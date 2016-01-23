@@ -16,7 +16,8 @@ SCREENHEIGHT = 800  # 1600, 800  # 1920, 1080
 
 FPS = 60
 
-MENUMUSIC = os.path.join('resources/sounds', 'mainmenu_music.ogg')
+MUSICPATH = 'resources/music'
+MENUMUSIC = os.path.join(MUSICPATH, 'mainmenu_music.ogg')
 
 
 class GameEngine(object):
