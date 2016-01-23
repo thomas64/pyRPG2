@@ -7,6 +7,7 @@ class: MainMenu
 """
 
 import enum
+import os
 
 import pygame
 
@@ -23,6 +24,10 @@ MENUFONT = None
 MENUFONTSIZE = 50
 MENUFONTCOLOR1 = pygame.Color("white")
 MENUFONTCOLOR2 = pygame.Color("yellow")
+
+MENUSWITCHSOUND = os.path.join('resources/sounds', 'mainmenu_switch.wav')
+MENUSELECTSOUND = os.path.join('resources/sounds', 'mainmenu_select.wav')
+MENUERRORSOUND = os.path.join('resources/sounds', 'mainmenu_error.wav')
 
 
 class MenuItem(enum.Enum):
@@ -121,6 +126,10 @@ class MainMenu(object):
 
         self.cur_item = 0
 
+        self.switch = pygame.mixer.Sound(MENUSWITCHSOUND)
+        self.select = pygame.mixer.Sound(MENUSELECTSOUND)
+        self.error = pygame.mixer.Sound(MENUERRORSOUND)
+
     def handle_view(self):
         """
         Reset eerst alle kleuren.
@@ -144,13 +153,18 @@ class MainMenu(object):
         if event.type == pygame.KEYDOWN:
 
             if event.key == pygame.K_UP and self.cur_item > 0:
+                self.switch.play()
                 self.cur_item -= 1
             elif event.key == pygame.K_UP and self.cur_item == 0:
+                self.error.play()
                 self.cur_item = 0
             elif event.key == pygame.K_DOWN and self.cur_item < len(self.menu_items) - 1:
+                self.switch.play()
                 self.cur_item += 1
             elif event.key == pygame.K_DOWN and self.cur_item == len(self.menu_items) - 1:
+                self.error.play()
                 self.cur_item = len(self.menu_items) - 1
 
             if event.key == pygame.K_RETURN:
+                self.select.play()
                 return self.menu_items[self.cur_item].func

@@ -4,6 +4,7 @@ class: GameEngine
 """
 
 import os
+import time
 
 import pygame
 
@@ -15,6 +16,8 @@ SCREENHEIGHT = 800  # 1600, 800  # 1920, 1080
 
 FPS = 60
 
+MENUMUSIC = os.path.join('resources/sounds', 'mainmenu_music.ogg')
+
 
 class GameEngine(object):
     """
@@ -22,6 +25,7 @@ class GameEngine(object):
     """
     def __init__(self):
         os.environ['SDL_VIDEO_CENTERED'] = '1'
+        pygame.mixer.pre_init(44100, 16, 2, 4096)
         pygame.init()
         self.screen = pygame.display.set_mode((SCREENWIDTH, SCREENHEIGHT))  # , pygame.NOFRAME | pygame.FULLSCREEN)
 
@@ -41,6 +45,8 @@ class GameEngine(object):
         """
         self.running = True
         self.state.push(statemachine.State.MainMenu)
+        pygame.mixer.music.load(MENUMUSIC)
+        pygame.mixer.music.play(-1)
 
         while self.running:
             self.milliseconds = self.clock.tick(FPS)        # limit the redraw speed to 60 frames per second
@@ -74,5 +80,6 @@ class GameEngine(object):
         """
         if currentstate == statemachine.State.MainMenu:
             if self.mainmenu.handle_input(event) == mainmenu.MenuItem.ExitGame:
+                pygame.mixer.music.fadeout(1000)
+                time.sleep(1)
                 self.running = False
-
