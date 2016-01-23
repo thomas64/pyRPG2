@@ -25,9 +25,10 @@ MENUFONTSIZE = 50
 MENUFONTCOLOR1 = pygame.Color("white")
 MENUFONTCOLOR2 = pygame.Color("yellow")
 
-MENUSWITCHSOUND = os.path.join('resources/sounds', 'mainmenu_switch.wav')
-MENUSELECTSOUND = os.path.join('resources/sounds', 'mainmenu_select.wav')
-MENUERRORSOUND = os.path.join('resources/sounds', 'mainmenu_error.wav')
+RESOURCEPATH = 'resources/sounds'
+MENUSWITCHSOUND = os.path.join(RESOURCEPATH, 'mainmenu_switch.wav')
+MENUSELECTSOUND = os.path.join(RESOURCEPATH, 'mainmenu_select.wav')
+MENUERRORSOUND = os.path.join(RESOURCEPATH,  'mainmenu_error.wav')
 
 
 class MenuItem(enum.Enum):
