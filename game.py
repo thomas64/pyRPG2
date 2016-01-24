@@ -9,6 +9,7 @@ import time
 import pygame
 
 import mainmenu
+import overworld
 import statemachine
 
 SCREENWIDTH = 1600
@@ -16,8 +17,10 @@ SCREENHEIGHT = 800  # 1600, 800  # 1920, 1080
 
 FPS = 60
 
+# todo, een music class maken, op basis van currentstate
 MUSICPATH = 'resources/music'
-MENUMUSIC = os.path.join(MUSICPATH, 'mainmenu_music.ogg')
+MAINMENUMUSIC = os.path.join(MUSICPATH, 'mainmenu.ogg')
+OVERWORLDMUSIC = os.path.join(MUSICPATH, 'overworld.ogg')
 
 
 class GameEngine(object):
@@ -31,7 +34,9 @@ class GameEngine(object):
         self.screen = pygame.display.set_mode((SCREENWIDTH, SCREENHEIGHT))  # , pygame.NOFRAME | pygame.FULLSCREEN)
 
         self.state = statemachine.StateMachine()
+        # todo, moeten deze niet pas geladen worden wanneer ze echt nodig zijn?
         self.mainmenu = mainmenu.MainMenu(self.screen)
+        self.overworld = overworld.OverWorld(self.screen)
 
         self.running = False
 
@@ -40,13 +45,15 @@ class GameEngine(object):
         self.milliseconds = 0
         self.timer = 0
 
+        self.key_input = None
+
     def run(self):
         """
         Start de game loop.
         """
         self.running = True
         self.state.push(statemachine.State.MainMenu)
-        pygame.mixer.music.load(MENUMUSIC)
+        pygame.mixer.music.load(MAINMENUMUSIC)
         pygame.mixer.music.play(-1)
 
         while self.running:
@@ -55,6 +62,7 @@ class GameEngine(object):
 
             currentstate = self.state.peek()
             self.handle_view(currentstate)
+            self.handle_multi_input(currentstate)
             for event in pygame.event.get():
                 if event.type == pygame.QUIT:
                     self.running = False
@@ -72,6 +80,18 @@ class GameEngine(object):
         """
         if currentstate == statemachine.State.MainMenu:
             self.mainmenu.handle_view()
+        elif currentstate == statemachine.State.OverWorld:
+            self.overworld.handle_view()
+
+    def handle_multi_input(self, currentstate):
+        """
+        Handelt de ingedrukt-houden muis en keyboard input af.
+        :param currentstate: bovenste state van de stack
+        """
+        self.key_input = pygame.key.get_pressed()
+
+        if currentstate == statemachine.State.OverWorld:
+            self.overworld.handle_multi_input(self.key_input)
 
     def handle_single_input(self, event, currentstate):
         """
@@ -80,7 +100,17 @@ class GameEngine(object):
         :param currentstate: bovenste state van de stack
         """
         if currentstate == statemachine.State.MainMenu:
-            if self.mainmenu.handle_input(event) == mainmenu.MenuItem.ExitGame:
+            menu_choice = self.mainmenu.handle_input(event)
+            if menu_choice == mainmenu.MenuItem.ExitGame:
                 pygame.mixer.music.fadeout(1000)
                 time.sleep(1)
                 self.running = False
+            elif menu_choice == mainmenu.MenuItem.NewGame:
+                pygame.mixer.music.fadeout(1000)
+                time.sleep(1)
+                self.state.pop(currentstate)
+                self.state.push(statemachine.State.OverWorld)
+                pygame.mixer.music.load(OVERWORLDMUSIC)
+                pygame.mixer.music.play(-1)
+            elif menu_choice == mainmenu.MenuItem.LoadGame:
+                pass
