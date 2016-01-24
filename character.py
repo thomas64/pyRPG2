@@ -3,6 +3,8 @@
 class: Hero
 """
 
+import os
+
 import pygame
 
 import direction
@@ -14,6 +16,10 @@ MOVESPEED3 = 4
 MOVESPEED4 = 8
 TURNDELAY = 7
 VIEWSPEED = 8
+
+SOUNDSPATH = 'resources/sounds'
+STEP_GRASS_L = os.path.join(SOUNDSPATH, 'step_grass_l.wav')
+STEP_GRASS_R = os.path.join(SOUNDSPATH, 'step_grass_r.wav')
 
 
 class Hero(pygame.sprite.Sprite):
@@ -53,6 +59,9 @@ class Hero(pygame.sprite.Sprite):
         self.time_left = 0
         self.time_right = 0
         self.time_delay = 0
+
+        self.step_left = pygame.mixer.Sound(STEP_GRASS_L)
+        self.step_right = pygame.mixer.Sound(STEP_GRASS_R)
 
     def speed(self, key_input):
         """
@@ -293,6 +302,10 @@ class Hero(pygame.sprite.Sprite):
     def _get_frame(self, frame_set):
         self.step_count += 1
         if self.step_count % (24 / self.movespeed) == 1:  # 24 is deelbaar door alle movespeeds
+            if self.step_animation == 0:
+                self.step_left.play()
+            elif self.step_animation == 2:
+                self.step_right.play()
             self.step_animation += 1
             if self.step_animation > 3:
                 self.step_animation = 0
