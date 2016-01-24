@@ -8,7 +8,7 @@ import time
 
 import pygame
 
-import mainmenu
+import gamemenu
 import music
 import overworld
 import statemachine
@@ -31,10 +31,10 @@ class GameEngine(object):
 
         self.state = statemachine.StateMachine()
         self.music = music.Music()
-
         # todo, moeten deze niet pas geladen worden wanneer ze echt nodig zijn?
-        self.mainmenu = mainmenu.MainMenu(self.screen)
+        self.mainmenu = gamemenu.GameMenu(self.screen, gamemenu.MainMenuItem, True, False)
         self.overworld = overworld.OverWorld(self.screen)
+        self.pausemenu = gamemenu.GameMenu(self.screen, gamemenu.PauseMenuItem, False, True)
 
         self.running = False
 
@@ -81,6 +81,8 @@ class GameEngine(object):
             self.mainmenu.handle_view()
         elif currentstate == statemachine.State.OverWorld:
             self.overworld.handle_view()
+        elif currentstate == statemachine.State.PauseMenu:
+            self.pausemenu.handle_view()
 
     def handle_music(self, currentstate):
         """
@@ -105,12 +107,19 @@ class GameEngine(object):
         :param event: pygame.event.get()
         :param currentstate: bovenste state van de stack
         """
-        if currentstate == statemachine.State.MainMenu:
-            menu_choice = self.mainmenu.handle_input(event)
-            if menu_choice == mainmenu.MenuItem.ExitGame:
-                self.running = False
-            elif menu_choice == mainmenu.MenuItem.NewGame:
-                self.state.pop(currentstate)
-                self.state.push(statemachine.State.OverWorld)
-            elif menu_choice == mainmenu.MenuItem.LoadGame:
-                pass
+        if event.type == pygame.KEYDOWN:
+            print("Keyboard, key={}, unicode={}".format(event.key, event.unicode))
+
+            if currentstate == statemachine.State.MainMenu:
+                menu_choice = self.mainmenu.handle_input(event)
+                if menu_choice == gamemenu.MainMenuItem.ExitGame:
+                    self.running = False
+                elif menu_choice == gamemenu.MainMenuItem.NewGame:
+                    self.state.pop(currentstate)
+                    self.state.push(statemachine.State.OverWorld)
+                elif menu_choice == gamemenu.MainMenuItem.LoadGame:
+                    pass
+
+            elif currentstate == statemachine.State.OverWorld:
+                if event.key == pygame.K_ESCAPE:
+                    self.state.push(statemachine.State.PauseMenu)

@@ -13,6 +13,7 @@ class State(enum.Enum):
     """
     MainMenu = 1
     OverWorld = 2
+    PauseMenu = 3
 
 
 class StateMachine(object):

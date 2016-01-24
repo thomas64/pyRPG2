@@ -1,9 +1,10 @@
 
 """
-class: MenuItem
+class: MainMenuItem
+class: PauseMenuItem
 class: MenuTitel
 class: MenuText
-class: MainMenu
+class: GameMenu
 """
 
 import enum
@@ -12,7 +13,8 @@ import os
 import pygame
 
 
-BACKGROUNDCOLOR = pygame.Color("black")
+BACKGROUNDCOLOR1 = pygame.Color("black")
+BACKGROUNDCOLOR2 = pygame.Color("purple")
 
 TITLETEXT = "pyRPG"
 TITLEFONT = 'colonna'
@@ -31,13 +33,24 @@ MENUSELECTSOUND = os.path.join(SOUNDSPATH, 'mainmenu_select.wav')
 MENUERRORSOUND = os.path.join(SOUNDSPATH,  'mainmenu_error.wav')
 
 
-class MenuItem(enum.Enum):
+class MainMenuItem(enum.Enum):
     """
-    De menuitems.
+    De mainmenu items.
     """
     NewGame = 'New Game'
     LoadGame = 'Load Game'
     ExitGame = 'Exit'
+
+    def __iter__(self):
+        return iter(self)
+
+
+class PauseMenuItem(enum.Enum):
+    """
+    De pausemenu items.
+    """
+    SaveGame = 'Save Game'
+    MainMenu = 'Main Menu'
 
     def __iter__(self):
         return iter(self)
@@ -96,26 +109,34 @@ class MenuText(object):
         self.label = self.font.render(self.text, 1, self.font_color)
 
 
-class MainMenu(object):
+class GameMenu(object):
     """
-    Het startscherm hoofdmenu.
+    Een menuscherm.
     """
-    def __init__(self, screen):
+    def __init__(self, screen, itemsmenu, title, alpha):
         self.screen = screen
-        self.background = pygame.Surface(self.screen.get_size())
-        self.background.fill(BACKGROUNDCOLOR)
-        self.background = self.background.convert()
+        if alpha:
+            self.background = pygame.Surface(self.screen.get_size())
+            self.background.fill(BACKGROUNDCOLOR2)
+            self.background.set_colorkey(BACKGROUNDCOLOR2)
+            self.background.set_alpha(128)
+            self.background = self.background.convert()
+        else:
+            self.background = pygame.Surface(self.screen.get_size())
+            self.background.fill(BACKGROUNDCOLOR1)
+            self.background = self.background.convert()
 
         bg_width = self.background.get_rect().width
         bg_height = self.background.get_rect().height
 
+        self.show_title = title
         self.title = MenuTitle()
         pos_x = (bg_width/2) - (self.title.width/2)
         pos_y = TITLEPOSY
         self.title.set_position(pos_x, pos_y)
 
         self.menu_items = []
-        all_menu_items = list(MenuItem)
+        all_menu_items = list(itemsmenu)
         for index, item in enumerate(all_menu_items):
             menu_item = MenuText(item, MENUFONT, MENUFONTSIZE, MENUFONTCOLOR1)
             t_h = len(all_menu_items) * menu_item.height                 # t_h: total height of text block
@@ -142,7 +163,8 @@ class MainMenu(object):
         self.menu_items[self.cur_item].set_font_color(MENUFONTCOLOR2)
 
         self.screen.blit(self.background, (0, 0))
-        self.screen.blit(self.title.label, self.title.position)
+        if self.show_title:
+            self.screen.blit(self.title.label, self.title.position)
         for item in self.menu_items:
             self.screen.blit(item.label, item.position)
 
@@ -151,21 +173,19 @@ class MainMenu(object):
         Geef de tekst van het geselecteerde menuitem terug aan het spel.
         :param event: pygame.event.get() uit screen.py
         """
-        if event.type == pygame.KEYDOWN:
+        if event.key == pygame.K_UP and self.cur_item > 0:
+            self.switch.play()
+            self.cur_item -= 1
+        elif event.key == pygame.K_UP and self.cur_item == 0:
+            self.error.play()
+            self.cur_item = 0
+        elif event.key == pygame.K_DOWN and self.cur_item < len(self.menu_items) - 1:
+            self.switch.play()
+            self.cur_item += 1
+        elif event.key == pygame.K_DOWN and self.cur_item == len(self.menu_items) - 1:
+            self.error.play()
+            self.cur_item = len(self.menu_items) - 1
 
-            if event.key == pygame.K_UP and self.cur_item > 0:
-                self.switch.play()
-                self.cur_item -= 1
-            elif event.key == pygame.K_UP and self.cur_item == 0:
-                self.error.play()
-                self.cur_item = 0
-            elif event.key == pygame.K_DOWN and self.cur_item < len(self.menu_items) - 1:
-                self.switch.play()
-                self.cur_item += 1
-            elif event.key == pygame.K_DOWN and self.cur_item == len(self.menu_items) - 1:
-                self.error.play()
-                self.cur_item = len(self.menu_items) - 1
-
-            if event.key == pygame.K_RETURN:
-                self.select.play()
-                return self.menu_items[self.cur_item].func
+        if event.key == pygame.K_RETURN:
+            self.select.play()
+            return self.menu_items[self.cur_item].func
