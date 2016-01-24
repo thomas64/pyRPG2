@@ -1,13 +1,13 @@
 
 """
+class: Direction
 class: Hero
 """
 
+import enum
 import os
 
 import pygame
-
-import direction
 
 
 MOVESPEED1 = 1
@@ -21,6 +21,16 @@ VIEWSPEED = 8
 SOUNDSPATH = 'resources/sounds'
 STEP_GRASS_L = os.path.join(SOUNDSPATH, 'step_grass_l.wav')
 STEP_GRASS_R = os.path.join(SOUNDSPATH, 'step_grass_r.wav')
+
+
+class Direction(enum.Enum):
+    """
+    De vier richtingen waarheen een unit kan lopen.
+    """
+    North = 1
+    South = 2
+    West = 3
+    East = 4
 
 
 class Hero(pygame.sprite.Sprite):
@@ -48,7 +58,7 @@ class Hero(pygame.sprite.Sprite):
         # Assign the position parameter value to the topleft x-y values of the rect
         self.rect.topleft = position
         self.old_position = list(self.rect.topleft)
-        self.last_direction = direction.Direction.North
+        self.last_direction = Direction.North
         self.move_direction = None
 
         self.movespeed = 0
@@ -108,39 +118,38 @@ class Hero(pygame.sprite.Sprite):
             self.time_right = 0
 
         # Als hij nog geen stappen heeft gezet en hij kijkt naar een andere kant dan je drukt, stel een delay in.
-        if self.move_direction is None and \
-                ((self.time_up > 0 and not self.last_direction == direction.Direction.North) or
-                 (self.time_down > 0 and not self.last_direction == direction.Direction.South) or
-                 (self.time_left > 0 and not self.last_direction == direction.Direction.West) or
-                 (self.time_right > 0 and not self.last_direction == direction.Direction.East)):
+        if self.move_direction is None and ((self.time_up > 0 and not self.last_direction == Direction.North) or
+                                            (self.time_down > 0 and not self.last_direction == Direction.South) or
+                                            (self.time_left > 0 and not self.last_direction == Direction.West) or
+                                            (self.time_right > 0 and not self.last_direction == Direction.East)):
             self.time_delay = TURNDELAY
 
         # Als je meerdere knoppen indrukt, ga dan naar de richting van de laatst ingedrukte knop.
         if self.time_up > 0 and ((self.time_up <= self.time_down and self.time_down > 0) or
                                  (self.time_up <= self.time_left and self.time_left > 0) or
                                  (self.time_up <= self.time_right and self.time_right > 0)):
-            self.last_direction = direction.Direction.North
+            self.last_direction = Direction.North
         elif self.time_down > 0 and ((self.time_down <= self.time_up and self.time_up > 0) or
                                      (self.time_down <= self.time_left and self.time_left > 0) or
                                      (self.time_down <= self.time_right and self.time_right > 0)):
-            self.last_direction = direction.Direction.South
+            self.last_direction = Direction.South
         elif self.time_left > 0 and ((self.time_left <= self.time_up and self.time_up > 0) or
                                      (self.time_left <= self.time_down and self.time_down > 0) or
                                      (self.time_left <= self.time_right and self.time_right > 0)):
-            self.last_direction = direction.Direction.West
+            self.last_direction = Direction.West
         elif self.time_right > 0 and ((self.time_right <= self.time_up and self.time_up > 0) or
                                       (self.time_right <= self.time_down and self.time_down > 0) or
                                       (self.time_right <= self.time_left and self.time_left > 0)):
-            self.last_direction = direction.Direction.East
+            self.last_direction = Direction.East
         # Of ga in de richting van de enige knop die je indrukt.
         elif self.time_up > 0:
-            self.last_direction = direction.Direction.North
+            self.last_direction = Direction.North
         elif self.time_down > 0:
-            self.last_direction = direction.Direction.South
+            self.last_direction = Direction.South
         elif self.time_left > 0:
-            self.last_direction = direction.Direction.West
+            self.last_direction = Direction.West
         elif self.time_right > 0:
-            self.last_direction = direction.Direction.East
+            self.last_direction = Direction.East
 
         # Als je een knop indrukt, en er is geen delay, beweeg dan in die richting.
         if key_input[pygame.K_UP] or key_input[pygame.K_DOWN] or \
@@ -158,13 +167,13 @@ class Hero(pygame.sprite.Sprite):
         self.move_direction = self.last_direction
         self.old_position = list(self.rect.topleft)
 
-        if self.move_direction == direction.Direction.North:
+        if self.move_direction == Direction.North:
             self.rect.y -= self.movespeed
-        elif self.move_direction == direction.Direction.South:
+        elif self.move_direction == Direction.South:
             self.rect.y += self.movespeed
-        elif self.move_direction == direction.Direction.West:
+        elif self.move_direction == Direction.West:
             self.rect.x -= self.movespeed
-        elif self.move_direction == direction.Direction.East:
+        elif self.move_direction == Direction.East:
             self.rect.x += self.movespeed
 
     def align_to_grid(self, tile_size):
@@ -219,13 +228,13 @@ class Hero(pygame.sprite.Sprite):
         """
         Verzet de positie in de tegenovergestelde richting.
         """
-        if self.move_direction == direction.Direction.North:
+        if self.move_direction == Direction.North:
             self.rect.y += 1
-        if self.move_direction == direction.Direction.South:
+        if self.move_direction == Direction.South:
             self.rect.y -= 1
-        if self.move_direction == direction.Direction.West:
+        if self.move_direction == Direction.West:
             self.rect.x += 1
-        if self.move_direction == direction.Direction.East:
+        if self.move_direction == Direction.East:
             self.rect.x -= 1
 
     def _move_side(self, obst_rect):
@@ -233,7 +242,7 @@ class Hero(pygame.sprite.Sprite):
         Verzet de positie richting naast een object.
         :param obst_rect: een obstacle rectangle, zoals bijv een tree
         """
-        if self.move_direction in (direction.Direction.North, direction.Direction.South):
+        if self.move_direction in (Direction.North, Direction.South):
             # als midden van unit groter is dan rechts van object
             if self.rect.centerx > obst_rect.right:
                 self.rect.x += self.movespeed
@@ -246,7 +255,7 @@ class Hero(pygame.sprite.Sprite):
                 if self.rect.right < obst_rect.left:
                     self.rect.left = obst_rect.left - self.rect.width
 
-        if self.move_direction in (direction.Direction.West, direction.Direction.East):
+        if self.move_direction in (Direction.West, Direction.East):
             # object noord van je
             if self.rect.centery > obst_rect.bottom:
                 self.rect.y += self.movespeed
@@ -270,22 +279,22 @@ class Hero(pygame.sprite.Sprite):
         Kijkt of de unit beweegt. Geef dan de hele dir_states dict door ipv alleen waarde 0.
         """
         if self.move_direction is None:
-            if self.last_direction == direction.Direction.North:
+            if self.last_direction == Direction.North:
                 self._clip(self.north_states[0])
-            if self.last_direction == direction.Direction.South:
+            if self.last_direction == Direction.South:
                 self._clip(self.south_states[0])
-            if self.last_direction == direction.Direction.West:
+            if self.last_direction == Direction.West:
                 self._clip(self.west_states[0])
-            if self.last_direction == direction.Direction.East:
+            if self.last_direction == Direction.East:
                 self._clip(self.east_states[0])
         else:
-            if self.move_direction == direction.Direction.North:
+            if self.move_direction == Direction.North:
                 self._clip(self.north_states)
-            if self.move_direction == direction.Direction.South:
+            if self.move_direction == Direction.South:
                 self._clip(self.south_states)
-            if self.move_direction == direction.Direction.West:
+            if self.move_direction == Direction.West:
                 self._clip(self.west_states)
-            if self.move_direction == direction.Direction.East:
+            if self.move_direction == Direction.East:
                 self._clip(self.east_states)
 
         # Update the image for each pass
