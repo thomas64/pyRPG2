@@ -9,6 +9,7 @@ import time
 import pygame
 
 import mainmenu
+import music
 import overworld
 import statemachine
 
@@ -16,11 +17,6 @@ SCREENWIDTH = 1600
 SCREENHEIGHT = 800  # 1600, 800  # 1920, 1080
 
 FPS = 60
-
-# todo, een music class maken, op basis van currentstate
-MUSICPATH = 'resources/music'
-MAINMENUMUSIC = os.path.join(MUSICPATH, 'mainmenu.ogg')
-OVERWORLDMUSIC = os.path.join(MUSICPATH, 'overworld.ogg')
 
 
 class GameEngine(object):
@@ -34,6 +30,8 @@ class GameEngine(object):
         self.screen = pygame.display.set_mode((SCREENWIDTH, SCREENHEIGHT))  # , pygame.NOFRAME | pygame.FULLSCREEN)
 
         self.state = statemachine.StateMachine()
+        self.music = music.Music()
+
         # todo, moeten deze niet pas geladen worden wanneer ze echt nodig zijn?
         self.mainmenu = mainmenu.MainMenu(self.screen)
         self.overworld = overworld.OverWorld(self.screen)
@@ -53,8 +51,6 @@ class GameEngine(object):
         """
         self.running = True
         self.state.push(statemachine.State.MainMenu)
-        pygame.mixer.music.load(MAINMENUMUSIC)
-        pygame.mixer.music.play(-1)
 
         while self.running:
             self.milliseconds = self.clock.tick(FPS)        # limit the redraw speed to 60 frames per second
@@ -62,6 +58,7 @@ class GameEngine(object):
 
             currentstate = self.state.peek()
             self.handle_view(currentstate)
+            self.handle_music(currentstate)
             self.handle_multi_input(currentstate)
             for event in pygame.event.get():
                 if event.type == pygame.QUIT:
@@ -71,6 +68,8 @@ class GameEngine(object):
             pygame.display.set_caption("FPS: {:.2f}, time: {:.2f} seconds".format(self.clock.get_fps(), self.playtime))
             pygame.display.flip()
 
+        self.music.current.fadeout(1000)
+        time.sleep(1)
         pygame.quit()
 
     def handle_view(self, currentstate):
@@ -82,6 +81,13 @@ class GameEngine(object):
             self.mainmenu.handle_view()
         elif currentstate == statemachine.State.OverWorld:
             self.overworld.handle_view()
+
+    def handle_music(self, currentstate):
+        """
+        Handelt het spelen van muziek af.
+        :param currentstate: bovenste state van de stack
+        """
+        self.music.play(currentstate)
 
     def handle_multi_input(self, currentstate):
         """
@@ -102,15 +108,9 @@ class GameEngine(object):
         if currentstate == statemachine.State.MainMenu:
             menu_choice = self.mainmenu.handle_input(event)
             if menu_choice == mainmenu.MenuItem.ExitGame:
-                pygame.mixer.music.fadeout(1000)
-                time.sleep(1)
                 self.running = False
             elif menu_choice == mainmenu.MenuItem.NewGame:
-                pygame.mixer.music.fadeout(1000)
-                time.sleep(1)
                 self.state.pop(currentstate)
                 self.state.push(statemachine.State.OverWorld)
-                pygame.mixer.music.load(OVERWORLDMUSIC)
-                pygame.mixer.music.play(-1)
             elif menu_choice == mainmenu.MenuItem.LoadGame:
                 pass
