@@ -19,6 +19,7 @@ WINDOWPOS = 100, 100
 BACKGROUNDCOLOR = pygame.Color("black")
 WINDOWCOLOR = pygame.Color("gray12")
 
+# todo, mooiere map maken met variatie in het gras
 OVERWORLDPATH = 'resources/maps/start_forest.tmx'
 PLAYERLAYER = 1
 

@@ -17,6 +17,7 @@ MOVESPEED4 = 8
 TURNDELAY = 7
 VIEWSPEED = 8
 
+# todo, op andere ondergrond, ander stap geluid
 SOUNDSPATH = 'resources/sounds'
 STEP_GRASS_L = os.path.join(SOUNDSPATH, 'step_grass_l.wav')
 STEP_GRASS_R = os.path.join(SOUNDSPATH, 'step_grass_r.wav')
