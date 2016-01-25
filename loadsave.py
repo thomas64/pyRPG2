@@ -32,8 +32,13 @@ class Dialog(wx.App):
                                style=wx.FD_OPEN | wx.FD_FILE_MUST_EXIST)
         if dialog.ShowModal() == wx.ID_OK:
             filename = dialog.GetPath()
-            with open(filename, 'rb') as f:
-                game.overworld.hero.rect, game.overworld.hero.last_direction = pickle.load(f)
+            try:
+                print("Loading gamedata...")
+                with open(filename, 'rb') as f:
+                    game.overworld.hero.rect, game.overworld.hero.last_direction = pickle.load(f)
+            except pickle.UnpicklingError:
+                print('Corrupt gamedata.')
+                filename = None
         else:
             filename = None
         dialog.Destroy()
@@ -53,6 +58,7 @@ class Dialog(wx.App):
                                style=wx.FD_SAVE | wx.FD_OVERWRITE_PROMPT)
         if dialog.ShowModal() == wx.ID_OK:
             filename = dialog.GetPath()
+            print("Saving gamedata...")
             with open(filename, 'wb') as f:
                 pickle.dump([game.overworld.hero.rect, game.overworld.hero.last_direction], f)
         else:
