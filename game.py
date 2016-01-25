@@ -144,6 +144,7 @@ class GameEngine(object):
                     self.state.push(statemachine.State.OverWorld)
                     self.overworld = overworld.OverWorld(self.screen)
                 elif menu_choice == gamemenu.MainMenuItem.LoadGame:
+                    # todo, loadgame
                     pass
 
             elif currentstate == statemachine.State.PauseMenu:
@@ -157,6 +158,7 @@ class GameEngine(object):
                     self.overworld = None
                     self.state.push(statemachine.State.MainMenu)
                 elif menu_choice == gamemenu.PauseMenuItem.SaveGame:
+                    # todo, savegame
                     pass
 
             elif currentstate == statemachine.State.OverWorld:
