@@ -4,7 +4,6 @@ class: GameEngine
 """
 
 import os
-import time
 
 import pygame
 
@@ -18,6 +17,10 @@ SCREENHEIGHT = 800  # 1600, 800  # 1920, 1080
 
 FPS = 60
 
+DEBUGFONT = 'courier'
+DEBUGFONTSIZE = 11
+DEBUGFONTCOLOR = pygame.Color("white")
+
 
 class GameEngine(object):
     """
@@ -27,14 +30,14 @@ class GameEngine(object):
         os.environ['SDL_VIDEO_CENTERED'] = '1'
         pygame.mixer.pre_init(44100, 16, 2, 4096)
         pygame.init()
-        self.screen = pygame.display.set_mode((SCREENWIDTH, SCREENHEIGHT))  # , pygame.NOFRAME | pygame.FULLSCREEN)
+        self.screen = pygame.display.set_mode((SCREENWIDTH, SCREENHEIGHT), pygame.NOFRAME)  # | pygame.FULLSCREEN)
 
         self.state = statemachine.StateMachine()
         self.music = music.Music()
-        # todo, moeten deze niet pas geladen worden wanneer ze echt nodig zijn?
-        self.mainmenu = gamemenu.GameMenu(self.screen, gamemenu.MainMenuItem, True, False)
-        self.overworld = overworld.OverWorld(self.screen)
-        self.pausemenu = gamemenu.GameMenu(self.screen, gamemenu.PauseMenuItem, False, True)
+
+        self.mainmenu = None
+        self.pausemenu = None
+        self.overworld = None
 
         self.running = False
 
@@ -43,7 +46,11 @@ class GameEngine(object):
         self.milliseconds = 0
         self.timer = 0
 
+        self.debugfont = pygame.font.SysFont(DEBUGFONT, DEBUGFONTSIZE)
         self.key_input = None
+        self.scr_capt = None
+
+        self.show_debug = True
 
     def run(self):
         """
@@ -51,6 +58,7 @@ class GameEngine(object):
         """
         self.running = True
         self.state.push(statemachine.State.MainMenu)
+        self.mainmenu = gamemenu.GameMenu(self.screen, gamemenu.MainMenuItem, True)
 
         while self.running:
             self.milliseconds = self.clock.tick(FPS)        # limit the redraw speed to 60 frames per second
@@ -65,12 +73,24 @@ class GameEngine(object):
                     self.running = False
                 self.handle_single_input(event, currentstate)
 
-            pygame.display.set_caption("FPS: {:.2f}, time: {:.2f} seconds".format(self.clock.get_fps(), self.playtime))
+            self.view_debug()
             pygame.display.flip()
 
         self.music.current.fadeout(1000)
-        time.sleep(1)
+        pygame.time.delay(1000)
         pygame.quit()
+
+    def view_debug(self):
+        """
+        Geeft debug informatie weer linksboven in het scherm.
+        """
+        if self.show_debug:
+            text = ("FPS:              {:.2f}".format(self.clock.get_fps()),
+                    "milliseconds:     {:.2f}".format(self.milliseconds),
+                    "playtime:         {:.2f}".format(self.playtime),
+                    )
+            for count, line in enumerate(text):
+                self.screen.blit(self.debugfont.render(line, True, DEBUGFONTCOLOR), (0, count * 10))
 
     def handle_view(self, currentstate):
         """
@@ -78,11 +98,11 @@ class GameEngine(object):
         :param currentstate: bovenste state van de stack
         """
         if currentstate == statemachine.State.MainMenu:
-            self.mainmenu.handle_view()
+            self.mainmenu.handle_view(None)                 # geen achtergrond
+        elif currentstate == statemachine.State.PauseMenu:
+            self.pausemenu.handle_view(self.scr_capt)       # achtergrond, screen capture
         elif currentstate == statemachine.State.OverWorld:
             self.overworld.handle_view()
-        elif currentstate == statemachine.State.PauseMenu:
-            self.pausemenu.handle_view()
 
     def handle_music(self, currentstate):
         """
@@ -117,9 +137,26 @@ class GameEngine(object):
                 elif menu_choice == gamemenu.MainMenuItem.NewGame:
                     self.state.pop(currentstate)
                     self.state.push(statemachine.State.OverWorld)
+                    self.overworld = overworld.OverWorld(self.screen)
                 elif menu_choice == gamemenu.MainMenuItem.LoadGame:
+                    pass
+
+            elif currentstate == statemachine.State.PauseMenu:
+                menu_choice = self.pausemenu.handle_input(event)
+                if event.key == pygame.K_ESCAPE:
+                    self.state.pop(currentstate)
+                elif menu_choice == gamemenu.PauseMenuItem.ContinueGame:
+                    self.state.pop(currentstate)
+                elif menu_choice == gamemenu.PauseMenuItem.MainMenu:
+                    self.state.clear()
+                    self.overworld = None
+                    self.state.push(statemachine.State.MainMenu)
+                elif menu_choice == gamemenu.PauseMenuItem.SaveGame:
                     pass
 
             elif currentstate == statemachine.State.OverWorld:
                 if event.key == pygame.K_ESCAPE:
+                    data = pygame.image.tostring(self.screen, 'RGBA')       # maak een screen capture
+                    self.scr_capt = pygame.image.frombuffer(data, self.screen.get_size(), 'RGBA')
                     self.state.push(statemachine.State.PauseMenu)
+                    self.pausemenu = gamemenu.GameMenu(self.screen, gamemenu.PauseMenuItem, False)

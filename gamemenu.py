@@ -13,8 +13,7 @@ import os
 import pygame
 
 
-BACKGROUNDCOLOR1 = pygame.Color("black")
-BACKGROUNDCOLOR2 = pygame.Color("purple")
+BACKGROUNDCOLOR = pygame.Color("black")
 
 TITLETEXT = "pyRPG"
 TITLEFONT = 'colonna'
@@ -49,6 +48,7 @@ class PauseMenuItem(enum.Enum):
     """
     De pausemenu items.
     """
+    ContinueGame = 'Continue'
     SaveGame = 'Save Game'
     MainMenu = 'Main Menu'
 
@@ -65,8 +65,8 @@ class MenuTitle(object):
         self.font = pygame.font.SysFont(TITLEFONT, TITLEFONTSIZE)
         self.font_color = TITLEFONTCOLOR
         self.label = self.font.render(self.text, 1, self.font_color)
-        self.width = self.label.get_rect().width
-        self.height = self.label.get_rect().height
+        self.width = self.label.get_width()
+        self.height = self.label.get_height()
         self.position = (0, 0)
 
     def set_position(self, x, y):
@@ -88,8 +88,8 @@ class MenuText(object):
         self.font = pygame.font.SysFont(font, size)
         self.font_color = color
         self.label = self.font.render(self.text, 1, self.font_color)
-        self.width = self.label.get_rect().width
-        self.height = self.label.get_rect().height
+        self.width = self.label.get_width()
+        self.height = self.label.get_height()
         self.position = (0, 0)
 
     def set_position(self, x, y):
@@ -113,24 +113,18 @@ class GameMenu(object):
     """
     Een menuscherm.
     """
-    def __init__(self, screen, itemsmenu, title, alpha):
+    def __init__(self, screen, itemsmenu, title):
         self.screen = screen
-        if alpha:
-            self.background = pygame.Surface(self.screen.get_size())
-            self.background.fill(BACKGROUNDCOLOR2)
-            self.background.set_colorkey(BACKGROUNDCOLOR2)
-            self.background.set_alpha(128)
-            self.background = self.background.convert()
-        else:
-            self.background = pygame.Surface(self.screen.get_size())
-            self.background.fill(BACKGROUNDCOLOR1)
-            self.background = self.background.convert()
+        self.background = pygame.Surface(self.screen.get_size())
+        self.background.fill(BACKGROUNDCOLOR)
+        self.background.set_alpha(224)  # hij doet niets met de alpha als bij handle_view geen bg wordt meegegeven
+        self.background = self.background.convert()
 
-        bg_width = self.background.get_rect().width
-        bg_height = self.background.get_rect().height
+        bg_width = self.background.get_width()
+        bg_height = self.background.get_height()
 
         self.show_title = title
-        self.title = MenuTitle()
+        self.title = MenuTitle()        # ook als hij geen title heeft doet hij dit, maar hij laat het toch niet zien
         pos_x = (bg_width/2) - (self.title.width/2)
         pos_y = TITLEPOSY
         self.title.set_position(pos_x, pos_y)
@@ -152,19 +146,25 @@ class GameMenu(object):
         self.select = pygame.mixer.Sound(MENUSELECTSOUND)
         self.error = pygame.mixer.Sound(MENUERRORSOUND)
 
-    def handle_view(self):
+    def handle_view(self, bg):
         """
         Reset eerst alle kleuren.
         Zet dan de geselecteerde op een andere kleur.
-        Teken de achtergrond -> titel -> menuitems.
+        Teken de (overworld screencapture) -> achtergrond -> (titel) -> menuitems.
+        :param bg: screen capture van de overworld
         """
         for item in self.menu_items:
             item.set_font_color(MENUFONTCOLOR1)
         self.menu_items[self.cur_item].set_font_color(MENUFONTCOLOR2)
 
+        if bg is not None:
+            self.screen.blit(bg, (0, 0))
+
         self.screen.blit(self.background, (0, 0))
+
         if self.show_title:
             self.screen.blit(self.title.label, self.title.position)
+
         for item in self.menu_items:
             self.screen.blit(item.label, item.position)
 
@@ -186,6 +186,6 @@ class GameMenu(object):
             self.error.play()
             self.cur_item = len(self.menu_items) - 1
 
-        if event.key == pygame.K_RETURN:
+        if event.key == pygame.K_RETURN or event.key == pygame.K_KP_ENTER:
             self.select.play()
             return self.menu_items[self.cur_item].func

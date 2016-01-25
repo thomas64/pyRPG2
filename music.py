@@ -4,7 +4,6 @@ class: Music
 """
 
 import os
-import time
 
 import pygame
 
@@ -37,15 +36,19 @@ class Music(object):
         if currentstate == statemachine.State.MainMenu:
             if cur_music != self.mainmenu and cur_music is not None:
                 self.current.fadeout(1000)
-                time.sleep(1)
+                pygame.time.delay(1000)
             if cur_music != self.mainmenu:
-                time.sleep(.5)
+                pygame.time.delay(500)
                 self.current.play(self.mainmenu, -1)
+
+        elif currentstate == statemachine.State.PauseMenu:
+            if cur_music is not None:
+                self.current.fadeout(1000)
 
         elif currentstate == statemachine.State.OverWorld:
             if cur_music != self.overworld and cur_music is not None:
                 self.current.fadeout(1000)
-                time.sleep(1)
+                pygame.time.delay(1000)
             if cur_music != self.overworld:
-                time.sleep(.5)
+                pygame.time.delay(500)
                 self.current.play(self.overworld, -1)

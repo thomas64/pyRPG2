@@ -58,7 +58,7 @@ class Hero(pygame.sprite.Sprite):
         # Assign the position parameter value to the topleft x-y values of the rect
         self.rect.topleft = position
         self.old_position = list(self.rect.topleft)
-        self.last_direction = Direction.North
+        self.last_direction = Direction.South
         self.move_direction = None
 
         self.movespeed = 0

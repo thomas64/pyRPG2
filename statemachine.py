@@ -56,3 +56,10 @@ class StateMachine(object):
         print("Game pushed {}".format(state))
         self.statestack.append(state)
         return state
+
+    def clear(self):
+        """
+        Clear the whole stack.
+        """
+        print("Game cleared all states.")
+        self.statestack = []
