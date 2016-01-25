@@ -330,7 +330,6 @@
   <object id="9" x="704" y="832" width="32" height="128"/>
   <object id="10" x="672" y="864" width="32" height="96"/>
   <object id="13" x="672" y="896" height="16"/>
-  <object id="14" x="448" y="896" width="224" height="16"/>
   <object id="15" x="896" y="704" width="64" height="32"/>
   <object id="16" x="928" y="672" width="32" height="32"/>
   <object id="18" x="960" y="640" width="32" height="192"/>

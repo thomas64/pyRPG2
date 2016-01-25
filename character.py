@@ -178,7 +178,8 @@ class Hero(pygame.sprite.Sprite):
         elif self.move_direction == Direction.East:
             self.true_position[0] += self.movespeed * dt
 
-        self.rect.topleft = self.true_position
+        self.rect.x = round(self.true_position[0])
+        self.rect.y = round(self.true_position[1])
 
     def align_to_grid(self, tile_size):
         """
@@ -228,13 +229,14 @@ class Hero(pygame.sprite.Sprite):
         if moverange is not None:
             if pygame.sprite.collide_mask(self, moverange):
                 self.rect.topleft = list(self.old_position)
+                self.true_position = list(self.old_position)
+
+        self.true_position = list(self.rect.topleft)
 
     def _move_back(self):
         """
         Verzet de positie in de tegenovergestelde richting.
         """
-        self.true_position = list(self.rect.topleft)
-
         if self.move_direction == Direction.North:
             self.true_position[1] += 1
         elif self.move_direction == Direction.South:
@@ -244,45 +246,53 @@ class Hero(pygame.sprite.Sprite):
         elif self.move_direction == Direction.East:
             self.true_position[0] -= 1
 
-        self.rect.topleft = self.true_position
+        self.rect.x = round(self.true_position[0])
+        self.rect.y = round(self.true_position[1])
 
     def _move_side(self, obst_rect, dt):
         """
         Verzet de positie richting naast een object.
         :param obst_rect: een obstacle rectangle, zoals bijv een tree
         """
-        self.true_position = list(self.rect.topleft)
-
         if self.move_direction in (Direction.North, Direction.South):
             # als midden van unit groter is dan rechts van object
-            if self.rect.centerx > obst_rect.right:
+            # if self.rect.centerx > obst_rect.right:               # code comment out is van voor timebased movement
+            if self.true_position[0] + (self.rect.width / 2) > obst_rect.right:
                 self.true_position[0] += self.movespeed * dt
-                self.rect.topleft = self.true_position
                 # als links van char groter is dan rechts van object
-                if self.rect.left > obst_rect.right:
-                    self.rect.left = obst_rect.right
+                # if self.rect.left > obst_rect.right:
+                if self.true_position[0] > obst_rect.right:
+                    # self.rect.left = obst_rect.right
+                    self.true_position[0] = obst_rect.right
             # object oost van je
-            if self.rect.centerx < obst_rect.left:
+            # if self.rect.centerx < obst_rect.left:
+            if self.true_position[0] + (self.rect.width / 2) < obst_rect.left:
                 self.true_position[0] -= self.movespeed * dt
-                self.rect.topleft = self.true_position
-                if self.rect.right < obst_rect.left:
-                    self.rect.left = obst_rect.left - self.rect.width
+                # if self.rect.right < obst_rect.left:
+                if self.true_position[0] + self.rect.width < obst_rect.left:
+                    # self.rect.left = obst_rect.left - self.rect.width
+                    self.true_position[0] = obst_rect.left - self.rect.width
 
         if self.move_direction in (Direction.West, Direction.East):
             # object noord van je
-            if self.rect.centery > obst_rect.bottom:
+            # if self.rect.centery > obst_rect.bottom:
+            if self.true_position[1] + (self.rect.height / 2) > obst_rect.bottom:
                 self.true_position[1] += self.movespeed * dt
-                self.rect.topleft = self.true_position
-                if self.rect.top > obst_rect.bottom:
-                    self.rect.top = obst_rect.bottom
+                # if self.rect.top > obst_rect.bottom:
+                if self.true_position[1] > obst_rect.bottom:
+                    # self.rect.top = obst_rect.bottom
+                    self.true_position[1] = obst_rect.bottom
             # object zuid van je
-            if self.rect.centery < obst_rect.top:
+            # if self.rect.centery < obst_rect.top:
+            if self.true_position[1] + (self.rect.height / 2) < obst_rect.top:
                 self.true_position[1] -= self.movespeed * dt
-                self.rect.topleft = self.true_position
-                if self.rect.bottom < obst_rect.top:
-                    self.rect.top = obst_rect.top - self.rect.height
+                # if self.rect.bottom < obst_rect.top:
+                if self.true_position[1] + self.rect.height < obst_rect.top:
+                    # self.rect.top = obst_rect.top - self.rect.height
+                    self.true_position[1] = obst_rect.top - self.rect.height
 
-        self.true_position = list(self.rect.topleft)
+        self.rect.x = round(self.true_position[0])
+        self.rect.y = round(self.true_position[1])
 
     def stand(self):
         """
