@@ -14,6 +14,7 @@ MOVESPEED1 = 60
 MOVESPEED2 = 120    # pixels/second
 MOVESPEED3 = 240
 MOVESPEED4 = 480
+STEPSPEED = 25      # een waarde? lager is snellere stappen
 TURNDELAY = 7/60    # van een seconde
 VIEWSPEED = 8       # todo, deze moet nog aangepast worden
 
@@ -340,9 +341,9 @@ class Hero(pygame.sprite.Sprite):
 
     def _get_frame(self, frame_set, dt):
         self.step_count += 1
-        # round(1 / x * 25) is om de teller van hoge en lage movespeeds om te draaien
-        if self.step_count % round((1 / (self.movespeed * dt)) * 25) == 1:
-            if self.movespeed != MOVESPEED4:  # geen animatie of geluid bij movespeed4
+        # round(1 / x * STEPSPEED) is om de teller van hoge en lage movespeeds om te draaien
+        if self.step_count % round((1 / (self.movespeed * dt)) * STEPSPEED) == 1:
+            if self.movespeed != MOVESPEED4:  # geen animatie of geluid bij MOVESPEED4
                 if self.step_animation == 0:
                     self.step_left.play()
                 elif self.step_animation == 2:

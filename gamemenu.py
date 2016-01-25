@@ -168,7 +168,7 @@ class GameMenu(object):
         for item in self.menu_items:
             self.screen.blit(item.label, item.position)
 
-    def handle_input(self, event):
+    def handle_single_input(self, event):
         """
         Geef de tekst van het geselecteerde menuitem terug aan het spel.
         :param event: pygame.event.get() uit screen.py

@@ -8,8 +8,9 @@ import pytmx
 import pyscroll
 import pyscroll.data
 
-import map
 import character
+import map
+import sprites
 
 
 WINDOWWIDTH = 800
@@ -18,10 +19,13 @@ WINDOWPOS = 100, 100
 
 BACKGROUNDCOLOR = pygame.Color("black")
 WINDOWCOLOR = pygame.Color("gray12")
+GRIDCOLOR = pygame.Color("gray38")
 
 # todo, mooiere map maken met variatie in het gras
 OVERWORLDPATH = 'resources/maps/start_forest.tmx'
 PLAYERLAYER = 1
+GRIDLAYER = 6
+GRIDSIZE = 32
 
 
 class OverWorld(object):
@@ -39,6 +43,8 @@ class OverWorld(object):
 
         self._init_map()
         self._init_hero()
+
+        self.grid_sprite = None
 
     def _init_map(self):
         """
@@ -84,3 +90,17 @@ class OverWorld(object):
         # todo, moet dit niet naar de hero class?
         self.hero.check_obstacle(self.map1.obstacle_rects, self.map1.low_obst_rects,
                                  None, self.map1.width, self.map1.height, dt)
+
+    def handle_single_input(self, event):
+        """
+        Handelt keyevents af.
+        :param event: pygame.event.get() uit screen.py
+        """
+        if event.key == pygame.K_F10:
+            if self.grid_sprite is None:
+                self.grid_sprite = sprites.GridSprite(self.map1.width, self.map1.height, GRIDCOLOR, GRIDSIZE, GRIDLAYER)
+                self.group.add(self.grid_sprite)
+            else:
+                self.group.remove(self.grid_sprite)
+                self.grid_sprite = None
+

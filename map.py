@@ -14,6 +14,8 @@ class Map(object):
 
         self.width = int(tmx_data.width * tmx_data.tilewidth)
         self.height = int(tmx_data.height * tmx_data.tileheight)
+        self.tilewidth = tmx_data.tilewidth
+        self.tileheight = tmx_data.tileheight
 
         self.tree_rects = []
         self.water_rects = []

@@ -134,7 +134,7 @@ class GameEngine(object):
             print("Keyboard, key={}, unicode={}".format(event.key, event.unicode))
 
             if currentstate == statemachine.State.MainMenu:
-                menu_choice = self.mainmenu.handle_input(event)
+                menu_choice = self.mainmenu.handle_single_input(event)
                 if event.key == pygame.K_F12:
                     self.show_debug ^= True             # simple boolean swith
                 elif menu_choice == gamemenu.MainMenuItem.ExitGame:
@@ -148,7 +148,7 @@ class GameEngine(object):
                     pass
 
             elif currentstate == statemachine.State.PauseMenu:
-                menu_choice = self.pausemenu.handle_input(event)
+                menu_choice = self.pausemenu.handle_single_input(event)
                 if event.key == pygame.K_ESCAPE:
                     self.state.pop(currentstate)
                 elif menu_choice == gamemenu.PauseMenuItem.ContinueGame:
@@ -162,6 +162,7 @@ class GameEngine(object):
                     pass
 
             elif currentstate == statemachine.State.OverWorld:
+                self.overworld.handle_single_input(event)
                 if event.key == pygame.K_ESCAPE:
                     data = pygame.image.tostring(self.screen, 'RGBA')       # maak een screen capture
                     self.scr_capt = pygame.image.frombuffer(data, self.screen.get_size(), 'RGBA')
