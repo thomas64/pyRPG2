@@ -162,3 +162,6 @@ class GameEngine(object):
                     self.scr_capt = pygame.image.frombuffer(data, self.screen.get_size(), 'RGBA')
                     self.state.push(statemachine.State.PauseMenu)
                     self.pausemenu = gamemenu.GameMenu(self.screen, gamemenu.PauseMenuItem, False)
+                if event.key == pygame.K_BACKSPACE:                         # todo, deze moet uiteindelijk weg
+                    import sys
+                    sys.exit()

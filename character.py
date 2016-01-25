@@ -57,7 +57,7 @@ class Hero(pygame.sprite.Sprite):
 
         # Assign the position parameter value to the topleft x-y values of the rect
         self.rect.topleft = position
-        self.true_position = list(self.rect.topleft)
+        self.true_position = list(self.rect.topleft)    # true_pos is een float, dat is nodig voor timebased movement
         self.old_position = list(self.rect.topleft)
         self.last_direction = Direction.South
         self.move_direction = None
@@ -330,13 +330,14 @@ class Hero(pygame.sprite.Sprite):
 
     def _get_frame(self, frame_set, dt):
         self.step_count += 1
-        # todo, dit moet aangepast worden ook aan andere movespeeds of FPS's
-        if self.step_count % (self.movespeed * dt) == 1:  # 24 is deelbaar door alle movespeeds
-            if self.step_animation == 0:
-                self.step_left.play()
-            elif self.step_animation == 2:
-                self.step_right.play()
-            self.step_animation += 1
-            if self.step_animation > 3:
-                self.step_animation = 0
+        # round(1 / x * 25) is om de teller van hoge en lage movespeeds om te draaien
+        if self.step_count % round((1 / (self.movespeed * dt)) * 25) == 1:
+            if self.movespeed != MOVESPEED4:  # geen animatie of geluid bij movespeed4
+                if self.step_animation == 0:
+                    self.step_left.play()
+                elif self.step_animation == 2:
+                    self.step_right.play()
+                self.step_animation += 1
+                if self.step_animation > 3:
+                    self.step_animation = 0
         return frame_set[self.step_animation]
