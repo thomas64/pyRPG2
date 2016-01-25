@@ -5,6 +5,7 @@ class: GameEngine
 
 import pygame
 
+import loadsave
 import menu
 import music
 import overworld
@@ -17,6 +18,8 @@ DEBUGFONT = 'courier'
 DEBUGFONTSIZE = 11
 DEBUGFONTCOLOR = pygame.Color("white")
 
+BLACK = pygame.Color("black")
+
 
 class GameEngine(object):
     """
@@ -28,9 +31,10 @@ class GameEngine(object):
         self.music = music.Music()
         self.sound = sound.Sound()
 
+        self.loadsave = None
         self.mainmenu = None
-        self.pausemenu = None
         self.overworld = None
+        self.pausemenu = None
 
         self.running = False
 
@@ -143,25 +147,44 @@ class GameEngine(object):
                     self.running = False
                 elif menu_choice == menu.MainMenuItem.NewGame:
                     self.state.pop(currentstate)
+                    self.mainmenu = None
                     self.state.push(statemachine.State.OverWorld)
                     self.overworld = overworld.OverWorld(self.screen)
                 elif menu_choice == menu.MainMenuItem.LoadGame:
-                    # todo, loadgame
-                    pass
+                    self.loadsave = loadsave.Dialog()
+                    self.overworld = overworld.OverWorld(self.screen)       # laad de overworld alvast
+                    if self.loadsave.load(self) is None:
+                        self.overworld = None                               # toch niet
+                    else:                                                   # geef data mee aan de overworld
+                        self.sound.select.play()
+                        self.state.pop(currentstate)
+                        self.mainmenu = None
+                        self.state.push(statemachine.State.OverWorld)
+                    pygame.event.clear()
+                    self.loadsave = None
 
             elif currentstate == statemachine.State.PauseMenu:
                 menu_choice = self.pausemenu.handle_single_input(event)
                 if event.key == pygame.K_ESCAPE:
                     self.state.pop(currentstate)
+                    self.pausemenu = None
                 elif menu_choice == menu.PauseMenuItem.ContinueGame:
                     self.state.pop(currentstate)
+                    self.pausemenu = None
                 elif menu_choice == menu.PauseMenuItem.MainMenu:
                     self.state.clear()
+                    self.pausemenu = None
                     self.overworld = None
                     self.state.push(statemachine.State.MainMenu)
+                    self.screen.fill(BLACK)                                 # een test om eventjes het scherm op zwart
+                    pygame.time.delay(500)                                  # te zetten
+                    self.mainmenu = menu.GameMenu(self.screen, menu.MainMenuItem, True)
                 elif menu_choice == menu.PauseMenuItem.SaveGame:
-                    # todo, savegame
-                    pass
+                    self.loadsave = loadsave.Dialog()
+                    if self.loadsave.save(self) is not None:
+                        self.sound.select.play()
+                    pygame.event.clear()                                    # anders stapelen de geluiden zich op
+                    self.loadsave = None
 
             elif currentstate == statemachine.State.OverWorld:
                 self.overworld.handle_single_input(event)
