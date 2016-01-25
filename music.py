@@ -16,6 +16,7 @@ OVERWORLDMUSIC = os.path.join(MUSICPATH, 'overworld.ogg')
 
 
 class Music(object):
+    # todo, optie in hoofmenu om geluid en muziek te kunnen muten
     """
     Alle achtergrondmuziek.
     """

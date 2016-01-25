@@ -149,6 +149,8 @@ class GameEngine(object):
                     self.state.pop(currentstate)
                     self.mainmenu = None
                     self.state.push(statemachine.State.OverWorld)
+                    self.screen.fill(BLACK)
+                    pygame.time.delay(500)
                     self.overworld = overworld.OverWorld(self.screen)
                 elif menu_choice == menu.MainMenuItem.LoadGame:
                     self.loadsave = loadsave.Dialog()
@@ -159,6 +161,8 @@ class GameEngine(object):
                         self.sound.select.play()
                         self.state.pop(currentstate)
                         self.mainmenu = None
+                        self.screen.fill(BLACK)
+                        pygame.time.delay(500)
                         self.state.push(statemachine.State.OverWorld)
                     pygame.event.clear()
                     self.loadsave = None
@@ -166,6 +170,7 @@ class GameEngine(object):
             elif currentstate == statemachine.State.PauseMenu:
                 menu_choice = self.pausemenu.handle_single_input(event)
                 if event.key == pygame.K_ESCAPE:
+                    self.sound.select.play()
                     self.state.pop(currentstate)
                     self.pausemenu = None
                 elif menu_choice == menu.PauseMenuItem.ContinueGame:
