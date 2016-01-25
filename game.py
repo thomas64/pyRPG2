@@ -5,7 +5,7 @@ class: GameEngine
 
 import pygame
 
-import gamemenu
+import menu
 import music
 import overworld
 import sound
@@ -51,7 +51,7 @@ class GameEngine(object):
         """
         self.running = True
         self.state.push(statemachine.State.MainMenu)
-        self.mainmenu = gamemenu.GameMenu(self.screen, gamemenu.MainMenuItem, True)
+        self.mainmenu = menu.GameMenu(self.screen, menu.MainMenuItem, True)
 
         while self.running:
             self.dt = self.clock.tick(FPS)/1000.0       # limit the redraw speed to 60 frames per second
@@ -139,13 +139,13 @@ class GameEngine(object):
                 menu_choice = self.mainmenu.handle_single_input(event)
                 if event.key == pygame.K_F12:
                     self.show_debug ^= True             # simple boolean swith
-                elif menu_choice == gamemenu.MainMenuItem.ExitGame:
+                elif menu_choice == menu.MainMenuItem.ExitGame:
                     self.running = False
-                elif menu_choice == gamemenu.MainMenuItem.NewGame:
+                elif menu_choice == menu.MainMenuItem.NewGame:
                     self.state.pop(currentstate)
                     self.state.push(statemachine.State.OverWorld)
                     self.overworld = overworld.OverWorld(self.screen)
-                elif menu_choice == gamemenu.MainMenuItem.LoadGame:
+                elif menu_choice == menu.MainMenuItem.LoadGame:
                     # todo, loadgame
                     pass
 
@@ -153,13 +153,13 @@ class GameEngine(object):
                 menu_choice = self.pausemenu.handle_single_input(event)
                 if event.key == pygame.K_ESCAPE:
                     self.state.pop(currentstate)
-                elif menu_choice == gamemenu.PauseMenuItem.ContinueGame:
+                elif menu_choice == menu.PauseMenuItem.ContinueGame:
                     self.state.pop(currentstate)
-                elif menu_choice == gamemenu.PauseMenuItem.MainMenu:
+                elif menu_choice == menu.PauseMenuItem.MainMenu:
                     self.state.clear()
                     self.overworld = None
                     self.state.push(statemachine.State.MainMenu)
-                elif menu_choice == gamemenu.PauseMenuItem.SaveGame:
+                elif menu_choice == menu.PauseMenuItem.SaveGame:
                     # todo, savegame
                     pass
 
@@ -170,7 +170,7 @@ class GameEngine(object):
                     data = pygame.image.tostring(self.screen, 'RGBA')       # maak een screen capture
                     self.scr_capt = pygame.image.frombuffer(data, self.screen.get_size(), 'RGBA')
                     self.state.push(statemachine.State.PauseMenu)
-                    self.pausemenu = gamemenu.GameMenu(self.screen, gamemenu.PauseMenuItem, False)
+                    self.pausemenu = menu.GameMenu(self.screen, menu.PauseMenuItem, False)
                 if event.key == pygame.K_BACKSPACE:                         # todo, deze moet uiteindelijk weg
                     import sys
                     sys.exit()
