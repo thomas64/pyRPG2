@@ -3,17 +3,12 @@
 class: GameEngine
 """
 
-import os
-
 import pygame
 
 import gamemenu
 import music
 import overworld
 import statemachine
-
-SCREENWIDTH = 1600
-SCREENHEIGHT = 800  # 1600, 800  # 1920, 1080
 
 FPS = 60
 
@@ -27,11 +22,7 @@ class GameEngine(object):
     De grafische weergave van het scherm.
     """
     def __init__(self):
-        os.environ['SDL_VIDEO_CENTERED'] = '1'
-        pygame.mixer.pre_init(44100, 16, 2, 4096)
-        pygame.init()
-        self.screen = pygame.display.set_mode((SCREENWIDTH, SCREENHEIGHT), pygame.NOFRAME)  # | pygame.FULLSCREEN)
-
+        self.screen = pygame.display.get_surface()
         self.state = statemachine.StateMachine()
         self.music = music.Music()
 
@@ -42,9 +33,9 @@ class GameEngine(object):
         self.running = False
 
         self.clock = pygame.time.Clock()
-        self.playtime = 0
-        self.milliseconds = 0
-        self.timer = 0
+        self.playtime = 0.0
+        self.dt = 0.0
+        self.timer = 0.0
 
         self.debugfont = pygame.font.SysFont(DEBUGFONT, DEBUGFONTSIZE)
         self.key_input = None
@@ -52,7 +43,7 @@ class GameEngine(object):
 
         self.show_debug = True
 
-    def run(self):
+    def main_loop(self):
         """
         Start de game loop.
         """
@@ -61,8 +52,8 @@ class GameEngine(object):
         self.mainmenu = gamemenu.GameMenu(self.screen, gamemenu.MainMenuItem, True)
 
         while self.running:
-            self.milliseconds = self.clock.tick(FPS)        # limit the redraw speed to 60 frames per second
-            self.playtime += self.milliseconds / 1000
+            self.dt = self.clock.tick(FPS)/1000.0       # limit the redraw speed to 60 frames per second
+            self.playtime += self.dt
 
             currentstate = self.state.peek()
             self.handle_view(currentstate)
@@ -72,25 +63,7 @@ class GameEngine(object):
                 if event.type == pygame.QUIT:
                     self.running = False
                 self.handle_single_input(event, currentstate)
-
-            self.view_debug()
             pygame.display.flip()
-
-        self.music.current.fadeout(1000)
-        pygame.time.delay(1000)
-        pygame.quit()
-
-    def view_debug(self):
-        """
-        Geeft debug informatie weer linksboven in het scherm.
-        """
-        if self.show_debug:
-            text = ("FPS:              {:.2f}".format(self.clock.get_fps()),
-                    "milliseconds:     {:.2f}".format(self.milliseconds),
-                    "playtime:         {:.2f}".format(self.playtime),
-                    )
-            for count, line in enumerate(text):
-                self.screen.blit(self.debugfont.render(line, True, DEBUGFONTCOLOR), (0, count * 10))
 
     def handle_view(self, currentstate):
         """
@@ -103,6 +76,17 @@ class GameEngine(object):
             self.pausemenu.handle_view(self.scr_capt)       # achtergrond, screen capture
         elif currentstate == statemachine.State.OverWorld:
             self.overworld.handle_view()
+
+        """
+        Geeft debug informatie weer linksboven in het scherm.
+        """
+        if self.show_debug:
+            text = ("FPS:              {:.2f}".format(self.clock.get_fps()),
+                    "dt:               {:.2f}".format(self.dt),
+                    "playtime:         {:.2f}".format(self.playtime),
+                    )
+            for count, line in enumerate(text):
+                self.screen.blit(self.debugfont.render(line, True, DEBUGFONTCOLOR), (0, count * 10))
 
     def handle_music(self, currentstate):
         """
