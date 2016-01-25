@@ -12,7 +12,7 @@ import overworld
 import sound
 import statemachine
 
-FPS = 60
+FPS = 60        # minimaal 20 en maximaal 130, anders komen er bugs voor.
 
 DEBUGFONT = 'courier'
 DEBUGFONTSIZE = 11
