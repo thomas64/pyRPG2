@@ -10,12 +10,12 @@ import os
 import pygame
 
 
-MOVESPEED1 = 1
-MOVESPEED2 = 2
-MOVESPEED3 = 4
-MOVESPEED4 = 8
-TURNDELAY = 7
-VIEWSPEED = 8
+MOVESPEED1 = 60
+MOVESPEED2 = 120    # pixels/second
+MOVESPEED3 = 240
+MOVESPEED4 = 480
+TURNDELAY = 7/60    # van een seconde
+VIEWSPEED = 8       # todo, deze moet nog aangepast worden
 
 # todo, op andere ondergrond, ander stap geluid
 SOUNDSPATH = 'resources/sounds'
@@ -57,6 +57,7 @@ class Hero(pygame.sprite.Sprite):
 
         # Assign the position parameter value to the topleft x-y values of the rect
         self.rect.topleft = position
+        self.true_position = list(self.rect.topleft)
         self.old_position = list(self.rect.topleft)
         self.last_direction = Direction.South
         self.move_direction = None
@@ -88,17 +89,18 @@ class Hero(pygame.sprite.Sprite):
         elif key_input[pygame.K_LCTRL] or key_input[pygame.K_RCTRL]:
             self.movespeed = MOVESPEED1
 
-    def direction(self, key_input):
+    def direction(self, key_input, dt):
         """
         Geef de unit een richting mee.
         :param key_input: list van integers
+        :param dt: self.clock.tick(FPS)/1000.0
         """
         # Als je helemaal geen knoppen indrukt, ga dan in de stilstand pose.
         if not (key_input[pygame.K_UP] or key_input[pygame.K_DOWN] or
                 key_input[pygame.K_LEFT] or key_input[pygame.K_RIGHT]):
             self.time_delay = 0
             self.stand()
-            self.animate()
+            self.animate(dt)
 
         if key_input[pygame.K_UP]:
             self.time_up += 1
@@ -155,12 +157,12 @@ class Hero(pygame.sprite.Sprite):
         if key_input[pygame.K_UP] or key_input[pygame.K_DOWN] or \
            key_input[pygame.K_LEFT] or key_input[pygame.K_RIGHT]:
             if self.time_delay > 0:
-                self.time_delay -= 1
+                self.time_delay -= 1 * dt
             else:
-                self._move()
-                self.animate()
+                self._move(dt)
+                self.animate(dt)
 
-    def _move(self):
+    def _move(self, dt):
         """
         Verzet de positie in de opgegeven richting.
         """
@@ -168,13 +170,15 @@ class Hero(pygame.sprite.Sprite):
         self.old_position = list(self.rect.topleft)
 
         if self.move_direction == Direction.North:
-            self.rect.y -= self.movespeed
+            self.true_position[1] -= self.movespeed * dt
         elif self.move_direction == Direction.South:
-            self.rect.y += self.movespeed
+            self.true_position[1] += self.movespeed * dt
         elif self.move_direction == Direction.West:
-            self.rect.x -= self.movespeed
+            self.true_position[0] -= self.movespeed * dt
         elif self.move_direction == Direction.East:
-            self.rect.x += self.movespeed
+            self.true_position[0] += self.movespeed * dt
+
+        self.rect.topleft = self.true_position
 
     def align_to_grid(self, tile_size):
         """
@@ -183,7 +187,7 @@ class Hero(pygame.sprite.Sprite):
         """
         self.rect.topleft = (round(self.rect.x / tile_size) * tile_size, round(self.rect.y / tile_size) * tile_size)
 
-    def check_obstacle(self, obstacles, low_obsts, moverange, map_width, map_height):
+    def check_obstacle(self, obstacles, low_obsts, moverange, map_width, map_height, dt):
         """
         Bekijk of de unit tegen een andere sprite aan loopt.
         :param obstacles: lijst van rects van map1.obstacle_rects
@@ -191,18 +195,19 @@ class Hero(pygame.sprite.Sprite):
         :param moverange: jouw moverange sprite
         :param map_width: breedte van de map
         :param map_height: hoogte van de map
+        :param dt: self.clock.tick(FPS)/1000.0
         """
         # loop tegen de rand van een obstacle aan
         # er mag maar 1 obstacle in deze lijst zijn
         if len(self.rect.collidelistall(obstacles)) == 1:
             # obj_nr is het nummer van de betreffende obstacle
             obj_nr = self.rect.collidelist(obstacles)
-            self._move_side(obstacles[obj_nr])
+            self._move_side(obstacles[obj_nr], dt)
 
         # loop tegen de rand van een low obstacle aan, bijv water
         if len(self.rect.collidelistall(low_obsts)) == 1:
             obj_nr = self.rect.collidelist(low_obsts)
-            self._move_side(low_obsts[obj_nr])
+            self._move_side(low_obsts[obj_nr], dt)
 
         # loop recht tegen een obstacle of low_obst aan
         while self.rect.collidelist(obstacles) > -1 or \
@@ -228,44 +233,56 @@ class Hero(pygame.sprite.Sprite):
         """
         Verzet de positie in de tegenovergestelde richting.
         """
-        if self.move_direction == Direction.North:
-            self.rect.y += 1
-        if self.move_direction == Direction.South:
-            self.rect.y -= 1
-        if self.move_direction == Direction.West:
-            self.rect.x += 1
-        if self.move_direction == Direction.East:
-            self.rect.x -= 1
+        self.true_position = list(self.rect.topleft)
 
-    def _move_side(self, obst_rect):
+        if self.move_direction == Direction.North:
+            self.true_position[1] += 1
+        elif self.move_direction == Direction.South:
+            self.true_position[1] -= 1
+        elif self.move_direction == Direction.West:
+            self.true_position[0] += 1
+        elif self.move_direction == Direction.East:
+            self.true_position[0] -= 1
+
+        self.rect.topleft = self.true_position
+
+    def _move_side(self, obst_rect, dt):
         """
         Verzet de positie richting naast een object.
         :param obst_rect: een obstacle rectangle, zoals bijv een tree
         """
+        self.true_position = list(self.rect.topleft)
+
         if self.move_direction in (Direction.North, Direction.South):
             # als midden van unit groter is dan rechts van object
             if self.rect.centerx > obst_rect.right:
-                self.rect.x += self.movespeed
+                self.true_position[0] += self.movespeed * dt
+                self.rect.topleft = self.true_position
                 # als links van char groter is dan rechts van object
                 if self.rect.left > obst_rect.right:
                     self.rect.left = obst_rect.right
             # object oost van je
             if self.rect.centerx < obst_rect.left:
-                self.rect.x -= self.movespeed
+                self.true_position[0] -= self.movespeed * dt
+                self.rect.topleft = self.true_position
                 if self.rect.right < obst_rect.left:
                     self.rect.left = obst_rect.left - self.rect.width
 
         if self.move_direction in (Direction.West, Direction.East):
             # object noord van je
             if self.rect.centery > obst_rect.bottom:
-                self.rect.y += self.movespeed
+                self.true_position[1] += self.movespeed * dt
+                self.rect.topleft = self.true_position
                 if self.rect.top > obst_rect.bottom:
                     self.rect.top = obst_rect.bottom
             # object zuid van je
             if self.rect.centery < obst_rect.top:
-                self.rect.y -= self.movespeed
+                self.true_position[1] -= self.movespeed * dt
+                self.rect.topleft = self.true_position
                 if self.rect.bottom < obst_rect.top:
                     self.rect.top = obst_rect.top - self.rect.height
+
+        self.true_position = list(self.rect.topleft)
 
     def stand(self):
         """
@@ -273,45 +290,48 @@ class Hero(pygame.sprite.Sprite):
         """
         self.move_direction = None
         self.old_position = list(self.rect.topleft)
+        self.true_position = list(self.rect.topleft)
 
-    def animate(self):
+    def animate(self, dt):
         """
         Kijkt of de unit beweegt. Geef dan de hele dir_states dict door ipv alleen waarde 0.
+        :param dt: self.clock.tick(FPS)/1000.0
         """
         if self.move_direction is None:
             if self.last_direction == Direction.North:
-                self._clip(self.north_states[0])
+                self._clip(self.north_states[0], dt)
             if self.last_direction == Direction.South:
-                self._clip(self.south_states[0])
+                self._clip(self.south_states[0], dt)
             if self.last_direction == Direction.West:
-                self._clip(self.west_states[0])
+                self._clip(self.west_states[0], dt)
             if self.last_direction == Direction.East:
-                self._clip(self.east_states[0])
+                self._clip(self.east_states[0], dt)
         else:
             if self.move_direction == Direction.North:
-                self._clip(self.north_states)
+                self._clip(self.north_states, dt)
             if self.move_direction == Direction.South:
-                self._clip(self.south_states)
+                self._clip(self.south_states, dt)
             if self.move_direction == Direction.West:
-                self._clip(self.west_states)
+                self._clip(self.west_states, dt)
             if self.move_direction == Direction.East:
-                self._clip(self.east_states)
+                self._clip(self.east_states, dt)
 
         # Update the image for each pass
         self.image = self.full_sprite.subsurface(self.full_sprite.get_clip())
 
-    def _clip(self, clipped_rect):
+    def _clip(self, clipped_rect, dt):
         if type(clipped_rect) is dict:
-            self.full_sprite.set_clip(pygame.Rect(self._get_frame(clipped_rect)))
+            self.full_sprite.set_clip(pygame.Rect(self._get_frame(clipped_rect, dt)))
         else:
             self.step_count = 0
             self.step_animation = 0
             self.full_sprite.set_clip(pygame.Rect(clipped_rect))
         # return clipped_rect
 
-    def _get_frame(self, frame_set):
+    def _get_frame(self, frame_set, dt):
         self.step_count += 1
-        if self.step_count % (24 / self.movespeed) == 1:  # 24 is deelbaar door alle movespeeds
+        # todo, dit moet aangepast worden ook aan andere movespeeds of FPS's
+        if self.step_count % (self.movespeed * dt) == 1:  # 24 is deelbaar door alle movespeeds
             if self.step_animation == 0:
                 self.step_left.play()
             elif self.step_animation == 2:

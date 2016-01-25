@@ -73,13 +73,14 @@ class OverWorld(object):
         self.group.draw(self.window)
         self.screen.blit(self.window, WINDOWPOS)
 
-    def handle_multi_input(self, key_input):
+    def handle_multi_input(self, key_input, dt):
         """
         Handel de input af voor snelheid en richting. Check daarna op collision.
         :param key_input: pygame.key.get_pressed()
+        :param dt: self.clock.tick(FPS)/1000.0
         """
         self.hero.speed(key_input)
-        self.hero.direction(key_input)
+        self.hero.direction(key_input, dt)
         # todo, moet dit niet naar de hero class?
         self.hero.check_obstacle(self.map1.obstacle_rects, self.map1.low_obst_rects,
-                                 None, self.map1.width, self.map1.height)
+                                 None, self.map1.width, self.map1.height, dt)

@@ -80,10 +80,28 @@ class GameEngine(object):
         """
         Geeft debug informatie weer linksboven in het scherm.
         """
-        if self.show_debug:
+        # todo, dit moet nog naar een andere plek en op een andere manier
+        if self.show_debug and currentstate == statemachine.State.OverWorld:
+            hero = self.overworld.hero
             text = ("FPS:              {:.2f}".format(self.clock.get_fps()),
-                    "dt:               {:.2f}".format(self.dt),
+                    "dt:               {:.3f}".format(self.dt),
                     "playtime:         {:.2f}".format(self.playtime),
+                    "time_up:          {}".format(hero.time_up),
+                    "time_down:        {}".format(hero.time_down),
+                    "time_left:        {}".format(hero.time_left),
+                    "time_right:       {}".format(hero.time_right),
+                    "time_delay:       {}".format(hero.time_delay),
+                    "last_direction:   {}".format(hero.last_direction),
+                    "move_direction:   {}".format(hero.move_direction),
+                    "movespeed:        {}".format(hero.movespeed),
+                    "old_position.x:   {}".format(hero.old_position[0]),
+                    "old_position.y:   {}".format(hero.old_position[1]),
+                    "new_position.x:   {}".format(hero.rect.x),
+                    "new_position.y:   {}".format(hero.rect.y),
+                    "true_position.x:  {}".format(hero.true_position[0]),
+                    "true_position.y:  {}".format(hero.true_position[1]),
+                    "step_count:       {}".format(hero.step_count),
+                    "step_animation:   {}".format(hero.step_animation),
                     )
             for count, line in enumerate(text):
                 self.screen.blit(self.debugfont.render(line, True, DEBUGFONTCOLOR), (0, count * 10))
@@ -103,7 +121,7 @@ class GameEngine(object):
         self.key_input = pygame.key.get_pressed()
 
         if currentstate == statemachine.State.OverWorld:
-            self.overworld.handle_multi_input(self.key_input)
+            self.overworld.handle_multi_input(self.key_input, self.dt)
 
     def handle_single_input(self, event, currentstate):
         """
