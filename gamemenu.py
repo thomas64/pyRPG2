@@ -8,9 +8,10 @@ class: GameMenu
 """
 
 import enum
-import os
 
 import pygame
+
+import sound
 
 
 BACKGROUNDCOLOR = pygame.Color("black")
@@ -25,12 +26,6 @@ MENUFONT = None
 MENUFONTSIZE = 50
 MENUFONTCOLOR1 = pygame.Color("white")
 MENUFONTCOLOR2 = pygame.Color("yellow")
-
-# todo, dit moet naar de music class, de music en sound class moet globaal voor het hele spel gaan werken
-SOUNDSPATH = 'resources/sounds'
-MENUSWITCHSOUND = os.path.join(SOUNDSPATH, 'mainmenu_switch.wav')
-MENUSELECTSOUND = os.path.join(SOUNDSPATH, 'mainmenu_select.wav')
-MENUERRORSOUND = os.path.join(SOUNDSPATH,  'mainmenu_error.wav')
 
 
 class MainMenuItem(enum.Enum):
@@ -124,6 +119,8 @@ class GameMenu(object):
         bg_width = self.background.get_width()
         bg_height = self.background.get_height()
 
+        self.sound = sound.Sound()
+
         self.show_title = title
         self.title = MenuTitle()        # ook als hij geen title heeft doet hij dit, maar hij laat het toch niet zien
         pos_x = (bg_width/2) - (self.title.width/2)
@@ -142,10 +139,6 @@ class GameMenu(object):
             self.menu_items.append(menu_item)
 
         self.cur_item = 0
-
-        self.switch = pygame.mixer.Sound(MENUSWITCHSOUND)
-        self.select = pygame.mixer.Sound(MENUSELECTSOUND)
-        self.error = pygame.mixer.Sound(MENUERRORSOUND)
 
     def handle_view(self, bg):
         """
@@ -175,18 +168,18 @@ class GameMenu(object):
         :param event: pygame.event.get() uit screen.py
         """
         if event.key == pygame.K_UP and self.cur_item > 0:
-            self.switch.play()
+            self.sound.switch.play()
             self.cur_item -= 1
         elif event.key == pygame.K_UP and self.cur_item == 0:
-            self.error.play()
+            self.sound.error.play()
             self.cur_item = 0
         elif event.key == pygame.K_DOWN and self.cur_item < len(self.menu_items) - 1:
-            self.switch.play()
+            self.sound.switch.play()
             self.cur_item += 1
         elif event.key == pygame.K_DOWN and self.cur_item == len(self.menu_items) - 1:
-            self.error.play()
+            self.sound.error.play()
             self.cur_item = len(self.menu_items) - 1
 
         if event.key == pygame.K_RETURN or event.key == pygame.K_KP_ENTER:
-            self.select.play()
+            self.sound.select.play()
             return self.menu_items[self.cur_item].func

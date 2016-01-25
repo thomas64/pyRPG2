@@ -8,6 +8,7 @@ import pygame
 import gamemenu
 import music
 import overworld
+import sound
 import statemachine
 
 FPS = 60
@@ -25,6 +26,7 @@ class GameEngine(object):
         self.screen = pygame.display.get_surface()
         self.state = statemachine.StateMachine()
         self.music = music.Music()
+        self.sound = sound.Sound()
 
         self.mainmenu = None
         self.pausemenu = None
@@ -164,6 +166,7 @@ class GameEngine(object):
             elif currentstate == statemachine.State.OverWorld:
                 self.overworld.handle_single_input(event)
                 if event.key == pygame.K_ESCAPE:
+                    self.sound.select.play()
                     data = pygame.image.tostring(self.screen, 'RGBA')       # maak een screen capture
                     self.scr_capt = pygame.image.frombuffer(data, self.screen.get_size(), 'RGBA')
                     self.state.push(statemachine.State.PauseMenu)
