@@ -26,6 +26,7 @@ MENUFONTSIZE = 50
 MENUFONTCOLOR1 = pygame.Color("white")
 MENUFONTCOLOR2 = pygame.Color("yellow")
 
+# todo, dit moet naar de music class, de music en sound class moet globaal voor het hele spel gaan werken
 SOUNDSPATH = 'resources/sounds'
 MENUSWITCHSOUND = os.path.join(SOUNDSPATH, 'mainmenu_switch.wav')
 MENUSELECTSOUND = os.path.join(SOUNDSPATH, 'mainmenu_select.wav')

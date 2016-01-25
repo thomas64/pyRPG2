@@ -18,8 +18,8 @@ WINDOWHEIGHT = 600
 WINDOWPOS = 100, 100
 
 BACKGROUNDCOLOR = pygame.Color("black")
-WINDOWCOLOR = pygame.Color("gray12")
 GRIDCOLOR = pygame.Color("gray38")
+WINDOWCOLOR = pygame.Color("gray12")
 
 # todo, mooiere map maken met variatie in het gras
 OVERWORLDPATH = 'resources/maps/start_forest.tmx'
@@ -104,3 +104,4 @@ class OverWorld(object):
                 self.group.remove(self.grid_sprite)
                 self.grid_sprite = None
 
+        # todo, cboxes toevoegen
