@@ -7,7 +7,6 @@ import pygame
 
 import loadsave
 import menu
-import music
 import overworld
 import sound
 import statemachine
@@ -18,8 +17,6 @@ DEBUGFONT = 'courier'
 DEBUGFONTSIZE = 11
 DEBUGFONTCOLOR = pygame.Color("white")
 
-BLACK = pygame.Color("black")
-
 
 class GameEngine(object):
     """
@@ -28,7 +25,6 @@ class GameEngine(object):
     def __init__(self):
         self.screen = pygame.display.get_surface()
         self.state = statemachine.StateMachine()
-        self.music = music.Music()
         self.sound = sound.Sound()
 
         self.loadsave = None
@@ -44,6 +40,7 @@ class GameEngine(object):
         self.timer = 0.0
 
         self.debugfont = pygame.font.SysFont(DEBUGFONT, DEBUGFONTSIZE)
+        self.currentstate = None
         self.key_input = None
         self.scr_capt = None
 
@@ -54,27 +51,24 @@ class GameEngine(object):
         Start de game loop.
         """
         self.running = True
-        self.state.push(statemachine.State.MainMenu)
-        self.mainmenu = menu.GameMenu(self.screen, menu.MainMenuItem, True)
+        self._main_menu()
 
         while self.running:
             self.dt = self.clock.tick(FPS)/1000.0       # limit the redraw speed to 60 frames per second
             self.playtime += self.dt
 
-            currentstate = self.state.peek()
-            self.handle_view(currentstate)
-            self.handle_music(currentstate)
-            self.handle_multi_input(currentstate)
+            self.currentstate = self.state.peek()
+            self.handle_view()
+            self.handle_multi_input()
             for event in pygame.event.get():
                 if event.type == pygame.QUIT:
                     self.running = False
-                self.handle_single_input(event, currentstate)
+                self.handle_single_input(event)
             pygame.display.flip()
 
-    def handle_view(self, currentstate):
+    def handle_view(self):
         """
         Laat de weergave van de verschillende states zien.
-        :param currentstate: bovenste state van de stack
         """
         def show_debug():
             """
@@ -105,100 +99,135 @@ class GameEngine(object):
                 for count, line in enumerate(text):
                     self.screen.blit(self.debugfont.render(line, True, DEBUGFONTCOLOR), (0, count * 10))
 
-        if currentstate == statemachine.State.MainMenu:
+        if self.currentstate == statemachine.State.MainMenu:
             self.mainmenu.handle_view(None)                 # geen achtergrond
             show_debug()
-        elif currentstate == statemachine.State.PauseMenu:
+        elif self.currentstate == statemachine.State.PauseMenu:
             self.pausemenu.handle_view(self.scr_capt)       # achtergrond, screen capture
-        elif currentstate == statemachine.State.OverWorld:
+        elif self.currentstate == statemachine.State.OverWorld:
             self.overworld.handle_view()
 
-    def handle_music(self, currentstate):
-        """
-        Handelt het spelen van muziek af.
-        :param currentstate: bovenste state van de stack
-        """
-        self.music.play(currentstate)
-
-    def handle_multi_input(self, currentstate):
+    def handle_multi_input(self):
         """
         Handelt de ingedrukt-houden muis en keyboard input af.
-        :param currentstate: bovenste state van de stack
         """
         self.key_input = pygame.key.get_pressed()
 
-        if currentstate == statemachine.State.OverWorld:
+        if self.currentstate == statemachine.State.OverWorld:
             self.overworld.handle_multi_input(self.key_input, self.dt)
 
-    def handle_single_input(self, event, currentstate):
+    def handle_single_input(self, event):
         """
         Handelt de muis en keyboard input af.
         :param event: pygame.event.get()
-        :param currentstate: bovenste state van de stack
         """
         if event.type == pygame.KEYDOWN:
             print("Keyboard, key={}, unicode={}".format(event.key, event.unicode))
 
-            if currentstate == statemachine.State.MainMenu:
+            if self.currentstate == statemachine.State.MainMenu:
                 menu_choice = self.mainmenu.handle_single_input(event)
                 if event.key == pygame.K_F12:
-                    self.show_debug ^= True             # simple boolean swith
+                    self.show_debug ^= True                     # simple boolean swith
                 elif menu_choice == menu.MainMenuItem.ExitGame:
-                    self.running = False
+                    self._exit_game()
                 elif menu_choice == menu.MainMenuItem.NewGame:
-                    self.state.pop(currentstate)
-                    self.mainmenu = None
-                    self.state.push(statemachine.State.OverWorld)
-                    self.screen.fill(BLACK)
-                    pygame.time.delay(500)
-                    self.overworld = overworld.OverWorld(self.screen)
+                    self._new_game()
                 elif menu_choice == menu.MainMenuItem.LoadGame:
-                    self.loadsave = loadsave.Dialog()
-                    self.overworld = overworld.OverWorld(self.screen)       # laad de overworld alvast
-                    if self.loadsave.load(self) is None:
-                        self.overworld = None                               # toch niet
-                    else:                                                   # geef data mee aan de overworld
-                        self.sound.select.play()
-                        self.state.pop(currentstate)
-                        self.mainmenu = None
-                        self.screen.fill(BLACK)
-                        pygame.time.delay(500)
-                        self.state.push(statemachine.State.OverWorld)
-                    pygame.event.clear()
-                    self.loadsave = None
+                    self._load_game()
 
-            elif currentstate == statemachine.State.PauseMenu:
+            elif self.currentstate == statemachine.State.PauseMenu:
                 menu_choice = self.pausemenu.handle_single_input(event)
                 if event.key == pygame.K_ESCAPE:
-                    self.sound.select.play()
-                    self.state.pop(currentstate)
-                    self.pausemenu = None
+                    self.sound.select.play()                    # omdat escape in menu geen geluid geeft
+                    self._exit_pause()
                 elif menu_choice == menu.PauseMenuItem.ContinueGame:
-                    self.state.pop(currentstate)
-                    self.pausemenu = None
+                    self._exit_pause()
                 elif menu_choice == menu.PauseMenuItem.MainMenu:
-                    self.state.clear()
-                    self.pausemenu = None
-                    self.overworld = None
-                    self.state.push(statemachine.State.MainMenu)
-                    self.screen.fill(BLACK)                                 # een test om eventjes het scherm op zwart
-                    pygame.time.delay(500)                                  # te zetten
-                    self.mainmenu = menu.GameMenu(self.screen, menu.MainMenuItem, True)
+                    self._main_menu()
                 elif menu_choice == menu.PauseMenuItem.SaveGame:
-                    self.loadsave = loadsave.Dialog()
-                    if self.loadsave.save(self) is not None:
-                        self.sound.select.play()
-                    pygame.event.clear()                                    # anders stapelen de geluiden zich op
-                    self.loadsave = None
+                    self._save_game()
 
-            elif currentstate == statemachine.State.OverWorld:
+            elif self.currentstate == statemachine.State.OverWorld:
                 self.overworld.handle_single_input(event)
                 if event.key == pygame.K_ESCAPE:
-                    self.sound.select.play()
-                    data = pygame.image.tostring(self.screen, 'RGBA')       # maak een screen capture
-                    self.scr_capt = pygame.image.frombuffer(data, self.screen.get_size(), 'RGBA')
-                    self.state.push(statemachine.State.PauseMenu)
-                    self.pausemenu = menu.GameMenu(self.screen, menu.PauseMenuItem, False)
-                if event.key == pygame.K_BACKSPACE:                         # todo, deze moet uiteindelijk weg
-                    import sys
-                    sys.exit()
+                    self._load_pause()
+                if event.key == pygame.K_BACKSPACE:
+                    self._kill_game()                           # todo, deze en de methode moeten uiteindelijk weg
+
+    def change_state(self, new_state):
+        """
+        :param new_state:
+        """
+        if self.state is None:
+            pass
+
+    def _main_menu(self):
+        if self.sound.current.get_sound() is not None:
+            self.sound.current.fadeout(1000)
+        self.pausemenu = None
+        self.overworld = None
+        self.state.clear()
+        self.state.push(statemachine.State.MainMenu)
+        self.mainmenu = menu.GameMenu(self.screen, menu.MainMenuItem, True)
+        self.sound.current.set_volume(1)
+        self.sound.current.play(self.sound.mainmenu, -1)
+
+    def _new_game(self):
+        if self.sound.current.get_sound() is not None:
+            self.sound.current.fadeout(1000)
+        self.mainmenu = None
+        self.state.pop(self.currentstate)
+        self.state.push(statemachine.State.OverWorld)
+        self.overworld = overworld.OverWorld(self.screen)
+        self.sound.current.set_volume(1)
+        self.sound.current.play(self.sound.overworld, -1)
+
+    def _load_game(self):
+        self.loadsave = loadsave.Dialog()
+        self.overworld = overworld.OverWorld(self.screen)       # laad de overworld alvast
+        if self.loadsave.load(self) is None:
+            self.overworld = None                               # toch niet
+        else:                                                   # geef data mee aan de overworld
+            self.sound.select.play()
+            if self.sound.current.get_sound() is not None:
+                self.sound.current.fadeout(1000)
+            self.mainmenu = None
+            self.state.pop(self.currentstate)
+            self.state.push(statemachine.State.OverWorld)
+            self.sound.current.set_volume(1)
+            self.sound.current.play(self.sound.overworld, -1)
+        pygame.event.clear()
+        self.loadsave = None
+
+    def _exit_game(self):
+        if self.sound.current.get_sound() is not None:
+            self.sound.current.fadeout(1000)
+        self.running = False
+
+    def _load_pause(self):
+        self.sound.select.play()
+        if self.sound.current.get_sound() is not None:
+            self.sound.current.fadeout(1000)
+        data = pygame.image.tostring(self.screen, 'RGBA')       # maak een screen capture
+        self.scr_capt = pygame.image.frombuffer(data, self.screen.get_size(), 'RGBA')
+        self.state.push(statemachine.State.PauseMenu)
+        self.pausemenu = menu.GameMenu(self.screen, menu.PauseMenuItem, False)
+
+    def _save_game(self):
+        self.loadsave = loadsave.Dialog()
+        if self.loadsave.save(self) is not None:
+            self.sound.select.play()
+        pygame.event.clear()                                    # anders stapelen de geluiden zich op
+        self.loadsave = None
+
+    def _exit_pause(self):
+        self.state.pop(self.currentstate)
+        self.pausemenu = None
+        self.sound.current.set_volume(1)
+        self.sound.current.play(self.sound.overworld, -1)
+
+    @staticmethod
+    def _kill_game():
+        import sys
+        pygame.quit()
+        sys.exit()

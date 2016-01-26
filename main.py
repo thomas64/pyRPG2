@@ -22,8 +22,6 @@ def main():
     pygame.display.set_mode((SCREENWIDTH, SCREENHEIGHT), pygame.NOFRAME)  # | pygame.FULLSCREEN)
     game.GameEngine().main_loop()
     # exit
-    game.GameEngine().music.current.fadeout(1000)
-    pygame.time.delay(1000)
     pygame.quit()
     sys.exit()
 
