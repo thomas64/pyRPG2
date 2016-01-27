@@ -1,20 +1,7 @@
 
 """
-class: State
 class: Statemachine
 """
-
-import enum
-
-
-class State(enum.Enum):
-    """
-    State machine constants for the StateMachine class below
-    """
-    MainMenu = 1
-    OptionsMenu = 2
-    PauseMenu = 3
-    OverWorld = 4
 
 
 class StateMachine(object):

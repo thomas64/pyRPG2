@@ -1,15 +1,9 @@
 
 """
-class: MenuItem
-class: MainMenuItem
-class: OptionsMenuItem
-class: PauseMenuItem
 class: MenuTitel
 class: MenuText
 class: GameMenu
 """
-
-import enum
 
 import pygame
 
@@ -28,43 +22,6 @@ MENUFONT = None
 MENUFONTSIZE = 50
 MENUFONTCOLOR1 = pygame.Color("white")
 MENUFONTCOLOR2 = pygame.Color("yellow")
-
-
-class MenuItem(enum.Enum):
-    """
-    Base class voor de verschillende menu's.
-    Je kan er dan doorheen loopen.
-    """
-    def __iter__(self):
-        return iter(self)
-
-
-class MainMenuItem(MenuItem):
-    """
-    De mainmenu items.
-    """
-    NewGame = 'New Game'
-    LoadGame = 'Load Game'
-    Options = 'Options'
-    ExitGame = 'Exit'
-
-
-class OptionsMenuItem(MenuItem):
-    """
-    De options items.
-    """
-    Sounds = 'Sounds: On'
-    Music = 'Music: On'
-    Back = 'Back'
-
-
-class PauseMenuItem(MenuItem):
-    """
-    De pausemenu items.
-    """
-    ContinueGame = 'Continue'
-    SaveGame = 'Save Game'
-    MainMenu = 'Main Menu'
 
 
 class MenuTitle(object):
@@ -86,8 +43,8 @@ class MenuText(object):
     Een mainmenu item.
     """
     def __init__(self, item, font, size, color):
-        self.func = item
-        self.text = item.value
+        self.func = item[0]     # de key van een item
+        self.text = item[1]     # de value
         self.font = pygame.font.SysFont(font, size)
         self.font_color = color
         self.label = self.font.render(self.text, 1, self.font_color)
@@ -127,10 +84,9 @@ class GameMenu(object):
         self.title.position = (pos_x, pos_y)
 
         self.menu_items = []
-        all_menu_items = list(itemsmenu)
-        for index, item in enumerate(all_menu_items):
+        for index, item in enumerate(itemsmenu):
             menu_item = MenuText(item, MENUFONT, MENUFONTSIZE, MENUFONTCOLOR1)
-            t_h = len(all_menu_items) * menu_item.height                 # t_h: total height of text block
+            t_h = len(itemsmenu) * menu_item.height                 # t_h: total height of text block
             pos_x = (bg_width/2) - (menu_item.width/2)
             pos_y = ((bg_height/2) - (t_h/2)) + (menu_item.height * index * 2)
 

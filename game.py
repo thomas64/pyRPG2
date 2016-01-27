@@ -3,13 +3,17 @@
 class: GameEngine
 """
 
+import pickle
+
 import pygame
 
 import loadsave
 import menu
+import menus
 import overworld
 import sound
 import statemachine
+import states
 
 FPS = 60        # minimaal 20 en maximaal 130, anders komen er bugs voor.
 
@@ -94,14 +98,14 @@ class GameEngine(object):
                 for count, line in enumerate(text):
                     self.screen.blit(self.debugfont.render(line, True, DEBUGFONTCOLOR), (0, count * 10))
 
-        if self.currentstate == statemachine.State.MainMenu:
+        if self.currentstate == states.GameState.MainMenu:
             self.mainmenu.handle_view(None)                 # geen achtergrond
             show_debug()
-        elif self.currentstate == statemachine.State.OptionsMenu:
+        elif self.currentstate == states.GameState.OptionsMenu:
             self.optionsmenu.handle_view(None)
-        elif self.currentstate == statemachine.State.PauseMenu:
+        elif self.currentstate == states.GameState.PauseMenu:
             self.pausemenu.handle_view(self.scr_capt)       # achtergrond, screen capture
-        elif self.currentstate == statemachine.State.OverWorld:
+        elif self.currentstate == states.GameState.OverWorld:
             self.overworld.handle_view()
 
     def handle_multi_input(self):
@@ -110,7 +114,7 @@ class GameEngine(object):
         """
         self.key_input = pygame.key.get_pressed()
 
-        if self.currentstate == statemachine.State.OverWorld:
+        if self.currentstate == states.GameState.OverWorld:
             self.overworld.handle_multi_input(self.key_input, self.dt)
 
     def handle_single_input(self, event):
@@ -121,42 +125,42 @@ class GameEngine(object):
         if event.type == pygame.KEYDOWN:
             print("Keyboard, key={}, unicode={}".format(event.key, event.unicode))
 
-            if self.currentstate == statemachine.State.MainMenu:
+            if self.currentstate == states.GameState.MainMenu:
                 menu_choice = self.mainmenu.handle_single_input(event)
                 if event.key == pygame.K_F12:
                     self.show_debug ^= True                     # simple boolean swith
-                elif menu_choice == menu.MainMenuItem.NewGame:
+                elif menu_choice == menus.Main().NewGame:
                     self._main_menu_select_new_game()
-                elif menu_choice == menu.MainMenuItem.LoadGame:
+                elif menu_choice == menus.Main().LoadGame:
                     self._main_menu_select_load_game()
-                elif menu_choice == menu.MainMenuItem.Options:
+                elif menu_choice == menus.Main().Options:
                     self._main_menu_select_options()
-                elif menu_choice == menu.MainMenuItem.ExitGame:
+                elif menu_choice == menus.Main().ExitGame:
                     self._main_menu_select_exit_game()
 
-            elif self.currentstate == statemachine.State.OptionsMenu:
+            elif self.currentstate == states.GameState.OptionsMenu:
                 menu_choice = self.optionsmenu.handle_single_input(event)
                 if event.key == pygame.K_ESCAPE:
                     self._options_menu_select_back(with_esc=True)
-                elif menu_choice == menu.OptionsMenuItem.Back:
+                elif menu_choice == menus.Options().Back:
                     self._options_menu_select_back(with_esc=False)
-                elif menu_choice == menu.OptionsMenuItem.Sounds:
-                    self._options_menu_select_sounds()
-                elif menu_choice == menu.OptionsMenuItem.Music:
+                elif menu_choice == menus.Options().Music:
                     self._options_menu_select_music()
+                elif menu_choice == menus.Options().Sound:
+                    self._options_menu_select_sound()
 
-            elif self.currentstate == statemachine.State.PauseMenu:
+            elif self.currentstate == states.GameState.PauseMenu:
                 menu_choice = self.pausemenu.handle_single_input(event)
                 if event.key == pygame.K_ESCAPE:
                     self._pause_menu_select_continue(with_esc=True)
-                elif menu_choice == menu.PauseMenuItem.ContinueGame:
+                elif menu_choice == menus.Pause().ContinueGame:
                     self._pause_menu_select_continue(with_esc=False)
-                elif menu_choice == menu.PauseMenuItem.SaveGame:
+                elif menu_choice == menus.Pause().SaveGame:
                     self._pause_menu_select_save_game()
-                elif menu_choice == menu.PauseMenuItem.MainMenu:
+                elif menu_choice == menus.Pause().MainMenu:
                     self._show_main_menu()
 
-            elif self.currentstate == statemachine.State.OverWorld:
+            elif self.currentstate == states.GameState.OverWorld:
                 self.overworld.handle_single_input(event)
                 if event.key == pygame.K_ESCAPE:
                     self._show_pause_menu()
@@ -169,8 +173,8 @@ class GameEngine(object):
         self.pausemenu = None
         self.overworld = None
         self.state.clear()
-        self.state.push(statemachine.State.MainMenu)
-        self.mainmenu = menu.GameMenu(self.screen, menu.MainMenuItem, True)
+        self.state.push(states.GameState.MainMenu)
+        self.mainmenu = menu.GameMenu(self.screen, menus.Main(), True)
         self.sound.current.set_volume(1)
         self.sound.current.play(self.sound.mainmenu, -1, fade_ms=3000)
 
@@ -179,7 +183,7 @@ class GameEngine(object):
             self.sound.current.fadeout(1000)
         self.mainmenu = None
         self.state.pop(self.currentstate)
-        self.state.push(statemachine.State.OverWorld)
+        self.state.push(states.GameState.OverWorld)
         self.overworld = overworld.OverWorld(self.screen)
         self.sound.current.set_volume(1)
         self.sound.current.play(self.sound.overworld, -1, fade_ms=3000)
@@ -195,31 +199,50 @@ class GameEngine(object):
                 self.sound.current.fadeout(1000)
             self.mainmenu = None
             self.state.pop(self.currentstate)
-            self.state.push(statemachine.State.OverWorld)
+            self.state.push(states.GameState.OverWorld)
             self.sound.current.set_volume(1)
             self.sound.current.play(self.sound.overworld, -1, fade_ms=3000)
         pygame.event.clear()
         self.loadsave = None
 
     def _main_menu_select_options(self):
-        self.state.push(statemachine.State.OptionsMenu)
-        self.optionsmenu = menu.GameMenu(self.screen, menu.OptionsMenuItem, True)
+        self.state.push(states.GameState.OptionsMenu)
+        self.optionsmenu = menu.GameMenu(self.screen, menus.Options(), True)
 
     def _main_menu_select_exit_game(self):
         if self.sound.current.get_sound() is not None:
             self.sound.current.fadeout(1000)
         self.running = False
 
-    def _options_menu_select_sounds(self):
-        pass
-
     def _options_menu_select_music(self):
-        if "On" in menu.OptionsMenuItem.Sounds.value:
-            menu.OptionsMenuItem.Sounds.value = "pipo"  # .replace("On", "Off")
-            self.sound.current.stop()
+        with open('options.cfg', 'rb') as f:
+            musicsetting, soundsetting = pickle.load(f)
+        settingview = self.optionsmenu.menu_items[self.optionsmenu.cur_item]
+        if "On" in settingview.text:
+            settingview.text = settingview.text.replace("On", "Off")
+            musicsetting = 0
+            with open('options.cfg', 'wb') as f:
+                pickle.dump([musicsetting, soundsetting], f)
         else:
-            menu.OptionsMenuItem.Sounds.value.replace("Off", "On")
-            self.sound.current.play(-1)
+            settingview.text = settingview.text.replace("Off", "On")
+            musicsetting = 1
+            with open('options.cfg', 'wb') as f:
+                pickle.dump([musicsetting, soundsetting], f)
+
+    def _options_menu_select_sound(self):
+        with open('options.cfg', 'rb') as f:
+            musicsetting, soundsetting = pickle.load(f)
+        settingview = self.optionsmenu.menu_items[self.optionsmenu.cur_item]
+        if "On" in settingview.text:
+            settingview.text = settingview.text.replace("On", "Off")
+            soundsetting = 0
+            with open('options.cfg', 'wb') as f:
+                pickle.dump([musicsetting, soundsetting], f)
+        else:
+            settingview.text = settingview.text.replace("Off", "On")
+            soundsetting = 1
+            with open('options.cfg', 'wb') as f:
+                pickle.dump([musicsetting, soundsetting], f)
 
     def _options_menu_select_back(self, with_esc):
         if with_esc:
@@ -233,8 +256,8 @@ class GameEngine(object):
             self.sound.current.fadeout(1000)
         data = pygame.image.tostring(self.screen, 'RGBA')       # maak een screen capture
         self.scr_capt = pygame.image.frombuffer(data, self.screen.get_size(), 'RGBA')
-        self.state.push(statemachine.State.PauseMenu)
-        self.pausemenu = menu.GameMenu(self.screen, menu.PauseMenuItem, False)
+        self.state.push(states.GameState.PauseMenu)
+        self.pausemenu = menu.GameMenu(self.screen, menus.Pause(), False)
 
     def _pause_menu_select_save_game(self):
         self.loadsave = loadsave.Dialog()

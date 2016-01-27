@@ -22,6 +22,7 @@ class Sound(object):
     """
     Alle geluiden.
     """
+    # todo, optie in hoofmenu om geluid en muziek te kunnen muten
     def __init__(self):
         self.current = pygame.mixer.Channel(7)
         self.mainmenu = pygame.mixer.Sound(MAINMENUMUSIC)
