@@ -166,51 +166,41 @@ class GameEngine(object):
                     self._kill_game()                           # todo, deze en de methode moeten uiteindelijk weg
 
     def _show_main_menu(self):
-        if self.sound.current.get_sound() is not None:
-            self.sound.current.fadeout(1000)
         self.pausemenu = None
         self.overworld = None
         self.state.clear()
         self.state.push(states.GameState.MainMenu)
-        self.mainmenu = menu.GameMenu(self.screen, menus.Main(), True)
-        self.sound.current.set_volume(1)
-        self.sound.current.play(self.sound.mainmenu, -1, fade_ms=3000)
+        self.mainmenu = menu.GameMenu(self.screen, self.sound, menus.Main(), True)
+        self.sound.play_music(self.sound.mainmenu)
 
     def _main_menu_select_new_game(self):
-        if self.sound.current.get_sound() is not None:
-            self.sound.current.fadeout(1000)
         self.mainmenu = None
         self.state.pop(self.currentstate)
         self.state.push(states.GameState.OverWorld)
-        self.overworld = overworld.OverWorld(self.screen)
-        self.sound.current.set_volume(1)
-        self.sound.current.play(self.sound.overworld, -1, fade_ms=3000)
+        self.overworld = overworld.OverWorld(self.screen, self.sound)
+        self.sound.play_music(self.sound.overworld)
 
     def _main_menu_select_load_game(self):
         self.loadsave = loadsave.Dialog()
-        self.overworld = overworld.OverWorld(self.screen)       # laad de overworld alvast
+        self.overworld = overworld.OverWorld(self.screen, self.sound)               # laad de overworld alvast
         if self.loadsave.load(self) is None:
-            self.overworld = None                               # toch niet
-        else:                                                   # geef data mee aan de overworld
-            self.sound.select.play()
-            if self.sound.current.get_sound() is not None:
-                self.sound.current.fadeout(1000)
+            self.overworld = None                                                   # toch niet
+        else:                                                                       # geef data mee aan de overworld
+            self.sound.play_sound(self.sound.select)
             self.mainmenu = None
             self.state.pop(self.currentstate)
             self.state.push(states.GameState.OverWorld)
-            self.sound.current.set_volume(1)
-            self.sound.current.play(self.sound.overworld, -1, fade_ms=3000)
+            self.sound.play_music(self.sound.overworld)
         pygame.event.clear()
         self.loadsave = None
 
     def _main_menu_select_options(self):
         self.state.push(states.GameState.OptionsMenu)
         menu_items = menus.Options()                                                # hier worden de options geschreven
-        self.optionsmenu = menu.GameMenu(self.screen, menu_items, True)
+        self.optionsmenu = menu.GameMenu(self.screen, self.sound, menu_items, True)
 
     def _main_menu_select_exit_game(self):
-        if self.sound.current.get_sound() is not None:
-            self.sound.current.fadeout(1000)
+        self.sound.fade_music()
         self.running = False
 
     def _options_menu_select_music(self):
@@ -219,10 +209,14 @@ class GameEngine(object):
             settingview.text = settingview.text.replace("On", "Off")
             self.optionsmenu.menu_items.music = 0
             self.optionsmenu.menu_items.write_cfg()
+            self.sound.music = 0
+            self.sound.current.stop()
         else:
             settingview.text = settingview.text.replace("Off", "On")
             self.optionsmenu.menu_items.music = 1
             self.optionsmenu.menu_items.write_cfg()
+            self.sound.music = 1
+            self.sound.play_music(self.sound.mainmenu)
 
     def _options_menu_select_sound(self):
         settingview = self.optionsmenu.menu_texts[self.optionsmenu.cur_item]
@@ -230,40 +224,40 @@ class GameEngine(object):
             settingview.text = settingview.text.replace("On", "Off")
             self.optionsmenu.menu_items.sound = 0
             self.optionsmenu.menu_items.write_cfg()
+            self.sound.sound = 0
         else:
             settingview.text = settingview.text.replace("Off", "On")
             self.optionsmenu.menu_items.sound = 1
             self.optionsmenu.menu_items.write_cfg()
+            self.sound.sound = 1
 
     def _options_menu_select_back(self, with_esc):
         if with_esc:
-            self.sound.select.play()
+            self.sound.play_sound(self.sound.select)
         self.state.pop(self.currentstate)
         self.optionsmenu = None
 
     def _show_pause_menu(self):
-        self.sound.select.play()
-        if self.sound.current.get_sound() is not None:
-            self.sound.current.fadeout(1000)
+        self.sound.play_sound(self.sound.select)
+        self.sound.fade_music()
         data = pygame.image.tostring(self.screen, 'RGBA')       # maak een screen capture
         self.scr_capt = pygame.image.frombuffer(data, self.screen.get_size(), 'RGBA')
         self.state.push(states.GameState.PauseMenu)
-        self.pausemenu = menu.GameMenu(self.screen, menus.Pause(), False)
+        self.pausemenu = menu.GameMenu(self.screen, self.sound, menus.Pause(), False)
 
     def _pause_menu_select_save_game(self):
         self.loadsave = loadsave.Dialog()
         if self.loadsave.save(self) is not None:
-            self.sound.select.play()
+            self.sound.play_sound(self.sound.select)
         pygame.event.clear()                                    # anders stapelen de geluiden zich op
         self.loadsave = None
 
     def _pause_menu_select_continue(self, with_esc):
         if with_esc:
-            self.sound.select.play()                            # omdat escape in menu standaard geen geluid geeft
+            self.sound.play_sound(self.sound.select)            # omdat escape in menu standaard geen geluid geeft
         self.state.pop(self.currentstate)
         self.pausemenu = None
-        self.sound.current.set_volume(1)
-        self.sound.current.play(self.sound.overworld, -1, fade_ms=3000)
+        self.sound.play_music(self.sound.overworld)
 
     @staticmethod
     def _kill_game():

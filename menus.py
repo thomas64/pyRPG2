@@ -1,9 +1,9 @@
 
 """
-class: MenuItem
-class: MainMenuItem
-class: OptionsMenuItem
-class: PauseMenuItem
+class: Item
+class: Main
+class: Options
+class: Pause
 """
 
 import collections

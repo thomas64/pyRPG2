@@ -5,7 +5,6 @@ class: Hero
 """
 
 import enum
-import os
 
 import pygame
 
@@ -17,11 +16,6 @@ MOVESPEED4 = 480
 STEPSPEED = 25      # een waarde? lager is snellere stappen
 TURNDELAY = 7/60    # van een seconde
 VIEWSPEED = 8       # todo, deze moet nog aangepast worden
-
-# todo, op andere ondergrond, ander stap geluid
-SOUNDSPATH = 'resources/sounds'
-STEP_GRASS_L = os.path.join(SOUNDSPATH, 'step_grass_l.wav')
-STEP_GRASS_R = os.path.join(SOUNDSPATH, 'step_grass_r.wav')
 
 
 class Direction(enum.Enum):
@@ -38,7 +32,7 @@ class Hero(pygame.sprite.Sprite):
     """
     Hero extends the pygame.sprite.Sprite class
     """
-    def __init__(self, spritesheet, position):
+    def __init__(self, spritesheet, position, sound):
         pygame.sprite.Sprite.__init__(self)
 
         self.west_states = {0:  (32, 32, 32, 32), 1: (0, 32, 32, 32), 2: (32, 32, 32, 32), 3: (64, 32, 32, 32)}
@@ -56,6 +50,8 @@ class Hero(pygame.sprite.Sprite):
         self.rect = self.image.get_rect()
         self.mask = pygame.mask.from_surface(self.image)
 
+        self.sound = sound
+
         # Assign the position parameter value to the topleft x-y values of the rect
         self.rect.topleft = position
         self.true_position = list(self.rect.topleft)    # true_pos is een float, dat is nodig voor timebased movement
@@ -72,9 +68,6 @@ class Hero(pygame.sprite.Sprite):
         self.time_left = 0
         self.time_right = 0
         self.time_delay = 0
-
-        self.step_left = pygame.mixer.Sound(STEP_GRASS_L)
-        self.step_right = pygame.mixer.Sound(STEP_GRASS_R)
 
     def speed(self, key_input):
         """
@@ -345,9 +338,9 @@ class Hero(pygame.sprite.Sprite):
         if self.step_count % round((1 / (self.movespeed * dt)) * STEPSPEED) == 1:
             if self.movespeed != MOVESPEED4:  # geen animatie of geluid bij MOVESPEED4
                 if self.step_animation == 0:
-                    self.step_left.play()
+                    self.sound.play_sound(self.sound.step_left)
                 elif self.step_animation == 2:
-                    self.step_right.play()
+                    self.sound.play_sound(self.sound.step_right)
                 self.step_animation += 1
                 if self.step_animation > 3:
                     self.step_animation = 0

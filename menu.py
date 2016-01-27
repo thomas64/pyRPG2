@@ -7,8 +7,6 @@ class: GameMenu
 
 import pygame
 
-import sound
-
 
 BACKGROUNDCOLOR = pygame.Color("black")
 
@@ -65,7 +63,7 @@ class GameMenu(object):
     """
     Een menuscherm.
     """
-    def __init__(self, screen, itemsmenu, title):
+    def __init__(self, screen, sound, itemsmenu, title):
         self.screen = screen
         self.background = pygame.Surface(self.screen.get_size())
         self.background.fill(BACKGROUNDCOLOR)
@@ -75,7 +73,7 @@ class GameMenu(object):
         bg_width = self.background.get_width()
         bg_height = self.background.get_height()
 
-        self.sound = sound.Sound()
+        self.sound = sound
 
         self.show_title = title
         self.title = MenuTitle()        # ook als hij geen title heeft doet hij dit, maar hij laat het toch niet zien
@@ -124,18 +122,18 @@ class GameMenu(object):
         :param event: pygame.event.get() uit screen.py
         """
         if event.key == pygame.K_UP and self.cur_item > 0:
-            self.sound.switch.play()
+            self.sound.play_sound(self.sound.switch)
             self.cur_item -= 1
         elif event.key == pygame.K_UP and self.cur_item == 0:
-            self.sound.error.play()
+            self.sound.play_sound(self.sound.error)
             self.cur_item = 0
         elif event.key == pygame.K_DOWN and self.cur_item < len(self.menu_texts) - 1:
-            self.sound.switch.play()
+            self.sound.play_sound(self.sound.switch)
             self.cur_item += 1
         elif event.key == pygame.K_DOWN and self.cur_item == len(self.menu_texts) - 1:
-            self.sound.error.play()
+            self.sound.play_sound(self.sound.error)
             self.cur_item = len(self.menu_texts) - 1
 
         if event.key == pygame.K_RETURN or event.key == pygame.K_KP_ENTER:
-            self.sound.select.play()
+            self.sound.play_sound(self.sound.select)
             return self.menu_texts[self.cur_item].func

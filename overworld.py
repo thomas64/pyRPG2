@@ -32,7 +32,7 @@ class OverWorld(object):
     """
     Overworld layout.
     """
-    def __init__(self, screen):
+    def __init__(self, screen, sound):
         self.screen = screen
         self.background = pygame.Surface(self.screen.get_size())
         self.background.fill(BACKGROUNDCOLOR)
@@ -40,6 +40,8 @@ class OverWorld(object):
         self.window = pygame.Surface((WINDOWWIDTH, WINDOWHEIGHT))
         self.window.fill(WINDOWCOLOR)
         self.window = self.window.convert()
+
+        self.sound = sound
 
         self._init_map()
         self._init_hero()
@@ -67,7 +69,7 @@ class OverWorld(object):
         Maak de hero aan en voeg toe aan de group.
         """
         # todo, laden van pad van sprite moet nog anders
-        self.hero = character.Hero('resources/sprites/heroes/01_Alagos.png', [640, 768])
+        self.hero = character.Hero('resources/sprites/heroes/01_Alagos.png', [640, 768], self.sound)
         self.group.add(self.hero)
 
     def handle_view(self):
