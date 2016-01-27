@@ -47,24 +47,39 @@ class Options(Item):
     def __init__(self):
         super().__init__()
 
-        try:
-            with open('options.cfg', 'rb') as f:
-                music, sound = pickle.load(f)
-        except (pickle.UnpicklingError, FileNotFoundError):
-            print('Corrupt options file.')
-            music, sound = 1, 1
-            with open('options.cfg', 'wb') as f:
-                pickle.dump([music, sound], f)
+        self.music = None
+        self.sound = None
+        self.load_cfg()
 
-        if music == 1:
+        if self.music == 1:
             self.inside['Music'] = 'Music: On'
         else:
             self.inside['Music'] = 'Music: Off'
-        if sound == 1:
+        if self.sound == 1:
             self.inside['Sound'] = 'Sound: On'
         else:
             self.inside['Sound'] = 'Sound: Off'
         self.inside['Back'] = 'Back'
+
+    def load_cfg(self):
+        """
+        Laad settings uit config bestand.
+        """
+        try:
+            with open('options.cfg', 'rb') as f:
+                self.music, self.sound = pickle.load(f)
+        except (pickle.UnpicklingError, FileNotFoundError):
+            print('Corrupt options file.')
+            self.music, self.sound = 1, 1
+            with open('options.cfg', 'wb') as f:
+                pickle.dump([self.music, self.sound], f)
+
+    def write_cfg(self):
+        """
+        Schrijf settings naar config bestand.
+        """
+        with open('options.cfg', 'wb') as f:
+            pickle.dump([self.music, self.sound], f)
 
 
 class Pause(Item):

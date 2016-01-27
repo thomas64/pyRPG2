@@ -43,8 +43,8 @@ class MenuText(object):
     Een mainmenu item.
     """
     def __init__(self, item, font, size, color):
-        self.func = item[0]     # de key van een item
-        self.text = item[1]     # de value
+        self.func = item[0]     # de eerste van de double tuple, bijv NewGame
+        self.text = item[1]     # de tweede van de double tuple, bijv New Game
         self.font = pygame.font.SysFont(font, size)
         self.font_color = color
         self.label = self.font.render(self.text, 1, self.font_color)
@@ -83,15 +83,16 @@ class GameMenu(object):
         pos_y = TITLEPOSY
         self.title.position = (pos_x, pos_y)
 
-        self.menu_items = []
-        for index, item in enumerate(itemsmenu):
-            menu_item = MenuText(item, MENUFONT, MENUFONTSIZE, MENUFONTCOLOR1)
-            t_h = len(itemsmenu) * menu_item.height                 # t_h: total height of text block
-            pos_x = (bg_width/2) - (menu_item.width/2)
-            pos_y = ((bg_height/2) - (t_h/2)) + (menu_item.height * index * 2)
+        self.menu_items = itemsmenu     # het object OrderedDict genaamd inside
+        self.menu_texts = []            # een list van MenuText objecten
+        for index, item in enumerate(self.menu_items):
+            menu_text = MenuText(item, MENUFONT, MENUFONTSIZE, MENUFONTCOLOR1)
+            t_h = len(self.menu_items) * menu_text.height                 # t_h: total height of text block
+            pos_x = (bg_width/2) - (menu_text.width/2)
+            pos_y = ((bg_height/2) - (t_h/2)) + (menu_text.height * index * 2)
 
-            menu_item.position = (pos_x, pos_y)
-            self.menu_items.append(menu_item)
+            menu_text.position = (pos_x, pos_y)
+            self.menu_texts.append(menu_text)
 
         self.cur_item = 0
 
@@ -102,9 +103,9 @@ class GameMenu(object):
         Teken de (overworld screencapture) -> achtergrond -> (titel) -> menuitems.
         :param bg: screen capture van de overworld
         """
-        for item in self.menu_items:
+        for item in self.menu_texts:
             item.set_font_color(MENUFONTCOLOR1)
-        self.menu_items[self.cur_item].set_font_color(MENUFONTCOLOR2)
+        self.menu_texts[self.cur_item].set_font_color(MENUFONTCOLOR2)
 
         if bg is not None:
             self.screen.blit(bg, (0, 0))
@@ -114,7 +115,7 @@ class GameMenu(object):
         if self.show_title:
             self.screen.blit(self.title.label, self.title.position)
 
-        for item in self.menu_items:
+        for item in self.menu_texts:
             self.screen.blit(item.label, item.position)
 
     def handle_single_input(self, event):
@@ -128,13 +129,13 @@ class GameMenu(object):
         elif event.key == pygame.K_UP and self.cur_item == 0:
             self.sound.error.play()
             self.cur_item = 0
-        elif event.key == pygame.K_DOWN and self.cur_item < len(self.menu_items) - 1:
+        elif event.key == pygame.K_DOWN and self.cur_item < len(self.menu_texts) - 1:
             self.sound.switch.play()
             self.cur_item += 1
-        elif event.key == pygame.K_DOWN and self.cur_item == len(self.menu_items) - 1:
+        elif event.key == pygame.K_DOWN and self.cur_item == len(self.menu_texts) - 1:
             self.sound.error.play()
-            self.cur_item = len(self.menu_items) - 1
+            self.cur_item = len(self.menu_texts) - 1
 
         if event.key == pygame.K_RETURN or event.key == pygame.K_KP_ENTER:
             self.sound.select.play()
-            return self.menu_items[self.cur_item].func
+            return self.menu_texts[self.cur_item].func

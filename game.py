@@ -3,8 +3,6 @@
 class: GameEngine
 """
 
-import pickle
-
 import pygame
 
 import loadsave
@@ -215,34 +213,26 @@ class GameEngine(object):
         self.running = False
 
     def _options_menu_select_music(self):
-        with open('options.cfg', 'rb') as f:
-            musicsetting, soundsetting = pickle.load(f)
-        settingview = self.optionsmenu.menu_items[self.optionsmenu.cur_item]
-        if "On" in settingview.text:
+        settingview = self.optionsmenu.menu_texts[self.optionsmenu.cur_item]
+        if self.optionsmenu.menu_items.music == 1:
             settingview.text = settingview.text.replace("On", "Off")
-            musicsetting = 0
-            with open('options.cfg', 'wb') as f:
-                pickle.dump([musicsetting, soundsetting], f)
+            self.optionsmenu.menu_items.music = 0
+            self.optionsmenu.menu_items.write_cfg()
         else:
             settingview.text = settingview.text.replace("Off", "On")
-            musicsetting = 1
-            with open('options.cfg', 'wb') as f:
-                pickle.dump([musicsetting, soundsetting], f)
+            self.optionsmenu.menu_items.music = 1
+            self.optionsmenu.menu_items.write_cfg()
 
     def _options_menu_select_sound(self):
-        with open('options.cfg', 'rb') as f:
-            musicsetting, soundsetting = pickle.load(f)
-        settingview = self.optionsmenu.menu_items[self.optionsmenu.cur_item]
-        if "On" in settingview.text:
+        settingview = self.optionsmenu.menu_texts[self.optionsmenu.cur_item]
+        if self.optionsmenu.menu_items.sound == 1:
             settingview.text = settingview.text.replace("On", "Off")
-            soundsetting = 0
-            with open('options.cfg', 'wb') as f:
-                pickle.dump([musicsetting, soundsetting], f)
+            self.optionsmenu.menu_items.sound = 0
+            self.optionsmenu.menu_items.write_cfg()
         else:
             settingview.text = settingview.text.replace("Off", "On")
-            soundsetting = 1
-            with open('options.cfg', 'wb') as f:
-                pickle.dump([musicsetting, soundsetting], f)
+            self.optionsmenu.menu_items.sound = 1
+            self.optionsmenu.menu_items.write_cfg()
 
     def _options_menu_select_back(self, with_esc):
         if with_esc:
