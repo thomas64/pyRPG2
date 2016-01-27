@@ -205,7 +205,8 @@ class GameEngine(object):
 
     def _main_menu_select_options(self):
         self.state.push(states.GameState.OptionsMenu)
-        self.optionsmenu = menu.GameMenu(self.screen, menus.Options(), True)
+        menu_items = menus.Options()                                                # hier worden de options geschreven
+        self.optionsmenu = menu.GameMenu(self.screen, menu_items, True)
 
     def _main_menu_select_exit_game(self):
         if self.sound.current.get_sound() is not None:
@@ -213,8 +214,8 @@ class GameEngine(object):
         self.running = False
 
     def _options_menu_select_music(self):
-        settingview = self.optionsmenu.menu_texts[self.optionsmenu.cur_item]
-        if self.optionsmenu.menu_items.music == 1:
+        settingview = self.optionsmenu.menu_texts[self.optionsmenu.cur_item]        # hier wordt de visualisatie
+        if self.optionsmenu.menu_items.music == 1:                                  # later aangepast
             settingview.text = settingview.text.replace("On", "Off")
             self.optionsmenu.menu_items.music = 0
             self.optionsmenu.menu_items.write_cfg()
