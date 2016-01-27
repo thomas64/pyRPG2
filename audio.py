@@ -1,6 +1,6 @@
 
 """
-class: Sound
+class: Audio
 """
 
 import os
@@ -23,7 +23,7 @@ STEP_GRASS_L = os.path.join(SOUNDSPATH, 'step_grass_l.wav')
 STEP_GRASS_R = os.path.join(SOUNDSPATH, 'step_grass_r.wav')
 
 
-class Sound(object):
+class Audio(object):
     """
     Alle geluiden.
     """

@@ -32,7 +32,7 @@ class Hero(pygame.sprite.Sprite):
     """
     Hero extends the pygame.sprite.Sprite class
     """
-    def __init__(self, spritesheet, position, sound):
+    def __init__(self, spritesheet, position, audio):
         pygame.sprite.Sprite.__init__(self)
 
         self.west_states = {0:  (32, 32, 32, 32), 1: (0, 32, 32, 32), 2: (32, 32, 32, 32), 3: (64, 32, 32, 32)}
@@ -50,7 +50,7 @@ class Hero(pygame.sprite.Sprite):
         self.rect = self.image.get_rect()
         self.mask = pygame.mask.from_surface(self.image)
 
-        self.sound = sound
+        self.audio = audio
 
         # Assign the position parameter value to the topleft x-y values of the rect
         self.rect.topleft = position
@@ -338,9 +338,9 @@ class Hero(pygame.sprite.Sprite):
         if self.step_count % round((1 / (self.movespeed * dt)) * STEPSPEED) == 1:
             if self.movespeed != MOVESPEED4:  # geen animatie of geluid bij MOVESPEED4
                 if self.step_animation == 0:
-                    self.sound.play_sound(self.sound.step_left)
+                    self.audio.play_sound(self.audio.step_left)
                 elif self.step_animation == 2:
-                    self.sound.play_sound(self.sound.step_right)
+                    self.audio.play_sound(self.audio.step_right)
                 self.step_animation += 1
                 if self.step_animation > 3:
                     self.step_animation = 0
