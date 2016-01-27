@@ -88,6 +88,6 @@ class Pause(Item):
     """
     def __init__(self):
         super().__init__()
-        self.inside['ContineGame'] = 'Continue'
+        self.inside['ContinueGame'] = 'Continue'
         self.inside['SaveGame'] = 'Save Game'
         self.inside['MainMenu'] = 'Main Menu'
