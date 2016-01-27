@@ -12,8 +12,9 @@ class State(enum.Enum):
     State machine constants for the StateMachine class below
     """
     MainMenu = 1
-    OverWorld = 2
+    OptionsMenu = 2
     PauseMenu = 3
+    OverWorld = 4
 
 
 class StateMachine(object):

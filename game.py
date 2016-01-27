@@ -27,11 +27,6 @@ class GameEngine(object):
         self.state = statemachine.StateMachine()
         self.sound = sound.Sound()
 
-        self.loadsave = None
-        self.mainmenu = None
-        self.overworld = None
-        self.pausemenu = None
-
         self.running = False
 
         self.clock = pygame.time.Clock()
@@ -51,7 +46,7 @@ class GameEngine(object):
         Start de game loop.
         """
         self.running = True
-        self._main_menu()
+        self._show_main_menu()
 
         while self.running:
             self.dt = self.clock.tick(FPS)/1000.0       # limit the redraw speed to 60 frames per second
@@ -102,6 +97,8 @@ class GameEngine(object):
         if self.currentstate == statemachine.State.MainMenu:
             self.mainmenu.handle_view(None)                 # geen achtergrond
             show_debug()
+        elif self.currentstate == statemachine.State.OptionsMenu:
+            self.optionsmenu.handle_view(None)
         elif self.currentstate == statemachine.State.PauseMenu:
             self.pausemenu.handle_view(self.scr_capt)       # achtergrond, screen capture
         elif self.currentstate == statemachine.State.OverWorld:
@@ -128,40 +125,45 @@ class GameEngine(object):
                 menu_choice = self.mainmenu.handle_single_input(event)
                 if event.key == pygame.K_F12:
                     self.show_debug ^= True                     # simple boolean swith
-                elif menu_choice == menu.MainMenuItem.ExitGame:
-                    self._exit_game()
                 elif menu_choice == menu.MainMenuItem.NewGame:
-                    self._new_game()
+                    self._main_menu_select_new_game()
                 elif menu_choice == menu.MainMenuItem.LoadGame:
-                    self._load_game()
+                    self._main_menu_select_load_game()
+                elif menu_choice == menu.MainMenuItem.Options:
+                    self._main_menu_select_options()
+                elif menu_choice == menu.MainMenuItem.ExitGame:
+                    self._main_menu_select_exit_game()
+
+            elif self.currentstate == statemachine.State.OptionsMenu:
+                menu_choice = self.optionsmenu.handle_single_input(event)
+                if event.key == pygame.K_ESCAPE:
+                    self._options_menu_select_back(with_esc=True)
+                elif menu_choice == menu.OptionsMenuItem.Back:
+                    self._options_menu_select_back(with_esc=False)
+                elif menu_choice == menu.OptionsMenuItem.Sounds:
+                    self._options_menu_select_sounds()
+                elif menu_choice == menu.OptionsMenuItem.Music:
+                    self._options_menu_select_music()
 
             elif self.currentstate == statemachine.State.PauseMenu:
                 menu_choice = self.pausemenu.handle_single_input(event)
                 if event.key == pygame.K_ESCAPE:
-                    self.sound.select.play()                    # omdat escape in menu geen geluid geeft
-                    self._exit_pause()
+                    self._pause_menu_select_continue(with_esc=True)
                 elif menu_choice == menu.PauseMenuItem.ContinueGame:
-                    self._exit_pause()
-                elif menu_choice == menu.PauseMenuItem.MainMenu:
-                    self._main_menu()
+                    self._pause_menu_select_continue(with_esc=False)
                 elif menu_choice == menu.PauseMenuItem.SaveGame:
-                    self._save_game()
+                    self._pause_menu_select_save_game()
+                elif menu_choice == menu.PauseMenuItem.MainMenu:
+                    self._show_main_menu()
 
             elif self.currentstate == statemachine.State.OverWorld:
                 self.overworld.handle_single_input(event)
                 if event.key == pygame.K_ESCAPE:
-                    self._load_pause()
+                    self._show_pause_menu()
                 if event.key == pygame.K_BACKSPACE:
                     self._kill_game()                           # todo, deze en de methode moeten uiteindelijk weg
 
-    def change_state(self, new_state):
-        """
-        :param new_state:
-        """
-        if self.state is None:
-            pass
-
-    def _main_menu(self):
+    def _show_main_menu(self):
         if self.sound.current.get_sound() is not None:
             self.sound.current.fadeout(1000)
         self.pausemenu = None
@@ -170,9 +172,9 @@ class GameEngine(object):
         self.state.push(statemachine.State.MainMenu)
         self.mainmenu = menu.GameMenu(self.screen, menu.MainMenuItem, True)
         self.sound.current.set_volume(1)
-        self.sound.current.play(self.sound.mainmenu, -1)
+        self.sound.current.play(self.sound.mainmenu, -1, fade_ms=3000)
 
-    def _new_game(self):
+    def _main_menu_select_new_game(self):
         if self.sound.current.get_sound() is not None:
             self.sound.current.fadeout(1000)
         self.mainmenu = None
@@ -180,9 +182,9 @@ class GameEngine(object):
         self.state.push(statemachine.State.OverWorld)
         self.overworld = overworld.OverWorld(self.screen)
         self.sound.current.set_volume(1)
-        self.sound.current.play(self.sound.overworld, -1)
+        self.sound.current.play(self.sound.overworld, -1, fade_ms=3000)
 
-    def _load_game(self):
+    def _main_menu_select_load_game(self):
         self.loadsave = loadsave.Dialog()
         self.overworld = overworld.OverWorld(self.screen)       # laad de overworld alvast
         if self.loadsave.load(self) is None:
@@ -195,16 +197,37 @@ class GameEngine(object):
             self.state.pop(self.currentstate)
             self.state.push(statemachine.State.OverWorld)
             self.sound.current.set_volume(1)
-            self.sound.current.play(self.sound.overworld, -1)
+            self.sound.current.play(self.sound.overworld, -1, fade_ms=3000)
         pygame.event.clear()
         self.loadsave = None
 
-    def _exit_game(self):
+    def _main_menu_select_options(self):
+        self.state.push(statemachine.State.OptionsMenu)
+        self.optionsmenu = menu.GameMenu(self.screen, menu.OptionsMenuItem, True)
+
+    def _main_menu_select_exit_game(self):
         if self.sound.current.get_sound() is not None:
             self.sound.current.fadeout(1000)
         self.running = False
 
-    def _load_pause(self):
+    def _options_menu_select_sounds(self):
+        pass
+
+    def _options_menu_select_music(self):
+        if "On" in menu.OptionsMenuItem.Sounds.value:
+            menu.OptionsMenuItem.Sounds.value = "pipo"  # .replace("On", "Off")
+            self.sound.current.stop()
+        else:
+            menu.OptionsMenuItem.Sounds.value.replace("Off", "On")
+            self.sound.current.play(-1)
+
+    def _options_menu_select_back(self, with_esc):
+        if with_esc:
+            self.sound.select.play()
+        self.state.pop(self.currentstate)
+        self.optionsmenu = None
+
+    def _show_pause_menu(self):
         self.sound.select.play()
         if self.sound.current.get_sound() is not None:
             self.sound.current.fadeout(1000)
@@ -213,18 +236,20 @@ class GameEngine(object):
         self.state.push(statemachine.State.PauseMenu)
         self.pausemenu = menu.GameMenu(self.screen, menu.PauseMenuItem, False)
 
-    def _save_game(self):
+    def _pause_menu_select_save_game(self):
         self.loadsave = loadsave.Dialog()
         if self.loadsave.save(self) is not None:
             self.sound.select.play()
         pygame.event.clear()                                    # anders stapelen de geluiden zich op
         self.loadsave = None
 
-    def _exit_pause(self):
+    def _pause_menu_select_continue(self, with_esc):
+        if with_esc:
+            self.sound.select.play()                            # omdat escape in menu standaard geen geluid geeft
         self.state.pop(self.currentstate)
         self.pausemenu = None
         self.sound.current.set_volume(1)
-        self.sound.current.play(self.sound.overworld, -1)
+        self.sound.current.play(self.sound.overworld, -1, fade_ms=3000)
 
     @staticmethod
     def _kill_game():

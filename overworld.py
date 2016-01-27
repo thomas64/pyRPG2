@@ -105,3 +105,4 @@ class OverWorld(object):
                 self.grid_sprite = None
 
         # todo, cboxes toevoegen
+        # todo, debug uitbreiden

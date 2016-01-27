@@ -1,6 +1,8 @@
 
 """
+class: MenuItem
 class: MainMenuItem
+class: OptionsMenuItem
 class: PauseMenuItem
 class: MenuTitel
 class: MenuText
@@ -28,28 +30,41 @@ MENUFONTCOLOR1 = pygame.Color("white")
 MENUFONTCOLOR2 = pygame.Color("yellow")
 
 
-class MainMenuItem(enum.Enum):
+class MenuItem(enum.Enum):
+    """
+    Base class voor de verschillende menu's.
+    Je kan er dan doorheen loopen.
+    """
+    def __iter__(self):
+        return iter(self)
+
+
+class MainMenuItem(MenuItem):
     """
     De mainmenu items.
     """
     NewGame = 'New Game'
     LoadGame = 'Load Game'
+    Options = 'Options'
     ExitGame = 'Exit'
 
-    def __iter__(self):
-        return iter(self)
+
+class OptionsMenuItem(MenuItem):
+    """
+    De options items.
+    """
+    Sounds = 'Sounds: On'
+    Music = 'Music: On'
+    Back = 'Back'
 
 
-class PauseMenuItem(enum.Enum):
+class PauseMenuItem(MenuItem):
     """
     De pausemenu items.
     """
     ContinueGame = 'Continue'
     SaveGame = 'Save Game'
     MainMenu = 'Main Menu'
-
-    def __iter__(self):
-        return iter(self)
 
 
 class MenuTitle(object):
@@ -65,14 +80,6 @@ class MenuTitle(object):
         self.height = self.label.get_height()
         self.position = (0, 0)
 
-    def set_position(self, x, y):
-        """
-        Zet de titel op een bepaalde positie.
-        :param x: x-positie
-        :param y: y-positie
-        """
-        self.position = (x, y)
-
 
 class MenuText(object):
     """
@@ -87,14 +94,6 @@ class MenuText(object):
         self.width = self.label.get_width()
         self.height = self.label.get_height()
         self.position = (0, 0)
-
-    def set_position(self, x, y):
-        """
-        Zet een menu item op een bepaalde positie.
-        :param x: x-positie
-        :param y: y-positie
-        """
-        self.position = (x, y)
 
     def set_font_color(self, color):
         """
@@ -125,7 +124,7 @@ class GameMenu(object):
         self.title = MenuTitle()        # ook als hij geen title heeft doet hij dit, maar hij laat het toch niet zien
         pos_x = (bg_width/2) - (self.title.width/2)
         pos_y = TITLEPOSY
-        self.title.set_position(pos_x, pos_y)
+        self.title.position = (pos_x, pos_y)
 
         self.menu_items = []
         all_menu_items = list(itemsmenu)
@@ -135,7 +134,7 @@ class GameMenu(object):
             pos_x = (bg_width/2) - (menu_item.width/2)
             pos_y = ((bg_height/2) - (t_h/2)) + (menu_item.height * index * 2)
 
-            menu_item.set_position(pos_x, pos_y)
+            menu_item.position = (pos_x, pos_y)
             self.menu_items.append(menu_item)
 
         self.cur_item = 0
