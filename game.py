@@ -73,44 +73,49 @@ class GameEngine(object):
         """
         Laat de weergave van de verschillende states zien.
         """
-        def show_debug():
-            """
-            Geeft debug informatie weer linksboven in het scherm.
-            """
+        def _show_debug():
             if self.show_debug:
-                # hero = self.overworld.hero
-                text = ("FPS:              {:.2f}".format(self.clock.get_fps()),
-                        "dt:               {:.3f}".format(self.dt),
-                        "playtime:         {:.2f}".format(self.playtime),
-                        # "time_up:          {}".format(hero.time_up),
-                        # "time_down:        {}".format(hero.time_down),
-                        # "time_left:        {}".format(hero.time_left),
-                        # "time_right:       {}".format(hero.time_right),
-                        # "time_delay:       {}".format(hero.time_delay),
-                        # "last_direction:   {}".format(hero.last_direction),
-                        # "move_direction:   {}".format(hero.move_direction),
-                        # "movespeed:        {}".format(hero.movespeed),
-                        # "old_position.x:   {}".format(hero.old_position[0]),
-                        # "old_position.y:   {}".format(hero.old_position[1]),
-                        # "new_position.x:   {}".format(hero.rect.x),
-                        # "new_position.y:   {}".format(hero.rect.y),
-                        # "true_position.x:  {}".format(hero.true_position[0]),
-                        # "true_position.y:  {}".format(hero.true_position[1]),
-                        # "step_count:       {}".format(hero.step_count),
-                        # "step_animation:   {}".format(hero.step_animation),
-                        )
+                text = (
+                    "FPS:              {:.2f}".format(self.clock.get_fps()),
+                    "dt:               {:.3f}".format(self.dt),
+                    "playtime:         {:.2f}".format(self.playtime)
+                )
+                try:
+                    hero = self.overworld.hero
+                    text2 = (
+                        "time_up:          {}".format(hero.time_up),
+                        "time_down:        {}".format(hero.time_down),
+                        "time_left:        {}".format(hero.time_left),
+                        "time_right:       {}".format(hero.time_right),
+                        "time_delay:       {}".format(hero.time_delay),
+                        "last_direction:   {}".format(hero.last_direction),
+                        "move_direction:   {}".format(hero.move_direction),
+                        "movespeed:        {}".format(hero.movespeed),
+                        "old_position.x:   {}".format(hero.old_position[0]),
+                        "old_position.y:   {}".format(hero.old_position[1]),
+                        "new_position.x:   {}".format(hero.rect.x),
+                        "new_position.y:   {}".format(hero.rect.y),
+                        "true_position.x:  {}".format(hero.true_position[0]),
+                        "true_position.y:  {}".format(hero.true_position[1]),
+                        "step_count:       {}".format(hero.step_count),
+                        "step_animation:   {}".format(hero.step_animation)
+                    )
+                    text += text2
+                except AttributeError:
+                    pass
                 for count, line in enumerate(text):
                     self.screen.blit(self.debugfont.render(line, True, DEBUGFONTCOLOR), (0, count * 10))
 
         if self.currentstate == states.GameState.MainMenu:
             self.mainmenu.handle_view()                         # geen achtergrond
-            show_debug()
         elif self.currentstate == states.GameState.OptionsMenu:
             self.optionsmenu.handle_view()
         elif self.currentstate == states.GameState.PauseMenu:
             self.pausemenu.handle_view(self.scr_capt)           # achtergrond, screen capture
         elif self.currentstate == states.GameState.OverWorld:
             self.overworld.handle_view()
+
+        _show_debug()
 
     def handle_multi_input(self):
         """
@@ -129,10 +134,13 @@ class GameEngine(object):
         if event.type == pygame.KEYDOWN:
             print("Keyboard, key={}, unicode={}".format(event.key, event.unicode))
 
+            if event.key == pygame.K_F12:
+                self.show_debug ^= True                     # simple boolean swith
+
             if self.currentstate == states.GameState.MainMenu:
                 menu_choice = self.mainmenu.handle_single_input(event)
-                if event.key == pygame.K_F12:
-                    self.show_debug ^= True                     # simple boolean swith
+                if event.key == pygame.K_ESCAPE:
+                    self._main_menu_select_exit_game(with_esc=True)
                 elif menu_choice == menus.Main().NewGame:
                     self._main_menu_select_new_game()
                 elif menu_choice == menus.Main().LoadGame:
@@ -146,19 +154,19 @@ class GameEngine(object):
                 menu_choice = self.optionsmenu.handle_single_input(event)
                 if event.key == pygame.K_ESCAPE:
                     self._options_menu_select_back(with_esc=True)
-                elif menu_choice == menus.Options().Back:
-                    self._options_menu_select_back(with_esc=False)
                 elif menu_choice == menus.Options().Music:
                     self._options_menu_select_music()
                 elif menu_choice == menus.Options().Sound:
                     self._options_menu_select_sound()
+                elif menu_choice == menus.Options().Back:
+                    self._options_menu_select_back()
 
             elif self.currentstate == states.GameState.PauseMenu:
                 menu_choice = self.pausemenu.handle_single_input(event)
                 if event.key == pygame.K_ESCAPE:
                     self._pause_menu_select_continue(with_esc=True)
                 elif menu_choice == menus.Pause().ContinueGame:
-                    self._pause_menu_select_continue(with_esc=False)
+                    self._pause_menu_select_continue()
                 elif menu_choice == menus.Pause().SaveGame:
                     self._pause_menu_select_save_game()
                 elif menu_choice == menus.Pause().MainMenu:
@@ -206,7 +214,9 @@ class GameEngine(object):
         menu_items = menus.Options(self.audio.music, self.audio.sound)              # hier worden de options geschreven
         self.optionsmenu = menu.GameMenu(self.screen, self.audio, menu_items, True)
 
-    def _main_menu_select_exit_game(self):
+    def _main_menu_select_exit_game(self, with_esc=False):
+        if with_esc:
+            self.audio.play_sound(self.audio.select)
         self.audio.fade_music()
         self.running = False
 
@@ -232,7 +242,7 @@ class GameEngine(object):
             self.audio.sound = 1
         self.audio.write_cfg()
 
-    def _options_menu_select_back(self, with_esc):
+    def _options_menu_select_back(self, with_esc=False):
         if with_esc:
             self.audio.play_sound(self.audio.select)
         self.state.pop(self.currentstate)
@@ -253,7 +263,7 @@ class GameEngine(object):
         pygame.event.clear()                                    # anders stapelen de geluiden zich op
         self.loadsave = None
 
-    def _pause_menu_select_continue(self, with_esc):
+    def _pause_menu_select_continue(self, with_esc=False):
         if with_esc:
             self.audio.play_sound(self.audio.select)            # omdat escape in menu standaard geen geluid geeft
         self.state.pop(self.currentstate)
