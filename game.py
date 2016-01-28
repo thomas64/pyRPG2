@@ -36,6 +36,12 @@ class GameEngine(object):
         self.dt = 0.0
         self.timer = 0.0
 
+        self.mainmenu = None
+        self.pausemenu = None
+        self.optionsmenu = None
+        self.loadsave = None
+        self.overworld = None
+
         self.debugfont = pygame.font.SysFont(DEBUGFONT, DEBUGFONTSIZE)
         self.currentstate = None
         self.key_input = None
@@ -97,12 +103,12 @@ class GameEngine(object):
                     self.screen.blit(self.debugfont.render(line, True, DEBUGFONTCOLOR), (0, count * 10))
 
         if self.currentstate == states.GameState.MainMenu:
-            self.mainmenu.handle_view(None)                 # geen achtergrond
+            self.mainmenu.handle_view()                         # geen achtergrond
             show_debug()
         elif self.currentstate == states.GameState.OptionsMenu:
-            self.optionsmenu.handle_view(None)
+            self.optionsmenu.handle_view()
         elif self.currentstate == states.GameState.PauseMenu:
-            self.pausemenu.handle_view(self.scr_capt)       # achtergrond, screen capture
+            self.pausemenu.handle_view(self.scr_capt)           # achtergrond, screen capture
         elif self.currentstate == states.GameState.OverWorld:
             self.overworld.handle_view()
 
@@ -167,6 +173,7 @@ class GameEngine(object):
 
     def _show_main_menu(self):
         self.pausemenu = None
+        self.scr_capt = None
         self.overworld = None
         self.state.clear()
         self.state.push(states.GameState.MainMenu)
@@ -196,7 +203,7 @@ class GameEngine(object):
 
     def _main_menu_select_options(self):
         self.state.push(states.GameState.OptionsMenu)
-        menu_items = menus.Options()                                                # hier worden de options geschreven
+        menu_items = menus.Options(self.audio.music, self.audio.sound)              # hier worden de options geschreven
         self.optionsmenu = menu.GameMenu(self.screen, self.audio, menu_items, True)
 
     def _main_menu_select_exit_game(self):
@@ -205,31 +212,25 @@ class GameEngine(object):
 
     def _options_menu_select_music(self):
         settingview = self.optionsmenu.menu_texts[self.optionsmenu.cur_item]        # hier wordt de visualisatie
-        if self.optionsmenu.menu_items.music == 1:                                  # later aangepast
-            settingview.text = settingview.text.replace("On", "Off")
-            self.optionsmenu.menu_items.music = 0
-            self.optionsmenu.menu_items.write_cfg()
+        if self.audio.music == 1:
+            settingview.text = settingview.text.replace("On", "Off")                # later aangepast
             self.audio.music = 0
             self.audio.current.stop()
         else:
             settingview.text = settingview.text.replace("Off", "On")
-            self.optionsmenu.menu_items.music = 1
-            self.optionsmenu.menu_items.write_cfg()
             self.audio.music = 1
             self.audio.play_music(self.audio.mainmenu)
+        self.audio.write_cfg()
 
     def _options_menu_select_sound(self):
         settingview = self.optionsmenu.menu_texts[self.optionsmenu.cur_item]
-        if self.optionsmenu.menu_items.sound == 1:
+        if self.audio.sound == 1:
             settingview.text = settingview.text.replace("On", "Off")
-            self.optionsmenu.menu_items.sound = 0
-            self.optionsmenu.menu_items.write_cfg()
             self.audio.sound = 0
         else:
             settingview.text = settingview.text.replace("Off", "On")
-            self.optionsmenu.menu_items.sound = 1
-            self.optionsmenu.menu_items.write_cfg()
             self.audio.sound = 1
+        self.audio.write_cfg()
 
     def _options_menu_select_back(self, with_esc):
         if with_esc:
@@ -257,6 +258,7 @@ class GameEngine(object):
             self.audio.play_sound(self.audio.select)            # omdat escape in menu standaard geen geluid geeft
         self.state.pop(self.currentstate)
         self.pausemenu = None
+        self.scr_capt = None
         self.audio.play_music(self.audio.overworld)
 
     @staticmethod

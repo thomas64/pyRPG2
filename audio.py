@@ -9,6 +9,9 @@ import pickle
 import pygame
 
 
+OPTIONSPATH = 'options'
+OPTIONSFILE = os.path.join(OPTIONSPATH, 'audio.cfg')
+
 MUSICPATH = 'resources/music'
 MAINMENUMUSIC = os.path.join(MUSICPATH,  'mainmenu.ogg')
 OVERWORLDMUSIC = os.path.join(MUSICPATH, 'overworld.ogg')
@@ -46,14 +49,24 @@ class Audio(object):
         """
         Laad settings uit config bestand.
         """
+        if not os.path.exists(OPTIONSPATH):
+            os.makedirs(OPTIONSPATH)
+
         try:
-            with open('options.cfg', 'rb') as f:
+            with open(OPTIONSFILE, 'rb') as f:
                 self.music, self.sound = pickle.load(f)
         except (pickle.UnpicklingError, FileNotFoundError):
             print('Corrupt options file.')
             self.music, self.sound = 1, 1
-            with open('options.cfg', 'wb') as f:
+            with open(OPTIONSFILE, 'wb') as f:
                 pickle.dump([self.music, self.sound], f)
+
+    def write_cfg(self):
+        """
+        Schrijf settings naar config bestand.
+        """
+        with open(OPTIONSFILE, 'wb') as f:
+            pickle.dump([self.music, self.sound], f)
 
     def play_music(self, music):
         """

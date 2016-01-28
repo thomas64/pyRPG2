@@ -94,7 +94,7 @@ class GameMenu(object):
 
         self.cur_item = 0
 
-    def handle_view(self, bg):
+    def handle_view(self, bg=None):
         """
         Reset eerst alle kleuren.
         Zet dan de geselecteerde op een andere kleur.
