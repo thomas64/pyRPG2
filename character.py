@@ -192,40 +192,50 @@ class Hero(pygame.sprite.Sprite):
         :param map_height: hoogte van de map
         :param dt: self.clock.tick(FPS)/1000.0
         """
+        t = False   # deze variabele is er om te kijken of true_pos aangepast moet worden aan het eind.
+
         # loop tegen de rand van een obstacle aan
         # er mag maar 1 obstacle in deze lijst zijn
         if len(self.rect.collidelistall(obstacles)) == 1:
             # obj_nr is het nummer van de betreffende obstacle
             obj_nr = self.rect.collidelist(obstacles)
             self._move_side(obstacles[obj_nr], dt)
+            t = True
 
         # loop tegen de rand van een low obstacle aan, bijv water
         if len(self.rect.collidelistall(low_obsts)) == 1:
             obj_nr = self.rect.collidelist(low_obsts)
             self._move_side(low_obsts[obj_nr], dt)
+            t = True
 
         # loop recht tegen een obstacle of low_obst aan
         while self.rect.collidelist(obstacles) > -1 or \
                 self.rect.collidelist(low_obsts) > -1:
             self._move_back()
+            t = True
 
         # loop tegen de rand van de map aan
         if self.rect.top < 0:
             self.rect.top = 0
+            t = True
         if self.rect.left < 0:
             self.rect.left = 0
+            t = True
         if self.rect.bottom > map_height:
             self.rect.bottom = map_height
+            t = True
         if self.rect.right > map_width:
             self.rect.right = map_width
+            t = True
 
         # als er een moverange bestaat en je loopt tegen de rand van je moverange
         if moverange is not None:
             if pygame.sprite.collide_mask(self, moverange):
                 self.rect.topleft = list(self.old_position)
-                self.true_position = list(self.old_position)
+                t = True
 
-        self.true_position = list(self.rect.topleft)
+        if t:
+            self.true_position = list(self.rect.topleft)
 
     def _move_back(self):
         """
