@@ -63,7 +63,7 @@ class Audio(object):
         if self.music == 1:
             self.fade_music()
             self.current.set_volume(1)
-            self.current.play(music, -1, fade_ms=3000)
+            self.current.play(music, -1)
 
     def play_sound(self, sound):
         """
@@ -78,4 +78,4 @@ class Audio(object):
         Als er muziek speelt, fade die out.
         """
         if self.current.get_sound() is not None:
-            self.current.fadeout(1000)
+            self.current.fadeout(500)
