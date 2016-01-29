@@ -134,59 +134,61 @@ class GameEngine(object):
         Handelt de muis en keyboard input af.
         :param event: pygame.event.get()
         """
-        if event.type == pygame.MOUSEBUTTONDOWN:            # handle mouse down events
+        if event.type == pygame.MOUSEBUTTONDOWN:
             print("Mouse, pos={}, button={}".format(event.pos, event.button))
-
-        if event.type == pygame.MOUSEMOTION:
-            print("Mouse, pos={}".format(event.pos))
-
         if event.type == pygame.KEYDOWN:
             print("Keyboard, key={}, unicode={}".format(event.key, event.unicode))
 
             if event.key == pygame.K_F12:
                 self.show_debug ^= True                     # simple boolean swith
 
-            if self.currentstate == states.GameState.MainMenu:
-                menu_choice = self.mainmenu.handle_single_input(event)
+            if self.currentstate == states.GameState.MainMenu:          # eerst de keys op het toetsenbord
                 if event.key == pygame.K_ESCAPE:
                     self._main_menu_select_exit_game(with_esc=True)
-                elif menu_choice == menus.Main().NewGame:
-                    self._main_menu_select_new_game()
-                elif menu_choice == menus.Main().LoadGame:
-                    self._main_menu_select_load_game()
-                elif menu_choice == menus.Main().Options:
-                    self._main_menu_select_options()
-                elif menu_choice == menus.Main().ExitGame:
-                    self._main_menu_select_exit_game()
-
-            elif self.currentstate == states.GameState.OptionsMenu:
-                menu_choice = self.optionsmenu.handle_single_input(event)
+                    return                                              # returns, want anders zitten ze
+            elif self.currentstate == states.GameState.OptionsMenu:     # de menu's in de weg
                 if event.key == pygame.K_ESCAPE:
                     self._options_menu_select_back(with_esc=True)
-                elif menu_choice == menus.Options().Music:
-                    self._options_menu_select_music()
-                elif menu_choice == menus.Options().Sound:
-                    self._options_menu_select_sound()
-                elif menu_choice == menus.Options().Back:
-                    self._options_menu_select_back()
-
+                    return
             elif self.currentstate == states.GameState.PauseMenu:
-                menu_choice = self.pausemenu.handle_single_input(event)
                 if event.key == pygame.K_ESCAPE:
                     self._pause_menu_select_continue(with_esc=True)
-                elif menu_choice == menus.Pause().ContinueGame:
-                    self._pause_menu_select_continue()
-                elif menu_choice == menus.Pause().SaveGame:
-                    self._pause_menu_select_save_game()
-                elif menu_choice == menus.Pause().MainMenu:
-                    self._show_main_menu()
-
+                    return
             elif self.currentstate == states.GameState.OverWorld:
                 self.overworld.handle_single_input(event)
                 if event.key == pygame.K_ESCAPE:
                     self._show_pause_menu()
                 if event.key == pygame.K_BACKSPACE:
                     self._kill_game()                           # todo, deze en de methode moeten uiteindelijk weg
+
+        if self.currentstate == states.GameState.MainMenu:              # dan de menu's
+            menu_choice = self.mainmenu.handle_single_input(event)
+            if menu_choice == menus.Main().NewGame:
+                self._main_menu_select_new_game()
+            elif menu_choice == menus.Main().LoadGame:
+                self._main_menu_select_load_game()
+            elif menu_choice == menus.Main().Options:
+                self._main_menu_select_options()
+            elif menu_choice == menus.Main().ExitGame:
+                self._main_menu_select_exit_game()
+
+        elif self.currentstate == states.GameState.OptionsMenu:
+            menu_choice = self.optionsmenu.handle_single_input(event)
+            if menu_choice == menus.Options().Music:
+                self._options_menu_select_music()
+            elif menu_choice == menus.Options().Sound:
+                self._options_menu_select_sound()
+            elif menu_choice == menus.Options().Back:
+                self._options_menu_select_back()
+
+        elif self.currentstate == states.GameState.PauseMenu:
+            menu_choice = self.pausemenu.handle_single_input(event)
+            if menu_choice == menus.Pause().ContinueGame:
+                self._pause_menu_select_continue()
+            elif menu_choice == menus.Pause().SaveGame:
+                self._pause_menu_select_save_game()
+            elif menu_choice == menus.Pause().MainMenu:
+                self._show_main_menu()
 
     def _show_main_menu(self):
         self.pausemenu = None

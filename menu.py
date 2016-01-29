@@ -40,9 +40,10 @@ class MenuText(object):
     """
     Een mainmenu item.
     """
-    def __init__(self, item, font, size, color):
+    def __init__(self, item, index, font, size, color):
         self.func = item[0]     # de eerste van de double tuple, bijv NewGame
         self.text = item[1]     # de tweede van de double tuple, bijv New Game
+        self.index = index
         self.font = pygame.font.SysFont(font, size)
         self.font_color = color
         self.label = self.font.render(self.text, True, self.font_color)
@@ -85,7 +86,7 @@ class GameMenu(object):
         self.menu_items = itemsmenu     # het object OrderedDict genaamd inside
         self.menu_texts = []            # een list van MenuText objecten
         for index, item in enumerate(self.menu_items):
-            menu_text = MenuText(item, MENUFONT, MENUFONTSIZE, MENUFONTCOLOR1)
+            menu_text = MenuText(item, index, MENUFONT, MENUFONTSIZE, MENUFONTCOLOR1)
             t_h = len(self.menu_items) * menu_text.height                 # t_h: total height of text block
             pos_x = (bg_width/2) - (menu_text.width/2)
             pos_y = ((bg_height/2) - (t_h/2)) + (menu_text.height * index * 2)
@@ -120,35 +121,37 @@ class GameMenu(object):
 
     def handle_single_input(self, event):
         """
-        Handel de muis input af.
-        :param mouse_pos: pygame.mouse.get_pos()
-        """
-
-        for items in self.menu_texts:
-            if item.rect.collidepoint(mouse_pos):
-
-                self.audio.play_sound(self.audio.switch)
-                # self.key_input = list(self.key_input)
-                # self.key_input[button.key] = 1
-
-    def handle_single_input(self, event):
-        """
         Geef de tekst van het geselecteerde menuitem terug aan het spel.
-        :param event: pygame.event.get() uit screen.py
+        :param event: pygame.event.get() uit game.py
         """
-        if event.key == pygame.K_UP and self.cur_item > 0:
-            self.audio.play_sound(self.audio.switch)
-            self.cur_item -= 1
-        elif event.key == pygame.K_UP and self.cur_item == 0:
-            self.audio.play_sound(self.audio.error)
-            self.cur_item = 0
-        elif event.key == pygame.K_DOWN and self.cur_item < len(self.menu_texts) - 1:
-            self.audio.play_sound(self.audio.switch)
-            self.cur_item += 1
-        elif event.key == pygame.K_DOWN and self.cur_item == len(self.menu_texts) - 1:
-            self.audio.play_sound(self.audio.error)
-            self.cur_item = len(self.menu_texts) - 1
+        if event.type == pygame.MOUSEMOTION:
+            for item in self.menu_texts:
+                if item.rect.collidepoint(event.pos):
+                    if self.cur_item != item.index:
+                        self.cur_item = item.index
+                        self.audio.play_sound(self.audio.switch)
 
-        if event.key == pygame.K_RETURN or event.key == pygame.K_KP_ENTER:
-            self.audio.play_sound(self.audio.select)
-            return self.menu_texts[self.cur_item].func
+        elif event.type == pygame.MOUSEBUTTONDOWN:
+            if event.button == 1:
+                for item in self.menu_texts:
+                    if item.rect.collidepoint(event.pos):
+                        self.audio.play_sound(self.audio.select)
+                        return item.func
+
+        elif event.type == pygame.KEYDOWN:
+            if event.key == pygame.K_UP and self.cur_item > 0:
+                self.audio.play_sound(self.audio.switch)
+                self.cur_item -= 1
+            elif event.key == pygame.K_UP and self.cur_item == 0:
+                self.audio.play_sound(self.audio.error)
+                self.cur_item = 0
+            elif event.key == pygame.K_DOWN and self.cur_item < len(self.menu_texts) - 1:
+                self.audio.play_sound(self.audio.switch)
+                self.cur_item += 1
+            elif event.key == pygame.K_DOWN and self.cur_item == len(self.menu_texts) - 1:
+                self.audio.play_sound(self.audio.error)
+                self.cur_item = len(self.menu_texts) - 1
+
+            if event.key == pygame.K_RETURN or event.key == pygame.K_KP_ENTER:
+                self.audio.play_sound(self.audio.select)
+                return self.menu_texts[self.cur_item].func
