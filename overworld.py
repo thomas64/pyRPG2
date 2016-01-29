@@ -24,6 +24,7 @@ TREECOLOR = pygame.Color("yellow")
 OVERWORLDPATH = 'resources/maps/start_forest.tmx'
 PLAYERLAYER = 1
 GRIDLAYER = 6
+CBOXLAYER = 7
 GRIDSIZE = 32
 
 # todo, laden van pad van sprite moet nog anders
@@ -94,9 +95,9 @@ class OverWorld(object):
 
         elif event.key == pygame.K_F11:
             if len(self.cbox_sprites) == 0:                             # als de lijst leeg is.
-                self.cbox_sprites.append(sprites.ColorBoxSprite(self.hero.rect, HEROCOLOR, GRIDLAYER))
+                self.cbox_sprites.append(sprites.ColorBoxSprite(self.hero.rect, HEROCOLOR, CBOXLAYER))
                 for rect in self.map1.tree_rects:
-                    self.cbox_sprites.append(sprites.ColorBoxSprite(rect, TREECOLOR, GRIDLAYER))
+                    self.cbox_sprites.append(sprites.ColorBoxSprite(rect, TREECOLOR, CBOXLAYER))
                 self.group.add(self.cbox_sprites)
             else:
                 self.group.remove(self.cbox_sprites)
