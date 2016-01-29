@@ -46,6 +46,7 @@ class MenuText(object):
         self.font = pygame.font.SysFont(font, size)
         self.font_color = color
         self.label = self.font.render(self.text, True, self.font_color)
+        self.rect = self.label.get_rect()
         self.width = self.label.get_width()
         self.height = self.label.get_height()
         self.position = (0, 0)
@@ -90,6 +91,7 @@ class GameMenu(object):
             pos_y = ((bg_height/2) - (t_h/2)) + (menu_text.height * index * 2)
 
             menu_text.position = (pos_x, pos_y)
+            menu_text.rect.topleft = menu_text.position
             self.menu_texts.append(menu_text)
 
         self.cur_item = 0
@@ -115,6 +117,19 @@ class GameMenu(object):
 
         for item in self.menu_texts:
             self.screen.blit(item.label, item.position)
+
+    def handle_single_input(self, event):
+        """
+        Handel de muis input af.
+        :param mouse_pos: pygame.mouse.get_pos()
+        """
+
+        for items in self.menu_texts:
+            if item.rect.collidepoint(mouse_pos):
+
+                self.audio.play_sound(self.audio.switch)
+                # self.key_input = list(self.key_input)
+                # self.key_input[button.key] = 1
 
     def handle_single_input(self, event):
         """
