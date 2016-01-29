@@ -113,7 +113,7 @@ class GameEngine(object):
         elif self.currentstate == states.GameState.PauseMenu:
             self.pausemenu.handle_view(self.scr_capt)           # achtergrond, screen capture
         elif self.currentstate == states.GameState.OverWorld:
-            self.overworld.handle_view()
+            self.overworld.handle_view(self.key_input)          # key_input vanweg de onscreen buttons
 
         _show_debug()
 

@@ -30,7 +30,7 @@ class MenuTitle(object):
         self.text = TITLETEXT
         self.font = pygame.font.SysFont(TITLEFONT, TITLEFONTSIZE)
         self.font_color = TITLEFONTCOLOR
-        self.label = self.font.render(self.text, 1, self.font_color)
+        self.label = self.font.render(self.text, True, self.font_color)
         self.width = self.label.get_width()
         self.height = self.label.get_height()
         self.position = (0, 0)
@@ -45,7 +45,7 @@ class MenuText(object):
         self.text = item[1]     # de tweede van de double tuple, bijv New Game
         self.font = pygame.font.SysFont(font, size)
         self.font_color = color
-        self.label = self.font.render(self.text, 1, self.font_color)
+        self.label = self.font.render(self.text, True, self.font_color)
         self.width = self.label.get_width()
         self.height = self.label.get_height()
         self.position = (0, 0)
@@ -56,7 +56,7 @@ class MenuText(object):
         :param color: pygame.Color("kleurnaam")
         """
         self.font_color = color
-        self.label = self.font.render(self.text, 1, self.font_color)
+        self.label = self.font.render(self.text, True, self.font_color)
 
 
 class GameMenu(object):

@@ -53,12 +53,32 @@ class OverWorld(object):
         self.hero = character.Hero(HEROPATH, HEROPOS, self.audio)
         self.group.add(self.hero)
 
+        self._init_buttons()
+
         self.grid_sprite = None
         self.cbox_sprites = []
 
-    def handle_view(self):
+    def _init_buttons(self):
+        """
+        Maak de knoppen aan en zet ze in een lijst.
+        Plaats ook de bijbehorende keys in een lijst.
+        """
+        bg_width = self.background.get_width()
+        bg_height = self.background.get_height()
+
+        button_view = sprites.ButtonSprite((bg_width-200,   bg_height-300), "V",     pygame.K_v)
+        button_up = sprites.ButtonSprite((bg_width-150,     bg_height-300), "Up",    pygame.K_UP)
+        button_down = sprites.ButtonSprite((bg_width-150,   bg_height-250), "Down",  pygame.K_DOWN)
+        button_left = sprites.ButtonSprite((bg_width-200,   bg_height-250), "Left",  pygame.K_LEFT)
+        button_right = sprites.ButtonSprite((bg_width-100,  bg_height-250), "Right", pygame.K_RIGHT)
+        button_cancel = sprites.ButtonSprite((bg_width-100, bg_height-200), "C",     pygame.K_c)
+
+        self.buttons = [button_view, button_up, button_down, button_left, button_right, button_cancel]
+
+    def handle_view(self, key_input):
         """
         Update locaties -> teken de achtergrond -> centreer op de hero -> teken de window.
+        :param key_input: pygame.key.get_pressed()
         """
         if len(self.cbox_sprites) > 0:                                  # de eerste die aan cbox_sprites bij F11 is
             self.cbox_sprites[0].update(self.hero.rect)                 # toegevoegd is de hero.rect, vandaar [0]
@@ -67,6 +87,9 @@ class OverWorld(object):
         self.group.center(self.hero.rect.center)
         self.group.draw(self.window)
         self.screen.blit(self.window, WINDOWPOS)
+
+        for button in self.buttons:
+            button.draw(self.screen, key_input)
 
     def handle_multi_input(self, key_input, dt):
         """
