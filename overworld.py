@@ -32,6 +32,7 @@ HEROPATH = 'resources/sprites/heroes/01_Alagos.png'
 HEROPOS = 640, 768
 
 
+# todo, overworld hernoemen naar playscreen oid. en de inhoud van window naar eigen bestand window.py oid.
 class OverWorld(object):
     """
     Overworld layout.
@@ -54,6 +55,7 @@ class OverWorld(object):
         self.group.add(self.hero)
 
         self._init_buttons()
+        self.key_input = pygame.key.get_pressed()
 
         self.grid_sprite = None
         self.cbox_sprites = []
@@ -66,19 +68,20 @@ class OverWorld(object):
         bg_width = self.background.get_width()
         bg_height = self.background.get_height()
 
-        button_view = sprites.ButtonSprite((bg_width-200,   bg_height-300), "V",     pygame.K_v)
+        # todo, afhankelijk van situatie, buttons niet weergeven
+        # button_view = sprites.ButtonSprite((bg_width-200,   bg_height-300), "V",     pygame.K_v)
         button_up = sprites.ButtonSprite((bg_width-150,     bg_height-300), "Up",    pygame.K_UP)
         button_down = sprites.ButtonSprite((bg_width-150,   bg_height-250), "Down",  pygame.K_DOWN)
         button_left = sprites.ButtonSprite((bg_width-200,   bg_height-250), "Left",  pygame.K_LEFT)
         button_right = sprites.ButtonSprite((bg_width-100,  bg_height-250), "Right", pygame.K_RIGHT)
-        button_cancel = sprites.ButtonSprite((bg_width-100, bg_height-200), "C",     pygame.K_c)
+        # button_cancel = sprites.ButtonSprite((bg_width-100, bg_height-200), "C",     pygame.K_c)
 
-        self.buttons = [button_view, button_up, button_down, button_left, button_right, button_cancel]
+        # self.buttons = [button_view, button_up, button_down, button_left, button_right, button_cancel]
+        self.buttons = [button_up, button_down, button_left, button_right]
 
-    def handle_view(self, key_input):
+    def handle_view(self):
         """
         Update locaties -> teken de achtergrond -> centreer op de hero -> teken de window.
-        :param key_input: pygame.key.get_pressed()
         """
         if len(self.cbox_sprites) > 0:                                  # de eerste die aan cbox_sprites bij F11 is
             self.cbox_sprites[0].update(self.hero.rect)                 # toegevoegd is de hero.rect, vandaar [0]
@@ -89,16 +92,25 @@ class OverWorld(object):
         self.screen.blit(self.window, WINDOWPOS)
 
         for button in self.buttons:
-            button.draw(self.screen, key_input)
+            button.draw(self.screen, self.key_input)
 
-    def handle_multi_input(self, key_input, dt):
+    def handle_multi_input(self, key_input, mouse_pos, dt):
         """
         Handel de input af voor snelheid en richting. Check daarna op collision.
         :param key_input: pygame.key.get_pressed()
+        :param mouse_pos: pygame.mouse.get_pos()
         :param dt: self.clock.tick(FPS)/1000.0
         """
-        self.hero.speed(key_input)
-        self.hero.direction(key_input, dt)
+        self.key_input = key_input
+
+        if mouse_pos is not None:
+            for button in self.buttons:
+                if button.rect.collidepoint(mouse_pos):
+                    self.key_input = list(self.key_input)
+                    self.key_input[button.key] = 1
+
+        self.hero.speed(self.key_input)
+        self.hero.direction(self.key_input, dt)
         # todo, moet dit niet naar de hero class?
         self.hero.check_obstacle(self.map1.obstacle_rects, self.map1.low_obst_rects,
                                  None, self.map1.width, self.map1.height, dt)

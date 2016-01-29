@@ -113,7 +113,7 @@ class GameEngine(object):
         elif self.currentstate == states.GameState.PauseMenu:
             self.pausemenu.handle_view(self.scr_capt)           # achtergrond, screen capture
         elif self.currentstate == states.GameState.OverWorld:
-            self.overworld.handle_view(self.key_input)          # key_input vanweg de onscreen buttons
+            self.overworld.handle_view()
 
         _show_debug()
 
@@ -122,15 +122,21 @@ class GameEngine(object):
         Handelt de ingedrukt-houden muis en keyboard input af.
         """
         self.key_input = pygame.key.get_pressed()
+        mouse_pos = None
+        if pygame.mouse.get_pressed()[0]:
+            mouse_pos = pygame.mouse.get_pos()
 
         if self.currentstate == states.GameState.OverWorld:
-            self.overworld.handle_multi_input(self.key_input, self.dt)
+            self.overworld.handle_multi_input(self.key_input, mouse_pos, self.dt)
 
     def handle_single_input(self, event):
         """
         Handelt de muis en keyboard input af.
         :param event: pygame.event.get()
         """
+        if event.type == pygame.MOUSEBUTTONDOWN:            # handle mouse down events
+            print("Mouse, pos={}, button={}".format(event.pos, event.button))
+
         if event.type == pygame.KEYDOWN:
             print("Keyboard, key={}, unicode={}".format(event.key, event.unicode))
 
