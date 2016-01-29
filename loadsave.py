@@ -9,14 +9,17 @@ import pickle
 import wx
 
 
+SAVEPATH = 'savegame'
+
+
 class Dialog(wx.App):
     """
     Twee wx dialog boxes om te saven en te laden. Maak bij voorbaat een pad aan.
     """
     def __init__(self):
         wx.App.__init__(self)
-        if not os.path.exists('savegame'):
-            os.makedirs('savegame')
+        if not os.path.exists(SAVEPATH):
+            os.makedirs(SAVEPATH)
 
     @staticmethod
     def load(game):
@@ -26,7 +29,7 @@ class Dialog(wx.App):
         """
         dialog = wx.FileDialog(None,
                                message='Load File',
-                               defaultDir='savegame',
+                               defaultDir=SAVEPATH,
                                defaultFile='savefile.dat',
                                wildcard="Save Files (*.dat) |*.dat",
                                style=wx.FD_OPEN | wx.FD_FILE_MUST_EXIST)
@@ -52,7 +55,7 @@ class Dialog(wx.App):
         """
         dialog = wx.FileDialog(None,
                                message='Save File',
-                               defaultDir='savegame',
+                               defaultDir=SAVEPATH,
                                defaultFile='savefile.dat',
                                wildcard="Save Files (*.dat) |*.dat",
                                style=wx.FD_SAVE | wx.FD_OVERWRITE_PROMPT)

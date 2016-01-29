@@ -4,31 +4,39 @@ class: Map
 """
 
 import pygame
+import pytmx
+import pyscroll
+import pyscroll.data
 
 
 class Map(object):
     """
     Bevat allemaal lijsten van rects.
-    En de cbox sprites.
     """
-    def __init__(self, tmx_data):
+    def __init__(self, tmxpath, windowwidth, windowheight, layer):
 
-        self.width = int(tmx_data.width * tmx_data.tilewidth)
-        self.height = int(tmx_data.height * tmx_data.tileheight)
-        self.tilewidth = tmx_data.tilewidth
-        self.tileheight = tmx_data.tileheight
+        tmx_data = pytmx.load_pygame(tmxpath)
+        map_data = pyscroll.data.TiledMapData(tmx_data)
+        map_layer = pyscroll.BufferedRenderer(map_data, (windowwidth, windowheight), clamp_camera=True)
+        self.view = pyscroll.PyscrollGroup(map_layer=map_layer, default_layer=layer)
+
+        tilewidth = tmx_data.tilewidth
+        tileheight = tmx_data.tileheight
+        self.width = int(tmx_data.width * tilewidth)
+        self.height = int(tmx_data.height * tileheight)
 
         self.tree_rects = []
         self.water_rects = []
-        self.hero_rects = []
-        self.villain_rects = []
         self.obstacle_rects = []
         self.low_obst_rects = []
-        self.start_pos_rect = None
-        self.warphole_rect = None
 
-        self.current_sprite = None
-        self.cbox_sprites = []
+        for rect in tmx_data.get_layer_by_name("trees"):
+            self.add_rect_to_list(rect, self.tree_rects)
+            self.add_rect_to_list(rect, self.obstacle_rects)
+
+        # for rect in tmx_data.get_layer_by_name("water"):
+        #     self.add_rect_to_list(rect, self.water_rects)
+        #     self.add_rect_to_list(rect, self.low_obst_rects)
 
     @staticmethod
     def add_rect_to_list(rect, alist):
