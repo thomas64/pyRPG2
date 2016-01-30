@@ -120,7 +120,10 @@ class OverWorld(object):
         Handelt keyevents af.
         :param event: pygame.event.get() uit screen.py
         """
-        if event.key == pygame.K_F10:
+        if event.key == pygame.K_SPACE:
+            self.hero.align_to_grid(GRIDSIZE)
+
+        elif event.key == pygame.K_F10:
             if self.grid_sprite is None:
                 self.grid_sprite = sprites.GridSprite(self.map1.width, self.map1.height, GRIDCOLOR, GRIDSIZE, GRIDLAYER)
                 self.group.add(self.grid_sprite)
