@@ -8,7 +8,7 @@ import pygame
 import loadsave
 import menu
 import menus
-import screen
+import playscreen
 import audio
 import statemachine
 import states
@@ -203,12 +203,12 @@ class GameEngine(object):
         self.mainmenu = None
         self.state.pop(self.currentstate)
         self.state.push(states.GameState.PlayScreen)
-        self.playscreen = screen.PlayScreen(self.screen, self.audio)
+        self.playscreen = playscreen.PlayScreen(self.screen, self.audio)
         self.audio.play_music(self.audio.overworld)
 
     def _main_menu_select_load_game(self):
         self.loadsave = loadsave.Dialog()
-        self.playscreen = screen.PlayScreen(self.screen, self.audio)                # laad de playscreen alvast
+        self.playscreen = playscreen.PlayScreen(self.screen, self.audio)                # laad de playscreen alvast
         if self.loadsave.load(self) is None:
             self.playscreen = None                                                  # toch niet
         else:                                                                       # geef data mee aan de playscreen

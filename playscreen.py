@@ -32,6 +32,7 @@ HEROPATH = 'resources/sprites/heroes/01_Alagos.png'
 HEROPOS = 640, 768
 
 
+# todo, een window klasse maken voor de inhoud van de window
 class PlayScreen(object):
     """
     Playscreen layout.
@@ -116,7 +117,7 @@ class PlayScreen(object):
     def handle_single_input(self, event):
         """
         Handelt keyevents af.
-        :param event: pygame.event.get() uit screen.py
+        :param event: pygame.event.get() uit playscreen.py
         """
         if event.key == pygame.K_SPACE:
             self.hero.align_to_grid(GRIDSIZE)
