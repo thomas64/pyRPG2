@@ -8,7 +8,7 @@ import pygame
 import loadsave
 import menu
 import menus
-import overworld
+import screen
 import audio
 import statemachine
 import states
@@ -40,7 +40,7 @@ class GameEngine(object):
         self.pausemenu = None
         self.optionsmenu = None
         self.loadsave = None
-        self.overworld = None
+        self.playscreen = None
 
         self.debugfont = pygame.font.SysFont(DEBUGFONT, DEBUGFONTSIZE)
         self.currentstate = None
@@ -81,7 +81,7 @@ class GameEngine(object):
                     "playtime:         {:.2f}".format(self.playtime)
                 )
                 try:
-                    hero = self.overworld.hero
+                    hero = self.playscreen.hero
                     text2 = (
                         "time_up:          {}".format(hero.time_up),
                         "time_down:        {}".format(hero.time_down),
@@ -112,8 +112,8 @@ class GameEngine(object):
             self.optionsmenu.handle_view()
         elif self.currentstate == states.GameState.PauseMenu:
             self.pausemenu.handle_view(self.scr_capt)           # achtergrond, screen capture
-        elif self.currentstate == states.GameState.OverWorld:
-            self.overworld.handle_view()
+        elif self.currentstate == states.GameState.PlayScreen:
+            self.playscreen.handle_view()
 
         _show_debug()
 
@@ -123,11 +123,11 @@ class GameEngine(object):
         """
         self.key_input = pygame.key.get_pressed()
 
-        if self.currentstate == states.GameState.OverWorld:
+        if self.currentstate == states.GameState.PlayScreen:
             mouse_pos = None
             if pygame.mouse.get_pressed()[0]:
                 mouse_pos = pygame.mouse.get_pos()
-            self.overworld.handle_multi_input(self.key_input, mouse_pos, self.dt)
+            self.playscreen.handle_multi_input(self.key_input, mouse_pos, self.dt)
 
     def handle_single_input(self, event):
         """
@@ -154,8 +154,8 @@ class GameEngine(object):
                 if event.key == pygame.K_ESCAPE:
                     self._pause_menu_select_continue(with_esc=True)
                     return
-            elif self.currentstate == states.GameState.OverWorld:
-                self.overworld.handle_single_input(event)
+            elif self.currentstate == states.GameState.PlayScreen:
+                self.playscreen.handle_single_input(event)
                 if event.key == pygame.K_ESCAPE:
                     self._show_pause_menu()
                 if event.key == pygame.K_BACKSPACE:
@@ -193,7 +193,7 @@ class GameEngine(object):
     def _show_main_menu(self):
         self.pausemenu = None
         self.scr_capt = None
-        self.overworld = None
+        self.playscreen = None
         self.state.clear()
         self.state.push(states.GameState.MainMenu)
         self.mainmenu = menu.GameMenu(self.screen, self.audio, menus.Main(), True)
@@ -202,20 +202,20 @@ class GameEngine(object):
     def _main_menu_select_new_game(self):
         self.mainmenu = None
         self.state.pop(self.currentstate)
-        self.state.push(states.GameState.OverWorld)
-        self.overworld = overworld.OverWorld(self.screen, self.audio)
+        self.state.push(states.GameState.PlayScreen)
+        self.playscreen = screen.PlayScreen(self.screen, self.audio)
         self.audio.play_music(self.audio.overworld)
 
     def _main_menu_select_load_game(self):
         self.loadsave = loadsave.Dialog()
-        self.overworld = overworld.OverWorld(self.screen, self.audio)               # laad de overworld alvast
+        self.playscreen = screen.PlayScreen(self.screen, self.audio)                # laad de playscreen alvast
         if self.loadsave.load(self) is None:
-            self.overworld = None                                                   # toch niet
-        else:                                                                       # geef data mee aan de overworld
+            self.playscreen = None                                                  # toch niet
+        else:                                                                       # geef data mee aan de playscreen
             self.audio.play_sound(self.audio.select)
             self.mainmenu = None
             self.state.pop(self.currentstate)
-            self.state.push(states.GameState.OverWorld)
+            self.state.push(states.GameState.PlayScreen)
             self.audio.play_music(self.audio.overworld)
         pygame.event.clear()
         self.loadsave = None

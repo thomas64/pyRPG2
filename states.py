@@ -13,4 +13,4 @@ class GameState(enum.Enum):
     MainMenu = 1
     OptionsMenu = 2
     PauseMenu = 3
-    OverWorld = 4
+    PlayScreen = 4

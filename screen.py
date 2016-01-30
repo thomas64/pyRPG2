@@ -1,6 +1,6 @@
 
 """
-class: OverWorld
+class: PlayScreen
 """
 
 import pygame
@@ -32,10 +32,9 @@ HEROPATH = 'resources/sprites/heroes/01_Alagos.png'
 HEROPOS = 640, 768
 
 
-# todo, overworld hernoemen naar playscreen oid. en de inhoud van window naar eigen bestand window.py oid.
-class OverWorld(object):
+class PlayScreen(object):
     """
-    Overworld layout.
+    Playscreen layout.
     """
     def __init__(self, screen, audio):
         self.screen = screen
@@ -46,14 +45,13 @@ class OverWorld(object):
         self.window.fill(WINDOWCOLOR)
         self.window = self.window.convert()
 
-        self.audio = audio
-
         self.map1 = map.Map(OVERWORLDPATH, WINDOWWIDTH, WINDOWHEIGHT, PLAYERLAYER)
         self.group = self.map1.view
 
-        self.hero = character.Hero(HEROPATH, HEROPOS, self.audio)
+        self.hero = character.Hero(HEROPATH, HEROPOS, audio)
         self.group.add(self.hero)
 
+        self.buttons = None
         self._init_buttons()
         self.key_input = pygame.key.get_pressed()
 

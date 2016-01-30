@@ -101,8 +101,8 @@ class GameMenu(object):
         """
         Reset eerst alle kleuren.
         Zet dan de geselecteerde op een andere kleur.
-        Teken de (overworld screencapture) -> achtergrond -> (titel) -> menuitems.
-        :param bg: screen capture van de overworld
+        Teken de (playscreen screencapture) -> achtergrond -> (titel) -> menuitems.
+        :param bg: screen capture van de playscreen
         """
         for item in self.menu_texts:
             item.set_font_color(MENUFONTCOLOR1)
@@ -122,7 +122,7 @@ class GameMenu(object):
     def handle_single_input(self, event):
         """
         Geef de tekst van het geselecteerde menuitem terug aan het spel.
-        :param event: pygame.event.get() uit game.py
+        :param event: pygame.event.get() uit engine.py
         """
         if event.type == pygame.MOUSEMOTION:
             for item in self.menu_texts:

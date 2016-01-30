@@ -22,10 +22,10 @@ class Dialog(wx.App):
             os.makedirs(SAVEPATH)
 
     @staticmethod
-    def load(game):
+    def load(engine):
         """
         Load dialog.
-        :param game: self van game.py
+        :param engine: self van engine.py
         """
         dialog = wx.FileDialog(None,
                                message='Load File',
@@ -38,7 +38,7 @@ class Dialog(wx.App):
             try:
                 print("Loading gamedata...")
                 with open(filename, 'rb') as f:
-                    game.overworld.hero.rect, game.overworld.hero.last_direction = pickle.load(f)
+                    engine.playscreen.hero.rect, engine.playscreen.hero.last_direction = pickle.load(f)
             except pickle.UnpicklingError:
                 print('Corrupt gamedata.')
                 filename = None
@@ -48,10 +48,10 @@ class Dialog(wx.App):
         return filename
 
     @staticmethod
-    def save(game):
+    def save(engine):
         """
         Save dialog.
-        :param game: self van game.py
+        :param engine: self van engine.py
         """
         dialog = wx.FileDialog(None,
                                message='Save File',
@@ -63,7 +63,7 @@ class Dialog(wx.App):
             filename = dialog.GetPath()
             print("Saving gamedata...")
             with open(filename, 'wb') as f:
-                pickle.dump([game.overworld.hero.rect, game.overworld.hero.last_direction], f)
+                pickle.dump([engine.playscreen.hero.rect, engine.playscreen.hero.last_direction], f)
         else:
             filename = None
         dialog.Destroy()

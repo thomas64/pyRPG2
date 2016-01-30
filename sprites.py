@@ -47,8 +47,8 @@ class ButtonSprite(pygame.sprite.Sprite):
     def draw(self, surface, key_input):
         """
         Teken de zichtbare knoppen op de gegeven surface.
-        :param surface: self.screen uit game
-        :param key_input: self.key_input uit game
+        :param surface: self.screen uit engine
+        :param key_input: self.key_input uit engine
         """
         if self._visible:
             if key_input[self.key]:

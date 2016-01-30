@@ -6,7 +6,7 @@ import sys
 
 import pygame
 
-import game
+import engine
 
 SCREENWIDTH = 1400
 SCREENHEIGHT = 800  # 1600, 800  # 1920, 1080
@@ -20,7 +20,7 @@ def main():
     pygame.mixer.pre_init(44100, 16, 2, 4096)
     pygame.init()
     pygame.display.set_mode((SCREENWIDTH, SCREENHEIGHT), pygame.NOFRAME)  # | pygame.FULLSCREEN)
-    game.GameEngine().main_loop()
+    engine.GameEngine().main_loop()
     # exit
     pygame.quit()
     sys.exit()
