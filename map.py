@@ -31,15 +31,15 @@ class Map(object):
         self.low_obst_rects = []
 
         for rect in tmx_data.get_layer_by_name("trees"):
-            self.add_rect_to_list(rect, self.tree_rects)
-            self.add_rect_to_list(rect, self.obstacle_rects)
+            self._add_rect_to_list(rect, self.tree_rects)
+            self._add_rect_to_list(rect, self.obstacle_rects)
 
         # for rect in tmx_data.get_layer_by_name("water"):
         #     self.add_rect_to_list(rect, self.water_rects)
         #     self.add_rect_to_list(rect, self.low_obst_rects)
 
     @staticmethod
-    def add_rect_to_list(rect, alist):
+    def _add_rect_to_list(rect, alist):
         """
         Voeg een rect toe aan een lijst.
         :param rect: de rect
@@ -48,7 +48,7 @@ class Map(object):
         alist.append(pygame.Rect(rect.x, rect.y, rect.width, rect.height))
 
     @staticmethod
-    def del_rect_from_list(rect, alist):
+    def _del_rect_from_list(rect, alist):
         """
         Haal een rect uit een lijst.
         :param rect: de rect

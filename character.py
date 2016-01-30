@@ -93,8 +93,8 @@ class Hero(pygame.sprite.Sprite):
         if not (key_input[pygame.K_UP] or key_input[pygame.K_DOWN] or
                 key_input[pygame.K_LEFT] or key_input[pygame.K_RIGHT]):
             self.time_delay = 0
-            self.stand()
-            self.animate(dt)
+            self._stand()
+            self._animate(dt)
 
         if key_input[pygame.K_UP]:
             self.time_up += 1
@@ -154,7 +154,7 @@ class Hero(pygame.sprite.Sprite):
                 self.time_delay -= 1 * dt
             else:
                 self._move(dt)
-                self.animate(dt)
+                self._animate(dt)
 
     def _move(self, dt):
         """
@@ -298,7 +298,7 @@ class Hero(pygame.sprite.Sprite):
         self.rect.x = round(self.true_position[0])
         self.rect.y = round(self.true_position[1])
 
-    def stand(self):
+    def _stand(self):
         """
         Laat de unit stoppen met bewegen.
         """
@@ -306,7 +306,7 @@ class Hero(pygame.sprite.Sprite):
         self.old_position = list(self.rect.topleft)
         self.true_position = list(self.rect.topleft)
 
-    def animate(self, dt):
+    def _animate(self, dt):
         """
         Kijkt of de unit beweegt. Geef dan de hele dir_states dict door ipv alleen waarde 0.
         :param dt: self.clock.tick(FPS)/1000.0
