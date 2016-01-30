@@ -27,8 +27,8 @@ class ButtonSprite(pygame.sprite.Sprite):
 
         self.width = BUTTONWIDTH
         self.height = BUTTONHEIGHT
-        self._bgcolor = BUTTONBGCOLOR
-        self._visible = True
+        self.bgcolor = BUTTONBGCOLOR
+        self.visible = True
 
         self.image = pygame.Surface((self.width, self.height))
         self.image = self.image.convert()
@@ -42,50 +42,21 @@ class ButtonSprite(pygame.sprite.Sprite):
 
         self.key = key
 
-        self._update()
-
     def draw(self, surface, key_input):
         """
         Teken de zichtbare knoppen op de gegeven surface.
         :param surface: self.screen uit engine
         :param key_input: self.key_input uit engine
         """
-        if self._visible:
+        if self.visible:
             if key_input[self.key]:
                 self.bgcolor = BUTTONPRESSCOLOR
             else:
                 self.bgcolor = BUTTONBGCOLOR
-
+            self.image.fill(self.bgcolor)
+            pygame.draw.rect(self.image, BUTTONFONTCOLOR, (0, 0, self.width, self.height), 1)
+            self.image.blit(self.label, self.labelrect)
             surface.blit(self.image, self.rect.topleft)
-
-    def _update(self):
-        self.image.fill(self.bgcolor)
-        pygame.draw.rect(self.image, BUTTONFONTCOLOR, (0, 0, self.width, self.height), 1)
-        self.image.blit(self.label, self.labelrect)
-
-    @property
-    def bgcolor(self):
-        """
-        :return: backgroundcolor
-        """
-        return self._bgcolor
-
-    @bgcolor.setter
-    def bgcolor(self, value):
-        self._bgcolor = value
-        self._update()
-
-    @property
-    def visible(self):
-        """
-        :return: of hij zichtbaar is
-        """
-        return self._visible
-
-    @visible.setter
-    def visible(self, value):
-        self._visible = value
-        self._update()
 
 
 class ColorBoxSprite(pygame.sprite.Sprite):
@@ -103,13 +74,6 @@ class ColorBoxSprite(pygame.sprite.Sprite):
         self.image = self.image.convert()
         self.rect = self.image.get_rect()
         self.rect.topleft = rect.topleft
-
-    def update(self, mobile_rect):
-        """
-        Update de coordinaten van deze cbox naar de nieuwe positie van het spriteobject.
-        :param mobile_rect: de rect van het spriteobject waar de cbox omheen staat
-        """
-        self.rect.topleft = mobile_rect.topleft
 
 
 class GridSprite(pygame.sprite.Sprite):

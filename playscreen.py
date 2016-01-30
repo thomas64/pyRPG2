@@ -83,7 +83,7 @@ class PlayScreen(object):
         Update locaties -> teken de achtergrond -> centreer op de hero -> teken de window.
         """
         if len(self.cbox_sprites) > 0:                                  # de eerste die aan cbox_sprites bij F11 is
-            self.cbox_sprites[0].update(self.hero.rect)                 # toegevoegd is de hero.rect, vandaar [0]
+            self.cbox_sprites[0].rect.topleft = self.hero.rect.topleft  # toegevoegd is de hero.rect, vandaar [0]
 
         self.screen.blit(self.background, (0, 0))
         self.group.center(self.hero.rect.center)
