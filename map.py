@@ -6,7 +6,6 @@ class: Map
 import pygame
 import pytmx
 import pyscroll
-import pyscroll.data
 
 
 class Map(object):
@@ -16,9 +15,9 @@ class Map(object):
     def __init__(self, tmxpath, windowwidth, windowheight, layer):
 
         tmx_data = pytmx.load_pygame(tmxpath)
-        map_data = pyscroll.data.TiledMapData(tmx_data)
-        map_layer = pyscroll.BufferedRenderer(map_data, (windowwidth, windowheight), clamp_camera=True)
-        self.view = pyscroll.PyscrollGroup(map_layer=map_layer, default_layer=layer)
+        map_data = pyscroll.TiledMapData(tmx_data)
+        self.map_layer = pyscroll.BufferedRenderer(map_data, (windowwidth, windowheight))
+        self.view = pyscroll.PyscrollGroup(map_layer=self.map_layer, default_layer=layer)
 
         tilewidth = tmx_data.tilewidth
         tileheight = tmx_data.tileheight
@@ -30,13 +29,19 @@ class Map(object):
         self.obstacle_rects = []
         self.low_obst_rects = []
 
-        for rect in tmx_data.get_layer_by_name("trees"):
-            self._add_rect_to_list(rect, self.tree_rects)
-            self._add_rect_to_list(rect, self.obstacle_rects)
+        try:
+            for rect in tmx_data.get_layer_by_name("trees"):
+                self._add_rect_to_list(rect, self.tree_rects)
+                self._add_rect_to_list(rect, self.obstacle_rects)
+        except ValueError:
+            pass
 
-        # for rect in tmx_data.get_layer_by_name("water"):
-        #     self.add_rect_to_list(rect, self.water_rects)
-        #     self.add_rect_to_list(rect, self.low_obst_rects)
+        try:
+            for rect in tmx_data.get_layer_by_name("water"):
+                self._add_rect_to_list(rect, self.water_rects)
+                self._add_rect_to_list(rect, self.low_obst_rects)
+        except ValueError:
+            pass
 
     @staticmethod
     def _add_rect_to_list(rect, alist):

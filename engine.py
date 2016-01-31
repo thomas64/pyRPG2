@@ -83,6 +83,7 @@ class GameEngine(object):
                 try:
                     hero = self.playscreen.hero
                     text2 = (
+                        "zoom:             {:.1f}".format(self.playscreen.map1.map_layer.zoom),
                         "time_up:          {}".format(hero.time_up),
                         "time_down:        {}".format(hero.time_down),
                         "time_left:        {}".format(hero.time_left),

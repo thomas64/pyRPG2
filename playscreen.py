@@ -21,7 +21,7 @@ HEROCOLOR = pygame.Color("blue")
 TREECOLOR = pygame.Color("yellow")
 
 # todo, mooiere map maken met variatie in het gras
-OVERWORLDPATH = 'resources/maps/start_forest.tmx'
+OVERWORLDPATH = 'resources/maps/test.tmx'
 PLAYERLAYER = 1
 GRIDLAYER = 6
 CBOXLAYER = 7
@@ -107,6 +107,17 @@ class PlayScreen(object):
                 if button.rect.collidepoint(mouse_pos):
                     self.key_input = list(self.key_input)
                     self.key_input[button.key] = 1
+
+        elif self.key_input[pygame.K_KP_PLUS]:
+            value = self.map1.map_layer.zoom + .1
+            if value < 3.1:
+                self.map1.map_layer.zoom = value
+        elif self.key_input[pygame.K_KP_MINUS]:
+            value = self.map1.map_layer.zoom - .1
+            if value > .5:
+                self.map1.map_layer.zoom = value
+        elif self.key_input[pygame.K_KP_DIVIDE]:
+            self.map1.map_layer.zoom = 1
 
         self.hero.speed(self.key_input)
         self.hero.direction(self.key_input, dt)
