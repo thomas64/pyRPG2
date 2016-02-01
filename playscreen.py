@@ -5,9 +5,8 @@ class: PlayScreen
 
 import pygame
 
-import character
-import map
 import sprites
+import window
 
 
 WINDOWWIDTH = 800
@@ -15,24 +14,8 @@ WINDOWHEIGHT = 600
 WINDOWPOS = 100, 100
 
 BACKGROUNDCOLOR = pygame.Color("black")
-GRIDCOLOR = pygame.Color("gray38")
-WINDOWCOLOR = pygame.Color("gray12")
-HEROCOLOR = pygame.Color("blue")
-TREECOLOR = pygame.Color("yellow")
-
-# todo, mooiere map maken met variatie in het gras
-OVERWORLDPATH = 'resources/maps/test.tmx'
-PLAYERLAYER = 1
-GRIDLAYER = 6
-CBOXLAYER = 7
-GRIDSIZE = 32
-
-# todo, laden van pad van sprite moet nog anders
-HEROPATH = 'resources/sprites/heroes/01_Alagos.png'
-HEROPOS = 640, 768
 
 
-# todo, een window klasse maken voor de inhoud van de window
 class PlayScreen(object):
     """
     Playscreen layout.
@@ -42,22 +25,11 @@ class PlayScreen(object):
         self.background = pygame.Surface(self.screen.get_size())
         self.background.fill(BACKGROUNDCOLOR)
         self.background = self.background.convert()
-        self.window = pygame.Surface((WINDOWWIDTH, WINDOWHEIGHT))
-        self.window.fill(WINDOWCOLOR)
-        self.window = self.window.convert()
-
-        self.map1 = map.Map(OVERWORLDPATH, WINDOWWIDTH, WINDOWHEIGHT, PLAYERLAYER)
-        self.group = self.map1.view
-
-        self.hero = character.Hero(HEROPATH, HEROPOS, audio)
-        self.group.add(self.hero)
+        self.window = window.Window(WINDOWWIDTH, WINDOWHEIGHT, audio)
 
         self.buttons = None
         self._init_buttons()
         self.key_input = pygame.key.get_pressed()
-
-        self.grid_sprite = None
-        self.cbox_sprites = []
 
     def _init_buttons(self):
         """
@@ -80,22 +52,18 @@ class PlayScreen(object):
 
     def handle_view(self):
         """
-        Update locaties -> teken de achtergrond -> centreer op de hero -> teken de window.
+        Handel de view af in de window -> teken de achtergrond -> teken de window -> teken de buttons.
         """
-        if len(self.cbox_sprites) > 0:                                  # de eerste die aan cbox_sprites bij F11 is
-            self.cbox_sprites[0].rect.topleft = self.hero.rect.topleft  # toegevoegd is de hero.rect, vandaar [0]
+        self.window.handle_view()
 
         self.screen.blit(self.background, (0, 0))
-        self.group.center(self.hero.rect.center)
-        self.group.draw(self.window)
-        self.screen.blit(self.window, WINDOWPOS)
-
+        self.screen.blit(self.window.surface, WINDOWPOS)
         for button in self.buttons:
             button.draw(self.screen, self.key_input)
 
     def handle_multi_input(self, key_input, mouse_pos, dt):
         """
-        Handel de input af voor snelheid en richting. Check daarna op collision.
+        Registreert of er op de buttons wordt geklikt. En zet dat om naar keyboard input.
         :param key_input: pygame.key.get_pressed()
         :param mouse_pos: pygame.mouse.get_pos()
         :param dt: self.clock.tick(FPS)/1000.0
@@ -108,45 +76,11 @@ class PlayScreen(object):
                     self.key_input = list(self.key_input)
                     self.key_input[button.key] = 1
 
-        elif self.key_input[pygame.K_KP_PLUS]:
-            value = self.map1.map_layer.zoom + .1
-            if value < 3.1:
-                self.map1.map_layer.zoom = value
-        elif self.key_input[pygame.K_KP_MINUS]:
-            value = self.map1.map_layer.zoom - .1
-            if value > .5:
-                self.map1.map_layer.zoom = value
-        elif self.key_input[pygame.K_KP_DIVIDE]:
-            self.map1.map_layer.zoom = 1
-
-        self.hero.speed(self.key_input)
-        self.hero.direction(self.key_input, dt)
-        # todo, moet dit niet naar de hero class?
-        self.hero.check_obstacle(self.map1.obstacle_rects, self.map1.low_obst_rects,
-                                 None, self.map1.width, self.map1.height, dt)
+        self.window.handle_multi_input(self.key_input, dt)
 
     def handle_single_input(self, event):
         """
         Handelt keyevents af.
         :param event: pygame.event.get() uit playscreen.py
         """
-        if event.key == pygame.K_SPACE:
-            self.hero.align_to_grid(GRIDSIZE)
-
-        elif event.key == pygame.K_F10:
-            if self.grid_sprite is None:
-                self.grid_sprite = sprites.GridSprite(self.map1.width, self.map1.height, GRIDCOLOR, GRIDSIZE, GRIDLAYER)
-                self.group.add(self.grid_sprite)
-            else:
-                self.group.remove(self.grid_sprite)
-                self.grid_sprite = None
-
-        elif event.key == pygame.K_F11:
-            if len(self.cbox_sprites) == 0:                             # als de lijst leeg is.
-                self.cbox_sprites.append(sprites.ColorBoxSprite(self.hero.rect, HEROCOLOR, CBOXLAYER))
-                for rect in self.map1.tree_rects:
-                    self.cbox_sprites.append(sprites.ColorBoxSprite(rect, TREECOLOR, CBOXLAYER))
-                self.group.add(self.cbox_sprites)
-            else:
-                self.group.remove(self.cbox_sprites)
-                self.cbox_sprites = []
+        self.window.handle_single_input(event)
