@@ -82,7 +82,7 @@ class Window(object):
     def handle_single_input(self, event):
         """
         Handelt keyevents af.
-        :param event: pygame.event.get() uit playscreen.py
+        :param event: pygame.event.get() uit overworld.py
         """
         if event.key == pygame.K_SPACE:
             self.hero.align_to_grid(GRIDSIZE)

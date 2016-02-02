@@ -1,6 +1,6 @@
 
 """
-class: PlayScreen
+class: Overworld
 """
 
 import pygame
@@ -16,9 +16,10 @@ WINDOWPOS = 100, 100
 BACKGROUNDCOLOR = pygame.Color("black")
 
 
-class PlayScreen(object):
+# todo, faces van heroes implementeren
+class Overworld(object):
     """
-    Playscreen layout.
+    Overworld layout.
     """
     def __init__(self, screen, audio):
         self.screen = screen
@@ -70,17 +71,14 @@ class PlayScreen(object):
         """
         self.key_input = key_input
 
-        if mouse_pos is not None:
-            for button in self.buttons:
-                if button.rect.collidepoint(mouse_pos):
-                    self.key_input = list(self.key_input)
-                    self.key_input[button.key] = 1
+        for button in self.buttons:
+            self.key_input = button.click(mouse_pos, self.key_input)
 
         self.window.handle_multi_input(self.key_input, dt)
 
     def handle_single_input(self, event):
         """
         Handelt keyevents af.
-        :param event: pygame.event.get() uit playscreen.py
+        :param event: pygame.event.get() uit overworld.py
         """
         self.window.handle_single_input(event)

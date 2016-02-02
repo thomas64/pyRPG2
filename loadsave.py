@@ -38,7 +38,7 @@ class Dialog(wx.App):
             try:
                 print("Loading gamedata...")
                 with open(filename, 'rb') as f:
-                    engine.playscreen.window.hero.rect, engine.playscreen.window.hero.last_direction = pickle.load(f)
+                    engine.overworld.window.hero.rect, engine.overworld.window.hero.last_direction = pickle.load(f)
             except pickle.UnpicklingError:
                 print('Corrupt gamedata.')
                 filename = None
@@ -63,7 +63,7 @@ class Dialog(wx.App):
             filename = dialog.GetPath()
             print("Saving gamedata...")
             with open(filename, 'wb') as f:
-                pickle.dump([engine.playscreen.window.hero.rect, engine.playscreen.window.hero.last_direction], f)
+                pickle.dump([engine.overworld.window.hero.rect, engine.overworld.window.hero.last_direction], f)
         else:
             filename = None
         dialog.Destroy()

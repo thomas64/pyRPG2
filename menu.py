@@ -101,8 +101,8 @@ class GameMenu(object):
         """
         Reset eerst alle kleuren.
         Zet dan de geselecteerde op een andere kleur.
-        Teken de (playscreen screencapture) -> achtergrond -> (titel) -> menuitems.
-        :param bg: screen capture van de playscreen
+        Teken de (overworld screencapture) -> achtergrond -> (titel) -> menuitems.
+        :param bg: screen capture van de overworld
         """
         for item in self.menu_texts:
             item.set_font_color(MENUFONTCOLOR1)

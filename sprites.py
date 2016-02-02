@@ -58,6 +58,21 @@ class ButtonSprite(pygame.sprite.Sprite):
             self.image.blit(self.label, self.labelrect)
             surface.blit(self.image, self.rect.topleft)
 
+    def click(self, mouse_pos, key_input):
+        """
+        Als er geklikt is met de muis en op de knop.
+        Maak dan van de tuple een list en zet de key van deze button in de list op 1.
+        Die ingedrukt knop wordt dan teruggestuurd als het waarde keyboard input.
+        :param mouse_pos: pygame.mouse.get_pos()
+        :param key_input: pygame.key.get_pressed()
+        :return: aangepaste key_input waarde
+        """
+        if mouse_pos is not None:
+            if self.rect.collidepoint(mouse_pos):
+                key_input = list(key_input)
+                key_input[self.key] = 1
+        return key_input
+
 
 class ColorBoxSprite(pygame.sprite.Sprite):
     """
