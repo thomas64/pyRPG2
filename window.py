@@ -14,17 +14,17 @@ BACKGROUNDCOLOR = pygame.Color("gray12")
 GRIDCOLOR = pygame.Color("gray38")
 HEROCOLOR = pygame.Color("blue")
 TREECOLOR = pygame.Color("yellow")
+WATERCOLOR = pygame.Color("purple")
 
 # todo, mooiere map maken met variatie in het gras
-OVERWORLDPATH = 'resources/maps/test.tmx'
-PLAYERLAYER = 1
-GRIDLAYER = 6
-CBOXLAYER = 7
+OVERWORLDPATH = 'resources/maps/start_forest.tmx'
+PLAYERLAYER = 3
+GRIDLAYER = 8
+CBOXLAYER = 9
 GRIDSIZE = 32
 
 # todo, laden van pad van sprite moet nog anders
 HEROPATH = 'resources/sprites/heroes/01_Alagos.png'
-HEROPOS = 640, 768  # todo, pos als object op de kaart.
 
 
 class Window(object):
@@ -39,7 +39,7 @@ class Window(object):
         self.map1 = map.Map(OVERWORLDPATH, width, height, PLAYERLAYER)
         self.group = self.map1.view
 
-        self.hero = character.Hero(HEROPATH, HEROPOS, audio)
+        self.hero = character.Hero(HEROPATH, self.map1.start_pos.topleft, audio)
         self.group.add(self.hero)
 
         self.grid_sprite = None
@@ -100,6 +100,8 @@ class Window(object):
                 self.cbox_sprites.append(sprites.ColorBoxSprite(self.hero.rect, HEROCOLOR, CBOXLAYER))
                 for rect in self.map1.tree_rects:
                     self.cbox_sprites.append(sprites.ColorBoxSprite(rect, TREECOLOR, CBOXLAYER))
+                for rect in self.map1.water_rects:
+                    self.cbox_sprites.append(sprites.ColorBoxSprite(rect, WATERCOLOR, CBOXLAYER))
                 self.group.add(self.cbox_sprites)
             else:
                 self.group.remove(self.cbox_sprites)
