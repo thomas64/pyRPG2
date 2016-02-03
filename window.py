@@ -24,7 +24,7 @@ CBOXLAYER = 9
 GRIDSIZE = 32
 
 # todo, laden van pad van sprite moet nog anders
-HEROPATH = 'resources/sprites/heroes/01_Alagos.png'
+HEROPATH = 'resources/sprites/heroes/01s_Alagos.png'
 
 
 class Window(object):

@@ -189,7 +189,7 @@ class GameEngine(object):
             elif menu_choice == menus.Pause().SaveGame:
                 self._pause_menu_select_save_game()
             elif menu_choice == menus.Pause().MainMenu:
-                self._show_main_menu()
+                self._pause_menu_select_main_menu()
 
     def _show_main_menu(self):
         self.pausemenu = None
@@ -222,15 +222,18 @@ class GameEngine(object):
         self.loadsave = None
 
     def _main_menu_select_options(self):
-        self.state.push(states.GameState.OptionsMenu)
-        menu_items = menus.Options(self.audio.music, self.audio.sound)              # hier worden de options geschreven
-        self.optionsmenu = menu.GameMenu(self.screen, self.audio, menu_items, True)
+        self._show_options_menu()
 
     def _main_menu_select_exit_game(self, with_esc=False):
         if with_esc:
             self.audio.play_sound(self.audio.select)
         self.audio.fade_music()
         self.running = False
+
+    def _show_options_menu(self):
+        self.state.push(states.GameState.OptionsMenu)
+        menu_items = menus.Options(self.audio.music, self.audio.sound)              # hier worden de options geschreven
+        self.optionsmenu = menu.GameMenu(self.screen, self.audio, menu_items, True)
 
     def _options_menu_select_music(self):
         settingview = self.optionsmenu.menu_texts[self.optionsmenu.cur_item]        # hier wordt de visualisatie
@@ -268,13 +271,6 @@ class GameEngine(object):
         self.state.push(states.GameState.PauseMenu)
         self.pausemenu = menu.GameMenu(self.screen, self.audio, menus.Pause(), False)
 
-    def _pause_menu_select_save_game(self):
-        self.loadsave = loadsave.Dialog()
-        if self.loadsave.save(self) is not None:
-            self.audio.play_sound(self.audio.select)
-        pygame.event.clear()                                    # anders stapelen de geluiden zich op
-        self.loadsave = None
-
     def _pause_menu_select_continue(self, with_esc=False):
         if with_esc:
             self.audio.play_sound(self.audio.select)            # omdat escape in menu standaard geen geluid geeft
@@ -282,6 +278,16 @@ class GameEngine(object):
         self.pausemenu = None
         self.scr_capt = None
         self.audio.play_music(self.audio.overworld)
+
+    def _pause_menu_select_save_game(self):
+        self.loadsave = loadsave.Dialog()
+        if self.loadsave.save(self) is not None:
+            self.audio.play_sound(self.audio.select)
+        pygame.event.clear()                                    # anders stapelen de geluiden zich op
+        self.loadsave = None
+
+    def _pause_menu_select_main_menu(self):
+        self._show_main_menu()
 
     @staticmethod
     def _kill_game():

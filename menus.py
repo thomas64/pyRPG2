@@ -13,6 +13,9 @@ class Item(object):
     """
     Base class voor de verschillende menu's.
     Je kan er dan de lengte van bepalen, er doorheen loopen, en de attr van opvragen.
+    Enums zijn niet aan te passen.
+    Gewone attribute strings staan niet op volgorde
+    Vandaar gekozen voor een ordereddict.
     """
     def __init__(self):
         self.inside = collections.OrderedDict()
