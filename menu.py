@@ -69,7 +69,6 @@ class GameMenu(object):
         self.screen = screen
         self.background = pygame.Surface(self.screen.get_size())
         self.background.fill(BACKGROUNDCOLOR)
-        self.background.set_alpha(224)  # hij doet niets met de alpha als bij handle_view geen bg wordt meegegeven
         self.background = self.background.convert()
 
         bg_width = self.background.get_width()
@@ -109,7 +108,8 @@ class GameMenu(object):
         self.menu_texts[self.cur_item].set_font_color(MENUFONTCOLOR2)
 
         if bg is not None:
-            self.screen.blit(bg, (0, 0))
+            self.screen.blit(bg, (0, 0))        # gooi over het hele scherm de overworld achtergrond
+            self.background.set_alpha(224)      # maak de zwarte 'background' transparant
 
         self.screen.blit(self.background, (0, 0))
 
