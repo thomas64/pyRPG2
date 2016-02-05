@@ -7,6 +7,8 @@ import enum
 
 import items.gear
 
+# todo, alle belts afmaken
+
 
 class BeltsData(enum.Enum):
     """
