@@ -18,11 +18,10 @@ class GearType(enum.Enum):
     armor = 5
     cloak = 6
     gloves = 7
-    lring = 8
-    rring = 9
-    belt = 10
-    boots = 11
-    accessory = 12
+    ring = 8
+    belt = 9
+    boots = 10
+    accessory = 11
 
 
 class GearItem(object):
