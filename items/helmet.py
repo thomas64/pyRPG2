@@ -34,6 +34,14 @@ class HelmetsData(enum.Enum):
     helmoftempests = dict(name="Helm of Tempests",        value=8800,  shop=True,  weight=2, prt=1, war=1)
     helmoftempests2 = dict(name="Helm of Tempests +",     value=9680,  shop=False, weight=3, prt=2, war=1)
 
+    # todo, dit moet nog toegevoegd worden aan alle enum gear classes
+    # noinspection PyUnusedLocal
+    def __getitem__(self, item):        # als er iets wordt gevraagd wat niet kan aan een enum, zoals [0] of [1]
+        if item == 0:                   # voor een OrderedDict (zoals ShieldsData) dan wordt deze uitgevoerd.
+            return self.name            # hij returned dan een waarde die een enum wel kan, namelijk .name en .value
+        elif item == 1:
+            return self.value
+
     @staticmethod
     def factory(helmet):
         """
@@ -42,3 +50,9 @@ class HelmetsData(enum.Enum):
         :return: een gearitem object met attributen uit de bovenstaande enum dict
         """
         return items.gear.GearItem(items.gear.GearType.helmet, **helmet.value)
+
+
+# for helmet in HelmetsData:
+#     print(helmet[1]['name'])
+#
+# quit()
