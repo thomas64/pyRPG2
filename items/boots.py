@@ -12,6 +12,8 @@ class BootsData(items.gear.GearData):
     """
     Hier staan alle laarzen uit het spel in als enum met een dict voor de waarden.
     """
+    empty = dict()
+
     leatherboots = dict(nam="Leather Boots",         val=100,  shp=True,  wht=1, prt=1)
     bronzeboots = dict(nam="Bronze Boots",           val=200,  shp=True,  wht=2, prt=2)
     ironboots = dict(nam="Iron Boots",               val=400,  shp=True,  wht=3, prt=3)

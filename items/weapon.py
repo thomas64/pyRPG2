@@ -11,6 +11,8 @@ class WeaponsDataClass(items.gear.GearDataClass):
     """
     Hier staan alle wapens uit het spel in een dict als enum met een dict voor de waarden.
     """
+    empty = dict()
+
     @staticmethod
     def factory(weapon):
         """

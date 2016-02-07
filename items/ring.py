@@ -12,6 +12,8 @@ class RingsData(items.gear.GearData):
     """
     Hier staan alle ringen uit het spel in als enum met een dict voor de waarden.
     """
+    empty = dict()
+
     testring = dict(nam="Test Ring",   val=100, shp=True,  wht=1, prt=1)
 
     @staticmethod

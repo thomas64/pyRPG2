@@ -12,6 +12,8 @@ class GlovesData(items.gear.GearData):
     """
     Hier staan alle handschoenen uit het spel in als enum met een dict voor de waarden.
     """
+    empty = dict()
+
     leathergloves = dict(nam="Leather Gloves", val=100, shp=True,  wht=1, prt=1)
 
     @staticmethod

@@ -12,6 +12,8 @@ class AccessoriesData(items.gear.GearData):
     """
     Hier staan alle accessoires uit het spel in als enum met een dict voor de waarden.
     """
+    empty = dict()
+
     testaccessory = dict(nam="Test Accessory",   val=100, shp=True,  wht=1, prt=1)
 
     @staticmethod

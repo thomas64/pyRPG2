@@ -12,6 +12,8 @@ class BeltsData(items.gear.GearData):
     """
     Hier staan alle gordels uit het spel in als enum met een dict voor de waarden.
     """
+    empty = dict()
+
     leatherbelt = dict(nam="Leather Belt", val=100, shp=True,  wht=1, prt=1)
 
     @staticmethod

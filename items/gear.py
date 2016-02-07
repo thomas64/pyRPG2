@@ -10,7 +10,6 @@ import collections
 import enum
 
 # todo, uit colornote app:
-# - geen empty items meer
 # - min int gebruiken voor items?
 # - mvp aan items
 
@@ -65,7 +64,7 @@ class GearType(enum.Enum):
     weapon = 1
     shield = 2
     helmet = 3
-    necklace = 4
+    amulet = 4
     armor = 5
     cloak = 6
     gloves = 7
@@ -83,8 +82,8 @@ class GearItem(object):
         self.TYP = geartype                        # enum
         self.quantity = 1
 
-        for key, value in kwargs.items():
-            setattr(self, key.upper(), value)       # zet de dict van kwargs om in attributen
+        for gear_value_key, gear_value_value in kwargs.items():
+            setattr(self, gear_value_key.upper(), gear_value_value)     # zet de dict van kwargs om in attributen
 
     # noinspection PyUnusedLocal
     def __getattr__(self, item):                    # als de attribute niet bestaat, geef dan 0 terug.
