@@ -16,8 +16,6 @@ class ShieldsDataClass(object):
     def __init__(self):
         self.inside = collections.OrderedDict()
 
-        self.inside['emptyshield'] = dict(name="Empty Shield", value=0, shop=False, min_str=0, sort=0, col=0, row=0)
-
     def __iter__(self):                 # om gesorteerd op winkelvolgorde te laten zien
         return iter(sorted(self.inside.items(), key=lambda xx: xx[1]['sort']))      # [1] dan zijn het de .values()
 

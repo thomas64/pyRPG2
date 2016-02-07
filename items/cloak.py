@@ -12,8 +12,6 @@ class CloakData(enum.Enum):
     """
     Hier staan alle mantels uit het spel in als enum met een dict voor de waarden.
     """
-    emptycloak = dict(name="Empty Cloak",                  value=0,     shop=False, weight=0)
-
     leathercloak = dict(name="Leather Cloak",              value=100,   shop=True,  weight=1, prt=1)
     battlecloak = dict(name="Battle Cloak",                value=1000,  shop=True,  weight=2, prt=2)
 
@@ -38,6 +36,12 @@ class CloakData(enum.Enum):
     silkcloak2 = dict(name="Silk Cloak +",                 value=2750,  shop=False, weight=2, thf=1, prt=1)
     thievescloak = dict(name="Thieves Cloak",              value=5000,  shop=True,  weight=1, thf=2)
     thievescloak2 = dict(name="Thieves Cloak +",           value=5500,  shop=False, weight=2, thf=2, prt=1)
+
+    def __getitem__(self, item):        # als er iets wordt gevraagd wat niet kan aan een enum, zoals [0] of [1]
+        if item == 0:                   # voor een OrderedDict (zoals ShieldsData) dan wordt deze uitgevoerd.
+            return self.name            # hij returned dan een waarde die een enum wel kan, namelijk .name en .value
+        elif item == 1:
+            return self.value
 
     @staticmethod
     def factory(cloak):

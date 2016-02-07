@@ -6,6 +6,11 @@ class: GearItem
 
 import enum
 
+# todo, uit colornote app:
+# - geen empty items meer
+# - min int gebruiken voor items?
+# - mvp aan items
+
 
 class GearType(enum.Enum):
     """

@@ -12,8 +12,6 @@ class HelmetsData(enum.Enum):
     """
     Hier staan alle helmen uit het spel in als enum met een dict voor de waarden.
     """
-    emptyhelmet = dict(name="Empty Helmet",               value=0,     shop=False, weight=0)
-
     leathercap = dict(name="Leather Cap",                 value=100,   shop=True,  weight=1, prt=1)
     bronzehelmet = dict(name="Bronze Helmet",             value=1225,  shop=True,  weight=2, prt=2)
     ironhelmet = dict(name="Iron Helmet",                 value=3600,  shop=True,  weight=3, prt=3)
@@ -34,8 +32,6 @@ class HelmetsData(enum.Enum):
     helmoftempests = dict(name="Helm of Tempests",        value=8800,  shop=True,  weight=2, prt=1, war=1)
     helmoftempests2 = dict(name="Helm of Tempests +",     value=9680,  shop=False, weight=3, prt=2, war=1)
 
-    # todo, dit moet nog toegevoegd worden aan alle enum gear classes
-    # noinspection PyUnusedLocal
     def __getitem__(self, item):        # als er iets wordt gevraagd wat niet kan aan een enum, zoals [0] of [1]
         if item == 0:                   # voor een OrderedDict (zoals ShieldsData) dan wordt deze uitgevoerd.
             return self.name            # hij returned dan een waarde die een enum wel kan, namelijk .name en .value
