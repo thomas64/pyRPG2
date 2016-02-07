@@ -95,16 +95,16 @@ class GridSprite(pygame.sprite.Sprite):
     """
     Een grid over de window wanneer F10 is ingedrukt.
     """
-    def __init__(self, map_width, map_height, color, tile_size, layer):
+    def __init__(self, map_width, map_height, color, grid_size, layer):
         pygame.sprite.Sprite.__init__(self)
 
         self._layer = layer
         self.image = pygame.Surface((map_width, map_height))
         self.image.fill(FILLCOLOR)
         self.image.set_colorkey(FILLCOLOR)
-        for i in range(0, map_width, tile_size):
+        for i in range(0, map_width, grid_size):
             pygame.draw.line(self.image, color, (0, i), (map_width, i))
-        for i in range(0, map_height, tile_size):
+        for i in range(0, map_height, grid_size):
             pygame.draw.line(self.image, color, (i, 0), (i, map_height))
         self.image = self.image.convert()
         self.rect = self.image.get_rect()

@@ -175,12 +175,12 @@ class Hero(pygame.sprite.Sprite):
         self.rect.x = round(self.true_position[0])
         self.rect.y = round(self.true_position[1])
 
-    def align_to_grid(self, tile_size):
+    def align_to_grid(self, grid_size):
         """
         Align de unit op de grid.
-        :param tile_size: grootte van een hokje
+        :param grid_size: grootte van een hokje
         """
-        self.rect.topleft = (round(self.rect.x / tile_size) * tile_size, round(self.rect.y / tile_size) * tile_size)
+        self.rect.topleft = (round(self.rect.x / grid_size) * grid_size, round(self.rect.y / grid_size) * grid_size)
 
     def check_obstacle(self, obstacles, low_obsts, moverange, map_width, map_height, dt):
         """
@@ -346,6 +346,7 @@ class Hero(pygame.sprite.Sprite):
         self.step_count += 1
         if self.movespeed != MOVESPEED4:  # geen animatie of geluid bij MOVESPEED4
             # round(1 / x * STEPSPEED) is om de teller van hoge en lage movespeeds om te draaien
+            # todo, het stappen en geluid gaat nog niet helemaal juist bij lage framerates
             if self.step_count % round((1 / (self.movespeed * dt)) * STEPSPEED) == 1:
                 if self.step_animation == 0:
                     self.audio.play_sound(self.audio.step_left)

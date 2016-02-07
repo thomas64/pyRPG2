@@ -10,11 +10,20 @@ import map
 import sprites
 
 
+ALIGNKEY = pygame.K_SPACE
+GRIDKEY = pygame.K_F10
+CBOXKEY = pygame.K_F11
+
 BACKGROUNDCOLOR = pygame.Color("gray12")
 GRIDCOLOR = pygame.Color("gray38")
 HEROCOLOR = pygame.Color("blue")
 TREECOLOR = pygame.Color("yellow")
 WATERCOLOR = pygame.Color("purple")
+
+ZOOMSPEED = .1
+MAXZOOM = 3.1
+DEFZOOM = 1.0
+MINZOOM = 1.5
 
 # todo, mooiere map maken met variatie in het gras
 OVERWORLDPATH = 'resources/maps/start_forest.tmx'
@@ -47,7 +56,7 @@ class Window(object):
 
     def handle_view(self):
         """
-        Update locaties -> centreer op de hero -> teken de window inhoud.
+        Update locaties (indien F11) -> centreer op de hero -> teken de window inhoud.
         """
         if len(self.cbox_sprites) > 0:                                  # de eerste die aan cbox_sprites bij F11 is
             self.cbox_sprites[0].rect.topleft = self.hero.rect.topleft  # toegevoegd is de hero.rect, vandaar [0]
@@ -63,15 +72,15 @@ class Window(object):
         :param dt: self.clock.tick(FPS)/1000.0
         """
         if key_input[pygame.K_KP_PLUS]:
-            value = self.map1.map_layer.zoom + .1
-            if value < 3.1:
+            value = self.map1.map_layer.zoom + ZOOMSPEED
+            if value < MAXZOOM:
                 self.map1.map_layer.zoom = value
         elif key_input[pygame.K_KP_MINUS]:
-            value = self.map1.map_layer.zoom - .1
-            if value > .5:
+            value = self.map1.map_layer.zoom - ZOOMSPEED
+            if value > MINZOOM:
                 self.map1.map_layer.zoom = value
         elif key_input[pygame.K_KP_DIVIDE]:
-            self.map1.map_layer.zoom = 1
+            self.map1.map_layer.zoom = DEFZOOM
 
         self.hero.speed(key_input)
         self.hero.direction(key_input, dt)
@@ -84,10 +93,10 @@ class Window(object):
         Handelt keyevents af.
         :param event: pygame.event.get() uit overworld.py
         """
-        if event.key == pygame.K_SPACE:
+        if event.key == ALIGNKEY:
             self.hero.align_to_grid(GRIDSIZE)
 
-        elif event.key == pygame.K_F10:
+        elif event.key == GRIDKEY:
             if self.grid_sprite is None:
                 self.grid_sprite = sprites.GridSprite(self.map1.width, self.map1.height, GRIDCOLOR, GRIDSIZE, GRIDLAYER)
                 self.group.add(self.grid_sprite)
@@ -95,7 +104,7 @@ class Window(object):
                 self.group.remove(self.grid_sprite)
                 self.grid_sprite = None
 
-        elif event.key == pygame.K_F11:
+        elif event.key == CBOXKEY:
             if len(self.cbox_sprites) == 0:                             # als de lijst leeg is.
                 self.cbox_sprites.append(sprites.ColorBoxSprite(self.hero.rect, HEROCOLOR, CBOXLAYER))
                 for rect in self.map1.tree_rects:

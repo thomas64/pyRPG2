@@ -20,13 +20,13 @@ class Item(object):
     def __init__(self):
         self.inside = collections.OrderedDict()
 
-    def __len__(self):
-        return len(self.inside)
+    def __len__(self):                      # om de totale hoogte van alle items te kunnen berekenen, om het blok
+        return len(self.inside)             # verticaal te kunnen centreren.
 
-    def __iter__(self):
-        return iter(self.inside.items())
+    def __iter__(self):                     # zodat de GameMenu class door alle enum items kan heen lopen
+        return iter(self.inside.items())    # om ze te kunnen projecteren.
 
-    def __getattr__(self, key):
+    def __getattr__(self, key):             # om te controleren op een key zoals 'NewGame' of die gekozen wordt
         return key
 
 

@@ -25,6 +25,8 @@ MENUERRORSOUND = os.path.join(SOUNDSPATH,  'menu_error.wav')
 STEP_GRASS_L = os.path.join(SOUNDSPATH, 'step_grass_l.wav')
 STEP_GRASS_R = os.path.join(SOUNDSPATH, 'step_grass_r.wav')
 
+FADEOUTTIME = 500
+
 
 class Audio(object):
     """
@@ -91,4 +93,4 @@ class Audio(object):
         Als er muziek speelt, fade die out.
         """
         if self.current.get_sound() is not None:
-            self.current.fadeout(500)
+            self.current.fadeout(FADEOUTTIME)

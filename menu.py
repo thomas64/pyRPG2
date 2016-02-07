@@ -9,6 +9,7 @@ import pygame
 
 
 BACKGROUNDCOLOR = pygame.Color("black")
+BACKGROUNDTRANS = 224       # 1-255 hoger is zwarter
 
 TITLETEXT = "pyRPG"
 TITLEFONT = 'colonna'
@@ -108,8 +109,8 @@ class GameMenu(object):
         self.menu_texts[self.cur_item].set_font_color(MENUFONTCOLOR2)
 
         if bg is not None:
-            self.screen.blit(bg, (0, 0))        # gooi over het hele scherm de overworld achtergrond
-            self.background.set_alpha(224)      # maak de zwarte 'background' transparant
+            self.screen.blit(bg, (0, 0))                    # gooi over het hele scherm de overworld achtergrond
+            self.background.set_alpha(BACKGROUNDTRANS)      # maak de zwarte 'background' transparant
 
         self.screen.blit(self.background, (0, 0))
 

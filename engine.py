@@ -13,8 +13,9 @@ import audio
 import statemachine
 import states
 
-FPS = 60        # minimaal 20 en maximaal 130, anders komen er bugs voor.
+FPS = 60        # minimaal 15, anders kan hij door bomen lopen
 
+DEBUGKEY = pygame.K_F12
 DEBUGFONT = 'courier'
 DEBUGFONTSIZE = 11
 DEBUGFONTCOLOR = pygame.Color("white")
@@ -140,7 +141,7 @@ class GameEngine(object):
         if event.type == pygame.KEYDOWN:
             print("Keyboard, key={}, unicode={}".format(event.key, event.unicode))
 
-            if event.key == pygame.K_F12:
+            if event.key == DEBUGKEY:
                 self.show_debug ^= True                     # simple boolean swith
 
             if self.currentstate == states.GameState.MainMenu:          # eerst de keys op het toetsenbord

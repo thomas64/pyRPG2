@@ -7,6 +7,10 @@ import pygame
 import pytmx
 import pyscroll
 
+STARTPOSLAYER = "start_pos"
+TREESLAYER = "trees"
+WATERLAYER = "water"
+
 
 class Map(object):
     """
@@ -29,22 +33,21 @@ class Map(object):
         self.obstacle_rects = []
         self.low_obst_rects = []
 
-        self.start_pos = pygame.Rect(0, 0, 16, 16)
         try:
-            for rect in tmx_data.get_layer_by_name("start_pos"):
+            for rect in tmx_data.get_layer_by_name(STARTPOSLAYER):
                 self.start_pos = self._pg_rect(rect)
         except (AttributeError, ValueError):
             pass
 
         try:
-            for rect in tmx_data.get_layer_by_name("trees"):
+            for rect in tmx_data.get_layer_by_name(TREESLAYER):
                 self._add_rect_to_list(rect, self.tree_rects)
                 self._add_rect_to_list(rect, self.obstacle_rects)
         except (AttributeError, ValueError):
             pass
 
         try:
-            for rect in tmx_data.get_layer_by_name("water"):
+            for rect in tmx_data.get_layer_by_name(WATERLAYER):
                 self._add_rect_to_list(rect, self.water_rects)
                 self._add_rect_to_list(rect, self.low_obst_rects)
         except (AttributeError, ValueError):
