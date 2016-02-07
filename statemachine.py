@@ -32,7 +32,7 @@ class StateMachine(object):
         :param state: print the name of the popped state
         """
         try:
-            console.Output.state_pop(state)
+            console.state_pop(state)
             self.statestack.pop()
             return len(self.statestack) > 0
         except IndexError:
@@ -43,7 +43,7 @@ class StateMachine(object):
         :param state: Push a new state onto the stack.
         :return: Returns the pushed value.
         """
-        console.Output.state_push(state)
+        console.state_push(state)
         self.statestack.append(state)
         return state
 
@@ -51,5 +51,5 @@ class StateMachine(object):
         """
         Clear the whole stack.
         """
-        console.Output.state_clear()
+        console.state_clear()
         self.statestack = []

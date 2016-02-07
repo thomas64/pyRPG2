@@ -6,6 +6,7 @@ class: GameEngine
 import pygame
 
 import console
+import data
 import loadsave
 import menu
 import menus
@@ -29,6 +30,7 @@ class GameEngine(object):
     def __init__(self):
         self.screen = pygame.display.get_surface()
         self.state = statemachine.StateMachine()
+        self.data = data.Data()
         self.audio = audio.Audio()
 
         self.running = False
@@ -138,9 +140,9 @@ class GameEngine(object):
         :param event: pygame.event.get()
         """
         if event.type == pygame.MOUSEBUTTONDOWN:
-            console.Output.mouse_down(event.pos, event.button)
+            console.mouse_down(event.pos, event.button)
         if event.type == pygame.KEYDOWN:
-            console.Output.keyboard_down(event.key, event.unicode)
+            console.keyboard_down(event.key, event.unicode)
 
             if event.key == DEBUGKEY:
                 self.show_debug ^= True                     # simple boolean swith
@@ -268,8 +270,8 @@ class GameEngine(object):
     def _show_pause_menu(self):
         self.audio.play_sound(self.audio.select)
         self.audio.fade_music()
-        data = pygame.image.tostring(self.screen, 'RGBA')       # maak een screen capture
-        self.scr_capt = pygame.image.frombuffer(data, self.screen.get_size(), 'RGBA')
+        scr_data = pygame.image.tostring(self.screen, 'RGBA')       # maak een screen capture
+        self.scr_capt = pygame.image.frombuffer(scr_data, self.screen.get_size(), 'RGBA')
         self.state.push(states.GameState.PauseMenu)
         self.pausemenu = menu.GameMenu(self.screen, self.audio, menus.Pause(), False)
 

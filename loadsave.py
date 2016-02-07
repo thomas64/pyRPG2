@@ -38,11 +38,11 @@ class Dialog(wx.App):
         if dialog.ShowModal() == wx.ID_OK:
             filename = dialog.GetPath()
             try:
-                console.Output.load_gamedata()
+                console.load_gamedata()
                 with open(filename, 'rb') as f:
                     engine.overworld.window.hero.rect, engine.overworld.window.hero.last_direction = pickle.load(f)
             except pickle.UnpicklingError:
-                console.Output.corrupt_gamedata()
+                console.corrupt_gamedata()
                 filename = None
         else:
             filename = None
@@ -63,7 +63,7 @@ class Dialog(wx.App):
                                style=wx.FD_SAVE | wx.FD_OVERWRITE_PROMPT)
         if dialog.ShowModal() == wx.ID_OK:
             filename = dialog.GetPath()
-            console.Output.save_gamedata()
+            console.save_gamedata()
             with open(filename, 'wb') as f:
                 pickle.dump([engine.overworld.window.hero.rect, engine.overworld.window.hero.last_direction], f)
         else:
