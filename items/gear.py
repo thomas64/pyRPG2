@@ -80,7 +80,7 @@ class GearItem(object):
     """
     def __init__(self, geartype, **kwargs):
         self.TYP = geartype                        # enum
-        self.quantity = 1
+        self.qty = 1
 
         for gear_value_key, gear_value_value in kwargs.items():
             setattr(self, gear_value_key.upper(), gear_value_value)     # zet de dict van kwargs om in attributen

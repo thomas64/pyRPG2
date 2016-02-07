@@ -10,6 +10,7 @@ import characters.stats
 PATH = 'resources/sprites/icons/'
 
 # todo, description aanpassen van skills. wanneer skills meer of anders kunnen, zoals pick locks voor thief.
+# todo, docstrings
 
 
 class Skill(characters.stats.Stat):
@@ -26,7 +27,7 @@ class Skill(characters.stats.Stat):
         """
         ...
         """
-        if self.quantity >= 1:
+        if self.qty >= 1:
             return True
         return False
 
@@ -162,12 +163,12 @@ class Warrior(Skill):
 
     def bonus(self, wpn):
         """
-
+        ...
         :param wpn:
         :return:
         """
-        if self.positive_quantity() and "empty" not in wpn.RAW:
-            return round((47 - ((wpn.BASE_HIT / 10) * 5)) * (self.total / 10))
+        if self.positive_quantity():  # and "empty" not in wpn.RAW:     RAW bestaat niet meer, en empty is return 0 oid.
+            return round((47 - ((wpn.HIT / 10) * 5)) * (self.tot / 10))
 
 
 class Wizard(Skill):

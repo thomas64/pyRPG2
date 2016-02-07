@@ -12,7 +12,7 @@ class: Strength
 class: Stamina
 """
 
-# todo, descriptions van stats
+# todo, descriptions van stats, en docstrings
 
 
 class Stat(object):
@@ -20,14 +20,14 @@ class Stat(object):
     ...
     """
     def __init__(self, name, raw, maximum, upgrade, quantity):
-        self.NAME = name
+        self.NAM = name
         self.RAW = raw
-        self.MAXIMUM = maximum     # maximum mogelijk, bijv 30
-        self.UPGRADE = upgrade     # upgrade formule constante
-        self.quantity = quantity   # standaard hoeveelheid op te waarderen stat (tot bijv 30)
-        self.extra = 0             # wat geeft gear voor pos/neg extra
-        self.total = quantity      # quantity + extra
-        self.current = quantity    # gaat af wanneer er bijv schade is (sta, edu, lev)
+        self.MAX = maximum          # maximum mogelijk, bijv 10 bij skill of 30 bij int
+        self.UPG = upgrade          # upgrade formule constante
+        self.qty = quantity         # standaard hoeveelheid op te waarderen stat (tot bijv 30)
+        self.ext = 0                # extra: wat geeft gear voor pos/neg extra
+        self.tot = quantity         # total: quantity + extra
+        self.cur = quantity         # current: gaat af wanneer er bijv schade is (sta, edu, lev)
 
 
 class Level(Stat):
@@ -42,10 +42,10 @@ class Level(Stat):
         ...
         :param totalxp:
         """
-        if self.quantity >= self.MAXIMUM:
+        if self.qty >= self.MAX:
             return 1
         else:
-            return int((250 / 3) * (2 * self.quantity ** 3 + 9 * self.quantity ** 2 + 13 * self.quantity + 6) - totalxp)
+            return int((250 / 3) * (2 * self.qty ** 3 + 9 * self.qty ** 2 + 13 * self.qty + 6) - totalxp)
 
 
 class Experience(object):
@@ -53,8 +53,8 @@ class Experience(object):
     ...
     """
     def __init__(self, total):
-        self.total = total
-        self.remaining = 0
+        self.tot = total
+        self.rem = 0        # remaining
 
 
 class Intelligence(Stat):
