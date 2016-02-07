@@ -1,5 +1,6 @@
 
 """
+class: GearData
 class: GearType
 class: GearItem
 """
@@ -10,6 +11,17 @@ import enum
 # - geen empty items meer
 # - min int gebruiken voor items?
 # - mvp aan items
+
+
+class GearData(enum.Enum):
+    """
+    Alle enum gears erven van deze class en krijgen deze methode mee.
+    """
+    def __getitem__(self, item):        # als er iets wordt gevraagd wat niet kan aan een enum, zoals [0] of [1]
+        if item == 0:                   # voor een OrderedDict (zoals ShieldsData) dan wordt deze uitgevoerd.
+            return self.name            # hij returned dan een waarde die een enum wel kan, namelijk .name en .value
+        elif item == 1:
+            return self.value
 
 
 class GearType(enum.Enum):

@@ -3,12 +3,10 @@
 class: HelmetsData
 """
 
-import enum
-
 import items.gear
 
 
-class HelmetsData(enum.Enum):
+class HelmetsData(items.gear.GearData):
     """
     Hier staan alle helmen uit het spel in als enum met een dict voor de waarden.
     """
@@ -31,12 +29,6 @@ class HelmetsData(enum.Enum):
     helmofcognizance2 = dict(name="Helm of Cognizance +", value=10890, shop=False, weight=3, prt=2, sci=1)
     helmoftempests = dict(name="Helm of Tempests",        value=8800,  shop=True,  weight=2, prt=1, war=1)
     helmoftempests2 = dict(name="Helm of Tempests +",     value=9680,  shop=False, weight=3, prt=2, war=1)
-
-    def __getitem__(self, item):        # als er iets wordt gevraagd wat niet kan aan een enum, zoals [0] of [1]
-        if item == 0:                   # voor een OrderedDict (zoals ShieldsData) dan wordt deze uitgevoerd.
-            return self.name            # hij returned dan een waarde die een enum wel kan, namelijk .name en .value
-        elif item == 1:
-            return self.value
 
     @staticmethod
     def factory(helmet):
