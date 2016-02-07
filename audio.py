@@ -8,6 +8,8 @@ import pickle
 
 import pygame
 
+import console
+
 
 OPTIONSPATH = 'options'
 OPTIONSFILE = os.path.join(OPTIONSPATH, 'audio.cfg')
@@ -58,7 +60,7 @@ class Audio(object):
             with open(OPTIONSFILE, 'rb') as f:
                 self.music, self.sound = pickle.load(f)
         except (pickle.UnpicklingError, FileNotFoundError):
-            print('Corrupt options file.')
+            console.Output.corrupt_options()
             self.music, self.sound = 1, 1
             with open(OPTIONSFILE, 'wb') as f:
                 pickle.dump([self.music, self.sound], f)

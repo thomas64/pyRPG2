@@ -1,5 +1,7 @@
 
-"""..."""
+"""
+def: main
+"""
 
 import os
 import sys

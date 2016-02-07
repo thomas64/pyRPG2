@@ -5,6 +5,7 @@ class: GameEngine
 
 import pygame
 
+import console
 import loadsave
 import menu
 import menus
@@ -137,9 +138,9 @@ class GameEngine(object):
         :param event: pygame.event.get()
         """
         if event.type == pygame.MOUSEBUTTONDOWN:
-            print("Mouse, pos={}, button={}".format(event.pos, event.button))
+            console.Output.mouse_down(event.pos, event.button)
         if event.type == pygame.KEYDOWN:
-            print("Keyboard, key={}, unicode={}".format(event.key, event.unicode))
+            console.Output.keyboard_down(event.key, event.unicode)
 
             if event.key == DEBUGKEY:
                 self.show_debug ^= True                     # simple boolean swith

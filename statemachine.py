@@ -3,6 +3,8 @@
 class: Statemachine
 """
 
+import console
+
 
 class StateMachine(object):
     """
@@ -30,7 +32,7 @@ class StateMachine(object):
         :param state: print the name of the popped state
         """
         try:
-            print("Game popped {}".format(state))
+            console.Output.state_pop(state)
             self.statestack.pop()
             return len(self.statestack) > 0
         except IndexError:
@@ -41,7 +43,7 @@ class StateMachine(object):
         :param state: Push a new state onto the stack.
         :return: Returns the pushed value.
         """
-        print("Game pushed {}".format(state))
+        console.Output.state_push(state)
         self.statestack.append(state)
         return state
 
@@ -49,5 +51,5 @@ class StateMachine(object):
         """
         Clear the whole stack.
         """
-        print("Game cleared all states.")
+        console.Output.state_clear()
         self.statestack = []

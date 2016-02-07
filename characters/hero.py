@@ -25,25 +25,92 @@ PATH = 'resources/sprites/heroes/'
 
 class HeroData(enum.Enum):
     """
-    ...
+    Alle heroes uit het spel als Enum met een dict voor de waarden.
     """
-    alagos = dict(nam="Alagos", spr=PATH+"01s_Alagos.png", fac=PATH+"01f_Alagos.png",
-                  lev=1, exp=500,
-                  int=18, wil=12, dex=15, agi=15, edu=15, str=15, sta=30,
+    alagos = dict(nam="Alagos", raw="alagos", spr=PATH+"01s_Alagos.png", fac=PATH+"01f_Alagos.png",
+                  lev=1, exp=500, int=18, wil=12, dex=15, agi=15, edu=15, str=15, sta=30,
                   alc=0, dip=0, hlr=0, lor=0, mec=0, mer=0, ran=0, stl=1, thf=0, trb=1, war=3, wiz=1,
                   haf=1, mis=3, pol=0, shd=3, swd=3, thr=0,
-                  wpn=items.weapon.WeaponsData.bronzeshortsword,
-                  sld=items.shield.ShieldsData.woodenbuckler,
-                  hlm=items.helmet.HelmetsData.empty,
-                  amu=items.amulet.AmuletsData.empty,
-                  arm=items.armor.ArmorsData.lightleatherarmor,
-                  clk=items.cloak.CloakData.empty,
-                  glv=items.gloves.GlovesData.empty,
-                  lrg=items.ring.RingsData.empty,
-                  rrg=items.ring.RingsData.empty,
-                  blt=items.belt.BeltsData.empty,
-                  bts=items.boots.BootsData.empty,
-                  acy=items.accessory.AccessoriesData.empty)
+                  wpn=items.weapon.WeaponsData.bronzeshortsword, sld=items.shield.ShieldsData.woodenbuckler,
+                  arm=items.armor.ArmorsData.lightleatherarmor)
+    luana = dict(nam="Luana", raw="luana", spr=PATH+"02s_Luana.png", fac=PATH+"01f_Luana.png",
+                 lev=1, exp=500, int=14, wil=10, dex=22, agi=20, edu=10, str=8, sta=20,
+                 alc=0, dip=0, hlr=0, lor=0, mec=1, mer=0, ran=0, stl=3, thf=3, trb=0, war=0, wiz=0,
+                 haf=-1, mis=-1, pol=0, shd=-1, swd=1, thr=2,
+                 wpn=items.weapon.WeaponsData.bronzedagger, sld=items.shield.ShieldsData.empty,
+                 arm=items.armor.ArmorsData.lightleatherarmor)
+    grindan = dict(nam="Grindan", raw="grindan", spr=PATH+"03s_Grindan.png", fac=PATH+"03f_Grindan.png",
+                   lev=8, exp=102000, int=10, wil=8, dex=25, agi=10, edu=20, str=20, sta=40,
+                   alc=-1, dip=0, hlr=0, lor=0, mec=0, mer=0, ran=0, stl=1, thf=-1, trb=0, war=4, wiz=-1,
+                   haf=0, mis=-1, pol=0, shd=2, swd=4, thr=2,
+                   wpn=items.weapon.WeaponsData.ironlongsword, sld=items.shield.ShieldsData.irontarge,
+                   arm=items.armor.ArmorsData.mediumbronzearmor)
+    rydalin = dict(nam="Rydalin", raw="rydalin", spr=PATH+"04s_Rydalin.png", fac=PATH+"04f_Rydalin.png",
+                   lev=3, exp=7000, int=22, wil=16, dex=20, agi=15, edu=16, str=10, sta=31,
+                   alc=0, dip=0, hlr=0, lor=1, mec=0, mer=1, ran=0, stl=0, thf=0, trb=0, war=0, wiz=4,
+                   haf=0, mis=-1, pol=3, shd=0, swd=3, thr=-1,
+                   wpn=items.weapon.WeaponsData.bronzestaff, sld=items.shield.ShieldsData.empty,
+                   arm=items.armor.ArmorsData.mediumleatherarmor)
+    codrif = dict(nam="Codrif", raw="codrif", spr=PATH+"05s_Codrif.png", fac=PATH+"05f_Codrif.png",
+                  lev=2, exp=2500, int=22, wil=18, dex=15, agi=12, edu=15, str=10, sta=20,
+                  alc=3, dip=0, hlr=0, lor=2, mec=2, mer=0, ran=0, stl=0, thf=0, trb=0, war=0, wiz=2,
+                  haf=-1, mis=-1, pol=0, shd=-1, swd=1, thr=1,
+                  wpn=items.weapon.WeaponsData.bronzedagger, sld=items.shield.ShieldsData.empty,
+                  arm=items.armor.ArmorsData.lightleatherarmor)
+    galen = dict(nam="Galen", raw="galen", spr=PATH+"06s_Galen.png", fac=PATH+"06f_Galen.png",
+                 lev=4, exp=15000, int=15, wil=15, dex=18, agi=10, edu=20, str=25, sta=40,
+                 alc=-1, dip=0, hlr=0, lor=0, mec=0, mer=0, ran=4, stl=3, thf=0, trb=0, war=5, wiz=-1,
+                 haf=5, mis=3, pol=0, shd=3, swd=-1, thr=-1,
+                 wpn=items.weapon.WeaponsData.ironaxe, sld=items.shield.ShieldsData.irontarge,
+                 arm=items.armor.ArmorsData.mediumbronzearmor)
+    # name = dict(nam="", spr=PATH+"0s_.png", fac=PATH+"0f_.png",
+    #              lev=, exp=, int=, wil=, dex=, agi=, edu=, str=, sta=,
+    #              alc=0, dip=0, hlr=0, lor=0, mec=0, mer=0, ran=0, stl=0, thf=0, trb=0, war=0, wiz=0,
+    #              haf=0, mis=0, pol=0, shd=0, swd=0, thr=0,
+    #              wpn=items.weapon.WeaponsData.empty, sld=items.shield.ShieldsData.empty,
+    #              arm=items.armor.ArmorsData.empty)
+    # name = dict(nam="", spr=PATH+"0s_.png", fac=PATH+"0f_.png",
+    #              lev=, exp=, int=, wil=, dex=, agi=, edu=, str=, sta=,
+    #              alc=0, dip=0, hlr=0, lor=0, mec=0, mer=0, ran=0, stl=0, thf=0, trb=0, war=0, wiz=0,
+    #              haf=0, mis=0, pol=0, shd=0, swd=0, thr=0,
+    #              wpn=items.weapon.WeaponsData.empty, sld=items.shield.ShieldsData.empty,
+    #              arm=items.armor.ArmorsData.empty)
+    # name = dict(nam="", spr=PATH+"0s_.png", fac=PATH+"0f_.png",
+    #              lev=, exp=, int=, wil=, dex=, agi=, edu=, str=, sta=,
+    #              alc=0, dip=0, hlr=0, lor=0, mec=0, mer=0, ran=0, stl=0, thf=0, trb=0, war=0, wiz=0,
+    #              haf=0, mis=0, pol=0, shd=0, swd=0, thr=0,
+    #              wpn=items.weapon.WeaponsData.empty, sld=items.shield.ShieldsData.empty,
+    #              arm=items.armor.ArmorsData.empty)
+    # name = dict(nam="", spr=PATH+"0s_.png", fac=PATH+"0f_.png",
+    #              lev=, exp=, int=, wil=, dex=, agi=, edu=, str=, sta=,
+    #              alc=0, dip=0, hlr=0, lor=0, mec=0, mer=0, ran=0, stl=0, thf=0, trb=0, war=0, wiz=0,
+    #              haf=0, mis=0, pol=0, shd=0, swd=0, thr=0,
+    #              wpn=items.weapon.WeaponsData.empty, sld=items.shield.ShieldsData.empty,
+    #              arm=items.armor.ArmorsData.empty)
+    # name = dict(nam="", spr=PATH+"0s_.png", fac=PATH+"0f_.png",
+    #              lev=, exp=, int=, wil=, dex=, agi=, edu=, str=, sta=,
+    #              alc=0, dip=0, hlr=0, lor=0, mec=0, mer=0, ran=0, stl=0, thf=0, trb=0, war=0, wiz=0,
+    #              haf=0, mis=0, pol=0, shd=0, swd=0, thr=0,
+    #              wpn=items.weapon.WeaponsData.empty, sld=items.shield.ShieldsData.empty,
+    #              arm=items.armor.ArmorsData.empty)
+    # name = dict(nam="", spr=PATH+"0s_.png", fac=PATH+"0f_.png",
+    #              lev=, exp=, int=, wil=, dex=, agi=, edu=, str=, sta=,
+    #              alc=0, dip=0, hlr=0, lor=0, mec=0, mer=0, ran=0, stl=0, thf=0, trb=0, war=0, wiz=0,
+    #              haf=0, mis=0, pol=0, shd=0, swd=0, thr=0,
+    #              wpn=items.weapon.WeaponsData.empty, sld=items.shield.ShieldsData.empty,
+    #              arm=items.armor.ArmorsData.empty)
+    # name = dict(nam="", spr=PATH+"0s_.png", fac=PATH+"0f_.png",
+    #              lev=, exp=, int=, wil=, dex=, agi=, edu=, str=, sta=,
+    #              alc=0, dip=0, hlr=0, lor=0, mec=0, mer=0, ran=0, stl=0, thf=0, trb=0, war=0, wiz=0,
+    #              haf=0, mis=0, pol=0, shd=0, swd=0, thr=0,
+    #              wpn=items.weapon.WeaponsData.empty, sld=items.shield.ShieldsData.empty,
+    #              arm=items.armor.ArmorsData.empty)
+    # name = dict(nam="", spr=PATH+"0s_.png", fac=PATH+"0f_.png",
+    #              lev=, exp=, int=, wil=, dex=, agi=, edu=, str=, sta=,
+    #              alc=0, dip=0, hlr=0, lor=0, mec=0, mer=0, ran=0, stl=0, thf=0, trb=0, war=0, wiz=0,
+    #              haf=0, mis=0, pol=0, shd=0, swd=0, thr=0,
+    #              wpn=items.weapon.WeaponsData.empty, sld=items.shield.ShieldsData.empty,
+    #              arm=items.armor.ArmorsData.empty)
 
     @staticmethod
     def factory(hero):
@@ -57,10 +124,11 @@ class HeroData(enum.Enum):
 
 class Hero(object):
     """
-    ...
+    Het Hero object. Alle Enum values worden ingeladen.
     """
     def __init__(self, **kwargs):
         self.NAM = kwargs['nam']
+        self.RAW = kwargs['raw']
         self.SPR = kwargs['spr']
         self.FAC = kwargs['fac']
 
@@ -96,21 +164,46 @@ class Hero(object):
 
         self.swd = items.weapon.WeaponsData.factory(kwargs['wpn'])
         self.sld = items.shield.ShieldsData.factory(kwargs['sld'])
-        self.hlm = items.helmet.HelmetsData.factory(kwargs['hlm'])
-        self.amu = items.amulet.AmuletsData.factory(kwargs['amu'])
+        self.hlm = items.helmet.HelmetsData.factory(items.helmet.HelmetsData.empty)
+        self.amu = items.amulet.AmuletsData.factory(items.amulet.AmuletsData.empty)
         self.arm = items.armor.ArmorsData.factory(kwargs['arm'])
-        self.clk = items.cloak.CloakData.factory(kwargs['clk'])
-        self.glv = items.gloves.GlovesData.factory(kwargs['glv'])
-        self.lrg = items.ring.RingsData.factory(kwargs['lrg'])
-        self.rrg = items.ring.RingsData.factory(kwargs['rrg'])
-        self.blt = items.belt.BeltsData.factory(kwargs['blt'])
-        self.bts = items.boots.BootsData.factory(kwargs['bts'])
-        self.acy = items.accessory.AccessoriesData.factory(kwargs['acy'])
+        self.clk = items.cloak.CloakData.factory(items.cloak.CloakData.empty)
+        self.glv = items.gloves.GlovesData.factory(items.gloves.GlovesData.empty)
+        self.lrg = items.ring.RingsData.factory(items.ring.RingsData.empty)
+        self.rrg = items.ring.RingsData.factory(items.ring.RingsData.empty)
+        self.blt = items.belt.BeltsData.factory(items.belt.BeltsData.empty)
+        self.bts = items.boots.BootsData.factory(items.boots.BootsData.empty)
+        self.acy = items.accessory.AccessoriesData.factory(items.accessory.AccessoriesData.empty)
 
 
-# piet = HeroData.factory(HeroData.alagos)
-# print(piet.NAM)
-# print(piet.sld.NAM)
-# print(piet.arm.TYP)
-# print(piet.acy.NAM)
+# import characters.party
+#
+# party = characters.party.Party()
+# print(party)
+# alagos = HeroData.factory(HeroData.alagos)
+# luana = HeroData.factory(HeroData.luana)
+# grindan = HeroData.factory(HeroData.grindan)
+# rydalin = HeroData.factory(HeroData.rydalin)
+# codrif = HeroData.factory(HeroData.codrif)
+# galen = HeroData.factory(HeroData.galen)
+#
+# party.add(1)
+# party.add(alagos)
+# party.add(alagos)
+#
+# print(party)
+# party.add(luana)
+# party.add(grindan)
+# party.add(rydalin)
+# party.add(luana)
+# party.add(codrif)
+# party.add(galen)
+# print(party)
+#
+# party.remove(alagos)
+# print(party)
+# party.remove(luana)
+# print(party)
+# party.remove(luana)
+#
 # quit()
