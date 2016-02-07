@@ -1,10 +1,12 @@
 
 """
 class: GearData
+class: GearDataClass
 class: GearType
 class: GearItem
 """
 
+import collections
 import enum
 
 # todo, uit colornote app:
@@ -15,13 +17,27 @@ import enum
 
 class GearData(enum.Enum):
     """
-    Alle enum gears erven van deze class en krijgen deze methode mee.
+    Alle Enum gears data erven van deze class en krijgen deze methode mee.
     """
     def __getitem__(self, item):        # als er iets wordt gevraagd wat niet kan aan een enum, zoals [0] of [1]
         if item == 0:                   # voor een OrderedDict (zoals ShieldsData) dan wordt deze uitgevoerd.
             return self.name            # hij returned dan een waarde die een enum wel kan, namelijk .name en .value
         elif item == 1:
             return self.value
+
+
+class GearDataClass(object):
+    """
+    Alle data classes die geen Enum zijn kunnen erven van deze class. Weapons, Shields en Armors.
+    """
+    def __init__(self):
+        self.inside = collections.OrderedDict()
+
+    def __iter__(self):                 # om gesorteerd op winkelvolgorde te laten zien
+        return iter(sorted(self.inside.items(), key=lambda xx: xx[1]['sort']))      # [1] dan zijn het de .values()
+
+    def __getattr__(self, key):         # om een nieuwe aan te kunnen maken met factory
+        return self.inside[key]
 
 
 class GearType(enum.Enum):
