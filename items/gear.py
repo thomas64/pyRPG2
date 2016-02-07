@@ -36,8 +36,8 @@ class GearDataClass(object):
     def __iter__(self):                 # om er in een winkel doorheen te kunnen gaan loopen
         return iter(self.inside.items())
 
-    def __getattr__(self, key):         # om een nieuwe aan te kunnen maken met factory
-        return self.inside[key]
+    def __getattr__(self, key):         # om een nieuwe aan te kunnen maken met factory. anders herkent hij de woodenb.
+        return self.inside[key]         # niet als een attribute: piet = ShieldsData.factory(ShieldsData.woodenbuckler)
 
     def set_shop(self):
         """

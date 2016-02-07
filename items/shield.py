@@ -22,11 +22,9 @@ class ShieldsDataClass(items.gear.GearDataClass):
 
     def __init__(self):
         super().__init__()
-        """
-        Vul de OrderedDict self.inside met de gecombineerde data.
-        """
+        # Vul de OrderedDict self.inside met de gecombineerde data.
 
-        # upgradable, min_mech, metals zijn nog niet verwerkt.
+        # todo, upgradable, min_mech, metals zijn nog niet verwerkt.
 
         #                     val, min str, prt, des, dex, stl,  srt, col
         shield_material = {
@@ -59,7 +57,8 @@ class ShieldsDataClass(items.gear.GearDataClass):
                 for upgraded_key, upgraded_value in shield_upgraded.items():
 
                     raw_key_name = (material_key + type_key + upgraded_key).strip().lower().replace(" ", "")
-                    price = (material_value[0] + type_value[0]) * (material_value[0] + type_value[0]) / 900
+                    # todo, deze int was alleen bij weapon, moet de int hier weer weg?
+                    price = int((material_value[0] + type_value[0]) * (material_value[0] + type_value[0]) / 900)
 
                     self.inside[raw_key_name] = dict(
                         nam=(material_key + " " + type_key + " " + upgraded_key).strip(),
