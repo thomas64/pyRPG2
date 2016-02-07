@@ -79,11 +79,8 @@ class ArmorsDataClass(items.gear.GearDataClass):
                         srt=material_value[4] + type_value[4] + upgraded_value[4]
                     )
 
-        # shop uitzetten voor sommige armors
-        for armor_key, armor_value in self.inside.items():
-            if "+" in armor_key or "titanium" in armor_key:
-                armor_value['shp'] = False
-        # de laatste van shop is misschien niet nodig. dit kan ook in de shop zelf gecheckt worden. scheelt een variable
+        self.set_shop()
+        self.rearrage()
 
 
 ArmorsData = ArmorsDataClass()

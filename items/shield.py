@@ -90,23 +90,20 @@ class ShieldsDataClass(items.gear.GearDataClass):
                         row=type_value[7]
                     )
 
-        # shop uitzetten voor sommige shields
-        for shield_key, shield_value in self.inside.items():
-            if "+" in shield_key or "titanium" in shield_key:
-                shield_value['shp'] = False
-        # de laatste van shop is misschien niet nodig. dit kan ook in de shop zelf gecheckt worden. scheelt een variable
+        self.set_shop()
+        self.rearrage()
 
 
 ShieldsData = ShieldsDataClass()
 
 
 # piet = ShieldsData.factory(ShieldsData.woodenbuckler)
-# print(piet.NAME)
-# print(piet.name)
+# print(piet.NAM)
+# print(piet.nam)
 # print(piet.PRT)
 # print(piet.DEX)
 # print(piet.THF)
 #
 # for shield in ShieldsData:
-#     print(shield[1]['name'], shield[1]['shop'])
+#     print(shield[1]['nam'], shield[1]['shp'])
 # quit()

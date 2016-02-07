@@ -41,6 +41,6 @@ class HelmetsData(items.gear.GearData):
 
 
 # for helmet in HelmetsData:
-#     print(helmet[1]['name'])
+#     print(helmet[1]['nam'])
 #
 # quit()

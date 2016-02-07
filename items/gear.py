@@ -33,11 +33,29 @@ class GearDataClass(object):
     def __init__(self):
         self.inside = collections.OrderedDict()
 
-    def __iter__(self):                 # om gesorteerd op winkelvolgorde te laten zien
-        return iter(sorted(self.inside.items(), key=lambda xx: xx[1]['sort']))      # [1] dan zijn het de .values()
+    def __iter__(self):                 # om er in een winkel doorheen te kunnen gaan loopen
+        return iter(self.inside.items())
 
     def __getattr__(self, key):         # om een nieuwe aan te kunnen maken met factory
         return self.inside[key]
+
+    def set_shop(self):
+        """
+        Shop uitzetten voor sommige gear items.
+        """
+        for gear_key, gear_value in self.inside.items():
+            if "+" in gear_key or "titanium" in gear_key:
+                gear_value['shp'] = False
+        # de laatste van shop is misschien niet nodig. dit kan ook in de shop zelf gecheckt worden. scheelt een variable
+
+    def rearrage(self):
+        """
+        Herschik de volgorde van de gecreerde dataset.
+        """
+        temp_dict = collections.OrderedDict()
+        for gear_key, gear_value in sorted(self.inside.items(), key=lambda xx: xx[1]['srt']):
+            temp_dict[gear_key] = gear_value
+        self.inside = temp_dict
 
 
 class GearType(enum.Enum):
