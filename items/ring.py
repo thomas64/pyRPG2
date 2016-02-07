@@ -12,7 +12,7 @@ class RingsData(items.gear.GearData):
     """
     Hier staan alle ringen uit het spel in als enum met een dict voor de waarden.
     """
-    testring = dict(name="Test Ring",   value=100, shop=True,  weight=1, prt=1)
+    testring = dict(nam="Test Ring",   val=100, shp=True,  wht=1, prt=1)
 
     @staticmethod
     def factory(ring):

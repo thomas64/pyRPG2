@@ -12,7 +12,7 @@ class BeltsData(items.gear.GearData):
     """
     Hier staan alle gordels uit het spel in als enum met een dict voor de waarden.
     """
-    leatherbelt = dict(name="Leather Belt", value=100, shop=True,  weight=1, prt=1)
+    leatherbelt = dict(nam="Leather Belt", val=100, shp=True,  wht=1, prt=1)
 
     @staticmethod
     def factory(belt):

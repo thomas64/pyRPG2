@@ -62,7 +62,7 @@ class GearItem(object):
     Een GearItem object met attributen als de waarden van de extra's die het item heeft zoals THF.
     """
     def __init__(self, geartype, **kwargs):
-        self.TYPE = geartype                        # enum
+        self.TYP = geartype                        # enum
         self.quantity = 1
 
         for key, value in kwargs.items():

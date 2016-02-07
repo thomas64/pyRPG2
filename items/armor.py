@@ -28,7 +28,7 @@ class ArmorsDataClass(items.gear.GearDataClass):
 
         # col, row, upgradable, min_mech, metals zijn nog niet verwerkt.
 
-        #                     value, weight, prt, stl, sort
+        #                       val,    wht, prt, stl,  srt
         armor_material = {
             "Leather Armor":   (100,      0,   0,   0, 1000),
             "Bronze Armor":    (600,      3,   3,  -3, 2000),
@@ -38,13 +38,13 @@ class ArmorsDataClass(items.gear.GearDataClass):
             "Titanium Armor": (2600,      0,  12,   0, 6000)
             # "Stealth":        (16,     10,   1,   1)
         }
-        #                     value, weight, prt, stl, sort
+        #                       val,    wht, prt, stl,  srt
         armor_type = {
             "Light":           (100,      1,   1,   0,  100),
             "Medium":          (300,      2,   2,  -1,  200),
             "Heavy":           (500,      3,   3,  -2,  300)
         }
-        #                     value, weight, prt, stl, sort
+        #                       val,    wht, prt, stl,  srt
         armor_upgraded = {
             "":                (1.0,      0,   0,   0,   10),
             "+":               (1.1,      0,   0,   1,   20),
@@ -52,37 +52,37 @@ class ArmorsDataClass(items.gear.GearDataClass):
         }
         # hoogste protection mogelijk is 15: Heavy Silver/Titanium Armor /+/++
 
-        for key_material, value_material in armor_material.items():
-            for key_type, value_type in armor_type.items():
-                for key_upgraded, value_upgraded in armor_upgraded.items():
+        for material_key, material_value in armor_material.items():
+            for type_key, type_value in armor_type.items():
+                for upgraded_key, upgraded_value in armor_upgraded.items():
 
-                    raw_key_name = (key_type + key_material + key_upgraded).strip().lower().replace(" ", "")
-                    price = (value_material[0] + value_type[0]) * (value_material[0] + value_type[0]) / 400
+                    raw_key_name = (type_key + material_key + upgraded_key).strip().lower().replace(" ", "")
+                    price = (material_value[0] + type_value[0]) * (material_value[0] + type_value[0]) / 400
 
                     self.inside[raw_key_name] = dict(
-                        name=(key_type + " " + key_material + " " + key_upgraded).strip(),
+                        nam=(type_key + " " + material_key + " " + upgraded_key).strip(),
 
                         # berekening value: material * type * upgraded
-                        value=int(price * value_upgraded[0]),
-                        shop=True,
+                        val=int(price * upgraded_value[0]),
+                        shp=True,
 
                         # berekening weight: material + type + upgraded
-                        weight=value_material[1] + value_type[1] + value_upgraded[1],
+                        wht=material_value[1] + type_value[1] + upgraded_value[1],
 
                         # berekening protection: material + type
-                        prt=value_material[2] + value_type[2],
+                        prt=material_value[2] + type_value[2],
 
                         # berekening stealth: material + type + upgraded
-                        stl=value_material[3] + value_type[3] + value_upgraded[3],
+                        stl=material_value[3] + type_value[3] + upgraded_value[3],
 
                         # puur voor sortering in de database, omdat geen enum is
-                        sort=value_material[4] + value_type[4] + value_upgraded[4]
+                        srt=material_value[4] + type_value[4] + upgraded_value[4]
                     )
 
         # shop uitzetten voor sommige armors
-        for k, v in self.inside.items():
-            if "+" in k or "titanium" in k:
-                v['shop'] = False
+        for armor_key, armor_value in self.inside.items():
+            if "+" in armor_key or "titanium" in armor_key:
+                armor_value['shp'] = False
         # de laatste van shop is misschien niet nodig. dit kan ook in de shop zelf gecheckt worden. scheelt een variable
 
 

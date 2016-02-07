@@ -12,7 +12,7 @@ class NecklacesData(items.gear.GearData):
     """
     Hier staan alle halskettingen uit het spel in als enum met een dict voor de waarden.
     """
-    testnecklace = dict(name="Test Necklace",   value=100, shop=True,  weight=1, prt=1)
+    testnecklace = dict(nam="Test Necklace",   val=100, shp=True,  wht=1, prt=1)
 
     @staticmethod
     def factory(necklace):

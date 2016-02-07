@@ -12,7 +12,7 @@ class GlovesData(items.gear.GearData):
     """
     Hier staan alle handschoenen uit het spel in als enum met een dict voor de waarden.
     """
-    leathergloves = dict(name="Leather Gloves", value=100, shop=True,  weight=1, prt=1)
+    leathergloves = dict(nam="Leather Gloves", val=100, shp=True,  wht=1, prt=1)
 
     @staticmethod
     def factory(gloves):

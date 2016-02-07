@@ -10,25 +10,25 @@ class HelmetsData(items.gear.GearData):
     """
     Hier staan alle helmen uit het spel in als enum met een dict voor de waarden.
     """
-    leathercap = dict(name="Leather Cap",                 value=100,   shop=True,  weight=1, prt=1)
-    bronzehelmet = dict(name="Bronze Helmet",             value=1225,  shop=True,  weight=2, prt=2)
-    ironhelmet = dict(name="Iron Helmet",                 value=3600,  shop=True,  weight=3, prt=3)
-    steelhelmet = dict(name="Steel Helmet",               value=7225,  shop=True,  weight=4, prt=4)
-    silverhelmet = dict(name="Silver Helmet",             value=12100, shop=True,  weight=5, prt=5)
-    titaniumhelmet = dict(name="Titanium Helmet",         value=24300, shop=False, weight=1, prt=5)
+    leathercap = dict(nam="Leather Cap",                 val=100,   shp=True,  wht=1, prt=1)
+    bronzehelmet = dict(nam="Bronze Helmet",             val=1225,  shp=True,  wht=2, prt=2)
+    ironhelmet = dict(nam="Iron Helmet",                 val=3600,  shp=True,  wht=3, prt=3)
+    steelhelmet = dict(nam="Steel Helmet",               val=7225,  shp=True,  wht=4, prt=4)
+    silverhelmet = dict(nam="Silver Helmet",             val=12100, shp=True,  wht=5, prt=5)
+    titaniumhelmet = dict(nam="Titanium Helmet",         val=24300, shp=False, wht=1, prt=5)
 
-    helmofknowledge = dict(name="Helm of Knowledge",      value=5500,  shop=True,  weight=2, prt=1, int=2)
-    helmofknowledge2 = dict(name="Helm of Knowledge +",   value=6050,  shop=False, weight=3, prt=2, int=2)
-    helmofwisdom = dict(name="Helm of Wisdom",            value=5500,  shop=True,  weight=2, prt=1, wil=2)
-    helmofwisdom2 = dict(name="Helm of Wisdom +",         value=6050,  shop=False, weight=3, prt=2, wil=2)
-    helmofcharisma = dict(name="Helm of Charisma",        value=6600,  shop=True,  weight=2, prt=1, dip=1)
-    helmofcharisma2 = dict(name="Helm of Charisma +",     value=7260,  shop=False, weight=3, prt=2, dip=1)
-    helmofinsight = dict(name="Helm of Insight",          value=7700,  shop=True,  weight=2, prt=1, lor=1)
-    helmofinsight2 = dict(name="Helm of Insight +",       value=8470,  shop=False, weight=3, prt=2, lor=1)
-    helmofcognizance = dict(name="Helm of Cognizance",    value=9900,  shop=True,  weight=2, prt=1, sci=1)
-    helmofcognizance2 = dict(name="Helm of Cognizance +", value=10890, shop=False, weight=3, prt=2, sci=1)
-    helmoftempests = dict(name="Helm of Tempests",        value=8800,  shop=True,  weight=2, prt=1, war=1)
-    helmoftempests2 = dict(name="Helm of Tempests +",     value=9680,  shop=False, weight=3, prt=2, war=1)
+    helmofknowledge = dict(nam="Helm of Knowledge",      val=5500,  shp=True,  wht=2, prt=1, int=2)
+    helmofknowledge2 = dict(nam="Helm of Knowledge +",   val=6050,  shp=False, wht=3, prt=2, int=2)
+    helmofwisdom = dict(nam="Helm of Wisdom",            val=5500,  shp=True,  wht=2, prt=1, wil=2)
+    helmofwisdom2 = dict(nam="Helm of Wisdom +",         val=6050,  shp=False, wht=3, prt=2, wil=2)
+    helmofcharisma = dict(nam="Helm of Charisma",        val=6600,  shp=True,  wht=2, prt=1, dip=1)
+    helmofcharisma2 = dict(nam="Helm of Charisma +",     val=7260,  shp=False, wht=3, prt=2, dip=1)
+    helmofinsight = dict(nam="Helm of Insight",          val=7700,  shp=True,  wht=2, prt=1, lor=1)
+    helmofinsight2 = dict(nam="Helm of Insight +",       val=8470,  shp=False, wht=3, prt=2, lor=1)
+    helmofcognizance = dict(nam="Helm of Cognizance",    val=9900,  shp=True,  wht=2, prt=1, sci=1)
+    helmofcognizance2 = dict(nam="Helm of Cognizance +", val=10890, shp=False, wht=3, prt=2, sci=1)
+    helmoftempests = dict(nam="Helm of Tempests",        val=8800,  shp=True,  wht=2, prt=1, war=1)
+    helmoftempests2 = dict(nam="Helm of Tempests +",     val=9680,  shp=False, wht=3, prt=2, war=1)
 
     @staticmethod
     def factory(helmet):

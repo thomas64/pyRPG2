@@ -12,7 +12,7 @@ class AccessoriesData(items.gear.GearData):
     """
     Hier staan alle accessoires uit het spel in als enum met een dict voor de waarden.
     """
-    testaccessory = dict(name="Test Accessory",   value=100, shop=True,  weight=1, prt=1)
+    testaccessory = dict(nam="Test Accessory",   val=100, shp=True,  wht=1, prt=1)
 
     @staticmethod
     def factory(accessory):
