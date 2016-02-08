@@ -117,7 +117,8 @@ class GameEngine(object):
             self.optionsmenu.handle_view()
         elif self.currentstate == states.GameState.PauseMenu:
             self.pausemenu.handle_view(self.scr_capt)           # achtergrond, screen capture
-        elif self.currentstate == states.GameState.Overworld:
+        elif self.currentstate == states.GameState.Overworld or \
+                self.currentstate == states.GameState.PartyScreen:
             self.overworld.handle_view()
 
         _show_debug()
@@ -208,15 +209,15 @@ class GameEngine(object):
         self.mainmenu = None
         self.state.pop(self.currentstate)
         self.state.push(states.GameState.Overworld)
-        self.overworld = overworld.Overworld(self.screen, self.audio)
+        self.overworld = overworld.Overworld(self)
         self.audio.play_music(self.audio.overworld)
 
     def _main_menu_select_load_game(self):
-        self.loadsave = loadsave.Dialog()
-        self.overworld = overworld.Overworld(self.screen, self.audio)                # laad de overworld alvast
-        if self.loadsave.load(self) is None:
-            self.overworld = None                                                  # toch niet
-        else:                                                                       # geef data mee aan de overworld
+        self.loadsave = loadsave.Dialog(self)
+        self.overworld = overworld.Overworld(self)                                  # laad de overworld alvast
+        if self.loadsave.load() is None:
+            self.overworld = None                                                   # toch niet
+        else:                                                                       # geef dan data mee aan de overworld
             self.audio.play_sound(self.audio.select)
             self.mainmenu = None
             self.state.pop(self.currentstate)
@@ -284,8 +285,8 @@ class GameEngine(object):
         self.audio.play_music(self.audio.overworld)
 
     def _pause_menu_select_save_game(self):
-        self.loadsave = loadsave.Dialog()
-        if self.loadsave.save(self) is not None:
+        self.loadsave = loadsave.Dialog(self)
+        if self.loadsave.save():
             self.audio.play_sound(self.audio.select)
         pygame.event.clear()                                    # anders stapelen de geluiden zich op
         self.loadsave = None

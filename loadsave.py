@@ -17,16 +17,15 @@ class Dialog(wx.App):
     """
     Twee wx dialog boxes om te saven en te laden. Maak bij voorbaat een pad aan.
     """
-    def __init__(self):
+    def __init__(self, engine):
+        self.engine = engine
         wx.App.__init__(self)
         if not os.path.exists(SAVEPATH):
             os.makedirs(SAVEPATH)
 
-    @staticmethod
-    def load(engine):
+    def load(self):
         """
         Load dialog.
-        :param engine: self van engine.py
         """
         dialog = wx.FileDialog(None,
                                message='Load File',
@@ -39,9 +38,9 @@ class Dialog(wx.App):
             try:
                 console.load_gamedata()
                 with open(filename, 'rb') as f:
-                    (engine.data,
-                     engine.overworld.window.hero.rect,
-                     engine.overworld.window.hero.last_direction) = pickle.load(f)
+                    (self.engine.data,
+                     self.engine.overworld.window.hero.rect,
+                     self.engine.overworld.window.hero.last_direction) = pickle.load(f)
             except pickle.UnpicklingError:
                 console.corrupt_gamedata()
                 filename = None
@@ -50,11 +49,9 @@ class Dialog(wx.App):
         dialog.Destroy()
         return filename
 
-    @staticmethod
-    def save(engine):
+    def save(self):
         """
         Save dialog.
-        :param engine: self van engine.py
         """
         dialog = wx.FileDialog(None,
                                message='Save File',
@@ -66,9 +63,9 @@ class Dialog(wx.App):
             filename = dialog.GetPath()
             console.save_gamedata()
             with open(filename, 'wb') as f:
-                pickle.dump([engine.data,
-                             engine.overworld.window.hero.rect,
-                             engine.overworld.window.hero.last_direction], f)
+                pickle.dump([self.engine.data,
+                             self.engine.overworld.window.hero.rect,
+                             self.engine.overworld.window.hero.last_direction], f)
         else:
             filename = None
         dialog.Destroy()

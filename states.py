@@ -16,3 +16,4 @@ class GameState(enum.Enum):
     Overworld = 4
     Battle = 5
     Conversation = 6
+    PartyScreen = 7

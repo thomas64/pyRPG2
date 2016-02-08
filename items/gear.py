@@ -86,14 +86,17 @@ class GearItem(object):
             setattr(self, gear_value_key.upper(), gear_value_value)     # zet de dict van kwargs om in attributen
 
         try:
+            # noinspection PyUnresolvedReferences
             self.RAW = self.NAM.strip().lower().replace(" ", "")
         except AttributeError:
             pass
         try:
+            # noinspection PyUnresolvedReferences
             del self.SRT        # deze zijn niet nodig als gear. alleen voor in de shop, en dan zijn het geen gear nog.
         except AttributeError:
             pass
         try:
+            # noinspection PyUnresolvedReferences
             del self.SHP
         except AttributeError:
             pass
