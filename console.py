@@ -122,3 +122,20 @@ def leader_not_leave_party():
     Party.remove()
     """
     print("The party leader cannot leave his own party!")
+
+
+def add_item(item_quantity, item_name, inventory_name):
+    """
+    Inventory.add()
+    :param item_quantity: integer
+    :param item_name: string
+    :param inventory_name: string
+    """
+    print("Put {} {} in {}.".format(item_quantity, item_name, inventory_name))
+
+
+def quantity_less_than_one():
+    """
+    Inventory.add()
+    """
+    print("That is not possible.")

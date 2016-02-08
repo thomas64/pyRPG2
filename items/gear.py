@@ -85,6 +85,19 @@ class GearItem(object):
         for gear_value_key, gear_value_value in kwargs.items():
             setattr(self, gear_value_key.upper(), gear_value_value)     # zet de dict van kwargs om in attributen
 
+        try:
+            self.RAW = self.NAM.strip().lower().replace(" ", "")
+        except AttributeError:
+            pass
+        try:
+            del self.SRT        # deze zijn niet nodig als gear. alleen voor in de shop, en dan zijn het geen gear nog.
+        except AttributeError:
+            pass
+        try:
+            del self.SHP
+        except AttributeError:
+            pass
+
     # noinspection PyUnusedLocal
     def __getattr__(self, item):                    # als de attribute niet bestaat, geef dan 0 terug.
         return 0

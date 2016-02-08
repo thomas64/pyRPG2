@@ -64,16 +64,16 @@ class Hero(object):
 
         self.swd = items.weapon.WeaponsData.factory(kwargs['wpn'])
         self.sld = items.shield.ShieldsData.factory(kwargs['sld'])
-        self.hlm = items.helmet.HelmetsData.factory(items.helmet.HelmetsData.empty)
-        self.amu = items.amulet.AmuletsData.factory(items.amulet.AmuletsData.empty)
+        self.hlm = items.helmet.HelmetsData.factory(None)
+        self.amu = items.amulet.AmuletsData.factory(None)
         self.arm = items.armor.ArmorsData.factory(kwargs['arm'])
-        self.clk = items.cloak.CloakData.factory(items.cloak.CloakData.empty)
-        self.glv = items.gloves.GlovesData.factory(items.gloves.GlovesData.empty)
-        self.lrg = items.ring.RingsData.factory(items.ring.RingsData.empty)
-        self.rrg = items.ring.RingsData.factory(items.ring.RingsData.empty)
-        self.blt = items.belt.BeltsData.factory(items.belt.BeltsData.empty)
-        self.bts = items.boots.BootsData.factory(items.boots.BootsData.empty)
-        self.acy = items.accessory.AccessoriesData.factory(items.accessory.AccessoriesData.empty)
+        self.clk = items.cloak.CloakData.factory(None)
+        self.glv = items.gloves.GlovesData.factory(None)
+        self.lrg = items.ring.RingsData.factory(None)
+        self.rrg = items.ring.RingsData.factory(None)
+        self.blt = items.belt.BeltsData.factory(None)
+        self.bts = items.boots.BootsData.factory(None)
+        self.acy = items.accessory.AccessoriesData.factory(None)
 
 
 class HeroData(enum.Enum):
@@ -90,7 +90,7 @@ class HeroData(enum.Enum):
                  lev=1, exp=500, int=14, wil=10, dex=22, agi=20, edu=10, str=8, sta=20,
                  alc=0, dip=0, hlr=0, lor=0, mec=1, mer=0, ran=0, stl=3, thf=3, trb=0, war=0, wiz=0,
                  haf=-1, mis=-1, pol=0, shd=-1, swd=1, thr=2,
-                 wpn=items.weapon.WeaponsData.bronzedagger, sld=items.shield.ShieldsData.empty,
+                 wpn=items.weapon.WeaponsData.bronzedagger, sld=None,
                  arm=items.armor.ArmorsData.lightleatherarmor)
     grindan = Hero(nam="Grindan", spr=PATH+"03s_Grindan.png", fac=PATH+"03f_Grindan.png",
                    lev=8, exp=102000, int=10, wil=8, dex=25, agi=10, edu=20, str=20, sta=40,
@@ -102,13 +102,13 @@ class HeroData(enum.Enum):
                    lev=3, exp=7000, int=22, wil=16, dex=20, agi=15, edu=16, str=10, sta=31,
                    alc=0, dip=0, hlr=0, lor=1, mec=0, mer=1, ran=0, stl=0, thf=0, trb=0, war=0, wiz=4,
                    haf=0, mis=-1, pol=3, shd=0, swd=3, thr=-1,
-                   wpn=items.weapon.WeaponsData.bronzestaff, sld=items.shield.ShieldsData.empty,
+                   wpn=items.weapon.WeaponsData.bronzestaff, sld=None,
                    arm=items.armor.ArmorsData.mediumleatherarmor)
     codrif = Hero(nam="Codrif", spr=PATH+"05s_Codrif.png", fac=PATH+"05f_Codrif.png",
                   lev=2, exp=2500, int=22, wil=18, dex=15, agi=12, edu=15, str=10, sta=20,
                   alc=3, dip=0, hlr=0, lor=2, mec=2, mer=0, ran=0, stl=0, thf=0, trb=0, war=0, wiz=2,
                   haf=-1, mis=-1, pol=0, shd=-1, swd=1, thr=1,
-                  wpn=items.weapon.WeaponsData.bronzedagger, sld=items.shield.ShieldsData.empty,
+                  wpn=items.weapon.WeaponsData.bronzedagger, sld=None,
                   arm=items.armor.ArmorsData.lightleatherarmor)
     galen = Hero(nam="Galen", spr=PATH+"06s_Galen.png", fac=PATH+"06f_Galen.png",
                  lev=4, exp=15000, int=15, wil=15, dex=18, agi=10, edu=20, str=25, sta=40,

@@ -1,6 +1,6 @@
 
 """
-...
+class: Data
 """
 
 import characters.hero
@@ -21,7 +21,7 @@ import containers.inventory
 
 class Data(object):
     """
-    ...
+    Hier is alle gamedata.
     """
     def __init__(self):
         self.heroes = characters.hero.HeroData
@@ -29,13 +29,18 @@ class Data(object):
         self.party = containers.party.Party()
         self.party.add(self.heroes.alagos, verbose=False)
 
-        # todo, poging tot gear zijn nog geen objecten in inventory.
-        # ze worden pas een object wanneer een hero de gear equiped.
-        # ook kijken of de de ordereddict kan converteren naar een enum.
-        # de quantity is ook nog een probleem.
         self.inventory = containers.inventory.Inventory()
-        self.inventory.add(items.boots.BootsData.ironboots, 48)
-        self.inventory.add(items.weapon.WeaponsData.bronzeshortsword, 20)
-        self.inventory.add(items.shield.ShieldsData.silverkit, 9)
 
-        print(self.inventory)
+        # piet1 = items.weapon.WeaponsData.factory(items.weapon.WeaponsData.bronzeshortsword)
+        # piet2 = items.shield.ShieldsData.factory(items.shield.ShieldsData.silverkite)
+        # piet3 = items.boots.BootsData.factory(items.boots.BootsData.ironboots)
+        #
+        # self.inventory.add(piet1, 20)
+        # self.inventory.add(piet2, 9)
+        # self.inventory.add(piet3, 48)
+        # self.inventory.add(piet2, 0)
+        # self.inventory.add(piet2, -1)
+        # self.inventory.add(piet2, 1)
+        #
+        # print(self.inventory)
+        # quit()

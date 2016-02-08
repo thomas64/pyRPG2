@@ -10,8 +10,6 @@ class CloakData(items.gear.GearData):
     """
     Hier staan alle mantels uit het spel in als enum met een dict voor de waarden.
     """
-    empty = dict()
-
     leathercloak = dict(nam="Leather Cloak",              val=100,   shp=True,  wht=1, prt=1)
     battlecloak = dict(nam="Battle Cloak",                val=1000,  shp=True,  wht=2, prt=2)
 
@@ -44,4 +42,6 @@ class CloakData(items.gear.GearData):
         :param cloak: een bovenstaand enum item
         :return: een gearitem object met attributen uit de bovenstaande enum dict
         """
+        if cloak is None:
+            return items.gear.GearItem(items.gear.GearType.cloak)
         return items.gear.GearItem(items.gear.GearType.cloak, **cloak.value)

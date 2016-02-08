@@ -11,7 +11,6 @@ class WeaponsDataClass(items.gear.GearDataClass):
     """
     Hier staan alle wapens uit het spel in een dict als enum met een dict voor de waarden.
     """
-    empty = dict()
 
     @staticmethod
     def factory(weapon):
@@ -20,13 +19,16 @@ class WeaponsDataClass(items.gear.GearDataClass):
         :param weapon: een bovenstaand enum item
         :return: een gearitem object met attributen uit de bovenstaande enum dict
         """
+        if weapon is None:
+            return items.gear.GearItem(items.gear.GearType.weapon)
         return items.gear.GearItem(items.gear.GearType.weapon, **weapon)
 
     def __init__(self):
         super().__init__()
+
         # Vul de OrderedDict self.inside met de gecombineerde data.
 
-        # upgradable, min_mech, metals zijn nog niet verwerkt.
+        # todo, upgradable, min_mech, metals zijn nog niet verwerkt.
 
         #                     val, min int/str, dam, srt, col
         weapon_material = {

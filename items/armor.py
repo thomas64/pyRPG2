@@ -12,8 +12,6 @@ class ArmorsDataClass(items.gear.GearDataClass):
     Hier staan alle armors uit het spel in een dict als enum met een dict voor de waarden.
     """
 
-    empty = dict()
-
     @staticmethod
     def factory(armor):
         """
@@ -21,10 +19,13 @@ class ArmorsDataClass(items.gear.GearDataClass):
         :param armor: een bovenstaand enum item
         :return: een gearitem object met attributen uit de bovenstaande enum dict
         """
+        if armor is None:
+            return items.gear.GearItem(items.gear.GearType.armor)
         return items.gear.GearItem(items.gear.GearType.armor, **armor)
 
     def __init__(self):
         super().__init__()
+
         # Vul de OrderedDict self.inside met de gecombineerde data.
 
         # todo, col, row, upgradable, min_mech, metals zijn nog niet verwerkt.

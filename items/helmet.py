@@ -12,8 +12,6 @@ class HelmetsData(items.gear.GearData):
     """
     Hier staan alle helmen uit het spel in als enum met een dict voor de waarden.
     """
-    empty = dict()
-
     leathercap = dict(nam="Leather Cap",                 val=100,   shp=True,  wht=1, prt=1)
     bronzehelmet = dict(nam="Bronze Helmet",             val=1225,  shp=True,  wht=2, prt=2)
     ironhelmet = dict(nam="Iron Helmet",                 val=3600,  shp=True,  wht=3, prt=3)
@@ -42,4 +40,6 @@ class HelmetsData(items.gear.GearData):
         :param helmet: een bovenstaand enum item
         :return: een gearitem object met attributen uit de bovenstaande enum dict
         """
+        if helmet is None:
+            return items.gear.GearItem(items.gear.GearType.helmet)
         return items.gear.GearItem(items.gear.GearType.helmet, **helmet.value)

@@ -11,7 +11,6 @@ class ShieldsDataClass(items.gear.GearDataClass):
     """
     Hier staan alle schilden uit het spel in een dict als enum met een dict voor de waarden.
     """
-    empty = dict()
 
     @staticmethod
     def factory(shield):
@@ -20,10 +19,13 @@ class ShieldsDataClass(items.gear.GearDataClass):
         :param shield: een bovenstaand enum item
         :return: een gearitem object met attributen uit de bovenstaande enum dict
         """
+        if shield is None:
+            return items.gear.GearItem(items.gear.GearType.shield)
         return items.gear.GearItem(items.gear.GearType.shield, **shield)
 
     def __init__(self):
         super().__init__()
+
         # Vul de OrderedDict self.inside met de gecombineerde data.
 
         # todo, upgradable, min_mech, metals zijn nog niet verwerkt.
