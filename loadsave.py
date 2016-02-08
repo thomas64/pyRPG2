@@ -1,4 +1,3 @@
-
 """
 class: Dialog
 """
@@ -40,7 +39,9 @@ class Dialog(wx.App):
             try:
                 console.load_gamedata()
                 with open(filename, 'rb') as f:
-                    engine.overworld.window.hero.rect, engine.overworld.window.hero.last_direction = pickle.load(f)
+                    (engine.data,
+                     engine.overworld.window.hero.rect,
+                     engine.overworld.window.hero.last_direction) = pickle.load(f)
             except pickle.UnpicklingError:
                 console.corrupt_gamedata()
                 filename = None
@@ -65,7 +66,9 @@ class Dialog(wx.App):
             filename = dialog.GetPath()
             console.save_gamedata()
             with open(filename, 'wb') as f:
-                pickle.dump([engine.overworld.window.hero.rect, engine.overworld.window.hero.last_direction], f)
+                pickle.dump([engine.data,
+                             engine.overworld.window.hero.rect,
+                             engine.overworld.window.hero.last_direction], f)
         else:
             filename = None
         dialog.Destroy()

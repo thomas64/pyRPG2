@@ -97,7 +97,3 @@ class GearItem(object):
             del self.SHP
         except AttributeError:
             pass
-
-    # noinspection PyUnusedLocal
-    def __getattr__(self, item):                    # als de attribute niet bestaat, geef dan 0 terug.
-        return 0

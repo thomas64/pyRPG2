@@ -19,7 +19,7 @@ class Inventory(collections.OrderedDict):
     def add(self, gear, quantity=1, verbose=True):
         """
         Voeg gear toe aan de inventory.
-        :param gear: GearData object
+        :param gear: GearData Object
         :param quantity: integer
         :param verbose: als False meegegeven wordt, print dan niets in de console
         """
