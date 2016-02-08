@@ -17,7 +17,7 @@ class: Stamina
 
 class Stat(object):
     """
-    ...
+    Stat baseclass voor stats en skills.
     """
     def __init__(self, name, raw, maximum, upgrade, quantity):
         self.NAM = name
@@ -32,14 +32,14 @@ class Stat(object):
 
 class Level(Stat):
     """
-    ...
+    Level. Heeft geen upgrade.
     """
     def __init__(self, quantity):
         super().__init__("Level", "lev", 40, None, quantity)
 
     def next(self, totalxp):
         """
-        ...
+        Dit betreft een formule van Anton, en verbeterd door Wolframe.
         :param totalxp:
         """
         if self.qty >= self.MAX:

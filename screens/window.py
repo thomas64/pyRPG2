@@ -5,9 +5,9 @@ class: Window
 
 import pygame
 
-import character
-import map
-import sprites
+import screens.character
+import screens.map
+import screens.sprites
 
 
 ALIGNKEY = pygame.K_SPACE
@@ -45,10 +45,10 @@ class Window(object):
         self.surface.fill(BACKGROUNDCOLOR)
         self.surface = self.surface.convert()
 
-        self.map1 = map.Map(OVERWORLDPATH, width, height, PLAYERLAYER)
+        self.map1 = screens.map.Map(OVERWORLDPATH, width, height, PLAYERLAYER)
         self.group = self.map1.view
 
-        self.hero = character.Hero(HEROPATH, self.map1.start_pos.topleft, audio)
+        self.hero = screens.character.Hero(HEROPATH, self.map1.start_pos.topleft, audio)
         self.group.add(self.hero)
 
         self.grid_sprite = None
@@ -98,7 +98,8 @@ class Window(object):
 
         elif event.key == GRIDKEY:
             if self.grid_sprite is None:
-                self.grid_sprite = sprites.GridSprite(self.map1.width, self.map1.height, GRIDCOLOR, GRIDSIZE, GRIDLAYER)
+                self.grid_sprite = screens.sprites.GridSprite(self.map1.width, self.map1.height,
+                                                              GRIDCOLOR, GRIDSIZE, GRIDLAYER)
                 self.group.add(self.grid_sprite)
             else:
                 self.group.remove(self.grid_sprite)
@@ -106,11 +107,11 @@ class Window(object):
 
         elif event.key == CBOXKEY:
             if len(self.cbox_sprites) == 0:                             # als de lijst leeg is.
-                self.cbox_sprites.append(sprites.ColorBoxSprite(self.hero.rect, HEROCOLOR, CBOXLAYER))
+                self.cbox_sprites.append(screens.sprites.ColorBoxSprite(self.hero.rect, HEROCOLOR, CBOXLAYER))
                 for rect in self.map1.tree_rects:
-                    self.cbox_sprites.append(sprites.ColorBoxSprite(rect, TREECOLOR, CBOXLAYER))
+                    self.cbox_sprites.append(screens.sprites.ColorBoxSprite(rect, TREECOLOR, CBOXLAYER))
                 for rect in self.map1.water_rects:
-                    self.cbox_sprites.append(sprites.ColorBoxSprite(rect, WATERCOLOR, CBOXLAYER))
+                    self.cbox_sprites.append(screens.sprites.ColorBoxSprite(rect, WATERCOLOR, CBOXLAYER))
                 self.group.add(self.cbox_sprites)
             else:
                 self.group.remove(self.cbox_sprites)
