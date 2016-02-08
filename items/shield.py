@@ -96,15 +96,3 @@ class ShieldsDataClass(items.gear.GearDataClass):
 
 
 ShieldsData = ShieldsDataClass()
-
-
-# piet = ShieldsData.factory(ShieldsData.woodenbuckler)
-# print(piet.NAM)
-# print(piet.nam)
-# print(piet.PRT)
-# print(piet.DEX)
-# print(piet.THF)
-#
-# for shield in ShieldsData:
-#     print(shield[1]['nam'], shield[1]['shp'])
-# quit()

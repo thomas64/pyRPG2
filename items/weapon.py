@@ -117,7 +117,3 @@ class WeaponsDataClass(items.gear.GearDataClass):
 
 
 WeaponsData = WeaponsDataClass()
-
-# for weapon in WeaponsData:
-#     print(weapon[1]['nam'], weapon[1]['min_int'], weapon[1]['min_str'])
-# quit()

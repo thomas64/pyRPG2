@@ -43,9 +43,3 @@ class HelmetsData(items.gear.GearData):
         :return: een gearitem object met attributen uit de bovenstaande enum dict
         """
         return items.gear.GearItem(items.gear.GearType.helmet, **helmet.value)
-
-
-# for helmet in HelmetsData:
-#     print(helmet[1]['nam'])
-#
-# quit()

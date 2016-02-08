@@ -3,11 +3,20 @@
 ...
 """
 
-
-import collections
-
 import characters.hero
-import characters.party
+import items.weapon
+import items.shield
+import items.helmet
+import items.amulet
+import items.armor
+import items.cloak
+import items.gloves
+import items.ring
+import items.belt
+import items.boots
+import items.accessory
+import containers.party
+import containers.inventory
 
 
 class Data(object):
@@ -15,15 +24,18 @@ class Data(object):
     ...
     """
     def __init__(self):
-        self.heroes = collections.OrderedDict()
+        self.heroes = characters.hero.HeroData
 
-        self.heroes['alagos'] = characters.hero.HeroData.factory(characters.hero.HeroData.alagos)
-        self.heroes['luana'] = characters.hero.HeroData.factory(characters.hero.HeroData.luana)
-        self.heroes['grindan'] = characters.hero.HeroData.factory(characters.hero.HeroData.grindan)
-        self.heroes['rydalin'] = characters.hero.HeroData.factory(characters.hero.HeroData.rydalin)
-        self.heroes['codrif'] = characters.hero.HeroData.factory(characters.hero.HeroData.codrif)
-        self.heroes['galen'] = characters.hero.HeroData.factory(characters.hero.HeroData.galen)
+        self.party = containers.party.Party()
+        self.party.add(self.heroes.alagos, verbose=False)
 
-        self.party = characters.party.Party()
+        # todo, poging tot gear zijn nog geen objecten in inventory.
+        # ze worden pas een object wanneer een hero de gear equiped.
+        # ook kijken of de de ordereddict kan converteren naar een enum.
+        # de quantity is ook nog een probleem.
+        self.inventory = containers.inventory.Inventory()
+        self.inventory.add(items.boots.BootsData.ironboots, 48)
+        self.inventory.add(items.weapon.WeaponsData.bronzeshortsword, 20)
+        self.inventory.add(items.shield.ShieldsData.silverkit, 9)
 
-        self.party.add(self.heroes['alagos'], verbose=False)
+        print(self.inventory)
