@@ -59,7 +59,7 @@ class ButtonSprite(pygame.sprite.Sprite):
     def multi_click(self, mouse_pos, key_input):
         """
         Als er geklikt is met de muis en op de knop.
-        Maak dan van de tuple een list en zet de key van deze button in de list op 1.
+        Maak dan van de key_input-tuple een list en zet de key van deze button in de list op 1.
         Die ingedrukt knop wordt dan teruggestuurd als het waarde keyboard input.
         :param mouse_pos: pygame.mouse.get_pos()
         :param key_input: pygame.key.get_pressed()
@@ -71,12 +71,14 @@ class ButtonSprite(pygame.sprite.Sprite):
                 key_input[self.key] = 1
         return key_input
 
-    def single_click(self, mouse_pos):
+    def single_click(self, event):
         """
-        ...
-        :param mouse_pos:
+        Ontvang mouse event. Kijk of het met de button collide.
+        :param event: pygame.MOUSEBUTTONDOWN uit engine.py
+        :return: de knop die aan de button verbonden zit
         """
-        pass
+        if self.rect.collidepoint(event.pos):
+            return self.key
 
 
 class ColorBoxSprite(pygame.sprite.Sprite):

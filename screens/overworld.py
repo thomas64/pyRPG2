@@ -80,12 +80,16 @@ class Overworld(object):
         :param mouse_pos: pygame.mouse.get_pos()
         :param dt: self.clock.tick(FPS)/1000.0
         """
-        self.key_input = key_input
+        if self.engine.currentstate == states.GameState.Overworld:
+            self.key_input = key_input
 
-        for button in self.buttons:
-            self.key_input = button.multi_click(mouse_pos, self.key_input)
+            for button in self.buttons:
+                self.key_input = button.multi_click(mouse_pos, self.key_input)
 
-        self.window.handle_multi_input(self.key_input, dt)
+            self.window.handle_multi_input(self.key_input, dt)
+
+        elif self.engine.currentstate == states.GameState.PartyScreen:
+            self.partyscreen.handle_multi_input(key_input, mouse_pos)
 
     def handle_single_mouse_input(self, event):
         """
@@ -94,9 +98,12 @@ class Overworld(object):
         """
         if self.engine.currentstate == states.GameState.Overworld:
 
-            # todo, ook op de i met de muis klikken moet gemaakt worden
             if event.button == 1:
-                print("test")
+                for button in self.buttons:
+                    button_press = button.single_click(event)
+                    if button_press == pygame.K_i:
+                        self._show_party_screen()
+                        break
 
     def handle_single_keyboard_input(self, event):
         """
@@ -106,8 +113,7 @@ class Overworld(object):
         if self.engine.currentstate == states.GameState.Overworld:
 
             if event.key == pygame.K_i:
-                self.engine.state.push(states.GameState.PartyScreen)
-                self.partyscreen = screens.partyscreen.PartyScreen(self.screen)
+                self._show_party_screen()
 
             self.window.handle_single_input(event)
 
@@ -116,3 +122,7 @@ class Overworld(object):
             if event.key == pygame.K_ESCAPE or event.key == pygame.K_i:
                 self.engine.state.pop(self.engine.currentstate)
                 self.partyscreen = None
+
+    def _show_party_screen(self):
+        self.engine.state.push(states.GameState.PartyScreen)
+        self.partyscreen = screens.partyscreen.PartyScreen(self.screen)

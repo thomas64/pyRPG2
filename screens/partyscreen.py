@@ -55,14 +55,17 @@ class PartyScreen(object):
         button_w = screens.sprites.ButtonSprite(80, 40, (bg_width - 90, 120), "Next", pygame.K_w)
         self.buttons = [button_c, button_q, button_w]
 
+        self.key_input = pygame.key.get_pressed()       # dit is voor de mousepress op een button.
+
     def handle_view(self):
         """
-        ...
+        self.background bij button.draw()? moet dit niet self.screen zijn? ik snap nog niet de voorwaarden.
+        bij de rest heb overal self.screen gedaan, maar blijkbaar kan het ook anders.
         """
         self.screen.blit(self.background, (0, 0))
 
         for button in self.buttons:
-            button.draw(self.background, pygame.key.get_pressed())      # self.background? moet dit niet self.screen zijn? ik snap niet de voorwaarden nog. bij de rest heb overal self.screen gedaan, maar blijkbaar kan het ook anders.
+            button.draw(self.screen, self.key_input)
 
         # heroface1 = pygame.image.load(HEROFACE1)
         # heroface2 = pygame.image.load(HEROFACE2)
@@ -92,6 +95,17 @@ class PartyScreen(object):
         # self.screen.blit(heroface12, (1100, 0))
         # self.screen.blit(heroface13, (1200, 0))
         # self.screen.blit(heroface14, (1300, 0))
+
+    def handle_multi_input(self, key_input, mouse_pos):
+        """
+        Registreert of er op de buttons wordt geklikt. En zet dat om naar keyboard input.
+        :param key_input: pygame.key.get_pressed()
+        :param mouse_pos: pygame.mouse.get_pos()
+        """
+        self.key_input = key_input
+
+        for button in self.buttons:
+            self.key_input = button.multi_click(mouse_pos, self.key_input)
 
     def handle_single_input(self, event):
         """

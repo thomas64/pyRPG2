@@ -50,6 +50,7 @@ class GameEngine(object):
         self.debugfont = pygame.font.SysFont(DEBUGFONT, DEBUGFONTSIZE)
         self.currentstate = None
         self.key_input = None
+        self.mouse_input = None
         self.scr_capt = None
 
         self.show_debug = False
@@ -129,13 +130,13 @@ class GameEngine(object):
         Handelt de ingedrukt-houden muis en keyboard input af.
         """
         self.key_input = pygame.key.get_pressed()
+        self.mouse_input = None
+        if pygame.mouse.get_pressed()[0]:
+            self.mouse_input = pygame.mouse.get_pos()
 
-        if self.currentstate == states.GameState.Overworld:
-            mouse_pos = None
-            # todo, get_pressed blijft onthouden worden?
-            if pygame.mouse.get_pressed()[0]:
-                mouse_pos = pygame.mouse.get_pos()
-            self.overworld.handle_multi_input(self.key_input, mouse_pos, self.dt)
+        if self.currentstate == states.GameState.Overworld or \
+           self.currentstate == states.GameState.PartyScreen:
+            self.overworld.handle_multi_input(self.key_input, self.mouse_input, self.dt)
 
     def handle_single_input(self, event):
         """
