@@ -95,13 +95,21 @@ class Overworld(object):
         if self.engine.currentstate == states.GameState.Overworld:
 
             # todo, ook op de i met de muis klikken moet gemaakt worden
-            if event.key == pygame.K_i:
-                self.engine.state.push(states.GameState.PartyScreen)
-                self.partyscreen = screens.partyscreen.PartyScreen(self.screen)
+            if event.type == pygame.KEYDOWN:
 
-            self.window.handle_single_input(event)
+                if event.key == pygame.K_i:
+                    self.engine.state.push(states.GameState.PartyScreen)
+                    self.partyscreen = screens.partyscreen.PartyScreen(self.screen)
+
+                self.window.handle_single_input(event)
+
+            # elif event.type == pygame.MOUSEBUTTONDOWN:
+            #     if event.button == 1:
 
         elif self.engine.currentstate == states.GameState.PartyScreen:
 
-            if event.key == pygame.K_ESCAPE or event.key == pygame.K_i:
-                self.engine.state.pop(self.engine.currentstate)
+            if event.type == pygame.KEYDOWN:
+
+                if event.key == pygame.K_ESCAPE or event.key == pygame.K_i:
+                    self.engine.state.pop(self.engine.currentstate)
+                    self.partyscreen = None

@@ -17,7 +17,7 @@ TITLEFONTSIZE = 150
 TITLEFONTCOLOR = pygame.Color("red")
 TITLEPOSY = 125
 
-MENUFONT = 'impact'     # todo, was None. Nog een andere kiezen?
+MENUFONT = None             # todo, nog een ander font kiezen?
 MENUFONTSIZE = 50
 MENUFONTCOLOR1 = pygame.Color("white")
 MENUFONTCOLOR2 = pygame.Color("yellow")
@@ -89,7 +89,7 @@ class GameMenu(object):
             menu_text = MenuText(item, index, MENUFONT, MENUFONTSIZE, MENUFONTCOLOR1)
             t_h = len(self.menu_items) * menu_text.height                 # t_h: total height of text block
             pos_x = (bg_width/2) - (menu_text.width/2)
-            pos_y = ((bg_height/2) - (t_h/2)) + (menu_text.height * index * 1.3 + 50)   # was * 2
+            pos_y = ((bg_height/2) - (t_h/2)) + (menu_text.height * index * 2)
 
             menu_text.position = (pos_x, pos_y)
             menu_text.rect.topleft = menu_text.position

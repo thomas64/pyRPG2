@@ -164,11 +164,9 @@ class GameEngine(object):
                     self._pause_menu_select_continue(with_esc=True)
                     return
             elif self.currentstate == states.GameState.Overworld:
-                self.overworld.handle_single_input(event)
                 if event.key == pygame.K_ESCAPE:
                     self._show_pause_menu()
-            elif self.currentstate == states.GameState.PartyScreen:
-                self.overworld.handle_single_input(event)
+                    return
 
         if self.currentstate == states.GameState.MainMenu:              # dan de menu's
             menu_choice = self.mainmenu.handle_single_input(event)
@@ -198,6 +196,10 @@ class GameEngine(object):
                 self._pause_menu_select_save_game()
             elif menu_choice == screens.menus.Pause().MainMenu:
                 self._pause_menu_select_main_menu()
+
+        elif self.currentstate == states.GameState.Overworld or \
+                self.currentstate == states.GameState.PartyScreen:
+            self.overworld.handle_single_input(event)
 
     def _show_main_menu(self):
         self.pausemenu = None
