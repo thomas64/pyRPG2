@@ -56,7 +56,7 @@ class ButtonSprite(pygame.sprite.Sprite):
             self.image.blit(self.label, self.labelrect)
             surface.blit(self.image, self.rect.topleft)
 
-    def click(self, mouse_pos, key_input):
+    def multi_click(self, mouse_pos, key_input):
         """
         Als er geklikt is met de muis en op de knop.
         Maak dan van de tuple een list en zet de key van deze button in de list op 1.
@@ -70,6 +70,13 @@ class ButtonSprite(pygame.sprite.Sprite):
                 key_input = list(key_input)
                 key_input[self.key] = 1
         return key_input
+
+    def single_click(self, mouse_pos):
+        """
+        ...
+        :param mouse_pos:
+        """
+        pass
 
 
 class ColorBoxSprite(pygame.sprite.Sprite):

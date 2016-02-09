@@ -83,33 +83,36 @@ class Overworld(object):
         self.key_input = key_input
 
         for button in self.buttons:
-            self.key_input = button.click(mouse_pos, self.key_input)
+            self.key_input = button.multi_click(mouse_pos, self.key_input)
 
         self.window.handle_multi_input(self.key_input, dt)
 
-    def handle_single_input(self, event):
+    def handle_single_mouse_input(self, event):
         """
-        Handelt keyevents af.
-        :param event: pygame.event.get() uit overworld.py
+        Handelt mouse events af.
+        :param event: pygame.MOUSEBUTTONDOWN uit engine.py
         """
         if self.engine.currentstate == states.GameState.Overworld:
 
             # todo, ook op de i met de muis klikken moet gemaakt worden
-            if event.type == pygame.KEYDOWN:
+            if event.button == 1:
+                print("test")
 
-                if event.key == pygame.K_i:
-                    self.engine.state.push(states.GameState.PartyScreen)
-                    self.partyscreen = screens.partyscreen.PartyScreen(self.screen)
+    def handle_single_keyboard_input(self, event):
+        """
+        Handelt keyboard events af.
+        :param event: pygame.KEYDOWN uit engine.py
+        """
+        if self.engine.currentstate == states.GameState.Overworld:
 
-                self.window.handle_single_input(event)
+            if event.key == pygame.K_i:
+                self.engine.state.push(states.GameState.PartyScreen)
+                self.partyscreen = screens.partyscreen.PartyScreen(self.screen)
 
-            # elif event.type == pygame.MOUSEBUTTONDOWN:
-            #     if event.button == 1:
+            self.window.handle_single_input(event)
 
         elif self.engine.currentstate == states.GameState.PartyScreen:
 
-            if event.type == pygame.KEYDOWN:
-
-                if event.key == pygame.K_ESCAPE or event.key == pygame.K_i:
-                    self.engine.state.pop(self.engine.currentstate)
-                    self.partyscreen = None
+            if event.key == pygame.K_ESCAPE or event.key == pygame.K_i:
+                self.engine.state.pop(self.engine.currentstate)
+                self.partyscreen = None
