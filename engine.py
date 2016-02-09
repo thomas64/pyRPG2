@@ -26,7 +26,7 @@ DEBUGFONTCOLOR = pygame.Color("white")
 
 class GameEngine(object):
     """
-    De grafische weergave van het scherm.
+    De grafische weergave van het scherm. Handelt de states.
     """
     def __init__(self):
         self.screen = pygame.display.get_surface()
@@ -148,6 +148,8 @@ class GameEngine(object):
 
             if event.key == DEBUGKEY:
                 self.show_debug ^= True                                 # simple boolean swith
+            elif event.key == pygame.K_BACKSPACE:
+                self._kill_game()                           # todo, deze en de methode moeten uiteindelijk weg
 
             if self.currentstate == states.GameState.MainMenu:          # eerst de keys op het toetsenbord
                 if event.key == pygame.K_ESCAPE:
@@ -165,8 +167,8 @@ class GameEngine(object):
                 self.overworld.handle_single_input(event)
                 if event.key == pygame.K_ESCAPE:
                     self._show_pause_menu()
-                if event.key == pygame.K_BACKSPACE:
-                    self._kill_game()                           # todo, deze en de methode moeten uiteindelijk weg
+            elif self.currentstate == states.GameState.PartyScreen:
+                self.overworld.handle_single_input(event)
 
         if self.currentstate == states.GameState.MainMenu:              # dan de menu's
             menu_choice = self.mainmenu.handle_single_input(event)

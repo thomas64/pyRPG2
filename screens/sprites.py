@@ -9,9 +9,7 @@ import pygame
 
 FILLCOLOR = pygame.Color("black")
 
-BUTTONWIDTH = 40
-BUTTONHEIGHT = 40
-BUTTONFONT = 'sans'
+BUTTONFONT = 'impact'
 BUTTONFONTCOLOR = pygame.Color("white")
 BUTTONFONTSIZE = 14
 BUTTONBGCOLOR = pygame.Color("black")
@@ -22,11 +20,11 @@ class ButtonSprite(pygame.sprite.Sprite):
     """
     De gegevens van de knoppen in beeld.
     """
-    def __init__(self, position, label, key):
+    def __init__(self, width, height, position, label, key):
         pygame.sprite.Sprite.__init__(self)
 
-        self.width = BUTTONWIDTH
-        self.height = BUTTONHEIGHT
+        self.width = width
+        self.height = height
         self.bgcolor = BUTTONBGCOLOR
         self.visible = True
 

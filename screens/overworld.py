@@ -34,7 +34,7 @@ class Overworld(object):
 
         self.buttons = None
         self._init_buttons()
-        self.key_input = pygame.key.get_pressed()
+        self.key_input = pygame.key.get_pressed()       # dit is voor de mousepress op een button.
 
     def _init_buttons(self):
         """
@@ -46,11 +46,11 @@ class Overworld(object):
 
         # todo, afhankelijk van situatie, buttons niet weergeven
         # button_view = sprites.ButtonSprite((bg_width-200,   bg_height-300), "V",     pygame.K_v)
-        button_i = screens.sprites.ButtonSprite((bg_width - 200, bg_height - 300), "I", pygame.K_i)
-        button_up = screens.sprites.ButtonSprite((bg_width - 150, bg_height - 300), "Up", pygame.K_UP)
-        button_down = screens.sprites.ButtonSprite((bg_width - 150, bg_height - 250), "Down", pygame.K_DOWN)
-        button_left = screens.sprites.ButtonSprite((bg_width - 200, bg_height - 250), "Left", pygame.K_LEFT)
-        button_right = screens.sprites.ButtonSprite((bg_width - 100, bg_height - 250), "Right", pygame.K_RIGHT)
+        button_i = screens.sprites.ButtonSprite(40, 40, (bg_width - 200, bg_height - 300), "I", pygame.K_i)
+        button_up = screens.sprites.ButtonSprite(40, 40, (bg_width - 150, bg_height - 300), "Up", pygame.K_UP)
+        button_down = screens.sprites.ButtonSprite(40, 40, (bg_width - 150, bg_height - 250), "Down", pygame.K_DOWN)
+        button_left = screens.sprites.ButtonSprite(40, 40, (bg_width - 200, bg_height - 250), "Left", pygame.K_LEFT)
+        button_right = screens.sprites.ButtonSprite(40, 40, (bg_width - 100, bg_height - 250), "Right", pygame.K_RIGHT)
         # button_cancel = sprites.ButtonSprite((bg_width-100, bg_height-200), "C",     pygame.K_c)
 
         # self.buttons = [button_view, button_up, button_down, button_left, button_right, button_cancel]
@@ -92,9 +92,16 @@ class Overworld(object):
         Handelt keyevents af.
         :param event: pygame.event.get() uit overworld.py
         """
-        if event.key == pygame.K_i:
-            self.engine.state.push(states.GameState.PartyScreen)
-            self.engine.audio.fade_music()
-            self.partyscreen = screens.partyscreen.PartyScreen(self.screen)
+        if self.engine.currentstate == states.GameState.Overworld:
 
-        self.window.handle_single_input(event)
+            # todo, ook op de i met de muis klikken moet gemaakt worden
+            if event.key == pygame.K_i:
+                self.engine.state.push(states.GameState.PartyScreen)
+                self.partyscreen = screens.partyscreen.PartyScreen(self.screen)
+
+            self.window.handle_single_input(event)
+
+        elif self.engine.currentstate == states.GameState.PartyScreen:
+
+            if event.key == pygame.K_ESCAPE or event.key == pygame.K_i:
+                self.engine.state.pop(self.engine.currentstate)
