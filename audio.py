@@ -39,7 +39,7 @@ class Audio(object):
         self.sound = 0
         self._load_cfg()
 
-        self.current = pygame.mixer.Channel(7)
+        self.current_music_channel = pygame.mixer.Channel(7)
         self.mainmenu = pygame.mixer.Sound(MAINMENUMUSIC)
         self.overworld = pygame.mixer.Sound(OVERWORLDMUSIC)
 
@@ -79,8 +79,14 @@ class Audio(object):
         """
         if self.music == 1:
             self.fade_music()
-            self.current.set_volume(1)
-            self.current.play(music, -1)
+            self.current_music_channel.set_volume(1)
+            self.current_music_channel.play(music, -1)
+
+    def stop_music(self):
+        """
+        Laat het muziekkanaal stoppen.
+        """
+        self.current_music_channel.stop()
 
     def play_sound(self, sound):
         """
@@ -90,9 +96,17 @@ class Audio(object):
         if self.sound == 1:
             sound.play()
 
+    @staticmethod
+    def stop_sound(sound):
+        """
+        "Stop het huidige geluid onmiddelijk.
+        :param sound: een geluidsfragment uit de init.
+        """
+        sound.stop()
+
     def fade_music(self):
         """
         Als er muziek speelt, fade die out.
         """
-        if self.current.get_sound() is not None:
-            self.current.fadeout(FADEOUTTIME)
+        if self.current_music_channel.get_sound() is not None:
+            self.current_music_channel.fadeout(FADEOUTTIME)

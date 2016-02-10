@@ -12,6 +12,8 @@ import console
 
 SAVEPATH = 'savegame'
 
+# todo, ipv wx, iets met pygame maken.
+
 
 class Dialog(wx.App):
     """

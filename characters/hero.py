@@ -76,6 +76,20 @@ class Hero(object):
         self.bts = items.boots.BootsData.factory(None)
         self.acy = items.accessory.AccessoriesData.factory(None)
 
+    @property
+    def cur_hp(self):
+        """
+        ...
+        """
+        return self.lev.cur + self.sta.cur + self.edu.cur
+
+    @property
+    def max_hp(self):
+        """
+        ...
+        """
+        return self.lev.qty + self.sta.qty + self.edu.qty
+
 
 class HeroData(enum.Enum):
     """

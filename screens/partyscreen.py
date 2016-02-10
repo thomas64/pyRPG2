@@ -11,22 +11,10 @@ import screens.sprites
 BACKGROUNDCOLOR = pygame.Color("black")
 LINECOLOR = pygame.Color("white")
 
-# todo, faces van heroes goed implementeren
-PATH = 'resources/sprites/heroes/'
-HEROFACE1 = PATH+'01f_Alagos.png'
-HEROFACE2 = PATH+'02f_Luana.png'
-HEROFACE3 = PATH+'03f_Grindan.png'
-HEROFACE4 = PATH+'04f_Rydalin.png'
-HEROFACE5 = PATH+'05f_Codrif.png'
-HEROFACE6 = PATH+'06f_Galen.png'
-HEROFACE7 = PATH+'07f_Raiko.png'
-HEROFACE8 = PATH+'08f_Kiara.png'
-HEROFACE9 = PATH+'09f_Luthais.png'
-HEROFACE10 = PATH+'10f_Elias.png'
-HEROFACE11 = PATH+'11f_Onarr.png'
-HEROFACE12 = PATH+'12f_Duilio.png'
-HEROFACE13 = PATH+'13f_Iellwen.png'
-HEROFACE14 = PATH+'14f_Faeron.png'
+FONTCOLOR = pygame.Color("white")
+FONT = 'impact'
+LARGEFONTSIZE = 30
+NORMALFONTSIZE = 15
 
 
 class PartyScreen(object):
@@ -34,7 +22,6 @@ class PartyScreen(object):
     ...
     """
     def __init__(self, data, screen):
-        self.data = data
         self.screen = screen
         self.background = pygame.Surface(self.screen.get_size())
         self.background.fill(BACKGROUNDCOLOR)
@@ -45,13 +32,20 @@ class PartyScreen(object):
 
         self.key_input = pygame.key.get_pressed()       # dit is voor de mousepress op een button.
 
-        party = self.data.party.values()
-        for index, hero in enumerate(party):
+        self.largefont = pygame.font.SysFont(FONT, LARGEFONTSIZE)
+        self.normalfont = pygame.font.SysFont(FONT, NORMALFONTSIZE)
+
+        self.party = data.party.values()
+
+        for index, hero in enumerate(self.party):
             self._set_up(hero, index)
 
     def _set_up(self, hero, index):
         face = pygame.image.load(hero.FAC)
-        self.background.blit(face, (11 + index * 260, 11))
+        face_rect = self.background.blit(face, (11 + index * 260, 11))
+
+        name = self.largefont.render(hero.NAM, True, FONTCOLOR)
+        name_rect = self.background.blit(name, (16 + index * 260, 116))
 
     def _paint(self):
         pygame.draw.rect(self.background, LINECOLOR, (10,    10, 250,  150), 1)
@@ -81,6 +75,17 @@ class PartyScreen(object):
 
         for button in self.buttons:
             button.draw(self.screen, self.key_input)
+
+        for index, hero in enumerate(self.party):
+            level = self.normalfont.render("Level: {:12}".format(hero.lev.qty), True, FONTCOLOR)
+            level_rect = self.screen.blit(level, (121 + index * 260, 26))
+
+            hitpoints = self.normalfont.render("HitPoints: {:5}{} {}".format(
+                                                                    hero.cur_hp, "/", hero.max_hp), True, FONTCOLOR)
+            hitpoints_rect = self.screen.blit(hitpoints, (121 + index * 260, 61))
+
+            pygame.draw.rect(self.screen, LINECOLOR, (121, 91, 130, 15), 1)
+
 
     def handle_multi_input(self, key_input, mouse_pos):
         """

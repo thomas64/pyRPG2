@@ -261,7 +261,7 @@ class GameEngine(object):
         if self.audio.music == 1:
             settingview.text = settingview.text.replace("On", "Off")                # later aangepast
             self.audio.music = 0
-            self.audio.current.stop()
+            self.audio.stop_music()
         else:
             settingview.text = settingview.text.replace("Off", "On")
             self.audio.music = 1
@@ -271,11 +271,13 @@ class GameEngine(object):
     def _options_menu_select_sound(self):
         settingview = self.optionsmenu.menu_texts[self.optionsmenu.cur_item]
         if self.audio.sound == 1:
+            self.audio.stop_sound(self.audio.select)
             settingview.text = settingview.text.replace("On", "Off")
             self.audio.sound = 0
         else:
             settingview.text = settingview.text.replace("Off", "On")
             self.audio.sound = 1
+            self.audio.play_sound(self.audio.select)
         self.audio.write_cfg()
 
     def _options_menu_select_back(self, with_esc=False):
