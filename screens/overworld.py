@@ -105,6 +105,11 @@ class Overworld(object):
                         self._show_party_screen()
                         break
 
+        elif self.engine.currentstate == states.GameState.PartyScreen:
+
+            if self.partyscreen.handle_single_mouse_input(event):       # alleen de ESC key returned een waarde
+                self._close_party_screen()
+
     def handle_single_keyboard_input(self, event):
         """
         Handelt keyboard events af.
@@ -120,9 +125,12 @@ class Overworld(object):
         elif self.engine.currentstate == states.GameState.PartyScreen:
 
             if event.key == pygame.K_ESCAPE or event.key == pygame.K_i:
-                self.engine.state.pop(self.engine.currentstate)
-                self.partyscreen = None
+                self._close_party_screen()
 
     def _show_party_screen(self):
         self.engine.state.push(states.GameState.PartyScreen)
-        self.partyscreen = screens.partyscreen.PartyScreen(self.screen)
+        self.partyscreen = screens.partyscreen.PartyScreen(self.engine.data, self.screen)
+
+    def _close_party_screen(self):
+        self.engine.state.pop(self.engine.currentstate)
+        self.partyscreen = None
