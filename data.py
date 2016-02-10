@@ -38,9 +38,9 @@ class Data(object):
         self.party = containers.party.Party()
         self.party.add(self.heroes['alagos'], verbose=False)
         # self.party.add(self.heroes['alagos'])
+        self.party.add(self.heroes['luana'])
         # self.party.add(self.heroes['luana'])
-        # self.party.add(self.heroes['luana'])
-        # self.party.add(self.heroes['codrif'])
+        self.party.add(self.heroes['codrif'])
         # self.party.remove(self.heroes['alagos'])
         # self.party.remove(self.heroes['luana'])
 

@@ -41,14 +41,17 @@ class PartyScreen(object):
         self.background = self.background.convert()
 
         self._paint()
-
-        bg_width = self.background.get_width()
-        button_c = screens.sprites.ButtonSprite(80, 40, (bg_width - 90,  10), "Close", pygame.K_ESCAPE)
-        button_q = screens.sprites.ButtonSprite(80, 40, (bg_width - 90,  70), "Previous", pygame.K_q)
-        button_w = screens.sprites.ButtonSprite(80, 40, (bg_width - 90, 120), "Next", pygame.K_w)
-        self.buttons = [button_c, button_q, button_w]
+        self._init_buttons()
 
         self.key_input = pygame.key.get_pressed()       # dit is voor de mousepress op een button.
+
+        party = self.data.party.values()
+        for index, hero in enumerate(party):
+            self._set_up(hero, index)
+
+    def _set_up(self, hero, index):
+        face = pygame.image.load(hero.FAC)
+        self.background.blit(face, (11 + index * 260, 11))
 
     def _paint(self):
         pygame.draw.rect(self.background, LINECOLOR, (10,    10, 250,  150), 1)
@@ -62,8 +65,12 @@ class PartyScreen(object):
         pygame.draw.rect(self.background, LINECOLOR, (750,  170, 315,  620), 1)
         pygame.draw.rect(self.background, LINECOLOR, (1075, 170, 315,  620), 1)
 
-        heroface1 = pygame.image.load(HEROFACE1)
-        self.background.blit(heroface1, (11, 11))
+    def _init_buttons(self):
+        bg_width = self.background.get_width()
+        button_c = screens.sprites.ButtonSprite(80, 40, (bg_width - 90,  10), "Close", pygame.K_ESCAPE)
+        button_q = screens.sprites.ButtonSprite(80, 40, (bg_width - 90,  70), "Previous", pygame.K_q)
+        button_w = screens.sprites.ButtonSprite(80, 40, (bg_width - 90, 120), "Next", pygame.K_w)
+        self.buttons = [button_c, button_q, button_w]
 
     def handle_view(self):
         """

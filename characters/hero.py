@@ -96,7 +96,7 @@ class HeroData(enum.Enum):
                   haf=1, mis=3, pol=0, shd=3, swd=3, thr=0,
                   wpn=items.weapon.WeaponsData.bronzeshortsword, sld=items.shield.ShieldsData.woodenbuckler,
                   arm=items.armor.ArmorsData.lightleatherarmor)
-    luana = dict(nam="Luana", spr=PATH+"02s_Luana.png", fac=PATH+"01f_Luana.png",
+    luana = dict(nam="Luana", spr=PATH+"02s_Luana.png", fac=PATH+"02f_Luana.png",
                  lev=1, exp=500, int=14, wil=10, dex=22, agi=20, edu=10, str=8, sta=20,
                  alc=0, dip=0, hlr=0, lor=0, mec=1, mer=0, ran=0, stl=3, thf=3, trb=0, war=0, wiz=0,
                  haf=-1, mis=-1, pol=0, shd=-1, swd=1, thr=2,
