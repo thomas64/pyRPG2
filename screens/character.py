@@ -13,7 +13,7 @@ MOVESPEED1 = 60
 MOVESPEED2 = 120    # pixels/second
 MOVESPEED3 = 240
 MOVESPEED4 = 480
-STEPSPEED = 25      # een waarde? lager is snellere stappen
+STEPSPEED = 30      # een waarde? lager is snellere stappen
 TURNDELAY = 7/60    # van een seconde
 VIEWSPEED = 8       # todo, deze moet nog aangepast worden
 
@@ -337,17 +337,16 @@ class Hero(pygame.sprite.Sprite):
         if type(clipped_rect) is dict:
             self.full_sprite.set_clip(pygame.Rect(self._get_frame(clipped_rect, dt)))
         else:
-            self.step_count = 0
+            self.step_count = STEPSPEED         # zodat hij direct een stap animeert uit stilstand
             self.step_animation = 0
             self.full_sprite.set_clip(pygame.Rect(clipped_rect))
         # return clipped_rect
 
     def _get_frame(self, frame_set, dt):
-        self.step_count += 1
         if self.movespeed != MOVESPEED4:  # geen animatie of geluid bij MOVESPEED4
-            # round(1 / x * STEPSPEED) is om de teller van hoge en lage movespeeds om te draaien
-            # todo, het stappen en geluid gaat nog niet helemaal juist bij lage framerates
-            if self.step_count % round((1 / (self.movespeed * dt)) * STEPSPEED) == 1:
+            self.step_count += self.movespeed * dt
+            if self.step_count > STEPSPEED:
+                self.step_count = 0
                 if self.step_animation == 0:
                     self.audio.play_sound(self.audio.step_left)
                 elif self.step_animation == 2:

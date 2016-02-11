@@ -13,7 +13,7 @@ import screens.loadsave
 import screens.overworld
 import states
 
-
+# todo, er gaat nog wat mis met sidestep als fps te hoog is, oorzaak onduidelijk.
 FPS = 60        # minimaal 15, anders kan hij door bomen lopen
 
 DEBUGKEY = pygame.K_F12
@@ -108,12 +108,16 @@ class GameEngine(object):
                         "last_direction:    {}".format(hero.last_direction),
                         "move_direction:    {}".format(hero.move_direction),
                         "movespeed:         {}".format(hero.movespeed),
+                        "",
                         "old_position.x:    {}".format(hero.old_position[0]),
                         "old_position.y:    {}".format(hero.old_position[1]),
-                        "new_position.x:    {}".format(hero.rect.x),
-                        "new_position.y:    {}".format(hero.rect.y),
+                        "",
+                        "hero.rect.x:       {}".format(hero.rect.x),
+                        "hero.rect.y:       {}".format(hero.rect.y),
+                        "",
                         "true_position.x:   {}".format(hero.true_position[0]),
                         "true_position.y:   {}".format(hero.true_position[1]),
+                        "",
                         "step_count:        {}".format(hero.step_count),
                         "step_animation:    {}".format(hero.step_animation)
                     )
