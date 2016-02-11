@@ -271,13 +271,13 @@ class GameEngine(object):
     def _options_menu_select_sound(self):
         settingview = self.optionsmenu.menu_texts[self.optionsmenu.cur_item]
         if self.audio.sound == 1:
-            self.audio.stop_sound(self.audio.select)
-            settingview.text = settingview.text.replace("On", "Off")
+            self.audio.stop_sound(self.audio.select)    # vanwege de enter knop in menu's speelt hij dit geluid af
+            settingview.text = settingview.text.replace("On", "Off")    # stop hem daarom alsnog.
             self.audio.sound = 0
         else:
             settingview.text = settingview.text.replace("Off", "On")
             self.audio.sound = 1
-            self.audio.play_sound(self.audio.select)
+            self.audio.play_sound(self.audio.select)    # en speel weer een geluid af omdat er geluid is.
         self.audio.write_cfg()
 
     def _options_menu_select_back(self, with_esc=False):

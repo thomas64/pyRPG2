@@ -39,6 +39,8 @@ class Data(object):
         self.party.add(self.heroes['alagos'], verbose=False)
         # self.party.add(self.heroes['alagos'])
         self.party.add(self.heroes['luana'])
+        self.party.add(self.heroes['grindan'])
+        self.party.add(self.heroes['rydalin'])
         # self.party.add(self.heroes['luana'])
         self.party.add(self.heroes['codrif'])
         # self.party.remove(self.heroes['alagos'])

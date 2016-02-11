@@ -124,6 +124,8 @@ class Overworld(object):
 
         elif self.engine.currentstate == states.GameState.PartyScreen:
 
+            self.partyscreen.handle_single_keyboard_input(event)
+
             if event.key == pygame.K_ESCAPE or event.key == pygame.K_i:
                 self._close_party_screen()
 

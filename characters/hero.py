@@ -79,14 +79,14 @@ class Hero(object):
     @property
     def cur_hp(self):
         """
-        ...
+        Current HP bestaat uit deze drie waarden.
         """
         return self.lev.cur + self.sta.cur + self.edu.cur
 
     @property
     def max_hp(self):
         """
-        ...
+        Maximum HP bestaat uit deze drie waarden.
         """
         return self.lev.qty + self.sta.qty + self.edu.qty
 
