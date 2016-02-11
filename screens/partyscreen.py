@@ -72,6 +72,9 @@ class PartyScreen(object):
         self.background bij button.draw()? moet dit niet self.screen zijn? ik snap nog niet de voorwaarden.
         bij de rest heb overal self.screen gedaan, maar blijkbaar kan het ook anders.
         """
+
+        # todo, aparte classen voor de verschillende onderdelen
+
         self.screen.blit(self.background, (0, 0))
 
         for button in self.buttons:

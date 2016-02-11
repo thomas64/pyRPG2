@@ -8,11 +8,9 @@ import pygame
 import audio
 import console
 import data
-import screens.menu
 import screens.menus
 import screens.loadsave
 import screens.overworld
-import statemachine
 import states
 
 
@@ -30,7 +28,7 @@ class GameEngine(object):
     """
     def __init__(self):
         self.screen = pygame.display.get_surface()
-        self.state = statemachine.StateMachine()
+        self.statemachine = states.StateMachine()
         self.data = data.Data()
         self.audio = audio.Audio()
 
@@ -66,7 +64,7 @@ class GameEngine(object):
             self.dt = self.clock.tick(FPS)/1000.0       # limit the redraw speed to 60 frames per second
             self.playtime += self.dt
 
-            self.currentstate = self.state.peek()
+            self.currentstate = self.statemachine.peek()
             self.handle_view()
             self.handle_multi_input()
             for event in pygame.event.get():
@@ -82,30 +80,42 @@ class GameEngine(object):
         def _show_debug():
             if self.show_debug:
                 text = (
-                    "FPS:              {:.2f}".format(self.clock.get_fps()),
-                    "dt:               {:.3f}".format(self.dt),
-                    "playtime:         {:.2f}".format(self.playtime)
+                    "FPS:               {:.2f}".format(self.clock.get_fps()),
+                    "dt:                {:.3f}".format(self.dt),
+                    "playtime:          {:.2f}".format(self.playtime),
+                    "",
+                    "currenstate:       {}".format(self.currentstate),
+                    "mainmenu:          {}".format(self.mainmenu),
+                    "pausemenu:         {}".format(self.pausemenu),
+                    "optionsmenu:       {}".format(self.optionsmenu),
+                    "loadsave:          {}".format(self.loadsave),
+                    "overworld:         {}".format(self.overworld),
+                    "scr_capt:          {}".format(self.scr_capt),
+                    "mouse_input:       {}".format(self.mouse_input)
                 )
                 try:
                     hero = self.overworld.window.hero
                     text2 = (
-                        "zoom:             {:.1f}".format(self.overworld.window.map1.map_layer.zoom),
-                        "time_up:          {}".format(hero.time_up),
-                        "time_down:        {}".format(hero.time_down),
-                        "time_left:        {}".format(hero.time_left),
-                        "time_right:       {}".format(hero.time_right),
-                        "time_delay:       {}".format(hero.time_delay),
-                        "last_direction:   {}".format(hero.last_direction),
-                        "move_direction:   {}".format(hero.move_direction),
-                        "movespeed:        {}".format(hero.movespeed),
-                        "old_position.x:   {}".format(hero.old_position[0]),
-                        "old_position.y:   {}".format(hero.old_position[1]),
-                        "new_position.x:   {}".format(hero.rect.x),
-                        "new_position.y:   {}".format(hero.rect.y),
-                        "true_position.x:  {}".format(hero.true_position[0]),
-                        "true_position.y:  {}".format(hero.true_position[1]),
-                        "step_count:       {}".format(hero.step_count),
-                        "step_animation:   {}".format(hero.step_animation)
+                        "",
+                        "partyscreen:       {}".format(self.overworld.partyscreen),
+                        "",
+                        "zoom:              {:.1f}".format(self.overworld.window.map1.map_layer.zoom),
+                        "time_up:           {}".format(hero.time_up),
+                        "time_down:         {}".format(hero.time_down),
+                        "time_left:         {}".format(hero.time_left),
+                        "time_right:        {}".format(hero.time_right),
+                        "time_delay:        {}".format(hero.time_delay),
+                        "last_direction:    {}".format(hero.last_direction),
+                        "move_direction:    {}".format(hero.move_direction),
+                        "movespeed:         {}".format(hero.movespeed),
+                        "old_position.x:    {}".format(hero.old_position[0]),
+                        "old_position.y:    {}".format(hero.old_position[1]),
+                        "new_position.x:    {}".format(hero.rect.x),
+                        "new_position.y:    {}".format(hero.rect.y),
+                        "true_position.x:   {}".format(hero.true_position[0]),
+                        "true_position.y:   {}".format(hero.true_position[1]),
+                        "step_count:        {}".format(hero.step_count),
+                        "step_animation:    {}".format(hero.step_animation)
                     )
                     text += text2
                 except AttributeError:
@@ -181,34 +191,37 @@ class GameEngine(object):
     def _handle_menu_input(self, full_event):
 
         if self.currentstate == states.GameState.MainMenu:
+            menu_keys = screens.menus.MainMenu()
             menu_choice = self.mainmenu.handle_single_input(full_event)
-            if menu_choice == screens.menus.Main().NewGame:
+            if menu_choice == menu_keys.NewGame:
                 self._main_menu_select_new_game()
-            elif menu_choice == screens.menus.Main().LoadGame:
+            elif menu_choice == menu_keys.LoadGame:
                 self._main_menu_select_load_game()
-            elif menu_choice == screens.menus.Main().Options:
+            elif menu_choice == menu_keys.Options:
                 self._main_menu_select_options()
-            elif menu_choice == screens.menus.Main().ExitGame:
+            elif menu_choice == menu_keys.ExitGame:
                 self._main_menu_select_exit_game()
             return
 
         elif self.currentstate == states.GameState.OptionsMenu:
+            menu_keys = screens.menus.OptionsMenu()
             menu_choice = self.optionsmenu.handle_single_input(full_event)
-            if menu_choice == screens.menus.Options().Music:
+            if menu_choice == menu_keys.Music:                             # .Music geeft de key "Music"
                 self._options_menu_select_music()
-            elif menu_choice == screens.menus.Options().Sound:
+            elif menu_choice == menu_keys.Sound:
                 self._options_menu_select_sound()
-            elif menu_choice == screens.menus.Options().Back:
+            elif menu_choice == menu_keys.Back:
                 self._options_menu_select_back()
             return
 
         elif self.currentstate == states.GameState.PauseMenu:
+            menu_keys = screens.menus.PauseMenu()
             menu_choice = self.pausemenu.handle_single_input(full_event)
-            if menu_choice == screens.menus.Pause().ContinueGame:
+            if menu_choice == menu_keys.ContinueGame:
                 self._pause_menu_select_continue()
-            elif menu_choice == screens.menus.Pause().SaveGame:
+            elif menu_choice == menu_keys.SaveGame:
                 self._pause_menu_select_save_game()
-            elif menu_choice == screens.menus.Pause().MainMenu:
+            elif menu_choice == menu_keys.MainMenu:
                 self._pause_menu_select_main_menu()
             return
 
@@ -216,15 +229,16 @@ class GameEngine(object):
         self.pausemenu = None
         self.scr_capt = None
         self.overworld = None
-        self.state.clear()
-        self.state.push(states.GameState.MainMenu)
-        self.mainmenu = screens.menu.GameMenu(self.screen, self.audio, screens.menus.Main(), True)
+        self.statemachine.clear()
+        self.statemachine.push(states.GameState.MainMenu)
+        menu_items = screens.menus.MainMenu()
+        self.mainmenu = screens.menus.GameMenu(self.screen, self.audio, menu_items, True)
         self.audio.play_music(self.audio.mainmenu)
 
     def _main_menu_select_new_game(self):
         self.mainmenu = None
-        self.state.pop(self.currentstate)
-        self.state.push(states.GameState.Overworld)
+        self.statemachine.pop(self.currentstate)
+        self.statemachine.push(states.GameState.Overworld)
         self.overworld = screens.overworld.Overworld(self)
         self.audio.play_music(self.audio.overworld)
 
@@ -236,8 +250,8 @@ class GameEngine(object):
         else:                                                                   # geef dan data mee aan de overworld
             self.audio.play_sound(self.audio.select)
             self.mainmenu = None
-            self.state.pop(self.currentstate)
-            self.state.push(states.GameState.Overworld)
+            self.statemachine.pop(self.currentstate)
+            self.statemachine.push(states.GameState.Overworld)
             self.audio.play_music(self.audio.overworld)
         pygame.event.clear()
         self.loadsave = None
@@ -252,21 +266,21 @@ class GameEngine(object):
         self.running = False
 
     def _show_options_menu(self):
-        self.state.push(states.GameState.OptionsMenu)
-        menu_items = screens.menus.Options(self.audio.music, self.audio.sound)  # hier worden de options geschreven
-        self.optionsmenu = screens.menu.GameMenu(self.screen, self.audio, menu_items, True)
+        self.statemachine.push(states.GameState.OptionsMenu)
+        menu_items = screens.menus.OptionsMenu(self.audio.music, self.audio.sound)  # hier worden de weergave van
+        self.optionsmenu = screens.menus.GameMenu(self.screen, self.audio, menu_items, True)    # options gekozen
 
     def _options_menu_select_music(self):
-        settingview = self.optionsmenu.menu_texts[self.optionsmenu.cur_item]        # hier wordt de visualisatie
+        settingview = self.optionsmenu.menu_texts[self.optionsmenu.cur_item]        # hier wordt de weergave
         if self.audio.music == 1:
             settingview.text = settingview.text.replace("On", "Off")                # later aangepast
-            self.audio.music = 0
+            self.audio.music = 0                                                    # en de instelling zelf aangepast
             self.audio.stop_music()
         else:
             settingview.text = settingview.text.replace("Off", "On")
             self.audio.music = 1
             self.audio.play_music(self.audio.mainmenu)
-        self.audio.write_cfg()
+        self.audio.write_cfg()                                                      # en weggeschreven
 
     def _options_menu_select_sound(self):
         settingview = self.optionsmenu.menu_texts[self.optionsmenu.cur_item]
@@ -283,7 +297,7 @@ class GameEngine(object):
     def _options_menu_select_back(self, with_esc=False):
         if with_esc:
             self.audio.play_sound(self.audio.select)
-        self.state.pop(self.currentstate)
+        self.statemachine.pop(self.currentstate)
         self.optionsmenu = None
 
     def _show_pause_menu(self):
@@ -291,13 +305,14 @@ class GameEngine(object):
         self.audio.fade_music()
         scr_data = pygame.image.tostring(self.screen, 'RGBA')   # maak een screen capture
         self.scr_capt = pygame.image.frombuffer(scr_data, self.screen.get_size(), 'RGBA')
-        self.state.push(states.GameState.PauseMenu)
-        self.pausemenu = screens.menu.GameMenu(self.screen, self.audio, screens.menus.Pause(), False)
+        self.statemachine.push(states.GameState.PauseMenu)
+        menu_items = screens.menus.PauseMenu()
+        self.pausemenu = screens.menus.GameMenu(self.screen, self.audio, menu_items, False)
 
     def _pause_menu_select_continue(self, with_esc=False):
         if with_esc:
             self.audio.play_sound(self.audio.select)            # omdat escape in menu standaard geen geluid geeft
-        self.state.pop(self.currentstate)
+        self.statemachine.pop(self.currentstate)
         self.pausemenu = None
         self.scr_capt = None
         self.audio.play_music(self.audio.overworld)

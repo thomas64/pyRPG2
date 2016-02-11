@@ -23,7 +23,7 @@ WATERCOLOR = pygame.Color("purple")
 ZOOMSPEED = .1
 MAXZOOM = 3.1
 DEFZOOM = 1.0
-MINZOOM = 1.5
+MINZOOM = .5
 
 # todo, mooiere map maken met variatie in het gras
 OVERWORLDPATH = 'resources/maps/start_forest.tmx'
