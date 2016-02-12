@@ -24,6 +24,9 @@ HPCOLORNORM = pygame.Color("yellow")
 HPCOLORLOW = pygame.Color("orange")
 HPCOLORCRIT = pygame.Color("red")
 
+POSCOLOR = pygame.Color("green")
+NEGCOLOR = pygame.Color("red")
+
 
 class PartyScreen(object):
     """
@@ -286,13 +289,13 @@ class StatsBox(object):
 
         col3 = ("",
                 "",
+                "3",
                 "",
                 "",
+                "5",
                 "",
                 "",
-                "",
-                "",
-                "",
+                "-8",
                 "",
                 "",
                 str(hero.int.ext),
@@ -317,7 +320,20 @@ class StatsBox(object):
             self.col2.append(self.normalfont.render(line, True, FONTCOLOR))
         self.col3 = []
         for line in col3:
-            self.col3.append(self.normalfont.render(line, True, FONTCOLOR))
+            try:
+                line = int(line)
+                if line == 0:
+                    line = ""
+                    self.col3.append(self.normalfont.render(line, True, FONTCOLOR))
+                elif line > 0:
+                    line = "(+"+str(line)+")"
+                    self.col3.append(self.normalfont.render(line, True, POSCOLOR))
+                elif line < 0:
+                    line = "("+str(line)+")"
+                    self.col3.append(self.normalfont.render(line, True, NEGCOLOR))
+            except (TypeError, ValueError):
+                line = ""
+                self.col3.append(self.normalfont.render(line, True, FONTCOLOR))
 
     def draw(self, screen, hero):
         """
