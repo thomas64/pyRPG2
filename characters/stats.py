@@ -40,7 +40,7 @@ class Level(Stat):
     def next(self, totalxp):
         """
         Dit betreft een formule van Anton, en verbeterd door Wolframe.
-        :param totalxp:
+        :param totalxp: dit is experience.tot
         """
         if self.qty >= self.MAX:
             return 1
@@ -50,7 +50,7 @@ class Level(Stat):
 
 class Experience(object):
     """
-    ...
+    Erft niet van Stat.
     """
     def __init__(self, total):
         self.tot = total

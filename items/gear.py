@@ -87,7 +87,7 @@ class GearItem(object):
 
         try:
             # noinspection PyUnresolvedReferences
-            self.RAW = self.NAM.strip().lower().replace(" ", "")
+            self.RAW = self.NAM.strip().lower().replace(" ", "")        # als er een NAM is, geef hem een RAW
         except AttributeError:
             pass
         try:

@@ -90,6 +90,64 @@ class Hero(object):
         """
         return self.lev.qty + self.sta.qty + self.edu.qty
 
+    @property
+    def tot_wht(self):
+        """
+        Loop door alle attributen van de hero heen en return een WHT waarde als hij die kan vinden, anders +0.
+        :return: Tel die op en return de totale weight.
+        """
+        total = 0
+        for equipment_item in self.__dict__.values():
+            total += getattr(equipment_item, 'WHT', 0)
+        return total
+
+    @property
+    def sta_mvp(self):
+        """
+        :return: Iedereen krijgt 5 mvp + je variable stamina waarde / 10.
+        """
+        return 5 + round(self.sta.cur / 10)
+
+    @property
+    def tot_prt(self):
+        """
+        :return: zie: def tot_wht()
+        """
+        total = 0
+        for equipment_item in self.__dict__.values():
+            total += getattr(equipment_item, 'PRT', 0)
+        return total
+
+    @property
+    def tot_des(self):
+        """
+        :return: zie: def tot_wht()
+        """
+        total = 0
+        for equipment_item in self.__dict__.values():
+            total += getattr(equipment_item, 'DES', 0)
+        return total
+
+    @property
+    def tot_hit(self):
+        """
+        :return: zie: def tot_wht()
+        """
+        total = 0
+        for equipment_item in self.__dict__.values():
+            total += getattr(equipment_item, 'HIT', 0)
+        return total
+
+    @property
+    def tot_dam(self):
+        """
+        :return: zie: def tot_wht()
+        """
+        total = 0
+        for equipment_item in self.__dict__.values():
+            total += getattr(equipment_item, 'DAM', 0)
+        return total
+
 
 class HeroData(enum.Enum):
     """

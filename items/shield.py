@@ -78,7 +78,7 @@ class ShieldsDataClass(items.gear.GearDataClass):
                         prt=material_value[2] + type_value[2],
 
                         # berekening defense: material + type
-                        des=material_value[3] + type_value[3],
+                        des=material_value[3] + type_value[3],  # 'def' kon niet, dus maar des gedaan.
 
                         # berekening dexterity: material + type + upgraded
                         dex=material_value[4] + type_value[4] + upgraded_value[4],

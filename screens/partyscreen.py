@@ -257,9 +257,34 @@ class StatsBox(object):
                 "Endurance :",
                 "Strength :",
                 "Stamina :")
+
+        if hero.lev.qty >= hero.lev.MAX:
+            hero_exp_tot = "Max"
+            hero_lev_next = "Max"
+        else:
+            hero_exp_tot = str(hero.exp.tot)
+            hero_lev_next = str(hero.lev.next(hero.exp.tot))
+
         col2 = (str(hero.exp.rem),
-                str(hero.exp.tot),
-                str(hero.lev.next(hero.exp.tot)),
+                str(hero_exp_tot),
+                str(hero_lev_next),
+                "",
+                str(hero.tot_wht),
+                str(hero.sta_mvp),
+                str(hero.tot_prt),
+                str(hero.tot_des),
+                str(hero.tot_hit)+" %",
+                str(hero.tot_dam),
+                "",
+                str(hero.int.qty),
+                str(hero.wil.qty),
+                str(hero.dex.qty),
+                str(hero.agi.qty),
+                str(hero.edu.qty),
+                str(hero.str.qty),
+                str(hero.sta.qty))
+
+        col3 = ("",
                 "",
                 "",
                 "",
@@ -270,9 +295,19 @@ class StatsBox(object):
                 "",
                 "",
                 "",
-                "",
-                "",
-                "")
+                str(hero.int.ext),
+                str(hero.wil.ext),
+                str(hero.dex.ext),
+                str(hero.agi.ext),
+                str(hero.edu.ext),
+                str(hero.str.ext),
+                str(hero.sta.ext))
+
+        # todo, ik moet wat verzinnen voor deze ext. in het oude spel worden die gezet bij _set_stats. op dit moment
+        # denk ik dat ik wil dat dynamisch geladen worden zoals weight oid. maar ik wil het eigenlijk in de stats
+        # class zelf, maar ik heb dat nog niet uitgezocht of dat echt wel logisch zal zijn.
+        # ten tweede, vanwege de kleurtjes van de verschillende items, en de klikbaarheid kan het waarschijnlijk toch
+        # niet zo makkelijk in kolommen zoals nu. :(
 
         self.col1 = []
         for line in col1:
@@ -280,6 +315,9 @@ class StatsBox(object):
         self.col2 = []
         for line in col2:
             self.col2.append(self.normalfont.render(line, True, FONTCOLOR))
+        self.col3 = []
+        for line in col3:
+            self.col3.append(self.normalfont.render(line, True, FONTCOLOR))
 
     def draw(self, screen, hero):
         """
@@ -297,5 +335,7 @@ class StatsBox(object):
             self.surface.blit(text, (50, 60 + line * 22))
         for line, text in enumerate(self.col2):
             self.surface.blit(text, (160, 60 + line * 22))
+        for line, text in enumerate(self.col3):
+            self.surface.blit(text, (200, 60 + line * 22))
 
         screen.blit(self.surface, self.rect.topleft)
