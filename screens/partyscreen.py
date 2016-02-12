@@ -27,7 +27,7 @@ HPCOLORCRIT = pygame.Color("red")
 
 class PartyScreen(object):
     """
-    ...
+    Overzicht scherm PartyScreen.
     """
     def __init__(self, data, screen):
         self.screen = screen
@@ -58,7 +58,7 @@ class PartyScreen(object):
     def _init_boxes(self):
         self.hero_boxes = []
         for index, hero in enumerate(self.party):
-            self.hero_boxes.append(HeroBox((10 + index * 260, 10), hero))
+            self.hero_boxes.append(HeroBox((10 + index * 260, 10), index, hero))
 
         pygame.draw.rect(self.background, LINECOLOR, (10,   120, 405, 500), 1)
         pygame.draw.rect(self.background, LINECOLOR, (425,  120, 315, 670), 1)
@@ -67,18 +67,18 @@ class PartyScreen(object):
 
     def handle_view(self):
         """
-        ...
+        screen -> achtergond -> knoppen -> heroboxes -> verder
         """
         self.screen.blit(self.background, (0, 0))
 
         for button in self.buttons:
-            button.draw(self.background, self.key_input)
-
-        cur_hero = self.party[self.hc]
+            button.draw(self.screen, self.key_input)
 
         for hero_box in self.hero_boxes:
-            hero_box.draw(self.background)
-            hero_box.select(cur_hero)
+            hero_box.select(self.hc)
+            hero_box.draw(self.screen)
+
+        cur_hero = self.party[self.hc]
 
         name2 = self.largefont.render(cur_hero.NAM, True, FONTCOLOR)
         name2_rect = self.screen.blit(name2, (300, 300))
@@ -100,6 +100,9 @@ class PartyScreen(object):
         :param event: pygame.MOUSEBUTTONDOWN uit engine.py
         """
         if event.button == 1:
+            for hero_box in self.hero_boxes:
+                self.hc = hero_box.single_click(event, self.hc)
+
             for button in self.buttons:
                 button_press = button.single_click(event)
                 if button_press == pygame.K_ESCAPE:
@@ -137,11 +140,10 @@ class PartyScreen(object):
 
 class HeroBox(object):
     """
-    ...
+    Alle weergegeven informatie in een hero boxje in het partyscherm.
     """
-    def __init__(self, position, hero):
+    def __init__(self, position, hc, hero):
         self.surface = pygame.Surface((250, 98))
-        self.surface.fill(BACKGROUNDCOLOR)
         self.surface = self.surface.convert()
         self.rect = self.surface.get_rect()
         self.rect.topleft = position
@@ -150,18 +152,19 @@ class HeroBox(object):
         self.background.fill(BACKGROUNDCOLOR)
         self.background = self.background.convert()
 
+        self.largefont = pygame.font.SysFont(FONT, LARGEFONTSIZE)
+        self.normalfont = pygame.font.SysFont(FONT, NORMALFONTSIZE)
+
+        self.hc = hc
         self.hero = hero
 
     def _update(self):
-        largefont = pygame.font.SysFont(FONT, LARGEFONTSIZE)
-        normalfont = pygame.font.SysFont(FONT, NORMALFONTSIZE)
-
         self.face = pygame.image.load(self.hero.FAC)
-        self.name = largefont.render(self.hero.NAM, True, FONTCOLOR)
-        self.level = normalfont.render("Level: {:12}".format(self.hero.lev.qty), True, FONTCOLOR)
-        self.hitpoints = normalfont.render(
+        self.name = self.largefont.render(self.hero.NAM, True, FONTCOLOR)
+        self.level = self.normalfont.render("Level: {:12}".format(self.hero.lev.qty), True, FONTCOLOR)
+        self.hitpoints = self.normalfont.render(
                                 "HitPoints: {:5}{} {}".format(self.hero.cur_hp, "/", self.hero.max_hp), True, FONTCOLOR)
-        # health bars ##########
+        # health bars #
         self.full_hp = 135
         self.curr_hp = (self.full_hp / self.hero.max_hp) * self.hero.cur_hp
         self.color = HPCOLORFULL
@@ -173,12 +176,12 @@ class HeroBox(object):
             self.color = HPCOLORCRIT
         if self.hero.edu.cur < self.hero.edu.qty and self.hero.sta.cur > 0:
             self.color = HPCOLORLOW
-        ########################
+        # ----------- #
 
     def draw(self, screen):
         """
-        ...
-        :param screen:
+        Update eerst de data, en teken dan al die data op de surface en die op de screen.
+        :param screen: self.screen van partyscreen
         """
         self._update()
 
@@ -193,12 +196,23 @@ class HeroBox(object):
 
         screen.blit(self.surface, self.rect.topleft)
 
-    def select(self, hero):
+    def select(self, cur_hc):
         """
-        ...
-        :param hero:
+        Als het de geselecteerde hero_box is pas dan de achtergrondkleur aan.
+        :param cur_hc: het huidige party hero nummer
         """
-        if hero == self.hero:
+        if cur_hc == self.hc:
             self.background.fill(HEROCOLOR)
         else:
             self.background.fill(BACKGROUNDCOLOR)
+
+    def single_click(self, event, cur_hc):
+        """
+        Ontvang mouse event. Kijk of het met de de surface collide.
+        :param event: pygame.MOUSEBUTTONDOWN uit engine.py
+        :param cur_hc: het huidige party hero nummer
+        :return: het volgorde nummer van de hero van de party, of gewoon het oude huidige nummer
+        """
+        if self.rect.collidepoint(event.pos):
+            return self.hc
+        return cur_hc
