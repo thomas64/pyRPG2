@@ -60,7 +60,7 @@ class PartyScreen(object):
         for index, hero in enumerate(self.party):
             self.hero_boxes.append(HeroBox((10 + index * 260, 10), index, hero))
 
-        pygame.draw.rect(self.background, LINECOLOR, (10,   120, 405, 500), 1)
+        self.stats_box = StatsBox((10, 120))
         pygame.draw.rect(self.background, LINECOLOR, (425,  120, 315, 670), 1)
         pygame.draw.rect(self.background, LINECOLOR, (750,  120, 315, 670), 1)
         pygame.draw.rect(self.background, LINECOLOR, (1075, 120, 315, 670), 1)
@@ -80,8 +80,10 @@ class PartyScreen(object):
 
         cur_hero = self.party[self.hc]
 
+        self.stats_box.draw(self.screen, cur_hero)
+
         name2 = self.largefont.render(cur_hero.NAM, True, FONTCOLOR)
-        name2_rect = self.screen.blit(name2, (300, 300))
+        name2_rect = self.screen.blit(name2, (500, 300))
 
     def handle_multi_input(self, key_input, mouse_pos):
         """
@@ -148,7 +150,7 @@ class HeroBox(object):
         self.rect = self.surface.get_rect()
         self.rect.topleft = position
 
-        self.background = pygame.Surface((250, 98))
+        self.background = pygame.Surface(self.surface.get_size())
         self.background.fill(BACKGROUNDCOLOR)
         self.background = self.background.convert()
 
@@ -186,7 +188,7 @@ class HeroBox(object):
         self._update()
 
         self.surface.blit(self.background, (0, 0))
-        pygame.draw.rect(self.surface, LINECOLOR, (0, 0, 250, 98), 1)
+        pygame.draw.rect(self.surface, LINECOLOR, self.surface.get_rect(), 1)
         self.surface.blit(self.face, (1, 1))
         self.surface.blit(self.name, (111, 4))
         self.surface.blit(self.level, (111, 36))
@@ -216,3 +218,84 @@ class HeroBox(object):
         if self.rect.collidepoint(event.pos):
             return self.hc
         return cur_hc
+
+
+class StatsBox(object):
+    """
+    ...
+    """
+    def __init__(self, position):
+        self.surface = pygame.Surface((405, 500))
+        self.surface = self.surface.convert()
+        self.rect = self.surface.get_rect()
+        self.rect.topleft = position
+
+        self.background = pygame.Surface(self.surface.get_size())
+        self.background.fill(BACKGROUNDCOLOR)
+        self.background = self.background.convert()
+
+        self.largefont = pygame.font.SysFont(FONT, LARGEFONTSIZE)
+        self.normalfont = pygame.font.SysFont(FONT, NORMALFONTSIZE)
+
+    def _update(self, hero):
+        self.title = self.largefont.render("Stats", True, FONTCOLOR)
+        col1 = ("XP Remaining :",
+                "Total XP :",
+                "Next Level :",
+                "",
+                "Weight :",
+                "Movepoints :",
+                "Protection :",
+                "Defense :",
+                "Base Hit :",
+                "Damage :",
+                "",
+                "Intelligence :",
+                "Willpower :",
+                "Dexterity :",
+                "Agility :",
+                "Endurance :",
+                "Strength :",
+                "Stamina :")
+        col2 = (str(hero.exp.rem),
+                str(hero.exp.tot),
+                str(hero.lev.next(hero.exp.tot)),
+                "",
+                "",
+                "",
+                "",
+                "",
+                "",
+                "",
+                "",
+                "",
+                "",
+                "",
+                "",
+                "")
+
+        self.col1 = []
+        for line in col1:
+            self.col1.append(self.normalfont.render(line, True, FONTCOLOR))
+        self.col2 = []
+        for line in col2:
+            self.col2.append(self.normalfont.render(line, True, FONTCOLOR))
+
+    def draw(self, screen, hero):
+        """
+        ...
+        :param hero:
+        :param screen:
+        """
+        self._update(hero)
+
+        self.surface.blit(self.background, (0, 0))
+        pygame.draw.rect(self.background, LINECOLOR, self.surface.get_rect(), 1)
+
+        self.surface.blit(self.title, (7, 1))
+        for line, text in enumerate(self.col1):
+            self.surface.blit(text, (50, 60 + line * 22))
+        for line, text in enumerate(self.col2):
+            self.surface.blit(text, (160, 60 + line * 22))
+
+        screen.blit(self.surface, self.rect.topleft)
