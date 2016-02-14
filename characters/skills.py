@@ -169,6 +169,7 @@ class Warrior(Skill):
         """
         if self.positive_quantity():  # and "empty" not in wpn.RAW:     RAW bestaat niet meer, en empty is return 0 oid.
             return round((47 - ((wpn.HIT / 10) * 5)) * (self.tot / 10))
+        return 0
 
 
 class Wizard(Skill):

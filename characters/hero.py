@@ -43,6 +43,7 @@ class Hero(object):
         self.edu = characters.stats.Endurance(kwargs['edu'])
         self.str = characters.stats.Strength(kwargs['str'])
         self.sta = characters.stats.Stamina(kwargs['sta'])
+        self.stats_tuple = (self.int, self.wil, self.dex, self.agi, self.edu, self.str, self.sta)
 
         self.alc = characters.skills.Alchemist(kwargs['alc'])
         self.dip = characters.skills.Diplomat(kwargs['dip'])
@@ -62,8 +63,10 @@ class Hero(object):
         self.shd = characters.skills.Shield(kwargs['shd'])
         self.swd = characters.skills.Sword(kwargs['swd'])
         self.thr = characters.skills.Thrown(kwargs['thr'])
+        self.skills_tuple = (self.alc, self.dip, self.hlr, self.lor, self.mec, self.mer, self.ran, self.stl, self.thf,
+                             self.trb, self.war, self.wiz, self.haf, self.mis, self.pol, self.shd, self.swd, self.thr)
 
-        self.swd = items.weapon.WeaponsData.factory(kwargs['wpn'])
+        self.wpn = items.weapon.WeaponsData.factory(kwargs['wpn'])
         self.sld = items.shield.ShieldsData.factory(kwargs['sld'])
         self.hlm = items.helmet.HelmetsData.factory(None)
         self.amu = items.amulet.AmuletsData.factory(None)
@@ -75,6 +78,8 @@ class Hero(object):
         self.blt = items.belt.BeltsData.factory(None)
         self.bts = items.boots.BootsData.factory(None)
         self.acy = items.accessory.AccessoriesData.factory(None)
+        self.equipment_tuple = (self.wpn, self.sld, self.hlm, self.amu, self.arm, self.clk,
+                                self.glv, self.lrg, self.rrg, self.blt, self.bts, self.acy)
 
     @property
     def cur_hp(self):
@@ -97,7 +102,7 @@ class Hero(object):
         :return: Tel die op en return de totale weight.
         """
         total = 0
-        for equipment_item in self.__dict__.values():
+        for equipment_item in self.equipment_tuple:
             total += getattr(equipment_item, 'WHT', 0)
         return total
 
@@ -114,7 +119,7 @@ class Hero(object):
         :return: zie: def tot_wht()
         """
         total = 0
-        for equipment_item in self.__dict__.values():
+        for equipment_item in self.equipment_tuple:
             total += getattr(equipment_item, 'PRT', 0)
         return total
 
@@ -124,7 +129,7 @@ class Hero(object):
         :return: zie: def tot_wht()
         """
         total = 0
-        for equipment_item in self.__dict__.values():
+        for equipment_item in self.equipment_tuple:
             total += getattr(equipment_item, 'DES', 0)
         return total
 
@@ -134,7 +139,7 @@ class Hero(object):
         :return: zie: def tot_wht()
         """
         total = 0
-        for equipment_item in self.__dict__.values():
+        for equipment_item in self.equipment_tuple:
             total += getattr(equipment_item, 'HIT', 0)
         return total
 
@@ -144,9 +149,29 @@ class Hero(object):
         :return: zie: def tot_wht()
         """
         total = 0
-        for equipment_item in self.__dict__.values():
+        for equipment_item in self.equipment_tuple:
             total += getattr(equipment_item, 'DAM', 0)
         return total
+
+    def calc_stats(self):
+        """
+        Hier worden voor de 7 hero stats in alle equipment gekeken en toegevoegd aan extra.
+        En uiteindelijk ook aan total. Dit moet uitgevoerd worden aan het begin van het spel en
+        wanneer een gear van een hero wordt verwisseld.
+        Agility extra wordt op een andere manier gevuld voor een tweede keer, met weight. De eerste keer is
+        soort van nutteloos.
+        """
+        for stat in self.stats_tuple:
+            stat.ext = 0
+            for equipment_item in self.equipment_tuple:
+                stat.ext += getattr(equipment_item, stat.RAW.upper(), 0)
+
+        self.agi.ext = -round(self.tot_wht / 3)
+
+        for stat in self.stats_tuple:
+            stat.tot = stat.qty + stat.ext
+            if stat.tot < 1:  # het origineel uit vb.net is < 0, klopt dat?
+                stat.tot = 1
 
 
 class HeroData(enum.Enum):

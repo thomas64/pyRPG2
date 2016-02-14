@@ -35,6 +35,9 @@ class Data(object):
         self.heroes['codrif'] = characters.hero.HeroData.factory(characters.hero.HeroData.codrif)
         self.heroes['galen'] = characters.hero.HeroData.factory(characters.hero.HeroData.galen)
 
+        for hero in self.heroes.values():
+            hero.calc_stats()
+
         self.party = containers.party.Party()
         self.party.add(self.heroes['alagos'], verbose=False)
         # self.party.add(self.heroes['alagos'])
@@ -45,6 +48,9 @@ class Data(object):
         self.party.add(self.heroes['codrif'])
         # self.party.remove(self.heroes['alagos'])
         # self.party.remove(self.heroes['luana'])
+        self.party.add(self.heroes['grindan'])
+        self.party.add(self.heroes['rydalin'])
+        self.party.add(self.heroes['galen'])
 
         self.inventory = containers.inventory.Inventory()
 

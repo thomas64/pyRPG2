@@ -289,28 +289,24 @@ class StatsBox(object):
 
         col3 = ("",
                 "",
-                "3",
                 "",
                 "",
-                "5",
                 "",
                 "",
-                "-8",
                 "",
                 "",
-                str(hero.int.ext),
-                str(hero.wil.ext),
-                str(hero.dex.ext),
-                str(hero.agi.ext),
-                str(hero.edu.ext),
-                str(hero.str.ext),
-                str(hero.sta.ext))
+                hero.war.bonus(hero.wpn),      # todo, testen hoe dit gaat met hero zonder wapen. bonus() checken.
+                "",
+                "",
+                hero.int.ext,
+                hero.wil.ext,
+                hero.dex.ext,
+                hero.agi.ext,
+                hero.edu.ext,
+                hero.str.ext,
+                hero.sta.ext)
 
-        # todo, ik moet wat verzinnen voor deze ext. in het oude spel worden die gezet bij _set_stats. op dit moment
-        # denk ik dat ik wil dat dynamisch geladen worden zoals weight oid. maar ik wil het eigenlijk in de stats
-        # class zelf, maar ik heb dat nog niet uitgezocht of dat echt wel logisch zal zijn.
-        # ten tweede, vanwege de kleurtjes van de verschillende items, en de klikbaarheid kan het waarschijnlijk toch
-        # niet zo makkelijk in kolommen zoals nu. :(
+        # todo, klikbaar maken van deze kolommen voor ingame uitleg.
 
         self.col1 = []
         for line in col1:
@@ -320,20 +316,25 @@ class StatsBox(object):
             self.col2.append(self.normalfont.render(line, True, FONTCOLOR))
         self.col3 = []
         for line in col3:
-            try:
-                line = int(line)
-                if line == 0:
-                    line = ""
-                    self.col3.append(self.normalfont.render(line, True, FONTCOLOR))
-                elif line > 0:
-                    line = "(+"+str(line)+")"
-                    self.col3.append(self.normalfont.render(line, True, POSCOLOR))
-                elif line < 0:
-                    line = "("+str(line)+")"
-                    self.col3.append(self.normalfont.render(line, True, NEGCOLOR))
-            except (TypeError, ValueError):
-                line = ""
-                self.col3.append(self.normalfont.render(line, True, FONTCOLOR))
+            self._col(line, self.col3)
+
+    def _col(self, value, col):
+        """
+        ...
+        :param value:
+        :param col:
+        """
+        if value == "":
+            value = 0
+        if value == 0:
+            value = ""
+            col.append(self.normalfont.render(value, True, FONTCOLOR))
+        elif value > 0:
+            value = "(+"+str(value)+")"
+            col.append(self.normalfont.render(value, True, POSCOLOR))
+        elif value < 0:
+            value = "("+str(value)+")"
+            col.append(self.normalfont.render(value, True, NEGCOLOR))
 
     def draw(self, screen, hero):
         """
