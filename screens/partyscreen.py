@@ -2,6 +2,8 @@
 """
 class: PartyScreen
 class: HeroBox
+class: InfoBox
+class: StatsBox
 """
 
 import pygame
@@ -51,6 +53,8 @@ class PartyScreen(object):
         self._init_buttons()
         self._init_boxes()
 
+        self.info_label = ""
+
     def _init_buttons(self):
         bg_width = self.background.get_width()
         button_c = screens.sprites.ButtonSprite(80, 30, (bg_width - 90, 10), "Close", pygame.K_ESCAPE)
@@ -64,6 +68,7 @@ class PartyScreen(object):
             self.hero_boxes.append(HeroBox((10 + index * 260, 10), index, hero))
 
         self.stats_box = StatsBox((10, 120))
+        self.info_box = InfoBox((10, 630))
         pygame.draw.rect(self.background, LINECOLOR, (425,  120, 315, 670), 1)
         pygame.draw.rect(self.background, LINECOLOR, (750,  120, 315, 670), 1)
         pygame.draw.rect(self.background, LINECOLOR, (1075, 120, 315, 670), 1)
@@ -84,6 +89,7 @@ class PartyScreen(object):
         cur_hero = self.party[self.hc]
 
         self.stats_box.draw(self.screen, cur_hero)
+        self.info_box.draw(self.screen, self.info_label)
 
         name2 = self.largefont.render(cur_hero.NAM, True, FONTCOLOR)
         name2_rect = self.screen.blit(name2, (500, 300))
@@ -98,6 +104,14 @@ class PartyScreen(object):
 
         for button in self.buttons:
             self.key_input = button.multi_click(mouse_pos, self.key_input)
+
+    def handle_single_mouse_motion(self, event):
+        """
+        Handelt mouse events af.
+        :param event: pygame.MOUSEMOTION uit engine.py
+        """
+        if self.stats_box.rect.collidepoint(event.pos):
+            self.info_label = self.stats_box.mouse_hover(event)
 
     def handle_single_mouse_input(self, event):
         """
@@ -223,10 +237,45 @@ class HeroBox(object):
         return cur_hc
 
 
+class InfoBox(object):
+    """
+    Waar in het partyscreen alle omschrijvingen worden weergegeven.
+    """
+    def __init__(self, position):
+        self.surface = pygame.Surface((405, 160))
+        self.surface = self.surface.convert()
+        self.rect = self.surface.get_rect()
+        self.rect.topleft = position
+
+        self.background = pygame.Surface(self.surface.get_size())
+        self.background.fill(BACKGROUNDCOLOR)
+        self.background = self.background.convert()
+
+        self.largefont = pygame.font.SysFont(FONT, LARGEFONTSIZE)
+        self.normalfont = pygame.font.SysFont(FONT, NORMALFONTSIZE)
+
+    def draw(self, screen, text):
+        """
+        Teken het label bovenop de achtergrond.
+        :param screen: self.screen van partyscreen
+        :param text: de tekst om weer te geven
+        """
+        self.surface.blit(self.background, (0, 0))
+        label = self.normalfont.render(text, True, FONTCOLOR)
+        self.surface.blit(label, (10, 10))
+        screen.blit(self.surface, self.rect.topleft)
+
+
 class StatsBox(object):
     """
-    ...
+    Alle weergegeven informatie van alle stats van een hero.
     """
+    COLSY = 60
+    COL1X = 50
+    COL2X = 160
+    COL3X = 200
+    LINEH = 22
+
     def __init__(self, position):
         self.surface = pygame.Surface((405, 500))
         self.surface = self.surface.convert()
@@ -306,23 +355,25 @@ class StatsBox(object):
                 hero.str.ext,
                 hero.sta.ext)
 
-        # todo, klikbaar maken van deze kolommen voor ingame uitleg.
-
+        self.col1_rects = []    # extra lijst met tuples van rects en text erin.
         self.col1 = []
-        for line in col1:
-            self.col1.append(self.normalfont.render(line, True, FONTCOLOR))
+        for line, text in enumerate(col1):
+            self.col1.append(self.normalfont.render(text, True, FONTCOLOR))  # eerst de render aan zijn lijst.
+            rect = self.normalfont.render(text, True, FONTCOLOR).get_rect()  # maak ook nog een rect aan van de render
+            rect.topleft = self.rect.left + self.COL1X, (self.rect.top + self.COLSY) + line * self.LINEH  # positioneer
+            self.col1_rects.append((rect, text))                           # die rect en voeg hem toe aan de rect lijst
         self.col2 = []
         for line in col2:
             self.col2.append(self.normalfont.render(line, True, FONTCOLOR))
         self.col3 = []
         for line in col3:
-            self._col(line, self.col3)
+            self._line(line, self.col3)
 
-    def _col(self, value, col):
+    def _line(self, value, col):
         """
-        ...
-        :param value:
-        :param col:
+        Geef een regel in een kolom een bepaalde format en kleur mee aan de hand van de waarde.
+        :param value: dit is een van die waarden
+        :param col: in welke kolom de regel zich bevind
         """
         if value == "":
             value = 0
@@ -338,9 +389,9 @@ class StatsBox(object):
 
     def draw(self, screen, hero):
         """
-        ...
-        :param hero:
-        :param screen:
+        Update eerst de data, en teken dan al die data op de surface en die op de screen.
+        :param screen: self.screen van partyscreen
+        :param hero: de huidige geselecteerde hero
         """
         self._update(hero)
 
@@ -349,10 +400,20 @@ class StatsBox(object):
 
         self.surface.blit(self.title, (7, 1))
         for line, text in enumerate(self.col1):
-            self.surface.blit(text, (50, 60 + line * 22))
+            self.surface.blit(text, (self.COL1X, self.COLSY + line * self.LINEH))
         for line, text in enumerate(self.col2):
-            self.surface.blit(text, (160, 60 + line * 22))
+            self.surface.blit(text, (self.COL2X, self.COLSY + line * self.LINEH))
         for line, text in enumerate(self.col3):
-            self.surface.blit(text, (200, 60 + line * 22))
+            self.surface.blit(text, (self.COL3X, self.COLSY + line * self.LINEH))
 
         screen.blit(self.surface, self.rect.topleft)
+
+    def mouse_hover(self, event):
+        """
+        Als de muis over een item in kolom 1 gaat. rect[0] is de rect.
+        :param event: pygame.MOUSEMOTION uit engine.py
+        :return: rect[1] is de text
+        """
+        for rect in self.col1_rects:
+            if rect[0].collidepoint(event.pos):
+                return rect[1]

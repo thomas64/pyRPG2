@@ -165,6 +165,11 @@ class GameEngine(object):
                self.currentstate == states.GameState.PartyScreen:
                 self.overworld.handle_single_mouse_input(event)
 
+        if event.type == pygame.MOUSEMOTION:
+            if self.currentstate == states.GameState.PartyScreen:
+                if self.overworld.partyscreen is not None:  # onverklaarbaar, anders kun je niet al muisbewegend, het
+                    self.overworld.partyscreen.handle_single_mouse_motion(event)  # partyscreen verlaten.
+
         if event.type == pygame.KEYDOWN:
             console.keyboard_down(event.key, event.unicode)
 
