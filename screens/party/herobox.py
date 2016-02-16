@@ -7,7 +7,7 @@ import pygame
 
 BACKGROUNDCOLOR = pygame.Color("black")
 LINECOLOR = pygame.Color("white")
-HEROCOLOR = pygame.Color("gray38")
+HEROCOLOR = pygame.Color("gray24")
 
 FONTCOLOR = pygame.Color("white")
 FONT = 'impact'

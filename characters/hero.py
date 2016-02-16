@@ -116,6 +116,24 @@ class Hero(object):
         return 5 + round(self.sta.cur / 10)
 
     @property
+    def tot_mvp(self):
+        """
+        Totale movepoints.
+        :return: movepoints die je krijgt door je stamina min het gewicht dat je draagt.
+        """
+        total = self.sta_mvp - round(self.tot_wht / 2)
+        if total < 1:
+            return 1
+        return total
+
+    @property
+    def dif_mvp(self):
+        """
+        Waarschijnlijk alleen voor visuele partyscreen weergave. Totale - stamina mvp
+        """
+        return self.tot_mvp - self.sta_mvp
+
+    @property
     def prt(self):
         """
         Totale protection min shield protection

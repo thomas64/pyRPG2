@@ -8,8 +8,9 @@ import pygame
 BACKGROUNDCOLOR = pygame.Color("black")
 
 FONTCOLOR = pygame.Color("white")
-FONT = 'impact'
-FONTSIZE = 15
+FONT = 'arial'
+FONTSIZE = 14
+LINEHEIGHT = 20
 
 
 class InfoBox(object):
@@ -35,6 +36,11 @@ class InfoBox(object):
         :param text: de tekst om weer te geven
         """
         self.surface.blit(self.background, (0, 0))
-        label = self.font.render(text, True, FONTCOLOR)
-        self.surface.blit(label, (10, 10))
+        if type(text) == tuple:
+            for i, line in enumerate(text):
+                label = self.font.render(line, True, FONTCOLOR)
+                self.surface.blit(label, (10, 10 + i * LINEHEIGHT))
+        elif type(text) == str:
+            label = self.font.render(text, True, FONTCOLOR)
+            self.surface.blit(label, (10, 10))
         screen.blit(self.surface, self.rect.topleft)

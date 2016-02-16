@@ -15,7 +15,7 @@ GRIDKEY = pygame.K_F10
 CBOXKEY = pygame.K_F11
 
 BACKGROUNDCOLOR = pygame.Color("gray12")
-GRIDCOLOR = pygame.Color("gray38")
+GRIDCOLOR = pygame.Color("gray36")
 HEROCOLOR = pygame.Color("blue")
 TREECOLOR = pygame.Color("yellow")
 WATERCOLOR = pygame.Color("purple")

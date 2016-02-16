@@ -3,6 +3,8 @@
 class: StatsBox
 """
 
+# todo, de extra benodigde kolommen bekijken in vb en implementeren. ook de kolommen uit pyRPG1.
+
 import pygame
 
 BACKGROUNDCOLOR = pygame.Color("black")
@@ -61,8 +63,8 @@ class StatsBox(object):
             ["Total XP :",     str(hero_exp_tot),       "",                        ""],
             ["Next Level :",   str(hero_lev_next),      "",                        ""],
             ["",               "",                      "",                        ""],
-            ["Weight :",       str(hero.tot_wht),       "",                        ""],
-            ["Movepoints :",   str(hero.sta_mvp),       "",                        ""],
+            ["Weight :",       str(hero.tot_wht),       "",                        self._desc('wht')],
+            ["Movepoints :",   str(hero.sta_mvp),       hero.dif_mvp,              self._desc('mvp')],
             ["Protection :",   str(hero.prt),           hero.sld_prt,              ""],
             ["Defense :",      str(hero.tot_des),       "",                        ""],
             ["Base Hit :",     str(hero.tot_hit)+" %",  hero.war.bonus(hero.wpn),  ""],
@@ -154,4 +156,21 @@ class StatsBox(object):
                 self.cur_item = index
                 return row[3]
 
-# todo, de extra benodigde kolommen bekijken in vb en implementeren. ook de kolommen uit pyRPG1.
+    @staticmethod
+    def _desc(stat):
+        if stat == 'wht':
+            return (
+                "Weight:",
+                "Defines how heavy your character is equipped with gear.",
+                "Weight has negative impact on movepoints and agility."
+            )
+
+        if stat == 'mvp':
+            return (
+                "Movepoints:",
+                "Defines how many steps are your character is able to take in one turn.",
+                "The more stamina your character has, the more movepoints.",
+                "The more weight your character has, the less movepoints.",
+                "The first column shows the number of movepoints calculated from your stamina.",
+                "The second (red) column shows the calculated weight subtracted."
+            )
