@@ -98,6 +98,7 @@ class Hero(object):
     @property
     def tot_wht(self):
         """
+        Total Weight
         Loop door alle attributen van de hero heen en return een WHT waarde als hij die kan vinden, anders +0.
         :return: Tel die op en return de totale weight.
         """
@@ -109,13 +110,34 @@ class Hero(object):
     @property
     def sta_mvp(self):
         """
+        Stamina Movepoints
         :return: Iedereen krijgt 5 mvp + je variable stamina waarde / 10.
         """
         return 5 + round(self.sta.cur / 10)
 
     @property
+    def prt(self):
+        """
+        Totale protection min shield protection
+        :return: zie: def tot_wht()
+        """
+        total = 0
+        for equipment_item in self.equipment_tuple:
+            total += getattr(equipment_item, 'PRT', 0)
+        total -= self.sld_prt
+        return total
+
+    @property
+    def sld_prt(self):
+        """
+        Alleen shield protection.
+        """
+        return getattr(self.sld, 'PRT', 0)
+
+    @property
     def tot_prt(self):
         """
+        Totale protection, ook met shield.
         :return: zie: def tot_wht()
         """
         total = 0
@@ -126,6 +148,7 @@ class Hero(object):
     @property
     def tot_des(self):
         """
+        Totale Defense
         :return: zie: def tot_wht()
         """
         total = 0
@@ -136,6 +159,7 @@ class Hero(object):
     @property
     def tot_hit(self):
         """
+        Totale BaseHit
         :return: zie: def tot_wht()
         """
         total = 0
@@ -146,6 +170,7 @@ class Hero(object):
     @property
     def tot_dam(self):
         """
+        Totale Damage
         :return: zie: def tot_wht()
         """
         total = 0

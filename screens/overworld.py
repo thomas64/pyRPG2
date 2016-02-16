@@ -5,7 +5,7 @@ class: Overworld
 
 import pygame
 
-import screens.partyscreen
+import screens.party.display
 import screens.sprites
 import screens.window
 import states
@@ -131,7 +131,7 @@ class Overworld(object):
 
     def _show_party_screen(self):
         self.engine.statemachine.push(states.GameState.PartyScreen)
-        self.partyscreen = screens.partyscreen.PartyScreen(self.engine.data, self.screen)
+        self.partyscreen = screens.party.display.Display(self.engine.data, self.screen)
 
     def _close_party_screen(self):
         self.engine.statemachine.pop(self.engine.currentstate)

@@ -9,7 +9,8 @@ import pygame.gfxdraw
 import audio
 import console
 import data
-import screens.menus
+import screens.menu.content
+import screens.menu.display
 import screens.loadsave
 import screens.overworld
 import states
@@ -204,7 +205,7 @@ class GameEngine(object):
     def _handle_menu_input(self, full_event):
 
         if self.currentstate == states.GameState.MainMenu:
-            menu_keys = screens.menus.MainMenu()
+            menu_keys = screens.menu.content.MainMenu()
             menu_choice = self.mainmenu.handle_single_input(full_event)
             if menu_choice == menu_keys.NewGame:
                 self._main_menu_select_new_game()
@@ -217,7 +218,7 @@ class GameEngine(object):
             return
 
         elif self.currentstate == states.GameState.OptionsMenu:
-            menu_keys = screens.menus.OptionsMenu()
+            menu_keys = screens.menu.content.OptionsMenu()
             menu_choice = self.optionsmenu.handle_single_input(full_event)
             if menu_choice == menu_keys.Music:                             # .Music geeft de key "Music"
                 self._options_menu_select_music()
@@ -228,7 +229,7 @@ class GameEngine(object):
             return
 
         elif self.currentstate == states.GameState.PauseMenu:
-            menu_keys = screens.menus.PauseMenu()
+            menu_keys = screens.menu.content.PauseMenu()
             menu_choice = self.pausemenu.handle_single_input(full_event)
             if menu_choice == menu_keys.ContinueGame:
                 self._pause_menu_select_continue()
@@ -244,8 +245,8 @@ class GameEngine(object):
         self.overworld = None
         self.statemachine.clear()
         self.statemachine.push(states.GameState.MainMenu)
-        menu_items = screens.menus.MainMenu()
-        self.mainmenu = screens.menus.GameMenu(self.screen, self.audio, menu_items, True)
+        menu_items = screens.menu.content.MainMenu()
+        self.mainmenu = screens.menu.display.Display(self.screen, self.audio, menu_items, True)
         self.audio.play_music(self.audio.mainmenu)
 
     def _main_menu_select_new_game(self):
@@ -280,8 +281,8 @@ class GameEngine(object):
 
     def _show_options_menu(self):
         self.statemachine.push(states.GameState.OptionsMenu)
-        menu_items = screens.menus.OptionsMenu(self.audio.music, self.audio.sound)  # hier worden de weergave van
-        self.optionsmenu = screens.menus.GameMenu(self.screen, self.audio, menu_items, True)    # options gekozen
+        menu_items = screens.menu.content.OptionsMenu(self.audio.music, self.audio.sound)  # hier worden de weergave van
+        self.optionsmenu = screens.menu.display.Display(self.screen, self.audio, menu_items, True)    # options gekozen
 
     def _options_menu_select_music(self):
         settingview = self.optionsmenu.menu_texts[self.optionsmenu.cur_item]        # hier wordt de weergave
@@ -319,8 +320,8 @@ class GameEngine(object):
         scr_data = pygame.image.tostring(self.screen, 'RGBA')   # maak een screen capture
         self.scr_capt = pygame.image.frombuffer(scr_data, self.screen.get_size(), 'RGBA')
         self.statemachine.push(states.GameState.PauseMenu)
-        menu_items = screens.menus.PauseMenu()
-        self.pausemenu = screens.menus.GameMenu(self.screen, self.audio, menu_items, False)
+        menu_items = screens.menu.content.PauseMenu()
+        self.pausemenu = screens.menu.display.Display(self.screen, self.audio, menu_items, False)
 
     def _pause_menu_select_continue(self, with_esc=False):
         if with_esc:
