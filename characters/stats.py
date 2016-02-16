@@ -63,6 +63,8 @@ class Intelligence(Stat):
     """
     def __init__(self, quantity):
         super().__init__("Intelligence", "int", 30, 12, quantity)
+        self.DESC = "Dit is een " \
+                    "test."
 
 
 class Willpower(Stat):

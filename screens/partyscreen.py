@@ -15,7 +15,8 @@ BACKGROUNDCOLOR = pygame.Color("black")
 LINECOLOR = pygame.Color("white")
 HEROCOLOR = pygame.Color("gray38")
 
-FONTCOLOR = pygame.Color("white")
+FONTCOLOR1 = pygame.Color("white")
+FONTCOLOR2 = pygame.Color("yellow")
 FONT = 'impact'
 LARGEFONTSIZE = 25
 NORMALFONTSIZE = 15
@@ -91,7 +92,7 @@ class PartyScreen(object):
         self.stats_box.draw(self.screen, cur_hero)
         self.info_box.draw(self.screen, self.info_label)
 
-        name2 = self.largefont.render(cur_hero.NAM, True, FONTCOLOR)
+        name2 = self.largefont.render(cur_hero.NAM, True, FONTCOLOR1)
         name2_rect = self.screen.blit(name2, (500, 300))
 
     def handle_multi_input(self, key_input, mouse_pos):
@@ -179,10 +180,10 @@ class HeroBox(object):
 
     def _update(self):
         self.face = pygame.image.load(self.hero.FAC)
-        self.name = self.largefont.render(self.hero.NAM, True, FONTCOLOR)
-        self.level = self.normalfont.render("Level: {:12}".format(self.hero.lev.qty), True, FONTCOLOR)
+        self.name = self.largefont.render(self.hero.NAM, True, FONTCOLOR1)
+        self.level = self.normalfont.render("Level: {:12}".format(self.hero.lev.qty), True, FONTCOLOR1)
         self.hitpoints = self.normalfont.render(
-                                "HitPoints: {:5}{} {}".format(self.hero.cur_hp, "/", self.hero.max_hp), True, FONTCOLOR)
+                            "HitPoints: {:5}{} {}".format(self.hero.cur_hp, "/", self.hero.max_hp), True, FONTCOLOR1)
         # health bars #
         self.full_hp = 135
         self.curr_hp = (self.full_hp / self.hero.max_hp) * self.hero.cur_hp
@@ -261,7 +262,7 @@ class InfoBox(object):
         :param text: de tekst om weer te geven
         """
         self.surface.blit(self.background, (0, 0))
-        label = self.normalfont.render(text, True, FONTCOLOR)
+        label = self.normalfont.render(text, True, FONTCOLOR1)
         self.surface.blit(label, (10, 10))
         screen.blit(self.surface, self.rect.topleft)
 
@@ -289,27 +290,12 @@ class StatsBox(object):
         self.largefont = pygame.font.SysFont(FONT, LARGEFONTSIZE)
         self.normalfont = pygame.font.SysFont(FONT, NORMALFONTSIZE)
 
-    def _update(self, hero):
-        self.title = self.largefont.render("Stats", True, FONTCOLOR)
-        col1 = ("XP Remaining :",
-                "Total XP :",
-                "Next Level :",
-                "",
-                "Weight :",
-                "Movepoints :",
-                "Protection :",
-                "Defense :",
-                "Base Hit :",
-                "Damage :",
-                "",
-                "Intelligence :",
-                "Willpower :",
-                "Dexterity :",
-                "Agility :",
-                "Endurance :",
-                "Strength :",
-                "Stamina :")
+        self.cur_item = None
 
+    def _update(self, hero):
+        self.title = self.largefont.render("Stats", True, FONTCOLOR1)
+
+        # zet eerst even wat bepaalde waarden vast.
         if hero.lev.qty >= hero.lev.MAX:
             hero_exp_tot = "Max"
             hero_lev_next = "Max"
@@ -317,57 +303,51 @@ class StatsBox(object):
             hero_exp_tot = str(hero.exp.tot)
             hero_lev_next = str(hero.lev.next(hero.exp.tot))
 
-        col2 = (str(hero.exp.rem),
-                str(hero_exp_tot),
-                str(hero_lev_next),
-                "",
-                str(hero.tot_wht),
-                str(hero.sta_mvp),
-                str(hero.tot_prt),
-                str(hero.tot_des),
-                str(hero.tot_hit)+" %",
-                str(hero.tot_dam),
-                "",
-                str(hero.int.qty),
-                str(hero.wil.qty),
-                str(hero.dex.qty),
-                str(hero.agi.qty),
-                str(hero.edu.qty),
-                str(hero.str.qty),
-                str(hero.sta.qty))
+        # zet dan alles in deze tabel met drie kolommen.
+        # todo, testen hoe dit: hero.war.bonus(hero.wpn), gaat met hero zonder wapen. bonus() checken.
+        self.table_data = (["XP Remaining :", str(hero.exp.rem),      "",                        ""],
+                           ["Total XP :",     str(hero_exp_tot),      "",                        ""],
+                           ["Next Level :",   str(hero_lev_next),     "",                        ""],
+                           ["",               "",                     "",                        ""],
+                           ["Weight :",       str(hero.tot_wht),      "",                        ""],
+                           ["Movepoints :",   str(hero.sta_mvp),      "",                        ""],
+                           ["Protection :",   str(hero.tot_prt),      "",                        ""],
+                           ["Defense :",      str(hero.tot_des),      "",                        ""],
+                           ["Base Hit :",     str(hero.tot_hit)+" %", hero.war.bonus(hero.wpn),  ""],
+                           ["Damage :",       str(hero.tot_dam),      "",                        ""],
+                           ["",               "",                     "",                        ""],
+                           ["Intelligence :", str(hero.int.qty),      hero.int.ext,              hero.int.DESC],
+                           ["Willpower :",    str(hero.wil.qty),      hero.wil.ext,              ""],
+                           ["Dexterity :",    str(hero.dex.qty),      hero.dex.ext,              ""],
+                           ["Agility :",      str(hero.agi.qty),      hero.agi.ext,              ""],
+                           ["Endurance :",    str(hero.edu.qty),      hero.edu.ext,              ""],
+                           ["Strength :",     str(hero.str.qty),      hero.str.ext,              ""],
+                           ["Stamina :",      str(hero.sta.qty),      hero.sta.ext,              ""])
 
-        col3 = ("",
-                "",
-                "",
-                "",
-                "",
-                "",
-                "",
-                "",
-                hero.war.bonus(hero.wpn),      # todo, testen hoe dit gaat met hero zonder wapen. bonus() checken.
-                "",
-                "",
-                hero.int.ext,
-                hero.wil.ext,
-                hero.dex.ext,
-                hero.agi.ext,
-                hero.edu.ext,
-                hero.str.ext,
-                hero.sta.ext)
+        # maak een extra 4e kolom aan. hierin staan de rects.
+        for index, row in enumerate(self.table_data):
+            row.append(self._rect(index, row[0]))
 
-        self.col1_rects = []    # extra lijst met tuples van rects en text erin.
-        self.col1 = []
-        for line, text in enumerate(col1):
-            self.col1.append(self.normalfont.render(text, True, FONTCOLOR))  # eerst de render aan zijn lijst.
-            rect = self.normalfont.render(text, True, FONTCOLOR).get_rect()  # maak ook nog een rect aan van de render
-            rect.topleft = self.rect.left + self.COL1X, (self.rect.top + self.COLSY) + line * self.LINEH  # positioneer
-            self.col1_rects.append((rect, text))                           # die rect en voeg hem toe aan de rect lijst
-        self.col2 = []
-        for line in col2:
-            self.col2.append(self.normalfont.render(line, True, FONTCOLOR))
-        self.col3 = []
-        for line in col3:
-            self._line(line, self.col3)
+        # maak dan een nieuwe tabel aan met de tekst, maar dan gerendered.
+        self.table_view = []
+        for index, row in enumerate(self.table_data):
+            self.table_view.append(list())
+            if index == self.cur_item:              # als de index van deze rij gelijk is aan waar de muis over zit,
+                color = FONTCOLOR2                  # maak hem geel
+            else:                                   # anders gewoon wit.
+                color = FONTCOLOR1
+            self.table_view[index].append(self.normalfont.render(row[0], True, color))
+            self.table_view[index].append(self.normalfont.render(row[1], True, FONTCOLOR1))
+            self._line(row[2], self.table_view[index])
+
+    def _rect(self, index, text):
+        """
+        self.rect is de hele box zelf. Die heeft ook een position op het scherm, vandaar dat de position een soort
+        offset moet krijgen hier.
+        """
+        rect = self.normalfont.render(text, True, FONTCOLOR1).get_rect()
+        rect.topleft = self.rect.left + self.COL1X, (self.rect.top + self.COLSY) + index * self.LINEH
+        return rect
 
     def _line(self, value, col):
         """
@@ -379,7 +359,7 @@ class StatsBox(object):
             value = 0
         if value == 0:
             value = ""
-            col.append(self.normalfont.render(value, True, FONTCOLOR))
+            col.append(self.normalfont.render(value, True, FONTCOLOR1))
         elif value > 0:
             value = "(+"+str(value)+")"
             col.append(self.normalfont.render(value, True, POSCOLOR))
@@ -399,21 +379,26 @@ class StatsBox(object):
         pygame.draw.rect(self.background, LINECOLOR, self.surface.get_rect(), 1)
 
         self.surface.blit(self.title, (7, 1))
-        for line, text in enumerate(self.col1):
-            self.surface.blit(text, (self.COL1X, self.COLSY + line * self.LINEH))
-        for line, text in enumerate(self.col2):
-            self.surface.blit(text, (self.COL2X, self.COLSY + line * self.LINEH))
-        for line, text in enumerate(self.col3):
-            self.surface.blit(text, (self.COL3X, self.COLSY + line * self.LINEH))
+        for index, row in enumerate(self.table_view):
+            self.surface.blit(row[0], (self.COL1X, self.COLSY + index * self.LINEH))
+        for index, row in enumerate(self.table_view):
+            self.surface.blit(row[1], (self.COL2X, self.COLSY + index * self.LINEH))
+        for index, row in enumerate(self.table_view):
+            self.surface.blit(row[2], (self.COL3X, self.COLSY + index * self.LINEH))
 
         screen.blit(self.surface, self.rect.topleft)
 
     def mouse_hover(self, event):
         """
-        Als de muis over een item in kolom 1 gaat. rect[0] is de rect.
+        Als de muis over een item in uit de eerst visuele gaat. row[4] dat zijn de rects.
+        Zet cur_item op de index van degene waar de muis over gaat.
         :param event: pygame.MOUSEMOTION uit engine.py
-        :return: rect[1] is de text
+        :return: row[3] is de kolom met de info.
         """
-        for rect in self.col1_rects:
-            if rect[0].collidepoint(event.pos):
-                return rect[1]
+        self.cur_item = None
+        for index, row in enumerate(self.table_data):
+            if row[4].collidepoint(event.pos):
+                self.cur_item = index
+                return row[3]
+
+# todo, de extra benodigde kolommen bekijken in vb en implementeren. ook de kolommen uit pyRPG1.
