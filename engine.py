@@ -4,6 +4,7 @@ class: GameEngine
 """
 
 import pygame
+import pygame.gfxdraw
 
 import audio
 import console
@@ -14,12 +15,14 @@ import screens.overworld
 import states
 
 # todo, er gaat nog wat mis met sidestep als fps te hoog is, oorzaak onduidelijk.
-FPS = 60        # minimaal 15, anders kan hij door bomen lopen
+FPS = 60        # minimaal 15, anders kan hij door bomen lopen. maximaal 110, anders sidestep raar.
 
 DEBUGKEY = pygame.K_F12
 DEBUGFONT = 'courier'
 DEBUGFONTSIZE = 11
 DEBUGFONTCOLOR = pygame.Color("white")
+DEBUGRECT = (0, 0, 600, 400)
+DEBUGRECTCOLOR = (32, 32, 32, 200)
 
 
 class GameEngine(object):
@@ -124,6 +127,7 @@ class GameEngine(object):
                     text += text2
                 except AttributeError:
                     pass
+                pygame.gfxdraw.box(self.screen, pygame.Rect(DEBUGRECT), DEBUGRECTCOLOR)
                 for count, line in enumerate(text):
                     self.screen.blit(self.debugfont.render(line, True, DEBUGFONTCOLOR), (0, count * 10))
 
