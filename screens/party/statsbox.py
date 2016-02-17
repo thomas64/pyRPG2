@@ -56,32 +56,30 @@ class StatsBox(object):
             hero_exp_tot = str(hero.exp.tot)
             hero_lev_next = str(hero.lev.next(hero.exp.tot))
 
-        # zet dan alles in deze tabel met vier kolommen.
+        # zet dan alles in deze tabel met vijf kolommen. de vierde kolom is leeg voor de rects van de eerste kolom
         # todo, testen hoe dit: hero.war.bonus(hero.wpn), gaat met hero zonder wapen. bonus() checken.
-        self.table_data = (
-            ["XP Remaining :", str(hero.exp.rem),       "",                        ""],
-            ["Total XP :",     str(hero_exp_tot),       "",                        ""],
-            ["Next Level :",   str(hero_lev_next),      "",                        ""],
-            ["",               "",                      "",                        ""],
-            ["Weight :",       str(hero.tot_wht),       "",                        self._desc('wht')],
-            ["Movepoints :",   str(hero.sta_mvp),       hero.dif_mvp,              self._desc('mvp')],
-            ["Protection :",   str(hero.prt),           hero.sld_prt,              ""],
-            ["Defense :",      str(hero.tot_des),       "",                        ""],
-            ["Base Hit :",     str(hero.tot_hit)+" %",  hero.war.bonus(hero.wpn),  ""],
-            ["Damage :",       str(hero.tot_dam),       "",                        ""],
-            ["",               "",                      "",                        ""],
-            ["Intelligence :", str(hero.int.qty),       hero.int.ext,              hero.int.DESC],
-            ["Willpower :",    str(hero.wil.qty),       hero.wil.ext,              ""],
-            ["Dexterity :",    str(hero.dex.qty),       hero.dex.ext,              ""],
-            ["Agility :",      str(hero.agi.qty),       hero.agi.ext,              ""],
-            ["Endurance :",    str(hero.edu.qty),       hero.edu.ext,              ""],
-            ["Strength :",     str(hero.str.qty),       hero.str.ext,              ""],
-            ["Stamina :",      str(hero.sta.qty),       hero.sta.ext,              ""]
-        )
+        self.table_data = [
+            ["XP Remaining :", str(hero.exp.rem),       "",                        None,    ""],
+            ["Total XP :",     str(hero_exp_tot),       "",                        None,    ""],
+            ["Next Level :",   str(hero_lev_next),      "",                        None,    ""],
+            ["",               "",                      "",                        None,    ""],
+            ["Weight :",       str(hero.tot_wht),       "",                        None,    self._desc('wht')],
+            ["Movepoints :",   str(hero.sta_mvp),       hero.dif_mvp,              None,    self._desc('mvp')],
+            ["Protection :",   str(hero.prt),           hero.sld_prt,              None,    ""],
+            ["Defense :",      str(hero.tot_des),       "",                        None,    ""],
+            ["Base Hit :",     str(hero.tot_hit)+" %",  hero.war.bonus(hero.wpn),  None,    ""],
+            ["Damage :",       str(hero.tot_dam),       "",                        None,    ""],
+            ["",               "",                      "",                        None,    ""],
+        ]
+        # voeg ook de 7 stats aan de table_data toe
+        for stat in hero.stats_tuple:
+            self.table_data.append(
+                [str(stat.NAM) + " :",  str(stat.qty),  stat.ext,   None,   stat.DESC]
+            )
 
-        # maak een extra 4e kolom aan. hierin staan de rects.
+        # vul de vierde lege kolom. hierin staan de rects van de eerste kolom. rect is voor muisklik.
         for index, row in enumerate(self.table_data):
-            row.append(self._rect(index, row[0]))
+            row[3] = self._rect(index, row[0])
 
         # maak dan een nieuwe tabel aan met de tekst, maar dan gerendered.
         self.table_view = []
@@ -125,6 +123,7 @@ class StatsBox(object):
     def draw(self, screen, hero):
         """
         Update eerst de data, en teken dan al die data op de surface en die op de screen.
+        Let op: self.table_view bevat maar 3 kolommen in tegenstelling tot self.table_data met 5
         :param screen: self.screen van partyscreen
         :param hero: de huidige geselecteerde hero
         """
@@ -145,16 +144,16 @@ class StatsBox(object):
 
     def mouse_hover(self, event):
         """
-        Als de muis over een item in uit de eerst visuele gaat. row[4] dat zijn de rects.
+        Als de muis over een item in uit de eerste visuele gaat. row[3] dat zijn de rects.
         Zet cur_item op de index van degene waar de muis over gaat.
         :param event: pygame.MOUSEMOTION uit engine.py
-        :return: row[3] is de kolom met de info.
+        :return: row[4] is de kolom met de info.
         """
         self.cur_item = None
         for index, row in enumerate(self.table_data):
-            if row[4].collidepoint(event.pos):
+            if row[3].collidepoint(event.pos):
                 self.cur_item = index
-                return row[3]
+                return row[4]
 
     @staticmethod
     def _desc(stat):

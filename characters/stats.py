@@ -63,8 +63,9 @@ class Intelligence(Stat):
     """
     def __init__(self, quantity):
         super().__init__("Intelligence", "int", 30, 12, quantity)
-        self.DESC = "Dit is een " \
-                    "test."
+        self.DESC = ("Dit is een ",
+                     "test.",
+                     "intelligence")
 
 
 class Willpower(Stat):
@@ -73,6 +74,9 @@ class Willpower(Stat):
     """
     def __init__(self, quantity):
         super().__init__("Willpower", "wil", 30, 12, quantity)
+        self.DESC = ("Dit is een ",
+                     "test.",
+                     "willpower")
 
 
 class Dexterity(Stat):
@@ -81,6 +85,9 @@ class Dexterity(Stat):
     """
     def __init__(self, quantity):
         super().__init__("Dexterity", "dex", 30, 24, quantity)
+        self.DESC = ("Dit is een ",
+                     "test.",
+                     "Dexterity")
 
 
 class Agility(Stat):
@@ -89,6 +96,9 @@ class Agility(Stat):
     """
     def __init__(self, quantity):
         super().__init__("Agility", "agi", 30, 24, quantity)
+        self.DESC = ("Dit is een ",
+                     "test.",
+                     "Agility")
 
 
 class Endurance(Stat):
@@ -97,6 +107,9 @@ class Endurance(Stat):
     """
     def __init__(self, quantity):
         super().__init__("Endurance", "edu", 40, 12, quantity)
+        self.DESC = ("Dit is een ",
+                     "test.",
+                     "Endurance")
 
 
 class Strength(Stat):
@@ -105,6 +118,9 @@ class Strength(Stat):
     """
     def __init__(self, quantity):
         super().__init__("Strength", "str", 30, 12, quantity)
+        self.DESC = ("Dit is een ",
+                     "test.",
+                     "Strength")
 
 
 class Stamina(Stat):
@@ -113,3 +129,6 @@ class Stamina(Stat):
     """
     def __init__(self, quantity):
         super().__init__("Stamina", "sta", 90, 4, quantity)
+        self.DESC = ("Dit is een ",
+                     "test.",
+                     "Stamina")
