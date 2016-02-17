@@ -15,6 +15,8 @@ import screens.loadsave
 import screens.overworld
 import states
 
+# todo, magic numbers overal opruimen
+
 # todo, er gaat nog wat mis met sidestep als fps te hoog is, oorzaak onduidelijk.
 FPS = 60        # minimaal 15, anders kan hij door bomen lopen. maximaal 110, anders sidestep raar.
 
@@ -46,7 +48,6 @@ class GameEngine(object):
         self.mainmenu = None
         self.pausemenu = None
         self.optionsmenu = None
-        self.loadsave = None
         self.overworld = None
 
         self.debugfont = pygame.font.SysFont(DEBUGFONT, DEBUGFONTSIZE)
@@ -92,7 +93,6 @@ class GameEngine(object):
                     "mainmenu:          {}".format(self.mainmenu),
                     "pausemenu:         {}".format(self.pausemenu),
                     "optionsmenu:       {}".format(self.optionsmenu),
-                    "loadsave:          {}".format(self.loadsave),
                     "overworld:         {}".format(self.overworld),
                     "scr_capt:          {}".format(self.scr_capt),
                     "mouse_input:       {}".format(self.mouse_input)
@@ -257,9 +257,9 @@ class GameEngine(object):
         self.audio.play_music(self.audio.overworld)
 
     def _main_menu_select_load_game(self):
-        self.loadsave = screens.loadsave.Dialog(self)
+        dialog = screens.loadsave.Dialog(self)
         self.overworld = screens.overworld.Overworld(self)                      # laad de overworld alvast
-        if self.loadsave.load() is None:
+        if dialog.load() is None:
             self.overworld = None                                               # toch niet
         else:                                                                   # geef dan data mee aan de overworld
             self.audio.play_sound(self.audio.select)
@@ -268,7 +268,6 @@ class GameEngine(object):
             self.statemachine.push(states.GameState.Overworld)
             self.audio.play_music(self.audio.overworld)
         pygame.event.clear()
-        self.loadsave = None
 
     def _main_menu_select_options(self):
         self._show_options_menu()
@@ -332,11 +331,10 @@ class GameEngine(object):
         self.audio.play_music(self.audio.overworld)
 
     def _pause_menu_select_save_game(self):
-        self.loadsave = screens.loadsave.Dialog(self)
-        if self.loadsave.save():
+        dialog = screens.loadsave.Dialog(self)
+        if dialog.save():
             self.audio.play_sound(self.audio.select)
         pygame.event.clear()                                    # anders stapelen de geluiden zich op
-        self.loadsave = None
 
     def _pause_menu_select_main_menu(self):
         self._show_main_menu()

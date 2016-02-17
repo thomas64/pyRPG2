@@ -4,24 +4,28 @@ class: Dialog
 
 import os
 import pickle
-
-import wx
+import tkinter
+import tkinter.filedialog
 
 import console
 
-
 SAVEPATH = 'savegame'
 
-# todo, ipv wx, iets met pygame maken.
+# todo, ipv tkinter, iets met pygame maken. zodat hij in fullscreen kan blijven
 
 
-class Dialog(wx.App):
+class Dialog(object):
     """
-    Twee wx dialog boxes om te saven en te laden. Maak bij voorbaat een pad aan.
+    Twee tk dialog boxes om te saven en te laden. Maak bij voorbaat een pad aan.
     """
     def __init__(self, engine):
+        self.root = tkinter.Tk()
+        self.root.withdraw()        # dat er verder geen venster zichtbaar is
+        # dit maakt hem ongeveer op het midden van het scherm. als ik dat niet doe, dan schiet de save dialog
+        # soms naar achter vreemd genoeg.
+        self.root.geometry('0x0+{}+{}'.format(engine.screen.get_width() // 3, engine.screen.get_height() // 3))
+
         self.engine = engine
-        wx.App.__init__(self)
         if not os.path.exists(SAVEPATH):
             os.makedirs(SAVEPATH)
 
@@ -29,40 +33,36 @@ class Dialog(wx.App):
         """
         Load dialog.
         """
-        dialog = wx.FileDialog(None,
-                               message='Load File',
-                               defaultDir=SAVEPATH,
-                               defaultFile='savefile.dat',
-                               wildcard="Save Files (*.dat) |*.dat",
-                               style=wx.FD_OPEN | wx.FD_FILE_MUST_EXIST)
-        if dialog.ShowModal() == wx.ID_OK:
-            filename = dialog.GetPath()
+        filename = tkinter.filedialog.askopenfilename(title='Load File',
+                                                      initialdir=SAVEPATH,
+                                                      initialfile='savefile.dat',
+                                                      filetypes=[('Save Files', '*.dat')]
+                                                      )
+        if filename:
             try:
                 console.load_gamedata()
                 with open(filename, 'rb') as f:
                     (self.engine.data,
                      self.engine.overworld.window.hero.rect,
                      self.engine.overworld.window.hero.last_direction) = pickle.load(f)
-            except pickle.UnpicklingError:
+            except (pickle.UnpicklingError, EOFError):
                 console.corrupt_gamedata()
                 filename = None
         else:
             filename = None
-        dialog.Destroy()
+        self.root.destroy()
         return filename
 
     def save(self):
         """
         Save dialog.
         """
-        dialog = wx.FileDialog(None,
-                               message='Save File',
-                               defaultDir=SAVEPATH,
-                               defaultFile='savefile.dat',
-                               wildcard="Save Files (*.dat) |*.dat",
-                               style=wx.FD_SAVE | wx.FD_OVERWRITE_PROMPT)
-        if dialog.ShowModal() == wx.ID_OK:
-            filename = dialog.GetPath()
+        filename = tkinter.filedialog.asksaveasfilename(title='Save File',
+                                                        initialdir=SAVEPATH,
+                                                        initialfile='savefile.dat',
+                                                        filetypes=[('Save Files', '*.dat')]
+                                                        )
+        if filename:
             console.save_gamedata()
             with open(filename, 'wb') as f:
                 pickle.dump([self.engine.data,
@@ -70,5 +70,5 @@ class Dialog(wx.App):
                              self.engine.overworld.window.hero.last_direction], f)
         else:
             filename = None
-        dialog.Destroy()
+        self.root.destroy()
         return filename
