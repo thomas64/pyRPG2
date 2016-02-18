@@ -17,6 +17,24 @@ WINDOWPOS = 100, 100
 
 BACKGROUNDCOLOR = pygame.Color("black")
 
+INVLBL = "I"
+UPLBL = "Up"
+DOWNLBL = "Down"
+LEFTLBL = "Left"
+RIGHTLBL = "Right"
+INVKEY = pygame.K_i
+UPKEY = pygame.K_UP
+DOWNKEY = pygame.K_DOWN
+LEFTKEY = pygame.K_LEFT
+RIGHTKEY = pygame.K_RIGHT
+BTNWIDTH = 40
+BTNHEIGHT = 40
+INVX, INVY = -200, -300
+UPX, UPY = -150, -300
+DOWNX, DOWNY = -150, -250
+LEFTX, LEFTY = -200, -250
+RIGHTX, RIGHTY = -100, -250
+
 
 class Overworld(object):
     """
@@ -46,15 +64,20 @@ class Overworld(object):
 
         # todo, afhankelijk van situatie, buttons niet weergeven
         # button_view = sprites.ButtonSprite((bg_width-200,   bg_height-300), "V",     pygame.K_v)
-        button_i = screens.sprites.ButtonSprite(40, 40, (bg_width - 200, bg_height - 300), "I", pygame.K_i)
-        button_up = screens.sprites.ButtonSprite(40, 40, (bg_width - 150, bg_height - 300), "Up", pygame.K_UP)
-        button_down = screens.sprites.ButtonSprite(40, 40, (bg_width - 150, bg_height - 250), "Down", pygame.K_DOWN)
-        button_left = screens.sprites.ButtonSprite(40, 40, (bg_width - 200, bg_height - 250), "Left", pygame.K_LEFT)
-        button_right = screens.sprites.ButtonSprite(40, 40, (bg_width - 100, bg_height - 250), "Right", pygame.K_RIGHT)
+        button_inv = screens.sprites.ButtonSprite(
+                                    BTNWIDTH, BTNHEIGHT, (bg_width + INVX,   bg_height + INVY),   INVLBL,   INVKEY)
+        button_up = screens.sprites.ButtonSprite(
+                                    BTNWIDTH, BTNHEIGHT, (bg_width + UPX,    bg_height + UPY),    UPLBL,    UPKEY)
+        button_down = screens.sprites.ButtonSprite(
+                                    BTNWIDTH, BTNHEIGHT, (bg_width + DOWNX,  bg_height + DOWNY),  DOWNLBL,  DOWNKEY)
+        button_left = screens.sprites.ButtonSprite(
+                                    BTNWIDTH, BTNHEIGHT, (bg_width + LEFTX,  bg_height + LEFTY),  LEFTLBL,  LEFTKEY)
+        button_right = screens.sprites.ButtonSprite(
+                                    BTNWIDTH, BTNHEIGHT, (bg_width + RIGHTX, bg_height + RIGHTY), RIGHTLBL, RIGHTKEY)
         # button_cancel = sprites.ButtonSprite((bg_width-100, bg_height-200), "C",     pygame.K_c)
 
         # self.buttons = [button_view, button_up, button_down, button_left, button_right, button_cancel]
-        self.buttons = [button_i, button_up, button_down, button_left, button_right]
+        self.buttons = [button_inv, button_up, button_down, button_left, button_right]
 
     def handle_view(self):
         """
