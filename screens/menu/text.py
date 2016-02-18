@@ -29,3 +29,12 @@ class Text(object):
         """
         self.font_color = color
         self.label = self.font.render(self.text, True, self.font_color)
+
+    def flip_switch(self):
+        """
+        Wanneer aangeroepen verandert deze de visuele weergave van de tekst.
+        """
+        if "Off" in self.text:
+            self.text = self.text.replace("Off", "On")
+        elif "On" in self.text:
+            self.text = self.text.replace("On", "Off")

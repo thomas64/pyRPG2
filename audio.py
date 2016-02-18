@@ -9,6 +9,7 @@ import pickle
 import pygame
 
 import console
+import states
 
 
 OPTIONSPATH = 'options'
@@ -34,7 +35,8 @@ class Audio(object):
     """
     Alle geluiden.
     """
-    def __init__(self):
+    def __init__(self, statemachine):
+        self.statemachine = statemachine
         self.music = 0
         self.sound = 0
         self._load_cfg()
@@ -72,15 +74,41 @@ class Audio(object):
         with open(OPTIONSFILE, 'wb') as f:
             pickle.dump([self.music, self.sound], f)
 
-    def play_music(self, music):
+    def flip_sound(self):
+        """
+        Zet geluid aan als het uit staat en vice versa.
+        """
+        if self.sound == 1:
+            self.stop_sound(self.select)    # vanwege de enter knop in menu's speelt hij dit geluid af,
+            self.sound = 0                  # stop hem daarom alsnog.
+        elif self.sound == 0:
+            self.sound = 1
+            self.play_sound(self.select)    # en speel weer een geluid af omdat er geluid is.
+
+    def flip_music(self):
+        """
+        Zet muziek aan als het uit staat en vice versa.
+        """
+        if self.music == 1:
+            self.music = 0
+            self.stop_music()
+        elif self.music == 0:
+            self.music = 1
+            self.play_music()
+
+    def play_music(self):
         """
         Als mag, fade dan de huidige. Volume max, fade nieuwe muziek in.
-        :param music: een muziekfragment uit de init.
         """
         if self.music == 1:
             self.fade_music()
             self.current_music_channel.set_volume(1)
-            self.current_music_channel.play(music, -1)
+            currentstate = self.statemachine.peek()
+            if currentstate == states.GameState.MainMenu or \
+               currentstate == states.GameState.OptionsMenu:
+                self.current_music_channel.play(self.mainmenu, -1)
+            elif currentstate == states.GameState.Overworld:
+                self.current_music_channel.play(self.overworld, -1)
 
     def stop_music(self):
         """

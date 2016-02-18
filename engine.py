@@ -36,7 +36,7 @@ class GameEngine(object):
         self.screen = pygame.display.get_surface()
         self.statemachine = states.StateMachine()
         self.data = data.Data()
-        self.audio = audio.Audio()
+        self.audio = audio.Audio(self.statemachine)
 
         self.running = False
 
@@ -248,14 +248,14 @@ class GameEngine(object):
         self.statemachine.push(states.GameState.MainMenu)
         menu_items = screens.menu.content.MainMenu()
         self.mainmenu = screens.menu.display.Display(self.screen, self.audio, menu_items, True)
-        self.audio.play_music(self.audio.mainmenu)
+        self.audio.play_music()
 
     def _main_menu_select_new_game(self):
         self.mainmenu = None
         self.statemachine.pop(self.currentstate)
         self.statemachine.push(states.GameState.Overworld)
         self.overworld = screens.overworld.Overworld(self)
-        self.audio.play_music(self.audio.overworld)
+        self.audio.play_music()
 
     def _main_menu_select_load_game(self):
         dialog = screens.loadsave.Dialog(self)
@@ -267,7 +267,7 @@ class GameEngine(object):
             self.mainmenu = None
             self.statemachine.pop(self.currentstate)
             self.statemachine.push(states.GameState.Overworld)
-            self.audio.play_music(self.audio.overworld)
+            self.audio.play_music()
         pygame.event.clear()
 
     def _main_menu_select_options(self):
@@ -286,26 +286,14 @@ class GameEngine(object):
 
     def _options_menu_select_music(self):
         settingview = self.optionsmenu.menu_texts[self.optionsmenu.cur_item]        # hier wordt de weergave
-        if self.audio.music == 1:
-            settingview.text = settingview.text.replace("On", "Off")                # later aangepast
-            self.audio.music = 0                                                    # en de instelling zelf aangepast
-            self.audio.stop_music()
-        else:
-            settingview.text = settingview.text.replace("Off", "On")
-            self.audio.music = 1
-            self.audio.play_music(self.audio.mainmenu)
+        settingview.flip_switch()                                                   # later aangepast
+        self.audio.flip_music()                                                     # en de instelling zelf aangepast
         self.audio.write_cfg()                                                      # en weggeschreven
 
     def _options_menu_select_sound(self):
         settingview = self.optionsmenu.menu_texts[self.optionsmenu.cur_item]
-        if self.audio.sound == 1:
-            self.audio.stop_sound(self.audio.select)    # vanwege de enter knop in menu's speelt hij dit geluid af
-            settingview.text = settingview.text.replace("On", "Off")    # stop hem daarom alsnog.
-            self.audio.sound = 0
-        else:
-            settingview.text = settingview.text.replace("Off", "On")
-            self.audio.sound = 1
-            self.audio.play_sound(self.audio.select)    # en speel weer een geluid af omdat er geluid is.
+        settingview.flip_switch()
+        self.audio.flip_sound()
         self.audio.write_cfg()
 
     def _options_menu_select_back(self, with_esc=False):
@@ -329,7 +317,7 @@ class GameEngine(object):
         self.statemachine.pop(self.currentstate)
         self.pausemenu = None
         self.scr_capt = None
-        self.audio.play_music(self.audio.overworld)
+        self.audio.play_music()
 
     def _pause_menu_select_save_game(self):
         dialog = screens.loadsave.Dialog(self)
