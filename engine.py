@@ -20,6 +20,9 @@ import states
 # todo, er gaat nog wat mis met sidestep als fps te hoog is, oorzaak onduidelijk.
 FPS = 60        # minimaal 15, anders kan hij door bomen lopen. maximaal 110, anders sidestep raar.
 
+KILLKEY = pygame.K_BACKSPACE
+EXITKEY = pygame.K_ESCAPE
+
 DEBUGKEY = pygame.K_F12
 DEBUGFONT = 'courier'
 DEBUGFONTSIZE = 11
@@ -185,17 +188,18 @@ class GameEngine(object):
 
             if event.key == DEBUGKEY:
                 self.show_debug ^= True                                     # simple boolean swith
-            if event.key == pygame.K_BACKSPACE:
-                self._kill_game()                           # todo, deze en de methode moeten uiteindelijk weg
-            if event.key == pygame.K_ESCAPE:
+            if event.key == KILLKEY:
+                self._kill_game()                           # todo, deze, de key en de methode moeten uiteindelijk weg
+            if event.key == EXITKEY:
+                self.audio.play_sound(self.audio.select)            # omdat escape in menu standaard geen geluid geeft
                 if self.currentstate == states.GameState.MainMenu:          # eerst de keys op het toetsenbord
-                    self._main_menu_select_exit_game(with_esc=True)
+                    self._main_menu_select_exit_game()
                     return                                                  # returns, want anders zitten ze
                 elif self.currentstate == states.GameState.OptionsMenu:     # de menu's in de weg
-                    self._options_menu_select_back(with_esc=True)
+                    self._options_menu_select_back()
                     return
                 elif self.currentstate == states.GameState.PauseMenu:
-                    self._pause_menu_select_continue(with_esc=True)
+                    self._pause_menu_select_continue()
                     return
                 elif self.currentstate == states.GameState.Overworld:
                     self._show_pause_menu()
@@ -273,9 +277,7 @@ class GameEngine(object):
     def _main_menu_select_options(self):
         self._show_options_menu()
 
-    def _main_menu_select_exit_game(self, with_esc=False):
-        if with_esc:
-            self.audio.play_sound(self.audio.select)
+    def _main_menu_select_exit_game(self):
         self.audio.fade_music()
         self.running = False
 
@@ -296,9 +298,7 @@ class GameEngine(object):
         self.audio.flip_sound()
         self.audio.write_cfg()
 
-    def _options_menu_select_back(self, with_esc=False):
-        if with_esc:
-            self.audio.play_sound(self.audio.select)
+    def _options_menu_select_back(self):
         self.statemachine.pop(self.currentstate)
         self.optionsmenu = None
 
@@ -311,9 +311,7 @@ class GameEngine(object):
         menu_items = screens.menu.content.PauseMenu()
         self.pausemenu = screens.menu.display.Display(self.screen, self.audio, menu_items, False)
 
-    def _pause_menu_select_continue(self, with_esc=False):
-        if with_esc:
-            self.audio.play_sound(self.audio.select)            # omdat escape in menu standaard geen geluid geeft
+    def _pause_menu_select_continue(self):
         self.statemachine.pop(self.currentstate)
         self.pausemenu = None
         self.scr_capt = None
