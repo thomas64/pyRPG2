@@ -147,6 +147,7 @@ class GameEngine(object):
     def handle_multi_input(self):
         """
         Handelt de ingedrukt-houden muis en keyboard input af.
+        Wordt op dit moment alleen maar gebruikt voor visuele oplichten van de buttons en character movement.
         """
         self.key_input = pygame.key.get_pressed()
         self.mouse_input = None

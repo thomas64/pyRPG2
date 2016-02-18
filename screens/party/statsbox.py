@@ -10,6 +10,17 @@ import pygame
 BACKGROUNDCOLOR = pygame.Color("black")
 LINECOLOR = pygame.Color("white")
 
+BOXWIDTH = 405
+BOXHEIGHT = 500
+TITLEX, TITLEY = 7, 1
+COLUMN1X = 50
+COLUMN2X = 160
+COLUMN3X = 200
+COLUMNSY = 60
+ROWHEIGHT = 22
+
+TITLE = "Stats"
+
 FONTCOLOR1 = pygame.Color("white")
 FONTCOLOR2 = pygame.Color("yellow")
 FONT = 'impact'
@@ -19,19 +30,16 @@ NORMALFONTSIZE = 15
 POSCOLOR = pygame.Color("green")
 NEGCOLOR = pygame.Color("red")
 
+WHT_DESC = 'wht'
+MVP_DESC = 'mvp'
+
 
 class StatsBox(object):
     """
     Alle weergegeven informatie van alle stats van een hero.
     """
-    COLSY = 60
-    COL1X = 50
-    COL2X = 160
-    COL3X = 200
-    LINEH = 22
-
     def __init__(self, position):
-        self.surface = pygame.Surface((405, 500))
+        self.surface = pygame.Surface((BOXWIDTH, BOXHEIGHT))
         self.surface = self.surface.convert()
         self.rect = self.surface.get_rect()
         self.rect.topleft = position
@@ -46,7 +54,7 @@ class StatsBox(object):
         self.cur_item = None
 
     def _update(self, hero):
-        self.title = self.largefont.render("Stats", True, FONTCOLOR1)
+        self.title = self.largefont.render(TITLE, True, FONTCOLOR1)
 
         # zet eerst even wat bepaalde waarden vast.
         if hero.lev.qty >= hero.lev.MAX:
@@ -63,8 +71,8 @@ class StatsBox(object):
             ["Total XP :",     str(hero_exp_tot),       "",                        None,    ""],
             ["Next Level :",   str(hero_lev_next),      "",                        None,    ""],
             ["",               "",                      "",                        None,    ""],
-            ["Weight :",       str(hero.tot_wht),       "",                        None,    self._desc('wht')],
-            ["Movepoints :",   str(hero.sta_mvp),       hero.dif_mvp,              None,    self._desc('mvp')],
+            ["Weight :",       str(hero.tot_wht),       "",                        None,    self._desc(WHT_DESC)],
+            ["Movepoints :",   str(hero.sta_mvp),       hero.dif_mvp,              None,    self._desc(MVP_DESC)],
             ["Protection :",   str(hero.prt),           hero.sld_prt,              None,    ""],
             ["Defense :",      str(hero.tot_des),       "",                        None,    ""],
             ["Base Hit :",     str(hero.tot_hit)+" %",  hero.war.bonus(hero.wpn),  None,    ""],
@@ -99,7 +107,7 @@ class StatsBox(object):
         offset moet krijgen hier.
         """
         rect = self.normalfont.render(text, True, FONTCOLOR1).get_rect()
-        rect.topleft = self.rect.left + self.COL1X, (self.rect.top + self.COLSY) + index * self.LINEH
+        rect.topleft = self.rect.left + COLUMN1X, (self.rect.top + COLUMNSY) + index * ROWHEIGHT
         return rect
 
     def _line(self, value, col):
@@ -132,13 +140,13 @@ class StatsBox(object):
         self.surface.blit(self.background, (0, 0))
         pygame.draw.rect(self.background, LINECOLOR, self.surface.get_rect(), 1)
 
-        self.surface.blit(self.title, (7, 1))
+        self.surface.blit(self.title, (TITLEX, TITLEY))
         for index, row in enumerate(self.table_view):
-            self.surface.blit(row[0], (self.COL1X, self.COLSY + index * self.LINEH))
+            self.surface.blit(row[0], (COLUMN1X, COLUMNSY + index * ROWHEIGHT))
         for index, row in enumerate(self.table_view):
-            self.surface.blit(row[1], (self.COL2X, self.COLSY + index * self.LINEH))
+            self.surface.blit(row[1], (COLUMN2X, COLUMNSY + index * ROWHEIGHT))
         for index, row in enumerate(self.table_view):
-            self.surface.blit(row[2], (self.COL3X, self.COLSY + index * self.LINEH))
+            self.surface.blit(row[2], (COLUMN3X, COLUMNSY + index * ROWHEIGHT))
 
         screen.blit(self.surface, self.rect.topleft)
 
@@ -157,14 +165,14 @@ class StatsBox(object):
 
     @staticmethod
     def _desc(stat):
-        if stat == 'wht':
+        if stat == WHT_DESC:
             return (
                 "Weight:",
                 "Defines how heavy your character is equipped with gear.",
                 "Weight has negative impact on movepoints and agility."
             )
 
-        if stat == 'mvp':
+        if stat == MVP_DESC:
             return (
                 "Movepoints:",
                 "Defines how many steps are your character is able to take in one turn.",

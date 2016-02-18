@@ -9,6 +9,20 @@ BACKGROUNDCOLOR = pygame.Color("black")
 LINECOLOR = pygame.Color("white")
 HEROCOLOR = pygame.Color("gray24")
 
+BOXWIDTH = 250
+BOXHEIGHT = 98
+
+FACEX, FACEY = 1, 1
+NAMEX, NAMEY = 111, 4
+LEVELX, LEVELY = 111, 36
+HITPOINTSX, HITPOINTSY = 111, 56
+HEALTHBARX, HEALTHBARY = 111, 81
+HEALTHBARWIDTH = 135
+HEALTHBARHEIGHT = 13
+
+LEVEL = "Level: {:12}"
+HITPOINTS = "HitPoints: {:5}/ {}"
+
 FONTCOLOR = pygame.Color("white")
 FONT = 'impact'
 LARGEFONTSIZE = 25
@@ -26,7 +40,7 @@ class HeroBox(object):
     Alle weergegeven informatie in een hero boxje in het partyscherm.
     """
     def __init__(self, position, hc, hero):
-        self.surface = pygame.Surface((250, 98))
+        self.surface = pygame.Surface((BOXWIDTH, BOXHEIGHT))
         self.surface = self.surface.convert()
         self.rect = self.surface.get_rect()
         self.rect.topleft = position
@@ -44,11 +58,10 @@ class HeroBox(object):
     def _update(self):
         self.face = pygame.image.load(self.hero.FAC)
         self.name = self.largefont.render(self.hero.NAM, True, FONTCOLOR)
-        self.level = self.normalfont.render("Level: {:12}".format(self.hero.lev.qty), True, FONTCOLOR)
-        self.hitpoints = self.normalfont.render(
-                            "HitPoints: {:5}{} {}".format(self.hero.cur_hp, "/", self.hero.max_hp), True, FONTCOLOR)
+        self.level = self.normalfont.render(LEVEL.format(self.hero.lev.qty), True, FONTCOLOR)
+        self.hitpoints = self.normalfont.render(HITPOINTS.format(self.hero.cur_hp, self.hero.max_hp), True, FONTCOLOR)
         # health bars #
-        self.full_hp = 135
+        self.full_hp = HEALTHBARWIDTH
         self.curr_hp = (self.full_hp / self.hero.max_hp) * self.hero.cur_hp
         self.color = HPCOLORFULL
         if self.hero.lev.cur < self.hero.lev.qty:
@@ -70,12 +83,12 @@ class HeroBox(object):
 
         self.surface.blit(self.background, (0, 0))
         pygame.draw.rect(self.surface, LINECOLOR, self.surface.get_rect(), 1)
-        self.surface.blit(self.face, (1, 1))
-        self.surface.blit(self.name, (111, 4))
-        self.surface.blit(self.level, (111, 36))
-        self.surface.blit(self.hitpoints, (111, 56))
-        pygame.draw.rect(self.surface, self.color, (111, 81, self.curr_hp, 13), 0)
-        pygame.draw.rect(self.surface, LINECOLOR, (111, 81, self.full_hp, 13), 1)
+        self.surface.blit(self.face, (FACEX, FACEY))
+        self.surface.blit(self.name, (NAMEX, NAMEY))
+        self.surface.blit(self.level, (LEVELX, LEVELY))
+        self.surface.blit(self.hitpoints, (HITPOINTSX, HITPOINTSY))
+        pygame.draw.rect(self.surface, self.color, (HEALTHBARX, HEALTHBARY, self.curr_hp, HEALTHBARHEIGHT), 0)
+        pygame.draw.rect(self.surface, LINECOLOR, (HEALTHBARX, HEALTHBARY, self.full_hp, HEALTHBARHEIGHT), 1)
 
         screen.blit(self.surface, self.rect.topleft)
 

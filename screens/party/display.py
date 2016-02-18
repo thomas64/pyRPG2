@@ -14,6 +14,28 @@ import screens.sprites
 BACKGROUNDCOLOR = pygame.Color("black")
 LINECOLOR = pygame.Color("white")
 
+CLOSELBL = "Close"
+PREVLBL = "Previous"
+NEXTLBL = "Next"
+
+CLOSEKEY = pygame.K_ESCAPE
+PREVKEY = pygame.K_q
+NEXTKEY = pygame.K_w
+
+CLOSEX, CLOSEY = -90, 10    # negatieve x omdat de positie van rechts bepaald wordt.
+PREVX, PREVY = -90, 45
+NEXTX, NEXTY = -90, 80
+BTNWIDTH = 80
+BTNHEIGHT = 30
+
+HEROBOXX, HEROBOXY = 10, 10
+HEROBOXVAR = 260
+STATBOXX, STATBOXY = 10, 120
+INFOBOXX, INFOBOXY = 10, 630
+SKILBOXX, SKILBOXY = 425, 120
+INVBOXX, INVBOXY = 750, 120
+SPELBOXX, SPELBOXY = 1075, 120
+
 
 class Display(object):
     """
@@ -27,7 +49,7 @@ class Display(object):
 
         self.key_input = pygame.key.get_pressed()       # dit is voor de mousepress op een button.
 
-        cur_hero = data.party['alagos']
+        cur_hero = data.party['alagos']                 # todo, dit moet nog de hero die aan de beurt is worden
 
         self.party = list(data.party.values())
         self.hc = self.party.index(cur_hero)
@@ -39,21 +61,22 @@ class Display(object):
 
     def _init_buttons(self):
         bg_width = self.background.get_width()
-        button_c = screens.sprites.ButtonSprite(80, 30, (bg_width - 90, 10), "Close", pygame.K_ESCAPE)
-        button_q = screens.sprites.ButtonSprite(80, 30, (bg_width - 90, 45), "Previous", pygame.K_q)
-        button_w = screens.sprites.ButtonSprite(80, 30, (bg_width - 90, 80), "Next", pygame.K_w)
+        button_c = screens.sprites.ButtonSprite(BTNWIDTH, BTNHEIGHT, (bg_width + CLOSEX, CLOSEY), CLOSELBL, CLOSEKEY)
+        button_q = screens.sprites.ButtonSprite(BTNWIDTH, BTNHEIGHT, (bg_width + PREVX, PREVY), PREVLBL, PREVKEY)
+        button_w = screens.sprites.ButtonSprite(BTNWIDTH, BTNHEIGHT, (bg_width + NEXTX, NEXTY), NEXTLBL, NEXTKEY)
         self.buttons = (button_c, button_q, button_w)
 
     def _init_boxes(self):
         self.hero_boxes = []
         for index, hero in enumerate(self.party):
-            self.hero_boxes.append(screens.party.herobox.HeroBox((10 + index * 260, 10), index, hero))
+            self.hero_boxes.append(screens.party.herobox.HeroBox(
+                                                                (HEROBOXX + index * HEROBOXVAR, HEROBOXY), index, hero))
 
-        self.stats_box = screens.party.statsbox.StatsBox((10, 120))
-        self.info_box = screens.party.infobox.InfoBox((10, 630))
-        pygame.draw.rect(self.background, LINECOLOR, (425,  120, 315, 670), 1)
-        pygame.draw.rect(self.background, LINECOLOR, (750,  120, 315, 670), 1)
-        pygame.draw.rect(self.background, LINECOLOR, (1075, 120, 315, 670), 1)
+        self.stats_box = screens.party.statsbox.StatsBox((STATBOXX, STATBOXY))
+        self.info_box = screens.party.infobox.InfoBox((INFOBOXX, INFOBOXY))
+        pygame.draw.rect(self.background, LINECOLOR, (SKILBOXX, SKILBOXY, 315, 670), 1)  # de grootte zit in de class
+        pygame.draw.rect(self.background, LINECOLOR, (INVBOXX, INVBOXY,   315, 670), 1)  # zelf, de positie zit in deze
+        pygame.draw.rect(self.background, LINECOLOR, (SPELBOXX, SPELBOXY, 315, 670), 1)  # class, moet dat anders?
 
     def handle_view(self):
         """
@@ -79,6 +102,8 @@ class Display(object):
     def handle_multi_input(self, key_input, mouse_pos):
         """
         Registreert of er op de buttons wordt geklikt. En zet dat om naar keyboard input.
+        Dit is alleen maar voor het visuele oplichten van de knoppen,
+        self.key_input wordt hier niet gebruikt voor input.
         :param key_input: pygame.key.get_pressed()
         :param mouse_pos: pygame.mouse.get_pos()
         """
@@ -106,24 +131,24 @@ class Display(object):
 
             for button in self.buttons:
                 button_press = button.single_click(event)
-                if button_press == pygame.K_ESCAPE:
+                if button_press == CLOSEKEY:
                     return button_press
-                elif button_press == pygame.K_q:
+                elif button_press == PREVKEY:
                     self._previous()
                     break
-                elif button_press == pygame.K_w:
+                elif button_press == NEXTKEY:
                     self._next()
                     break
-            return                                  # als het niet de ESC button is, return niets.
+            return                                  # als het niet de CLOSE button is, return niets.
 
     def handle_single_keyboard_input(self, event):
         """
         Handelt keyboard events af.
         :param event: pygame.KEYDOWN uit engine.py
         """
-        if event.key == pygame.K_q:
+        if event.key == PREVKEY:
             self._previous()
-        elif event.key == pygame.K_w:
+        elif event.key == NEXTKEY:
             self._next()
         # elif event.key == pygame.K_m:
         #     self.party[0].lev.qty += 1

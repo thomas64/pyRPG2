@@ -24,6 +24,9 @@ ZOOMSPEED = .1
 MAXZOOM = 3.1
 DEFZOOM = 1.0
 MINZOOM = .5
+ZOOMPLUSKEY = pygame.K_KP_PLUS
+ZOOMMINKEY = pygame.K_KP_MINUS
+ZOOMRESETKEY = pygame.K_KP_DIVIDE
 
 # todo, mooiere map maken met variatie in het gras
 OVERWORLDPATH = 'resources/maps/start_forest.tmx'
@@ -71,15 +74,15 @@ class Window(object):
         :param key_input: pygame.key.get_pressed()
         :param dt: self.clock.tick(FPS)/1000.0
         """
-        if key_input[pygame.K_KP_PLUS]:
+        if key_input[ZOOMPLUSKEY]:
             value = self.map1.map_layer.zoom + ZOOMSPEED
             if value < MAXZOOM:
                 self.map1.map_layer.zoom = value
-        elif key_input[pygame.K_KP_MINUS]:
+        elif key_input[ZOOMMINKEY]:
             value = self.map1.map_layer.zoom - ZOOMSPEED
             if value > MINZOOM:
                 self.map1.map_layer.zoom = value
-        elif key_input[pygame.K_KP_DIVIDE]:
+        elif key_input[ZOOMRESETKEY]:
             self.map1.map_layer.zoom = DEFZOOM
 
         self.hero.speed(key_input)

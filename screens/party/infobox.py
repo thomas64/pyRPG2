@@ -7,6 +7,10 @@ import pygame
 
 BACKGROUNDCOLOR = pygame.Color("black")
 
+BOXWIDTH = 405
+BOXHEIGHT = 160
+TEXTX, TEXTY = 10, 10
+
 FONTCOLOR = pygame.Color("white")
 FONT = 'arial'
 FONTSIZE = 14
@@ -18,7 +22,7 @@ class InfoBox(object):
     Waar in het partyscreen alle omschrijvingen worden weergegeven.
     """
     def __init__(self, position):
-        self.surface = pygame.Surface((405, 160))
+        self.surface = pygame.Surface((BOXWIDTH, BOXHEIGHT))
         self.surface = self.surface.convert()
         self.rect = self.surface.get_rect()
         self.rect.topleft = position
@@ -39,8 +43,8 @@ class InfoBox(object):
         if type(text) == tuple:
             for i, line in enumerate(text):
                 label = self.font.render(line, True, FONTCOLOR)
-                self.surface.blit(label, (10, 10 + i * LINEHEIGHT))
+                self.surface.blit(label, (TEXTX, TEXTY + i * LINEHEIGHT))
         elif type(text) == str:
             label = self.font.render(text, True, FONTCOLOR)
-            self.surface.blit(label, (10, 10))
+            self.surface.blit(label, (TEXTX, TEXTY))
         screen.blit(self.surface, self.rect.topleft)
