@@ -7,7 +7,7 @@ class: etc
 import characters.stats
 
 
-PATH = 'resources/sprites/icons/'
+PATH = 'resources/sprites/icons/skills/'
 
 # todo, description aanpassen van skills. wanneer skills meer of anders kunnen, zoals pick locks voor thief.
 # todo, docstrings

@@ -216,6 +216,21 @@ class Hero(object):
             if stat.tot < 1:  # het origineel uit vb.net is < 0, klopt dat?
                 stat.tot = 1
 
+    def calc_skills(self):
+        """
+        Ik moet dit nog beter bekijken! Snelle opzet.
+        """
+        for skill in self.skills_tuple:
+            skill.ext = 0
+            for equipment_item in self.equipment_tuple:
+                skill.ext += getattr(equipment_item, skill.RAW.upper(), 0)
+            skill.tot = skill.qty + skill.ext
+            if skill.tot < 0 or skill.qty <= 0:
+                skill.tot = 0
+            # visueel aanpassen als het negatieve van de item groter is dan de skill van de hero
+            if skill.ext < 0 and skill.ext < -skill.qty and skill.positive_quantity:
+                skill.ext = -skill.qty
+
 
 class HeroData(enum.Enum):
     """

@@ -37,6 +37,7 @@ class Data(object):
 
         for hero in self.heroes.values():
             hero.calc_stats()
+            hero.calc_skills()
 
         self.party = containers.party.Party()
         self.party.add(self.heroes['alagos'], verbose=False)
