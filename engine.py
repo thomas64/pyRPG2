@@ -166,10 +166,12 @@ class GameEngine(object):
         Handelt de muis en keyboard input af.
         :param event: pygame.event.get()
         """
-
         if event.type == pygame.MOUSEBUTTONDOWN:
             console.mouse_down(event.pos, event.button)
+        if event.type == pygame.KEYDOWN:
+            console.keyboard_down(event.key, event.unicode)
 
+        if event.type == pygame.MOUSEBUTTONDOWN:
             if self.currentstate == states.GameState.Overworld or \
                self.currentstate == states.GameState.PartyScreen:
                 self.overworld.handle_single_mouse_input(event)
@@ -180,8 +182,6 @@ class GameEngine(object):
                     self.overworld.partyscreen.handle_single_mouse_motion(event)  # partyscreen verlaten.
 
         if event.type == pygame.KEYDOWN:
-            console.keyboard_down(event.key, event.unicode)
-
             if self.currentstate == states.GameState.Overworld or \
                self.currentstate == states.GameState.PartyScreen:
                 self.overworld.handle_single_keyboard_input(event)
@@ -191,17 +191,20 @@ class GameEngine(object):
             if event.key == KILLKEY:
                 self._kill_game()                           # todo, deze, de key en de methode moeten uiteindelijk weg
             if event.key == EXITKEY:
-                self.audio.play_sound(self.audio.select)            # omdat escape in menu standaard geen geluid geeft
                 if self.currentstate == states.GameState.MainMenu:          # eerst de keys op het toetsenbord
+                    self.audio.play_sound(self.audio.select)        # omdat escape in menu standaard geen geluid geeft
                     self._main_menu_select_exit_game()
                     return                                                  # returns, want anders zitten ze
                 elif self.currentstate == states.GameState.OptionsMenu:     # de menu's in de weg
+                    self.audio.play_sound(self.audio.select)
                     self._options_menu_select_back()
                     return
                 elif self.currentstate == states.GameState.PauseMenu:
+                    self.audio.play_sound(self.audio.select)
                     self._pause_menu_select_continue()
                     return
                 elif self.currentstate == states.GameState.Overworld:
+                    self.audio.play_sound(self.audio.select)
                     self._show_pause_menu()
                     return
 

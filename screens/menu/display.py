@@ -16,6 +16,11 @@ MENUFONTSIZE = 50
 MENUFONTCOLOR1 = pygame.Color("white")
 MENUFONTCOLOR2 = pygame.Color("yellow")
 
+UPKEY = pygame.K_UP
+DOWNKEY = pygame.K_DOWN
+SELECTKEY1 = pygame.K_RETURN
+SELECTKEY2 = pygame.K_KP_ENTER
+
 
 class Display(object):
     """
@@ -95,19 +100,19 @@ class Display(object):
                         return item.func
 
         elif event.type == pygame.KEYDOWN:
-            if event.key == pygame.K_UP and self.cur_item > 0:
+            if event.key == UPKEY and self.cur_item > 0:
                 self.audio.play_sound(self.audio.switch)
                 self.cur_item -= 1
-            elif event.key == pygame.K_UP and self.cur_item == 0:
+            elif event.key == UPKEY and self.cur_item == 0:
                 self.audio.play_sound(self.audio.error)
                 self.cur_item = 0
-            elif event.key == pygame.K_DOWN and self.cur_item < len(self.menu_texts) - 1:
+            elif event.key == DOWNKEY and self.cur_item < len(self.menu_texts) - 1:
                 self.audio.play_sound(self.audio.switch)
                 self.cur_item += 1
-            elif event.key == pygame.K_DOWN and self.cur_item == len(self.menu_texts) - 1:
+            elif event.key == DOWNKEY and self.cur_item == len(self.menu_texts) - 1:
                 self.audio.play_sound(self.audio.error)
                 self.cur_item = len(self.menu_texts) - 1
 
-            if event.key == pygame.K_RETURN or event.key == pygame.K_KP_ENTER:
+            if event.key in (SELECTKEY1, SELECTKEY2):
                 self.audio.play_sound(self.audio.select)
                 return self.menu_texts[self.cur_item].func

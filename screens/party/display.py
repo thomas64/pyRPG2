@@ -132,7 +132,7 @@ class Display(object):
             for button in self.buttons:
                 button_press = button.single_click(event)
                 if button_press == CLOSEKEY:
-                    return button_press
+                    return button_press             # alleen de closekey returned een waarde
                 elif button_press == PREVKEY:
                     self._previous()
                     break

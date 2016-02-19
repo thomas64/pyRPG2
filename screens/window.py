@@ -94,7 +94,7 @@ class Window(object):
     def handle_single_input(self, event):
         """
         Handelt keyevents af.
-        :param event: pygame.event.get() uit overworld.py
+        :param event: pygame.KEYDOWN uit engine.py
         """
         if event.key == ALIGNKEY:
             self.hero.align_to_grid(GRIDSIZE)
