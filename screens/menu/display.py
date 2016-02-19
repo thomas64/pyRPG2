@@ -18,8 +18,7 @@ MENUFONTCOLOR2 = pygame.Color("yellow")
 
 UPKEY = pygame.K_UP
 DOWNKEY = pygame.K_DOWN
-SELECTKEY1 = pygame.K_RETURN
-SELECTKEY2 = pygame.K_KP_ENTER
+SELECTKEYS = pygame.K_RETURN, pygame.K_KP_ENTER     # 2 mogelijkheden voor dezelfde constante
 
 
 class Display(object):
@@ -113,6 +112,6 @@ class Display(object):
                 self.audio.play_sound(self.audio.error)
                 self.cur_item = len(self.menu_texts) - 1
 
-            if event.key in (SELECTKEY1, SELECTKEY2):
+            if event.key in SELECTKEYS:
                 self.audio.play_sound(self.audio.select)
                 return self.menu_texts[self.cur_item].func
