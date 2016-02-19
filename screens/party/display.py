@@ -132,7 +132,7 @@ class Display(object):
             for button in self.buttons:
                 button_press = button.single_click(event)
                 if button_press == CLOSEKEY:
-                    return button_press             # alleen de closekey returned een waarde
+                    return CLOSEKEY                 # alleen de closekey returned een waarde
                 elif button_press == PREVKEY:
                     self._previous()
                     break
@@ -143,13 +143,18 @@ class Display(object):
 
     def handle_single_keyboard_input(self, event):
         """
-        Handelt keyboard events af.
+        Handelt keyboard events af. Deze methode wordt aangeroepen alleen door overworld.single_keyb_inp(),
+        en die wil een return terug.
         :param event: pygame.KEYDOWN uit engine.py
+        :return: return niets, alleen met de closekey
         """
-        if event.key == PREVKEY:
+        if event.key == CLOSEKEY:
+            return CLOSEKEY
+        elif event.key == PREVKEY:
             self._previous()
         elif event.key == NEXTKEY:
             self._next()
+        return
         # elif event.key == pygame.K_m:
         #     self.party[0].lev.qty += 1
 

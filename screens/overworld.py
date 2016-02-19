@@ -22,13 +22,16 @@ UPLBL = "Up"
 DOWNLBL = "Down"
 LEFTLBL = "Left"
 RIGHTLBL = "Right"
+
 INVKEY = pygame.K_i
 UPKEY = pygame.K_UP
 DOWNKEY = pygame.K_DOWN
 LEFTKEY = pygame.K_LEFT
 RIGHTKEY = pygame.K_RIGHT
+
 BTNWIDTH = 40
 BTNHEIGHT = 40
+
 INVX, INVY = -200, -300
 UPX, UPY = -150, -300
 DOWNX, DOWNY = -150, -250
@@ -120,16 +123,14 @@ class Overworld(object):
         :param event: pygame.MOUSEBUTTONDOWN uit engine.py
         """
         if self.engine.currentstate == states.GameState.Overworld:
-
             if event.button == 1:
                 for button in self.buttons:
                     button_press = button.single_click(event)
-                    if button_press == pygame.K_i:
+                    if button_press == INVKEY:
                         self._show_party_screen()
                         break
 
         elif self.engine.currentstate == states.GameState.PartyScreen:
-
             if self.partyscreen.handle_single_mouse_input(event):       # alleen de ESC key returned een waarde
                 self._close_party_screen()
 
@@ -139,17 +140,12 @@ class Overworld(object):
         :param event: pygame.KEYDOWN uit engine.py
         """
         if self.engine.currentstate == states.GameState.Overworld:
-
-            if event.key == pygame.K_i:
+            if event.key == INVKEY:
                 self._show_party_screen()
-
             self.window.handle_single_input(event)
 
         elif self.engine.currentstate == states.GameState.PartyScreen:
-
-            self.partyscreen.handle_single_keyboard_input(event)
-
-            if event.key == pygame.K_ESCAPE or event.key == pygame.K_i:
+            if self.partyscreen.handle_single_keyboard_input(event) or event.key == INVKEY:
                 self._close_party_screen()
 
     def _show_party_screen(self):
