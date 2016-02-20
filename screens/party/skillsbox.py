@@ -55,7 +55,7 @@ class SkillsBox(object):
 
         self.table_data = []
         for skill in hero.skills_tuple:
-            # if skill.positive_quantity():
+            if skill.positive_quantity():
                 self.table_data.append(
                     # row[0],        row[1],                 row[2],        row[3],    row[4],    row[5]
                     [skill.ICON,  str(skill.NAM) + " :",  str(skill.qty),  skill.ext,   None,   skill.DESC]
@@ -84,7 +84,7 @@ class SkillsBox(object):
         offset moet krijgen hier.
         """
         rect = self.normalfont.render(text, True, FONTCOLOR1).get_rect()
-        rect.topleft = self.rect.left + COLUMN1X, (self.rect.top + COLUMNSY) + index * ROWHEIGHT
+        rect.topleft = self.rect.left + COLUMN2X, (self.rect.top + COLUMNSY) + index * ROWHEIGHT
         return rect
 
     def _line(self, value, col):

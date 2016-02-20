@@ -7,6 +7,7 @@ import pygame
 
 import screens.party.herobox
 import screens.party.infobox
+import screens.party.inventorybox
 import screens.party.skillsbox
 import screens.party.statsbox
 import screens.sprites
@@ -75,9 +76,9 @@ class Display(object):
 
         self.stats_box = screens.party.statsbox.StatsBox((STATBOXX, STATBOXY))
         self.info_box = screens.party.infobox.InfoBox((INFOBOXX, INFOBOXY))
-        self.skills_box = screens.party.skillsbox.SkillsBox((SKILBOXX, SKILBOXY))        # de grootte zit in de class
-        pygame.draw.rect(self.background, LINECOLOR, (INVBOXX, INVBOXY,   315, 670), 1)  # zelf, de positie zit in deze
-        pygame.draw.rect(self.background, LINECOLOR, (SPELBOXX, SPELBOXY, 315, 670), 1)  # class, moet dat anders?
+        self.skills_box = screens.party.skillsbox.SkillsBox((SKILBOXX, SKILBOXY))         # de grootte zit in de class
+        self.inventory_box = screens.party.inventorybox.InventoryBox((INVBOXX, INVBOXY))  # zelf, de positie zit in deze
+        pygame.draw.rect(self.background, LINECOLOR, (SPELBOXX, SPELBOXY, 315, 670), 1)   # class, moet dat anders?
 
     def handle_view(self):
         """
@@ -97,6 +98,7 @@ class Display(object):
         self.stats_box.draw(self.screen, cur_hero)
         self.info_box.draw(self.screen, self.info_label)
         self.skills_box.draw(self.screen, cur_hero)
+        self.inventory_box.draw(self.screen, cur_hero)
 
         # name2 = self.largefont.render(cur_hero.NAM, True, FONTCOLOR)   = voorbeeld van hoe een naam buiten een herobox
         # name2_rect = self.screen.blit(name2, (500, 300))
