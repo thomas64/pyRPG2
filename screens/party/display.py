@@ -121,6 +121,8 @@ class Display(object):
         """
         if self.stats_box.rect.collidepoint(event.pos):
             self.info_label = self.stats_box.mouse_hover(event)
+        elif self.skills_box.rect.collidepoint(event.pos):
+            self.info_label = self.skills_box.mouse_hover(event)
 
     def handle_single_mouse_input(self, event):
         """

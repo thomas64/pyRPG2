@@ -5,17 +5,17 @@ class: SkillsBox
 
 import pygame
 
-
 BACKGROUNDCOLOR = pygame.Color("black")
 LINECOLOR = pygame.Color("white")
 
 BOXWIDTH = 315
 BOXHEIGHT = 670
 TITLEX, TITLEY = 7, 1
-COLUMN1X = 40
-COLUMN2X = 80
-COLUMN3X = 200
-COLUMN4X = 230
+ICONOFFSET = -5
+COLUMN1X = 50
+COLUMN2X = 90
+COLUMN3X = 190
+COLUMN4X = 220
 COLUMNSY = 60
 ROWHEIGHT = 33
 
@@ -54,10 +54,10 @@ class SkillsBox(object):
         self.title = self.largefont.render(TITLE, True, FONTCOLOR1)
 
         self.table_data = []
-
         for skill in hero.skills_tuple:
-            if skill.positive_quantity():
+            # if skill.positive_quantity():
                 self.table_data.append(
+                    # row[0],        row[1],                 row[2],        row[3],    row[4],    row[5]
                     [skill.ICON,  str(skill.NAM) + " :",  str(skill.qty),  skill.ext,   None,   skill.DESC]
                 )
 
@@ -65,7 +65,7 @@ class SkillsBox(object):
         for index, row in enumerate(self.table_data):
             row[4] = self._rect(index, row[1])
 
-        # maak dan een nieuwe tabel aan met de tekst, maar dan gerendered.
+        # maak dan een nieuwe tabel aan met de tekst en icons, maar dan gerendered.
         self.table_view = []
         for index, row in enumerate(self.table_data):
             self.table_view.append(list())
@@ -118,7 +118,7 @@ class SkillsBox(object):
 
         self.surface.blit(self.title, (TITLEX, TITLEY))
         for index, row in enumerate(self.table_view):
-            self.surface.blit(row[0], (COLUMN1X, COLUMNSY - 5 + index * ROWHEIGHT))
+            self.surface.blit(row[0], (COLUMN1X, COLUMNSY + ICONOFFSET + index * ROWHEIGHT))
         for index, row in enumerate(self.table_view):
             self.surface.blit(row[1], (COLUMN2X, COLUMNSY + index * ROWHEIGHT))
         for index, row in enumerate(self.table_view):
@@ -127,3 +127,16 @@ class SkillsBox(object):
             self.surface.blit(row[3], (COLUMN4X, COLUMNSY + index * ROWHEIGHT))
 
         screen.blit(self.surface, self.rect.topleft)
+
+    def mouse_hover(self, event):
+        """
+        Als de muis over een item in uit de eerste visuele gaat. row[4] dat zijn de rects.
+        Zet cur_item op de index van degene waar de muis over gaat.
+        :param event: pygame.MOUSEMOTION uit engine.py
+        :return: row[5] is de kolom met de info.
+        """
+        self.cur_item = None
+        for index, row in enumerate(self.table_data):
+            if row[4].collidepoint(event.pos):
+                self.cur_item = index
+                return row[5]

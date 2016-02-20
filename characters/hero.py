@@ -218,7 +218,9 @@ class Hero(object):
 
     def calc_skills(self):
         """
-        Ik moet dit nog beter bekijken! Snelle opzet.
+        Hetzelfde als calc_stats ongeveer, maar dan alles in een keer.
+        Ga alle skills langs en ga daarmee alle equipment langs en voeg die toe aan .ext.
+        Ext en qty vormen samen totaal.
         """
         for skill in self.skills_tuple:
             skill.ext = 0
