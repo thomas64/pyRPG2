@@ -102,7 +102,7 @@ class HeroBox(object):
         else:
             self.background.fill(BACKGROUNDCOLOR)
 
-    def single_click(self, event, cur_hc):
+    def mouse_click(self, event, cur_hc):
         """
         Ontvang mouse event. Kijk of het met de de surface collide.
         :param event: pygame.MOUSEBUTTONDOWN uit engine.py

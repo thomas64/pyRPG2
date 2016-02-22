@@ -30,6 +30,7 @@ BLTBOX = pygame.Rect(136, 207, 33, 33)
 BTSBOX = pygame.Rect(136, 270, 33, 33)
 ACYBOX = pygame.Rect(206, 197, 33, 33)
 GEARBOXES = (WPNBOX, SLDBOX, HLMBOX, AMUBOX, ARMBOX, CLKBOX, GLVBOX, LRGBOX, RRGBOX, BLTBOX, BTSBOX, ACYBOX)
+SUBX, SUBY = 32, 32
 
 FONTCOLOR = pygame.Color("white")
 FONT = 'impact'
@@ -62,7 +63,7 @@ class InventoryBox(object):
         for gear in hero.equipment_tuple:
             # todo, de 'and' voorwaarde mag weg wanneer alle gear een sprite gekregen heeft.
             if hasattr(gear, 'SPR') and gear.SPR:
-                self.gear_sprites.append(pygame.image.load(gear.SPR).subsurface(gear.COL, gear.ROW, 32, 32))
+                self.gear_sprites.append(pygame.image.load(gear.SPR).subsurface(gear.COL, gear.ROW, SUBX, SUBY))
             else:
                 self.gear_sprites.append(pygame.Surface((0, 0)))
 
@@ -85,3 +86,17 @@ class InventoryBox(object):
             self.surface.blit(self.gear_sprites[index], box)
 
         screen.blit(self.surface, self.rect.topleft)
+
+    def mouse_click(self, event, hero):
+        """
+        Deze moet van de display de muispositie en het geartype teruggeven. Daar vraagt display om, zodat er een
+        clickbox opgezet kan worden.
+        :param event: pygame.MOUSEBUTTONDOWN uit engine.py
+        :param hero: self.cur_hero uit party/display.py
+        :return: None als er mis geklikt wordt.
+        """
+        rel_pos_x = event.pos[0] - self.rect.left
+        rel_pos_y = event.pos[1] - self.rect.top
+        if SLDBOX.collidepoint(rel_pos_x, rel_pos_y):
+            return event.pos, hero.sld
+        return None, None

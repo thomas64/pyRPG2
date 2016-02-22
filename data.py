@@ -55,11 +55,11 @@ class Data(object):
 
         self.inventory = containers.inventory.Inventory()
 
-        # piet1 = items.weapon.WeaponsData.factory(items.weapon.WeaponsData.bronzeshortsword)
+        piet1 = items.weapon.WeaponsData.factory(items.weapon.WeaponsData.bronzeshortsword)
         # piet2 = items.shield.ShieldsData.factory(items.shield.ShieldsData.silverkite)
         # piet3 = items.boots.BootsData.factory(items.boots.BootsData.ironboots)
         #
-        # self.inventory.add(piet1, 20)
+        self.inventory.add(piet1, 20)
         # self.inventory.add(piet2, 9)
         # self.inventory.add(piet3, 48)
         # self.inventory.add(piet2, 0)

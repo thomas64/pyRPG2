@@ -7,6 +7,7 @@ import pygame
 
 import screens.party.herobox
 import screens.party.infobox
+import screens.party.invclickbox
 import screens.party.inventorybox
 import screens.party.skillsbox
 import screens.party.statsbox
@@ -51,14 +52,15 @@ class Display(object):
 
         self.key_input = pygame.key.get_pressed()       # dit is voor de mousepress op een button.
 
-        cur_hero = data.party['alagos']                 # todo, dit moet nog de hero die aan de beurt is worden
+        self.cur_hero = data.party['alagos']                 # todo, dit moet nog de hero die aan de beurt is worden
 
         self.party = list(data.party.values())
-        self.hc = self.party.index(cur_hero)
+        self.hc = self.party.index(self.cur_hero)
 
         self._init_buttons()
         self._init_boxes()
 
+        self.invclick_box = None
         self.info_label = ""
 
     def _init_buttons(self):
@@ -93,12 +95,14 @@ class Display(object):
             hero_box.select(self.hc)
             hero_box.draw(self.screen)
 
-        cur_hero = self.party[self.hc]
+        self.cur_hero = self.party[self.hc]
 
-        self.stats_box.draw(self.screen, cur_hero)
+        self.stats_box.draw(self.screen, self.cur_hero)
         self.info_box.draw(self.screen, self.info_label)
-        self.skills_box.draw(self.screen, cur_hero)
-        self.inventory_box.draw(self.screen, cur_hero)
+        self.skills_box.draw(self.screen, self.cur_hero)
+        self.inventory_box.draw(self.screen, self.cur_hero)
+        if self.invclick_box:
+            self.invclick_box.draw(self.screen, self.cur_hero)
 
         # name2 = self.largefont.render(cur_hero.NAM, True, FONTCOLOR)   = voorbeeld van hoe een naam buiten een herobox
         # name2_rect = self.screen.blit(name2, (500, 300))
@@ -132,8 +136,21 @@ class Display(object):
         :param event: pygame.MOUSEBUTTONDOWN uit engine.py
         """
         if event.button == 1:
+
+            # als de clickbox er is en er wordt buiten gelikt, laat hem dan verdwijnen.
+            if self.invclick_box and not self.invclick_box.rect.collidepoint(event.pos):
+                self.invclick_box = None
+
             for hero_box in self.hero_boxes:
-                self.hc = hero_box.single_click(event, self.hc)
+                self.hc = hero_box.mouse_click(event, self.hc)
+
+            # als er in de inventory box wordt geklikt
+            if self.inventory_box.rect.collidepoint(event.pos):
+                # krijg de positie en gear type terug
+                boxpos, gear = self.inventory_box.mouse_click(event, self.cur_hero)
+                # als er geen clickbox is en wel een gear type, geef dan een clickbox weer
+                if not self.invclick_box and gear:
+                    self.invclick_box = screens.party.invclickbox.InvClickBox(boxpos, gear)
 
             for button in self.buttons:
                 button_press = button.single_click(event)
