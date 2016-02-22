@@ -42,4 +42,5 @@ class HelmetsData(items.gear.GearData):
         """
         if helmet is None:
             return items.gear.GearItem(items.gear.GearType.helmet)
+        helmet['spr'] = ""
         return items.gear.GearItem(items.gear.GearType.helmet, **helmet.value)

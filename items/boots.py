@@ -37,4 +37,5 @@ class BootsData(items.gear.GearData):
         """
         if boots is None:
             return items.gear.GearItem(items.gear.GearType.boots)
+        boots['spr'] = ""
         return items.gear.GearItem(items.gear.GearType.boots, **boots.value)

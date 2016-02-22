@@ -27,7 +27,7 @@ DEBUGKEY = pygame.K_F12
 DEBUGFONT = 'courier'
 DEBUGFONTSIZE = 11
 DEBUGFONTCOLOR = pygame.Color("white")
-DEBUGRECT = (0, 0, 600, 400)
+DEBUGRECT = pygame.Rect(0, 0, 600, 400)
 DEBUGRECTCOLOR = (32, 32, 32, 200)
 
 
@@ -131,7 +131,7 @@ class GameEngine(object):
                     text += text2
                 except AttributeError:
                     pass
-                pygame.gfxdraw.box(self.screen, pygame.Rect(DEBUGRECT), DEBUGRECTCOLOR)
+                pygame.gfxdraw.box(self.screen, DEBUGRECT, DEBUGRECTCOLOR)
                 for count, line in enumerate(text):
                     self.screen.blit(self.debugfont.render(line, True, DEBUGFONTCOLOR), (0, count * 10))
 

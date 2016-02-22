@@ -21,6 +21,7 @@ class WeaponsDataClass(items.gear.GearDataClass):
         """
         if weapon is None:
             return items.gear.GearItem(items.gear.GearType.weapon)
+        weapon['spr'] = 'resources/sprites/icons/gear/weapon1.png'
         return items.gear.GearItem(items.gear.GearType.weapon, **weapon)
 
     def __init__(self):

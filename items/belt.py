@@ -23,4 +23,5 @@ class BeltsData(items.gear.GearData):
         """
         if belt is None:
             return items.gear.GearItem(items.gear.GearType.belt)
+        belt['spr'] = ""
         return items.gear.GearItem(items.gear.GearType.belt, **belt.value)

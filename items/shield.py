@@ -21,6 +21,7 @@ class ShieldsDataClass(items.gear.GearDataClass):
         """
         if shield is None:
             return items.gear.GearItem(items.gear.GearType.shield)
+        shield['spr'] = 'resources/sprites/icons/gear/shield3.png'
         return items.gear.GearItem(items.gear.GearType.shield, **shield)
 
     def __init__(self):

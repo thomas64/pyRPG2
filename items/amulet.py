@@ -23,4 +23,5 @@ class AmuletsData(items.gear.GearData):
         """
         if amulet is None:
             return items.gear.GearItem(items.gear.GearType.amulet)
+        amulet['spr'] = ""
         return items.gear.GearItem(items.gear.GearType.amulet, **amulet.value)

@@ -21,6 +21,7 @@ class ArmorsDataClass(items.gear.GearDataClass):
         """
         if armor is None:
             return items.gear.GearItem(items.gear.GearType.armor)
+        armor['spr'] = ""
         return items.gear.GearItem(items.gear.GearType.armor, **armor)
 
     def __init__(self):

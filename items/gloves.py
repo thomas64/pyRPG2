@@ -23,4 +23,5 @@ class GlovesData(items.gear.GearData):
         """
         if gloves is None:
             return items.gear.GearItem(items.gear.GearType.gloves)
+        gloves['spr'] = ""
         return items.gear.GearItem(items.gear.GearType.gloves, **gloves.value)

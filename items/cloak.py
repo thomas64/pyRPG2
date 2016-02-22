@@ -44,4 +44,5 @@ class CloakData(items.gear.GearData):
         """
         if cloak is None:
             return items.gear.GearItem(items.gear.GearType.cloak)
+        cloak['spr'] = ""
         return items.gear.GearItem(items.gear.GearType.cloak, **cloak.value)

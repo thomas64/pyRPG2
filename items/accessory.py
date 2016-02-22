@@ -23,4 +23,5 @@ class AccessoriesData(items.gear.GearData):
         """
         if accessory is None:
             return items.gear.GearItem(items.gear.GearType.accessory)
+        accessory['spr'] = ""
         return items.gear.GearItem(items.gear.GearType.accessory, **accessory.value)

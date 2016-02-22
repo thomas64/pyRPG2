@@ -23,4 +23,5 @@ class RingsData(items.gear.GearData):
         """
         if ring is None:
             return items.gear.GearItem(items.gear.GearType.ring)
+        ring['spr'] = ""
         return items.gear.GearItem(items.gear.GearType.ring, **ring.value)
