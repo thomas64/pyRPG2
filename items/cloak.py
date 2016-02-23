@@ -5,6 +5,8 @@ class: CloaksData
 
 import items.gear
 
+SPRITEPATH = ''
+
 
 class CloakData(items.gear.GearData):
     """
@@ -43,6 +45,5 @@ class CloakData(items.gear.GearData):
         :return: een gearitem object met attributen uit de bovenstaande enum dict
         """
         if cloak is None:
-            return items.gear.GearItem(items.gear.GearType.cloak)
-        cloak['spr'] = ""
-        return items.gear.GearItem(items.gear.GearType.cloak, **cloak.value)
+            return items.gear.GearItem(items.gear.GearType.cloak, SPRITEPATH)
+        return items.gear.GearItem(items.gear.GearType.cloak, SPRITEPATH, **cloak.value)

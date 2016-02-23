@@ -7,6 +7,8 @@ import items.gear
 
 # todo, prijzen nog bepalen
 
+SPRITEPATH = ''
+
 
 class BootsData(items.gear.GearData):
     """
@@ -36,6 +38,5 @@ class BootsData(items.gear.GearData):
         :return: een gearitem object met attributen uit de bovenstaande enum dict
         """
         if boots is None:
-            return items.gear.GearItem(items.gear.GearType.boots)
-        boots['spr'] = ""
-        return items.gear.GearItem(items.gear.GearType.boots, **boots.value)
+            return items.gear.GearItem(items.gear.GearType.boots, SPRITEPATH)
+        return items.gear.GearItem(items.gear.GearType.boots, SPRITEPATH, **boots.value)

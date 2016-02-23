@@ -6,6 +6,8 @@ obj: ShieldsData
 
 import items.gear
 
+SPRITEPATH = 'resources/sprites/icons/gear/shield3.png'
+
 
 class ShieldsDataClass(items.gear.GearDataClass):
     """
@@ -20,9 +22,8 @@ class ShieldsDataClass(items.gear.GearDataClass):
         :return: een gearitem object met attributen uit de bovenstaande enum dict
         """
         if shield is None:
-            return items.gear.GearItem(items.gear.GearType.shield)
-        shield['spr'] = 'resources/sprites/icons/gear/shield3.png'
-        return items.gear.GearItem(items.gear.GearType.shield, **shield)
+            return items.gear.GearItem(items.gear.GearType.shield, SPRITEPATH)
+        return items.gear.GearItem(items.gear.GearType.shield, SPRITEPATH, **shield)
 
     def __init__(self):
         super().__init__()

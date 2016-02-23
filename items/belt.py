@@ -7,6 +7,8 @@ import items.gear
 
 # todo, alle belts afmaken
 
+SPRITEPATH = ''
+
 
 class BeltsData(items.gear.GearData):
     """
@@ -22,6 +24,5 @@ class BeltsData(items.gear.GearData):
         :return: een gearitem object met attributen uit de bovenstaande enum dict
         """
         if belt is None:
-            return items.gear.GearItem(items.gear.GearType.belt)
-        belt['spr'] = ""
-        return items.gear.GearItem(items.gear.GearType.belt, **belt.value)
+            return items.gear.GearItem(items.gear.GearType.belt, SPRITEPATH)
+        return items.gear.GearItem(items.gear.GearType.belt, SPRITEPATH, **belt.value)
