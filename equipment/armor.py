@@ -4,12 +4,12 @@ class: ArmorsDataClass
 obj: ArmorsData
 """
 
-import items.gear
+import equipment.gear
 
 SPRITEPATH = ''
 
 
-class ArmorsDataClass(items.gear.GearDataClass):
+class ArmorsDataClass(equipment.gear.GearDataClass):
     """
     Hier staan alle armors uit het spel in een dict als enum met een dict voor de waarden.
     """
@@ -22,8 +22,8 @@ class ArmorsDataClass(items.gear.GearDataClass):
         :return: een gearitem object met attributen uit de bovenstaande enum dict
         """
         if armor is None:
-            return items.gear.GearItem(items.gear.GearType.armor, SPRITEPATH)
-        return items.gear.GearItem(items.gear.GearType.armor, SPRITEPATH, **armor)
+            return equipment.gear.GearItem(equipment.gear.GearType.armor, SPRITEPATH)
+        return equipment.gear.GearItem(equipment.gear.GearType.armor, SPRITEPATH, **armor)
 
     def __init__(self):
         super().__init__()

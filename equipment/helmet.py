@@ -3,14 +3,14 @@
 class: HelmetsData
 """
 
-import items.gear
+import equipment.gear
 
 # todo, wizard hat stats nog aanpassen, vooral betreffende protection en weight
 
 SPRITEPATH = ''
 
 
-class HelmetsData(items.gear.GearData):
+class HelmetsData(equipment.gear.GearData):
     """
     Hier staan alle helmen uit het spel in als enum met een dict voor de waarden.
     """
@@ -43,5 +43,5 @@ class HelmetsData(items.gear.GearData):
         :return: een gearitem object met attributen uit de bovenstaande enum dict
         """
         if helmet is None:
-            return items.gear.GearItem(items.gear.GearType.helmet, SPRITEPATH)
-        return items.gear.GearItem(items.gear.GearType.helmet, SPRITEPATH, **helmet.value)
+            return equipment.gear.GearItem(equipment.gear.GearType.helmet, SPRITEPATH)
+        return equipment.gear.GearItem(equipment.gear.GearType.helmet, SPRITEPATH, **helmet.value)

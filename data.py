@@ -6,17 +6,17 @@ class: Data
 import collections
 
 import characters.hero
-import items.weapon
-import items.shield
-import items.helmet
-import items.amulet
-import items.armor
-import items.cloak
-import items.gloves
-import items.ring
-import items.belt
-import items.boots
-import items.accessory
+import equipment.weapon
+import equipment.shield
+import equipment.helmet
+import equipment.amulet
+import equipment.armor
+import equipment.cloak
+import equipment.gloves
+import equipment.ring
+import equipment.belt
+import equipment.boots
+import equipment.accessory
 import containers.party
 import containers.inventory
 
@@ -56,16 +56,16 @@ class Data(object):
 
         self.inventory = containers.inventory.Inventory()
 
-        piet1 = items.weapon.WeaponsData.factory(items.weapon.WeaponsData.bronzeshortsword)
-        piet2 = items.shield.ShieldsData.factory(items.shield.ShieldsData.silverkite)
-        piet3 = items.boots.BootsData.factory(items.boots.BootsData.ironboots)
-        piet4 = items.boots.BootsData.factory(items.boots.BootsData.bootsofmotion)
-        piet5 = items.boots.BootsData.factory(items.boots.BootsData.silenceboots)
-        piet6 = items.boots.BootsData.factory(items.boots.BootsData.titaniumboots)
-        piet7 = items.weapon.WeaponsData.factory(items.weapon.WeaponsData.bronzedagger)
-        piet8 = items.shield.ShieldsData.factory(items.shield.ShieldsData.woodentarge)
-        piet9 = items.shield.ShieldsData.factory(items.shield.ShieldsData.bronzescutum)
-        piet10 = items.shield.ShieldsData.factory(items.shield.ShieldsData.ironheater)
+        piet1 = equipment.weapon.WeaponsData.factory(equipment.weapon.WeaponsData.bronzeshortsword)
+        piet2 = equipment.shield.ShieldsData.factory(equipment.shield.ShieldsData.silverkite)
+        piet3 = equipment.boots.BootsData.factory(equipment.boots.BootsData.ironboots)
+        piet4 = equipment.boots.BootsData.factory(equipment.boots.BootsData.bootsofmotion)
+        piet5 = equipment.boots.BootsData.factory(equipment.boots.BootsData.silenceboots)
+        piet6 = equipment.boots.BootsData.factory(equipment.boots.BootsData.titaniumboots)
+        piet7 = equipment.weapon.WeaponsData.factory(equipment.weapon.WeaponsData.bronzedagger)
+        piet8 = equipment.shield.ShieldsData.factory(equipment.shield.ShieldsData.woodentarge)
+        piet9 = equipment.shield.ShieldsData.factory(equipment.shield.ShieldsData.bronzescutum)
+        piet10 = equipment.shield.ShieldsData.factory(equipment.shield.ShieldsData.ironheater)
 
         self.inventory.add(piet3, 48)
         self.inventory.add(piet1, 20)

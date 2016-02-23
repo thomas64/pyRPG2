@@ -3,14 +3,14 @@
 class: AccessoryDataBase
 """
 
-import items.gear
+import equipment.gear
 
 # todo, accessoires afmaken
 
 SPRITEPATH = ''
 
 
-class AccessoryDatabase(items.gear.GearData):
+class AccessoryDatabase(equipment.gear.GearData):
     """
     Hier staan alle accessoires uit het spel in als OrderedDict met een dict voor de waarden.
     """
@@ -30,6 +30,6 @@ class AccessoryDatabase(items.gear.GearData):
         :return: een gearitem object met attributen uit de bovenstaande ordered dict
         """
         if accessory is None:
-            return items.gear.GearItem(items.gear.GearType.acy)
+            return equipment.gear.GearItem(equipment.gear.GearType.acy)
         accessory['spr'] = SPRITEPATH
-        return items.gear.GearItem(items.gear.GearType.acy, **accessory)
+        return equipment.gear.GearItem(equipment.gear.GearType.acy, **accessory)

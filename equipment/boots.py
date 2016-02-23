@@ -3,14 +3,14 @@
 class: BootsData
 """
 
-import items.gear
+import equipment.gear
 
 # todo, prijzen nog bepalen
 
 SPRITEPATH = ''
 
 
-class BootsData(items.gear.GearData):
+class BootsData(equipment.gear.GearData):
     """
     Hier staan alle laarzen uit het spel in als enum met een dict voor de waarden.
     """
@@ -38,5 +38,5 @@ class BootsData(items.gear.GearData):
         :return: een gearitem object met attributen uit de bovenstaande enum dict
         """
         if boots is None:
-            return items.gear.GearItem(items.gear.GearType.boots, SPRITEPATH)
-        return items.gear.GearItem(items.gear.GearType.boots, SPRITEPATH, **boots.value)
+            return equipment.gear.GearItem(equipment.gear.GearType.boots, SPRITEPATH)
+        return equipment.gear.GearItem(equipment.gear.GearType.boots, SPRITEPATH, **boots.value)

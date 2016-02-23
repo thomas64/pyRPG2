@@ -4,12 +4,12 @@ class: WeaponsDataClass
 obj: WeaponsData
 """
 
-import items.gear
+import equipment.gear
 
 SPRITEPATH = 'resources/sprites/icons/gear/weapon1.png'
 
 
-class WeaponsDataClass(items.gear.GearDataClass):
+class WeaponsDataClass(equipment.gear.GearDataClass):
     """
     Hier staan alle wapens uit het spel in een dict als enum met een dict voor de waarden.
     """
@@ -22,8 +22,8 @@ class WeaponsDataClass(items.gear.GearDataClass):
         :return: een gearitem object met attributen uit de bovenstaande enum dict
         """
         if weapon is None:
-            return items.gear.GearItem(items.gear.GearType.weapon, SPRITEPATH)
-        return items.gear.GearItem(items.gear.GearType.weapon, SPRITEPATH, **weapon)
+            return equipment.gear.GearItem(equipment.gear.GearType.weapon, SPRITEPATH)
+        return equipment.gear.GearItem(equipment.gear.GearType.weapon, SPRITEPATH, **weapon)
 
     def __init__(self):
         super().__init__()

@@ -3,14 +3,14 @@
 class: RingsData
 """
 
-import items.gear
+import equipment.gear
 
 # todo, ringen afmaken
 
 SPRITEPATH = ''
 
 
-class RingsData(items.gear.GearData):
+class RingsData(equipment.gear.GearData):
     """
     Hier staan alle ringen uit het spel in als enum met een dict voor de waarden.
     """
@@ -24,5 +24,5 @@ class RingsData(items.gear.GearData):
         :return: een gearitem object met attributen uit de bovenstaande enum dict
         """
         if ring is None:
-            return items.gear.GearItem(items.gear.GearType.ring, SPRITEPATH)
-        return items.gear.GearItem(items.gear.GearType.ring, SPRITEPATH, **ring.value)
+            return equipment.gear.GearItem(equipment.gear.GearType.ring, SPRITEPATH)
+        return equipment.gear.GearItem(equipment.gear.GearType.ring, SPRITEPATH, **ring.value)
