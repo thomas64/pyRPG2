@@ -3,12 +3,12 @@
 class: CloaksData
 """
 
-import equipment.gear
+import equipment.equipment
 
 SPRITEPATH = ''
 
 
-class CloakData(equipment.gear.GearData):
+class CloakData(equipment.equipment.GearData):
     """
     Hier staan alle mantels uit het spel in als enum met een dict voor de waarden.
     """
@@ -45,5 +45,5 @@ class CloakData(equipment.gear.GearData):
         :return: een gearitem object met attributen uit de bovenstaande enum dict
         """
         if cloak is None:
-            return equipment.gear.GearItem(equipment.gear.GearType.cloak, SPRITEPATH)
-        return equipment.gear.GearItem(equipment.gear.GearType.cloak, SPRITEPATH, **cloak.value)
+            return equipment.equipment.GearItem(equipment.equipment.GearType.cloak, SPRITEPATH)
+        return equipment.equipment.GearItem(equipment.equipment.GearType.cloak, SPRITEPATH, **cloak.value)

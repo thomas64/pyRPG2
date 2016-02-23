@@ -3,14 +3,14 @@
 class: BeltsData
 """
 
-import equipment.gear
+import equipment.equipment
 
 # todo, alle belts afmaken
 
 SPRITEPATH = ''
 
 
-class BeltsData(equipment.gear.GearData):
+class BeltsData(equipment.equipment.GearData):
     """
     Hier staan alle gordels uit het spel in als enum met een dict voor de waarden.
     """
@@ -24,5 +24,5 @@ class BeltsData(equipment.gear.GearData):
         :return: een gearitem object met attributen uit de bovenstaande enum dict
         """
         if belt is None:
-            return equipment.gear.GearItem(equipment.gear.GearType.belt, SPRITEPATH)
-        return equipment.gear.GearItem(equipment.gear.GearType.belt, SPRITEPATH, **belt.value)
+            return equipment.equipment.GearItem(equipment.equipment.GearType.belt, SPRITEPATH)
+        return equipment.equipment.GearItem(equipment.equipment.GearType.belt, SPRITEPATH, **belt.value)

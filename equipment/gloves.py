@@ -3,14 +3,14 @@
 class: GlovesData
 """
 
-import equipment.gear
+import equipment.equipment
 
 # todo, alle gloves afmaken
 
 SPRITEPATH = ''
 
 
-class GlovesData(equipment.gear.GearData):
+class GlovesData(equipment.equipment.GearData):
     """
     Hier staan alle handschoenen uit het spel in als enum met een dict voor de waarden.
     """
@@ -24,5 +24,5 @@ class GlovesData(equipment.gear.GearData):
         :return: een gearitem object met attributen uit de bovenstaande enum dict
         """
         if gloves is None:
-            return equipment.gear.GearItem(equipment.gear.GearType.gloves, SPRITEPATH)
-        return equipment.gear.GearItem(equipment.gear.GearType.gloves, SPRITEPATH, **gloves.value)
+            return equipment.equipment.GearItem(equipment.equipment.GearType.gloves, SPRITEPATH)
+        return equipment.equipment.GearItem(equipment.equipment.GearType.gloves, SPRITEPATH, **gloves.value)

@@ -3,14 +3,14 @@
 class: AmuletsData
 """
 
-import equipment.gear
+import equipment.equipment
 
 # todo, alle amuletten afmaken
 
 SPRITEPATH = ''
 
 
-class AmuletsData(equipment.gear.GearData):
+class AmuletsData(equipment.equipment.GearData):
     """
     Hier staan alle amuletten uit het spel in als enum met een dict voor de waarden.
     """
@@ -24,5 +24,5 @@ class AmuletsData(equipment.gear.GearData):
         :return: een gearitem object met attributen uit de bovenstaande enum dict
         """
         if amulet is None:
-            return equipment.gear.GearItem(equipment.gear.GearType.amulet, SPRITEPATH)
-        return equipment.gear.GearItem(equipment.gear.GearType.amulet, SPRITEPATH, **amulet.value)
+            return equipment.equipment.GearItem(equipment.equipment.GearType.amulet, SPRITEPATH)
+        return equipment.equipment.GearItem(equipment.equipment.GearType.amulet, SPRITEPATH, **amulet.value)
