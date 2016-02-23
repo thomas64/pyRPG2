@@ -104,7 +104,7 @@ class Hero(object):
         """
         total = 0
         for equipment_item in self.equipment_tuple:
-            total += getattr(equipment_item, 'WHT', 0)
+            total += equipment_item.get_value_of('WHT')
         return total
 
     @property
@@ -141,7 +141,7 @@ class Hero(object):
         """
         total = 0
         for equipment_item in self.equipment_tuple:
-            total += getattr(equipment_item, 'PRT', 0)
+            total += equipment_item.get_value_of('PRT')
         total -= self.sld_prt
         return total
 
@@ -150,7 +150,7 @@ class Hero(object):
         """
         Alleen shield protection.
         """
-        return getattr(self.sld, 'PRT', 0)
+        return self.sld.get_value_of('PRT')
 
     @property
     def tot_prt(self):
@@ -160,7 +160,7 @@ class Hero(object):
         """
         total = 0
         for equipment_item in self.equipment_tuple:
-            total += getattr(equipment_item, 'PRT', 0)
+            total += equipment_item.get_value_of('PRT')
         return total
 
     @property
@@ -171,7 +171,7 @@ class Hero(object):
         """
         total = 0
         for equipment_item in self.equipment_tuple:
-            total += getattr(equipment_item, 'DES', 0)
+            total += equipment_item.get_value_of('DES')
         return total
 
     @property
@@ -182,7 +182,7 @@ class Hero(object):
         """
         total = 0
         for equipment_item in self.equipment_tuple:
-            total += getattr(equipment_item, 'HIT', 0)
+            total += equipment_item.get_value_of('HIT')
         return total
 
     @property
@@ -193,8 +193,19 @@ class Hero(object):
         """
         total = 0
         for equipment_item in self.equipment_tuple:
-            total += getattr(equipment_item, 'DAM', 0)
+            total += equipment_item.get_value_of('DAM')
         return total
+
+    def get_item_equipped_of_type(self, gear_type_value):
+        """
+        Geeft het item van het meegegeven Enum type wat de hero equipped heeft terug.
+        :param gear_type_value: is de value[0] of de Enum GearType, dus bijv. Shield = 'sld'. 'sld' dus.
+        :return: Als het geen empty is, geef dan het item. Anders None
+        """
+        equipment_item = getattr(self, gear_type_value, AttributeError)
+        if equipment_item.is_not_empty():
+            return equipment_item
+        return None
 
     def calc_stats(self):
         """
@@ -207,7 +218,7 @@ class Hero(object):
         for stat in self.stats_tuple:
             stat.ext = 0
             for equipment_item in self.equipment_tuple:
-                stat.ext += getattr(equipment_item, stat.RAW.upper(), 0)
+                stat.ext += equipment_item.get_value_of(stat.RAW)
 
         self.agi.ext = -round(self.tot_wht / 3)
 
@@ -225,7 +236,7 @@ class Hero(object):
         for skill in self.skills_tuple:
             skill.ext = 0
             for equipment_item in self.equipment_tuple:
-                skill.ext += getattr(equipment_item, skill.RAW.upper(), 0)
+                skill.ext += equipment_item.get_value_of(skill.RAW)
             skill.tot = skill.qty + skill.ext
             if skill.tot < 0 or skill.qty <= 0:
                 skill.tot = 0

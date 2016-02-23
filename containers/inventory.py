@@ -4,17 +4,34 @@ class: Inventory
 """
 
 import collections
+import importlib
 
 import console
 
 
-class Inventory(collections.OrderedDict):
+class Inventory(dict):
     """
     Inventory container.
     """
-    def __init__(self, *args, **kwds):
-        super().__init__(*args, **kwds)
+    def __init__(self, **kwargs):
+        super().__init__(**kwargs)
         self.NAM = "Inventory"
+
+    def get_sorted_of_type(self, gear_type):
+        """
+        Geeft uit de inventory alle items van een bepaald type op de juiste volgorde terug.
+        gear_type.value[1] en [2] zijn de values van de Enum GearType
+        :param gear_type: Enum GearType
+        :return: Een gesorteerde dict met alleen de gewenste items.
+        """
+        temp_dict = collections.OrderedDict()
+        module_name = importlib.import_module(gear_type.value[1])
+        items_data = getattr(module_name, gear_type.value[2])
+
+        for item in items_data:
+            if self.get(item[0]):
+                temp_dict[item[0]] = self[item[0]]
+        return temp_dict.values()
 
     def add(self, gear, quantity=1, verbose=True):
         """

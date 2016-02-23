@@ -60,26 +60,29 @@ class GearDataClass(object):
 class GearType(enum.Enum):
     """
     Alle gear typen op een rij.
+    Value[1] en [2] zijn strings, omdat ik ze niet direct kan importeren, ze worden later omgezet bijv in de
+    inventory container naar packages modules en class names.
     """
-    weapon = 1
-    shield = 2
-    helmet = 3
-    amulet = 4
-    armor = 5
-    cloak = 6
-    gloves = 7
-    ring = 8
-    belt = 9
-    boots = 10
-    accessory = 11
+    weapon = 'wpn',    'items.weapon',    'WeaponsData'
+    shield = 'sld',    'items.shield',    'ShieldsData'
+    helmet = 'hlm',    'items.helmet',    'HelmetsData'
+    amulet = 'amu',    'items.amulet',    'AmuletsData'
+    armor = 'arm',     'items.armor',     'ArmorsData'
+    cloak = 'clk',     'items.cloak',     'CloaksData'
+    gloves = 'glv',    'items.gloves',    'GlovesData'
+    ring = 'rng',      'items.ring',      'RingsData'
+    belt = 'blt',      'items.belt',      'BeltsData'
+    boots = 'bts',     'items.boots',     'BootsData'
+    accessory = 'acy', 'items.accessory', 'AccessoryData'
 
 
 class GearItem(object):
     """
     Een GearItem object met attributen als de waarden van de extra's die het item heeft zoals THF.
     """
-    def __init__(self, geartype, **kwargs):
+    def __init__(self, geartype, sprite, **kwargs):
         self.TYP = geartype                        # enum
+        self.SPR = sprite
         self.qty = 1
 
         for gear_value_key, gear_value_value in kwargs.items():
@@ -100,3 +103,21 @@ class GearItem(object):
             del self.SHP
         except AttributeError:
             pass
+
+    def get_value_of(self, attr):
+        """
+        Vraagt een attribute op van een GearItem. De RAW van bijv een skill is in lower zoals 'alc', maar de 'alc' van
+        een GearItem is self.ALC, vandaar de upper().
+        :param attr: sting, het opgevraagde attribute
+        :return: de waarde van het attribute, en zo niet bestaand, nul.
+        """
+        return getattr(self, attr.upper(), 0)
+
+    def is_not_empty(self):
+        """
+        Bekijkt of de GearItem een 'empty' is, door te checken op attribute NAM.
+        :return: True wanneer de NAM bestaat, want hij is niet empty. Anders False, want hij ís empty.
+        """
+        if hasattr(self, 'NAM'):
+            return True
+        return False
