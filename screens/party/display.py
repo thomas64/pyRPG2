@@ -57,6 +57,8 @@ class Display(object):
         self.party = list(data.party.values())
         self.hc = self.party.index(self.cur_hero)
 
+        self.inventory = data.inventory
+
         self._init_buttons()
         self._init_boxes()
 
@@ -102,7 +104,7 @@ class Display(object):
         self.skills_box.draw(self.screen, self.cur_hero)
         self.inventory_box.draw(self.screen, self.cur_hero)
         if self.invclick_box:
-            self.invclick_box.draw(self.screen, self.cur_hero)
+            self.invclick_box.draw(self.screen, self.party, self.inventory)
 
         # name2 = self.largefont.render(cur_hero.NAM, True, FONTCOLOR)   = voorbeeld van hoe een naam buiten een herobox
         # name2_rect = self.screen.blit(name2, (500, 300))
@@ -137,7 +139,7 @@ class Display(object):
         """
         if event.button == 1:
 
-            # als de clickbox er is en er wordt buiten gelikt, laat hem dan verdwijnen.
+            # als de clickbox er is en er wordt buiten geklikt, laat hem dan verdwijnen.
             if self.invclick_box and not self.invclick_box.rect.collidepoint(event.pos):
                 self.invclick_box = None
 
@@ -147,10 +149,10 @@ class Display(object):
             # als er in de inventory box wordt geklikt
             if self.inventory_box.rect.collidepoint(event.pos):
                 # krijg de positie en gear type terug
-                boxpos, gear = self.inventory_box.mouse_click(event, self.cur_hero)
+                boxpos, gear_type = self.inventory_box.mouse_click(event, self.cur_hero)
                 # als er geen clickbox is en wel een gear type, geef dan een clickbox weer
-                if not self.invclick_box and gear:
-                    self.invclick_box = screens.party.invclickbox.InvClickBox(boxpos, gear)
+                if not self.invclick_box and gear_type:
+                    self.invclick_box = screens.party.invclickbox.InvClickBox(boxpos, gear_type)
 
             for button in self.buttons:
                 button_press = button.single_click(event)
@@ -163,6 +165,10 @@ class Display(object):
                     self._next()
                     break
             return                                  # als het niet de CLOSE button is, return niets.
+
+        elif event.button in (4, 5):
+            if self.invclick_box and self.invclick_box.rect.collidepoint(event.pos):
+                self.invclick_box.mouse_scroll(event)
 
     def handle_single_keyboard_input(self, event):
         """

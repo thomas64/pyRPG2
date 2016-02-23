@@ -61,8 +61,8 @@ class InventoryBox(object):
 
         self.gear_sprites = []
         for gear in hero.equipment_tuple:
-            # todo, de 'and' voorwaarde mag weg wanneer alle gear een sprite gekregen heeft.
-            if hasattr(gear, 'SPR') and gear.SPR:
+            # todo, de 'and' voorwaarde mag weg wanneer alle gear een spritepath gekregen heeft.
+            if gear.is_not_empty() and gear.SPR:
                 self.gear_sprites.append(pygame.image.load(gear.SPR).subsurface(gear.COL, gear.ROW, SUBX, SUBY))
             else:
                 self.gear_sprites.append(pygame.Surface((0, 0)))
@@ -97,6 +97,28 @@ class InventoryBox(object):
         """
         rel_pos_x = event.pos[0] - self.rect.left
         rel_pos_y = event.pos[1] - self.rect.top
-        if SLDBOX.collidepoint(rel_pos_x, rel_pos_y):
-            return event.pos, hero.sld
+        if WPNBOX.collidepoint(rel_pos_x, rel_pos_y):
+            return event.pos, hero.wpn.TYP
+        elif SLDBOX.collidepoint(rel_pos_x, rel_pos_y):
+            return event.pos, hero.sld.TYP
+        elif HLMBOX.collidepoint(rel_pos_x, rel_pos_y):
+            return event.pos, hero.hlm.TYP
+        elif AMUBOX.collidepoint(rel_pos_x, rel_pos_y):
+            return event.pos, hero.amu.TYP
+        elif ARMBOX.collidepoint(rel_pos_x, rel_pos_y):
+            return event.pos, hero.arm.TYP
+        elif CLKBOX.collidepoint(rel_pos_x, rel_pos_y):
+            return event.pos, hero.clk.TYP
+        elif GLVBOX.collidepoint(rel_pos_x, rel_pos_y):
+            return event.pos, hero.glv.TYP
+        elif LRGBOX.collidepoint(rel_pos_x, rel_pos_y):
+            return event.pos, hero.lrg.TYP
+        elif RRGBOX.collidepoint(rel_pos_x, rel_pos_y):
+            return event.pos, hero.rrg.TYP
+        elif BLTBOX.collidepoint(rel_pos_x, rel_pos_y):
+            return event.pos, hero.blt.TYP
+        elif BTSBOX.collidepoint(rel_pos_x, rel_pos_y):
+            return event.pos, hero.bts.TYP
+        elif ACYBOX.collidepoint(rel_pos_x, rel_pos_y):
+            return event.pos, hero.acy.TYP
         return None, None
