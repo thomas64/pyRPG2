@@ -1,53 +1,14 @@
 
 """
-class: EquipmentDatabase
 class: EquipmentType
 class: EquipmentItem
 """
 
-import collections
 import enum
 
 # todo, uit colornote app:
 # - min int gebruiken voor items?
 # - mvp aan items
-
-
-class EquipmentDatabase(collections.OrderedDict):
-    """
-    Alle equipment data classes kunnen erven van deze class.
-    """
-    def __init__(self, *args, **kwargs):
-        super().__init__(*args, **kwargs)
-
-    def __iter__(self):                 # om er in een winkel doorheen te kunnen gaan loopen
-        return iter(self.items())
-
-    def __getattr__(self, key):         # om een nieuwe aan te kunnen maken met factory. anders herkent hij de woodenb.
-        return self[key]                # niet als een attribute: piet = ShieldsData.factory(ShieldsData.woodenbuckler)
-
-    def set_shop(self):
-        """
-        Shop uitzetten voor sommige equipment items.
-        """
-        for eqp_key, eqp_value in self.items():
-            if "+" in eqp_key or "titanium" in eqp_key:
-                eqp_value['shp'] = False
-        # de laatste van shop is misschien niet nodig. dit kan ook in de shop zelf gecheckt worden. scheelt een variable
-
-    def rearrage(self):
-        """
-        Herschik de volgorde van de gecreerde dataset.
-        """
-        temp_dict = collections.OrderedDict()
-        # sorteer en zet in nieuwe database
-        for eqp_key, eqp_value in sorted(self.items(), key=lambda xx: xx[1]['srt']):
-            temp_dict[eqp_key] = eqp_value
-        # maak eigen database leeg
-        self.clear()
-        # zet de gesorteerde neer
-        for eqp_key, eqp_value in temp_dict.items():
-            self[eqp_key] = eqp_value
 
 
 class EquipmentType(enum.Enum):
