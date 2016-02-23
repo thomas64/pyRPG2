@@ -62,6 +62,8 @@ class GearType(enum.Enum):
     Alle gear typen op een rij.
     Value[1] en [2] zijn strings, omdat ik ze niet direct kan importeren, ze worden later omgezet bijv in de
     inventory container naar packages modules en class names.
+    value[0] wordt gebruikt in hero.get_item_equipped_of_type()
+    value[1] en [2] worden gebruikt in inv_container.get_sorted_of_type()
     """
     weapon = 'wpn',    'items.weapon',    'WeaponsData'
     shield = 'sld',    'items.shield',    'ShieldsData'
@@ -73,7 +75,7 @@ class GearType(enum.Enum):
     ring = 'rng',      'items.ring',      'RingsData'
     belt = 'blt',      'items.belt',      'BeltsData'
     boots = 'bts',     'items.boots',     'BootsData'
-    accessory = 'acy', 'items.accessory', 'AccessoryData'
+    accessory = 'acy', 'items.accessory', 'AccessoriesData'
 
 
 class GearItem(object):

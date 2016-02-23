@@ -71,7 +71,7 @@ class Hero(object):
         self.hlm = items.helmet.HelmetsData.factory(None)
         self.amu = items.amulet.AmuletsData.factory(None)
         self.arm = items.armor.ArmorsData.factory(kwargs['arm'])
-        self.clk = items.cloak.CloakData.factory(None)
+        self.clk = items.cloak.CloaksData.factory(None)
         self.glv = items.gloves.GlovesData.factory(None)
         self.lrg = items.ring.RingsData.factory(None)
         self.rrg = items.ring.RingsData.factory(None)

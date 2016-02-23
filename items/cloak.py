@@ -8,7 +8,7 @@ import items.gear
 SPRITEPATH = ''
 
 
-class CloakData(items.gear.GearData):
+class CloaksData(items.gear.GearData):
     """
     Hier staan alle mantels uit het spel in als enum met een dict voor de waarden.
     """
