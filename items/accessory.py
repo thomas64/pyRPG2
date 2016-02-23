@@ -1,6 +1,6 @@
 
 """
-class: AccessoriesData
+class: AccessoryDataBase
 """
 
 import items.gear
@@ -10,19 +10,26 @@ import items.gear
 SPRITEPATH = ''
 
 
-class AccessoriesData(items.gear.GearData):
+class AccessoryDatabase(items.gear.GearData):
     """
-    Hier staan alle accessoires uit het spel in als enum met een dict voor de waarden.
+    Hier staan alle accessoires uit het spel in als OrderedDict met een dict voor de waarden.
     """
-    testaccessory = dict(nam="Test Accessory", val=100, shp=True,  wht=1, prt=1)
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+
+        self.inside['testaccessory'] = dict(nam="Test Accessory", srt=1, val=100, shp=True, wht=1, prt=1)
 
     @staticmethod
     def factory(accessory):
         """
-        Maak een object van een enum database item.
-        :param accessory: een bovenstaand enum item
-        :return: een gearitem object met attributen uit de bovenstaande enum dict
+        Maak een object van een van de items uit de inside dict database.
+        Geef ook een Enum GearType mee.
+        Wanneer een accessory wordt gemaakt die None meekrijgt, maak dan een leeg object aan. Dit is volgens mij
+        alleen bij het unequippen van een item.
+        :param accessory: een bovenstaand item
+        :return: een gearitem object met attributen uit de bovenstaande ordered dict
         """
         if accessory is None:
-            return items.gear.GearItem(items.gear.GearType.accessory, SPRITEPATH)
-        return items.gear.GearItem(items.gear.GearType.accessory, SPRITEPATH, **accessory.value)
+            return items.gear.GearItem(items.gear.GearType.acy)
+        accessory['spr'] = SPRITEPATH
+        return items.gear.GearItem(items.gear.GearType.acy, **accessory)

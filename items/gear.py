@@ -1,7 +1,6 @@
 
 """
-class: GearData
-class: GearDataClass
+class: EquipmentDatabase
 class: GearType
 class: GearItem
 """
@@ -14,35 +13,24 @@ import enum
 # - mvp aan items
 
 
-class GearData(enum.Enum):
+class EquipmentDatabase(collections.OrderedDict):
     """
-    Alle Enum gears data erven van deze class en krijgen deze methode mee.
+    Alle gear data classes kunnen erven van deze class.
     """
-    def __getitem__(self, item):        # als er iets wordt gevraagd wat niet kan aan een enum, zoals [0] of [1]
-        if item == 0:                   # voor een OrderedDict (zoals ShieldsData) dan wordt deze uitgevoerd.
-            return self.name            # hij returned dan een waarde die een enum wel kan, namelijk .name en .value
-        elif item == 1:
-            return self.value
-
-
-class GearDataClass(object):
-    """
-    Alle data classes die geen Enum zijn kunnen erven van deze class. Weapons, Shields en Armors.
-    """
-    def __init__(self):
-        self.inside = collections.OrderedDict()
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
 
     def __iter__(self):                 # om er in een winkel doorheen te kunnen gaan loopen
-        return iter(self.inside.items())
+        return iter(self.items())
 
     def __getattr__(self, key):         # om een nieuwe aan te kunnen maken met factory. anders herkent hij de woodenb.
-        return self.inside[key]         # niet als een attribute: piet = ShieldsData.factory(ShieldsData.woodenbuckler)
+        return self[key]                # niet als een attribute: piet = ShieldsData.factory(ShieldsData.woodenbuckler)
 
     def set_shop(self):
         """
         Shop uitzetten voor sommige gear items.
         """
-        for gear_key, gear_value in self.inside.items():
+        for gear_key, gear_value in self.items():
             if "+" in gear_key or "titanium" in gear_key:
                 gear_value['shp'] = False
         # de laatste van shop is misschien niet nodig. dit kan ook in de shop zelf gecheckt worden. scheelt een variable
@@ -52,37 +40,34 @@ class GearDataClass(object):
         Herschik de volgorde van de gecreerde dataset.
         """
         temp_dict = collections.OrderedDict()
-        for gear_key, gear_value in sorted(self.inside.items(), key=lambda xx: xx[1]['srt']):
+        for gear_key, gear_value in sorted(self.items(), key=lambda xx: xx[1]['srt']):
             temp_dict[gear_key] = gear_value
-        self.inside = temp_dict
+        self.items() = temp_dict.items()
 
 
 class GearType(enum.Enum):
     """
     Alle gear typen op een rij.
-    Value[1] en [2] zijn strings, omdat ik ze niet direct kan importeren, ze worden later omgezet bijv in de
-    inventory container naar packages modules en class names.
     """
-    weapon = 'wpn',    'items.weapon',    'WeaponsData'
-    shield = 'sld',    'items.shield',    'ShieldsData'
-    helmet = 'hlm',    'items.helmet',    'HelmetsData'
-    amulet = 'amu',    'items.amulet',    'AmuletsData'
-    armor = 'arm',     'items.armor',     'ArmorsData'
-    cloak = 'clk',     'items.cloak',     'CloaksData'
-    gloves = 'glv',    'items.gloves',    'GlovesData'
-    ring = 'rng',      'items.ring',      'RingsData'
-    belt = 'blt',      'items.belt',      'BeltsData'
-    boots = 'bts',     'items.boots',     'BootsData'
-    accessory = 'acy', 'items.accessory', 'AccessoryData'
+    wpn = "Weapon"
+    sld = "Shield"
+    hlm = "Helmet"
+    amu = "Amulet"
+    arm = "Armor"
+    clk = "Cloak"
+    glv = "Gloves"
+    rng = "Ring"
+    blt = "Belt"
+    bts = "Boots"
+    acy = "Accessory"
 
 
 class GearItem(object):
     """
     Een GearItem object met attributen als de waarden van de extra's die het item heeft zoals THF.
     """
-    def __init__(self, geartype, sprite, **kwargs):
+    def __init__(self, geartype, **kwargs):
         self.TYP = geartype                        # enum
-        self.SPR = sprite
         self.qty = 1
 
         for gear_value_key, gear_value_value in kwargs.items():
