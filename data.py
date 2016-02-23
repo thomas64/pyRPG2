@@ -46,6 +46,7 @@ class Data(object):
         self.party.add(self.heroes['grindan'])
         self.party.add(self.heroes['rydalin'])
         # self.party.add(self.heroes['luana'])
+        self.party.add(self.heroes['galen'])
         self.party.add(self.heroes['codrif'])
         # self.party.remove(self.heroes['alagos'])
         # self.party.remove(self.heroes['luana'])
@@ -56,15 +57,33 @@ class Data(object):
         self.inventory = containers.inventory.Inventory()
 
         piet1 = items.weapon.WeaponsData.factory(items.weapon.WeaponsData.bronzeshortsword)
-        # piet2 = items.shield.ShieldsData.factory(items.shield.ShieldsData.silverkite)
-        # piet3 = items.boots.BootsData.factory(items.boots.BootsData.ironboots)
-        #
+        piet2 = items.shield.ShieldsData.factory(items.shield.ShieldsData.silverkite)
+        piet3 = items.boots.BootsData.factory(items.boots.BootsData.ironboots)
+        piet4 = items.boots.BootsData.factory(items.boots.BootsData.bootsofmotion)
+        piet5 = items.boots.BootsData.factory(items.boots.BootsData.silenceboots)
+        piet6 = items.boots.BootsData.factory(items.boots.BootsData.titaniumboots)
+        piet7 = items.weapon.WeaponsData.factory(items.weapon.WeaponsData.bronzedagger)
+        piet8 = items.shield.ShieldsData.factory(items.shield.ShieldsData.woodentarge)
+        piet9 = items.shield.ShieldsData.factory(items.shield.ShieldsData.bronzescutum)
+        piet10 = items.shield.ShieldsData.factory(items.shield.ShieldsData.ironheater)
+
+        self.inventory.add(piet3, 48)
         self.inventory.add(piet1, 20)
-        # self.inventory.add(piet2, 9)
-        # self.inventory.add(piet3, 48)
-        # self.inventory.add(piet2, 0)
-        # self.inventory.add(piet2, -1)
-        # self.inventory.add(piet2, 1)
-        #
+        self.inventory.add(piet10, 25)
+        self.inventory.add(piet5, 26)
+        self.inventory.add(piet6, 27)
+        self.inventory.add(piet7, 22)
+        self.inventory.add(piet8, 23)
+        self.inventory.add(piet9, 21)
+        self.inventory.add(piet2, 9)
+        self.inventory.add(piet4, 3)
+        self.inventory.add(piet2, 0)
+        self.inventory.add(piet2, -1)
+        self.inventory.add(piet2, 1)
+
         # print(self.inventory)
+
+        # for boot in items.shield.ShieldsData:
+        #     print(boot[0])
+
         # quit()
