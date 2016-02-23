@@ -1,8 +1,8 @@
 
 """
 class: EquipmentDatabase
-class: GearType
-class: GearItem
+class: EquipmentType
+class: EquipmentItem
 """
 
 import collections
@@ -15,7 +15,7 @@ import enum
 
 class EquipmentDatabase(collections.OrderedDict):
     """
-    Alle gear data classes kunnen erven van deze class.
+    Alle equipment data classes kunnen erven van deze class.
     """
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
@@ -28,11 +28,11 @@ class EquipmentDatabase(collections.OrderedDict):
 
     def set_shop(self):
         """
-        Shop uitzetten voor sommige gear items.
+        Shop uitzetten voor sommige equipment items.
         """
-        for gear_key, gear_value in self.items():
-            if "+" in gear_key or "titanium" in gear_key:
-                gear_value['shp'] = False
+        for eqp_key, eqp_value in self.items():
+            if "+" in eqp_key or "titanium" in eqp_key:
+                eqp_value['shp'] = False
         # de laatste van shop is misschien niet nodig. dit kan ook in de shop zelf gecheckt worden. scheelt een variable
 
     def rearrage(self):
@@ -40,14 +40,19 @@ class EquipmentDatabase(collections.OrderedDict):
         Herschik de volgorde van de gecreerde dataset.
         """
         temp_dict = collections.OrderedDict()
-        for gear_key, gear_value in sorted(self.items(), key=lambda xx: xx[1]['srt']):
-            temp_dict[gear_key] = gear_value
-        self.items() = temp_dict.items()
+        # sorteer en zet in nieuwe database
+        for eqp_key, eqp_value in sorted(self.items(), key=lambda xx: xx[1]['srt']):
+            temp_dict[eqp_key] = eqp_value
+        # maak eigen database leeg
+        self.clear()
+        # zet de gesorteerde neer
+        for eqp_key, eqp_value in temp_dict.items():
+            self[eqp_key] = eqp_value
 
 
-class GearType(enum.Enum):
+class EquipmentType(enum.Enum):
     """
-    Alle gear typen op een rij.
+    Alle equipment typen op een rij.
     """
     wpn = "Weapon"
     sld = "Shield"
@@ -62,25 +67,20 @@ class GearType(enum.Enum):
     acy = "Accessory"
 
 
-class GearItem(object):
+class EquipmentItem(object):
     """
-    Een GearItem object met attributen als de waarden van de extra's die het item heeft zoals THF.
+    Een EquipmentItem object met attributen als de waarden van de extra's die het item heeft zoals THF.
     """
-    def __init__(self, geartype, **kwargs):
-        self.TYP = geartype                        # enum
+    def __init__(self, equipment_type, **kwargs):
+        self.TYP = equipment_type                                       # Enum van EquipmentType
         self.qty = 1
 
-        for gear_value_key, gear_value_value in kwargs.items():
-            setattr(self, gear_value_key.upper(), gear_value_value)     # zet de dict van kwargs om in attributen
+        for eqp_value_key, eqp_value_value in kwargs.items():
+            setattr(self, eqp_value_key.upper(), eqp_value_value)       # zet de dict van kwargs om in attributen
 
         try:
             # noinspection PyUnresolvedReferences
             self.RAW = self.NAM.strip().lower().replace(" ", "")        # als er een NAM is, geef hem een RAW
-        except AttributeError:
-            pass
-        try:
-            # noinspection PyUnresolvedReferences
-            del self.SRT        # deze zijn niet nodig als gear. alleen voor in de shop, en dan zijn het geen gear nog.
         except AttributeError:
             pass
         try:
@@ -91,8 +91,8 @@ class GearItem(object):
 
     def get_value_of(self, attr):
         """
-        Vraagt een attribute op van een GearItem. De RAW van bijv een skill is in lower zoals 'alc', maar de 'alc' van
-        een GearItem is self.ALC, vandaar de upper().
+        Vraagt een attribute op van een EquipmentItem. De RAW van bijv een skill is in lower zoals 'alc', maar de
+        'alc' van een EquipmentItem is self.ALC, vandaar de upper().
         :param attr: sting, het opgevraagde attribute
         :return: de waarde van het attribute, en zo niet bestaand, nul.
         """
@@ -100,7 +100,7 @@ class GearItem(object):
 
     def is_not_empty(self):
         """
-        Bekijkt of de GearItem een 'empty' is, door te checken op attribute NAM.
+        Bekijkt of de EquipmentItem een 'empty' is, door te checken op attribute NAM.
         :return: True wanneer de NAM bestaat, want hij is niet empty. Anders False, want hij ís empty.
         """
         if hasattr(self, 'NAM'):
