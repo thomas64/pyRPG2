@@ -5,7 +5,8 @@ class: BeltDatabase
 
 import collections
 
-import equipment.equipment as eqp
+import console
+import equipment
 
 # todo, alle gordels afmaken
 
@@ -28,7 +29,10 @@ class BeltDatabase(collections.OrderedDict):
         :param key_name:
         """
         if key_name is None:
-            return eqp.EquipmentItem(eqp.EquipmentType.blt)
-        belt = self[key_name]
-        belt['spr'] = SPRITEPATH
-        return eqp.EquipmentItem(eqp.EquipmentType.blt, **belt)
+            return equipment.EquipmentItem(equipment.EquipmentType.blt)
+        try:
+            belt = self[key_name]
+            belt['spr'] = SPRITEPATH
+            return equipment.EquipmentItem(equipment.EquipmentType.blt, **belt)
+        except KeyError:
+            console.equipment_item_name_not_in_database(key_name)

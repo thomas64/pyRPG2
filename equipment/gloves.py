@@ -1,28 +1,38 @@
 
 """
-class: GlovesData
+class: GlovesDatabase
 """
 
-import equipment.equipment
+import collections
 
-# todo, alle gloves afmaken
+import console
+import equipment
+
+# todo, alle handschoenen afmaken
 
 SPRITEPATH = ''
 
 
-class GlovesData(equipment.equipment.GearData):
+class GlovesDatabase(collections.OrderedDict):
     """
-    Hier staan alle handschoenen uit het spel in als enum met een dict voor de waarden.
+    Zie accessory
     """
-    leathergloves = dict(nam="Leather Gloves", val=100, shp=True,  wht=1, prt=1)
+    def __init__(self, *args, **kwds):
+        super().__init__(*args, **kwds)
 
-    @staticmethod
-    def factory(gloves):
+        self['leathergloves'] = dict(nam="Leather Gloves", srt=1, val=100, shp=True, wht=1, prt=1)
+        self['testgloves2'] = dict(nam="Test Gloves 2",    srt=2, val=200, shp=True, wht=2, prt=2)
+
+    def factory(self, key_name):
         """
-        Maak een object van een enum database item.
-        :param gloves: een bovenstaand enum item
-        :return: een gearitem object met attributen uit de bovenstaande enum dict
+        Zie accessory
+        :param key_name:
         """
-        if gloves is None:
-            return equipment.equipment.GearItem(equipment.equipment.GearType.gloves, SPRITEPATH)
-        return equipment.equipment.GearItem(equipment.equipment.GearType.gloves, SPRITEPATH, **gloves.value)
+        if key_name is None:
+            return equipment.EquipmentItem(equipment.EquipmentType.glv)
+        try:
+            gloves = self[key_name]
+            gloves['spr'] = SPRITEPATH
+            return equipment.EquipmentItem(equipment.EquipmentType.glv, **gloves)
+        except KeyError:
+            console.equipment_item_name_not_in_database(key_name)

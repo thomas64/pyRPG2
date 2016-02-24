@@ -6,19 +6,9 @@ class: Data
 import collections
 
 import characters.hero
-import equipment.weapon
-import equipment.shield
-import equipment.helmet
-import equipment.amulet
-import equipment.armor
-import equipment.cloak
-import equipment.gloves
-import equipment.ring
-import equipment.belt
-import equipment.boots
-import equipment.accessory
 import containers.party
 import containers.inventory
+import equipment
 
 
 class Data(object):
@@ -56,30 +46,30 @@ class Data(object):
 
         self.inventory = containers.inventory.Inventory()
 
-        piet1 = equipment.weapon.WeaponsData.factory(equipment.weapon.WeaponsData.bronzeshortsword)
-        piet2 = equipment.shield.ShieldsData.factory(equipment.shield.ShieldsData.silverkite)
-        piet3 = equipment.boots.BootsData.factory(equipment.boots.BootsData.ironboots)
-        piet4 = equipment.boots.BootsData.factory(equipment.boots.BootsData.bootsofmotion)
-        piet5 = equipment.boots.BootsData.factory(equipment.boots.BootsData.silenceboots)
-        piet6 = equipment.boots.BootsData.factory(equipment.boots.BootsData.titaniumboots)
-        piet7 = equipment.weapon.WeaponsData.factory(equipment.weapon.WeaponsData.bronzedagger)
-        piet8 = equipment.shield.ShieldsData.factory(equipment.shield.ShieldsData.woodentarge)
-        piet9 = equipment.shield.ShieldsData.factory(equipment.shield.ShieldsData.bronzescutum)
-        piet10 = equipment.shield.ShieldsData.factory(equipment.shield.ShieldsData.ironheater)
+        weapon1 = equipment.WeaponDatabase.factory('bronzeshortsword')
+        weapon2 = equipment.WeaponDatabase.factory('bronzedagger')
+        boots1 = equipment.BootsDatabase.factory('ironboots')
+        boots2 = equipment.BootsDatabase.factory('bootsofmotion')
+        boots3 = equipment.BootsDatabase.factory('silenceboots')
+        boots4 = equipment.BootsDatabase.factory('titaniumboots')
+        shield1 = equipment.ShieldDatabase.factory('silverkite')
+        shield2 = equipment.ShieldDatabase.factory('woodentarge')
+        shield3 = equipment.ShieldDatabase.factory('bronzescutum')
+        shield4 = equipment.ShieldDatabase.factory('ironheater')
 
-        self.inventory.add(piet3, 48)
-        self.inventory.add(piet1, 20)
-        self.inventory.add(piet10, 25)
-        self.inventory.add(piet5, 26)
-        self.inventory.add(piet6, 27)
-        self.inventory.add(piet7, 22)
-        self.inventory.add(piet8, 23)
-        self.inventory.add(piet9, 21)
-        self.inventory.add(piet2, 9)
-        self.inventory.add(piet4, 3)
-        self.inventory.add(piet2, 0)
-        self.inventory.add(piet2, -1)
-        self.inventory.add(piet2, 1)
+        self.inventory.add(weapon1, 48)
+        self.inventory.add(weapon2, 20)
+        self.inventory.add(boots1, 25)
+        self.inventory.add(boots2, 26)
+        self.inventory.add(boots3, 27)
+        self.inventory.add(boots4, 22)
+        self.inventory.add(shield1, 23)
+        self.inventory.add(shield2, 21)
+        self.inventory.add(shield3, 9)
+        self.inventory.add(shield4, 3)
+        self.inventory.add(shield4, 0)
+        self.inventory.add(shield4, -1)
+        self.inventory.add(shield4, 1)
 
         # print(self.inventory)
 

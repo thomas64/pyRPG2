@@ -5,7 +5,8 @@ class: BootsDatabase
 
 import collections
 
-import equipment.equipment as eqp
+import console
+import equipment
 
 # todo, prijzen nog bepalen
 
@@ -41,7 +42,10 @@ class BootsDatabase(collections.OrderedDict):
         :param key_name:
         """
         if key_name is None:
-            return eqp.EquipmentItem(eqp.EquipmentType.bts)
-        boots = self[key_name]
-        boots['spr'] = SPRITEPATH
-        return eqp.EquipmentItem(eqp.EquipmentType.bts, **boots)
+            return equipment.EquipmentItem(equipment.EquipmentType.bts)
+        try:
+            boots = self[key_name]
+            boots['spr'] = SPRITEPATH
+            return equipment.EquipmentItem(equipment.EquipmentType.bts, **boots)
+        except KeyError:
+            console.equipment_item_name_not_in_database(key_name)

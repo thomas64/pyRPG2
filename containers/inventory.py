@@ -17,6 +17,7 @@ class Inventory(dict):
         super().__init__(**kwargs)
         self.NAM = "Inventory"
 
+    # todo, deze anders doen, icm een return in class EquipmentItem, oid.
     def get_sorted_of_type(self, gear_type):
         """
         Geeft uit de inventory alle items van een bepaald type op de juiste volgorde terug.
@@ -49,4 +50,4 @@ class Inventory(dict):
             self[gear.RAW] = gear                       # gear bestaat uit zichzelf al uit quantity = 1
             self[gear.RAW].qty += (quantity - 1)        # dus daarom, wanneer hij voor het eerst wordt toegevoegd: - 1
         if verbose:
-            console.add_item(quantity, gear.NAM, self.NAM)
+            console.add_equipment_item(quantity, gear.NAM, self.NAM)

@@ -5,7 +5,8 @@ class: CloakDatabase
 
 import collections
 
-import equipment.equipment as eqp
+import console
+import equipment
 
 SPRITEPATH = ''
 
@@ -48,7 +49,10 @@ class CloakDatabase(collections.OrderedDict):
         :param key_name:
         """
         if key_name is None:
-            return eqp.EquipmentItem(eqp.EquipmentType.clk)
-        cloak = self[key_name]
-        cloak['spr'] = SPRITEPATH
-        return eqp.EquipmentItem(eqp.EquipmentType.clk, **cloak)
+            return equipment.EquipmentItem(equipment.EquipmentType.clk)
+        try:
+            cloak = self[key_name]
+            cloak['spr'] = SPRITEPATH
+            return equipment.EquipmentItem(equipment.EquipmentType.clk, **cloak)
+        except KeyError:
+            console.equipment_item_name_not_in_database(key_name)

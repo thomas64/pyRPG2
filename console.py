@@ -124,14 +124,14 @@ def leader_not_leave_party():
     print("The party leader cannot leave his own party!")
 
 
-def add_item(item_quantity, item_name, inventory_name):
+def add_equipment_item(equipment_item_quantity, equipment_item_name, inventory_name):
     """
     Inventory.add()
-    :param item_quantity: integer
-    :param item_name: string
+    :param equipment_item_quantity: integer
+    :param equipment_item_name: string
     :param inventory_name: string
     """
-    print("Put {} {} in {}.".format(item_quantity, item_name, inventory_name))
+    print("Put {} {} in {}.".format(equipment_item_quantity, equipment_item_name, inventory_name))
 
 
 def quantity_less_than_one():
@@ -139,3 +139,11 @@ def quantity_less_than_one():
     Inventory.add()
     """
     print("That is not possible.")
+
+
+def equipment_item_name_not_in_database(equipment_item_name):
+    """
+    EquipmentDatabase.factory()
+    :param equipment_item_name: string
+    """
+    print("Cannot find {} in database.".format(equipment_item_name))

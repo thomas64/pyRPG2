@@ -5,7 +5,8 @@ class: ArmorDatabase
 
 import collections
 
-import equipment.equipment as eqp
+import console
+import equipment
 
 SPRITEPATH = ''
 
@@ -96,7 +97,10 @@ class ArmorDatabase(collections.OrderedDict):
         :param key_name:
         """
         if key_name is None:
-            return eqp.EquipmentItem(eqp.EquipmentType.arm)
-        armor = self[key_name]
-        armor['spr'] = SPRITEPATH
-        return eqp.EquipmentItem(eqp.EquipmentType.arm, **armor)
+            return equipment.EquipmentItem(equipment.EquipmentType.arm)
+        try:
+            armor = self[key_name]
+            armor['spr'] = SPRITEPATH
+            return equipment.EquipmentItem(equipment.EquipmentType.arm, **armor)
+        except KeyError:
+            console.equipment_item_name_not_in_database(key_name)

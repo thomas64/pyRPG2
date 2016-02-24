@@ -7,17 +7,7 @@ import enum
 
 import characters.stats
 import characters.skills
-import equipment.weapon
-import equipment.shield
-import equipment.helmet
-import equipment.amulet
-import equipment.armor
-import equipment.cloak
-import equipment.gloves
-import equipment.ring
-import equipment.belt
-import equipment.boots
-import equipment.accessory
+import equipment
 
 
 PATH = 'resources/sprites/heroes/'
@@ -66,18 +56,18 @@ class Hero(object):
         self.skills_tuple = (self.alc, self.dip, self.hlr, self.lor, self.mec, self.mer, self.ran, self.stl, self.thf,
                              self.trb, self.war, self.wiz, self.haf, self.mis, self.pol, self.shd, self.swd, self.thr)
 
-        self.wpn = equipment.weapon.WeaponsData.factory(kwargs['wpn'])
-        self.sld = equipment.shield.ShieldsData.factory(kwargs['sld'])
-        self.hlm = equipment.helmet.HelmetsData.factory(None)
-        self.amu = equipment.amulet.AmuletsData.factory(None)
-        self.arm = equipment.armor.ArmorsData.factory(kwargs['arm'])
-        self.clk = equipment.cloak.CloakData.factory(None)
-        self.glv = equipment.gloves.GlovesData.factory(None)
-        self.lrg = equipment.ring.RingsData.factory(None)
-        self.rrg = equipment.ring.RingsData.factory(None)
-        self.blt = equipment.belt.BeltsData.factory(None)
-        self.bts = equipment.boots.BootsData.factory(None)
-        self.acy = equipment.accessory.AccessoriesData.factory(None)
+        self.wpn = equipment.WeaponDatabase.factory(kwargs['wpn'])
+        self.sld = equipment.ShieldDatabase.factory(kwargs['sld'])
+        self.hlm = equipment.HelmetDatabase.factory(None)
+        self.amu = equipment.AmuletDatabase.factory(None)
+        self.arm = equipment.ArmorDatabase.factory(kwargs['arm'])
+        self.clk = equipment.CloakDatabase.factory(None)
+        self.glv = equipment.GlovesDatabase.factory(None)
+        self.lrg = equipment.RingDatabase.factory(None)
+        self.rrg = equipment.RingDatabase.factory(None)
+        self.blt = equipment.BeltDatabase.factory(None)
+        self.bts = equipment.BootsDatabase.factory(None)
+        self.acy = equipment.AccessoryDatabase.factory(None)
         self.equipment_tuple = (self.wpn, self.sld, self.hlm, self.amu, self.arm, self.clk,
                                 self.glv, self.lrg, self.rrg, self.blt, self.bts, self.acy)
 

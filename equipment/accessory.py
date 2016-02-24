@@ -5,7 +5,8 @@ class: AccessoryDatabase
 
 import collections
 
-import equipment.equipment as eqp
+import console
+import equipment
 
 # todo, alle accessoires afmaken
 
@@ -32,7 +33,10 @@ class AccessoryDatabase(collections.OrderedDict):
         :return: een EquipmentItem object met attributen uit de bovenstaande ordered dict
         """
         if key_name is None:
-            return eqp.EquipmentItem(eqp.EquipmentType.acy)
-        accessory = self[key_name]
-        accessory['spr'] = SPRITEPATH
-        return eqp.EquipmentItem(eqp.EquipmentType.acy, **accessory)
+            return equipment.EquipmentItem(equipment.EquipmentType.acy)
+        try:
+            accessory = self[key_name]
+            accessory['spr'] = SPRITEPATH
+            return equipment.EquipmentItem(equipment.EquipmentType.acy, **accessory)
+        except KeyError:
+            console.equipment_item_name_not_in_database(key_name)

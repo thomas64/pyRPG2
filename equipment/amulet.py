@@ -5,7 +5,8 @@ class: AmuletDatabase
 
 import collections
 
-import equipment.equipment as eqp
+import console
+import equipment
 
 # todo, alle amuletten afmaken
 
@@ -28,7 +29,10 @@ class AmuletDatabase(collections.OrderedDict):
         :param key_name:
         """
         if key_name is None:
-            return eqp.EquipmentItem(eqp.EquipmentType.amu)
-        amulet = self[key_name]
-        amulet['spr'] = SPRITEPATH
-        return eqp.EquipmentItem(eqp.EquipmentType.amu, **amulet)
+            return equipment.EquipmentItem(equipment.EquipmentType.amu)
+        try:
+            amulet = self[key_name]
+            amulet['spr'] = SPRITEPATH
+            return equipment.EquipmentItem(equipment.EquipmentType.amu, **amulet)
+        except KeyError:
+            console.equipment_item_name_not_in_database(key_name)
