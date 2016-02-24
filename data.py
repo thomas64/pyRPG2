@@ -5,9 +5,8 @@ class: Data
 
 import collections
 
-import characters.hero
-import containers.party
-import containers.inventory
+import characters
+import containers
 import equipment
 
 
@@ -16,20 +15,22 @@ class Data(object):
     Hier is alle gamedata.
     """
     def __init__(self):
+
         self.heroes = collections.OrderedDict()
 
-        self.heroes['alagos'] = characters.hero.HeroData.factory(characters.hero.HeroData.alagos)
-        self.heroes['luana'] = characters.hero.HeroData.factory(characters.hero.HeroData.luana)
-        self.heroes['grindan'] = characters.hero.HeroData.factory(characters.hero.HeroData.grindan)
-        self.heroes['rydalin'] = characters.hero.HeroData.factory(characters.hero.HeroData.rydalin)
-        self.heroes['codrif'] = characters.hero.HeroData.factory(characters.hero.HeroData.codrif)
-        self.heroes['galen'] = characters.hero.HeroData.factory(characters.hero.HeroData.galen)
+        self.heroes['alagos'] = characters.HeroData.factory(characters.HeroData.alagos)
+        self.heroes['luana'] = characters.HeroData.factory(characters.HeroData.luana)
+        self.heroes['grindan'] = characters.HeroData.factory(characters.HeroData.grindan)
+        self.heroes['rydalin'] = characters.HeroData.factory(characters.HeroData.rydalin)
+        self.heroes['codrif'] = characters.HeroData.factory(characters.HeroData.codrif)
+        self.heroes['galen'] = characters.HeroData.factory(characters.HeroData.galen)
 
         for hero in self.heroes.values():
             hero.calc_stats()
             hero.calc_skills()
 
-        self.party = containers.party.Party()
+        self.party = containers.Party()
+
         self.party.add(self.heroes['alagos'], verbose=False)
         # self.party.add(self.heroes['alagos'])
         self.party.add(self.heroes['luana'])
@@ -44,7 +45,7 @@ class Data(object):
         self.party.add(self.heroes['rydalin'])
         self.party.add(self.heroes['galen'])
 
-        self.inventory = containers.inventory.Inventory()
+        self.inventory = containers.Inventory()
 
         weapon1 = equipment.WeaponDatabase.factory('bronzeshortsword')
         weapon2 = equipment.WeaponDatabase.factory('bronzedagger')
