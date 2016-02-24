@@ -14,6 +14,9 @@ import equipment.boots
 import equipment.cloak
 import equipment.gloves
 import equipment.helmet
+import equipment.ring
+import equipment.shield
+import equipment.weapon
 
 # todo, uit colornote app:
 # - min int gebruiken voor items?
@@ -27,6 +30,9 @@ BootsDatabase = equipment.boots.BootsDatabase()
 CloakDatabase = equipment.cloak.CloakDatabase()
 GlovesDatabase = equipment.gloves.GlovesDatabase()
 HelmetDatabase = equipment.helmet.HelmetDatabase()
+RingDatabase = equipment.ring.RingDatabase()
+ShieldDatabase = equipment.shield.ShieldDatabase()
+WeaponDatabase = equipment.weapon.WeaponDatabase()
 
 
 class EquipmentType(enum.Enum):

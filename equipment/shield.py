@@ -1,34 +1,24 @@
 
 """
-class: ShieldsDataClass
-obj: ShieldsData
+class: ShieldDatabase
 """
 
-import equipment.equipment
+import collections
+
+import console
+import equipment
 
 SPRITEPATH = 'resources/sprites/icons/gear/shield3.png'
 
 
-class ShieldsDataClass(equipment.equipment.GearDataClass):
+class ShieldDatabase(collections.OrderedDict):
     """
-    Hier staan alle schilden uit het spel in een dict als enum met een dict voor de waarden.
+    Zie accessory
     """
+    def __init__(self, *args, **kwds):
+        super().__init__(*args, **kwds)
 
-    @staticmethod
-    def factory(shield):
-        """
-        Maak een object van een enum database item.
-        :param shield: een bovenstaand enum item
-        :return: een gearitem object met attributen uit de bovenstaande enum dict
-        """
-        if shield is None:
-            return equipment.equipment.GearItem(equipment.equipment.GearType.shield, SPRITEPATH)
-        return equipment.equipment.GearItem(equipment.equipment.GearType.shield, SPRITEPATH, **shield)
-
-    def __init__(self):
-        super().__init__()
-
-        # Vul de OrderedDict self.inside met de gecombineerde data.
+        # Vul de OrderedDict self met de gecombineerde data.
 
         # todo, upgradable, min_mech, metals zijn nog niet verwerkt.
 
@@ -66,8 +56,11 @@ class ShieldsDataClass(equipment.equipment.GearDataClass):
                     # todo, deze int was alleen bij weapon, moet de int hier weer weg?
                     price = int((material_value[0] + type_value[0]) * (material_value[0] + type_value[0]) / 900)
 
-                    self.inside[raw_key_name] = dict(
+                    self[raw_key_name] = dict(
                         nam=(material_key + " " + type_key + " " + upgraded_key).strip(),
+
+                        # puur voor sortering in de database, omdat geen enum is
+                        srt=material_value[6] + type_value[6] + upgraded_value[6],
 
                         # berekening value: material * type * upgraded
                         val=int(price * upgraded_value[0]),
@@ -88,15 +81,37 @@ class ShieldsDataClass(equipment.equipment.GearDataClass):
                         # berekening stealth: material + type + upgraded
                         stl=material_value[5] + type_value[5] + upgraded_value[5],
 
-                        # puur voor sortering in de database, omdat geen enum is
-                        srt=material_value[6] + type_value[6] + upgraded_value[6],
-
                         col=material_value[7],
                         row=type_value[7]
                     )
 
-        self.set_shop()
-        self.rearrage()
+        # Shop uitzetten voor sommige equipment items.
+        for eqp_key, eqp_value in self.items():
+            if "+" in eqp_key or "titanium" in eqp_key:
+                eqp_value['shp'] = False
+        # de laatste van shop is misschien niet nodig. dit kan ook in de shop zelf gecheckt worden. scheelt een variable
 
+        # Herschik de volgorde van de gecreerde dataset.
+        temp_dict = collections.OrderedDict()
+        # sorteer en zet in nieuwe database
+        for eqp_key, eqp_value in sorted(self.items(), key=lambda xx: xx[1]['srt']):
+            temp_dict[eqp_key] = eqp_value
+        # maak eigen database leeg
+        self.clear()
+        # zet de gesorteerde neer
+        for eqp_key, eqp_value in temp_dict.items():
+            self[eqp_key] = eqp_value
 
-ShieldsData = ShieldsDataClass()
+    def factory(self, key_name):
+        """
+        Zie accessory
+        :param key_name:
+        """
+        if key_name is None:
+            return equipment.EquipmentItem(equipment.EquipmentType.sld)
+        try:
+            shield = self[key_name]
+            shield['spr'] = SPRITEPATH
+            return equipment.EquipmentItem(equipment.EquipmentType.sld, **shield)
+        except KeyError:
+            console.equipment_item_name_not_in_database(key_name)

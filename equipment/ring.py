@@ -1,28 +1,38 @@
 
 """
-class: RingsData
+class: RingDatabase
 """
 
-import equipment.equipment
+import collections
 
-# todo, ringen afmaken
+import console
+import equipment
+
+# todo, alle ringen afmaken
 
 SPRITEPATH = ''
 
 
-class RingsData(equipment.equipment.GearData):
+class RingDatabase(collections.OrderedDict):
     """
-    Hier staan alle ringen uit het spel in als enum met een dict voor de waarden.
+    Zie accessory
     """
-    testring = dict(nam="Test Ring", val=100, shp=True,  wht=1, prt=1)
+    def __init__(self, *args, **kwds):
+        super().__init__(*args, **kwds)
 
-    @staticmethod
-    def factory(ring):
+        self['testring'] = dict(nam="Test Ring",    srt=1, val=100, shp=True, wht=1, prt=1)
+        self['testring2'] = dict(nam="Test Ring 2", srt=2, val=200, shp=True, wht=2, prt=2)
+
+    def factory(self, key_name):
         """
-        Maak een object van een enum database item.
-        :param ring: een bovenstaand enum item
-        :return: een gearitem object met attributen uit de bovenstaande enum dict
+        Zie accessory
+        :param key_name:
         """
-        if ring is None:
-            return equipment.equipment.GearItem(equipment.equipment.GearType.ring, SPRITEPATH)
-        return equipment.equipment.GearItem(equipment.equipment.GearType.ring, SPRITEPATH, **ring.value)
+        if key_name is None:
+            return equipment.EquipmentItem(equipment.EquipmentType.rng)
+        try:
+            ring = self[key_name]
+            ring['spr'] = SPRITEPATH
+            return equipment.EquipmentItem(equipment.EquipmentType.rng, **ring)
+        except KeyError:
+            console.equipment_item_name_not_in_database(key_name)
