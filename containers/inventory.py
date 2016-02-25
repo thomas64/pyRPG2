@@ -41,8 +41,9 @@ class Inventory(dict):
         if equipment_item.RAW in self:
             self[equipment_item.RAW].qty += quantity
         else:
-            # equipment_item bestaat uit zichzelf al uit quantity = 1
+            # als hij nog niet in de inv dict zit, voeg hem toe.
             self[equipment_item.RAW] = equipment_item
+            # equipment_item bestaat uit zichzelf al uit quantity = 1,
             # dus daarom, wanneer hij voor het eerst wordt toegevoegd: + qty - 1
             self[equipment_item.RAW].qty += (quantity - 1)
         if verbose:

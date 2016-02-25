@@ -73,25 +73,25 @@ def corrupt_gamedata():
     print('Corrupt gamedata.')
 
 
-def character_join_party(character_name, party_name):
+def hero_join_party(hero_name, party_name):
     """
     Party.add()
-    :param character_name: string
+    :param hero_name: string
     :param party_name: string
     """
-    print("{} joined {}.".format(character_name, party_name))
+    print("{} joined {}.".format(hero_name, party_name))
 
 
-def character_double_join(character_name, party_name):
+def hero_double_join(hero_name, party_name):
     """
     Party.add()
-    :param character_name: string
+    :param hero_name: string
     :param party_name: string
     """
-    print("{} is already in {}.".format(character_name, party_name))
+    print("{} is already in {}.".format(hero_name, party_name))
 
 
-def character_full_party(party_name):
+def hero_full_party(party_name):
     """
     Party.add()
     :param party_name: string
@@ -99,22 +99,22 @@ def character_full_party(party_name):
     print("{} is full.".format(party_name))
 
 
-def character_leave_party(character_name, party_name):
+def hero_leave_party(hero_name, party_name):
     """
     Party.remove()
-    :param character_name: string
+    :param hero_name: string
     :param party_name: string
     """
-    print("{} left {}.".format(character_name, party_name))
+    print("{} left {}.".format(hero_name, party_name))
 
 
-def character_not_in_party(character_name, party_name):
+def hero_not_in_party(hero_name, party_name):
     """
     Party.remove()
-    :param character_name: string
+    :param hero_name: string
     :param party_name: string
     """
-    print("{} is not in {}.".format(character_name, party_name))
+    print("{} is not in {}.".format(hero_name, party_name))
 
 
 def leader_not_leave_party():

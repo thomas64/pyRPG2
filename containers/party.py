@@ -17,30 +17,30 @@ class Party(collections.OrderedDict):
         self.NAM = "Party"
         self.MAX = 5
 
-    def add(self, character, verbose=True):
+    def add(self, hero, verbose=True):
         """
         Voeg heroes toe aan de party.
-        :param character: HeroData Object
+        :param hero: Hero Object
         :param verbose: als False meegegeven wordt, print dan niets in de console
         """
-        if character.RAW in self:
-            console.character_double_join(character.NAM, self.NAM)
+        if hero.RAW in self:
+            console.hero_double_join(hero.NAM, self.NAM)
         elif len(self) < self.MAX:
-            self[character.RAW] = character
+            self[hero.RAW] = hero
             if verbose:
-                console.character_join_party(character.NAM, self.NAM)
+                console.hero_join_party(hero.NAM, self.NAM)
         else:
-            console.character_full_party(self.NAM)
+            console.hero_full_party(self.NAM)
 
-    def remove(self, character):
+    def remove(self, hero):
         """
         Haal heroes weg uit de party
-        :param character: HeroData Object
+        :param hero: Hero Object
         """
-        if character.RAW == 'alagos':
+        if hero.RAW == 'alagos':
             console.leader_not_leave_party()
-        elif character.RAW in self:
-            console.character_leave_party(character.NAM, self.NAM)
-            del self[character.RAW]
+        elif hero.RAW in self:
+            console.hero_leave_party(hero.NAM, self.NAM)
+            del self[hero.RAW]
         else:
-            console.character_not_in_party(character.NAM, self.NAM)
+            console.hero_not_in_party(hero.NAM, self.NAM)
