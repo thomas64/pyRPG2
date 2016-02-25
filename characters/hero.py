@@ -7,6 +7,7 @@ import enum
 
 import characters.stats
 import characters.skills
+import console
 import equipment
 
 
@@ -68,8 +69,15 @@ class Hero(object):
         self.blt = equipment.BeltDatabase.factory(None)
         self.bts = equipment.BootsDatabase.factory(None)
         self.acy = equipment.AccessoryDatabase.factory(None)
-        self.equipment_tuple = (self.wpn, self.sld, self.hlm, self.amu, self.arm, self.clk,
-                                self.glv, self.lrg, self.rrg, self.blt, self.bts, self.acy)
+
+    @property
+    def equipment_tuple(self):
+        """
+        Deze tuple is apart van de andere tuples, omdat bij deze tuples ook echt de attributen kunnen veranderen.
+        :return: een tuple met alle equipment
+        """
+        return (self.wpn, self.sld, self.hlm, self.amu, self.arm, self.clk,
+                self.glv, self.lrg, self.rrg, self.blt, self.bts, self.acy)
 
     @property
     def cur_hp(self):
@@ -192,10 +200,74 @@ class Hero(object):
         :param equipment_type: Enum EquipmentType, dus bijv. ' sld = "Shield" '.
         :return: Als het geen empty is, geef dan het item. Anders None
         """
-        equipment_item = getattr(self, equipment_type.name, AttributeError)
-        if equipment_item.is_not_empty():
-            return equipment_item
+        # todo, Let op, bij ringen geeft hij er maar 1 terug. Denk ik, nog niet getest.
+        # er moet een conversieslag komen oid. van rightring naar ring en andersom.
+        for equipment_item in self.equipment_tuple:
+            if equipment_item.TYP == equipment_type:
+                if equipment_item.is_not_empty():
+                    return equipment_item
         return None
+
+    def set_equipment_item(self, new_equipment_item, verbose=True):
+        """
+        Nog niet zo netjes opgelost.
+        :param new_equipment_item:
+        :param verbose:
+        :return:
+        """
+        # ga door de waarden van alle attributen van hero heen.
+        for key_eqp_item, value_eqp_item in self.__dict__.items():
+            # als de attribute van type eqp_item is, (en dat weet hij omdat new_eqp_item ook van type eqp_item is)
+            if isinstance(value_eqp_item, type(new_equipment_item)):
+                # als de type van het equipment item overeenkomt met het type van de nieuwe equipment item
+                if value_eqp_item.TYP == new_equipment_item.TYP:
+                    # als de hero het equipment item mag/kan gebruiken:
+                    if self.is_able_to_equip(new_equipment_item):
+                        # stel de gekozen attribute bijv self.bts in op de nieuwe equipment
+                        setattr(self, key_eqp_item, new_equipment_item)
+                        self.calc_stats()
+                        self.calc_skills()
+
+        # todo, verbose en voorwaarde op eqp
+
+    def is_able_to_equip(self, new_equipment_item):
+        """
+        :param new_equipment_item:
+        :return:
+        """
+        # todo, kloppend maken nog, vergelijken met pyrpg1, en docstring,
+        if self.get_hero_weapon_skill_for_equipment_item(new_equipment_item) < 1:
+            console.not_equipping_skill(self.NAM, new_equipment_item.NAM)
+            return False
+        if new_equipment_item.get_value_of("MIN_INT") > self.int.qty:
+            console.not_equipping_min_int(self.NAM, new_equipment_item.NAM, new_equipment_item.MIN_INT)
+            return False
+        if new_equipment_item.get_value_of("MIN_STR") > self.str.qty:
+            console.not_equipping_min_str(self.NAM, new_equipment_item.NAM, new_equipment_item.MIN_STR)
+            return False
+        return True
+
+    def get_hero_weapon_skill_for_equipment_item(self, new_equipment_item):
+        """
+        Bekijkt welke SKL waarde het equipment item heeft, geef dan het bijbehorende attribute van de hero terug.
+        :param new_equipment_item: Object van EquipmentItem
+        :return: of de qty waarde groter is dan 1 of ander 1
+        """
+        val = new_equipment_item.get_value_of("SKL")    # val is een Enum
+        if val == equipment.WeaponType.swd:
+            return self.swd.qty                         # return -1, 0 of iets groters dan dat
+        elif val == equipment.WeaponType.haf:
+            return self.haf.qty
+        elif val == equipment.WeaponType.pol:
+            return self.pol.qty
+        elif val == equipment.WeaponType.mis:
+            return self.mis.qty
+        elif val == equipment.WeaponType.thr:
+            return self.thr.qty
+        elif val == equipment.WeaponType.shd:
+            return self.shd.qty
+        else:
+            return 1
 
     def calc_stats(self):
         """

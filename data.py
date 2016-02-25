@@ -72,6 +72,9 @@ class Data(object):
         self.inventory.add(shield4, -1)
         self.inventory.add(shield4, 1)
 
+        # self.heroes['alagos'].set_equipment_item(equipment.BootsDatabase.factory('ironboots'))
+        # self.heroes['alagos'].set_equipment_item(equipment.WeaponDatabase.factory('silverwarbow'))
+
         # print(self.inventory)
 
         # for boot in items.shield.ShieldsData:
