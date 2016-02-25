@@ -210,10 +210,9 @@ class Hero(object):
 
     def set_equipment_item(self, new_equipment_item, verbose=True):
         """
-        Nog niet zo netjes opgelost.
-        :param new_equipment_item:
-        :param verbose:
-        :return:
+        Nog niet zo netjes opgelost, naar wat ik denk. Hier wordt een nieuw equipment item aan de hero gegeven.
+        :param new_equipment_item: Object van EquipmentItem
+        :param verbose: geef console output if True
         """
         # ga door de waarden van alle attributen van hero heen.
         for key_eqp_item, value_eqp_item in self.__dict__.items():
@@ -227,15 +226,18 @@ class Hero(object):
                         setattr(self, key_eqp_item, new_equipment_item)
                         self.calc_stats()
                         self.calc_skills()
-
-        # todo, verbose en voorwaarde op eqp
+                        if verbose:
+                            if new_equipment_item.is_not_empty():
+                                console.is_equipping(self.NAM, new_equipment_item.NAM)
+                            else:
+                                console.is_unequipping(self.NAM, value_eqp_item.NAM)
 
     def is_able_to_equip(self, new_equipment_item):
         """
-        :param new_equipment_item:
-        :return:
+        Hier bekijkt hij of hij het nieuwe equipment item wel mag/kan dragen.
+        :param new_equipment_item: Object van EquipmentItem
+        :return: False of True of hij mag/kan
         """
-        # todo, kloppend maken nog, vergelijken met pyrpg1, en docstring,
         if self.get_hero_weapon_skill_for_equipment_item(new_equipment_item) < 1:
             console.not_equipping_skill(self.NAM, new_equipment_item.NAM)
             return False

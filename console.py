@@ -149,6 +149,24 @@ def equipment_item_name_not_in_database(equipment_item_name):
     print("Cannot find {} in database.".format(equipment_item_name))
 
 
+def is_equipping(hero_name, equipment_item_name):
+    """
+    Hero.set_equipment_item()
+    :param hero_name: string
+    :param equipment_item_name: string
+    """
+    print("{} is equipping {}.".format(hero_name, equipment_item_name))
+
+
+def is_unequipping(hero_name, equipment_item_name):
+    """
+    Hero.set_equipment_item()
+    :param hero_name: string
+    :param equipment_item_name: string
+    """
+    print("{} is unequipping {}.".format(hero_name, equipment_item_name))
+
+
 def not_equipping_skill(hero_name, equipment_item_name):
     """
     Hero.is_able_to_equip()
