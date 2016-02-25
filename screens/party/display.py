@@ -177,6 +177,10 @@ class Display(object):
         :param event: pygame.KEYDOWN uit engine.py
         :return: return niets, alleen met de closekey
         """
+        # als de clickbox er is en er wordt een toets gedrukt, laat hem dan verdwijnen.
+        if self.invclick_box:
+            self.invclick_box = None
+
         if event.key == CLOSEKEY:
             return CLOSEKEY
         elif event.key == PREVKEY:

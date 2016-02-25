@@ -30,7 +30,7 @@ BLTBOX = pygame.Rect(136, 207, 33, 33)
 BTSBOX = pygame.Rect(136, 270, 33, 33)
 ACYBOX = pygame.Rect(206, 197, 33, 33)
 GEARBOXES = (WPNBOX, SLDBOX, HLMBOX, AMUBOX, ARMBOX, CLKBOX, GLVBOX, LRGBOX, RRGBOX, BLTBOX, BTSBOX, ACYBOX)
-SUBX, SUBY = 32, 32
+SUBSURW, SUBSURH = 32, 32
 
 FONTCOLOR = pygame.Color("white")
 FONT = 'impact'
@@ -63,7 +63,7 @@ class InventoryBox(object):
         for gear in hero.equipment_tuple:
             # todo, de 'and' voorwaarde mag weg wanneer alle gear een spritepath gekregen heeft.
             if gear.is_not_empty() and gear.SPR:
-                self.gear_sprites.append(pygame.image.load(gear.SPR).subsurface(gear.COL, gear.ROW, SUBX, SUBY))
+                self.gear_sprites.append(pygame.image.load(gear.SPR).subsurface(gear.COL, gear.ROW, SUBSURW, SUBSURH))
             else:
                 self.gear_sprites.append(pygame.Surface((0, 0)))
 
