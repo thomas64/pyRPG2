@@ -22,18 +22,6 @@ import equipment.weapon
 # - min int gebruiken voor items?
 # - mvp aan items
 
-AccessoryDatabase = equipment.accessory.AccessoryDatabase()
-AmuletDatabase = equipment.amulet.AmuletDatabase()
-ArmorDatabase = equipment.armor.ArmorDatabase()
-BeltDatabase = equipment.belt.BeltDatabase()
-BootsDatabase = equipment.boots.BootsDatabase()
-CloakDatabase = equipment.cloak.CloakDatabase()
-GlovesDatabase = equipment.gloves.GlovesDatabase()
-HelmetDatabase = equipment.helmet.HelmetDatabase()
-RingDatabase = equipment.ring.RingDatabase()
-ShieldDatabase = equipment.shield.ShieldDatabase()
-WeaponDatabase = equipment.weapon.WeaponDatabase()
-
 
 class EquipmentType(enum.Enum):
     """
@@ -50,6 +38,31 @@ class EquipmentType(enum.Enum):
     blt = "Belt"
     bts = "Boots"
     acy = "Accessory"
+
+
+class WeaponType(enum.Enum):
+    """
+    Alle weapon types en shield op een rij.
+    """
+    swd = "Sword"
+    haf = "Hafted"
+    pol = "Pole"
+    mis = "Missile"
+    thr = "Thrown"
+    shd = "Shield"
+
+
+AccessoryDatabase = equipment.accessory.AccessoryDatabase()
+AmuletDatabase = equipment.amulet.AmuletDatabase()
+ArmorDatabase = equipment.armor.ArmorDatabase()
+BeltDatabase = equipment.belt.BeltDatabase()
+BootsDatabase = equipment.boots.BootsDatabase()
+CloakDatabase = equipment.cloak.CloakDatabase()
+GlovesDatabase = equipment.gloves.GlovesDatabase()
+HelmetDatabase = equipment.helmet.HelmetDatabase()
+RingDatabase = equipment.ring.RingDatabase()
+ShieldDatabase = equipment.shield.ShieldDatabase()
+WeaponDatabase = equipment.weapon.WeaponDatabase()
 
 
 class EquipmentItem(object):

@@ -112,6 +112,7 @@ class ShieldDatabase(collections.OrderedDict):
         try:
             shield = self[key_name]
             shield['spr'] = SPRITEPATH
+            shield['skl'] = equipment.WeaponType.shd
             return equipment.EquipmentItem(equipment.EquipmentType.sld, **shield)
         except KeyError:
             console.equipment_item_name_not_in_database(key_name)
