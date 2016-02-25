@@ -16,7 +16,7 @@ TITLEX, TITLEY = 7, 1
 TITLE = "Inventory"
 STICKMANPATH = "resources/sprites/stickman.png"
 STICKMANPOS = 60
-GEARBOXCOLOR = (100, 0, 0, 128)
+EQUIPMENTITEMBOXCOLOR = (100, 0, 0, 128)
 WPNBOX = pygame.Rect(70,  165, 33, 33)
 SLDBOX = pygame.Rect(206, 165, 33, 33)
 HLMBOX = pygame.Rect(136,  70, 33, 33)
@@ -29,7 +29,7 @@ RRGBOX = pygame.Rect(70,  229, 33, 33)
 BLTBOX = pygame.Rect(136, 207, 33, 33)
 BTSBOX = pygame.Rect(136, 270, 33, 33)
 ACYBOX = pygame.Rect(206, 197, 33, 33)
-GEARBOXES = (WPNBOX, SLDBOX, HLMBOX, AMUBOX, ARMBOX, CLKBOX, GLVBOX, LRGBOX, RRGBOX, BLTBOX, BTSBOX, ACYBOX)
+EQUIPMENTITEMBOXES = (WPNBOX, SLDBOX, HLMBOX, AMUBOX, ARMBOX, CLKBOX, GLVBOX, LRGBOX, RRGBOX, BLTBOX, BTSBOX, ACYBOX)
 SUBSURW, SUBSURH = 32, 32
 
 FONTCOLOR = pygame.Color("white")
@@ -59,13 +59,15 @@ class InventoryBox(object):
         self.title = self.largefont.render(TITLE, True, FONTCOLOR)
         self.stickman = pygame.image.load(STICKMANPATH)
 
-        self.gear_sprites = []
-        for gear in hero.equipment_tuple:
-            # todo, de 'and' voorwaarde mag weg wanneer alle gear een spritepath gekregen heeft.
-            if gear.is_not_empty() and gear.SPR:
-                self.gear_sprites.append(pygame.image.load(gear.SPR).subsurface(gear.COL, gear.ROW, SUBSURW, SUBSURH))
+        self.equipment_item_sprites = []
+        for equipment_item in hero.equipment_tuple:
+            # todo, de 'and' voorwaarde mag weg wanneer alle equipment een spritepath gekregen heeft.
+            if equipment_item.is_not_empty() and equipment_item.SPR:
+                # laat het gekozen icon zien van de equipment item
+                self.equipment_item_sprites.append(pygame.image.load(equipment_item.SPR).subsurface(
+                                                            equipment_item.COL, equipment_item.ROW, SUBSURW, SUBSURH))
             else:
-                self.gear_sprites.append(pygame.Surface((0, 0)))
+                self.equipment_item_sprites.append(pygame.Surface((0, 0)))
 
     def draw(self, screen, hero):
         """
@@ -79,17 +81,22 @@ class InventoryBox(object):
         pygame.draw.rect(self.background, LINECOLOR, self.surface.get_rect(), 1)
 
         self.surface.blit(self.title, (TITLEX, TITLEY))
+        # positioneer stickman in het midden
         self.surface.blit(self.stickman, ((self.surface.get_width() - self.stickman.get_width()) / 2, STICKMANPOS))
-        for index, box in enumerate(GEARBOXES):
-            pygame.gfxdraw.box(self.surface, box, GEARBOXCOLOR)
+
+        for index, box in enumerate(EQUIPMENTITEMBOXES):
+            # teken een doorzichtige box
+            pygame.gfxdraw.box(self.surface, box, EQUIPMENTITEMBOXCOLOR)
+            # teken het lijntje eromheen
             pygame.draw.rect(self.surface, LINECOLOR, box, 1)
-            self.surface.blit(self.gear_sprites[index], box)
+            # teken de icon
+            self.surface.blit(self.equipment_item_sprites[index], box)
 
         screen.blit(self.surface, self.rect.topleft)
 
     def mouse_click(self, event, hero):
         """
-        Deze moet van de display de muispositie en het geartype teruggeven. Daar vraagt display om, zodat er een
+        Deze moet van de display de muispositie en het EquipmentType teruggeven. Daar vraagt display om, zodat er een
         clickbox opgezet kan worden.
         :param event: pygame.MOUSEBUTTONDOWN uit engine.py
         :param hero: self.cur_hero uit party/display.py

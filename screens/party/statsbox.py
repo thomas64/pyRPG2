@@ -168,7 +168,7 @@ class StatsBox(object):
         if stat == WHT_DESC:
             return (
                 "Weight:",
-                "Defines how heavy your character is equipped with gear.",
+                "Defines how heavy your character is equipped with equipment.",
                 "Weight has negative impact on movepoints and agility."
             )
 

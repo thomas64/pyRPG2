@@ -104,7 +104,7 @@ class Display(object):
         self.skills_box.draw(self.screen, self.cur_hero)
         self.inventory_box.draw(self.screen, self.cur_hero)
         if self.invclick_box:
-            self.invclick_box.draw(self.screen, self.party, self.inventory)
+            self.invclick_box.draw(self.screen)
 
         # name2 = self.largefont.render(cur_hero.NAM, True, FONTCOLOR)   = voorbeeld van hoe een naam buiten een herobox
         # name2_rect = self.screen.blit(name2, (500, 300))
@@ -148,11 +148,12 @@ class Display(object):
 
             # als er in de inventory box wordt geklikt
             if self.inventory_box.rect.collidepoint(event.pos):
-                # krijg de positie en gear type terug
-                boxpos, gear_type = self.inventory_box.mouse_click(event, self.cur_hero)
-                # als er geen clickbox is en wel een gear type, geef dan een clickbox weer
-                if not self.invclick_box and gear_type:
-                    self.invclick_box = screens.party.invclickbox.InvClickBox(boxpos, gear_type)
+                # krijg de positie en equipment_type terug
+                boxpos, equipment_type = self.inventory_box.mouse_click(event, self.cur_hero)
+                # als er geen clickbox is en wel een equipment_type, geef dan een clickbox weer
+                if not self.invclick_box and equipment_type:
+                    self.invclick_box = screens.party.invclickbox.InvClickBox(
+                                                                    boxpos, equipment_type, self.party, self.inventory)
 
             for button in self.buttons:
                 button_press = button.single_click(event)
