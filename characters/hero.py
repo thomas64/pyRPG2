@@ -192,7 +192,7 @@ class Hero(object):
         :param equipment_type: Enum EquipmentType, dus bijv. ' sld = "Shield" '.
         :return: Als het geen empty is, geef dan het item. Anders None
         """
-        equipment_item = getattr(self, equipment_type.Name, AttributeError)
+        equipment_item = getattr(self, equipment_type.name, AttributeError)
         if equipment_item.is_not_empty():
             return equipment_item
         return None
