@@ -41,11 +41,11 @@ class InvClickBox(object):
 
         for hero in party:
             # todo, bij rng en rrg en lrg zijn er nog problemen.
-            equipment_item = hero.get_item_equipped_of_type(self.equipment_type)
+            equipment_item = hero.get_equipped_item_of_type(self.equipment_type)
             if equipment_item:
                 self.table_data.append("{} {} {} {}".format(hero.NAM, "Icon", "1", equipment_item.NAM))
 
-        for equipment_item in inventory.get_sorted_of_type(self.equipment_type):
+        for equipment_item in inventory.get_all_equipment_items_of_type(self.equipment_type):
             self.table_data.append("{} {} {} {}".format("X", "Icon", equipment_item.qty, equipment_item.NAM))
 
         self.table_view = []
@@ -65,6 +65,8 @@ class InvClickBox(object):
         screen.blit(self.surface, self.rect.topleft)
 
     def mouse_scroll(self, event):
+
+        # todo, scrollen door het vakje maken
 
         if event.button == 4:
             self.rect = self.rect.move(0, -1)

@@ -9,6 +9,7 @@ import console
 import equipment
 
 # todo, alle accessoires afmaken
+# todo, alle sprites van alle equipment items
 
 SPRITEPATH = ''
 

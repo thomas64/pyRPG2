@@ -14,7 +14,7 @@ class Inventory(dict):
         super().__init__(**kwargs)
         self.NAM = "Inventory"
 
-    def get_sorted_of_type(self, equipment_type):
+    def get_all_equipment_items_of_type(self, equipment_type):
         """
         Geeft uit de inventory alle equipment items van een bepaald type op de juiste volgorde terug.
         :param equipment_type: Enum EquipmentType

@@ -186,7 +186,7 @@ class Hero(object):
             total += equipment_item.get_value_of('DAM')
         return total
 
-    def get_item_equipped_of_type(self, equipment_type):
+    def get_equipped_item_of_type(self, equipment_type):
         """
         Geeft het item van het meegegeven Enum type wat de hero equipped heeft terug.
         :param equipment_type: Enum EquipmentType, dus bijv. ' sld = "Shield" '.
@@ -247,6 +247,8 @@ class HeroData(enum.Enum):
         :return: een hero object met attributen uit de onderstaanstaande enum dict
         """
         return Hero(**hero.value)
+
+    # todo, alle hero data toevoegen
 
     alagos = dict(nam="Alagos", spr=PATH+"01s_Alagos.png", fac=PATH+"01f_Alagos.png",
                   lev=1, exp=500, int=18, wil=12, dex=15, agi=15, edu=15, str=15, sta=30,
