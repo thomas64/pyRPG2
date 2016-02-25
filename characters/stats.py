@@ -25,7 +25,7 @@ class Stat(object):
         self.MAX = maximum          # maximum mogelijk, bijv 10 bij skill of 30 bij int
         self.UPG = upgrade          # upgrade formule constante
         self.qty = quantity         # standaard hoeveelheid op te waarderen stat (tot bijv 30)
-        self.ext = 0                # extra: wat geeft gear voor pos/neg extra
+        self.ext = 0                # extra: wat geeft equipment item voor pos/neg extra
         self.tot = quantity         # total: quantity + extra
         self.cur = quantity         # current: gaat af wanneer er bijv schade is (sta, edu, lev)
 

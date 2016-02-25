@@ -8,7 +8,7 @@ import collections
 import console
 import equipment
 
-SPRITEPATH = 'resources/sprites/icons/gear/weapon1.png'
+SPRITEPATH = 'resources/sprites/icons/equipment/weapon1.png'
 
 
 class WeaponDatabase(collections.OrderedDict):

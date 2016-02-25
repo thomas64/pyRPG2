@@ -8,7 +8,7 @@ import collections
 import console
 import equipment
 
-SPRITEPATH = 'resources/sprites/icons/gear/shield3.png'
+SPRITEPATH = 'resources/sprites/icons/equipment/shield3.png'
 
 
 class ShieldDatabase(collections.OrderedDict):

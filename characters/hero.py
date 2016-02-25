@@ -186,22 +186,22 @@ class Hero(object):
             total += equipment_item.get_value_of('DAM')
         return total
 
-    def get_item_equipped_of_type(self, gear_type_value):
+    def get_item_equipped_of_type(self, equipment_type):
         """
         Geeft het item van het meegegeven Enum type wat de hero equipped heeft terug.
-        :param gear_type_value: is de value[0] of de Enum GearType, dus bijv. Shield = 'sld'. 'sld' dus.
+        :param equipment_type: Enum EquipmentType, dus bijv. ' sld = "Shield" '.
         :return: Als het geen empty is, geef dan het item. Anders None
         """
-        equipment_item = getattr(self, gear_type_value, AttributeError)
+        equipment_item = getattr(self, equipment_type.Name, AttributeError)
         if equipment_item.is_not_empty():
             return equipment_item
         return None
 
     def calc_stats(self):
         """
-        Hier worden voor de 7 hero stats in alle equipment gekeken en toegevoegd aan extra.
+        Hier worden voor de 7 hero stats in alle equipment items gekeken en toegevoegd aan extra.
         En uiteindelijk ook aan total. Dit moet uitgevoerd worden aan het begin van het spel en
-        wanneer een gear van een hero wordt verwisseld.
+        wanneer een equipment item van een hero wordt verwisseld.
         Agility extra wordt op een andere manier gevuld voor een tweede keer, met weight. De eerste keer is
         soort van nutteloos.
         """
@@ -220,7 +220,7 @@ class Hero(object):
     def calc_skills(self):
         """
         Hetzelfde als calc_stats ongeveer, maar dan alles in een keer.
-        Ga alle skills langs en ga daarmee alle equipment langs en voeg die toe aan .ext.
+        Ga alle skills langs en ga daarmee alle equipment items langs en voeg die toe aan .ext.
         Ext en qty vormen samen totaal.
         """
         for skill in self.skills_tuple:

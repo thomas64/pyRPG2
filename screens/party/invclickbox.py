@@ -18,7 +18,7 @@ class InvClickBox(object):
     """
     Wanneer je klikt in de inventorybox op een gear.
     """
-    def __init__(self, position, gear_type):
+    def __init__(self, position, equipment_type):
         self.surface = pygame.Surface((300, 200))
         self.surface.set_alpha(224)
         self.surface = self.surface.convert()
@@ -32,20 +32,20 @@ class InvClickBox(object):
         self.largefont = pygame.font.SysFont(FONT, LARGEFONTSIZE)
         self.normalfont = pygame.font.SysFont(FONT, NORMALFONTSIZE)
 
-        self.gear_type = gear_type
+        self.equipment_type = equipment_type
 
     def _update(self, party, inventory):
 
         self.table_data = []
-        self.table_data.append("{} {} {} {}".format("", "", "Unequip " + self.gear_type.name, ""))
+        self.table_data.append("{} {} {} {}".format("", "", "Unequip " + self.equipment_type.value, ""))
 
         for hero in party:
             # todo, bij rng en rrg en lrg zijn er nog problemen.
-            equipment_item = hero.get_item_equipped_of_type(self.gear_type.name)
+            equipment_item = hero.get_item_equipped_of_type(self.equipment_type)
             if equipment_item:
                 self.table_data.append("{} {} {} {}".format(hero.NAM, "Icon", "1", equipment_item.NAM))
 
-        for equipment_item in inventory.get_sorted_of_type(self.gear_type):
+        for equipment_item in inventory.get_sorted_of_type(self.equipment_type):
             self.table_data.append("{} {} {} {}".format("X", "Icon", equipment_item.qty, equipment_item.NAM))
 
         self.table_view = []
