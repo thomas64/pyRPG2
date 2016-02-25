@@ -41,7 +41,7 @@ class InvClickBox(object):
 
         for hero in party:
             # todo, bij rng en rrg en lrg zijn er nog problemen.
-            equipment_item = hero.get_item_equipped_of_type(self.gear_type.value[0])
+            equipment_item = hero.get_item_equipped_of_type(self.gear_type.name)
             if equipment_item:
                 self.table_data.append("{} {} {} {}".format(hero.NAM, "Icon", "1", equipment_item.NAM))
 

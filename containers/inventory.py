@@ -3,9 +3,6 @@
 class: Inventory
 """
 
-import collections
-import importlib
-
 import console
 
 
@@ -17,37 +14,36 @@ class Inventory(dict):
         super().__init__(**kwargs)
         self.NAM = "Inventory"
 
-    # todo, deze anders doen, icm een return in class EquipmentItem, oid.
-    def get_sorted_of_type(self, gear_type):
+    def get_sorted_of_type(self, equipment_type):
         """
-        Geeft uit de inventory alle items van een bepaald type op de juiste volgorde terug.
-        gear_type.value[1] en [2] zijn de values van de Enum GearType
-        :param gear_type: Enum GearType
-        :return: Een gesorteerde dict met alleen de gewenste items.
+        Geeft uit de inventory alle equipment items van een bepaald type op de juiste volgorde terug.
+        :param equipment_type: Enum EquipmentType
+        :return: Een lijst met alleen de gewenste equipment items.
         """
-        temp_dict = collections.OrderedDict()
-        module_name = importlib.import_module(gear_type.value[1])
-        items_data = getattr(module_name, gear_type.value[2])
+        temp_list = []
 
-        for item in items_data:
-            if self.get(item[0]):
-                temp_dict[item[0]] = self[item[0]]
-        return temp_dict.values()
+        for equipment_item in sorted(self.values(), key=lambda xx: xx.SRT):
+            if equipment_item.TYP == equipment_type:
+                temp_list.append(equipment_item)
 
-    def add(self, gear, quantity=1, verbose=True):
+        return temp_list
+
+    def add(self, equipment_item, quantity=1, verbose=True):
         """
-        Voeg gear toe aan de inventory.
-        :param gear: GearData Object
+        Voeg equipment item toe aan de inventory.
+        :param equipment_item: EquipmentItem Object
         :param quantity: integer
         :param verbose: als False meegegeven wordt, print dan niets in de console
         """
         if quantity < 1:
             console.quantity_less_than_one()
             return
-        if gear.RAW in self:
-            self[gear.RAW].qty += quantity
+        if equipment_item.RAW in self:
+            self[equipment_item.RAW].qty += quantity
         else:
-            self[gear.RAW] = gear                       # gear bestaat uit zichzelf al uit quantity = 1
-            self[gear.RAW].qty += (quantity - 1)        # dus daarom, wanneer hij voor het eerst wordt toegevoegd: - 1
+            # equipment_item bestaat uit zichzelf al uit quantity = 1
+            self[equipment_item.RAW] = equipment_item
+            # dus daarom, wanneer hij voor het eerst wordt toegevoegd: + qty - 1
+            self[equipment_item.RAW].qty += (quantity - 1)
         if verbose:
-            console.add_equipment_item(quantity, gear.NAM, self.NAM)
+            console.add_equipment_item(quantity, equipment_item.NAM, self.NAM)
