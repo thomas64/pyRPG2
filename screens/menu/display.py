@@ -16,6 +16,7 @@ MENUFONTSIZE = 50
 MENUFONTCOLOR1 = pygame.Color("white")
 MENUFONTCOLOR2 = pygame.Color("yellow")
 
+CLICKBUTTON = 1
 UPKEY = pygame.K_UP
 DOWNKEY = pygame.K_DOWN
 SELECTKEYS = pygame.K_RETURN, pygame.K_KP_ENTER     # 2 mogelijkheden voor dezelfde constante
@@ -92,7 +93,7 @@ class Display(object):
                         self.audio.play_sound(self.audio.switch)
 
         elif event.type == pygame.MOUSEBUTTONDOWN:
-            if event.button == 1:
+            if event.button == CLICKBUTTON:
                 for item in self.menu_texts:
                     if item.rect.collidepoint(event.pos):
                         self.audio.play_sound(self.audio.select)

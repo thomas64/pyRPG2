@@ -21,6 +21,8 @@ CLOSELBL = "Close"
 PREVLBL = "Previous"
 NEXTLBL = "Next"
 
+CLICKBUTTON = 1
+SCROLLBUTTONS = 4, 5
 CLOSEKEY = pygame.K_ESCAPE
 PREVKEY = pygame.K_q
 NEXTKEY = pygame.K_w
@@ -137,7 +139,7 @@ class Display(object):
         Handelt mouse events af.
         :param event: pygame.MOUSEBUTTONDOWN uit engine.py
         """
-        if event.button == 1:
+        if event.button == CLICKBUTTON:
 
             # als de clickbox er is en er wordt buiten geklikt, laat hem dan verdwijnen.
             if self.invclick_box and not self.invclick_box.rect.collidepoint(event.pos):
@@ -167,7 +169,7 @@ class Display(object):
                     break
             return                                  # als het niet de CLOSE button is, return niets.
 
-        elif event.button in (4, 5):
+        elif event.button in SCROLLBUTTONS:
             if self.invclick_box and self.invclick_box.rect.collidepoint(event.pos):
                 self.invclick_box.mouse_scroll(event)
 

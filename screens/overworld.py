@@ -23,6 +23,7 @@ DOWNLBL = "Down"
 LEFTLBL = "Left"
 RIGHTLBL = "Right"
 
+CLICKBUTTON = 1
 INVKEY = pygame.K_i
 UPKEY = pygame.K_UP
 DOWNKEY = pygame.K_DOWN
@@ -123,7 +124,7 @@ class Overworld(object):
         :param event: pygame.MOUSEBUTTONDOWN uit engine.py
         """
         if self.engine.currentstate == states.GameState.Overworld:
-            if event.button == 1:
+            if event.button == CLICKBUTTON:
                 for button in self.buttons:
                     button_press = button.single_click(event)
                     if button_press == INVKEY:

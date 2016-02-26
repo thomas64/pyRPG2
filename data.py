@@ -58,6 +58,8 @@ class Data(object):
         shield2 = equipment.ShieldDatabase.factory('woodentarge')
         shield3 = equipment.ShieldDatabase.factory('bronzescutum')
         shield4 = equipment.ShieldDatabase.factory('ironheater')
+        ring1 = equipment.RingDatabase.factory('testring')
+        ring2 = equipment.RingDatabase.factory('testring2')
 
         self.inventory.add(weapon1, 48)
         self.inventory.add(weapon2, 20)
@@ -72,6 +74,10 @@ class Data(object):
         self.inventory.add(shield4, 0)
         self.inventory.add(shield4, -1)
         self.inventory.add(shield4, 1)
+        self.inventory.add(ring1, 4)
+        self.inventory.add(ring2, 6)
+
+        # todo, hoe bepaal je of een ring aan de linker of rechter hand kan?
 
         self.heroes['alagos'].set_equipment_item(equipment.BootsDatabase.factory('ironboots'))
         self.heroes['alagos'].set_equipment_item(equipment.BootsDatabase.factory(None))
