@@ -306,7 +306,6 @@ class GameEngine(object):
         self.optionsmenu = None
 
     def _show_pause_menu(self):
-        self.audio.play_sound(self.audio.select)
         self.audio.fade_music()
         scr_data = pygame.image.tostring(self.screen, 'RGBA')   # maak een screen capture
         self.scr_capt = pygame.image.frombuffer(scr_data, self.screen.get_size(), 'RGBA')

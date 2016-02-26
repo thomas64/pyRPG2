@@ -51,6 +51,8 @@ class InvClickBox(object):
         for index, row in enumerate(table_data):
             self.table_view.append(normalfont.render(row, True, FONTCOLOR))
 
+        # todo, row hoogte gewoon op index bepalen. het kan namelijk makkelijker.
+
         surface_height = STARTBOXHEIGHT
         self.layer_height = 0
         for row in self.table_view:
