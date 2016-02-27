@@ -7,9 +7,17 @@ import pygame
 
 TITLETEXT = "pyRPG"
 TITLEFONT = 'colonna'
-TITLEFONTSIZE = 150
-TITLEFONTCOLOR = pygame.Color("red")
-TITLEPOSY = 125
+TITLEFONTSIZE = 100
+TITLEFONTCOLOR = pygame.Color("black")
+TITLEPOSX = 150
+TITLEPOSY = 50
+
+SUBTEXT = "THE LOST GATE"
+SUBFONT = None
+SUBFONTSIZE = 50
+SUBFONTCOLOR = pygame.Color("gray36")
+SUBPOSX = 155
+SUBPOSY = 160
 
 
 class Title(object):
@@ -17,19 +25,15 @@ class Title(object):
     De mainmenu titel.
     """
     def __init__(self):
-        self.text = TITLETEXT
-        self.font = pygame.font.SysFont(TITLEFONT, TITLEFONTSIZE)
-        self.font_color = TITLEFONTCOLOR
-        self.label = self.font.render(self.text, True, self.font_color)
-        self.width = self.label.get_width()
-        self.height = self.label.get_height()
-        self.position = (0, 0)
+        self.titlefont = pygame.font.SysFont(TITLEFONT, TITLEFONTSIZE)
+        self.subfont = pygame.font.SysFont(SUBFONT, SUBFONTSIZE)
+        self.title = self.titlefont.render(TITLETEXT, True, TITLEFONTCOLOR)
+        self.sub = self.subfont.render(SUBTEXT, True, SUBFONTCOLOR)
 
-    def set_position(self, screen_width):
+    def draw(self, screen):
         """
-        Zet de titel op de juiste positie.
-        :param screen_width: de totale breedte van de achtergrond waarop de title zich bevind.
+        Tekent de titel op de screen.
+        :param screen: self.screen van de menuscreen
         """
-        pos_x = (screen_width/2) - (self.width/2)
-        pos_y = TITLEPOSY
-        self.position = (pos_x, pos_y)
+        screen.blit(self.title, (TITLEPOSX, TITLEPOSY))
+        screen.blit(self.sub, (SUBPOSX, SUBPOSY))

@@ -5,16 +5,24 @@ class: Screen
 
 import pygame
 
+import screens.menu.animation
 import screens.menu.text
 import screens.menu.title
 
-BACKGROUNDCOLOR = pygame.Color("black")
+BACKGROUNDCOLOR1 = pygame.Color("black")
+BACKGROUNDCOLOR2 = pygame.Color("white")
 BACKGROUNDTRANS = 224       # 1-255 hoger is zwarter
 
 MENUFONT = None             # todo, nog een ander font kiezen?
 MENUFONTSIZE = 50
 MENUFONTCOLOR1 = pygame.Color("white")
 MENUFONTCOLOR2 = pygame.Color("yellow")
+MENUFONTCOLOR3 = pygame.Color("black")
+MENUFONTCOLOR4 = pygame.Color("red")
+
+MENUH = 1.5
+MENUX = -400
+MENUY = -100
 
 CLICKBUTTON = 1
 UPKEY = pygame.K_UP
@@ -26,10 +34,17 @@ class Display(object):
     """
     Een menuscherm.
     """
-    def __init__(self, screen, audio, itemsmenu, title):
+    def __init__(self, screen, audio, itemsmenu, title, animation):
         self.screen = screen
         self.background = pygame.Surface(self.screen.get_size())
-        self.background.fill(BACKGROUNDCOLOR)
+        if animation:
+            self.background.fill(BACKGROUNDCOLOR2)
+            self.color1 = MENUFONTCOLOR3
+            self.color2 = MENUFONTCOLOR4
+        else:
+            self.background.fill(BACKGROUNDCOLOR1)
+            self.color1 = MENUFONTCOLOR1
+            self.color2 = MENUFONTCOLOR2
         self.background = self.background.convert()
 
         bg_width = self.background.get_width()
@@ -40,15 +55,22 @@ class Display(object):
         self.show_title = title
         if self.show_title:
             self.title = screens.menu.title.Title()
-            self.title.set_position(bg_width)
+
+        self.show_animation = animation
+        if self.show_animation:
+            self.animation = screens.menu.animation.Animation()
+            self.animation.set_position(bg_width, bg_height)
 
         self.menu_items = itemsmenu     # het object OrderedDict genaamd inside
         self.menu_texts = []            # een list van MenuText objecten
         for index, item in enumerate(self.menu_items):
-            menu_text = screens.menu.text.Text(item, index, MENUFONT, MENUFONTSIZE, MENUFONTCOLOR1)
+            menu_text = screens.menu.text.Text(item, index, MENUFONT, MENUFONTSIZE, self.color1)
             t_h = len(self.menu_items) * menu_text.height                 # t_h: total height of text block
-            pos_x = (bg_width/2) - (menu_text.width/2)
-            pos_y = ((bg_height/2) - (t_h/2)) + (menu_text.height * index * 2)
+            pos_x = (bg_width - menu_text.width) / 2
+            pos_y = ((bg_height - t_h) / 2) + (menu_text.height * index * MENUH)
+            if self.show_animation:
+                pos_x += MENUX
+                pos_y += MENUY
 
             menu_text.position = (pos_x, pos_y)
             menu_text.rect.topleft = menu_text.position
@@ -56,16 +78,17 @@ class Display(object):
 
         self.cur_item = 0
 
-    def handle_view(self, bg=None):
+    def handle_view(self, dt, bg=None):
         """
         Reset eerst alle kleuren.
         Zet dan de geselecteerde op een andere kleur.
         Teken de (overworld screencapture) -> achtergrond -> (titel) -> menuitems.
+        :param dt: self.clock.tick(FPS)/1000.0
         :param bg: screen capture van de overworld
         """
         for item in self.menu_texts:
-            item.set_font_color(MENUFONTCOLOR1)
-        self.menu_texts[self.cur_item].set_font_color(MENUFONTCOLOR2)
+            item.set_font_color(self.color1)
+        self.menu_texts[self.cur_item].set_font_color(self.color2)
 
         if bg is not None:
             self.screen.blit(bg, (0, 0))                    # gooi over het hele scherm de overworld achtergrond
@@ -73,8 +96,11 @@ class Display(object):
 
         self.screen.blit(self.background, (0, 0))
 
+        if self.show_animation:
+            self.animation.animate(self.screen, dt)
+
         if self.show_title:
-            self.screen.blit(self.title.label, self.title.position)
+            self.title.draw(self.screen)
 
         for item in self.menu_texts:
             self.screen.blit(item.label, item.position)

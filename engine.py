@@ -136,11 +136,11 @@ class GameEngine(object):
                     self.screen.blit(self.debugfont.render(line, True, DEBUGFONTCOLOR), (0, count * 10))
 
         if self.currentstate == states.GameState.MainMenu:
-            self.mainmenu.handle_view()                         # geen achtergrond
+            self.mainmenu.handle_view(self.dt)                          # geen achtergrond
         elif self.currentstate == states.GameState.OptionsMenu:
-            self.optionsmenu.handle_view()
+            self.optionsmenu.handle_view(self.dt)
         elif self.currentstate == states.GameState.PauseMenu:
-            self.pausemenu.handle_view(self.scr_capt)           # achtergrond, screen capture
+            self.pausemenu.handle_view(self.dt, self.scr_capt)          # achtergrond, screen capture
         elif self.currentstate == states.GameState.Overworld or \
                 self.currentstate == states.GameState.PartyScreen:
             self.overworld.handle_view()
@@ -254,7 +254,7 @@ class GameEngine(object):
         self.statemachine.clear()
         self.statemachine.push(states.GameState.MainMenu)
         menu_items = screens.menu.content.MainMenu()
-        self.mainmenu = screens.menu.display.Display(self.screen, self.audio, menu_items, True)
+        self.mainmenu = screens.menu.display.Display(self.screen, self.audio, menu_items, True, True)
         self.audio.play_music()
 
     def _main_menu_select_new_game(self):
@@ -286,8 +286,9 @@ class GameEngine(object):
 
     def _show_options_menu(self):
         self.statemachine.push(states.GameState.OptionsMenu)
-        menu_items = screens.menu.content.OptionsMenu(self.audio.music, self.audio.sound)  # hier worden de weergave van
-        self.optionsmenu = screens.menu.display.Display(self.screen, self.audio, menu_items, True)    # options gekozen
+        # hier wordt de weergave van options gekozen
+        menu_items = screens.menu.content.OptionsMenu(self.audio.music, self.audio.sound)
+        self.optionsmenu = screens.menu.display.Display(self.screen, self.audio, menu_items, True, True)
 
     def _options_menu_select_music(self):
         settingview = self.optionsmenu.menu_texts[self.optionsmenu.cur_item]        # hier wordt de weergave
@@ -310,7 +311,7 @@ class GameEngine(object):
         self.scr_capt = pygame.image.frombuffer(scr_data, self.screen.get_size(), 'RGBA')
         self.statemachine.push(states.GameState.PauseMenu)
         menu_items = screens.menu.content.PauseMenu()
-        self.pausemenu = screens.menu.display.Display(self.screen, self.audio, menu_items, False)
+        self.pausemenu = screens.menu.display.Display(self.screen, self.audio, menu_items, False, False)
         self.audio.play_music()
 
     def _pause_menu_select_continue(self):
