@@ -24,6 +24,7 @@ MENUSWITCHSOUND = os.path.join(SOUNDSPATH, 'menu_switch.wav')
 MENUSELECTSOUND = os.path.join(SOUNDSPATH, 'menu_select.wav')
 MENUERRORSOUND = os.path.join(SOUNDSPATH,  'menu_error.wav')
 
+FORESTSOUNDS = os.path.join(SOUNDSPATH, 'forestsounds.ogg')
 # todo, op andere ondergrond, ander stap geluid
 STEP_GRASS_L = os.path.join(SOUNDSPATH, 'step_grass_l.wav')
 STEP_GRASS_R = os.path.join(SOUNDSPATH, 'step_grass_r.wav')
@@ -48,6 +49,7 @@ class Audio(object):
         self.switch = pygame.mixer.Sound(MENUSWITCHSOUND)
         self.select = pygame.mixer.Sound(MENUSELECTSOUND)
         self.error = pygame.mixer.Sound(MENUERRORSOUND)
+        self.forestsounds = pygame.mixer.Sound(FORESTSOUNDS)
         self.step_left = pygame.mixer.Sound(STEP_GRASS_L)
         self.step_right = pygame.mixer.Sound(STEP_GRASS_R)
 
@@ -100,15 +102,20 @@ class Audio(object):
         """
         Als mag, fade dan de huidige. Volume max, fade nieuwe muziek in.
         """
+        currentstate = self.statemachine.peek()
         if self.music == 1:
             self.fade_music()
             self.current_music_channel.set_volume(1)
-            currentstate = self.statemachine.peek()
             if currentstate == states.GameState.MainMenu or \
                currentstate == states.GameState.OptionsMenu:
                 self.current_music_channel.play(self.mainmenu, -1)
             elif currentstate == states.GameState.Overworld:
                 self.current_music_channel.play(self.overworld, -1)
+
+        if currentstate == states.GameState.Overworld:
+            self.play_sound(self.forestsounds, loop=-1)
+        else:
+            self.stop_sound(self.forestsounds)
 
     def stop_music(self):
         """
@@ -116,13 +123,14 @@ class Audio(object):
         """
         self.current_music_channel.stop()
 
-    def play_sound(self, sound):
+    def play_sound(self, sound, loop=0):
         """
         Als mag, speel dan geluid.
         :param sound: een geluidsfragment uit de init.
+        :param loop:
         """
         if self.sound == 1:
-            sound.play()
+            sound.play(loops=loop)
 
     @staticmethod
     def stop_sound(sound):
