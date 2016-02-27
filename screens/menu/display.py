@@ -21,8 +21,8 @@ MENUFONTCOLOR3 = pygame.Color("black")
 MENUFONTCOLOR4 = pygame.Color("red")
 
 MENUH = 1.5
-MENUX = -400
-MENUY = -100
+MENUX = -405
+MENUY = -50
 
 CLICKBUTTON = 1
 UPKEY = pygame.K_UP

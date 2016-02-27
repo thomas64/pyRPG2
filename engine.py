@@ -212,6 +212,11 @@ class GameEngine(object):
 
     def _handle_menu_input(self, full_event):
 
+        # todo, menu handler helemaal verbeteren
+        # verbetering ook in de 3 self.mainmenu, optionsmenu, pausemenu. kan 1 menu zijn?
+        # geluiden in menu verwerken.
+        # muziek later in laten komen.
+
         if self.currentstate == states.GameState.MainMenu:
             menu_keys = screens.menu.content.MainMenu()
             menu_choice = self.mainmenu.handle_single_input(full_event)
