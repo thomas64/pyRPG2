@@ -16,18 +16,19 @@ OPTIONSPATH = 'options'
 OPTIONSFILE = os.path.join(OPTIONSPATH, 'audio.cfg')
 
 MUSICPATH = 'resources/music'
-MAINMENUMUSIC = os.path.join(MUSICPATH,  'mainmenu.ogg')
-OVERWORLDMUSIC = os.path.join(MUSICPATH, 'overworld.ogg')
+MAINMENU = os.path.join(MUSICPATH,  'mainmenu.ogg')
+OVERWORLD = os.path.join(MUSICPATH, 'overworld.ogg')
 
 SOUNDSPATH = 'resources/sounds'
-MENUSWITCHSOUND = os.path.join(SOUNDSPATH, 'menu_switch.wav')
-MENUSELECTSOUND = os.path.join(SOUNDSPATH, 'menu_select.wav')
-MENUERRORSOUND = os.path.join(SOUNDSPATH,  'menu_error.wav')
+MENUSWITCH = os.path.join(SOUNDSPATH, 'menu_switch.ogg')
+MENUSELECT = os.path.join(SOUNDSPATH, 'menu_select.ogg')
+MENUERROR = os.path.join(SOUNDSPATH,  'menu_error.ogg')
 
-FORESTSOUNDS = os.path.join(SOUNDSPATH, 'forestsounds.ogg')
+WIND = os.path.join(SOUNDSPATH, 'wind.ogg')
+BIRDS = os.path.join(SOUNDSPATH, 'birds.ogg')
 # todo, op andere ondergrond, ander stap geluid
-STEP_GRASS_L = os.path.join(SOUNDSPATH, 'step_grass_l.wav')
-STEP_GRASS_R = os.path.join(SOUNDSPATH, 'step_grass_r.wav')
+STEPGRASSL = os.path.join(SOUNDSPATH, 'step_grass_l.ogg')
+STEPGRASSR = os.path.join(SOUNDSPATH, 'step_grass_r.ogg')
 
 FADEOUTTIME = 500
 
@@ -43,15 +44,15 @@ class Audio(object):
         self._load_cfg()
 
         self.current_music_channel = pygame.mixer.Channel(7)
-        self.mainmenu = pygame.mixer.Sound(MAINMENUMUSIC)
-        self.overworld = pygame.mixer.Sound(OVERWORLDMUSIC)
+        self.mainmenu = pygame.mixer.Sound(MAINMENU)
+        self.overworld = pygame.mixer.Sound(OVERWORLD)
 
-        self.switch = pygame.mixer.Sound(MENUSWITCHSOUND)
-        self.select = pygame.mixer.Sound(MENUSELECTSOUND)
-        self.error = pygame.mixer.Sound(MENUERRORSOUND)
-        self.forestsounds = pygame.mixer.Sound(FORESTSOUNDS)
-        self.step_left = pygame.mixer.Sound(STEP_GRASS_L)
-        self.step_right = pygame.mixer.Sound(STEP_GRASS_R)
+        self.switch = pygame.mixer.Sound(MENUSWITCH)
+        self.select = pygame.mixer.Sound(MENUSELECT)
+        self.error = pygame.mixer.Sound(MENUERROR)
+        self.birds = pygame.mixer.Sound(BIRDS)
+        self.step_grass_l = pygame.mixer.Sound(STEPGRASSL)
+        self.step_grass_r = pygame.mixer.Sound(STEPGRASSR)
 
     def _load_cfg(self):
         """
@@ -113,9 +114,9 @@ class Audio(object):
                 self.current_music_channel.play(self.overworld, -1)
 
         if currentstate == states.GameState.Overworld:
-            self.play_sound(self.forestsounds, loop=-1)
+            self.play_sound(self.birds, loop=-1)
         else:
-            self.stop_sound(self.forestsounds)
+            self.stop_sound(self.birds)
 
     def stop_music(self):
         """
