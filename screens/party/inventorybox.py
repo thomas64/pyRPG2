@@ -57,7 +57,7 @@ class InventoryBox(object):
 
     def _update(self, hero):
         self.title = self.largefont.render(TITLE, True, FONTCOLOR)
-        self.stickman = pygame.image.load(STICKMANPATH)
+        self.stickman = pygame.image.load(STICKMANPATH).convert()
 
         self.equipment_item_sprites = []
         for equipment_item in hero.equipment_tuple:
@@ -65,7 +65,7 @@ class InventoryBox(object):
             if equipment_item.is_not_empty() and equipment_item.SPR:
                 # laat het gekozen icon zien van de equipment item
                 self.equipment_item_sprites.append(pygame.image.load(equipment_item.SPR).subsurface(
-                                                            equipment_item.COL, equipment_item.ROW, SUBSURW, SUBSURH))
+                                            equipment_item.COL, equipment_item.ROW, SUBSURW, SUBSURH).convert_alpha())
             else:
                 self.equipment_item_sprites.append(pygame.Surface((0, 0)))
 

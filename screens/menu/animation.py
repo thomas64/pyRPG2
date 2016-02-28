@@ -27,15 +27,15 @@ class Animation(object):
 
         self.speed = 0
 
-        self.animation = {0: pygame.image.load(ANIMATION01),
-                          1: pygame.image.load(ANIMATION02),
-                          2: pygame.image.load(ANIMATION03),
-                          3: pygame.image.load(ANIMATION04),
-                          4: pygame.image.load(ANIMATION05),
-                          5: pygame.image.load(ANIMATION06),
-                          6: pygame.image.load(ANIMATION07),
-                          7: pygame.image.load(ANIMATION08),
-                          8: pygame.image.load(ANIMATION09)}
+        self.animation = {0: pygame.image.load(ANIMATION01).convert_alpha(),
+                          1: pygame.image.load(ANIMATION02).convert_alpha(),
+                          2: pygame.image.load(ANIMATION03).convert_alpha(),
+                          3: pygame.image.load(ANIMATION04).convert_alpha(),
+                          4: pygame.image.load(ANIMATION05).convert_alpha(),
+                          5: pygame.image.load(ANIMATION06).convert_alpha(),
+                          6: pygame.image.load(ANIMATION07).convert_alpha(),
+                          7: pygame.image.load(ANIMATION08).convert_alpha(),
+                          8: pygame.image.load(ANIMATION09).convert_alpha()}
 
         self.width = self.animation[0].get_width()
         self.height = self.animation[0].get_height()

@@ -78,7 +78,7 @@ class GameEngine(object):
                 if event.type == pygame.QUIT:
                     self.running = False
                 self.handle_single_input(event)
-            pygame.display.flip()
+            pygame.display.update()
 
     def handle_view(self):
         """
@@ -126,6 +126,16 @@ class GameEngine(object):
                         "step_animation:    {}".format(hero.step_animation)
                     )
                     text += text2
+                except AttributeError:
+                    pass
+                try:
+                    import screens.party.invclickbox
+                    text3 = (
+                        "",
+                        "max_box_height     {}".format(screens.party.invclickbox.MAXBOXHEIGHT),
+                        "layer_height       {}".format(self.overworld.partyscreen.invclick_box.layer_height)
+                    )
+                    text += text3
                 except AttributeError:
                     pass
                 pygame.gfxdraw.box(self.screen, DEBUGRECT, DEBUGRECTCOLOR)
@@ -316,7 +326,7 @@ class GameEngine(object):
 
     def _show_pause_menu(self):
         scr_data = pygame.image.tostring(self.screen, 'RGBA')         # maak een screen capture
-        self.scr_capt = pygame.image.frombuffer(scr_data, self.screen.get_size(), 'RGBA')
+        self.scr_capt = pygame.image.frombuffer(scr_data, self.screen.get_size(), 'RGBA').convert()
         self.statemachine.push(states.GameState.PauseMenu)
         menu_items = screens.menu.content.PauseMenu()
         self.menu = screens.menu.display.Display(self.screen, self.audio, menu_items, False, False)

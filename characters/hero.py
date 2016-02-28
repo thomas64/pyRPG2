@@ -241,21 +241,21 @@ class Hero(object):
         if self.get_hero_weapon_skill_for_equipment_item(new_equipment_item) < 1:
             console.not_equipping_skill(self.NAM, new_equipment_item.NAM)
             return False
-        if new_equipment_item.get_value_of("MIN_INT") > self.int.qty:
+        if new_equipment_item.get_value_of('MIN_INT') > self.int.qty:
             console.not_equipping_min_int(self.NAM, new_equipment_item.NAM, new_equipment_item.MIN_INT)
             return False
-        if new_equipment_item.get_value_of("MIN_STR") > self.str.qty:
+        if new_equipment_item.get_value_of('MIN_STR') > self.str.qty:
             console.not_equipping_min_str(self.NAM, new_equipment_item.NAM, new_equipment_item.MIN_STR)
             return False
         return True
 
     def get_hero_weapon_skill_for_equipment_item(self, new_equipment_item):
         """
-        Bekijkt welke SKL waarde het equipment item heeft, geef dan het bijbehorende attribute van de hero terug.
+        Bekijkt welke SKL waarde het equipment item heeft, geef dan de bijbehorende qty van attribute van de hero terug.
         :param new_equipment_item: Object van EquipmentItem
-        :return: of de qty waarde groter is dan 1 of ander 1
+        :return: of de qty waarde groter is dan 1, of anders 1
         """
-        val = new_equipment_item.get_value_of("SKL")    # val is een Enum
+        val = new_equipment_item.get_value_of('SKL')    # val is een Enum
         if val == equipment.WeaponType.swd:
             return self.swd.qty                         # return -1, 0 of iets groters dan dat
         elif val == equipment.WeaponType.haf:

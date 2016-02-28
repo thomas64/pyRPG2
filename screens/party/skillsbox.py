@@ -17,7 +17,7 @@ COLUMN3X = 190
 COLUMN4X = 220
 COLUMNSY = 60
 ROWHEIGHT = 33
-ICONOFFSET = -5
+ICONOFFSET = -6
 
 TITLE = "Skills"
 
@@ -57,8 +57,8 @@ class SkillsBox(object):
         for skill in hero.skills_tuple:
             if skill.positive_quantity():
                 self.table_data.append(
-                    # row[0],        row[1],                 row[2],        row[3],    row[4],    row[5]
-                    [skill.ICON,  str(skill.NAM) + " :",  str(skill.qty),  skill.ext,   None,   skill.DESC]
+                    # row[0],        row[1],            row[2],        row[3],    row[4],    row[5]
+                    [skill.ICON,  skill.NAM + " :",  str(skill.qty),  skill.ext,   None,   skill.DESC]
                 )
 
         # vul de vijfde lege kolom. hierin staan de rects van de tweede kolom. rect is voor muisklik.
@@ -69,7 +69,7 @@ class SkillsBox(object):
         self.table_view = []
         for index, row in enumerate(self.table_data):
             self.table_view.append(list())
-            self.table_view[index].append(pygame.image.load(row[0]))
+            self.table_view[index].append(pygame.image.load(row[0]).convert_alpha())
             if index == self.cur_item:              # als de index van deze rij gelijk is aan waar de muis over zit,
                 color = FONTCOLOR2                  # maak hem geel
             else:                                   # anders gewoon wit.

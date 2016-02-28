@@ -89,7 +89,7 @@ class Audio(object):
         if self.sound == 1:
             self.stop_sound(self.select)    # vanwege de enter knop in menu's speelt hij dit geluid af,
             self.sound = 0                  # stop hem daarom alsnog.
-            self.stop_background_sounds()
+            self.stop_bg_sounds()
         elif self.sound == 0:
             self.sound = 1
             self.play_sound(self.select)    # en speel weer een geluid af omdat er geluid is.

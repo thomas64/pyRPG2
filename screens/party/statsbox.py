@@ -82,7 +82,7 @@ class StatsBox(object):
         # voeg ook de 7 stats aan de table_data toe
         for stat in hero.stats_tuple:
             self.table_data.append(
-                [str(stat.NAM) + " :",  str(stat.qty),  stat.ext,   None,   stat.DESC]
+                [stat.NAM + " :",  str(stat.qty),  stat.ext,   None,   stat.DESC]
             )
 
         # vul de vierde lege kolom. hierin staan de rects van de eerste kolom. rect is voor muisklik.
