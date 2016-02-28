@@ -34,7 +34,7 @@ class Display(object):
     """
     Een menuscherm.
     """
-    def __init__(self, screen, audio, itemsmenu, title, animation):
+    def __init__(self, screen, audio, itemsmenu, title, animation, cur_item=0):
         self.screen = screen
         self.background = pygame.Surface(self.screen.get_size())
         if animation:
@@ -76,7 +76,7 @@ class Display(object):
             menu_text.rect.topleft = menu_text.position
             self.menu_texts.append(menu_text)
 
-        self.cur_item = 0
+        self.cur_item = cur_item
 
     def handle_view(self, dt, bg):
         """

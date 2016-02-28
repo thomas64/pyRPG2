@@ -148,7 +148,7 @@ class GameEngine(object):
         """
         audio_state_is_changed = self.statemachine.has_audio_state_changed()
         self.audio.handle_music(self.currentstate, audio_state_is_changed)
-        self.audio.handle_background_sounds(self.currentstate, audio_state_is_changed)
+        self.audio.handle_bg_sounds(self.currentstate, audio_state_is_changed)
 
     def handle_multi_input(self):
         """
@@ -254,10 +254,11 @@ class GameEngine(object):
             return
 
     def _show_main_menu(self, from_state):
+        cur_item = 0
         if from_state is None:
             self.statemachine.push(states.GameState.MainMenu)
         elif from_state == states.GameState.OptionsMenu:
-            pass
+            cur_item = 2
         elif from_state == states.GameState.PauseMenu:
             self.scr_capt = None
             self.overworld = None
@@ -265,7 +266,7 @@ class GameEngine(object):
             self.statemachine.push(states.GameState.MainMenu)
 
         menu_items = screens.menu.content.MainMenu()
-        self.menu = screens.menu.display.Display(self.screen, self.audio, menu_items, True, True)
+        self.menu = screens.menu.display.Display(self.screen, self.audio, menu_items, True, True, cur_item)
 
     def _main_menu_select_new_game(self):
         self.menu = None

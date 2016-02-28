@@ -128,7 +128,7 @@ class Audio(object):
                 elif currentstate == states.GameState.Overworld:
                     self.bg_music_channel.play(self.overworld, -1)
 
-    def handle_background_sounds(self, currentstate, state_has_changed):
+    def handle_bg_sounds(self, currentstate, state_has_changed):
         """
         Zet de achtergrond geluiden aan of uit afhankelijk van een state.
         :param currentstate: self.statemachine.peek()
@@ -152,7 +152,7 @@ class Audio(object):
         """
         self.bg_music_channel.stop()
 
-    def stop_background_sounds(self):
+    def stop_bg_sounds(self):
         """
         Laat de 2 achtergrondkanalen stoppen.
         """
