@@ -50,6 +50,9 @@ class Data(object):
 
         weapon1 = equipment.WeaponDatabase.factory('bronzeshortsword')
         weapon2 = equipment.WeaponDatabase.factory('bronzedagger')
+        weapon3 = equipment.WeaponDatabase.factory('irondagger')
+        weapon4 = equipment.WeaponDatabase.factory('silverdagger')
+        weapon5 = equipment.WeaponDatabase.factory('steeldagger')
         boots1 = equipment.BootsDatabase.factory('ironboots')
         boots2 = equipment.BootsDatabase.factory('bootsofmotion')
         boots3 = equipment.BootsDatabase.factory('silenceboots')
@@ -63,6 +66,9 @@ class Data(object):
 
         self.inventory.add(weapon1, 48)
         self.inventory.add(weapon2, 20)
+        self.inventory.add(weapon3, 22)
+        self.inventory.add(weapon4, 23)
+        self.inventory.add(weapon5, 24)
         self.inventory.add(boots1, 25)
         self.inventory.add(boots2, 26)
         self.inventory.add(boots3, 27)
