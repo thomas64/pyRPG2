@@ -54,7 +54,7 @@ class StatsBox(object):
         self.cur_item = None
 
     def _update(self, hero):
-        self.title = self.largefont.render(TITLE, True, FONTCOLOR1)
+        self.title = self.largefont.render(TITLE, True, FONTCOLOR1).convert_alpha()
 
         # zet eerst even wat bepaalde waarden vast.
         if hero.lev.qty >= hero.lev.MAX:
@@ -97,8 +97,8 @@ class StatsBox(object):
                 color = FONTCOLOR2                  # maak hem geel
             else:                                   # anders gewoon wit.
                 color = FONTCOLOR1
-            self.table_view[index].append(self.normalfont.render(row[0], True, color))
-            self.table_view[index].append(self.normalfont.render(row[1], True, FONTCOLOR1))
+            self.table_view[index].append(self.normalfont.render(row[0], True, color).convert_alpha())
+            self.table_view[index].append(self.normalfont.render(row[1], True, FONTCOLOR1).convert_alpha())
             self._line(row[2], self.table_view[index])
 
     def _rect(self, index, text):
@@ -120,13 +120,13 @@ class StatsBox(object):
             value = 0
         if value == 0:
             value = ""
-            col.append(self.normalfont.render(value, True, FONTCOLOR1))
+            col.append(self.normalfont.render(value, True, FONTCOLOR1).convert_alpha())
         elif value > 0:
             value = "(+"+str(value)+")"
-            col.append(self.normalfont.render(value, True, POSCOLOR))
+            col.append(self.normalfont.render(value, True, POSCOLOR).convert_alpha())
         elif value < 0:
             value = "("+str(value)+")"
-            col.append(self.normalfont.render(value, True, NEGCOLOR))
+            col.append(self.normalfont.render(value, True, NEGCOLOR).convert_alpha())
 
     def draw(self, screen, hero):
         """

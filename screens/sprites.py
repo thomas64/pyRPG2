@@ -34,7 +34,7 @@ class ButtonSprite(pygame.sprite.Sprite):
         self.rect.topleft = position
 
         self.font = pygame.font.SysFont(BUTTONFONT, BUTTONFONTSIZE)
-        self.label = self.font.render(label, True, BUTTONFONTCOLOR)
+        self.label = self.font.render(label, True, BUTTONFONTCOLOR).convert_alpha()
         self.labelrect = self.label.get_rect()
         self.labelrect.center = self.rect.width / 2, self.rect.height / 2
 

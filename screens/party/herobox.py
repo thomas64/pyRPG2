@@ -57,9 +57,10 @@ class HeroBox(object):
 
     def _update(self):
         self.face = pygame.image.load(self.hero.FAC).convert_alpha()
-        self.name = self.largefont.render(self.hero.NAM, True, FONTCOLOR)
-        self.level = self.normalfont.render(LEVEL.format(self.hero.lev.qty), True, FONTCOLOR)
-        self.hitpoints = self.normalfont.render(HITPOINTS.format(self.hero.cur_hp, self.hero.max_hp), True, FONTCOLOR)
+        self.name = self.largefont.render(self.hero.NAM, True, FONTCOLOR).convert_alpha()
+        self.level = self.normalfont.render(LEVEL.format(self.hero.lev.qty), True, FONTCOLOR).convert_alpha()
+        self.hitpoints = self.normalfont.render(
+                        HITPOINTS.format(self.hero.cur_hp, self.hero.max_hp), True, FONTCOLOR).convert_alpha()
         # health bars #
         self.full_hp = HEALTHBARWIDTH
         self.curr_hp = (self.full_hp / self.hero.max_hp) * self.hero.cur_hp

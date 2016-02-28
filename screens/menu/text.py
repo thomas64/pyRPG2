@@ -16,7 +16,7 @@ class Text(object):
         self.index = index
         self.font = pygame.font.SysFont(font, size)
         self.font_color = color
-        self.label = self.font.render(self.text, True, self.font_color)
+        self.label = self.font.render(self.text, True, self.font_color).convert_alpha()
         self.rect = self.label.get_rect()
         self.width = self.label.get_width()
         self.height = self.label.get_height()
@@ -28,7 +28,7 @@ class Text(object):
         :param color: pygame.Color("kleurnaam")
         """
         self.font_color = color
-        self.label = self.font.render(self.text, True, self.font_color)
+        self.label = self.font.render(self.text, True, self.font_color).convert_alpha()
 
     def flip_switch(self):
         """

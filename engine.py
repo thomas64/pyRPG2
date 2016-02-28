@@ -140,7 +140,7 @@ class GameEngine(object):
                     pass
                 pygame.gfxdraw.box(self.screen, DEBUGRECT, DEBUGRECTCOLOR)
                 for count, line in enumerate(text):
-                    self.screen.blit(self.debugfont.render(line, True, DEBUGFONTCOLOR), (0, count * 10))
+                    self.screen.blit(self.debugfont.render(line, True, DEBUGFONTCOLOR).convert_alpha(), (0, count * 10))
 
         if self.currentstate == states.GameState.MainMenu or \
            self.currentstate == states.GameState.OptionsMenu or \

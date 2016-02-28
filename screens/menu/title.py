@@ -27,8 +27,8 @@ class Title(object):
     def __init__(self):
         self.titlefont = pygame.font.SysFont(TITLEFONT, TITLEFONTSIZE)
         self.subfont = pygame.font.SysFont(SUBFONT, SUBFONTSIZE)
-        self.title = self.titlefont.render(TITLETEXT, True, TITLEFONTCOLOR)
-        self.sub = self.subfont.render(SUBTEXT, True, SUBFONTCOLOR)
+        self.title = self.titlefont.render(TITLETEXT, True, TITLEFONTCOLOR).convert_alpha()
+        self.sub = self.subfont.render(SUBTEXT, True, SUBFONTCOLOR).convert_alpha()
 
     def draw(self, screen):
         """

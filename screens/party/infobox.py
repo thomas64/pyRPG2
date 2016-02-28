@@ -42,9 +42,9 @@ class InfoBox(object):
         self.surface.blit(self.background, (0, 0))
         if type(text) == tuple:
             for i, line in enumerate(text):
-                label = self.font.render(line, True, FONTCOLOR)
+                label = self.font.render(line, True, FONTCOLOR).convert_alpha()
                 self.surface.blit(label, (TEXTX, TEXTY + i * LINEHEIGHT))
         elif type(text) == str:
-            label = self.font.render(text, True, FONTCOLOR)
+            label = self.font.render(text, True, FONTCOLOR).convert_alpha()
             self.surface.blit(label, (TEXTX, TEXTY))
         screen.blit(self.surface, self.rect.topleft)

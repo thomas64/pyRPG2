@@ -93,8 +93,8 @@ class InvClickBox(object):
             self.table_view.append(list())
             self.table_view[index].append(row[0])
             self.table_view[index].append(row[1])
-            self.table_view[index].append(normalfont.render(row[2], True, FONTCOLOR))
-            self.table_view[index].append(normalfont.render(row[3], True, FONTCOLOR))
+            self.table_view[index].append(normalfont.render(row[2], True, FONTCOLOR).convert_alpha())
+            self.table_view[index].append(normalfont.render(row[3], True, FONTCOLOR).convert_alpha())
 
         # bepaal het breedste item wat naam betreft en gebruik dat als boxbreedte
         list_widths = []
@@ -115,6 +115,7 @@ class InvClickBox(object):
         self.rect.topleft = position
 
         self.layer = pygame.Surface((self.box_width, self.layer_height))
+        self.layer = self.layer.convert()
         self.layer_offset = 0
 
         self.background = pygame.Surface((self.box_width, self.layer_height))

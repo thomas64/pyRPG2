@@ -56,7 +56,7 @@ class InventoryBox(object):
         self.normalfont = pygame.font.SysFont(FONT, NORMALFONTSIZE)
 
     def _update(self, hero):
-        self.title = self.largefont.render(TITLE, True, FONTCOLOR)
+        self.title = self.largefont.render(TITLE, True, FONTCOLOR).convert_alpha()
         self.stickman = pygame.image.load(STICKMANPATH).convert()
 
         self.equipment_item_sprites = []
@@ -67,7 +67,7 @@ class InventoryBox(object):
                 self.equipment_item_sprites.append(pygame.image.load(equipment_item.SPR).subsurface(
                                             equipment_item.COL, equipment_item.ROW, SUBSURW, SUBSURH).convert_alpha())
             else:
-                self.equipment_item_sprites.append(pygame.Surface((0, 0)))
+                self.equipment_item_sprites.append(pygame.Surface((0, 0)).convert)
 
     def draw(self, screen, hero):
         """
