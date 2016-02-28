@@ -256,17 +256,17 @@ class Hero(object):
         :return: of de qty waarde groter is dan 1, of anders 1
         """
         val = new_equipment_item.get_value_of('SKL')    # val is een Enum
-        if val == equipment.WeaponType.swd:
+        if val == equipment.WeaponType.swd.value:
             return self.swd.qty                         # return -1, 0 of iets groters dan dat
-        elif val == equipment.WeaponType.haf:
+        elif val == equipment.WeaponType.haf.value:
             return self.haf.qty
-        elif val == equipment.WeaponType.pol:
+        elif val == equipment.WeaponType.pol.value:
             return self.pol.qty
-        elif val == equipment.WeaponType.mis:
+        elif val == equipment.WeaponType.mis.value:
             return self.mis.qty
-        elif val == equipment.WeaponType.thr:
+        elif val == equipment.WeaponType.thr.value:
             return self.thr.qty
-        elif val == equipment.WeaponType.shd:
+        elif val == equipment.WeaponType.shd.value:
             return self.shd.qty
         else:
             return 1

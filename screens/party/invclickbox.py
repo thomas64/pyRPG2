@@ -64,7 +64,7 @@ class InvClickBox(object):
                 # als een equipment item een skill waarde heeft, zoals eigenlijk alleen bij wapens
                 if equipment_item.get_value_of('SKL'):
                     # zet dat dan voor de naam
-                    equipment_item_nam = "[" + equipment_item.SKL.value + "] " + equipment_item.NAM
+                    equipment_item_nam = "[" + equipment_item.SKL + "] " + equipment_item.NAM
                     # maar bij een schild niet, (want die heeft ook een skill waarde, maar niet om zichtbaar te maken
                     if "Shield" in equipment_item_nam:
                         equipment_item_nam = equipment_item.NAM
@@ -79,7 +79,7 @@ class InvClickBox(object):
             equipment_item_spr = pygame.image.load(equipment_item.SPR).subsurface(
                                             equipment_item.COL, equipment_item.ROW, SUBSURW, SUBSURH).convert_alpha()
             if equipment_item.get_value_of('SKL'):
-                equipment_item_nam = "[" + equipment_item.SKL.value + "] " + equipment_item.NAM
+                equipment_item_nam = "[" + equipment_item.SKL + "] " + equipment_item.NAM
                 if "Shield" in equipment_item_nam:
                     equipment_item_nam = equipment_item.NAM
             else:
