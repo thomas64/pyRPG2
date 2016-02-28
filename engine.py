@@ -18,7 +18,7 @@ import states
 # todo, magic numbers overal opruimen
 
 # todo, er gaat nog wat mis met sidestep als fps te hoog is, oorzaak onduidelijk.
-FPS = 60        # minimaal 15, anders kan hij door bomen lopen. maximaal 110, anders sidestep raar.
+FPS = 6000        # minimaal 15, anders kan hij door bomen lopen. maximaal 110, anders sidestep raar.
 
 KILLKEY = pygame.K_BACKSPACE
 EXITKEY = pygame.K_ESCAPE
@@ -39,7 +39,7 @@ class GameEngine(object):
         self.screen = pygame.display.get_surface()
         self.statemachine = states.StateMachine()
         self.data = data.Data()
-        self.audio = audio.Audio(self.statemachine)
+        self.audio = audio.Audio()
 
         self.running = False
 
@@ -74,6 +74,7 @@ class GameEngine(object):
 
             self.currentstate = self.statemachine.peek()
             self.handle_view()
+            self.handle_audio()
             self.handle_multi_input()
             for event in pygame.event.get():
                 if event.type == pygame.QUIT:
@@ -146,6 +147,14 @@ class GameEngine(object):
             self.overworld.handle_view()
 
         _show_debug()
+
+    def handle_audio(self):
+        """
+        Geeft de juiste muziek en achtergrond geluiden weer.
+        """
+        audio_state_is_changed = self.statemachine.has_audio_state_changed()
+        self.audio.handle_music(self.currentstate, audio_state_is_changed)
+        self.audio.handle_background_sounds(self.currentstate, audio_state_is_changed)
 
     def handle_multi_input(self):
         """
@@ -260,14 +269,12 @@ class GameEngine(object):
         self.statemachine.push(states.GameState.MainMenu)
         menu_items = screens.menu.content.MainMenu()
         self.mainmenu = screens.menu.display.Display(self.screen, self.audio, menu_items, True, True)
-        self.audio.play_music()
 
     def _main_menu_select_new_game(self):
         self.mainmenu = None
         self.statemachine.pop(self.currentstate)
         self.statemachine.push(states.GameState.Overworld)
         self.overworld = screens.overworld.Overworld(self)
-        self.audio.play_music()
 
     def _main_menu_select_load_game(self):
         dialog = screens.loadsave.Dialog(self)
@@ -279,14 +286,12 @@ class GameEngine(object):
             self.mainmenu = None
             self.statemachine.pop(self.currentstate)
             self.statemachine.push(states.GameState.Overworld)
-            self.audio.play_music()
         pygame.event.clear()
 
     def _main_menu_select_options(self):
         self._show_options_menu()
 
     def _main_menu_select_exit_game(self):
-        self.audio.fade_music()
         self.running = False
 
     def _show_options_menu(self):
@@ -317,13 +322,11 @@ class GameEngine(object):
         self.statemachine.push(states.GameState.PauseMenu)
         menu_items = screens.menu.content.PauseMenu()
         self.pausemenu = screens.menu.display.Display(self.screen, self.audio, menu_items, False, False)
-        self.audio.play_music()
 
     def _pause_menu_select_continue(self):
         self.statemachine.pop(self.currentstate)
         self.pausemenu = None
         self.scr_capt = None
-        self.audio.play_music()
 
     def _pause_menu_select_save_game(self):
         dialog = screens.loadsave.Dialog(self)

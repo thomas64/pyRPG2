@@ -25,6 +25,7 @@ MENUSELECT = os.path.join(SOUNDSPATH, 'menu_select.ogg')
 MENUERROR = os.path.join(SOUNDSPATH,  'menu_error.ogg')
 
 WIND = os.path.join(SOUNDSPATH, 'wind.ogg')
+CROWS = os.path.join(SOUNDSPATH, 'crows.ogg')
 BIRDS = os.path.join(SOUNDSPATH, 'birds.ogg')
 # todo, op andere ondergrond, ander stap geluid
 STEPGRASSL = os.path.join(SOUNDSPATH, 'step_grass_l.ogg')
@@ -37,20 +38,24 @@ class Audio(object):
     """
     Alle geluiden.
     """
-    def __init__(self, statemachine):
-        self.statemachine = statemachine
+    def __init__(self):
         self.music = 0
         self.sound = 0
         self._load_cfg()
 
-        self.current_music_channel = pygame.mixer.Channel(7)
+        self.bg_music_channel = pygame.mixer.Channel(7)
         self.mainmenu = pygame.mixer.Sound(MAINMENU)
         self.overworld = pygame.mixer.Sound(OVERWORLD)
+
+        self.bg_sound_channel1 = pygame.mixer.Channel(6)
+        self.bg_sound_channel2 = pygame.mixer.Channel(5)
+        self.wind = pygame.mixer.Sound(WIND)
+        self.crows = pygame.mixer.Sound(CROWS)
+        self.birds = pygame.mixer.Sound(BIRDS)
 
         self.switch = pygame.mixer.Sound(MENUSWITCH)
         self.select = pygame.mixer.Sound(MENUSELECT)
         self.error = pygame.mixer.Sound(MENUERROR)
-        self.birds = pygame.mixer.Sound(BIRDS)
         self.step_grass_l = pygame.mixer.Sound(STEPGRASSL)
         self.step_grass_r = pygame.mixer.Sound(STEPGRASSR)
 
@@ -84,9 +89,15 @@ class Audio(object):
         if self.sound == 1:
             self.stop_sound(self.select)    # vanwege de enter knop in menu's speelt hij dit geluid af,
             self.sound = 0                  # stop hem daarom alsnog.
+            self.stop_background_sounds()
         elif self.sound == 0:
             self.sound = 1
             self.play_sound(self.select)    # en speel weer een geluid af omdat er geluid is.
+            # dit is eigenlijk even een tijdelijke lelijke oplossing, maar makkelijk.
+            self.bg_sound_channel1.set_volume(1)                                    #
+            self.bg_sound_channel2.set_volume(1)                                    #
+            self.bg_sound_channel1.play(self.crows, -1)                             #
+            self.bg_sound_channel2.play(self.wind, -1)                              #
 
     def flip_music(self):
         """
@@ -97,32 +108,56 @@ class Audio(object):
             self.stop_music()
         elif self.music == 0:
             self.music = 1
-            self.play_music()
+            # dit is eigenlijk even een tijdelijke lelijke oplossing, maar makkelijk.
+            self.bg_music_channel.set_volume(1)                                     #
+            self.bg_music_channel.play(self.mainmenu, -1)                           #
 
-    def play_music(self):
+    def handle_music(self, currentstate, state_has_changed):
         """
         Als mag, fade dan de huidige. Volume max, fade nieuwe muziek in.
+        :param currentstate: self.statemachine.peek()
+        :param state_has_changed: True of False, als een state veranderd is
         """
-        currentstate = self.statemachine.peek()
         if self.music == 1:
-            self.fade_music()
-            self.current_music_channel.set_volume(1)
-            if currentstate == states.GameState.MainMenu or \
-               currentstate == states.GameState.OptionsMenu:
-                self.current_music_channel.play(self.mainmenu, -1)
-            elif currentstate == states.GameState.Overworld:
-                self.current_music_channel.play(self.overworld, -1)
+            if state_has_changed:
+                self.fade_music()
+                self.bg_music_channel.set_volume(1)
+                if currentstate == states.GameState.MainMenu or \
+                   currentstate == states.GameState.OptionsMenu:
+                    self.bg_music_channel.play(self.mainmenu, -1)
+                elif currentstate == states.GameState.Overworld:
+                    self.bg_music_channel.play(self.overworld, -1)
 
-        if currentstate == states.GameState.Overworld:
-            self.play_sound(self.birds, loop=-1)
-        else:
-            self.stop_sound(self.birds)
+    def handle_background_sounds(self, currentstate, state_has_changed):
+        """
+        Zet de achtergrond geluiden aan of uit afhankelijk van een state.
+        :param currentstate: self.statemachine.peek()
+        :param state_has_changed: True of False, als een state veranderd is
+        """
+        if self.sound == 1:
+            if state_has_changed:
+                self.fade_bg_sounds()
+                self.bg_sound_channel1.set_volume(1)
+                self.bg_sound_channel2.set_volume(1)
+                if currentstate == states.GameState.MainMenu or \
+                   currentstate == states.GameState.OptionsMenu:
+                    self.bg_sound_channel1.play(self.crows, -1)
+                    self.bg_sound_channel2.play(self.wind, -1)
+                elif currentstate == states.GameState.Overworld:
+                    self.bg_sound_channel1.play(self.birds, -1)
 
     def stop_music(self):
         """
         Laat het muziekkanaal stoppen.
         """
-        self.current_music_channel.stop()
+        self.bg_music_channel.stop()
+
+    def stop_background_sounds(self):
+        """
+        Laat de 2 achtergrondkanalen stoppen.
+        """
+        self.bg_sound_channel1.stop()
+        self.bg_sound_channel2.stop()
 
     def play_sound(self, sound, loop=0):
         """
@@ -136,7 +171,7 @@ class Audio(object):
     @staticmethod
     def stop_sound(sound):
         """
-        "Stop het huidige geluid onmiddelijk.
+        Stop het huidige geluid onmiddelijk.
         :param sound: een geluidsfragment uit de init.
         """
         sound.stop()
@@ -145,5 +180,14 @@ class Audio(object):
         """
         Als er muziek speelt, fade die out.
         """
-        if self.current_music_channel.get_sound() is not None:
-            self.current_music_channel.fadeout(FADEOUTTIME)
+        if self.bg_music_channel.get_sound() is not None:
+            self.bg_music_channel.fadeout(FADEOUTTIME)
+
+    def fade_bg_sounds(self):
+        """
+        Als er achtergrondgeluiden zijn, fade die out.
+        """
+        if self.bg_sound_channel1.get_sound() is not None:
+            self.bg_sound_channel1.fadeout(FADEOUTTIME)
+        if self.bg_sound_channel2.get_sound() is not None:
+            self.bg_sound_channel2.fadeout(FADEOUTTIME)

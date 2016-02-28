@@ -30,6 +30,18 @@ class StateMachine(object):
     """
     def __init__(self):
         self.statestack = []
+        self.audio_state_is_changed = False
+
+    def has_audio_state_changed(self):
+        """
+        Als er een state veranderd is, zet hem dan weer onveranderd en geef True terug. Anders gewoon False.
+        :return: True of False
+        """
+        if self.audio_state_is_changed:
+            self.audio_state_is_changed ^= True
+            return True
+        else:
+            return False
 
     def peek(self):
         """
@@ -50,6 +62,8 @@ class StateMachine(object):
         try:
             console.state_pop(state)
             self.statestack.pop()
+            if state != GameState.OptionsMenu:      # bij optionsmenu niet, omdat het geluid moet doorlopen.
+                self.audio_state_is_changed = True
             return len(self.statestack) > 0
         except IndexError:
             return None     # empty stack
@@ -61,6 +75,8 @@ class StateMachine(object):
         """
         console.state_push(state)
         self.statestack.append(state)
+        if state != GameState.OptionsMenu:
+            self.audio_state_is_changed = True
         return state
 
     def clear(self):
