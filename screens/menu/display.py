@@ -78,7 +78,7 @@ class Display(object):
 
         self.cur_item = 0
 
-    def handle_view(self, dt, bg=None):
+    def handle_view(self, dt, bg):
         """
         Reset eerst alle kleuren.
         Zet dan de geselecteerde op een andere kleur.
