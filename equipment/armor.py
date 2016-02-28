@@ -8,7 +8,7 @@ import collections
 import console
 import equipment
 
-SPRITEPATH = ''
+SPRITEPATH = 'resources/sprites/icons/equipment/armor1.png'
 
 
 class ArmorDatabase(collections.OrderedDict):
@@ -71,7 +71,10 @@ class ArmorDatabase(collections.OrderedDict):
                         prt=material_value[2] + type_value[2],
 
                         # berekening stealth: material + type + upgraded
-                        stl=material_value[3] + type_value[3] + upgraded_value[3]
+                        stl=material_value[3] + type_value[3] + upgraded_value[3],
+
+                        col=0,
+                        row=0
                     )
 
         # Shop uitzetten voor sommige equipment items.

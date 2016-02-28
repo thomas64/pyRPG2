@@ -10,7 +10,7 @@ import equipment
 
 # todo, alle gordels afmaken
 
-SPRITEPATH = ''
+SPRITEPATH = 'resources/sprites/icons/equipment/belt1.png'
 
 
 class BeltDatabase(collections.OrderedDict):
@@ -20,8 +20,8 @@ class BeltDatabase(collections.OrderedDict):
     def __init__(self, *args, **kwds):
         super().__init__(*args, **kwds)
 
-        self['leatherbelt'] = dict(nam="Leather Belt", srt=1, val=100, shp=True, wht=1, prt=1)
-        self['testbelt2'] = dict(nam="Test Belt 2",    srt=2, val=200, shp=True, wht=2, prt=2)
+        self['leatherbelt'] = dict(nam="Leather Belt", srt=1, val=100, shp=True, wht=1, prt=1, col=0, row=0)
+        self['testbelt2'] = dict(nam="Test Belt 2",    srt=2, val=200, shp=True, wht=2, prt=2, col=0, row=0)
 
     def factory(self, key_name):
         """

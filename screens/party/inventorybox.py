@@ -67,7 +67,7 @@ class InventoryBox(object):
                 self.equipment_item_sprites.append(pygame.image.load(equipment_item.SPR).subsurface(
                                             equipment_item.COL, equipment_item.ROW, SUBSURW, SUBSURH).convert_alpha())
             else:
-                self.equipment_item_sprites.append(pygame.Surface((0, 0)).convert)
+                self.equipment_item_sprites.append(pygame.Surface((0, 0)).convert())
 
     def draw(self, screen, hero):
         """

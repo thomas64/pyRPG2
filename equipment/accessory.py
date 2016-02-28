@@ -11,7 +11,7 @@ import equipment
 # todo, alle accessoires afmaken
 # todo, alle sprites van alle equipment items
 
-SPRITEPATH = ''
+SPRITEPATH = 'resources/sprites/icons/equipment/accessory1.png'
 
 
 class AccessoryDatabase(collections.OrderedDict):
@@ -21,8 +21,8 @@ class AccessoryDatabase(collections.OrderedDict):
     def __init__(self, *args, **kwds):
         super().__init__(*args, **kwds)
 
-        self['testaccessory'] = dict(nam="Test Accessory",    srt=1, val=100, shp=True, wht=1, prt=1)
-        self['testaccessory2'] = dict(nam="Test Accessory 2", srt=2, val=200, shp=True, wht=2, prt=2)
+        self['testaccessory'] = dict(nam="Test Accessory",    srt=1, val=100, shp=True, wht=1, prt=1, col=0, row=0)
+        self['testaccessory2'] = dict(nam="Test Accessory 2", srt=2, val=200, shp=True, wht=2, prt=2, col=0, row=0)
 
     def factory(self, key_name):
         """
