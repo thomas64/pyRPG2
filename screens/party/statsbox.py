@@ -166,18 +166,18 @@ class StatsBox(object):
     @staticmethod
     def _desc(stat):
         if stat == WHT_DESC:
+            # Weight
             return (
-                "Weight:",
-                "Defines how heavy your character is equipped with equipment.",
+                "Defines how heavy your character is equipped with equipment. "
                 "Weight has negative impact on movepoints and agility."
             )
 
         if stat == MVP_DESC:
+            # Movepoints
             return (
-                "Movepoints:",
-                "Defines how many steps are your character is able to take in one turn.",
-                "The more stamina your character has, the more movepoints.",
-                "The more weight your character has, the less movepoints.",
-                "The first column shows the number of movepoints calculated from your stamina.",
+                "Defines how many steps your character is able to take in one turn. "
+                "The more stamina your character has, the more movepoints. "
+                "The more weight your character has, the less movepoints. "
+                "The first column shows the number of movepoints calculated from your stamina. "
                 "The second (red) column shows the calculated weight subtracted."
             )

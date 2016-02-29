@@ -61,13 +61,13 @@ class InventoryBox(object):
 
         self.equipment_item_sprites = []
         for equipment_item in hero.equipment_tuple:
-            # todo, de 'and' voorwaarde mag weg wanneer alle equipment een spritepath gekregen heeft.
-            if equipment_item.is_not_empty() and equipment_item.SPR:
+            if equipment_item.is_not_empty():
                 # laat het gekozen icon zien van de equipment item
                 self.equipment_item_sprites.append(pygame.image.load(equipment_item.SPR).subsurface(
                                             equipment_item.COL, equipment_item.ROW, SUBSURW, SUBSURH).convert_alpha())
             else:
-                self.equipment_item_sprites.append(pygame.Surface((0, 0)).convert())
+                # of anders een lege surface
+                self.equipment_item_sprites.append(pygame.Surface((0, 0)))
 
     def draw(self, screen, hero):
         """
@@ -94,6 +94,22 @@ class InventoryBox(object):
 
         screen.blit(self.surface, self.rect.topleft)
 
+    def mouse_hover(self, event, hero):
+        """
+        Registreert of de muis over een boxje beweegt. Vergelijkt dan met TYP uit equipment_tuple om de juiste te vinden
+        :param event: pygame.MOUSEMOTION uit engine.py
+        :param hero: self.cur_hero uit party/display.py
+        :return: visuele weergave uit equipment_item.display(), of niets.
+        """
+        rel_pos_x = event.pos[0] - self.rect.left
+        rel_pos_y = event.pos[1] - self.rect.top
+        for index, box in enumerate(EQUIPMENTITEMBOXES):
+            if box.collidepoint(rel_pos_x, rel_pos_y):
+                equipment_item = hero.get_equipped_item_of_type(hero.equipment_tuple[index].TYP)
+                if equipment_item:
+                    return equipment_item.display()
+        return None
+
     def mouse_click(self, event, hero):
         """
         Deze moet van de display de muispositie en het EquipmentType teruggeven. Daar vraagt display om, zodat er een
@@ -104,28 +120,7 @@ class InventoryBox(object):
         """
         rel_pos_x = event.pos[0] - self.rect.left
         rel_pos_y = event.pos[1] - self.rect.top
-        if WPNBOX.collidepoint(rel_pos_x, rel_pos_y):
-            return event.pos, hero.wpn.TYP
-        elif SLDBOX.collidepoint(rel_pos_x, rel_pos_y):
-            return event.pos, hero.sld.TYP
-        elif HLMBOX.collidepoint(rel_pos_x, rel_pos_y):
-            return event.pos, hero.hlm.TYP
-        elif AMUBOX.collidepoint(rel_pos_x, rel_pos_y):
-            return event.pos, hero.amu.TYP
-        elif ARMBOX.collidepoint(rel_pos_x, rel_pos_y):
-            return event.pos, hero.arm.TYP
-        elif CLKBOX.collidepoint(rel_pos_x, rel_pos_y):
-            return event.pos, hero.clk.TYP
-        elif GLVBOX.collidepoint(rel_pos_x, rel_pos_y):
-            return event.pos, hero.glv.TYP
-        elif LRGBOX.collidepoint(rel_pos_x, rel_pos_y):
-            return event.pos, hero.lrg.TYP
-        elif RRGBOX.collidepoint(rel_pos_x, rel_pos_y):
-            return event.pos, hero.rrg.TYP
-        elif BLTBOX.collidepoint(rel_pos_x, rel_pos_y):
-            return event.pos, hero.blt.TYP
-        elif BTSBOX.collidepoint(rel_pos_x, rel_pos_y):
-            return event.pos, hero.bts.TYP
-        elif ACYBOX.collidepoint(rel_pos_x, rel_pos_y):
-            return event.pos, hero.acy.TYP
+        for index, box in enumerate(EQUIPMENTITEMBOXES):
+            if box.collidepoint(rel_pos_x, rel_pos_y):
+                return event.pos, hero.equipment_tuple[index].TYP
         return None, None

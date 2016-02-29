@@ -133,6 +133,8 @@ class Display(object):
             self.info_label = self.stats_box.mouse_hover(event)
         elif self.skills_box.rect.collidepoint(event.pos):
             self.info_label = self.skills_box.mouse_hover(event)
+        elif self.inventory_box.rect.collidepoint(event.pos):
+            self.info_label = self.inventory_box.mouse_hover(event, self.cur_hero)
 
     def handle_single_mouse_input(self, event):
         """
@@ -183,6 +185,7 @@ class Display(object):
         # als de clickbox er is en er wordt een toets gedrukt, laat hem dan verdwijnen.
         if self.invclick_box:
             self.invclick_box = None
+        self.info_label = ""
 
         if event.key == CLOSEKEY:
             return CLOSEKEY
