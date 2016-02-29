@@ -29,10 +29,10 @@ class AmuletDatabase(collections.OrderedDict):
         :param key_name:
         """
         if key_name is None:
-            return equipment.EquipmentItem(equipment.EquipmentType.amu)
+            return equipment.EquipmentItem(equipment.EquipmentType.amu.value)
         try:
             amulet = self[key_name]
             amulet['spr'] = SPRITEPATH
-            return equipment.EquipmentItem(equipment.EquipmentType.amu, **amulet)
+            return equipment.EquipmentItem(equipment.EquipmentType.amu.value, **amulet)
         except KeyError:
             console.equipment_item_name_not_in_database(key_name)

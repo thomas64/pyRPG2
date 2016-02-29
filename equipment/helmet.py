@@ -47,10 +47,10 @@ class HelmetDatabase(collections.OrderedDict):
         :param key_name:
         """
         if key_name is None:
-            return equipment.EquipmentItem(equipment.EquipmentType.hlm)
+            return equipment.EquipmentItem(equipment.EquipmentType.hlm.value)
         try:
             helmet = self[key_name]
             helmet['spr'] = SPRITEPATH
-            return equipment.EquipmentItem(equipment.EquipmentType.hlm, **helmet)
+            return equipment.EquipmentItem(equipment.EquipmentType.hlm.value, **helmet)
         except KeyError:
             console.equipment_item_name_not_in_database(key_name)

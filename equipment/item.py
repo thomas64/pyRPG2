@@ -9,7 +9,7 @@ class EquipmentItem(object):
     Een EquipmentItem object met attributen als de waarden van de extra's die het item heeft zoals THF.
     """
     def __init__(self, equipment_type, **kwargs):
-        self.TYP = equipment_type                                       # Enum van EquipmentType
+        self.TYP = equipment_type                                       # Enum van EquipmentType.value
         self.qty = 1
 
         for eqp_value_key, eqp_value_value in kwargs.items():
@@ -31,7 +31,7 @@ class EquipmentItem(object):
         Deze is voor weergave. Voeg de gevonden attributen op volgorde samen.
         :return: een lijst van de geselecteerde attributen
         """
-        name_tuple = (self.TYP.value, 'Skill', 'Min. Intelligence', 'Min. Strength', 'Weight', 'Movepoints',
+        name_tuple = (self.TYP, 'Skill', 'Min. Intelligence', 'Min. Strength', 'Weight', 'Movepoints',
                       'Protection', 'Defense', 'Base Hit', 'Damage',
                       'Intelligence', 'Willpower', 'Dexterity',
                       'Diplomat', 'Loremaster', 'Ranger', 'Stealth', 'Thief', 'Warrior', 'Wizard')

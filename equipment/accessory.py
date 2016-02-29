@@ -34,10 +34,10 @@ class AccessoryDatabase(collections.OrderedDict):
         :return: een EquipmentItem object met attributen uit de bovenstaande ordered dict
         """
         if key_name is None:
-            return equipment.EquipmentItem(equipment.EquipmentType.acy)
+            return equipment.EquipmentItem(equipment.EquipmentType.acy.value)
         try:
             accessory = self[key_name]
             accessory['spr'] = SPRITEPATH
-            return equipment.EquipmentItem(equipment.EquipmentType.acy, **accessory)
+            return equipment.EquipmentItem(equipment.EquipmentType.acy.value, **accessory)
         except KeyError:
             console.equipment_item_name_not_in_database(key_name)

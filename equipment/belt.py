@@ -29,10 +29,10 @@ class BeltDatabase(collections.OrderedDict):
         :param key_name:
         """
         if key_name is None:
-            return equipment.EquipmentItem(equipment.EquipmentType.blt)
+            return equipment.EquipmentItem(equipment.EquipmentType.blt.value)
         try:
             belt = self[key_name]
             belt['spr'] = SPRITEPATH
-            return equipment.EquipmentItem(equipment.EquipmentType.blt, **belt)
+            return equipment.EquipmentItem(equipment.EquipmentType.blt.value, **belt)
         except KeyError:
             console.equipment_item_name_not_in_database(key_name)

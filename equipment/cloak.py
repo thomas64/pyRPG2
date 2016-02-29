@@ -49,10 +49,10 @@ class CloakDatabase(collections.OrderedDict):
         :param key_name:
         """
         if key_name is None:
-            return equipment.EquipmentItem(equipment.EquipmentType.clk)
+            return equipment.EquipmentItem(equipment.EquipmentType.clk.value)
         try:
             cloak = self[key_name]
             cloak['spr'] = SPRITEPATH
-            return equipment.EquipmentItem(equipment.EquipmentType.clk, **cloak)
+            return equipment.EquipmentItem(equipment.EquipmentType.clk.value, **cloak)
         except KeyError:
             console.equipment_item_name_not_in_database(key_name)

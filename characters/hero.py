@@ -197,7 +197,7 @@ class Hero(object):
     def get_equipped_item_of_type(self, equipment_type):
         """
         Geeft het item van het meegegeven Enum type wat de hero equipped heeft terug.
-        :param equipment_type: Enum EquipmentType, dus bijv. ' sld = "Shield" '.
+        :param equipment_type: Enum EquipmentType.value, dus bijv. "Shield".
         :return: Als het geen empty is, geef dan het item. Anders None
         """
         # todo, Let op, bij ringen geeft hij er maar 1 terug. Denk ik, nog niet getest.

@@ -48,7 +48,7 @@ class InvClickBox(object):
 
         # de eerste rij
         table_data.append(
-            [black_spr, black_spr, "", "Unequip " + equipment_type.value]
+            [black_spr, black_spr, "", "Unequip " + equipment_type]
         )
         # de rijen van equipment van hero's
         for hero in party:
