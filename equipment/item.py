@@ -31,22 +31,34 @@ class EquipmentItem(object):
         Deze is voor weergave. Voeg de gevonden attributen op volgorde samen.
         :return: een lijst van de geselecteerde attributen
         """
-        name_tuple = (self.TYP, 'Skill', 'Min. Intelligence', 'Min. Strength', 'Weight', 'Movepoints',
-                      'Protection', 'Defense', 'Base Hit', 'Damage',
-                      'Intelligence', 'Willpower', 'Dexterity',
-                      'Diplomat', 'Loremaster', 'Ranger', 'Stealth', 'Thief', 'Warrior', 'Wizard')
-
-        attr_tuple = ('nam', 'skl', 'min_int', 'min_str', 'wht', 'mvp',
-                      'prt', 'des', 'hit', 'dam',
-                      'int', 'wil', 'dex',
-                      'dip', 'lor', 'ran', 'stl', 'thf', 'war', 'wiz')
+        #               attr[0]             attr[1]
+        attr_tuple = ((self.TYP,            'nam'),
+                      ('Skill',             'skl'),
+                      ('Min. Intelligence', 'min_int'),
+                      ('Min. Strength',     'min_str'),
+                      ('Weight',            'wht'),
+                      ('Movepoints',        'mvp'),
+                      ('Protection',        'prt'),
+                      ('Defense',           'des'),
+                      ('Base Hit',          'hit'),
+                      ('Damage',            'dam'),
+                      ('Intelligence',      'int'),
+                      ('Willpower',         'wil'),
+                      ('Dexterity',         'dex'),
+                      ('Diplomat',          'dip'),
+                      ('Loremaster',        'lor'),
+                      ('Ranger',            'ran'),
+                      ('Stealth',           'stl'),
+                      ('Thief',             'thf'),
+                      ('Warrior',           'war'),
+                      ('Wizard',            'wiz'))
 
         attr_list = []
 
-        for index, attr in enumerate(attr_tuple):
-            value_of_attr = self.get_value_of(attr)
+        for attr in attr_tuple:
+            value_of_attr = self.get_value_of(attr[1])
             if value_of_attr:
-                attr_list.append((str(name_tuple[index]), str(value_of_attr)))
+                attr_list.append((attr[0], str(value_of_attr)))
 
         return attr_list
 
