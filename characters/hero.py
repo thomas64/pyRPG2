@@ -238,7 +238,7 @@ class Hero(object):
         :param new_equipment_item: Object van EquipmentItem
         :return: False of True of hij mag/kan
         """
-        if self.get_hero_weapon_skill_for_equipment_item(new_equipment_item) < 1:
+        if not self.has_enough_weapon_skill_to_equip(new_equipment_item):
             console.not_equipping_skill(self.NAM, new_equipment_item.NAM)
             return False
         if new_equipment_item.get_value_of('MIN_INT') > self.int.qty:
@@ -249,27 +249,22 @@ class Hero(object):
             return False
         return True
 
-    def get_hero_weapon_skill_for_equipment_item(self, new_equipment_item):
+    def has_enough_weapon_skill_to_equip(self, new_equipment_item):
         """
         Bekijkt welke SKL waarde het equipment item heeft, geef dan de bijbehorende qty van attribute van de hero terug.
         :param new_equipment_item: Object van EquipmentItem
-        :return: of de qty waarde groter is dan 1, of anders 1
+        :return: Als het item geen skl waarde heeft, zoals bijv boots, return True.
+        :return: als de qty waarde > 0 return True. Als de waarde 0 of -1 is return False.
         """
-        val = new_equipment_item.get_value_of('SKL')    # val is een Enum
-        if val == equipment.WeaponType.swd.value:
-            return self.swd.qty                         # return -1, 0 of iets groters dan dat
-        elif val == equipment.WeaponType.haf.value:
-            return self.haf.qty
-        elif val == equipment.WeaponType.pol.value:
-            return self.pol.qty
-        elif val == equipment.WeaponType.mis.value:
-            return self.mis.qty
-        elif val == equipment.WeaponType.thr.value:
-            return self.thr.qty
-        elif val == equipment.WeaponType.shd.value:
-            return self.shd.qty
-        else:
-            return 1
+        wpn_skl = new_equipment_item.get_value_of('SKL')    # wpn_skl is een Enum.value van WeaponType
+        if wpn_skl == 0:
+            return True
+        for wpn_typ in equipment.WeaponType:
+            if wpn_skl == wpn_typ.value:
+                attr = getattr(self, wpn_typ.name)
+                if attr.qty > 0:
+                    return True
+        return False
 
     def calc_stats(self):
         """
