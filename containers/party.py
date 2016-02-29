@@ -30,7 +30,7 @@ class Party(collections.OrderedDict):
             if verbose:
                 console.hero_join_party(hero.NAM, self.NAM)
         else:
-            console.hero_full_party(self.NAM)
+            console.container_is_full(self.NAM)
 
     def remove(self, hero):
         """

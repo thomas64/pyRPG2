@@ -40,11 +40,15 @@ class Inventory(dict):
             return
         if equipment_item.RAW in self:
             self[equipment_item.RAW].qty += quantity
+            if self[equipment_item.RAW].qty > 99:
+                console.container_is_full(self.NAM)  # todo, hij geeft alleen nu nog maar mee, hij doet er nog niets aan
         else:
             # als hij nog niet in de inv dict zit, voeg hem toe.
             self[equipment_item.RAW] = equipment_item
             # equipment_item bestaat uit zichzelf al uit quantity = 1,
             # dus daarom, wanneer hij voor het eerst wordt toegevoegd: + qty - 1
             self[equipment_item.RAW].qty += (quantity - 1)
+            if self[equipment_item.RAW].qty > 99:
+                console.container_is_full(self.NAM)  # todo, hij geeft alleen nu nog maar mee, hij doet er nog niets aan
         if verbose:
             console.add_equipment_item(quantity, equipment_item.NAM, self.NAM)

@@ -61,16 +61,25 @@ def load_gamedata():
 
 def save_gamedata():
     """
-    Dialog.load()
+    Dialog.save()
     """
     print("Saving gamedata...")
 
 
 def corrupt_gamedata():
     """
-    Dialog.save()
+    Dialog.load()
     """
     print('Corrupt gamedata.')
+
+
+def container_is_full(container_name):
+    """
+    Party.add()
+    Inventory.add()
+    :param container_name: string
+    """
+    print("{} is full.".format(container_name))
 
 
 def hero_join_party(hero_name, party_name):
@@ -89,14 +98,6 @@ def hero_double_join(hero_name, party_name):
     :param party_name: string
     """
     print("{} is already in {}.".format(hero_name, party_name))
-
-
-def hero_full_party(party_name):
-    """
-    Party.add()
-    :param party_name: string
-    """
-    print("{} is full.".format(party_name))
 
 
 def hero_leave_party(hero_name, party_name):
