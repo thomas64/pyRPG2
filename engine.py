@@ -48,8 +48,9 @@ class GameEngine(object):
         self.dt = 0.0
         self.timer = 0.0
 
-        self.menu = None
-        self.overworld = None
+        self.menu = None    # todo, onderverdelen in 2: self.mainmenu en self.submenu
+        # todo, bouw een soort state manager? kan in engine zitten
+        self.overworld = None   # todo, overworld moet self.gameplay(screen)? worden oid.
 
         self.debugfont = pygame.font.SysFont(DEBUGFONT, DEBUGFONTSIZE)
         self.currentstate = None
@@ -259,7 +260,7 @@ class GameEngine(object):
                 self._pause_menu_select_continue()
             elif menu_choice == menu_keys.SaveGame:
                 self._pause_menu_select_save_game()
-            elif menu_choice == menu_keys.MainMenu:
+            elif menu_choice == menu_keys.Exit:
                 self._pause_menu_select_main_menu()
             return
 

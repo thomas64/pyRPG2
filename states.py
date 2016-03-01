@@ -14,12 +14,15 @@ class GameState(enum.Enum):
     State machine constants for the StateMachine class
     """
     MainMenu = 1
-    OptionsMenu = 2
-    PauseMenu = 3
-    Overworld = 4
-    Battle = 5
-    Conversation = 6
-    PartyScreen = 7
+    LoadMenu = 2
+    SaveMenu = 3
+    OptionsMenu = 4
+    PauseMenu = 5
+
+    Overworld = 6
+    Battle = 7
+    Conversation = 8
+    PartyScreen = 9
 
 
 class StateMachine(object):

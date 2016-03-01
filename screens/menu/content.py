@@ -67,5 +67,7 @@ class PauseMenu(MenuItem):
     def __init__(self):
         super().__init__()
         self.inside['ContinueGame'] = 'Continue'
+        self.inside['LoadGame'] = 'Load Game'
         self.inside['SaveGame'] = 'Save Game'
-        self.inside['MainMenu'] = 'Main Menu'
+        self.inside['Options'] = 'Options'
+        self.inside['Exit'] = 'Exit'

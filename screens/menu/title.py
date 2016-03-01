@@ -19,6 +19,13 @@ SUBFONTCOLOR = pygame.Color("gray36")
 SUBPOSX = 155
 SUBPOSY = 160
 
+VERSIONTEXT = "PreAlpha v0.004"
+VERSIONFONT = 'verdana'
+VERSIONFONTSIZE = 12
+VERSIONFONTCOLOR = pygame.Color("black")
+VERSIONPOSX = -120
+VERSIONPOSY = -20
+
 
 class Title(object):
     """
@@ -27,8 +34,10 @@ class Title(object):
     def __init__(self):
         self.titlefont = pygame.font.SysFont(TITLEFONT, TITLEFONTSIZE)
         self.subfont = pygame.font.SysFont(SUBFONT, SUBFONTSIZE)
+        self.versionfont = pygame.font.SysFont(VERSIONFONT, VERSIONFONTSIZE)
         self.title = self.titlefont.render(TITLETEXT, True, TITLEFONTCOLOR).convert_alpha()
         self.sub = self.subfont.render(SUBTEXT, True, SUBFONTCOLOR).convert_alpha()
+        self.version = self.versionfont.render(VERSIONTEXT, True, VERSIONFONTCOLOR).convert_alpha()
 
     def draw(self, screen):
         """
@@ -37,3 +46,4 @@ class Title(object):
         """
         screen.blit(self.title, (TITLEPOSX, TITLEPOSY))
         screen.blit(self.sub, (SUBPOSX, SUBPOSY))
+        screen.blit(self.version, (screen.get_width() + VERSIONPOSX, screen.get_height() + VERSIONPOSY))
