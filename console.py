@@ -38,9 +38,9 @@ def state_pop(state):
     print("Game popped {}".format(state))
 
 
-def state_clear():
+def state_change():
     """
-    StateMachine.clear()
+    StateMachine.change()
     """
     print("Game cleared all states.")
 

@@ -82,9 +82,11 @@ class StateMachine(object):
             self.audio_state_is_changed = True
         return state
 
-    def clear(self):
+    def change(self, state):
         """
-        Clear the whole stack.
+        Clear the whole stack. And pushes one.
+        :param state: Push a new state onto the stack.
         """
-        console.state_clear()
+        console.state_change()
         self.statestack = []
+        self.push(state)

@@ -151,7 +151,7 @@ class Overworld(object):
 
     def _show_party_screen(self):
         self.engine.statemachine.push(states.GameState.PartyScreen)
-        self.partyscreen = screens.party.display.Display(self.engine.data, self.screen)
+        self.partyscreen = screens.party.display.Display(self.screen, self.engine.data)
 
     def _close_party_screen(self):
         self.engine.statemachine.pop(self.engine.currentstate)
