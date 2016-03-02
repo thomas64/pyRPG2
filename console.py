@@ -66,6 +66,13 @@ def save_gamedata():
     print("Saving gamedata...")
 
 
+def delete_gamedata():
+    """
+    Dialog.delete()
+    """
+    print("Deleting gamedata...")
+
+
 def corrupt_gamedata():
     """
     Dialog.load()

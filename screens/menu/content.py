@@ -7,6 +7,10 @@ class: PauseMenu
 """
 
 import collections
+import os
+import datetime
+
+SAVEPATH = 'savegame'
 
 
 class MenuItem(object):
@@ -60,6 +64,28 @@ class OptionsMenu(MenuItem):
         self.inside['Back'] = 'Back'
 
 
+class LoadMenu(MenuItem):
+    """
+    Hier worden alle bestanden van de savegame dir in een list gezet
+    en weergegeven in de inside dict.
+    """
+    # todo, scrollbaar maken
+    def __init__(self):
+        super().__init__()
+
+        files = []
+        for (dirpath, dirnames, filenames) in os.walk(SAVEPATH):
+            files.extend(filenames)
+            break
+
+        for file in files:
+            timestamp = os.path.getmtime(os.path.join(SAVEPATH, file))
+            timestamp = datetime.datetime.fromtimestamp(timestamp).strftime('%Y-%m-%d %H:%M:%S')
+            self.inside[file] = str(file)+" ["+str(timestamp)+"]"
+
+        self.inside['Back'] = 'Back'
+
+
 class PauseMenu(MenuItem):
     """
     De pausemenu items.
@@ -70,4 +96,4 @@ class PauseMenu(MenuItem):
         self.inside['LoadGame'] = 'Load Game'
         self.inside['SaveGame'] = 'Save Game'
         self.inside['Options'] = 'Options'
-        self.inside['Exit'] = 'Exit'
+        self.inside['MainMenu'] = 'Main Menu'

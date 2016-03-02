@@ -48,7 +48,7 @@ class GameEngine(object):
         self.dt = 0.0
         self.timer = 0.0
 
-        self.menu = None    # todo, onderverdelen in 2: self.mainmenu en self.submenu
+        self.menu = None    # todo, onderverdelen in 2? self.mainmenu en self.submenu
         # todo, bouw een soort state manager? kan in engine zitten
         self.overworld = None   # todo, overworld moet self.gameplay(screen)? worden oid.
 
@@ -155,6 +155,7 @@ class GameEngine(object):
                     self.screen.blit(self.debugfont.render(line, True, DEBUGFONTCOLOR).convert_alpha(), (0, count * 10))
 
         if self.currentstate == states.GameState.MainMenu or \
+           self.currentstate == states.GameState.LoadMenu or \
            self.currentstate == states.GameState.OptionsMenu or \
            self.currentstate == states.GameState.PauseMenu:
             self.menu.handle_view(self.dt, self.scr_capt)
@@ -220,7 +221,11 @@ class GameEngine(object):
                     self.audio.play_sound(self.audio.select)        # omdat escape in menu standaard geen geluid geeft
                     self._main_menu_select_exit_game()
                     return                                                    # returns, want anders zitten ze
-                elif self.currentstate == states.GameState.OptionsMenu:       # de menu's in de weg
+                elif self.currentstate == states.GameState.LoadMenu:          # de menu's in de weg
+                    self.audio.play_sound(self.audio.select)
+                    self._load_game_menu_select_back()
+                    return
+                elif self.currentstate == states.GameState.OptionsMenu:
                     self.audio.play_sound(self.audio.select)
                     self._options_menu_select_back()
                     return
@@ -241,44 +246,62 @@ class GameEngine(object):
         # todo, menu handler helemaal verbeteren
         # muziek later in laten komen?
 
-        menu_choice = self.menu.handle_single_input(full_event)
+        menu_choice, delete = self.menu.handle_single_input(full_event)
 
         if self.currentstate == states.GameState.MainMenu:
-            menu_keys = screens.menu.content.MainMenu()
-            if menu_choice == menu_keys.NewGame:
-                self._main_menu_select_new_game()
-            elif menu_choice == menu_keys.LoadGame:
-                self._main_menu_select_load_game()
-            elif menu_choice == menu_keys.Options:
-                self._main_menu_select_options()
-            elif menu_choice == menu_keys.ExitGame:
-                self._main_menu_select_exit_game()
+            if not delete:
+                menu_keys = screens.menu.content.MainMenu()
+                if menu_choice == menu_keys.NewGame:
+                    self._main_menu_select_new_game()
+                elif menu_choice == menu_keys.LoadGame:
+                    self._main_menu_select_load_game()
+                elif menu_choice == menu_keys.Options:
+                    self._main_menu_select_options()
+                elif menu_choice == menu_keys.ExitGame:
+                    self._main_menu_select_exit_game()
+                return
+
+        elif self.currentstate == states.GameState.LoadMenu:
+            menu_keys = screens.menu.content.LoadMenu()                       # menu_keys is de volledig inside[]
+            if menu_choice == menu_keys.Back:                                 # met alle keys van dat menu
+                if not delete:
+                    self._load_game_menu_select_back()
+            elif menu_choice is not None:
+                if delete:
+                    self._load_game_menu_delete_savefile(menu_choice)
+                else:
+                    self._load_game_menu_select_savefile(menu_choice)
             return
 
         elif self.currentstate == states.GameState.OptionsMenu:
-            menu_keys = screens.menu.content.OptionsMenu()
-            if menu_choice == menu_keys.Music:                                # .Music geeft de key "Music"
-                self._options_menu_select_music()
-            elif menu_choice == menu_keys.Sound:
-                self._options_menu_select_sound()
-            elif menu_choice == menu_keys.Back:
-                self._options_menu_select_back()
-            return
+            if not delete:
+                menu_keys = screens.menu.content.OptionsMenu()
+                if menu_choice == menu_keys.Music:                            # .Music geeft de key "Music"
+                    self._options_menu_select_music()
+                elif menu_choice == menu_keys.Sound:
+                    self._options_menu_select_sound()
+                elif menu_choice == menu_keys.Back:
+                    self._options_menu_select_back()
+                return
 
         elif self.currentstate == states.GameState.PauseMenu:
-            menu_keys = screens.menu.content.PauseMenu()
-            if menu_choice == menu_keys.ContinueGame:
-                self._pause_menu_select_continue()
-            elif menu_choice == menu_keys.SaveGame:
-                self._pause_menu_select_save_game()
-            elif menu_choice == menu_keys.Exit:
-                self._pause_menu_select_main_menu()
-            return
+            if not delete:
+                menu_keys = screens.menu.content.PauseMenu()
+                if menu_choice == menu_keys.ContinueGame:
+                    self._pause_menu_select_continue()
+                elif menu_choice == menu_keys.SaveGame:
+                    self._pause_menu_select_save_game()
+                elif menu_choice == menu_keys.MainMenu:
+                    self._pause_menu_select_main_menu()
+                return
 
     def _show_main_menu(self, from_state):
         cur_item = 0
         if from_state is None:
             self.statemachine.push(states.GameState.MainMenu)
+        elif from_state == states.GameState.LoadMenu:
+            # todo, geen magische nummers, maar get de index uit screens.menu.content.MainMenu()
+            cur_item = 1
         elif from_state == states.GameState.OptionsMenu:
             cur_item = 2
         elif from_state == states.GameState.PauseMenu:
@@ -295,15 +318,7 @@ class GameEngine(object):
         self.overworld = screens.overworld.Overworld(self)
 
     def _main_menu_select_load_game(self):
-        dialog = screens.loadsave.Dialog(self)
-        self.overworld = screens.overworld.Overworld(self)                    # laad de overworld alvast
-        if dialog.load() is None:
-            self.overworld = None                                             # toch niet
-        else:                                                                 # geef dan data mee aan de overworld
-            self.audio.play_sound(self.audio.select)
-            self.menu = None
-            self.statemachine.change(states.GameState.Overworld)
-        pygame.event.clear()
+        self._show_load_game_menu()
 
     def _main_menu_select_options(self):
         self._show_options_menu()
@@ -311,13 +326,41 @@ class GameEngine(object):
     def _main_menu_select_exit_game(self):
         self.running = False
 
+    def _show_load_game_menu(self):
+        self.statemachine.push(states.GameState.LoadMenu)
+        cur_item = -1
+        menu_items = screens.menu.content.LoadMenu()
+        self.menu = screens.menu.display.Display(self.screen, self.audio, menu_items, False, False, cur_item)
+
+    def _load_game_menu_select_back(self):
+        self.statemachine.pop(self.currentstate)
+        self._show_main_menu(self.currentstate)
+
+    def _load_game_menu_select_savefile(self, savefile):
+        dialog = screens.loadsave.Dialog(self)
+        self.overworld = screens.overworld.Overworld(self)                    # laad de overworld alvast
+        if dialog.load(savefile) is None:
+            self.overworld = None                                             # toch niet
+        else:                                                                 # geef dan data mee aan de overworld
+            self.audio.play_sound(self.audio.select)
+            self.menu = None
+            self.statemachine.change(states.GameState.Overworld)
+
+    def _load_game_menu_delete_savefile(self, savefile):
+        dialog = screens.loadsave.Dialog(self)
+        dialog.delete(savefile)
+        self.statemachine.pop(self.currentstate)
+        self._show_load_game_menu()
+
     def _show_options_menu(self):
         self.statemachine.push(states.GameState.OptionsMenu)
+        cur_item = -1
         # hier wordt de weergave van options gekozen
         menu_items = screens.menu.content.OptionsMenu(self.audio.music, self.audio.sound)
-        self.menu = screens.menu.display.Display(self.screen, self.audio, menu_items, True, True)
+        self.menu = screens.menu.display.Display(self.screen, self.audio, menu_items, True, True, cur_item)
 
     def _options_menu_select_music(self):
+        # todo, ipv switch net zoals delete savefile doen? volledig opnieuw laden?
         settingview = self.menu.menu_texts[self.menu.cur_item]                # hier wordt de weergave
         settingview.flip_switch()                                             # later aangepast
         self.audio.flip_music()                                               # en de instelling zelf aangepast

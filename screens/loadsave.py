@@ -29,28 +29,21 @@ class Dialog(object):
         if not os.path.exists(SAVEPATH):
             os.makedirs(SAVEPATH)
 
-    def load(self):
+    def load(self, filename):
         """
-        Load dialog.
+        Laad een opgeslagen spelbestand.
+        :param filename: het gekozen bestandsnaam uit de lijst
         """
-        filename = tkinter.filedialog.askopenfilename(title='Load File',
-                                                      initialdir=SAVEPATH,
-                                                      initialfile='savefile.dat',
-                                                      filetypes=[('Save Files', '*.dat')]
-                                                      )
-        if filename:
-            try:
-                console.load_gamedata()
-                with open(filename, 'rb') as f:
-                    (self.engine.data,
-                     self.engine.overworld.window.hero.rect,
-                     self.engine.overworld.window.hero.last_direction) = pickle.load(f)
-            except (pickle.UnpicklingError, EOFError):
-                console.corrupt_gamedata()
-                filename = None
-        else:
+        filename = os.path.join(SAVEPATH, filename)
+        try:
+            console.load_gamedata()
+            with open(filename, 'rb') as f:
+                (self.engine.data,
+                 self.engine.overworld.window.hero.rect,
+                 self.engine.overworld.window.hero.last_direction) = pickle.load(f)
+        except (pickle.UnpicklingError, EOFError):
+            console.corrupt_gamedata()
             filename = None
-        self.root.destroy()
         return filename
 
     def save(self):
@@ -72,3 +65,13 @@ class Dialog(object):
             filename = None
         self.root.destroy()
         return filename
+
+    @staticmethod
+    def delete(filename):
+        """
+        Delete een opgeslagen spelbestand.
+        :param filename: het gekozen bestandsnaam uit de lijst
+        """
+        console.delete_gamedata()
+        filename = os.path.join(SAVEPATH, filename)
+        os.remove(filename)
