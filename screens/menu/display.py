@@ -144,7 +144,7 @@ class Display(object):
                 self.audio.play_sound(self.audio.error)
                 self.cur_item = len(self.menu_texts) - 1
 
-            # todo, de 'enter' en zo iets met enum keystates oid oplossen.
+            # todo, de 'enter' enzo iets met enum keystates oid oplossen.
 
             if event.key in SELECTKEYS:
                 self.audio.play_sound(self.audio.select)

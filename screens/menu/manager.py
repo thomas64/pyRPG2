@@ -80,7 +80,7 @@ class MenuManager(object):
         """
         self.menu.handle_view(dt, self.scr_capt)
 
-    def handle_menu_input(self, full_event):
+    def handle_single_input(self, full_event):
 
         # todo, menu handler helemaal verbeteren
         # muziek later in laten komen?

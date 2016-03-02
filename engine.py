@@ -153,7 +153,7 @@ class GameEngine(object):
                 self._kill_game()                           # todo, deze, de key en de methode moeten uiteindelijk weg
 
         if self.currentstate == states.GameState.Menu:
-            self.menu_manager.handle_menu_input(event)
+            self.menu_manager.handle_single_input(event)
 
     @staticmethod
     def _kill_game():
