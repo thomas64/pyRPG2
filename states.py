@@ -13,16 +13,22 @@ class GameState(enum.Enum):
     """
     State machine constants for the StateMachine class
     """
+    Menu = 1
+    Overworld = 2
+    Battle = 3
+    Conversation = 4
+    PartyScreen = 5
+
+
+class MenuState(enum.Enum):
+    """
+    State machine menu constanten.
+    """
     MainMenu = 1
     LoadMenu = 2
     SaveMenu = 3
     OptionsMenu = 4
     PauseMenu = 5
-
-    Overworld = 6
-    Battle = 7
-    Conversation = 8
-    PartyScreen = 9
 
 
 class StateMachine(object):
@@ -65,7 +71,7 @@ class StateMachine(object):
         try:
             console.state_pop(state)
             self.statestack.pop()
-            if state != GameState.OptionsMenu:      # bij optionsmenu niet, omdat het geluid moet doorlopen.
+            if state != MenuState.OptionsMenu:      # bij optionsmenu niet, omdat het geluid moet doorlopen.
                 self.audio_state_is_changed = True
             return len(self.statestack) > 0
         except IndexError:
@@ -78,15 +84,21 @@ class StateMachine(object):
         """
         console.state_push(state)
         self.statestack.append(state)
-        if state != GameState.OptionsMenu:
+        if state != MenuState.OptionsMenu:
             self.audio_state_is_changed = True
         return state
+
+    def clear(self):
+        """
+        Clear the whole stack.
+        """
+        console.state_clear()
+        self.statestack = []
 
     def change(self, state):
         """
         Clear the whole stack. And pushes one.
         :param state: Push a new state onto the stack.
         """
-        console.state_change()
-        self.statestack = []
+        self.clear()
         self.push(state)

@@ -24,6 +24,7 @@ LEFTLBL = "Left"
 RIGHTLBL = "Right"
 
 CLICKBUTTON = 1
+EXITKEY = pygame.K_ESCAPE
 INVKEY = pygame.K_i
 UPKEY = pygame.K_UP
 DOWNKEY = pygame.K_DOWN
@@ -143,11 +144,17 @@ class Overworld(object):
         if self.engine.currentstate == states.GameState.Overworld:
             if event.key == INVKEY:
                 self._show_party_screen()
+            elif event.key == EXITKEY:
+                self._show_pause_menu()
             self.window.handle_single_input(event)
 
         elif self.engine.currentstate == states.GameState.PartyScreen:
             if self.partyscreen.handle_single_keyboard_input(event) or event.key == INVKEY:
                 self._close_party_screen()
+
+    def _show_pause_menu(self):
+        self.engine.audio.play_sound(self.engine.audio.select)
+        self.engine.menu_manager.open_menu(states.MenuState.PauseMenu)
 
     def _show_party_screen(self):
         self.engine.statemachine.push(states.GameState.PartyScreen)

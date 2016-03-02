@@ -29,6 +29,7 @@ UPKEY = pygame.K_UP
 DOWNKEY = pygame.K_DOWN
 SELECTKEYS = pygame.K_RETURN, pygame.K_KP_ENTER     # 2 mogelijkheden voor dezelfde constante
 DELETEKEY = pygame.K_DELETE
+EXITKEY = pygame.K_ESCAPE
 
 
 class Display(object):
@@ -127,7 +128,7 @@ class Display(object):
                 for item in self.menu_texts:
                     if item.rect.collidepoint(event.pos):
                         self.audio.play_sound(self.audio.select)
-                        return item.func, False
+                        return item.func, 'enter'
 
         elif event.type == pygame.KEYDOWN:
             if event.key == UPKEY and self.cur_item > 0:
@@ -143,11 +144,16 @@ class Display(object):
                 self.audio.play_sound(self.audio.error)
                 self.cur_item = len(self.menu_texts) - 1
 
+            # todo, de 'enter' en zo iets met enum keystates oid oplossen.
+
             if event.key in SELECTKEYS:
                 self.audio.play_sound(self.audio.select)
-                return self.menu_texts[self.cur_item].func, False   # 2e parameter is voor delet
+                return self.menu_texts[self.cur_item].func, 'enter'
             elif event.key == DELETEKEY:
                 self.audio.play_sound(self.audio.select)
-                return self.menu_texts[self.cur_item].func, True  # True is parameter voor delete
+                return self.menu_texts[self.cur_item].func, 'delete'
+            elif event.key == EXITKEY:
+                self.audio.play_sound(self.audio.select)
+                return self.menu_texts[self.cur_item].func, 'escape'
 
-        return None, False      # dit is voor als er niets geselecteerd wordt
+        return None, None      # dit is voor als er niets geselecteerd wordt
