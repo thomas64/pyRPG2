@@ -5,6 +5,7 @@ class: Screen
 
 import pygame
 
+import keys
 import screens.menu.animation
 import screens.menu.text
 import screens.menu.title
@@ -23,13 +24,6 @@ MENUFONTCOLOR4 = pygame.Color("red")
 MENUH = 1.5
 MENUX = -405
 MENUY = -50
-
-CLICKBUTTON = 1
-UPKEY = pygame.K_UP
-DOWNKEY = pygame.K_DOWN
-SELECTKEYS = pygame.K_RETURN, pygame.K_KP_ENTER     # 2 mogelijkheden voor dezelfde constante
-DELETEKEY = pygame.K_DELETE
-EXITKEY = pygame.K_ESCAPE
 
 
 class Display(object):
@@ -124,36 +118,36 @@ class Display(object):
                         self.audio.play_sound(self.audio.switch)
 
         elif event.type == pygame.MOUSEBUTTONDOWN:
-            if event.button == CLICKBUTTON:
+            if event.button == keys.LEFTCLICK:
                 for item in self.menu_texts:
                     if item.rect.collidepoint(event.pos):
                         self.audio.play_sound(self.audio.select)
-                        return item.func, 'enter'
+                        return item.func, keys.SELECT, self.cur_item
 
         elif event.type == pygame.KEYDOWN:
-            if event.key == UPKEY and self.cur_item > 0:
+            if event.key == keys.UP and self.cur_item > 0:
                 self.audio.play_sound(self.audio.switch)
                 self.cur_item -= 1
-            elif event.key == UPKEY and self.cur_item == 0:
+            elif event.key == keys.UP and self.cur_item == 0:
                 self.audio.play_sound(self.audio.error)
                 self.cur_item = 0
-            elif event.key == DOWNKEY and self.cur_item < len(self.menu_texts) - 1:
+            elif event.key == keys.DOWN and self.cur_item < len(self.menu_texts) - 1:
                 self.audio.play_sound(self.audio.switch)
                 self.cur_item += 1
-            elif event.key == DOWNKEY and self.cur_item == len(self.menu_texts) - 1:
+            elif event.key == keys.DOWN and self.cur_item == len(self.menu_texts) - 1:
                 self.audio.play_sound(self.audio.error)
                 self.cur_item = len(self.menu_texts) - 1
 
             # todo, de 'enter' enzo iets met enum keystates oid oplossen.
 
-            if event.key in SELECTKEYS:
+            if event.key in keys.SELECT:
                 self.audio.play_sound(self.audio.select)
-                return self.menu_texts[self.cur_item].func, 'enter'
-            elif event.key == DELETEKEY:
+                return self.menu_texts[self.cur_item].func, keys.SELECT, self.cur_item
+            elif event.key == keys.DELETE:
                 self.audio.play_sound(self.audio.select)
-                return self.menu_texts[self.cur_item].func, 'delete'
-            elif event.key == EXITKEY:
+                return self.menu_texts[self.cur_item].func, keys.DELETE, self.cur_item
+            elif event.key == keys.EXIT:
                 self.audio.play_sound(self.audio.select)
-                return self.menu_texts[self.cur_item].func, 'escape'
+                return self.menu_texts[self.cur_item].func, keys.EXIT, self.cur_item
 
-        return None, None      # dit is voor als er niets geselecteerd wordt
+        return None, None, self.cur_item      # dit is voor als er niets geselecteerd wordt

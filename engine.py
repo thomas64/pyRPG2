@@ -9,6 +9,7 @@ import pygame.gfxdraw
 import audio
 import console
 import data
+import keys
 import screens.menu.manager
 import screens.overworld
 import states
@@ -18,13 +19,10 @@ import states
 # todo, er gaat nog wat mis met sidestep als fps te hoog is, oorzaak onduidelijk.
 FPS = 6000        # minimaal 15, anders kan hij door bomen lopen. maximaal 110, anders sidestep raar.
 
-KILLKEY = pygame.K_BACKSPACE
-
-DEBUGKEY = pygame.K_F12
 DEBUGFONT = 'courier'
 DEBUGFONTSIZE = 11
 DEBUGFONTCOLOR = pygame.Color("white")
-DEBUGRECT = pygame.Rect(0, 0, 600, 400)
+DEBUGRECT = pygame.Rect(0, 0, 400, 600)
 DEBUGRECTCOLOR = (32, 32, 32, 200)
 
 
@@ -83,6 +81,8 @@ class GameEngine(object):
         """
         if self.currentstate == states.GameState.Menu:
             self.menu_manager.loop()
+            if self.menu_manager.menu_currentstate == states.MenuState.MainMenu:
+                self.overworld = None
 
         elif self.currentstate == states.GameState.Overworld:
             if self.overworld is None:
@@ -147,9 +147,9 @@ class GameEngine(object):
                self.currentstate == states.GameState.PartyScreen:
                 self.overworld.handle_single_keyboard_input(event)
 
-            if event.key == DEBUGKEY:
+            if event.key == keys.DEBUG:
                 self.show_debug ^= True                                             # simple boolean swith
-            if event.key == KILLKEY:
+            if event.key == keys.KILL:
                 self._kill_game()                           # todo, deze, de key en de methode moeten uiteindelijk weg
 
         if self.currentstate == states.GameState.Menu:
@@ -170,30 +170,14 @@ class GameEngine(object):
                 "clock:             {}".format(self.clock),
                 "timer:             {}".format(self.timer),
                 "",
-                "StateStack:"
-            )
-            textb = []
-            for state in self.statemachine.statestack:
-                textb.append(str(state))
-            textb.reverse()
-            text += tuple(textb)
-            text += (
-                "",
-                "Menu StateStack:"
-            )
-            textb = []
-            for state in self.menu_manager.menu_statemachine.statestack:
-                textb.append(str(state))
-            textb.reverse()
-            text += tuple(textb)
-            text += (
-                "",
                 "currenstate:       {}".format(self.currentstate),
                 "menu_cur_state:    {}".format(self.menu_manager.menu_currentstate),
                 "menu_manager:      {}".format(self.menu_manager),
                 "menu:              {}".format(self.menu_manager.menu),
                 "overworld:         {}".format(self.overworld),
                 "scr_capt:          {}".format(self.menu_manager.scr_capt),
+                "cur_item:          {}".format(self.menu_manager.cur_item),
+                "last_item:         {}".format(self.menu_manager.last_item),
                 "mouse_input:       {}".format(self.mouse_input)
             )
             try:
@@ -237,6 +221,28 @@ class GameEngine(object):
                 text += text3
             except AttributeError:
                 pass
+            text4 = (
+                "",
+                "StateStack:",
+                ""
+            )
+            textb = []
+            for state in self.statemachine.statestack:
+                textb.append(str(state))
+            textb.reverse()
+            text4 += tuple(textb)
+            text4 += (
+                "",
+                "Menu StateStack:",
+                ""
+            )
+            textb = []
+            for state in self.menu_manager.menu_statemachine.statestack:
+                textb.append(str(state))
+            textb.reverse()
+            text4 += tuple(textb)
+            text += text4
+
             pygame.gfxdraw.box(self.screen, DEBUGRECT, DEBUGRECTCOLOR)
             for count, line in enumerate(text):
                 self.screen.blit(self.debugfont.render(line, True, DEBUGFONTCOLOR).convert_alpha(), (0, count * 10))

@@ -5,6 +5,7 @@ class: Overworld
 
 import pygame
 
+import keys
 import screens.party.display
 import screens.sprites
 import screens.window
@@ -22,14 +23,6 @@ UPLBL = "Up"
 DOWNLBL = "Down"
 LEFTLBL = "Left"
 RIGHTLBL = "Right"
-
-CLICKBUTTON = 1
-EXITKEY = pygame.K_ESCAPE
-INVKEY = pygame.K_i
-UPKEY = pygame.K_UP
-DOWNKEY = pygame.K_DOWN
-LEFTKEY = pygame.K_LEFT
-RIGHTKEY = pygame.K_RIGHT
 
 BTNWIDTH = 40
 BTNHEIGHT = 40
@@ -70,15 +63,15 @@ class Overworld(object):
         # todo, afhankelijk van situatie, buttons niet weergeven
         # button_view = sprites.ButtonSprite((bg_width-200,   bg_height-300), "V",     pygame.K_v)
         button_inv = screens.sprites.ButtonSprite(
-                                    BTNWIDTH, BTNHEIGHT, (bg_width + INVX,   bg_height + INVY),   INVLBL,   INVKEY)
+                                    BTNWIDTH, BTNHEIGHT, (bg_width + INVX,   bg_height + INVY),   INVLBL,   keys.INV)
         button_up = screens.sprites.ButtonSprite(
-                                    BTNWIDTH, BTNHEIGHT, (bg_width + UPX,    bg_height + UPY),    UPLBL,    UPKEY)
+                                    BTNWIDTH, BTNHEIGHT, (bg_width + UPX,    bg_height + UPY),    UPLBL,    keys.UP)
         button_down = screens.sprites.ButtonSprite(
-                                    BTNWIDTH, BTNHEIGHT, (bg_width + DOWNX,  bg_height + DOWNY),  DOWNLBL,  DOWNKEY)
+                                    BTNWIDTH, BTNHEIGHT, (bg_width + DOWNX,  bg_height + DOWNY),  DOWNLBL,  keys.DOWN)
         button_left = screens.sprites.ButtonSprite(
-                                    BTNWIDTH, BTNHEIGHT, (bg_width + LEFTX,  bg_height + LEFTY),  LEFTLBL,  LEFTKEY)
+                                    BTNWIDTH, BTNHEIGHT, (bg_width + LEFTX,  bg_height + LEFTY),  LEFTLBL,  keys.LEFT)
         button_right = screens.sprites.ButtonSprite(
-                                    BTNWIDTH, BTNHEIGHT, (bg_width + RIGHTX, bg_height + RIGHTY), RIGHTLBL, RIGHTKEY)
+                                    BTNWIDTH, BTNHEIGHT, (bg_width + RIGHTX, bg_height + RIGHTY), RIGHTLBL, keys.RIGHT)
         # button_cancel = sprites.ButtonSprite((bg_width-100, bg_height-200), "C",     pygame.K_c)
 
         # self.buttons = [button_view, button_up, button_down, button_left, button_right, button_cancel]
@@ -125,10 +118,10 @@ class Overworld(object):
         :param event: pygame.MOUSEBUTTONDOWN uit engine.py
         """
         if self.engine.currentstate == states.GameState.Overworld:
-            if event.button == CLICKBUTTON:
+            if event.button == keys.LEFTCLICK:
                 for button in self.buttons:
                     button_press = button.single_click(event)
-                    if button_press == INVKEY:
+                    if button_press == keys.INV:
                         self._show_party_screen()
                         break
 
@@ -142,14 +135,14 @@ class Overworld(object):
         :param event: pygame.KEYDOWN uit engine.py
         """
         if self.engine.currentstate == states.GameState.Overworld:
-            if event.key == INVKEY:
+            if event.key == keys.INV:
                 self._show_party_screen()
-            elif event.key == EXITKEY:
+            elif event.key == keys.EXIT:
                 self._show_pause_menu()
             self.window.handle_single_input(event)
 
         elif self.engine.currentstate == states.GameState.PartyScreen:
-            if self.partyscreen.handle_single_keyboard_input(event) or event.key == INVKEY:
+            if self.partyscreen.handle_single_keyboard_input(event) or event.key == keys.INV:
                 self._close_party_screen()
 
     def _show_pause_menu(self):
