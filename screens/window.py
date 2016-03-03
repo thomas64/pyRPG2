@@ -5,14 +5,10 @@ class: Window
 
 import pygame
 
+import keys
 import screens.character
 import screens.map
 import screens.sprites
-
-
-ALIGNKEY = pygame.K_SPACE
-GRIDKEY = pygame.K_F10
-CBOXKEY = pygame.K_F11
 
 BACKGROUNDCOLOR = pygame.Color("gray12")
 GRIDCOLOR = pygame.Color("gray36")
@@ -24,9 +20,6 @@ ZOOMSPEED = .1
 MAXZOOM = 3.1
 DEFZOOM = 1.0
 MINZOOM = .5
-ZOOMPLUSKEY = pygame.K_KP_PLUS
-ZOOMMINKEY = pygame.K_KP_MINUS
-ZOOMRESETKEY = pygame.K_KP_DIVIDE
 
 # todo, mooiere map maken met variatie in het gras
 OVERWORLDPATH = 'resources/maps/start_forest.tmx'
@@ -74,15 +67,15 @@ class Window(object):
         :param key_input: pygame.key.get_pressed()
         :param dt: self.clock.tick(FPS)/1000.0
         """
-        if key_input[ZOOMPLUSKEY]:
+        if key_input[keys.ZOOMPLUS]:
             value = self.map1.map_layer.zoom + ZOOMSPEED
             if value < MAXZOOM:
                 self.map1.map_layer.zoom = value
-        elif key_input[ZOOMMINKEY]:
+        elif key_input[keys.ZOOMMIN]:
             value = self.map1.map_layer.zoom - ZOOMSPEED
             if value > MINZOOM:
                 self.map1.map_layer.zoom = value
-        elif key_input[ZOOMRESETKEY]:
+        elif key_input[keys.ZOOMRESET]:
             self.map1.map_layer.zoom = DEFZOOM
 
         self.hero.speed(key_input)
@@ -96,10 +89,10 @@ class Window(object):
         Handelt keyevents af.
         :param event: pygame.KEYDOWN uit engine.py
         """
-        if event.key == ALIGNKEY:
+        if event.key == keys.ALIGN:
             self.hero.align_to_grid(GRIDSIZE)
 
-        elif event.key == GRIDKEY:
+        elif event.key == keys.GRID:
             if self.grid_sprite is None:
                 self.grid_sprite = screens.sprites.GridSprite(self.map1.width, self.map1.height,
                                                               GRIDCOLOR, GRIDSIZE, GRIDLAYER)
@@ -108,7 +101,7 @@ class Window(object):
                 self.group.remove(self.grid_sprite)
                 self.grid_sprite = None
 
-        elif event.key == CBOXKEY:
+        elif event.key == keys.CBOX:
             if len(self.cbox_sprites) == 0:                             # als de lijst leeg is.
                 self.cbox_sprites.append(screens.sprites.ColorBoxSprite(self.hero.rect, HEROCOLOR, CBOXLAYER))
                 for rect in self.map1.tree_rects:

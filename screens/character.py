@@ -8,6 +8,8 @@ import enum
 
 import pygame
 
+import keys
+
 
 MOVESPEED1 = 60
 MOVESPEED2 = 120    # pixels/second
@@ -16,15 +18,6 @@ MOVESPEED4 = 480
 STEPSPEED = 30      # een waarde? lager is snellere stappen
 TURNDELAY = 7/60    # van een seconde
 VIEWSPEED = 8       # todo, deze moet nog aangepast worden
-
-UPKEY = pygame.K_UP
-DOWNKEY = pygame.K_DOWN
-LEFTKEY = pygame.K_LEFT
-RIGHTKEY = pygame.K_RIGHT
-MVSPEED1KEY1 = pygame.K_LCTRL
-MVSPEED1KEY2 = pygame.K_RCTRL
-MVSPEED3KEY1 = pygame.K_LSHIFT
-MVSPEED3KEY2 = pygame.K_RSHIFT
 
 
 class Direction(enum.Enum):
@@ -84,12 +77,12 @@ class Hero(pygame.sprite.Sprite):
         :param key_input: list van integers
         """
         self.movespeed = MOVESPEED2
-        if (key_input[MVSPEED1KEY1] or key_input[MVSPEED1KEY2]) and \
-           (key_input[MVSPEED3KEY1] or key_input[MVSPEED3KEY2]):
+        if (key_input[keys.MVSPEED1_1] or key_input[keys.MVSPEED1_2]) and \
+           (key_input[keys.MVSPEED3_1] or key_input[keys.MVSPEED3_2]):
             self.movespeed = MOVESPEED4
-        elif key_input[MVSPEED3KEY1] or key_input[MVSPEED3KEY2]:
+        elif key_input[keys.MVSPEED3_1] or key_input[keys.MVSPEED3_2]:
             self.movespeed = MOVESPEED3
-        elif key_input[MVSPEED1KEY1] or key_input[MVSPEED1KEY2]:
+        elif key_input[keys.MVSPEED1_1] or key_input[keys.MVSPEED1_2]:
             self.movespeed = MOVESPEED1
 
     def direction(self, key_input, dt):
@@ -99,25 +92,25 @@ class Hero(pygame.sprite.Sprite):
         :param dt: self.clock.tick(FPS)/1000.0
         """
         # Als je helemaal geen knoppen indrukt, ga dan in de stilstand pose.
-        if not (key_input[UPKEY] or key_input[DOWNKEY] or
-                key_input[LEFTKEY] or key_input[RIGHTKEY]):
+        if not (key_input[keys.UP] or key_input[keys.DOWN] or
+                key_input[keys.LEFT] or key_input[keys.RIGHT]):
             self.time_delay = 0
             self._stand()
             self._animate(dt)
 
-        if key_input[UPKEY]:
+        if key_input[keys.UP]:
             self.time_up += 1
         else:
             self.time_up = 0
-        if key_input[DOWNKEY]:
+        if key_input[keys.DOWN]:
             self.time_down += 1
         else:
             self.time_down = 0
-        if key_input[LEFTKEY]:
+        if key_input[keys.LEFT]:
             self.time_left += 1
         else:
             self.time_left = 0
-        if key_input[RIGHTKEY]:
+        if key_input[keys.RIGHT]:
             self.time_right += 1
         else:
             self.time_right = 0
@@ -157,8 +150,8 @@ class Hero(pygame.sprite.Sprite):
             self.last_direction = Direction.East
 
         # Als je een knop indrukt, en er is geen delay, beweeg dan in die richting.
-        if key_input[UPKEY] or key_input[DOWNKEY] or \
-           key_input[LEFTKEY] or key_input[RIGHTKEY]:
+        if key_input[keys.UP] or key_input[keys.DOWN] or \
+           key_input[keys.LEFT] or key_input[keys.RIGHT]:
             if self.time_delay > 0:
                 self.time_delay -= 1 * dt
             else:

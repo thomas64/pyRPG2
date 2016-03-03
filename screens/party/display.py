@@ -5,6 +5,7 @@ class: Screen
 
 import pygame
 
+import keys
 import screens.party.herobox
 import screens.party.infobox
 import screens.party.invclickbox
@@ -23,9 +24,6 @@ NEXTLBL = "Next"
 
 CLICKBUTTON = 1
 SCROLLBUTTONS = 4, 5
-CLOSEKEY = pygame.K_ESCAPE
-PREVKEY = pygame.K_q
-NEXTKEY = pygame.K_w
 
 CLOSEX, CLOSEY = -90, 10    # negatieve x omdat de positie van rechts bepaald wordt.
 PREVX, PREVY = -90, 45
@@ -69,9 +67,9 @@ class Display(object):
 
     def _init_buttons(self):
         bg_width = self.background.get_width()
-        button_c = screens.sprites.ButtonSprite(BTNWIDTH, BTNHEIGHT, (bg_width + CLOSEX, CLOSEY), CLOSELBL, CLOSEKEY)
-        button_q = screens.sprites.ButtonSprite(BTNWIDTH, BTNHEIGHT, (bg_width + PREVX, PREVY), PREVLBL, PREVKEY)
-        button_w = screens.sprites.ButtonSprite(BTNWIDTH, BTNHEIGHT, (bg_width + NEXTX, NEXTY), NEXTLBL, NEXTKEY)
+        button_c = screens.sprites.ButtonSprite(BTNWIDTH, BTNHEIGHT, (bg_width + CLOSEX, CLOSEY), CLOSELBL, keys.EXIT)
+        button_q = screens.sprites.ButtonSprite(BTNWIDTH, BTNHEIGHT, (bg_width + PREVX, PREVY), PREVLBL, keys.PREV)
+        button_w = screens.sprites.ButtonSprite(BTNWIDTH, BTNHEIGHT, (bg_width + NEXTX, NEXTY), NEXTLBL, keys.NEXT)
         self.buttons = (button_c, button_q, button_w)
 
     def _init_boxes(self):
@@ -161,12 +159,12 @@ class Display(object):
 
             for button in self.buttons:
                 button_press = button.single_click(event)
-                if button_press == CLOSEKEY:
-                    return CLOSEKEY                 # alleen de closekey returned een waarde
-                elif button_press == PREVKEY:
+                if button_press == keys.EXIT:
+                    return keys.EXIT                # alleen de closekey returned een waarde
+                elif button_press == keys.PREV:
                     self._previous()
                     break
-                elif button_press == NEXTKEY:
+                elif button_press == keys.NEXT:
                     self._next()
                     break
             return                                  # als het niet de CLOSE button is, return niets.
@@ -187,11 +185,11 @@ class Display(object):
             self.invclick_box = None
         self.info_label = ""
 
-        if event.key == CLOSEKEY:
-            return CLOSEKEY
-        elif event.key == PREVKEY:
+        if event.key == keys.EXIT:
+            return keys.EXIT
+        elif event.key == keys.PREV:
             self._previous()
-        elif event.key == NEXTKEY:
+        elif event.key == keys.NEXT:
             self._next()
         return
         # elif event.key == pygame.K_m:
