@@ -3,17 +3,12 @@
 ...
 """
 
-import os
-
 import pygame
 
-import console
 import keys
 import screens.menu.content
 import screens.menu.display
 import states
-
-SAVEPATH = 'savegame'
 
 
 class MenuManager(object):
@@ -30,7 +25,7 @@ class MenuManager(object):
         self.title = False
         self.animation = False
         self.last_item = 0
-        self.cur_item = 0        # todo, deze gaan gebruiken om de juiste menu selectie te doen.
+        self.cur_item = 0
 
     def open_menu(self, new_state):
         """
@@ -190,10 +185,7 @@ class MenuManager(object):
         self._main_menu_select_new_game()
 
     def _load_game_menu_delete_savefile(self, savefile):
-        # todo, nog niet tevreden over deze oplossing, om dit hier te hebben staan.
-        console.delete_gamedata()
-        filename = os.path.join(SAVEPATH, savefile)
-        os.remove(filename)
+        self.engine.delete_saved_data(savefile)
         self.menu_statemachine.pop(self.menu_statemachine)
         self._menu_select_load_game()
 

@@ -68,7 +68,7 @@ class GameEngine(object):
             self.playtime += self.dt
 
             self.currentstate = self.statemachine.peek()
-            self.handle_managers()
+            self.handle_states()
             self.handle_view()
             self.handle_audio()
             self.handle_multi_input()
@@ -78,9 +78,9 @@ class GameEngine(object):
                 self.handle_single_input(event)
             pygame.display.update()
 
-    def handle_managers(self):
+    def handle_states(self):
         """
-        ...
+        Handelt de verschillende states af op verschillende voorwaarden.
         """
         if self.currentstate == states.GameState.Menu:
             self.menu_manager.loop()
@@ -89,8 +89,7 @@ class GameEngine(object):
             if self.overworld is None:
                 self.overworld = screens.overworld.Overworld(self)
                 if self.loaded_save_game:
-                    loadsave.Dialog(self).load(self.loaded_save_game)
-                    self.loaded_save_game = None
+                    self.load_saved_data()
 
     def handle_view(self):
         """
@@ -158,6 +157,20 @@ class GameEngine(object):
 
         if self.currentstate == states.GameState.Menu:
             self.menu_manager.handle_single_input(event)
+
+    def load_saved_data(self):
+        """
+        Laadt opgeslagen spel data.
+        """
+        loadsave.Dialog(self).load(self.loaded_save_game)
+        self.loaded_save_game = None
+
+    def delete_saved_data(self, savefile):
+        """
+        Verwijdert opgeslagen speldata.
+        :param savefile: bestandsnaam die verwijdert moet worden
+        """
+        loadsave.Dialog(self).delete(savefile)
 
     @staticmethod
     def _kill_game():
