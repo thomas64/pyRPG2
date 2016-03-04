@@ -5,6 +5,8 @@ class: InvClickBox
 
 import pygame
 
+import keys
+
 BACKGROUNDCOLOR = pygame.Color("black")
 LINECOLOR = pygame.Color("white")
 
@@ -26,8 +28,6 @@ FONTCOLOR = pygame.Color("white")
 FONT = 'impact'
 NORMALFONTSIZE = 15
 
-SCROLLUP = 4
-SCROLLDOWN = 5
 SCROLLSPEED = 17
 
 BLACK = 'resources/sprites/black.png'
@@ -155,9 +155,9 @@ class InvClickBox(object):
         Registreert of scrolwiel gebruikt wordt. Verplaatst de layer dan omhoog of omlaag.
         :param event: pygame.MOUSEBUTTONDOWN uit engine.py
         """
-        if event.button == SCROLLUP:
+        if event.button == keys.SCROLLUP:
             if self.layer_offset < 0:
                 self.layer_offset += SCROLLSPEED
-        elif event.button == SCROLLDOWN:
+        elif event.button == keys.SCROLLDOWN:
             if self.layer_offset > (self.rect.height - self.layer_height):
                 self.layer_offset -= SCROLLSPEED

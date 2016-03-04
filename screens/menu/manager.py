@@ -3,14 +3,17 @@
 ...
 """
 
+import os
+
 import pygame
 
+import console
 import keys
 import screens.menu.content
 import screens.menu.display
-# import screens.loadsave
-# import screens.overworld
 import states
+
+SAVEPATH = 'savegame'
 
 
 class MenuManager(object):
@@ -169,7 +172,9 @@ class MenuManager(object):
         self.menu_statemachine.push(states.MenuState.OptionsMenu)
 
     def _main_menu_select_new_game(self):
+        self.scr_capt = None
         self.menu = None
+        self.engine.overworld = None
         self.menu_statemachine.clear()
         self.engine.statemachine.change(states.GameState.Overworld)
 
@@ -179,6 +184,18 @@ class MenuManager(object):
     def _load_game_menu_select_back(self):
         self.menu = None
         self.menu_statemachine.pop(self.menu_currentstate)
+
+    def _load_game_menu_select_savefile(self, savefile):
+        self.engine.loaded_save_game = savefile
+        self._main_menu_select_new_game()
+
+    def _load_game_menu_delete_savefile(self, savefile):
+        # todo, nog niet tevreden over deze oplossing, om dit hier te hebben staan.
+        console.delete_gamedata()
+        filename = os.path.join(SAVEPATH, savefile)
+        os.remove(filename)
+        self.menu_statemachine.pop(self.menu_statemachine)
+        self._menu_select_load_game()
 
     def _options_menu_select_music(self):
         # todo, ipv switch net zoals delete savefile doen? volledig opnieuw laden?
@@ -211,22 +228,6 @@ class MenuManager(object):
         self.last_item = -1
 
 ########################################################################################################################
-
-    def _load_game_menu_select_savefile(self, savefile):
-        dialog = screens.loadsave.Dialog(self)
-        self.overworld = screens.overworld.Overworld(self)                    # laad de overworld alvast
-        if dialog.load(savefile) is None:
-            self.overworld = None                                             # toch niet
-        else:                                                                 # geef dan data mee aan de overworld
-            self.audio.play_sound(self.audio.select)
-            self.menu = None
-            self.statemachine.change(states.GameState.Overworld)
-
-    def _load_game_menu_delete_savefile(self, savefile):
-        dialog = screens.loadsave.Dialog(self)
-        dialog.delete(savefile)
-        self.statemachine.pop(self.currentstate)
-        self._show_load_game_menu()
 
     def _pause_menu_select_save_game(self):
         dialog = screens.loadsave.Dialog(self)

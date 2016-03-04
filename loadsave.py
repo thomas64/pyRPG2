@@ -65,13 +65,3 @@ class Dialog(object):
             filename = None
         self.root.destroy()
         return filename
-
-    @staticmethod
-    def delete(filename):
-        """
-        Delete een opgeslagen spelbestand.
-        :param filename: het gekozen bestandsnaam uit de lijst
-        """
-        console.delete_gamedata()
-        filename = os.path.join(SAVEPATH, filename)
-        os.remove(filename)

@@ -1,6 +1,6 @@
 
 """
-...
+Alle keys uit het spel
 """
 
 import pygame
@@ -35,3 +35,5 @@ PREV = pygame.K_q
 NEXT = pygame.K_w
 
 LEFTCLICK = 1
+SCROLLUP = 4
+SCROLLDOWN = 5

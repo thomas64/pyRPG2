@@ -10,6 +10,7 @@ import audio
 import console
 import data
 import keys
+import loadsave
 import screens.menu.manager
 import screens.overworld
 import states
@@ -51,6 +52,8 @@ class GameEngine(object):
         self.key_input = None
         self.mouse_input = None
 
+        self.loaded_save_game = None
+
         self.show_debug = False
 
     def main_loop(self):
@@ -81,12 +84,13 @@ class GameEngine(object):
         """
         if self.currentstate == states.GameState.Menu:
             self.menu_manager.loop()
-            if self.menu_manager.menu_currentstate == states.MenuState.MainMenu:
-                self.overworld = None
 
         elif self.currentstate == states.GameState.Overworld:
             if self.overworld is None:
                 self.overworld = screens.overworld.Overworld(self)
+                if self.loaded_save_game:
+                    loadsave.Dialog(self).load(self.loaded_save_game)
+                    self.loaded_save_game = None
 
     def handle_view(self):
         """
@@ -105,8 +109,8 @@ class GameEngine(object):
         Geeft de juiste muziek en achtergrond geluiden weer.
         """
         audio_state_is_changed = self.statemachine.has_audio_state_changed()
-        self.audio.handle_music(self.currentstate, audio_state_is_changed)
-        self.audio.handle_bg_sounds(self.currentstate, audio_state_is_changed)
+        # self.audio.handle_music(self.currentstate, audio_state_is_changed)
+        # self.audio.handle_bg_sounds(self.currentstate, audio_state_is_changed)
 
     def handle_multi_input(self):
         """
@@ -178,7 +182,8 @@ class GameEngine(object):
                 "scr_capt:          {}".format(self.menu_manager.scr_capt),
                 "cur_item:          {}".format(self.menu_manager.cur_item),
                 "last_item:         {}".format(self.menu_manager.last_item),
-                "mouse_input:       {}".format(self.mouse_input)
+                "mouse_input:       {}".format(self.mouse_input),
+                "loaded_save_game   {}".format(self.loaded_save_game)
             )
             try:
                 hero = self.overworld.window.hero

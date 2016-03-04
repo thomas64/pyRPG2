@@ -62,6 +62,16 @@ class StateMachine(object):
         except IndexError:
             return None     # empty stack
 
+    def deep_peek(self):
+        """
+        Geeft de enerlaatste uit de stack terug.
+        :return: None als die enerlaatste niet bestaat
+        """
+        try:
+            return self.statestack[-2]
+        except IndexError:
+            return None
+
     def pop(self, state):
         """
         Returns the current state and remove it from the stack.
