@@ -39,8 +39,8 @@ class Dialog(object):
             console.load_gamedata()
             with open(filename, 'rb') as f:
                 (self.engine.data,
-                 self.engine.overworld.window.hero.rect,
-                 self.engine.overworld.window.hero.last_direction) = pickle.load(f)
+                 self.engine.gamestate.peek().window.hero.rect,
+                 self.engine.gamestate.peek().window.hero.last_direction) = pickle.load(f)
         except (pickle.UnpicklingError, EOFError):
             console.corrupt_gamedata()
             filename = None
