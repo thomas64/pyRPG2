@@ -92,45 +92,6 @@ class Display(object):
         """
         print(str(self.name) + " on_exit")
 
-    def update(self, dt):
-        """
-        Update de achtergrond animatie.
-        :param dt: self.clock.tick(FPS)/1000.0
-        """
-        if self.animation:
-            self.animation.update(dt)
-
-    def render(self):
-        """
-        Reset eerst alle kleuren.
-        Zet dan de geselecteerde op een andere kleur.
-        Teken de (overworld screencapture) -> achtergrond -> (titel) -> menuitems.
-        """
-        for item in self.menu_texts:
-            item.set_font_color(self.color1)
-        self.menu_texts[self.cur_item].set_font_color(self.color2)
-
-        self.screen.blit(self.background, (0, 0))
-
-        if self.animation:
-            self.animation.render(self.screen)
-
-        if self.title:
-            self.title.draw(self.screen)
-
-        for item in self.menu_texts:
-            self.screen.blit(item.label, item.position)
-
-    # noinspection PyMethodMayBeStatic
-    def multi_input(self, key_input, mouse_pos, dt):
-        """
-        Handelt de ingedrukt-houden muis en keyboard input af.
-        :param key_input: pygame.key.get_pressed()
-        :param mouse_pos: pygame.mouse.get_pos()
-        :param dt: self.clock.tick(FPS)/1000.0
-        """
-        pass
-
     def single_input(self, event):
         """
         Geef de key van het geselecteerde menuitem terug aan het spel.
@@ -174,3 +135,42 @@ class Display(object):
             elif event.key == keys.EXIT:
                 self.audio.play_sound(self.audio.select)
                 self.menu_content.on_exit()
+
+    # noinspection PyMethodMayBeStatic
+    def multi_input(self, key_input, mouse_pos, dt):
+        """
+        Handelt de ingedrukt-houden muis en keyboard input af.
+        :param key_input: pygame.key.get_pressed()
+        :param mouse_pos: pygame.mouse.get_pos()
+        :param dt: self.clock.tick(FPS)/1000.0
+        """
+        pass
+
+    def update(self, dt):
+        """
+        Update de achtergrond animatie.
+        :param dt: self.clock.tick(FPS)/1000.0
+        """
+        if self.animation:
+            self.animation.update(dt)
+
+    def render(self):
+        """
+        Reset eerst alle kleuren.
+        Zet dan de geselecteerde op een andere kleur.
+        Teken de (overworld screencapture) -> achtergrond -> (titel) -> menuitems.
+        """
+        for item in self.menu_texts:
+            item.set_font_color(self.color1)
+        self.menu_texts[self.cur_item].set_font_color(self.color2)
+
+        self.screen.blit(self.background, (0, 0))
+
+        if self.animation:
+            self.animation.render(self.screen)
+
+        if self.title:
+            self.title.draw(self.screen)
+
+        for item in self.menu_texts:
+            self.screen.blit(item.label, item.position)

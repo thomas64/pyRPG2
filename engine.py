@@ -129,27 +129,24 @@ class GameEngine(object):
                 "FPS:               {:.2f}".format(self.clock.get_fps()),
                 "dt:                {:.3f}".format(self.dt),
                 "playtime:          {:.2f}".format(self.playtime),
-                "clock:             {}".format(self.clock),
                 "timer:             {}".format(self.timer),
                 "",
-                # "currenstate:       {}".format(self.currentstate),
-                # "menu_cur_state:    {}".format(self.menu_manager.menu_currentstate),
-                # "menu_manager:      {}".format(self.menu_manager),
-                # "menu:              {}".format(self.menu_manager.menu),
-                # "overworld:         {}".format(self.overworld),
-                # "scr_capt:          {}".format(self.menu_manager.scr_capt),
-                # "cur_item:          {}".format(self.menu_manager.cur_item),
-                # "last_item:         {}".format(self.menu_manager.last_item),
-                # "mouse_input:       {}".format(self.mouse_input),
-                # "loaded_save_game   {}".format(self.loaded_save_game)
+                "mouse_input:       {}".format(self.mouse_input),
+                ""
             )
             try:
-                hero = self.overworld.window.hero
                 text2 = (
-                    "",
-                    "partyscreen:       {}".format(self.overworld.partyscreen),
-                    "",
-                    "zoom:              {:.1f}".format(self.overworld.window.map1.map_layer.zoom),
+                    "menu_name:         {}".format(self.gamestate.peek().name),
+                    "cur_item:          {}".format(self.gamestate.peek().cur_item),
+                    "scr_capt:          {}".format(self.gamestate.peek().scr_capt)
+                )
+                text += text2
+            except AttributeError:
+                pass
+            try:
+                hero = self.gamestate.peek().window.hero
+                text2 = (
+                    "zoom:              {:.1f}".format(self.gamestate.peek().window.map1.map_layer.zoom),
                     "time_up:           {}".format(hero.time_up),
                     "time_down:         {}".format(hero.time_down),
                     "time_left:         {}".format(hero.time_left),
@@ -176,15 +173,15 @@ class GameEngine(object):
                 pass
             try:
                 import screens.party.invclickbox
-                text3 = (
+                text2 = (
                     "",
                     "max_box_height     {}".format(screens.party.invclickbox.MAXBOXHEIGHT),
-                    "layer_height       {}".format(self.overworld.partyscreen.invclick_box.layer_height)
+                    "layer_height       {}".format(self.gamestate.peek().invclick_box.layer_height)
                 )
-                text += text3
+                text += text2
             except AttributeError:
                 pass
-            text4 = (
+            text2 = (
                 "",
                 "StateStack:",
                 ""
@@ -193,18 +190,8 @@ class GameEngine(object):
             for state in self.gamestate.statestack:
                 textb.append(str(state))
             textb.reverse()
-            text4 += tuple(textb)
-            # text4 += (
-            #     "",
-            #     "Menu StateStack:",
-            #     ""
-            # )
-            # textb = []
-            # for state in self.menu_manager.menu_statemachine.statestack:
-            #     textb.append(str(state))
-            # textb.reverse()
-            # text4 += tuple(textb)
-            text += text4
+            text2 += tuple(textb)
+            text += text2
 
             pygame.gfxdraw.box(self.screen, DEBUGRECT, DEBUGRECTCOLOR)
             for count, line in enumerate(text):

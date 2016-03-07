@@ -164,10 +164,10 @@ class Overworld(object):
         push_object = screens.menu.manager.create_menu(screens.menu.manager.MenuItems.PauseMenu, self.engine)
         self.engine.gamestate.push(push_object)
 
-    # def _show_party_screen(self):
-    #     self.engine.statemachine.push(states.GameState.PartyScreen)
-    #     self.partyscreen = screens.party.display.Display(self.screen, self.engine.data)
-    #
+    def _show_party_screen(self):
+        push_object = screens.party.display.Display(self.screen, self.engine.data)
+        self.engine.gamestate.push(push_object)
+
     # def _close_party_screen(self):
     #     self.engine.statemachine.pop(self.engine.currentstate)
     #     self.partyscreen = None

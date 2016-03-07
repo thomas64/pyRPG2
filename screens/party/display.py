@@ -22,9 +22,6 @@ CLOSELBL = "Close"
 PREVLBL = "Previous"
 NEXTLBL = "Next"
 
-CLICKBUTTON = 1
-SCROLLBUTTONS = 4, 5
-
 CLOSEX, CLOSEY = -90, 10    # negatieve x omdat de positie van rechts bepaald wordt.
 PREVX, PREVY = -90, 45
 NEXTX, NEXTY = -90, 80
@@ -84,7 +81,88 @@ class Display(object):
         self.inventory_box = screens.party.inventorybox.InventoryBox((INVBOXX, INVBOXY))  # zelf, de positie zit in deze
         pygame.draw.rect(self.background, LINECOLOR, (SPELBOXX, SPELBOXY, 315, 670), 1)   # class, moet dat anders?
 
-    def handle_view(self):
+    def single_input(self, event):
+
+        if event.type == pygame.MOUSEMOTION:
+
+            if self.stats_box.rect.collidepoint(event.pos):
+                self.info_label = self.stats_box.mouse_hover(event)
+            elif self.skills_box.rect.collidepoint(event.pos):
+                self.info_label = self.skills_box.mouse_hover(event)
+            elif self.inventory_box.rect.collidepoint(event.pos):
+                self.info_label = self.inventory_box.mouse_hover(event, self.cur_hero)
+
+
+        elif event.type == pygame.MOUSEBUTTONDOWN:
+
+            if event.button == keys.LEFTCLICK:
+
+                # als de clickbox er is en er wordt buiten geklikt, laat hem dan verdwijnen.
+                if self.invclick_box and not self.invclick_box.rect.collidepoint(event.pos):
+                    self.invclick_box = None
+
+                for hero_box in self.hero_boxes:
+                    self.hc = hero_box.mouse_click(event, self.hc)
+
+                # als er in de inventory box wordt geklikt
+                if self.inventory_box.rect.collidepoint(event.pos):
+                    # krijg de positie en equipment_type terug
+                    boxpos, equipment_type = self.inventory_box.mouse_click(event, self.cur_hero)
+                    # als er geen clickbox is en wel een equipment_type, geef dan een clickbox weer
+                    if not self.invclick_box and equipment_type:
+                        self.invclick_box = screens.party.invclickbox.InvClickBox(
+                                                                        boxpos, equipment_type, self.party, self.inventory)
+
+                for button in self.buttons:
+                    button_press = button.single_click(event)
+                    if button_press == keys.EXIT:
+                        return keys.EXIT                # alleen de closekey returned een waarde
+                    elif button_press == keys.PREV:
+                        self._previous()
+                        break
+                    elif button_press == keys.NEXT:
+                        self._next()
+                        break
+                return                                  # als het niet de CLOSE button is, return niets.
+
+            elif event.button in (keys.SCROLLUP, keys.SCROLLDOWN):
+                if self.invclick_box and self.invclick_box.rect.collidepoint(event.pos):
+                    self.invclick_box.mouse_scroll(event)
+
+        elif event.type == pygame.KEYDOWN:
+
+            # als de clickbox er is en er wordt een toets gedrukt, laat hem dan verdwijnen.
+            if self.invclick_box:
+                self.invclick_box = None
+            self.info_label = ""
+
+            if event.key == keys.EXIT:
+                return keys.EXIT
+            elif event.key == keys.PREV:
+                self._previous()
+            elif event.key == keys.NEXT:
+                self._next()
+            return
+            # elif event.key == pygame.K_m:
+            #     self.party[0].lev.qty += 1
+
+    def handle_multi_input(self, key_input, mouse_pos):
+        """
+        Registreert of er op de buttons wordt geklikt. En zet dat om naar keyboard input.
+        Dit is alleen maar voor het visuele oplichten van de knoppen,
+        self.key_input wordt hier niet gebruikt voor input.
+        :param key_input: pygame.key.get_pressed()
+        :param mouse_pos: pygame.mouse.get_pos()
+        """
+        self.key_input = key_input
+
+        for button in self.buttons:
+            self.key_input = button.multi_click(mouse_pos, self.key_input)
+
+    def update(self):
+        pass
+
+    def render(self):
         """
         screen -> achtergond -> knoppen -> heroboxes -> verder
         """
@@ -108,92 +186,6 @@ class Display(object):
 
         # name2 = self.largefont.render(cur_hero.NAM, True, FONTCOLOR)   = voorbeeld van hoe een naam buiten een herobox
         # name2_rect = self.screen.blit(name2, (500, 300))
-
-    def handle_multi_input(self, key_input, mouse_pos):
-        """
-        Registreert of er op de buttons wordt geklikt. En zet dat om naar keyboard input.
-        Dit is alleen maar voor het visuele oplichten van de knoppen,
-        self.key_input wordt hier niet gebruikt voor input.
-        :param key_input: pygame.key.get_pressed()
-        :param mouse_pos: pygame.mouse.get_pos()
-        """
-        self.key_input = key_input
-
-        for button in self.buttons:
-            self.key_input = button.multi_click(mouse_pos, self.key_input)
-
-    def handle_single_mouse_motion(self, event):
-        """
-        Handelt mouse events af.
-        :param event: pygame.MOUSEMOTION uit engine.py
-        """
-        if self.stats_box.rect.collidepoint(event.pos):
-            self.info_label = self.stats_box.mouse_hover(event)
-        elif self.skills_box.rect.collidepoint(event.pos):
-            self.info_label = self.skills_box.mouse_hover(event)
-        elif self.inventory_box.rect.collidepoint(event.pos):
-            self.info_label = self.inventory_box.mouse_hover(event, self.cur_hero)
-
-    def handle_single_mouse_input(self, event):
-        """
-        Handelt mouse events af.
-        :param event: pygame.MOUSEBUTTONDOWN uit engine.py
-        """
-        if event.button == CLICKBUTTON:
-
-            # als de clickbox er is en er wordt buiten geklikt, laat hem dan verdwijnen.
-            if self.invclick_box and not self.invclick_box.rect.collidepoint(event.pos):
-                self.invclick_box = None
-
-            for hero_box in self.hero_boxes:
-                self.hc = hero_box.mouse_click(event, self.hc)
-
-            # als er in de inventory box wordt geklikt
-            if self.inventory_box.rect.collidepoint(event.pos):
-                # krijg de positie en equipment_type terug
-                boxpos, equipment_type = self.inventory_box.mouse_click(event, self.cur_hero)
-                # als er geen clickbox is en wel een equipment_type, geef dan een clickbox weer
-                if not self.invclick_box and equipment_type:
-                    self.invclick_box = screens.party.invclickbox.InvClickBox(
-                                                                    boxpos, equipment_type, self.party, self.inventory)
-
-            for button in self.buttons:
-                button_press = button.single_click(event)
-                if button_press == keys.EXIT:
-                    return keys.EXIT                # alleen de closekey returned een waarde
-                elif button_press == keys.PREV:
-                    self._previous()
-                    break
-                elif button_press == keys.NEXT:
-                    self._next()
-                    break
-            return                                  # als het niet de CLOSE button is, return niets.
-
-        elif event.button in SCROLLBUTTONS:
-            if self.invclick_box and self.invclick_box.rect.collidepoint(event.pos):
-                self.invclick_box.mouse_scroll(event)
-
-    def handle_single_keyboard_input(self, event):
-        """
-        Handelt keyboard events af. Deze methode wordt aangeroepen alleen door overworld.single_keyb_inp(),
-        en die wil een return terug.
-        :param event: pygame.KEYDOWN uit engine.py
-        :return: return niets, alleen met de closekey
-        """
-        # als de clickbox er is en er wordt een toets gedrukt, laat hem dan verdwijnen.
-        if self.invclick_box:
-            self.invclick_box = None
-        self.info_label = ""
-
-        if event.key == keys.EXIT:
-            return keys.EXIT
-        elif event.key == keys.PREV:
-            self._previous()
-        elif event.key == keys.NEXT:
-            self._next()
-        return
-        # elif event.key == pygame.K_m:
-        #     self.party[0].lev.qty += 1
 
     def _previous(self):
         self.hc -= 1
