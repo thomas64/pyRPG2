@@ -147,24 +147,6 @@ class Overworld(object):
         for button in self.buttons:
             button.draw(self.screen, self.key_input)
 
-    # def handle_view(self):
-    #     elif self.engine.currentstate == states.GameState.PartyScreen:
-    #         self.partyscreen.handle_view()
-
-    # def handle_multi_input(self, key_input, mouse_pos, dt):
-    #     elif self.engine.currentstate == states.GameState.PartyScreen:
-    #         self.partyscreen.handle_multi_input(key_input, mouse_pos)
-
-    # def handle_single_mouse_input(self, event):
-    #     elif self.engine.currentstate == states.GameState.PartyScreen:
-    #         if self.partyscreen.handle_single_mouse_input(event):       # alleen de ESC key returned een waarde
-    #             self._close_party_screen()
-
-    # def handle_single_keyboard_input(self, event):
-    #     elif self.engine.currentstate == states.GameState.PartyScreen:
-    #         if self.partyscreen.handle_single_keyboard_input(event) or event.key == keys.INV:
-    #             self._close_party_screen()
-
     def _show_pause_menu(self):
         self.engine.audio.play_sound(self.engine.audio.select)
 
@@ -172,9 +154,5 @@ class Overworld(object):
         self.engine.gamestate.push(push_object)
 
     def _show_party_screen(self):
-        push_object = screens.party.display.Display(self.screen, self.engine.data)
+        push_object = screens.party.display.Display(self.screen, self.engine)
         self.engine.gamestate.push(push_object)
-
-    # def _close_party_screen(self):
-    #     self.engine.statemachine.pop(self.engine.currentstate)
-    #     self.partyscreen = None

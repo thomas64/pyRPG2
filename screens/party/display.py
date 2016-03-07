@@ -41,20 +41,21 @@ class Display(object):
     """
     Overzicht scherm PartyScreen.
     """
-    def __init__(self, screen, data):
+    def __init__(self, screen, engine):
+        self.engine = engine
         self.screen = screen
         self.background = pygame.Surface(self.screen.get_size())
         self.background.fill(BACKGROUNDCOLOR)
         self.background = self.background.convert()
 
-        self.key_input = pygame.key.get_pressed()       # dit is voor de mousepress op een button.
+        self.key_input = pygame.key.get_pressed()           # dit is voor de mousepress op een button.
 
-        self.cur_hero = data.party['alagos']                 # todo, dit moet nog de hero die aan de beurt is worden
+        self.cur_hero = self.engine.data.party['alagos']    # todo, dit moet nog de hero die aan de beurt is worden
 
-        self.party = list(data.party.values())
+        self.party = list(self.engine.data.party.values())
         self.hc = self.party.index(self.cur_hero)
 
-        self.inventory = data.inventory
+        self.inventory = self.engine.data.inventory
 
         self._init_buttons()
         self._init_boxes()
@@ -135,14 +136,11 @@ class Display(object):
                 for button in self.buttons:
                     button_press = button.single_click(event)
                     if button_press == keys.EXIT:
-                        return keys.EXIT                # alleen de closekey returned een waarde
+                        self.engine.gamestate.pop()
                     elif button_press == keys.PREV:
                         self._previous()
-                        break
                     elif button_press == keys.NEXT:
                         self._next()
-                        break
-                return                                  # als het niet de CLOSE button is, return niets.
 
             elif event.button in (keys.SCROLLUP, keys.SCROLLDOWN):
                 if self.invclick_box and self.invclick_box.rect.collidepoint(event.pos):
@@ -155,13 +153,12 @@ class Display(object):
                 self.invclick_box = None
             self.info_label = ""
 
-            if event.key == keys.EXIT:
-                return keys.EXIT
+            if event.key in (keys.EXIT, keys.INV):
+                self.engine.gamestate.pop()
             elif event.key == keys.PREV:
                 self._previous()
             elif event.key == keys.NEXT:
                 self._next()
-            return
             # elif event.key == pygame.K_m:
             #     self.party[0].lev.qty += 1
 

@@ -86,10 +86,10 @@ class GameEngine(object):
         Handelt de muis en keyboard input af.
         :param event: pygame.event.get()
         """
-        if event.type == pygame.MOUSEBUTTONDOWN:
-            console.mouse_down(event.pos, event.button)
+        # if event.type == pygame.MOUSEBUTTONDOWN:          # todo, tijdelijk staan ze uit
+        #     console.mouse_down(event.pos, event.button)
         if event.type == pygame.KEYDOWN:
-            console.keyboard_down(event.key, event.unicode)
+            # console.keyboard_down(event.key, event.unicode)
 
             if event.key == keys.DEBUG:
                 # simple boolean swith
@@ -147,7 +147,8 @@ class GameEngine(object):
                 text2 = (
                     "menu_name:         {}".format(self.gamestate.peek().name),
                     "cur_item:          {}".format(self.gamestate.peek().cur_item),
-                    "scr_capt:          {}".format(self.gamestate.peek().scr_capt)
+                    "scr_capt:          {}".format(self.gamestate.peek().scr_capt),
+                    ""
                 )
                 text += text2
             except AttributeError:
@@ -175,7 +176,8 @@ class GameEngine(object):
                     "true_position.y:   {}".format(hero.true_position[1]),
                     "",
                     "step_count:        {}".format(hero.step_count),
-                    "step_animation:    {}".format(hero.step_animation)
+                    "step_animation:    {}".format(hero.step_animation),
+                    ""
                 )
                 text += text2
             except AttributeError:
@@ -184,13 +186,13 @@ class GameEngine(object):
                 import screens.party.invclickbox
                 text2 = (
                     "max_box_height     {}".format(screens.party.invclickbox.MAXBOXHEIGHT),
-                    "layer_height       {}".format(self.gamestate.peek().invclick_box.layer_height)
+                    "layer_height       {}".format(self.gamestate.peek().invclick_box.layer_height),
+                    ""
                 )
                 text += text2
             except AttributeError:
                 pass
             text2 = (
-                "",
                 "StateStack:",
                 ""
             )
