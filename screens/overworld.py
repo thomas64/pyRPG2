@@ -6,10 +6,10 @@ class: Overworld
 import pygame
 
 import keys
+import screens.menu.manager
 import screens.party.display
 import screens.sprites
 import screens.window
-import states
 
 
 WINDOWWIDTH = 800
@@ -77,47 +77,24 @@ class Overworld(object):
         # self.buttons = [button_view, button_up, button_down, button_left, button_right, button_cancel]
         self.buttons = [button_inv, button_up, button_down, button_left, button_right]
 
-    def handle_view(self):
+    def on_enter(self):
         """
-        Handel de view af in de window -> teken de achtergrond -> teken de window -> teken de buttons.
+        ...
         """
-        if self.engine.currentstate == states.GameState.Overworld:
+        print("on_enter")
 
-            self.window.handle_view()
-
-            self.screen.blit(self.background, (0, 0))
-            self.screen.blit(self.window.surface, WINDOWPOS)
-
-            for button in self.buttons:
-                button.draw(self.screen, self.key_input)
-
-        elif self.engine.currentstate == states.GameState.PartyScreen:
-            self.partyscreen.handle_view()
-
-    def handle_multi_input(self, key_input, mouse_pos, dt):
+    def on_exit(self):
         """
-        Registreert of er op de buttons wordt geklikt. En zet dat om naar keyboard input.
-        :param key_input: pygame.key.get_pressed()
-        :param mouse_pos: pygame.mouse.get_pos()
-        :param dt: self.clock.tick(FPS)/1000.0
+        ...
         """
-        if self.engine.currentstate == states.GameState.Overworld:
-            self.key_input = key_input
+        print("on_exit")
 
-            for button in self.buttons:
-                self.key_input = button.multi_click(mouse_pos, self.key_input)
-
-            self.window.handle_multi_input(self.key_input, dt)
-
-        elif self.engine.currentstate == states.GameState.PartyScreen:
-            self.partyscreen.handle_multi_input(key_input, mouse_pos)
-
-    def handle_single_mouse_input(self, event):
+    def single_input(self, event):
         """
-        Handelt mouse events af.
-        :param event: pygame.MOUSEBUTTONDOWN uit engine.py
+        ...
+        :param event:
         """
-        if self.engine.currentstate == states.GameState.Overworld:
+        if event.type == pygame.MOUSEBUTTONDOWN:
             if event.button == keys.LEFTCLICK:
                 for button in self.buttons:
                     button_press = button.single_click(event)
@@ -125,34 +102,72 @@ class Overworld(object):
                         self._show_party_screen()
                         break
 
-        elif self.engine.currentstate == states.GameState.PartyScreen:
-            if self.partyscreen.handle_single_mouse_input(event):       # alleen de ESC key returned een waarde
-                self._close_party_screen()
-
-    def handle_single_keyboard_input(self, event):
-        """
-        Handelt keyboard events af.
-        :param event: pygame.KEYDOWN uit engine.py
-        """
-        if self.engine.currentstate == states.GameState.Overworld:
+        elif event.type == pygame.KEYDOWN:
             if event.key == keys.INV:
                 self._show_party_screen()
             elif event.key == keys.EXIT:
                 self._show_pause_menu()
             self.window.handle_single_input(event)
 
-        elif self.engine.currentstate == states.GameState.PartyScreen:
-            if self.partyscreen.handle_single_keyboard_input(event) or event.key == keys.INV:
-                self._close_party_screen()
+    def multi_input(self, key_input, mouse_pos, dt):
+        """
+        Registreert of er op de buttons wordt geklikt. En zet dat om naar keyboard input.
+        :param key_input: pygame.key.get_pressed()
+        :param mouse_pos: pygame.mouse.get_pos()
+        :param dt: self.clock.tick(FPS)/1000.0
+        """
+        self.key_input = key_input
+
+        for button in self.buttons:
+            self.key_input = button.multi_click(mouse_pos, self.key_input)
+
+        self.window.handle_multi_input(self.key_input, dt)
+
+    # noinspection PyMissingOrEmptyDocstring
+    def update(self, dt):
+        pass
+
+    def render(self):
+        """
+        Handel de view af in de window -> teken de achtergrond -> teken de window -> teken de buttons.
+        """
+        self.window.handle_view()
+
+        self.screen.blit(self.background, (0, 0))
+        self.screen.blit(self.window.surface, WINDOWPOS)
+
+        for button in self.buttons:
+            button.draw(self.screen, self.key_input)
+
+
+    # def handle_view(self):
+    #     elif self.engine.currentstate == states.GameState.PartyScreen:
+    #         self.partyscreen.handle_view()
+
+    # def handle_multi_input(self, key_input, mouse_pos, dt):
+    #     elif self.engine.currentstate == states.GameState.PartyScreen:
+    #         self.partyscreen.handle_multi_input(key_input, mouse_pos)
+
+    # def handle_single_mouse_input(self, event):
+    #     elif self.engine.currentstate == states.GameState.PartyScreen:
+    #         if self.partyscreen.handle_single_mouse_input(event):       # alleen de ESC key returned een waarde
+    #             self._close_party_screen()
+
+    # def handle_single_keyboard_input(self, event):
+    #     elif self.engine.currentstate == states.GameState.PartyScreen:
+    #         if self.partyscreen.handle_single_keyboard_input(event) or event.key == keys.INV:
+    #             self._close_party_screen()
 
     def _show_pause_menu(self):
         self.engine.audio.play_sound(self.engine.audio.select)
-        self.engine.menu_manager.open_menu(states.MenuState.PauseMenu)
 
-    def _show_party_screen(self):
-        self.engine.statemachine.push(states.GameState.PartyScreen)
-        self.partyscreen = screens.party.display.Display(self.screen, self.engine.data)
+        push_object = screens.menu.manager.create_menu(screens.menu.manager.MenuItems.PauseMenu, self.engine)
+        self.engine.gamestate.push(push_object)
 
-    def _close_party_screen(self):
-        self.engine.statemachine.pop(self.engine.currentstate)
-        self.partyscreen = None
+    # def _show_party_screen(self):
+    #     self.engine.statemachine.push(states.GameState.PartyScreen)
+    #     self.partyscreen = screens.party.display.Display(self.screen, self.engine.data)
+    #
+    # def _close_party_screen(self):
+    #     self.engine.statemachine.pop(self.engine.currentstate)
+    #     self.partyscreen = None

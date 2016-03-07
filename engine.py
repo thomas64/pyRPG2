@@ -10,15 +10,14 @@ import audio
 import console
 import data
 import keys
-import loadsave
 import screens.menu.manager
-import screens.overworld
 import states
 
 # todo, magic numbers overal opruimen
 
 # todo, er gaat nog wat mis met sidestep als fps te hoog is, oorzaak onduidelijk.
-FPS = 6000        # minimaal 15, anders kan hij door bomen lopen. maximaal 110, anders sidestep raar.
+# minimaal 15, anders kan hij door bomen lopen. maximaal 110, anders sidestep raar.
+FPS = 6000
 
 DEBUGFONT = 'courier'
 DEBUGFONTSIZE = 11
@@ -33,7 +32,6 @@ class GameEngine(object):
     """
     def __init__(self):
         self.screen = pygame.display.get_surface()
-        self.statemachine = states.StateMachine()
         self.data = data.Data()
         self.audio = audio.Audio()
 
@@ -44,15 +42,11 @@ class GameEngine(object):
         self.dt = 0.0
         self.timer = 0.0
 
-        self.menu_manager = screens.menu.manager.MenuManager(self)
-        self.overworld = None   # todo, overworld moet self.gameplay(screen)? worden oid.
+        self.gamestate = states.StateMachine()
 
         self.debugfont = pygame.font.SysFont(DEBUGFONT, DEBUGFONTSIZE)
-        self.currentstate = None
         self.key_input = None
         self.mouse_input = None
-
-        self.loaded_save_game = None
 
         self.show_debug = False
 
@@ -61,116 +55,66 @@ class GameEngine(object):
         Start de game loop.
         """
         self.running = True
-        self.menu_manager.open_menu(states.MenuState.MainMenu)
+        # todo, het laden is nog erg zwaar, helemaal tweaken nog. komt door animatie? optimaliseren dus.
+        push_object = screens.menu.manager.create_menu(screens.menu.manager.MenuItems.MainMenu, self)
+        self.gamestate.push(push_object)
 
         while self.running:
-            self.dt = self.clock.tick(FPS)/1000.0       # limit the redraw speed to 60 frames per second
+            # limit the redraw speed to 60 frames per second
+            self.dt = self.clock.tick(FPS)/1000.0
             self.playtime += self.dt
 
-            self.currentstate = self.statemachine.peek()
-            self.handle_states()
-            self.handle_view()
-            self.handle_audio()
-            self.handle_multi_input()
             for event in pygame.event.get():
                 if event.type == pygame.QUIT:
                     self.running = False
-                self.handle_single_input(event)
+                self.single_input(event)
+            self.multi_input()
+            self.update()
+            self.render()
             pygame.display.update()
 
-    def handle_states(self):
+    def single_input(self, event):
         """
-        Handelt de verschillende states af op verschillende voorwaarden.
-        """
-        if self.currentstate == states.GameState.Menu:
-            self.menu_manager.loop()
-
-        elif self.currentstate == states.GameState.Overworld:
-            if self.overworld is None:
-                self.overworld = screens.overworld.Overworld(self)
-                if self.loaded_save_game:
-                    self.load_saved_data()
-
-    def handle_view(self):
-        """
-        Laat de weergave van de verschillende states zien.
-        """
-        if self.currentstate == states.GameState.Menu:
-            self.menu_manager.handle_view(self.dt)
-        elif self.currentstate == states.GameState.Overworld or \
-                self.currentstate == states.GameState.PartyScreen:
-            self.overworld.handle_view()
-
-        self._show_debug()
-
-    def handle_audio(self):
-        """
-        Geeft de juiste muziek en achtergrond geluiden weer.
-        """
-        audio_state_is_changed = self.statemachine.has_audio_state_changed()
-        # self.audio.handle_music(self.currentstate, audio_state_is_changed)
-        # self.audio.handle_bg_sounds(self.currentstate, audio_state_is_changed)
-
-    def handle_multi_input(self):
-        """
-        Handelt de ingedrukt-houden muis en keyboard input af.
-        Wordt op dit moment alleen maar gebruikt voor visuele oplichten van de buttons en character movement.
-        """
-        self.key_input = pygame.key.get_pressed()
-        self.mouse_input = None
-        if pygame.mouse.get_pressed()[0]:
-            self.mouse_input = pygame.mouse.get_pos()
-
-        if self.currentstate == states.GameState.Overworld or \
-           self.currentstate == states.GameState.PartyScreen:
-            self.overworld.handle_multi_input(self.key_input, self.mouse_input, self.dt)
-
-    def handle_single_input(self, event):
-        """
-        Handelt de muis en keyboard input af.
-        :param event: pygame.event.get()
+        ...
+        :param event:
         """
         if event.type == pygame.MOUSEBUTTONDOWN:
             console.mouse_down(event.pos, event.button)
         if event.type == pygame.KEYDOWN:
             console.keyboard_down(event.key, event.unicode)
 
-        if event.type == pygame.MOUSEBUTTONDOWN:
-            if self.currentstate == states.GameState.Overworld or \
-               self.currentstate == states.GameState.PartyScreen:
-                self.overworld.handle_single_mouse_input(event)
-
-        if event.type == pygame.MOUSEMOTION:
-            if self.currentstate == states.GameState.PartyScreen:
-                if self.overworld.partyscreen is not None:  # onverklaarbaar, anders kun je niet al muisbewegend, het
-                    self.overworld.partyscreen.handle_single_mouse_motion(event)    # partyscreen verlaten.
-
-        if event.type == pygame.KEYDOWN:
-            if self.currentstate == states.GameState.Overworld or \
-               self.currentstate == states.GameState.PartyScreen:
-                self.overworld.handle_single_keyboard_input(event)
-
             if event.key == keys.DEBUG:
-                self.show_debug ^= True                                             # simple boolean swith
+                # simple boolean swith
+                self.show_debug ^= True
             if event.key == keys.KILL:
-                self._kill_game()                           # todo, deze, de key en de methode moeten uiteindelijk weg
+                # todo, deze, de key en de methode moeten uiteindelijk weg
+                self._kill_game()
 
-        if self.currentstate == states.GameState.Menu:
-            self.menu_manager.handle_single_input(event)
+        self.gamestate.peek().single_input(event)
 
-    def load_saved_data(self):
+    def multi_input(self):
         """
-        Laadt opgeslagen spel data.
+        ...
         """
-        loadsave.Dialog(self).load(self.loaded_save_game)
-        self.loaded_save_game = None
+        self.key_input = pygame.key.get_pressed()
+        self.mouse_input = None
+        if pygame.mouse.get_pressed()[0]:
+            self.mouse_input = pygame.mouse.get_pos()
 
-    def delete_saved_data(self, savefile):
+        self.gamestate.peek().multi_input(self.key_input, self.mouse_input, self.dt)
+
+    def update(self):
         """
-        Verwijdert opgeslagen speldata.
-        :param savefile: bestandsnaam die verwijdert moet worden
+        ...
         """
-        loadsave.Dialog(self).delete(savefile)
+        self.gamestate.peek().update(self.dt)
+
+    def render(self):
+        """
+        ...
+        """
+        self.gamestate.peek().render()
+        self._show_debug()
 
     @staticmethod
     def _kill_game():
@@ -187,16 +131,16 @@ class GameEngine(object):
                 "clock:             {}".format(self.clock),
                 "timer:             {}".format(self.timer),
                 "",
-                "currenstate:       {}".format(self.currentstate),
-                "menu_cur_state:    {}".format(self.menu_manager.menu_currentstate),
-                "menu_manager:      {}".format(self.menu_manager),
-                "menu:              {}".format(self.menu_manager.menu),
-                "overworld:         {}".format(self.overworld),
-                "scr_capt:          {}".format(self.menu_manager.scr_capt),
-                "cur_item:          {}".format(self.menu_manager.cur_item),
-                "last_item:         {}".format(self.menu_manager.last_item),
-                "mouse_input:       {}".format(self.mouse_input),
-                "loaded_save_game   {}".format(self.loaded_save_game)
+                # "currenstate:       {}".format(self.currentstate),
+                # "menu_cur_state:    {}".format(self.menu_manager.menu_currentstate),
+                # "menu_manager:      {}".format(self.menu_manager),
+                # "menu:              {}".format(self.menu_manager.menu),
+                # "overworld:         {}".format(self.overworld),
+                # "scr_capt:          {}".format(self.menu_manager.scr_capt),
+                # "cur_item:          {}".format(self.menu_manager.cur_item),
+                # "last_item:         {}".format(self.menu_manager.last_item),
+                # "mouse_input:       {}".format(self.mouse_input),
+                # "loaded_save_game   {}".format(self.loaded_save_game)
             )
             try:
                 hero = self.overworld.window.hero
@@ -245,20 +189,20 @@ class GameEngine(object):
                 ""
             )
             textb = []
-            for state in self.statemachine.statestack:
+            for state in self.gamestate.statestack:
                 textb.append(str(state))
             textb.reverse()
             text4 += tuple(textb)
-            text4 += (
-                "",
-                "Menu StateStack:",
-                ""
-            )
-            textb = []
-            for state in self.menu_manager.menu_statemachine.statestack:
-                textb.append(str(state))
-            textb.reverse()
-            text4 += tuple(textb)
+            # text4 += (
+            #     "",
+            #     "Menu StateStack:",
+            #     ""
+            # )
+            # textb = []
+            # for state in self.menu_manager.menu_statemachine.statestack:
+            #     textb.append(str(state))
+            # textb.reverse()
+            # text4 += tuple(textb)
             text += text4
 
             pygame.gfxdraw.box(self.screen, DEBUGRECT, DEBUGRECTCOLOR)

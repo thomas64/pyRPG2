@@ -36,6 +36,7 @@ class Animation(object):
                           6: pygame.image.load(ANIMATION07).convert_alpha(),
                           7: pygame.image.load(ANIMATION08).convert_alpha(),
                           8: pygame.image.load(ANIMATION09).convert_alpha()}
+        self.current = None
 
         self.width = self.animation[0].get_width()
         self.height = self.animation[0].get_height()
@@ -51,10 +52,9 @@ class Animation(object):
         pos_y = (screen_height - self.height) / 2
         self.position = (pos_x, pos_y)
 
-    def animate(self, screen, dt):
+    def update(self, dt):
         """
         Bepaalt de snelheid aan de hand van deltatime en tekent de animatie.
-        :param screen: self.screen van de menuscreen
         :param dt: self.clock.tick(FPS)/1000.0
         """
         self.speed += dt * ANIMATIONSPEED
@@ -62,5 +62,10 @@ class Animation(object):
         if i >= len(self.animation):
             self.speed = 0
             i = 0
-        screen.blit(self.animation[i], self.position)
+        self.current = self.animation[i]
 
+    def render(self, screen):
+        """
+        :param screen: self.screen van de menuscreen
+        """
+        screen.blit(self.current, self.position)

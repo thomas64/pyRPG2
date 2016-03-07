@@ -4,6 +4,7 @@ class: Screen
 """
 
 import pygame
+import pygame.gfxdraw
 
 import keys
 import screens.menu.animation
@@ -12,10 +13,8 @@ import screens.menu.title
 
 BACKGROUNDCOLOR1 = pygame.Color("black")
 BACKGROUNDCOLOR2 = pygame.Color("white")
-BACKGROUNDTRANS = 224       # 1-255 hoger is zwarter
+BACKGROUNDTRANS = (0, 0, 0, 224)       # 1-255 hoger is zwarter
 
-MENUFONT = None             # todo, nog een ander font kiezen?
-MENUFONTSIZE = 50
 MENUFONTCOLOR1 = pygame.Color("white")
 MENUFONTCOLOR2 = pygame.Color("yellow")
 MENUFONTCOLOR3 = pygame.Color("black")
@@ -30,7 +29,7 @@ class Display(object):
     """
     Een menuscherm.
     """
-    def __init__(self, screen, audio, itemsmenu, title, animation, cur_item=0):
+    def __init__(self, screen, audio, menu_content, title, animation, scr_capt, cur_item=0):
         self.screen = screen
         self.background = pygame.Surface(self.screen.get_size())
         if animation:
@@ -57,11 +56,16 @@ class Display(object):
             self.animation = screens.menu.animation.Animation()
             self.animation.set_position(bg_width, bg_height)
 
-        self.menu_items = itemsmenu     # het object OrderedDict genaamd inside
-        self.menu_texts = []            # een list van MenuText objecten
-        for index, item in enumerate(self.menu_items):
-            menu_text = screens.menu.text.Text(item, index, MENUFONT, MENUFONTSIZE, self.color1)
-            t_h = len(self.menu_items) * menu_text.height                 # t_h: total height of text block
+        self.scr_capt = scr_capt
+        if self.scr_capt:
+            self.background.blit(self.scr_capt, (0, 0))         # gooi over het hele scherm de overworld achtergrond
+            pygame.gfxdraw.box(self.background, self.screen.get_rect(), BACKGROUNDTRANS) # en een doorzichtige laag
+
+        self.menu_content = menu_content                        # het object OrderedDict genaamd inside
+        self.menu_texts = []                                    # een list van MenuText objecten
+        for index, item in enumerate(self.menu_content):
+            menu_text = screens.menu.text.Text(item, index, self.color1)
+            t_h = len(self.menu_content) * menu_text.height     # t_h: total height of text block
             pos_x = (bg_width - menu_text.width) / 2
             pos_y = ((bg_height - t_h) / 2) + (menu_text.height * index * MENUH)
             if self.show_animation:
@@ -72,31 +76,45 @@ class Display(object):
             menu_text.rect.topleft = menu_text.position
             self.menu_texts.append(menu_text)
 
-        if cur_item == -1:      # als -1 wordt meegegeven als argument, selecteer dan de laatste
+        if cur_item == -1:                          # als -1 wordt meegegeven als argument, selecteer dan de laatste
             self.cur_item = len(self.menu_texts)-1
         else:
             self.cur_item = cur_item
 
-    def handle_view(self, dt, bg):
+    def on_enter(self):
+        """
+        ...
+        """
+        print("menu on_enter")
+
+    def on_exit(self):
+        """
+        ...
+        """
+        print("menu on_exit")
+
+    def update(self, dt):
+        """
+        ...
+        :param dt: self.clock.tick(FPS)/1000.0
+        """
+        if self.show_animation:
+            self.animation.update(dt)
+
+    def render(self):
         """
         Reset eerst alle kleuren.
         Zet dan de geselecteerde op een andere kleur.
         Teken de (overworld screencapture) -> achtergrond -> (titel) -> menuitems.
-        :param dt: self.clock.tick(FPS)/1000.0
-        :param bg: screen capture van de overworld
         """
         for item in self.menu_texts:
             item.set_font_color(self.color1)
         self.menu_texts[self.cur_item].set_font_color(self.color2)
 
-        if bg is not None:
-            self.screen.blit(bg, (0, 0))                    # gooi over het hele scherm de overworld achtergrond
-            self.background.set_alpha(BACKGROUNDTRANS)      # maak de zwarte 'background' transparant
-
         self.screen.blit(self.background, (0, 0))
 
         if self.show_animation:
-            self.animation.animate(self.screen, dt)
+            self.animation.render(self.screen)
 
         if self.show_title:
             self.title.draw(self.screen)
@@ -104,7 +122,15 @@ class Display(object):
         for item in self.menu_texts:
             self.screen.blit(item.label, item.position)
 
-    def handle_single_input(self, event):
+    def multi_input(self, key_input, mouse_pos, dt):
+        """
+        :param key_input:
+        :param mouse_pos:
+        :param dt:
+        """
+        pass
+
+    def single_input(self, event):
         """
         Geef de key van het geselecteerde menuitem terug aan het spel.
         :param event: pygame.event.get() uit engine.py
@@ -122,7 +148,7 @@ class Display(object):
                 for item in self.menu_texts:
                     if item.rect.collidepoint(event.pos):
                         self.audio.play_sound(self.audio.select)
-                        return item.func, keys.SELECT, self.cur_item
+                        self.menu_content.on_select(item, self.scr_capt)
 
         elif event.type == pygame.KEYDOWN:
             if event.key == keys.UP and self.cur_item > 0:
@@ -138,16 +164,12 @@ class Display(object):
                 self.audio.play_sound(self.audio.error)
                 self.cur_item = len(self.menu_texts) - 1
 
-            # todo, de 'enter' enzo iets met enum keystates oid oplossen.
-
             if event.key in keys.SELECT:
                 self.audio.play_sound(self.audio.select)
-                return self.menu_texts[self.cur_item].func, keys.SELECT, self.cur_item
+                self.menu_content.on_select(self.menu_texts[self.cur_item], self.scr_capt)
             elif event.key == keys.DELETE:
                 self.audio.play_sound(self.audio.select)
-                return self.menu_texts[self.cur_item].func, keys.DELETE, self.cur_item
+                self.menu_content.on_delete(self.menu_texts[self.cur_item].func, self.cur_item, self.scr_capt)
             elif event.key == keys.EXIT:
                 self.audio.play_sound(self.audio.select)
-                return self.menu_texts[self.cur_item].func, keys.EXIT, self.cur_item
-
-        return None, None, self.cur_item      # dit is voor als er niets geselecteerd wordt
+                self.menu_content.on_exit()
