@@ -1,6 +1,7 @@
 
 """
-...
+class: MenuItems
+function: create_menu
 """
 
 import enum
@@ -21,7 +22,7 @@ import screens.menu.title
 
 class MenuItems(enum.Enum):
     """
-    ...
+    Alle menu typen op een rij.
     """
     MainMenu = 1
     LoadMenu = 2
@@ -31,13 +32,13 @@ class MenuItems(enum.Enum):
 
 def create_menu(choice, engine, title=None, animation=None, scr_capt=None, select=None):
     """
-    ...
-    :param choice:
-    :param engine:
-    :param title:
-    :param animation:
-    :param scr_capt:
-    :param select:
+    Hier worden de verschillende eigenschappen van de verschillende menu's toegekend.
+    :param choice: Enum meny type
+    :param engine: self van GameEngine
+    :param title: menu Title Object
+    :param animation: een dict van afbeeldingen
+    :param scr_capt: een afbeelding
+    :param select: de voorgeslecteerde item
     """
     if choice == MenuItems.MainMenu:
         content = screens.menu.mainmenu.MainMenu(engine)
@@ -74,4 +75,5 @@ def create_menu(choice, engine, title=None, animation=None, scr_capt=None, selec
         scr_capt = pygame.image.frombuffer(scr_data, engine.screen.get_size(), 'RGBA').convert()
         select = 0
 
-    return screens.menu.display.Display(engine.screen, engine.audio, content, title, animation, scr_capt, select)
+    return screens.menu.display.Display(engine.screen, engine.audio, choice,
+                                        content, title, animation, scr_capt, select)

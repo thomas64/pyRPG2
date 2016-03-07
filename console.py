@@ -27,21 +27,21 @@ def state_push(state):
     StateMachine.push()
     :param state: Enum
     """
-    print("Game pushed {}".format(state))
+    print("Game pushed {} on stack.".format(state))
 
 
 def state_pop():
     """
     StateMachine.pop()
     """
-    print("Game popped top state.")
+    print("Game popped top state off stack.")
 
 
 def state_clear():
     """
     StateMachine.clear()
     """
-    print("Game cleared all states.")
+    print("Game cleared all states from stack.")
 
 
 def corrupt_options():

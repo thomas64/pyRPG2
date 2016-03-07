@@ -1,6 +1,6 @@
 
 """
-...
+Containters Package
 """
 
 from containers.inventory import Inventory

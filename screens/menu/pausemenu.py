@@ -48,7 +48,7 @@ class PauseMenu(screens.menu.basemenu.BaseMenu):
 
         elif menu_item.func == self.Options:
             push_object = screens.menu.manager.create_menu(screens.menu.manager.MenuItems.OptionsMenu, self.engine,
-                                                           title=False, animation=False, scr_capt=scr_capt)
+                                                           scr_capt=scr_capt)
             self.engine.gamestate.push(push_object)
 
         elif menu_item.func == self.MainMenu:

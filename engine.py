@@ -74,8 +74,8 @@ class GameEngine(object):
 
     def single_input(self, event):
         """
-        ...
-        :param event:
+        Handelt de muis en keyboard input af.
+        :param event: pygame.event.get()
         """
         if event.type == pygame.MOUSEBUTTONDOWN:
             console.mouse_down(event.pos, event.button)
@@ -93,7 +93,8 @@ class GameEngine(object):
 
     def multi_input(self):
         """
-        ...
+        Handelt de ingedrukt-houden muis en keyboard input af.
+        Wordt op dit moment alleen maar gebruikt voor visuele oplichten van de buttons en character movement.
         """
         self.key_input = pygame.key.get_pressed()
         self.mouse_input = None
@@ -104,13 +105,14 @@ class GameEngine(object):
 
     def update(self):
         """
-        ...
+        Update de waarden van de bovenste state.
         """
         self.gamestate.peek().update(self.dt)
 
     def render(self):
         """
-        ...
+        Laat de weergave van de bovenste states zien.
+        En de debugscherm.
         """
         self.gamestate.peek().render()
         self._show_debug()

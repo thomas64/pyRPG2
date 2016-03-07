@@ -1,15 +1,14 @@
 
 """
-class: Screen
+class: Display
 """
 
 import pygame
 import pygame.gfxdraw
 
 import keys
-import screens.menu.animation
+import screens.menu.manager
 import screens.menu.text
-import screens.menu.title
 
 BACKGROUNDCOLOR1 = pygame.Color("black")
 BACKGROUNDCOLOR2 = pygame.Color("white")
@@ -29,7 +28,7 @@ class Display(object):
     """
     Een menuscherm.
     """
-    def __init__(self, screen, audio, menu_content, title, animation, scr_capt, cur_item=0):
+    def __init__(self, screen, audio, menu_name, menu_content, title, animation, scr_capt, cur_item=0):
         self.screen = screen
         self.background = pygame.Surface(self.screen.get_size())
         if animation:
@@ -46,7 +45,7 @@ class Display(object):
         bg_height = self.background.get_height()
 
         self.audio = audio
-
+        self.name = menu_name
         self.title = title
 
         self.animation = animation
@@ -80,19 +79,22 @@ class Display(object):
 
     def on_enter(self):
         """
-        ...
+        Wanneer deze state op de stack komt, voer dit uit.
+        Op dit moment nog niets echts.
         """
-        print("menu on_enter")
+        if self.name == screens.menu.manager.MenuItems.MainMenu:
+            print(str(self.name) + " on_enter")
 
     def on_exit(self):
         """
-        ...
+        Wanneer deze state onder een andere state van de stack komt, voer dit uit.
+        Op dit moment nog niets echts
         """
-        print("menu on_exit")
+        print(str(self.name) + " on_exit")
 
     def update(self, dt):
         """
-        ...
+        Update de achtergrond animatie.
         :param dt: self.clock.tick(FPS)/1000.0
         """
         if self.animation:
@@ -119,11 +121,13 @@ class Display(object):
         for item in self.menu_texts:
             self.screen.blit(item.label, item.position)
 
+    # noinspection PyMethodMayBeStatic
     def multi_input(self, key_input, mouse_pos, dt):
         """
-        :param key_input:
-        :param mouse_pos:
-        :param dt:
+        Handelt de ingedrukt-houden muis en keyboard input af.
+        :param key_input: pygame.key.get_pressed()
+        :param mouse_pos: pygame.mouse.get_pos()
+        :param dt: self.clock.tick(FPS)/1000.0
         """
         pass
 
