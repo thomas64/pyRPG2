@@ -40,6 +40,8 @@ def create_menu(choice, engine, title=None, animation=None, scr_capt=None, selec
     :param scr_capt: een afbeelding
     :param select: de voorgeslecteerde item
     """
+    content = None
+
     if choice == MenuItems.MainMenu:
         content = screens.menu.mainmenu.MainMenu(engine)
         title = screens.menu.title.Title()

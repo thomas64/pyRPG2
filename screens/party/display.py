@@ -81,7 +81,27 @@ class Display(object):
         self.inventory_box = screens.party.inventorybox.InventoryBox((INVBOXX, INVBOXY))  # zelf, de positie zit in deze
         pygame.draw.rect(self.background, LINECOLOR, (SPELBOXX, SPELBOXY, 315, 670), 1)   # class, moet dat anders?
 
+    # noinspection PyMethodMayBeStatic
+    def on_enter(self):
+        """
+        Wanneer deze state op de stack komt, voer dit uit.
+        Op dit moment nog niets echts.
+        """
+        pass
+
+    # noinspection PyMethodMayBeStatic
+    def on_exit(self):
+        """
+        Wanneer deze state onder een andere state van de stack komt, voer dit uit.
+        Op dit moment nog niets echts
+        """
+        pass
+
     def single_input(self, event):
+        """
+        Handelt de muis en keyboard input af.
+        :param event: pygame.event.get()
+        """
 
         if event.type == pygame.MOUSEMOTION:
 
@@ -91,7 +111,6 @@ class Display(object):
                 self.info_label = self.skills_box.mouse_hover(event)
             elif self.inventory_box.rect.collidepoint(event.pos):
                 self.info_label = self.inventory_box.mouse_hover(event, self.cur_hero)
-
 
         elif event.type == pygame.MOUSEBUTTONDOWN:
 
@@ -111,7 +130,7 @@ class Display(object):
                     # als er geen clickbox is en wel een equipment_type, geef dan een clickbox weer
                     if not self.invclick_box and equipment_type:
                         self.invclick_box = screens.party.invclickbox.InvClickBox(
-                                                                        boxpos, equipment_type, self.party, self.inventory)
+                                                                    boxpos, equipment_type, self.party, self.inventory)
 
                 for button in self.buttons:
                     button_press = button.single_click(event)
@@ -146,20 +165,27 @@ class Display(object):
             # elif event.key == pygame.K_m:
             #     self.party[0].lev.qty += 1
 
-    def handle_multi_input(self, key_input, mouse_pos):
+    # noinspection PyUnusedLocal
+    def multi_input(self, key_input, mouse_pos, dt):
         """
         Registreert of er op de buttons wordt geklikt. En zet dat om naar keyboard input.
         Dit is alleen maar voor het visuele oplichten van de knoppen,
         self.key_input wordt hier niet gebruikt voor input.
         :param key_input: pygame.key.get_pressed()
         :param mouse_pos: pygame.mouse.get_pos()
+        :param dt: self.clock.tick(FPS)/1000.0
         """
         self.key_input = key_input
 
         for button in self.buttons:
             self.key_input = button.multi_click(mouse_pos, self.key_input)
 
-    def update(self):
+    # noinspection PyMethodMayBeStatic
+    def update(self, dt):
+        """
+        Update de waarden van de bovenste state.
+        :param dt: self.clock.tick(FPS)/1000.0
+        """
         pass
 
     def render(self):

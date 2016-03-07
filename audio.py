@@ -9,7 +9,7 @@ import pickle
 import pygame
 
 import console
-import states
+# import states
 
 
 OPTIONSPATH = 'options'

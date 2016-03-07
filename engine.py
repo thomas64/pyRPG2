@@ -11,7 +11,7 @@ import console
 import data
 import keys
 import screens.menu.manager
-import states
+import statemachine
 
 # todo, magic numbers overal opruimen
 
@@ -42,7 +42,7 @@ class GameEngine(object):
         self.dt = 0.0
         self.timer = 0.0
 
-        self.gamestate = states.StateMachine()
+        self.gamestate = statemachine.StateMachine()
 
         self.debugfont = pygame.font.SysFont(DEBUGFONT, DEBUGFONTSIZE)
         self.key_input = None
@@ -71,6 +71,15 @@ class GameEngine(object):
             self.update()
             self.render()
             pygame.display.update()
+
+    # todo, audio oplossen
+    def handle_audio(self):
+        """
+        Geeft de juiste muziek en achtergrond geluiden weer.
+        """
+        audio_state_is_changed = self.statemachine.has_audio_state_changed()
+        self.audio.handle_music(self.currentstate, audio_state_is_changed)
+        self.audio.handle_bg_sounds(self.currentstate, audio_state_is_changed)
 
     def single_input(self, event):
         """
@@ -174,7 +183,6 @@ class GameEngine(object):
             try:
                 import screens.party.invclickbox
                 text2 = (
-                    "",
                     "max_box_height     {}".format(screens.party.invclickbox.MAXBOXHEIGHT),
                     "layer_height       {}".format(self.gamestate.peek().invclick_box.layer_height)
                 )

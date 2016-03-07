@@ -77,22 +77,26 @@ class Overworld(object):
         # self.buttons = [button_view, button_up, button_down, button_left, button_right, button_cancel]
         self.buttons = [button_inv, button_up, button_down, button_left, button_right]
 
+    # noinspection PyMethodMayBeStatic
     def on_enter(self):
         """
-        ...
+        Wanneer deze state op de stack komt, voer dit uit.
+        Op dit moment nog niets echts.
         """
-        print("on_enter")
+        pass
 
+    # noinspection PyMethodMayBeStatic
     def on_exit(self):
         """
-        ...
+        Wanneer deze state onder een andere state van de stack komt, voer dit uit.
+        Op dit moment nog niets echts
         """
-        print("on_exit")
+        pass
 
     def single_input(self, event):
         """
-        ...
-        :param event:
+        Handelt de muis en keyboard input af.
+        :param event: pygame.event.get()
         """
         if event.type == pygame.MOUSEBUTTONDOWN:
             if event.button == keys.LEFTCLICK:
@@ -123,8 +127,12 @@ class Overworld(object):
 
         self.window.handle_multi_input(self.key_input, dt)
 
-    # noinspection PyMissingOrEmptyDocstring
+    # noinspection PyMethodMayBeStatic
     def update(self, dt):
+        """
+        Update de waarden van de bovenste state.
+        :param dt: self.clock.tick(FPS)/1000.0
+        """
         pass
 
     def render(self):
@@ -138,7 +146,6 @@ class Overworld(object):
 
         for button in self.buttons:
             button.draw(self.screen, self.key_input)
-
 
     # def handle_view(self):
     #     elif self.engine.currentstate == states.GameState.PartyScreen:
