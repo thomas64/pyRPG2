@@ -20,10 +20,12 @@ class MainMenu(screens.menu.basemenu.BaseMenu):
         self.inside['Options'] = 'Options'
         self.inside['ExitGame'] = 'Exit'
 
-    def on_select(self, menu_item, scr_capt):
+    def on_select(self, menu_item, title, animation, scr_capt):
         """
         Zie BaseMenu.
         :param menu_item: zie BaseMenu
+        :param title: zie BaseMenu
+        :param animation: zie BaseMenu
         :param scr_capt: zie BaseMenu
         """
         if menu_item.func == self.NewGame:
@@ -35,7 +37,8 @@ class MainMenu(screens.menu.basemenu.BaseMenu):
             self.engine.gamestate.push(push_object)
 
         elif menu_item.func == self.Options:
-            push_object = screens.menu.manager.create_menu(screens.menu.manager.MenuItems.OptionsMenu, self.engine)
+            push_object = screens.menu.manager.create_menu(screens.menu.manager.MenuItems.OptionsMenu, self.engine,
+                                                           title=title, animation=animation)
             self.engine.gamestate.push(push_object)
 
         elif menu_item.func == self.ExitGame:

@@ -55,7 +55,6 @@ class GameEngine(object):
         Start de game loop.
         """
         self.running = True
-        # todo, het laden is nog erg zwaar, helemaal tweaken nog. komt door animatie? optimaliseren dus.
         push_object = screens.menu.manager.create_menu(screens.menu.manager.MenuItems.MainMenu, self)
         self.gamestate.push(push_object)
 

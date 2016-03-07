@@ -20,10 +20,12 @@ class PauseMenu(screens.menu.basemenu.BaseMenu):
         self.inside['Options'] = 'Options'
         self.inside['MainMenu'] = 'Main Menu'
 
-    def on_select(self, menu_item, scr_capt):
+    def on_select(self, menu_item, title, animation, scr_capt):
         """
         Zie BaseMenu.
         :param menu_item: zie BaseMenu
+        :param title: zie BaseMenu
+        :param animation: zie BaseMenu
         :param scr_capt: zie BaseMenu
         """
         if menu_item.func == self.ContinueGame:

@@ -47,19 +47,16 @@ class Display(object):
 
         self.audio = audio
 
-        self.show_title = title
-        if self.show_title:
-            self.title = screens.menu.title.Title()
+        self.title = title
 
-        self.show_animation = animation
-        if self.show_animation:
-            self.animation = screens.menu.animation.Animation()
+        self.animation = animation
+        if self.animation:
             self.animation.set_position(bg_width, bg_height)
 
         self.scr_capt = scr_capt
         if self.scr_capt:
             self.background.blit(self.scr_capt, (0, 0))         # gooi over het hele scherm de overworld achtergrond
-            pygame.gfxdraw.box(self.background, self.screen.get_rect(), BACKGROUNDTRANS) # en een doorzichtige laag
+            pygame.gfxdraw.box(self.background, self.screen.get_rect(), BACKGROUNDTRANS)  # en een doorzichtige laag
 
         self.menu_content = menu_content                        # het object OrderedDict genaamd inside
         self.menu_texts = []                                    # een list van MenuText objecten
@@ -68,7 +65,7 @@ class Display(object):
             t_h = len(self.menu_content) * menu_text.height     # t_h: total height of text block
             pos_x = (bg_width - menu_text.width) / 2
             pos_y = ((bg_height - t_h) / 2) + (menu_text.height * index * MENUH)
-            if self.show_animation:
+            if self.animation:
                 pos_x += MENUX
                 pos_y += MENUY
 
@@ -98,7 +95,7 @@ class Display(object):
         ...
         :param dt: self.clock.tick(FPS)/1000.0
         """
-        if self.show_animation:
+        if self.animation:
             self.animation.update(dt)
 
     def render(self):
@@ -113,10 +110,10 @@ class Display(object):
 
         self.screen.blit(self.background, (0, 0))
 
-        if self.show_animation:
+        if self.animation:
             self.animation.render(self.screen)
 
-        if self.show_title:
+        if self.title:
             self.title.draw(self.screen)
 
         for item in self.menu_texts:
@@ -148,7 +145,7 @@ class Display(object):
                 for item in self.menu_texts:
                     if item.rect.collidepoint(event.pos):
                         self.audio.play_sound(self.audio.select)
-                        self.menu_content.on_select(item, self.scr_capt)
+                        self.menu_content.on_select(item, self.title, self.animation, self.scr_capt)
 
         elif event.type == pygame.KEYDOWN:
             if event.key == keys.UP and self.cur_item > 0:
@@ -166,7 +163,7 @@ class Display(object):
 
             if event.key in keys.SELECT:
                 self.audio.play_sound(self.audio.select)
-                self.menu_content.on_select(self.menu_texts[self.cur_item], self.scr_capt)
+                self.menu_content.on_select(self.menu_texts[self.cur_item], self.title, self.animation, self.scr_capt)
             elif event.key == keys.DELETE:
                 self.audio.play_sound(self.audio.select)
                 self.menu_content.on_delete(self.menu_texts[self.cur_item].func, self.cur_item, self.scr_capt)
