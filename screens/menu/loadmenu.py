@@ -10,6 +10,7 @@ import loadsave
 import screens.menu.basemenu
 import screens.menu.manager
 import screens.overworld
+import statemachine
 
 SAVEPATH = 'savegame'
 
@@ -66,6 +67,6 @@ class LoadMenu(screens.menu.basemenu.BaseMenu):
             loadsave.Dialog(self.engine).delete(key)
             self.engine.gamestate.pop()
 
-            push_object = screens.menu.manager.create_menu(screens.menu.manager.MenuItems.LoadMenu, self.engine,
+            push_object = screens.menu.manager.create_menu(statemachine.States.LoadMenu, self.engine,
                                                            scr_capt=scr_capt, select=index)
             self.engine.gamestate.push(push_object)

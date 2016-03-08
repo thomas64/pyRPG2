@@ -55,7 +55,7 @@ class GameEngine(object):
         Start de game loop.
         """
         self.running = True
-        push_object = screens.menu.manager.create_menu(screens.menu.manager.MenuItems.MainMenu, self)
+        push_object = screens.menu.manager.create_menu(statemachine.States.MainMenu, self)
         self.gamestate.push(push_object)
 
         while self.running:
@@ -68,18 +68,10 @@ class GameEngine(object):
                     self.running = False
                 self.single_input(event)
             self.multi_input()
+            # self.set_audio()
             self.update()
             self.render()
             pygame.display.update()
-
-    # todo, audio oplossen
-    def handle_audio(self):
-        """
-        Geeft de juiste muziek en achtergrond geluiden weer.
-        """
-        audio_state_is_changed = self.statemachine.has_audio_state_changed()
-        self.audio.handle_music(self.currentstate, audio_state_is_changed)
-        self.audio.handle_bg_sounds(self.currentstate, audio_state_is_changed)
 
     def single_input(self, event):
         """
@@ -111,6 +103,12 @@ class GameEngine(object):
             self.mouse_input = pygame.mouse.get_pos()
 
         self.gamestate.peek().multi_input(self.key_input, self.mouse_input, self.dt)
+
+    def set_audio(self):
+        """
+        Speel de juiste muziek en achtergrond geluiden af.
+        """
+        self.gamestate.peek().set_audio()
 
     def update(self):
         """

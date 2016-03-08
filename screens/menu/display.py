@@ -9,6 +9,7 @@ import pygame.gfxdraw
 import keys
 import screens.menu.manager
 import screens.menu.text
+import statemachine
 
 BACKGROUNDCOLOR1 = pygame.Color("black")
 BACKGROUNDCOLOR2 = pygame.Color("white")
@@ -28,7 +29,7 @@ class Display(object):
     """
     Een menuscherm.
     """
-    def __init__(self, screen, audio, menu_name, menu_content, title, animation, scr_capt, cur_item=0):
+    def __init__(self, screen, audio, state_name, menu_content, title, animation, scr_capt, cur_item=0):
         self.screen = screen
         self.background = pygame.Surface(self.screen.get_size())
         if animation:
@@ -45,7 +46,7 @@ class Display(object):
         bg_height = self.background.get_height()
 
         self.audio = audio
-        self.name = menu_name
+        self.name = state_name
         self.title = title
 
         self.animation = animation
@@ -77,12 +78,21 @@ class Display(object):
         else:
             self.cur_item = cur_item
 
+    # todo, audio oplossen
+    def handle_audio(self):
+        """
+        Geeft de juiste muziek en achtergrond geluiden weer.
+        """
+        audio_state_is_changed = self.statemachine.has_audio_state_changed()
+        self.audio.set_bg_music(self.currentstate, audio_state_is_changed)
+        self.audio.set_bg_sounds(self.currentstate, audio_state_is_changed)
+
     def on_enter(self):
         """
         Wanneer deze state op de stack komt, voer dit uit.
         Op dit moment nog niets echts.
         """
-        if self.name == screens.menu.manager.MenuItems.MainMenu:
+        if self.name == statemachine.States.MainMenu:
             print(str(self.name) + " on_enter")
 
     def on_exit(self):

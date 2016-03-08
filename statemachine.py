@@ -3,7 +3,25 @@
 class: StateMachine
 """
 
+import enum
+
 import console
+
+
+class States(enum.Enum):
+    """
+    Alle states uit het spel.
+    """
+    MainMenu = 1
+    LoadMenu = 2
+    SaveMenu = 3
+    OptionsMenu = 4
+    PauseMenu = 5
+
+    Overworld = 6
+    Battle = 7
+    Conversation = 8
+    PartyScreen = 9
 
 
 class StateMachine(object):

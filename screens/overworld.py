@@ -10,6 +10,7 @@ import screens.menu.manager
 import screens.party.display
 import screens.sprites
 import screens.window
+import statemachine
 
 
 WINDOWWIDTH = 800
@@ -46,7 +47,7 @@ class Overworld(object):
         self.background = self.background.convert()
         self.window = screens.window.Window(WINDOWWIDTH, WINDOWHEIGHT, self.engine.audio)
 
-        self.partyscreen = None
+        self.name = statemachine.States.Overworld
 
         self.buttons = None
         self._init_buttons()
@@ -150,7 +151,7 @@ class Overworld(object):
     def _show_pause_menu(self):
         self.engine.audio.play_sound(self.engine.audio.select)
 
-        push_object = screens.menu.manager.create_menu(screens.menu.manager.MenuItems.PauseMenu, self.engine)
+        push_object = screens.menu.manager.create_menu(statemachine.States.PauseMenu, self.engine)
         self.engine.gamestate.push(push_object)
 
     def _show_party_screen(self):

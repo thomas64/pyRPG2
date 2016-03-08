@@ -1,10 +1,7 @@
 
 """
-class: MenuItems
-function: create_menu
+def: create_menu
 """
-
-import enum
 
 import pygame
 
@@ -15,25 +12,16 @@ import screens.menu.loadmenu
 import screens.menu.optionsmenu
 import screens.menu.pausemenu
 import screens.menu.title
+import statemachine
 
 # todo, muziek later in laten komen?
 # todo, on exit en enter gebruiken?
 
 
-class MenuItems(enum.Enum):
-    """
-    Alle menu typen op een rij.
-    """
-    MainMenu = 1
-    LoadMenu = 2
-    OptionsMenu = 3
-    PauseMenu = 4
-
-
-def create_menu(choice, engine, title=None, animation=None, scr_capt=None, select=None):
+def create_menu(state_name, engine, title=None, animation=None, scr_capt=None, select=None):
     """
     Hier worden de verschillende eigenschappen van de verschillende menu's toegekend.
-    :param choice: Enum meny type
+    :param state_name: Enum state name
     :param engine: self van GameEngine
     :param title: menu Title Object
     :param animation: een dict van afbeeldingen
@@ -42,7 +30,7 @@ def create_menu(choice, engine, title=None, animation=None, scr_capt=None, selec
     """
     content = None
 
-    if choice == MenuItems.MainMenu:
+    if state_name == statemachine.States.MainMenu:
         content = screens.menu.mainmenu.MainMenu(engine)
         title = screens.menu.title.Title()
         animation = screens.menu.animation.Animation()
@@ -50,7 +38,7 @@ def create_menu(choice, engine, title=None, animation=None, scr_capt=None, selec
         if select is None:
             select = 0
 
-    elif choice == MenuItems.LoadMenu:
+    elif state_name == statemachine.States.LoadMenu:
         content = screens.menu.loadmenu.LoadMenu(engine)
         title = None
         animation = None
@@ -59,7 +47,7 @@ def create_menu(choice, engine, title=None, animation=None, scr_capt=None, selec
         if select is None:
             select = -1
 
-    elif choice == MenuItems.OptionsMenu:
+    elif state_name == statemachine.States.OptionsMenu:
         content = screens.menu.optionsmenu.OptionsMenu(engine)
         if title is None:
             title = None
@@ -69,7 +57,7 @@ def create_menu(choice, engine, title=None, animation=None, scr_capt=None, selec
             scr_capt = None
         select = -1
 
-    elif choice == MenuItems.PauseMenu:
+    elif state_name == statemachine.States.PauseMenu:
         content = screens.menu.pausemenu.PauseMenu(engine)
         title = None
         animation = None
@@ -77,5 +65,5 @@ def create_menu(choice, engine, title=None, animation=None, scr_capt=None, selec
         scr_capt = pygame.image.frombuffer(scr_data, engine.screen.get_size(), 'RGBA').convert()
         select = 0
 
-    return screens.menu.display.Display(engine.screen, engine.audio, choice,
+    return screens.menu.display.Display(engine.screen, engine.audio, state_name,
                                         content, title, animation, scr_capt, select)

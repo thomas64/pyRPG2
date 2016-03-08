@@ -5,6 +5,7 @@ class: PauseMenu
 
 import loadsave
 import screens.menu.basemenu
+import statemachine
 
 
 class PauseMenu(screens.menu.basemenu.BaseMenu):
@@ -32,7 +33,7 @@ class PauseMenu(screens.menu.basemenu.BaseMenu):
             self.on_exit()
 
         elif menu_item.func == self.LoadGame:
-            push_object = screens.menu.manager.create_menu(screens.menu.manager.MenuItems.LoadMenu, self.engine,
+            push_object = screens.menu.manager.create_menu(statemachine.States.LoadMenu, self.engine,
                                                            scr_capt=scr_capt)
             self.engine.gamestate.push(push_object)
 
@@ -47,12 +48,12 @@ class PauseMenu(screens.menu.basemenu.BaseMenu):
             pygame.event.clear()                                            # anders stapelen de geluiden zich op
 
         elif menu_item.func == self.Options:
-            push_object = screens.menu.manager.create_menu(screens.menu.manager.MenuItems.OptionsMenu, self.engine,
+            push_object = screens.menu.manager.create_menu(statemachine.States.OptionsMenu, self.engine,
                                                            scr_capt=scr_capt)
             self.engine.gamestate.push(push_object)
 
         elif menu_item.func == self.MainMenu:
-            push_object = screens.menu.manager.create_menu(screens.menu.manager.MenuItems.MainMenu, self.engine,
+            push_object = screens.menu.manager.create_menu(statemachine.States.MainMenu, self.engine,
                                                            select=-1)
             self.engine.gamestate.change(push_object)
 
