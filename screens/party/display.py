@@ -37,6 +37,8 @@ SKILBOXX, SKILBOXY = 425, 120
 INVBOXX, INVBOXY = 750, 120
 SPELBOXX, SPELBOXY = 1075, 120
 
+# todo, alle boxen netjes maken met single_input, multi_input, update en render
+
 
 class Display(object):
     """
@@ -165,7 +167,6 @@ class Display(object):
             # elif event.key == pygame.K_m:
             #     self.party[0].lev.qty += 1
 
-    # noinspection PyUnusedLocal
     def multi_input(self, key_input, mouse_pos, dt):
         """
         Registreert of er op de buttons wordt geklikt. En zet dat om naar keyboard input.

@@ -6,7 +6,7 @@ Alle print commando's van het spel.
 
 def keyboard_down(event_key, event_unicode):
     """
-    Engine.handle_single_input()
+    Engine.single_input()
     :param event_key: integer
     :param event_unicode: string
     """
@@ -15,7 +15,7 @@ def keyboard_down(event_key, event_unicode):
 
 def mouse_down(event_pos, event_button):
     """
-    Engine.handle_single_input()
+    Engine.single_input()
     :param event_pos: tuple
     :param event_button: integer
     """

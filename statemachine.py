@@ -3,6 +3,7 @@
 class: StateMachine
 """
 
+import collections
 import enum
 
 import console
@@ -31,7 +32,7 @@ class StateMachine(object):
     peeking and popping an empty stack returns None.
     """
     def __init__(self):
-        self.statestack = []
+        self.statestack = collections.deque()
         self.prev_state = None
 
     def peek(self):
