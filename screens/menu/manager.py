@@ -14,9 +14,6 @@ import screens.menu.pausemenu
 import screens.menu.title
 import statemachine
 
-# todo, muziek later in laten komen?
-# todo, on exit en enter gebruiken?
-
 
 def create_menu(state_name, engine, title=None, animation=None, scr_capt=None, select=None):
     """

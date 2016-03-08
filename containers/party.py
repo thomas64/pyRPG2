@@ -32,15 +32,17 @@ class Party(collections.OrderedDict):
         else:
             console.container_is_full(self.NAM)
 
-    def remove(self, hero):
+    def remove(self, hero, verbose=True):
         """
         Haal heroes weg uit de party
         :param hero: Hero Object
+        :param verbose: als False meegegeven wordt, print dan niets in de console
         """
         if hero.RAW == 'alagos':
             console.leader_not_leave_party()
         elif hero.RAW in self:
-            console.hero_leave_party(hero.NAM, self.NAM)
             del self[hero.RAW]
+            if verbose:
+                console.hero_leave_party(hero.NAM, self.NAM)
         else:
             console.hero_not_in_party(hero.NAM, self.NAM)

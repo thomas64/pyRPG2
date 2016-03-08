@@ -30,11 +30,12 @@ def state_push(state):
     print("Game pushed {} on stack.".format(state))
 
 
-def state_pop():
+def state_pop(state):
     """
     StateMachine.pop()
+    :param state: Enum
     """
-    print("Game popped top state off stack.")
+    print("Game popped {} off stack.".format(state))
 
 
 def state_clear():

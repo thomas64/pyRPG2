@@ -86,13 +86,16 @@ class Display(object):
         self.audio.set_bg_music(self.name)
         self.audio.set_bg_sounds(self.name)
 
+    # noinspection PyMethodMayBeStatic
     def on_exit(self):
         """
         Wanneer deze state onder een andere state van de stack komt, voer dit uit.
         Op dit moment nog niets echts
         """
-        if self.name == statemachine.States.MainMenu:
-            print(str(self.name) + " on_exit")
+        pass
+        # voorbeeld van gebruik on_exit:
+        # if self.name == statemachine.States.MainMenu:
+        #     print(str(self.name) + " on_exit")
 
     def single_input(self, event):
         """

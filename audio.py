@@ -108,6 +108,7 @@ class Audio(object):
             self.music = 1
             self.set_bg_music(self.engine.gamestate.deep_peek().name)
 
+    # todo, muziek van mainmenu later in laten komen?
     def set_bg_music(self, currentstate):
         """
         Als mag, fade dan de huidige. Volume max, fade nieuwe muziek in.
