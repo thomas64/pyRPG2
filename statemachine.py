@@ -32,6 +32,7 @@ class StateMachine(object):
     """
     def __init__(self):
         self.statestack = []
+        self.prev_state = None
 
     def peek(self):
         """
@@ -43,14 +44,26 @@ class StateMachine(object):
         except IndexError:
             return None                     # empty stack
 
+    def deep_peek(self):
+        """
+        Kijk in de enerbovenste laag van de stack.
+        """
+        try:
+            return self.statestack[-2]
+        except IndexError:
+            return None
+
     def pop(self):
         """
         Returns the current state and remove it from the stack.
         Returns None if the stack is empty.
         """
         try:
+            self.prev_state = self.peek().name
+            self.peek().on_exit()
             console.state_pop()
             self.statestack.pop()
+            self.peek().on_enter()
             return len(self.statestack) > 0
         except IndexError:
             return None                     # empty stack
@@ -60,11 +73,12 @@ class StateMachine(object):
         :param state: Push a new state onto the stack.
         :return: Returns the pushed value.
         """
-        console.state_push(state)
         try:
+            self.prev_state = self.peek().name
             self.peek().on_exit()
         except AttributeError:
             pass                            # doe niet on_exit() bij lege stack
+        console.state_push(state)
         self.statestack.append(state)
         self.peek().on_enter()
         return state
@@ -76,6 +90,7 @@ class StateMachine(object):
         self.peek().on_exit()
         console.state_clear()
         self.statestack = []
+        self.prev_state = None
 
     def change(self, state):
         """

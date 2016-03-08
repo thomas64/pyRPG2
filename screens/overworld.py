@@ -78,13 +78,13 @@ class Overworld(object):
         # self.buttons = [button_view, button_up, button_down, button_left, button_right, button_cancel]
         self.buttons = [button_inv, button_up, button_down, button_left, button_right]
 
-    # noinspection PyMethodMayBeStatic
     def on_enter(self):
         """
         Wanneer deze state op de stack komt, voer dit uit.
-        Op dit moment nog niets echts.
+        Zet muziek en achtergrond geluiden indien nodig.
         """
-        pass
+        self.engine.audio.set_bg_music(self.name)
+        self.engine.audio.set_bg_sounds(self.name)
 
     # noinspection PyMethodMayBeStatic
     def on_exit(self):

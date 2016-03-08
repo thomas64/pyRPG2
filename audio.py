@@ -9,7 +9,7 @@ import pickle
 import pygame
 
 import console
-# import states
+import statemachine
 
 
 OPTIONSPATH = 'options'
@@ -38,7 +38,8 @@ class Audio(object):
     """
     Alle geluiden.
     """
-    def __init__(self):
+    def __init__(self, engine):
+        self.engine = engine
         self.music = 0
         self.sound = 0
         self._load_cfg()
@@ -93,11 +94,8 @@ class Audio(object):
         elif self.sound == 0:
             self.sound = 1
             self.play_sound(self.select)    # en speel weer een geluid af omdat er geluid is.
-            # dit is eigenlijk even een tijdelijke lelijke oplossing, maar makkelijk.
-            self.bg_sound_channel1.set_volume(1)                                    #
-            self.bg_sound_channel2.set_volume(1)                                    #
-            self.bg_sound_channel1.play(self.crows, -1)                             #
-            self.bg_sound_channel2.play(self.wind, -1)                              #
+            # kijkt 1 laag dieper om te zien of hij in mainmenu of pausemenu zit
+            self.set_bg_sounds(self.engine.gamestate.deep_peek().name)
 
     def flip_music(self):
         """
@@ -105,59 +103,43 @@ class Audio(object):
         """
         if self.music == 1:
             self.music = 0
-            self.stop_music()
+            self.stop_bg_music()
         elif self.music == 0:
             self.music = 1
-            # dit is eigenlijk even een tijdelijke lelijke oplossing, maar makkelijk.
-            self.bg_music_channel.set_volume(1)                                     #
-            self.bg_music_channel.play(self.mainmenu, -1)                           #
+            self.set_bg_music(self.engine.gamestate.deep_peek().name)
 
-    def handle_music(self, currentstate, state_has_changed):
+    def set_bg_music(self, currentstate):
         """
         Als mag, fade dan de huidige. Volume max, fade nieuwe muziek in.
-        :param currentstate: self.statemachine.peek()
-        :param state_has_changed: True of False, als een state veranderd is
+        :param currentstate: self.gamestate.peek().name
         """
         if self.music == 1:
-            if state_has_changed:
-                self.fade_music()
+            # bij options menu moet er niets veranderen, en ook niet als hij van options komt.
+            if currentstate != statemachine.States.OptionsMenu and \
+                            self.engine.gamestate.prev_state != statemachine.States.OptionsMenu:
+                self.fade_bg_music()
                 self.bg_music_channel.set_volume(1)
-                if currentstate == states.GameState.MainMenu or \
-                   currentstate == states.GameState.OptionsMenu:
+                if currentstate == statemachine.States.MainMenu:
                     self.bg_music_channel.play(self.mainmenu, -1)
-                elif currentstate == states.GameState.Overworld:
+                elif currentstate == statemachine.States.Overworld:
                     self.bg_music_channel.play(self.overworld, -1)
 
-    def handle_bg_sounds(self, currentstate, state_has_changed):
+    def set_bg_sounds(self, currentstate):
         """
         Zet de achtergrond geluiden aan of uit afhankelijk van een state.
         :param currentstate: self.statemachine.peek()
-        :param state_has_changed: True of False, als een state veranderd is
         """
         if self.sound == 1:
-            if state_has_changed:
+            if currentstate != statemachine.States.OptionsMenu and \
+                            self.engine.gamestate.prev_state != statemachine.States.OptionsMenu:
                 self.fade_bg_sounds()
                 self.bg_sound_channel1.set_volume(1)
                 self.bg_sound_channel2.set_volume(1)
-                if currentstate == states.GameState.MainMenu or \
-                   currentstate == states.GameState.OptionsMenu:
+                if currentstate == statemachine.States.MainMenu:
                     self.bg_sound_channel1.play(self.crows, -1)
                     self.bg_sound_channel2.play(self.wind, -1)
-                elif currentstate == states.GameState.Overworld:
+                elif currentstate == statemachine.States.Overworld:
                     self.bg_sound_channel1.play(self.birds, -1)
-
-    def stop_music(self):
-        """
-        Laat het muziekkanaal stoppen.
-        """
-        self.bg_music_channel.stop()
-
-    def stop_bg_sounds(self):
-        """
-        Laat de 2 achtergrondkanalen stoppen.
-        """
-        self.bg_sound_channel1.stop()
-        self.bg_sound_channel2.stop()
 
     def play_sound(self, sound, loop=0):
         """
@@ -176,7 +158,20 @@ class Audio(object):
         """
         sound.stop()
 
-    def fade_music(self):
+    def stop_bg_music(self):
+        """
+        Laat het muziekkanaal stoppen.
+        """
+        self.bg_music_channel.stop()
+
+    def stop_bg_sounds(self):
+        """
+        Laat de 2 achtergrondkanalen stoppen.
+        """
+        self.bg_sound_channel1.stop()
+        self.bg_sound_channel2.stop()
+
+    def fade_bg_music(self):
         """
         Als er muziek speelt, fade die out.
         """

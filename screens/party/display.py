@@ -85,13 +85,13 @@ class Display(object):
         self.inventory_box = screens.party.inventorybox.InventoryBox((INVBOXX, INVBOXY))  # zelf, de positie zit in deze
         pygame.draw.rect(self.background, LINECOLOR, (SPELBOXX, SPELBOXY, 315, 670), 1)   # class, moet dat anders?
 
-    # noinspection PyMethodMayBeStatic
     def on_enter(self):
         """
         Wanneer deze state op de stack komt, voer dit uit.
-        Op dit moment nog niets echts.
+        Zet muziek en achtergrond geluiden indien nodig.
         """
-        pass
+        self.engine.audio.set_bg_music(self.name)
+        self.engine.audio.set_bg_sounds(self.name)
 
     # noinspection PyMethodMayBeStatic
     def on_exit(self):

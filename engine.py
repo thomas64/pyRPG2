@@ -33,7 +33,7 @@ class GameEngine(object):
     def __init__(self):
         self.screen = pygame.display.get_surface()
         self.data = data.Data()
-        self.audio = audio.Audio()
+        self.audio = audio.Audio(self)
 
         self.running = False
 
@@ -68,7 +68,6 @@ class GameEngine(object):
                     self.running = False
                 self.single_input(event)
             self.multi_input()
-            # self.set_audio()
             self.update()
             self.render()
             pygame.display.update()
@@ -103,12 +102,6 @@ class GameEngine(object):
             self.mouse_input = pygame.mouse.get_pos()
 
         self.gamestate.peek().multi_input(self.key_input, self.mouse_input, self.dt)
-
-    def set_audio(self):
-        """
-        Speel de juiste muziek en achtergrond geluiden af.
-        """
-        self.gamestate.peek().set_audio()
 
     def update(self):
         """
@@ -191,12 +184,13 @@ class GameEngine(object):
             except AttributeError:
                 pass
             text2 = (
+                "prev_state:        {}".format(self.gamestate.prev_state),
                 "StateStack:",
                 ""
             )
             textb = []
             for state in self.gamestate.statestack:
-                textb.append(str(state))
+                textb.append(str(state.name))
             textb.reverse()
             text2 += tuple(textb)
             text += text2

@@ -78,29 +78,21 @@ class Display(object):
         else:
             self.cur_item = cur_item
 
-    # todo, audio oplossen
-    def handle_audio(self):
-        """
-        Geeft de juiste muziek en achtergrond geluiden weer.
-        """
-        audio_state_is_changed = self.statemachine.has_audio_state_changed()
-        self.audio.set_bg_music(self.currentstate, audio_state_is_changed)
-        self.audio.set_bg_sounds(self.currentstate, audio_state_is_changed)
-
     def on_enter(self):
         """
         Wanneer deze state op de stack komt, voer dit uit.
-        Op dit moment nog niets echts.
+        Zet muziek en achtergrond geluiden indien nodig.
         """
-        if self.name == statemachine.States.MainMenu:
-            print(str(self.name) + " on_enter")
+        self.audio.set_bg_music(self.name)
+        self.audio.set_bg_sounds(self.name)
 
     def on_exit(self):
         """
         Wanneer deze state onder een andere state van de stack komt, voer dit uit.
         Op dit moment nog niets echts
         """
-        print(str(self.name) + " on_exit")
+        if self.name == statemachine.States.MainMenu:
+            print(str(self.name) + " on_exit")
 
     def single_input(self, event):
         """
