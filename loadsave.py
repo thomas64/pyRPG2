@@ -39,8 +39,9 @@ class Dialog(object):
             console.load_gamedata()
             with open(filename, 'rb') as f:
                 (self.engine.data,
-                 self.engine.gamestate.peek().window.heroes[0].rect,
+                 self.engine.gamestate.peek().window.heroes[0].rect.topleft,
                  self.engine.gamestate.peek().window.heroes[0].last_direction) = pickle.load(f)
+                self.engine.gamestate.peek().window.align()  # zet andere chars achter de hero
         except (pickle.UnpicklingError, EOFError):
             console.corrupt_gamedata()
             filename = None
@@ -59,7 +60,7 @@ class Dialog(object):
             console.save_gamedata()
             with open(filename, 'wb') as f:
                 pickle.dump([self.engine.data,
-                             self.engine.gamestate.peek().window.heroes[0].rect,
+                             self.engine.gamestate.peek().window.heroes[0].rect.topleft,
                              self.engine.gamestate.peek().window.heroes[0].last_direction], f)
         else:
             filename = None

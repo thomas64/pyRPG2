@@ -3,6 +3,8 @@
 class: Window
 """
 
+import collections
+
 import pygame
 
 import keys
@@ -43,8 +45,8 @@ class Window(object):
         self.group = self.map1.view
 
         self.heroes = []
-        party = list(self.engine.data.party.values())
-        for hero in party:
+        self.party = list(self.engine.data.party.values())
+        for hero in self.party:
             self.heroes.append(screens.character.Hero(hero.SPR, self.map1.start_pos.topleft, self.engine.audio))
         self.heroes.reverse()           # voeg de heroes in juiste volgorde toe
         self.group.add(self.heroes)     # maar als sprites moeten ze precies andersom staan
@@ -52,6 +54,21 @@ class Window(object):
 
         self.grid_sprite = None
         self.cbox_sprites = []
+
+        self.maxlen = ((len(self.party)-1)*GRIDSIZE)+1
+        self.hero_history = collections.deque(maxlen=self.maxlen)
+        self.align()
+
+    def align(self):
+        """
+        Zet de hero in het grid. Positioneer de party achter hem. Vul de geschiedenis met lege data.
+        """
+        self.heroes[0].align_to_grid(GRIDSIZE)
+        for hero in self.heroes:
+            hero.rect.topleft = list(self.heroes[0].rect.topleft)
+            hero.last_direction = self.heroes[0].last_direction
+        for _ in range(0, self.maxlen):
+            self.hero_history.append(self.heroes[0].get_history_data())
 
     def single_input(self, event):
         """
@@ -61,7 +78,7 @@ class Window(object):
         if event.type == pygame.KEYDOWN:
 
             if event.key == keys.ALIGN:
-                self.heroes[0].align_to_grid(GRIDSIZE)
+                self.align()
 
             elif event.key == keys.GRID:
                 if self.grid_sprite is None:
@@ -110,6 +127,8 @@ class Window(object):
         self.heroes[0].check_obstacle(self.map1.obstacle_rects, self.map1.low_obst_rects,
                                       None, self.map1.width, self.map1.height, dt)
 
+        self.hero_trail(key_input, dt)
+
     # noinspection PyMethodMayBeStatic
     def update(self, dt):
         """
@@ -131,25 +150,26 @@ class Window(object):
         self.group.center(self.heroes[0].rect.center)
         self.group.draw(self.surface)
 
+    def hero_trail(self, key_input, dt):
+        """
+        Als 1 van de 4 pijltoetsen gedrukt wordt en de zich ook daadwerkelijk verplaatst.
+        Vul de history van de hero dan aan met allemaal data uit een methode van character.
+        :param key_input: pygame.key.get_pressed()
+        :param dt: self.clock.tick(FPS)/1000.0
+        """
+        if (key_input[keys.UP] or key_input[keys.DOWN] or
+            key_input[keys.LEFT] or key_input[keys.RIGHT]) and \
+                (self.heroes[0].rect.x != self.hero_history[-1][0] or   # bekijk de laatste uit de deque
+                 self.heroes[0].rect.y != self.hero_history[-1][1]):
 
-# self.position_hist = collections.deque(maxlen=(len(self.party)-1)*32)
-# self.direction_hist = collections.deque(maxlen=(len(self.party)-1)*32)
-#
-# for _ in range(0, (len(self.party)-1)*32):
-#     self.position_hist.append((self.heroes[0].rect.x, self.heroes[0].rect.y))
-#     self.direction_hist.append(self.heroes[0].last_direction)
+            self.hero_history.append(self.heroes[0].get_history_data())
 
-
-# pos, drn = self.heroes[0].update_history()
-# if pos[0] == self.position_hist[-1][0] and \
-#    pos[1] == self.position_hist[-1][1]:
-#     return
-# self.position_hist.append(pos)
-# self.direction_hist.append(drn)
-#
-# for index, i in enumerate(range(len(self.party)-1, 0, -1)):
-#     self.heroes[i].rect.x = self.position_hist[index*32][0]
-#     self.heroes[i].rect.y = self.position_hist[index*32][1]
-#     self.heroes[i].move_direction = self.direction_hist[index*32]
-#     self.heroes[i].movespeed = self.heroes[0].movespeed
-#     self.heroes[i].animate(dt)
+            # de index loopt op van 0, 1, 2, 3.
+            # de i loopt af van 4, 3, 2, 1.
+            for index, i in enumerate(range(len(self.party)-1, 0, -1)):
+                self.heroes[i].rect.x = self.hero_history[index*GRIDSIZE][0]
+                self.heroes[i].rect.y = self.hero_history[index*GRIDSIZE][1]
+                self.heroes[i].last_direction = self.hero_history[index*GRIDSIZE][2]
+                self.heroes[i].move_direction = self.hero_history[index*GRIDSIZE][3]
+                self.heroes[i].movespeed = self.hero_history[index*GRIDSIZE][4]
+                self.heroes[i].animate(dt, make_sound=False)

@@ -96,7 +96,7 @@ class Hero(pygame.sprite.Sprite):
                 key_input[keys.LEFT] or key_input[keys.RIGHT]):
             self.time_delay = 0
             self._stand()
-            self._animate(dt)
+            self.animate(dt)
 
         if key_input[keys.UP]:
             self.time_up += 1
@@ -156,7 +156,7 @@ class Hero(pygame.sprite.Sprite):
                 self.time_delay -= 1 * dt
             else:
                 self._move(dt)
-                self._animate(dt)
+                self.animate(dt)
 
     def _move(self, dt):
         """
@@ -308,52 +308,59 @@ class Hero(pygame.sprite.Sprite):
         self.old_position = list(self.rect.topleft)
         self.true_position = list(self.rect.topleft)
 
-    def _animate(self, dt):
+    def animate(self, dt, make_sound=True):
         """
         Kijkt of de unit beweegt. Geef dan de hele dir_states dict door ipv alleen waarde 0.
         :param dt: self.clock.tick(FPS)/1000.0
+        :param make_sound: boolean, moeten de stappen geluid maken?
         """
         if self.move_direction is None:
             if self.last_direction == Direction.North:
-                self._clip(self.north_states[0], dt)
+                self._clip(self.north_states[0], dt, make_sound)
             if self.last_direction == Direction.South:
-                self._clip(self.south_states[0], dt)
+                self._clip(self.south_states[0], dt, make_sound)
             if self.last_direction == Direction.West:
-                self._clip(self.west_states[0], dt)
+                self._clip(self.west_states[0], dt, make_sound)
             if self.last_direction == Direction.East:
-                self._clip(self.east_states[0], dt)
+                self._clip(self.east_states[0], dt, make_sound)
         else:
             if self.move_direction == Direction.North:
-                self._clip(self.north_states, dt)
+                self._clip(self.north_states, dt, make_sound)
             if self.move_direction == Direction.South:
-                self._clip(self.south_states, dt)
+                self._clip(self.south_states, dt, make_sound)
             if self.move_direction == Direction.West:
-                self._clip(self.west_states, dt)
+                self._clip(self.west_states, dt, make_sound)
             if self.move_direction == Direction.East:
-                self._clip(self.east_states, dt)
+                self._clip(self.east_states, dt, make_sound)
 
         # Update the image for each pass
         self.image = self.full_sprite.subsurface(self.full_sprite.get_clip())
 
-    def _clip(self, clipped_rect, dt):
+    def _clip(self, clipped_rect, dt, make_sound):
         if type(clipped_rect) is dict:
-            self.full_sprite.set_clip(pygame.Rect(self._get_frame(clipped_rect, dt)))
+            self.full_sprite.set_clip(pygame.Rect(self._get_frame(clipped_rect, dt, make_sound)))
         else:
             self.step_count = STEPSPEED         # zodat hij direct een stap animeert uit stilstand
             self.step_animation = 0
             self.full_sprite.set_clip(pygame.Rect(clipped_rect))
         # return clipped_rect
 
-    def _get_frame(self, frame_set, dt):
+    def _get_frame(self, frame_set, dt, make_sound):
         if self.movespeed != MOVESPEED4:  # geen animatie of geluid bij MOVESPEED4
             self.step_count += self.movespeed * dt
             if self.step_count > STEPSPEED:
                 self.step_count = 0
-                if self.step_animation == 0:
+                if self.step_animation == 0 and make_sound:
                     self.audio.play_sound(self.audio.step_grass_l)
-                elif self.step_animation == 2:
+                elif self.step_animation == 2 and make_sound:
                     self.audio.play_sound(self.audio.step_grass_r)
                 self.step_animation += 1
                 if self.step_animation > 3:
                     self.step_animation = 0
         return frame_set[self.step_animation]
+
+    def get_history_data(self):
+        """
+        Geef een aantal waarden van de character terug.
+        """
+        return self.rect.x, self.rect.y, self.last_direction, self.move_direction, self.movespeed
