@@ -51,7 +51,7 @@ class Overworld(object):
 
         self.buttons = None
         self._init_buttons()
-        self.key_input = pygame.key.get_pressed()       # dit is voor de mousepress op een button.
+        self.key_input = None       # dit is voor de mousepress op een button.
 
     def _init_buttons(self):
         """
@@ -135,6 +135,9 @@ class Overworld(object):
         """
         self.window.update(dt)
 
+        for button in self.buttons:
+            button.update(self.key_input)
+
     def render(self):
         """
         Handel de view af in de window -> teken de achtergrond -> teken de window -> teken de buttons.
@@ -145,7 +148,7 @@ class Overworld(object):
         self.screen.blit(self.window.surface, WINDOWPOS)
 
         for button in self.buttons:
-            button.draw(self.screen, self.key_input)
+            button.render(self.screen)
 
     def _show_pause_menu(self):
         self.engine.audio.play_sound(self.engine.audio.select)

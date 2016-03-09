@@ -175,7 +175,7 @@ class Display(object):
             self.animation.render(self.screen)
 
         if self.title:
-            self.title.draw(self.screen)
+            self.title.render(self.screen)
 
         for item in self.menu_texts:
             self.screen.blit(item.label, item.position)

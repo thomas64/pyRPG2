@@ -40,21 +40,14 @@ class ButtonSprite(pygame.sprite.Sprite):
 
         self.key = key
 
-    def draw(self, surface, key_input):
+    def single_click(self, event):
         """
-        Teken de zichtbare knoppen op de gegeven surface.
-        :param surface: self.screen uit engine
-        :param key_input: self.key_input uit engine
+        Ontvang mouse event. Kijk of het met de button collide.
+        :param event: pygame.MOUSEBUTTONDOWN uit engine.py
+        :return: de knop die aan de button verbonden zit
         """
-        if self.visible:
-            if key_input[self.key]:
-                self.bgcolor = BUTTONPRESSCOLOR
-            else:
-                self.bgcolor = BUTTONBGCOLOR
-            self.image.fill(self.bgcolor)
-            pygame.draw.rect(self.image, BUTTONFONTCOLOR, (0, 0, self.width, self.height), 1)
-            self.image.blit(self.label, self.labelrect)
-            surface.blit(self.image, self.rect.topleft)
+        if self.rect.collidepoint(event.pos):
+            return self.key
 
     def multi_click(self, mouse_pos, key_input):
         """
@@ -71,14 +64,26 @@ class ButtonSprite(pygame.sprite.Sprite):
                 key_input[self.key] = 1
         return key_input
 
-    def single_click(self, event):
+    def update(self, key_input):
         """
-        Ontvang mouse event. Kijk of het met de button collide.
-        :param event: pygame.MOUSEBUTTONDOWN uit engine.py
-        :return: de knop die aan de button verbonden zit
+        Update de kleur van de knop.
+        :param key_input: self.key_input uit engine
         """
-        if self.rect.collidepoint(event.pos):
-            return self.key
+        if key_input[self.key]:
+            self.bgcolor = BUTTONPRESSCOLOR
+        else:
+            self.bgcolor = BUTTONBGCOLOR
+
+    def render(self, surface):
+        """
+        Teken de zichtbare knoppen op de gegeven surface.
+        :param surface: self.screen uit engine
+        """
+        if self.visible:
+            self.image.fill(self.bgcolor)
+            pygame.draw.rect(self.image, BUTTONFONTCOLOR, (0, 0, self.width, self.height), 1)
+            self.image.blit(self.label, self.labelrect)
+            surface.blit(self.image, self.rect.topleft)
 
 
 class ColorBoxSprite(pygame.sprite.Sprite):

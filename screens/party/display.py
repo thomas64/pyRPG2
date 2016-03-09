@@ -51,7 +51,7 @@ class Display(object):
 
         self.name = statemachine.States.PartyScreen
 
-        self.key_input = pygame.key.get_pressed()           # dit is voor de mousepress op een button.
+        self.key_input = None           # dit is voor de mousepress op een button.
 
         self.cur_hero = self.engine.data.party['alagos']    # todo, dit moet nog de hero die aan de beurt is worden
 
@@ -184,6 +184,9 @@ class Display(object):
         Update alle waarden in de boxen.
         :param dt: self.clock.tick(FPS)/1000.0
         """
+        for button in self.buttons:
+            button.update(self.key_input)
+
         for hero_box in self.hero_boxes:
             hero_box.update()
 
@@ -200,7 +203,7 @@ class Display(object):
         self.screen.blit(self.background, (0, 0))
 
         for button in self.buttons:
-            button.draw(self.screen, self.key_input)
+            button.render(self.screen)
 
         for hero_box in self.hero_boxes:
             hero_box.render(self.screen, self.hc)

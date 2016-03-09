@@ -39,7 +39,7 @@ class Title(object):
         self.sub = self.subfont.render(SUBTEXT, True, SUBFONTCOLOR).convert_alpha()
         self.version = self.versionfont.render(VERSIONTEXT, True, VERSIONFONTCOLOR).convert_alpha()
 
-    def draw(self, screen):
+    def render(self, screen):
         """
         Tekent de titel op de screen.
         :param screen: self.screen van de menuscreen
