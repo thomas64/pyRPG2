@@ -52,10 +52,10 @@ class BaseMenu(object):
         """
         raise NotImplementedError
 
-    def on_delete(self, key, index, scr_capt):
+    def on_delete(self, menu_item, index, scr_capt):
         """
         Als er een delete commando gegeven wordt. Dit komt eigenlijk alleen voor bij LoadMenu.
-        :param key: een self.inside[key]
+        :param menu_item: self.menu_texts[self.cur_item] uit Display. Dat is een key voor self.inside
         :param index: integer, welke menu item is geselecteerd
         :param scr_capt: een screencapture
         """

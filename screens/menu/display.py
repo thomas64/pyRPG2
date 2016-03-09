@@ -136,7 +136,7 @@ class Display(object):
                 self.menu_content.on_select(self.menu_texts[self.cur_item], self.title, self.animation, self.scr_capt)
             elif event.key == keys.DELETE:
                 self.audio.play_sound(self.audio.select)
-                self.menu_content.on_delete(self.menu_texts[self.cur_item].func, self.cur_item, self.scr_capt)
+                self.menu_content.on_delete(self.menu_texts[self.cur_item], self.cur_item, self.scr_capt)
             elif event.key == keys.EXIT:
                 self.audio.play_sound(self.audio.select)
                 self.menu_content.on_exit()

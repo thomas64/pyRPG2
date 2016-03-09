@@ -63,10 +63,10 @@ class PauseMenu(screens.menu.basemenu.BaseMenu):
         """
         self.engine.gamestate.pop()
 
-    def on_delete(self, key, index, scr_capt):
+    def on_delete(self, menu_item, index, scr_capt):
         """
         Zie BaseMenu.
-        :param key: zie BaseMenu
+        :param menu_item: zie BaseMenu
         :param index: zie BaseMenu
         :param scr_capt: zie BaseMenu
         """
