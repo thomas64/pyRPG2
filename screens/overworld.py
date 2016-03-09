@@ -45,7 +45,7 @@ class Overworld(object):
         self.background = pygame.Surface(self.screen.get_size())
         self.background.fill(BACKGROUNDCOLOR)
         self.background = self.background.convert()
-        self.window = screens.window.Window(WINDOWWIDTH, WINDOWHEIGHT, self.engine.audio)
+        self.window = screens.window.Window(WINDOWWIDTH, WINDOWHEIGHT, self.engine)
 
         self.name = statemachine.States.Overworld
 
@@ -112,7 +112,7 @@ class Overworld(object):
                 self._show_party_screen()
             elif event.key == keys.EXIT:
                 self._show_pause_menu()
-            self.window.handle_single_input(event)
+            self.window.single_input(event)
 
     def multi_input(self, key_input, mouse_pos, dt):
         """
@@ -126,21 +126,20 @@ class Overworld(object):
         for button in self.buttons:
             self.key_input = button.multi_click(mouse_pos, self.key_input)
 
-        self.window.handle_multi_input(self.key_input, dt)
+        self.window.multi_input(self.key_input, mouse_pos, dt)
 
-    # noinspection PyMethodMayBeStatic
     def update(self, dt):
         """
-        Update de waarden van de bovenste state.
+        Update de window.
         :param dt: self.clock.tick(FPS)/1000.0
         """
-        pass
+        self.window.update(dt)
 
     def render(self):
         """
         Handel de view af in de window -> teken de achtergrond -> teken de window -> teken de buttons.
         """
-        self.window.handle_view()
+        self.window.render()
 
         self.screen.blit(self.background, (0, 0))
         self.screen.blit(self.window.surface, WINDOWPOS)

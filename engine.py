@@ -145,7 +145,7 @@ class GameEngine(object):
             except AttributeError:
                 pass
             try:
-                hero = self.gamestate.peek().window.hero
+                hero = self.gamestate.peek().window.heroes[0]
                 text2 = (
                     "zoom:              {:.1f}".format(self.gamestate.peek().window.map1.map_layer.zoom),
                     "time_up:           {}".format(hero.time_up),
