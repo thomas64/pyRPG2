@@ -74,7 +74,8 @@ class Window(object):
 
             elif event.key == keys.CBOX:
                 if len(self.cbox_sprites) == 0:                             # als de lijst leeg is.
-                    self.cbox_sprites.append(screens.sprites.ColorBoxSprite(self.heroes[0].rect, HEROCOLOR, CBOXLAYER))
+                    for hero in self.heroes:
+                        self.cbox_sprites.append(screens.sprites.ColorBoxSprite(hero.rect, HEROCOLOR, CBOXLAYER))
                     for rect in self.map1.tree_rects:
                         self.cbox_sprites.append(screens.sprites.ColorBoxSprite(rect, TREECOLOR, CBOXLAYER))
                     for rect in self.map1.water_rects:
@@ -121,8 +122,11 @@ class Window(object):
         """
         Update locaties (indien F11) -> centreer op de hero -> teken de window inhoud.
         """
-        if len(self.cbox_sprites) > 0:                                       # de eerste die aan cbox_sprites bij F11 is
-            self.cbox_sprites[0].rect.topleft = self.heroes[0].rect.topleft  # toegevoegd is de hero.rect, vandaar [0]
+        # misschien gaat dit een probleem geven wanneer ingame de party grootte wordt gewijzigd.
+        # dan heeft bijv een boom een hero.rect.topleft oid.
+        if len(self.cbox_sprites) > 0:
+            for index, hero in enumerate(self.heroes):  # dit kan om dat de eerste paar die aan cbox_sprites bij F11
+                self.cbox_sprites[index].rect.topleft = hero.rect.topleft  # zijn toegevoegd zijn de hero.rects
 
         self.group.center(self.heroes[0].rect.center)
         self.group.draw(self.surface)
