@@ -49,9 +49,11 @@ class BaseMenu(object):
     def on_exit(self):
         """
         Als er een exit commando, bijvoorbeeld escape wordt gedaan.
+        Popt de bovenste state.
         """
-        raise NotImplementedError
+        self.engine.gamestate.pop()
 
+    # noinspection PyMethodMayBeStatic
     def on_delete(self, menu_item, index, scr_capt):
         """
         Als er een delete commando gegeven wordt. Dit komt eigenlijk alleen voor bij LoadMenu.
@@ -59,4 +61,4 @@ class BaseMenu(object):
         :param index: integer, welke menu item is geselecteerd
         :param scr_capt: een screencapture
         """
-        raise NotImplementedError
+        pass

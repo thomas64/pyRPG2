@@ -21,7 +21,6 @@ class LoadMenu(screens.menu.basemenu.BaseMenu):
     Hier worden alle bestanden van de savegame dir in een list gezet
     en weergegeven in de inside dict.
     """
-    # todo, scrollbaar maken
     def __init__(self, engine):
         super().__init__(engine)
 
@@ -56,12 +55,6 @@ class LoadMenu(screens.menu.basemenu.BaseMenu):
         elif menu_item.func not in (self.Slot1, self.Slot2, self.Slot3, self.Slot4, self.Slot5):
             self.engine.gamestate.change(screens.overworld.Overworld(self.engine))
             loadsave.Dialog(self.engine).load(menu_item.func)
-
-    def on_exit(self):
-        """
-        Zie BaseMenu. Popt deze state.
-        """
-        self.engine.gamestate.pop()
 
     def on_delete(self, menu_item, index, scr_capt):
         """

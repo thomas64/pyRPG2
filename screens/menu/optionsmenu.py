@@ -44,18 +44,3 @@ class OptionsMenu(screens.menu.basemenu.BaseMenu):
             self.engine.audio.write_cfg()
         elif menu_item.func == self.Back:
             self.on_exit()
-
-    def on_exit(self):
-        """
-        Zie BaseMenu. Popt deze state.
-        """
-        self.engine.gamestate.pop()
-
-    def on_delete(self, menu_item, index, scr_capt):
-        """
-        Zie BaseMenu.
-        :param menu_item: zie BaseMenu
-        :param index: zie BaseMenu
-        :param scr_capt: zie BaseMenu
-        """
-        pass

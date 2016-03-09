@@ -50,12 +50,3 @@ class MainMenu(screens.menu.basemenu.BaseMenu):
         Zie BaseMenu. Stopt de engine.
         """
         self.engine.running = False
-
-    def on_delete(self, menu_item, index, scr_capt):
-        """
-        Zie BaseMenu.
-        :param menu_item: zie BaseMenu
-        :param index: zie BaseMenu
-        :param scr_capt: zie BaseMenu
-        """
-        pass

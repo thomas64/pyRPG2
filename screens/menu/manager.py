@@ -9,6 +9,7 @@ import screens.menu.animation
 import screens.menu.display
 import screens.menu.mainmenu
 import screens.menu.loadmenu
+import screens.menu.savemenu
 import screens.menu.optionsmenu
 import screens.menu.pausemenu
 import screens.menu.title
@@ -37,6 +38,15 @@ def create_menu(state_name, engine, title=None, animation=None, scr_capt=None, s
 
     elif state_name == statemachine.States.LoadMenu:
         content = screens.menu.loadmenu.LoadMenu(engine)
+        title = None
+        animation = None
+        if scr_capt is None:
+            scr_capt = None
+        if select is None:
+            select = -1
+
+    elif state_name == statemachine.States.SaveMenu:
+        content = screens.menu.savemenu.SaveMenu(engine)
         title = None
         animation = None
         if scr_capt is None:
