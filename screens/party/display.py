@@ -37,8 +37,6 @@ SKILBOXX, SKILBOXY = 425, 120
 INVBOXX, INVBOXY = 750, 120
 SPELBOXX, SPELBOXY = 1075, 120
 
-# todo, alle boxen netjes maken met single_input, multi_input, update en render
-
 
 class Display(object):
     """
@@ -181,13 +179,19 @@ class Display(object):
         for button in self.buttons:
             self.key_input = button.multi_click(mouse_pos, self.key_input)
 
-    # noinspection PyMethodMayBeStatic
     def update(self, dt):
         """
-        Update de waarden van de bovenste state.
+        Update alle waarden in de boxen.
         :param dt: self.clock.tick(FPS)/1000.0
         """
-        pass
+        for hero_box in self.hero_boxes:
+            hero_box.update()
+
+        self.cur_hero = self.party[self.hc]
+
+        self.stats_box.update(self.cur_hero)
+        self.skills_box.update(self.cur_hero)
+        self.inventory_box.update(self.cur_hero)
 
     def render(self):
         """
@@ -199,17 +203,14 @@ class Display(object):
             button.draw(self.screen, self.key_input)
 
         for hero_box in self.hero_boxes:
-            hero_box.select(self.hc)
-            hero_box.draw(self.screen)
+            hero_box.render(self.screen, self.hc)
 
-        self.cur_hero = self.party[self.hc]
-
-        self.stats_box.draw(self.screen, self.cur_hero)
-        self.info_box.draw(self.screen, self.info_label)
-        self.skills_box.draw(self.screen, self.cur_hero)
-        self.inventory_box.draw(self.screen, self.cur_hero)
+        self.stats_box.render(self.screen)
+        self.info_box.render(self.screen, self.info_label)
+        self.skills_box.render(self.screen)
+        self.inventory_box.render(self.screen)
         if self.invclick_box:
-            self.invclick_box.draw(self.screen)
+            self.invclick_box.render(self.screen)
 
         # name2 = self.largefont.render(cur_hero.NAM, True, FONTCOLOR)   = voorbeeld van hoe een naam buiten een herobox
         # name2_rect = self.screen.blit(name2, (500, 300))

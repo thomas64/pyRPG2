@@ -53,9 +53,29 @@ class StatsBox(object):
 
         self.cur_item = None
 
-    def _update(self, hero):
         self.title = self.largefont.render(TITLE, True, FONTCOLOR1).convert_alpha()
+        self.table_data = []
+        self.table_view = []
 
+    def mouse_hover(self, event):
+        """
+        Als de muis over een item in uit de eerste visuele gaat. row[3] dat zijn de rects.
+        Zet cur_item op de index van degene waar de muis over gaat.
+        :param event: pygame.MOUSEMOTION uit partyscreen
+        :return: row[4] is de kolom met de info.
+        """
+        self.cur_item = None
+        for index, row in enumerate(self.table_data):
+            if row[3].collidepoint(event.pos):
+                self.cur_item = index
+                return row[4]
+
+    def update(self, hero):
+        """
+        Update eerst alle data.
+        Let op: self.table_view bevat maar 3 kolommen in tegenstelling tot self.table_data met 5
+        :param hero: de huidige geselecteerde hero uit partyscreen
+        """
         # zet eerst even wat bepaalde waarden vast.
         if hero.lev.qty >= hero.lev.MAX:
             hero_exp_tot = "Max"
@@ -101,6 +121,25 @@ class StatsBox(object):
             self.table_view[index].append(self.normalfont.render(row[1], True, FONTCOLOR1).convert_alpha())
             self._line(row[2], self.table_view[index])
 
+    def render(self, screen):
+        """
+        En teken dan al die data op de surface en die op de screen.
+        Let op: self.table_view bevat maar 3 kolommen in tegenstelling tot self.table_data met 5
+        :param screen: self.screen van partyscreen
+        """
+        self.surface.blit(self.background, (0, 0))
+        pygame.draw.rect(self.background, LINECOLOR, self.surface.get_rect(), 1)
+
+        self.surface.blit(self.title, (TITLEX, TITLEY))
+        for index, row in enumerate(self.table_view):
+            self.surface.blit(row[0], (COLUMN1X, COLUMNSY + index * ROWHEIGHT))
+        for index, row in enumerate(self.table_view):
+            self.surface.blit(row[1], (COLUMN2X, COLUMNSY + index * ROWHEIGHT))
+        for index, row in enumerate(self.table_view):
+            self.surface.blit(row[2], (COLUMN3X, COLUMNSY + index * ROWHEIGHT))
+
+        screen.blit(self.surface, self.rect.topleft)
+
     def _rect(self, index, text):
         """
         self.rect is de hele box zelf. Die heeft ook een position op het scherm, vandaar dat de position een soort
@@ -127,41 +166,6 @@ class StatsBox(object):
         elif value < 0:
             value = "("+str(value)+")"
             col.append(self.normalfont.render(value, True, NEGCOLOR).convert_alpha())
-
-    def draw(self, screen, hero):
-        """
-        Update eerst de data, en teken dan al die data op de surface en die op de screen.
-        Let op: self.table_view bevat maar 3 kolommen in tegenstelling tot self.table_data met 5
-        :param screen: self.screen van partyscreen
-        :param hero: de huidige geselecteerde hero
-        """
-        self._update(hero)
-
-        self.surface.blit(self.background, (0, 0))
-        pygame.draw.rect(self.background, LINECOLOR, self.surface.get_rect(), 1)
-
-        self.surface.blit(self.title, (TITLEX, TITLEY))
-        for index, row in enumerate(self.table_view):
-            self.surface.blit(row[0], (COLUMN1X, COLUMNSY + index * ROWHEIGHT))
-        for index, row in enumerate(self.table_view):
-            self.surface.blit(row[1], (COLUMN2X, COLUMNSY + index * ROWHEIGHT))
-        for index, row in enumerate(self.table_view):
-            self.surface.blit(row[2], (COLUMN3X, COLUMNSY + index * ROWHEIGHT))
-
-        screen.blit(self.surface, self.rect.topleft)
-
-    def mouse_hover(self, event):
-        """
-        Als de muis over een item in uit de eerste visuele gaat. row[3] dat zijn de rects.
-        Zet cur_item op de index van degene waar de muis over gaat.
-        :param event: pygame.MOUSEMOTION uit engine.py
-        :return: row[4] is de kolom met de info.
-        """
-        self.cur_item = None
-        for index, row in enumerate(self.table_data):
-            if row[3].collidepoint(event.pos):
-                self.cur_item = index
-                return row[4]
 
     @staticmethod
     def _desc(stat):

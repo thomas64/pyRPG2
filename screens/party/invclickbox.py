@@ -122,7 +122,19 @@ class InvClickBox(object):
         self.background.fill(BACKGROUNDCOLOR)
         self.background = self.background.convert()
 
-    def draw(self, screen):
+    def mouse_scroll(self, event):
+        """
+        Registreert of scrolwiel gebruikt wordt. Verplaatst de layer dan omhoog of omlaag.
+        :param event: pygame.MOUSEBUTTONDOWN uit partyscreen
+        """
+        if event.button == keys.SCROLLUP:
+            if self.layer_offset < 0:
+                self.layer_offset += SCROLLSPEED
+        elif event.button == keys.SCROLLDOWN:
+            if self.layer_offset > (self.rect.height - self.layer_height):
+                self.layer_offset -= SCROLLSPEED
+
+    def render(self, screen):
         """
         Surface tekent layer, de rest gaat op de layer, en screen tekent de surface.
         :param screen: self.screen van partyscreen
@@ -149,15 +161,3 @@ class InvClickBox(object):
                              (COLUMN1X, COLUMNSY + index * ROWHEIGHT), (self.box_width, COLUMNSY + index * ROWHEIGHT))
 
         screen.blit(self.surface, self.rect.topleft)
-
-    def mouse_scroll(self, event):
-        """
-        Registreert of scrolwiel gebruikt wordt. Verplaatst de layer dan omhoog of omlaag.
-        :param event: pygame.MOUSEBUTTONDOWN uit engine.py
-        """
-        if event.button == keys.SCROLLUP:
-            if self.layer_offset < 0:
-                self.layer_offset += SCROLLSPEED
-        elif event.button == keys.SCROLLDOWN:
-            if self.layer_offset > (self.rect.height - self.layer_height):
-                self.layer_offset -= SCROLLSPEED

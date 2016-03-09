@@ -55,32 +55,34 @@ class Window(object):
 
     def single_input(self, event):
         """
-        Handelt keyevents af.
-        :param event: pygame.KEYDOWN uit engine.py
+        Handelt de muis en keyboard input af.
+        :param event: pygame.event.get()
         """
-        if event.key == keys.ALIGN:
-            self.heroes[0].align_to_grid(GRIDSIZE)
+        if event.type == pygame.KEYDOWN:
 
-        elif event.key == keys.GRID:
-            if self.grid_sprite is None:
-                self.grid_sprite = screens.sprites.GridSprite(self.map1.width, self.map1.height,
-                                                              GRIDCOLOR, GRIDSIZE, GRIDLAYER)
-                self.group.add(self.grid_sprite)
-            else:
-                self.group.remove(self.grid_sprite)
-                self.grid_sprite = None
+            if event.key == keys.ALIGN:
+                self.heroes[0].align_to_grid(GRIDSIZE)
 
-        elif event.key == keys.CBOX:
-            if len(self.cbox_sprites) == 0:                             # als de lijst leeg is.
-                self.cbox_sprites.append(screens.sprites.ColorBoxSprite(self.heroes[0].rect, HEROCOLOR, CBOXLAYER))
-                for rect in self.map1.tree_rects:
-                    self.cbox_sprites.append(screens.sprites.ColorBoxSprite(rect, TREECOLOR, CBOXLAYER))
-                for rect in self.map1.water_rects:
-                    self.cbox_sprites.append(screens.sprites.ColorBoxSprite(rect, WATERCOLOR, CBOXLAYER))
-                self.group.add(self.cbox_sprites)
-            else:
-                self.group.remove(self.cbox_sprites)
-                self.cbox_sprites = []
+            elif event.key == keys.GRID:
+                if self.grid_sprite is None:
+                    self.grid_sprite = screens.sprites.GridSprite(self.map1.width, self.map1.height,
+                                                                  GRIDCOLOR, GRIDSIZE, GRIDLAYER)
+                    self.group.add(self.grid_sprite)
+                else:
+                    self.group.remove(self.grid_sprite)
+                    self.grid_sprite = None
+
+            elif event.key == keys.CBOX:
+                if len(self.cbox_sprites) == 0:                             # als de lijst leeg is.
+                    self.cbox_sprites.append(screens.sprites.ColorBoxSprite(self.heroes[0].rect, HEROCOLOR, CBOXLAYER))
+                    for rect in self.map1.tree_rects:
+                        self.cbox_sprites.append(screens.sprites.ColorBoxSprite(rect, TREECOLOR, CBOXLAYER))
+                    for rect in self.map1.water_rects:
+                        self.cbox_sprites.append(screens.sprites.ColorBoxSprite(rect, WATERCOLOR, CBOXLAYER))
+                    self.group.add(self.cbox_sprites)
+                else:
+                    self.group.remove(self.cbox_sprites)
+                    self.cbox_sprites = []
 
     def multi_input(self, key_input, mouse_pos, dt):
         """

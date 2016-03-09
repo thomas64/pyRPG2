@@ -50,9 +50,28 @@ class SkillsBox(object):
 
         self.cur_item = None
 
-    def _update(self, hero):
         self.title = self.largefont.render(TITLE, True, FONTCOLOR1).convert_alpha()
+        self.table_data = []
+        self.table_view = []
 
+    def mouse_hover(self, event):
+        """
+        Als de muis over een item in uit de eerste visuele gaat. row[4] dat zijn de rects.
+        Zet cur_item op de index van degene waar de muis over gaat.
+        :param event: pygame.MOUSEMOTION uit partyscreen
+        :return: row[5] is de kolom met de info.
+        """
+        self.cur_item = None
+        for index, row in enumerate(self.table_data):
+            if row[4].collidepoint(event.pos):
+                self.cur_item = index
+                return row[5]
+
+    def update(self, hero):
+        """
+        Update eerst alle data.
+        :param hero: de huidige geselecteerde hero uit partyscreen
+        """
         self.table_data = []
         for skill in hero.skills_tuple:
             if skill.positive_quantity():
@@ -77,6 +96,26 @@ class SkillsBox(object):
             self.table_view[index].append(self.normalfont.render(row[1], True, color).convert_alpha())
             self.table_view[index].append(self.normalfont.render(row[2], True, FONTCOLOR1).convert_alpha())
             self._line(row[3], self.table_view[index])
+
+    def render(self, screen):
+        """
+        En teken dan al die data op de surface en die op de screen.
+        :param screen: self.screen van partyscreen
+        """
+        self.surface.blit(self.background, (0, 0))
+        pygame.draw.rect(self.background, LINECOLOR, self.surface.get_rect(), 1)
+
+        self.surface.blit(self.title, (TITLEX, TITLEY))
+        for index, row in enumerate(self.table_view):
+            self.surface.blit(row[0], (COLUMN1X, COLUMNSY + ICONOFFSET + index * ROWHEIGHT))
+        for index, row in enumerate(self.table_view):
+            self.surface.blit(row[1], (COLUMN2X, COLUMNSY + index * ROWHEIGHT))
+        for index, row in enumerate(self.table_view):
+            self.surface.blit(row[2], (COLUMN3X, COLUMNSY + index * ROWHEIGHT))
+        for index, row in enumerate(self.table_view):
+            self.surface.blit(row[3], (COLUMN4X, COLUMNSY + index * ROWHEIGHT))
+
+        screen.blit(self.surface, self.rect.topleft)
 
     def _rect(self, index, text):
         """
@@ -104,39 +143,3 @@ class SkillsBox(object):
         elif value < 0:
             value = "("+str(value)+")"
             col.append(self.normalfont.render(value, True, NEGCOLOR).convert_alpha())
-
-    def draw(self, screen, hero):
-        """
-        Update eerst de data, en teken dan al die data op de surface en die op de screen.
-        :param screen: self.screen van partyscreen
-        :param hero: de huidige geselecteerde hero
-        """
-        self._update(hero)
-
-        self.surface.blit(self.background, (0, 0))
-        pygame.draw.rect(self.background, LINECOLOR, self.surface.get_rect(), 1)
-
-        self.surface.blit(self.title, (TITLEX, TITLEY))
-        for index, row in enumerate(self.table_view):
-            self.surface.blit(row[0], (COLUMN1X, COLUMNSY + ICONOFFSET + index * ROWHEIGHT))
-        for index, row in enumerate(self.table_view):
-            self.surface.blit(row[1], (COLUMN2X, COLUMNSY + index * ROWHEIGHT))
-        for index, row in enumerate(self.table_view):
-            self.surface.blit(row[2], (COLUMN3X, COLUMNSY + index * ROWHEIGHT))
-        for index, row in enumerate(self.table_view):
-            self.surface.blit(row[3], (COLUMN4X, COLUMNSY + index * ROWHEIGHT))
-
-        screen.blit(self.surface, self.rect.topleft)
-
-    def mouse_hover(self, event):
-        """
-        Als de muis over een item in uit de eerste visuele gaat. row[4] dat zijn de rects.
-        Zet cur_item op de index van degene waar de muis over gaat.
-        :param event: pygame.MOUSEMOTION uit engine.py
-        :return: row[5] is de kolom met de info.
-        """
-        self.cur_item = None
-        for index, row in enumerate(self.table_data):
-            if row[4].collidepoint(event.pos):
-                self.cur_item = index
-                return row[5]

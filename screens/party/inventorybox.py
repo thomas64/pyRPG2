@@ -55,49 +55,14 @@ class InventoryBox(object):
         self.largefont = pygame.font.SysFont(FONT, LARGEFONTSIZE)
         self.normalfont = pygame.font.SysFont(FONT, NORMALFONTSIZE)
 
-    def _update(self, hero):
         self.title = self.largefont.render(TITLE, True, FONTCOLOR).convert_alpha()
         self.stickman = pygame.image.load(STICKMANPATH).convert()
-
         self.equipment_item_sprites = []
-        for equipment_item in hero.equipment_tuple:
-            if equipment_item.is_not_empty():
-                # laat het gekozen icon zien van de equipment item
-                self.equipment_item_sprites.append(pygame.image.load(equipment_item.SPR).subsurface(
-                                            equipment_item.COL, equipment_item.ROW, SUBSURW, SUBSURH).convert_alpha())
-            else:
-                # of anders een lege surface
-                self.equipment_item_sprites.append(pygame.Surface((0, 0)))
-
-    def draw(self, screen, hero):
-        """
-        Update eerst de data, en teken dan al die data op de surface en die op de screen.
-        :param screen: self.screen van partyscreen
-        :param hero: de huidige geselecteerde hero
-        """
-        self._update(hero)
-
-        self.surface.blit(self.background, (0, 0))
-        pygame.draw.rect(self.background, LINECOLOR, self.surface.get_rect(), 1)
-
-        self.surface.blit(self.title, (TITLEX, TITLEY))
-        # positioneer stickman in het midden
-        self.surface.blit(self.stickman, ((self.surface.get_width() - self.stickman.get_width()) / 2, STICKMANPOS))
-
-        for index, box in enumerate(EQUIPMENTITEMBOXES):
-            # teken een doorzichtige box
-            pygame.gfxdraw.box(self.surface, box, EQUIPMENTITEMBOXCOLOR)
-            # teken het lijntje eromheen
-            pygame.draw.rect(self.surface, LINECOLOR, box, 1)
-            # teken de icon
-            self.surface.blit(self.equipment_item_sprites[index], box)
-
-        screen.blit(self.surface, self.rect.topleft)
 
     def mouse_hover(self, event, hero):
         """
         Registreert of de muis over een boxje beweegt. Vergelijkt dan met TYP uit equipment_tuple om de juiste te vinden
-        :param event: pygame.MOUSEMOTION uit engine.py
+        :param event: pygame.MOUSEMOTION uit partyscreen
         :param hero: self.cur_hero uit party/display.py
         :return: visuele weergave uit equipment_item.display(), of niets.
         """
@@ -114,7 +79,7 @@ class InventoryBox(object):
         """
         Deze moet van de display de muispositie en het EquipmentType teruggeven. Daar vraagt display om, zodat er een
         clickbox opgezet kan worden.
-        :param event: pygame.MOUSEBUTTONDOWN uit engine.py
+        :param event: pygame.MOUSEBUTTONDOWN uit partyscreen
         :param hero: self.cur_hero uit party/display.py
         :return: None als er mis geklikt wordt.
         """
@@ -124,3 +89,40 @@ class InventoryBox(object):
             if box.collidepoint(rel_pos_x, rel_pos_y):
                 return event.pos, hero.equipment_tuple[index].TYP
         return None, None
+
+    def update(self, hero):
+        """
+        Update eerst alle data.
+        :param hero: de huidige geselecteerde hero uit partyscreen
+        """
+        self.equipment_item_sprites = []
+        for equipment_item in hero.equipment_tuple:
+            if equipment_item.is_not_empty():
+                # laat het gekozen icon zien van de equipment item
+                self.equipment_item_sprites.append(pygame.image.load(equipment_item.SPR).subsurface(
+                                            equipment_item.COL, equipment_item.ROW, SUBSURW, SUBSURH).convert_alpha())
+            else:
+                # of anders een lege surface
+                self.equipment_item_sprites.append(pygame.Surface((0, 0)))
+
+    def render(self, screen):
+        """
+        En teken dan al die data op de surface en die op de screen.
+        :param screen: self.screen van partyscreen
+        """
+        self.surface.blit(self.background, (0, 0))
+        pygame.draw.rect(self.background, LINECOLOR, self.surface.get_rect(), 1)
+
+        self.surface.blit(self.title, (TITLEX, TITLEY))
+        # positioneer stickman in het midden
+        self.surface.blit(self.stickman, ((self.surface.get_width() - self.stickman.get_width()) / 2, STICKMANPOS))
+
+        for index, box in enumerate(EQUIPMENTITEMBOXES):
+            # teken een doorzichtige box
+            pygame.gfxdraw.box(self.surface, box, EQUIPMENTITEMBOXCOLOR)
+            # teken het lijntje eromheen
+            pygame.draw.rect(self.surface, LINECOLOR, box, 1)
+            # teken de icon
+            self.surface.blit(self.equipment_item_sprites[index], box)
+
+        screen.blit(self.surface, self.rect.topleft)

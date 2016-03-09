@@ -39,7 +39,7 @@ class InfoBox(object):
 
         self.font = pygame.font.SysFont(FONT, FONTSIZE)
 
-    def draw(self, screen, text):
+    def render(self, screen, text):
         """
         Teken de labels bovenop de achtergrond. Keuze uit 3 soorten tekst aanlevering.
         :param screen: self.screen van partyscreen
