@@ -42,27 +42,30 @@ class LoadMenu(screens.menu.basemenu.BaseMenu):
 
         self.inside['Back'] = 'Back'
 
-    def on_select(self, menu_item, index, title, animation, scr_capt):
+    def on_select(self, menu_item, title, animation, scr_capt, index):
         """
         Zie BaseMenu.
         :param menu_item: zie BaseMenu
-        :param index: zie BaseMenu
         :param title: zie BaseMenu
         :param animation: zie BaseMenu
         :param scr_capt: zie BaseMenu
+        :param index: zie BaseMenu
         """
         if menu_item.func == self.Back:
             self.on_exit()
         elif menu_item.func not in (self.Slot1, self.Slot2, self.Slot3, self.Slot4, self.Slot5):
             self.engine.gamestate.change(screens.overworld.Overworld(self.engine))
             loadsave.Dialog(self.engine).load(menu_item.func)
+        else:
+            self.engine.audio.stop_sound(self.engine.audio.select)
+            self.engine.audio.play_sound(self.engine.audio.error)
 
-    def on_delete(self, menu_item, index, scr_capt):
+    def on_delete(self, menu_item, scr_capt, index):
         """
         Zie BaseMenu. Als er delete wordt gedrukt op niet de Back knop. Herlaad het hele object.
         :param menu_item: zie BaseMenu
-        :param index: zie BaseMenu
         :param scr_capt: zie BaseMenu
+        :param index: zie BaseMenu
         """
         if menu_item.func not in (self.Back, self.Slot1, self.Slot2, self.Slot3, self.Slot4, self.Slot5):
             loadsave.Dialog(self.engine).delete(menu_item.func)

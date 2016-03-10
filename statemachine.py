@@ -16,14 +16,13 @@ class States(enum.Enum):
     MainMenu = 1
     LoadMenu = 2
     SaveMenu = 3
-    SaveDialog = 4
-    OptionsMenu = 5
-    PauseMenu = 6
+    OptionsMenu = 4
+    PauseMenu = 5
 
-    Overworld = 7
-    Battle = 8
-    Conversation = 9
-    PartyScreen = 10
+    Overworld = 6
+    Battle = 7
+    Conversation = 8
+    PartyScreen = 9
 
 
 class StateMachine(object):

@@ -36,14 +36,14 @@ class BaseMenu(object):
         """
         return key
 
-    def on_select(self, menu_item, index, title, animation, scr_capt):
+    def on_select(self, menu_item, title, animation, scr_capt, index):
         """
         Als er in een menu iets geselecteerd wordt.
         :param menu_item: self.menu_texts[self.cur_item] uit Display. Dat is een key voor self.inside
-        :param index: integer, welke menu item is geselecteerd
         :param title: de titel kan meegegeven worden
         :param animation: de animatie kan meegegeven worden
         :param scr_capt: een screencapture kan meegegeven worden
+        :param index: integer, welke menu item is geselecteerd
         """
         raise NotImplementedError
 
@@ -55,11 +55,11 @@ class BaseMenu(object):
         self.engine.gamestate.pop()
 
     # noinspection PyMethodMayBeStatic
-    def on_delete(self, menu_item, index, scr_capt):
+    def on_delete(self, menu_item, scr_capt, index):
         """
         Als er een delete commando gegeven wordt. Dit komt eigenlijk alleen voor bij LoadMenu.
         :param menu_item: self.menu_texts[self.cur_item] uit Display. Dat is een key voor self.inside
-        :param index: integer, welke menu item is geselecteerd
         :param scr_capt: een screencapture
+        :param index: integer, welke menu item is geselecteerd
         """
         pass

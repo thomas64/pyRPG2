@@ -27,35 +27,39 @@ class InputBox(object):
     """
     Geeft een input box weer om te kunnen typen.
     """
-    def __init__(self, engine, name):
-        self.engine = engine
-        self.screen = self.engine.screen
+    def __init__(self, screen):
+        self.screen = screen
         self.surface = pygame.Surface((BOXWIDTH, BOXHEIGHT))
         self.surface = self.surface.convert()
         self.rect = self.surface.get_rect()
         self.rect.topleft = (self.screen.get_width() - BOXWIDTH) / 2, BOXY
 
-        self.name = name
-
         self.font = pygame.font.SysFont(FONT, FONTSIZE)
         self.namelabel = INPUTLABEL
         self.textbox = ["_"]
 
-    # noinspection PyMethodMayBeStatic
-    def on_enter(self):
-        """
-        Wanneer deze state op de stack komt, voer dit uit.
-        Op dit moment nog niets echts
-        """
-        pass
+        self.running = False
+        self.confirm = False
 
-    # noinspection PyMethodMayBeStatic
-    def on_exit(self):
+    def input_loop(self):
         """
-        Wanneer deze state onder een andere state van de stack komt, voer dit uit.
-        Op dit moment nog niets echts
+        De loop waarin hij blijft, totdat de juiste input komt.
         """
-        pass
+        self.running = True
+        while self.running:
+
+            for event in pygame.event.get():
+                if event.type == pygame.QUIT:
+                    self.running = False
+                self.single_input(event)
+
+            self.render()
+            pygame.display.update()
+
+        if self.confirm:
+            return "".join(self.textbox[0:-1])  # return de string maar zonder het laatste character
+        else:
+            return None
 
     def single_input(self, event):
         """
@@ -72,34 +76,14 @@ class InputBox(object):
                 if len(self.textbox) == 0:
                     self.textbox = ["_"]
             if event.key == keys.EXIT:
-                self.engine.gamestate.pop()
+                self.running = False
             if event.key in keys.SELECT:
-                self.engine.gamestate.pop()
-                return "piet"   # todo, hoe geef ik het juiste goed terug?
-                # piet = self.engine.gamestate.deep_peek()
-                # pass
-
-    # noinspection PyMethodMayBeStatic
-    def multi_input(self, key_input, mouse_pos, dt):
-        """
-        Handelt de ingedrukt-houden muis en keyboard input af.
-        :param key_input: pygame.key.get_pressed()
-        :param mouse_pos: pygame.mouse.get_pos()
-        :param dt: self.clock.tick(FPS)/1000.0
-        """
-        pass
-
-    # noinspection PyMethodMayBeStatic
-    def update(self, dt):
-        """
-        Update de waarden van de bovenste state.
-        :param dt: self.clock.tick(FPS)/1000.0
-        """
-        pass
+                self.confirm = True
+                self.running = False
 
     def render(self):
         """
-        Teken de data.
+        Teken de letters.
         """
         self.surface.fill(BACKGROUNDCOLOR)
         pygame.draw.rect(self.surface, RECTCOLOR, self.surface.get_rect(), 1)

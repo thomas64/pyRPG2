@@ -24,14 +24,14 @@ class OptionsMenu(screens.menu.basemenu.BaseMenu):
 
         self.inside['Back'] = 'Back'
 
-    def on_select(self, menu_item, index, title, animation, scr_capt):
+    def on_select(self, menu_item, title, animation, scr_capt, index):
         """
         Zie BaseMenu. Deze stelt de settingsweergave in.
         :param menu_item: zie BaseMenu
-        :param index: zie BaseMenu
         :param title: zie BaseMenu
         :param animation: zie BaseMenu
         :param scr_capt: zie BaseMenu
+        :param index: zie BaseMenu
         """
         if menu_item.func == self.Music:
             settingview = menu_item                                          # hier wordt de weergave
