@@ -21,7 +21,7 @@ def main():
     os.environ['SDL_VIDEO_CENTERED'] = '1'
     pygame.mixer.pre_init(44100, 16, 2, 4096)
     pygame.init()
-    pygame.display.set_mode((SCREENWIDTH, SCREENHEIGHT), pygame.FULLSCREEN | pygame.DOUBLEBUF | pygame.HWSURFACE)
+    pygame.display.set_mode((SCREENWIDTH, SCREENHEIGHT))  # , pygame.FULLSCREEN | pygame.DOUBLEBUF | pygame.HWSURFACE)
     engine.GameEngine().main_loop()
     # exit
     pygame.quit()

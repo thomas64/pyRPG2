@@ -14,8 +14,8 @@ class States(enum.Enum):
     Alle states uit het spel.
     """
     MainMenu = 1
-    LoadMenu = 2
-    SaveMenu = 3
+    LoadMenu = "Load Game"
+    SaveMenu = "Save Game"
     OptionsMenu = 4
     PauseMenu = 5
 

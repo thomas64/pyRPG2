@@ -113,6 +113,8 @@ class Display(object):
                 self.info_label = self.stats_box.mouse_hover(event)
             elif self.skills_box.rect.collidepoint(event.pos):
                 self.info_label = self.skills_box.mouse_hover(event)
+            elif self.invclick_box and self.invclick_box.rect.collidepoint(event.pos):
+                self.info_label = self.invclick_box.mouse_hover(event)
             elif self.inventory_box.rect.collidepoint(event.pos):
                 self.info_label = self.inventory_box.mouse_hover(event, self.cur_hero)
 
