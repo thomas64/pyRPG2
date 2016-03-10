@@ -36,10 +36,11 @@ class BaseMenu(object):
         """
         return key
 
-    def on_select(self, menu_item, title, animation, scr_capt):
+    def on_select(self, menu_item, index, title, animation, scr_capt):
         """
         Als er in een menu iets geselecteerd wordt.
         :param menu_item: self.menu_texts[self.cur_item] uit Display. Dat is een key voor self.inside
+        :param index: integer, welke menu item is geselecteerd
         :param title: de titel kan meegegeven worden
         :param animation: de animatie kan meegegeven worden
         :param scr_capt: een screencapture kan meegegeven worden

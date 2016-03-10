@@ -115,7 +115,8 @@ class Display(object):
                 for item in self.menu_texts:
                     if item.rect.collidepoint(event.pos):
                         self.audio.play_sound(self.audio.select)
-                        self.menu_content.on_select(item, self.title, self.animation, self.scr_capt)
+                        self.menu_content.on_select(item, self.cur_item,
+                                                    self.title, self.animation, self.scr_capt)
 
         elif event.type == pygame.KEYDOWN:
             if event.key == keys.UP and self.cur_item > 0:
@@ -133,7 +134,8 @@ class Display(object):
 
             if event.key in keys.SELECT:
                 self.audio.play_sound(self.audio.select)
-                self.menu_content.on_select(self.menu_texts[self.cur_item], self.title, self.animation, self.scr_capt)
+                self.menu_content.on_select(self.menu_texts[self.cur_item], self.cur_item,
+                                            self.title, self.animation, self.scr_capt)
             elif event.key == keys.DELETE:
                 self.audio.play_sound(self.audio.select)
                 self.menu_content.on_delete(self.menu_texts[self.cur_item], self.cur_item, self.scr_capt)

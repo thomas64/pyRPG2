@@ -3,7 +3,6 @@
 class: PauseMenu
 """
 
-import loadsave
 import screens.menu.basemenu
 import statemachine
 
@@ -21,10 +20,11 @@ class PauseMenu(screens.menu.basemenu.BaseMenu):
         self.inside['Options'] = 'Options'
         self.inside['MainMenu'] = 'Main Menu'
 
-    def on_select(self, menu_item, title, animation, scr_capt):
+    def on_select(self, menu_item, index, title, animation, scr_capt):
         """
         Zie BaseMenu.
         :param menu_item: zie BaseMenu
+        :param index: zie BaseMenu
         :param title: zie BaseMenu
         :param animation: zie BaseMenu
         :param scr_capt: zie BaseMenu
@@ -41,15 +41,6 @@ class PauseMenu(screens.menu.basemenu.BaseMenu):
             push_object = screens.menu.manager.create_menu(statemachine.States.SaveMenu, self.engine,
                                                            scr_capt=scr_capt)
             self.engine.gamestate.push(push_object)
-
-            # top_from_stack = self.engine.gamestate.peek()                   # dit is omdat hij de top van de stack
-            # self.engine.gamestate.pop()                                     # gebruikt om te saven, namelijk overworld,
-            # dialog = loadsave.Dialog(self.engine)
-            # if dialog.save():
-            #     self.engine.audio.play_sound(self.engine.audio.select)
-            # self.engine.gamestate.push(top_from_stack)                      # die moet dus tijdelijk van de stack.
-            # import pygame
-            # pygame.event.clear()                                            # anders stapelen de geluiden zich op
 
         elif menu_item.func == self.Options:
             push_object = screens.menu.manager.create_menu(statemachine.States.OptionsMenu, self.engine,

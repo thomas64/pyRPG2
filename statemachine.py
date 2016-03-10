@@ -16,13 +16,14 @@ class States(enum.Enum):
     MainMenu = 1
     LoadMenu = 2
     SaveMenu = 3
-    OptionsMenu = 4
-    PauseMenu = 5
+    SaveDialog = 4
+    OptionsMenu = 5
+    PauseMenu = 6
 
-    Overworld = 6
-    Battle = 7
-    Conversation = 8
-    PartyScreen = 9
+    Overworld = 7
+    Battle = 8
+    Conversation = 9
+    PartyScreen = 10
 
 
 class StateMachine(object):
@@ -45,12 +46,13 @@ class StateMachine(object):
         except IndexError:
             return None                     # empty stack
 
-    def deep_peek(self):
+    def deep_peek(self, stackindex=-2):
         """
         Kijk in de enerbovenste laag van de stack.
+        :param stackindex: -1 is de bovenste, -2 is de enerbovenste, -3 etc.
         """
         try:
-            return self.statestack[-2]
+            return self.statestack[stackindex]
         except IndexError:
             return None
 

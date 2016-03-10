@@ -21,10 +21,11 @@ class MainMenu(screens.menu.basemenu.BaseMenu):
         self.inside['Options'] = 'Options'
         self.inside['ExitGame'] = 'Exit'
 
-    def on_select(self, menu_item, title, animation, scr_capt):
+    def on_select(self, menu_item, index, title, animation, scr_capt):
         """
         Zie BaseMenu.
         :param menu_item: zie BaseMenu
+        :param index: zie BaseMenu
         :param title: zie BaseMenu
         :param animation: zie BaseMenu
         :param scr_capt: zie BaseMenu

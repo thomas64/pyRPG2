@@ -5,7 +5,7 @@ Alle keys uit het spel
 
 import pygame
 
-KILL = pygame.K_BACKSPACE
+KILL = pygame.K_BACKSLASH
 GRID = pygame.K_F10
 CBOX = pygame.K_F11
 DEBUG = pygame.K_F12
@@ -13,6 +13,7 @@ DEBUG = pygame.K_F12
 SELECT = pygame.K_RETURN, pygame.K_KP_ENTER     # 2 mogelijkheden voor dezelfde constante
 DELETE = pygame.K_DELETE
 EXIT = pygame.K_ESCAPE
+REMOVE = pygame.K_BACKSPACE
 
 UP = pygame.K_UP
 DOWN = pygame.K_DOWN
