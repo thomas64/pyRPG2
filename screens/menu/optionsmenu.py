@@ -34,13 +34,11 @@ class OptionsMenu(screens.menu.basemenu.BaseMenu):
         :param index: zie BaseMenu
         """
         if menu_item.func == self.Music:
-            settingview = menu_item                                          # hier wordt de weergave
-            settingview.flip_switch()                                        # later aangepast
-            self.engine.audio.flip_music()                                   # en de instelling zelf aangepast
-            self.engine.audio.write_cfg()                                    # en weggeschreven
+            menu_item.flip_switch()             # hier wordt de weergave later aangepast
+            self.engine.audio.flip_music()      # en de instelling zelf aangepast
+            self.engine.audio.write_cfg()       # en weggeschreven
         elif menu_item.func == self.Sound:
-            settingview = menu_item
-            settingview.flip_switch()
+            menu_item.flip_switch()
             self.engine.audio.flip_sound()
             self.engine.audio.write_cfg()
         elif menu_item.func == self.Back:

@@ -10,10 +10,9 @@ import loadsave
 import screens.menu.basemenu
 import screens.menu.manager
 import screens.overworld
-import statemachine
 
 SAVEPATH = 'savegame'
-MAXLOAD = 5
+MAXSLOTS = 5
 
 
 class LoadMenu(screens.menu.basemenu.BaseMenu):
@@ -24,27 +23,38 @@ class LoadMenu(screens.menu.basemenu.BaseMenu):
     def __init__(self, engine):
         super().__init__(engine)
 
+        number_of_slots = []
+
+        # maak het aantal dict entries aan. en een tijdelijke lijst met alle '#_' prefixes.
+        for index in range(0, MAXSLOTS):
+            self.inside[index+1] = "Slot {}:  ...".format(index+1)
+            number_of_slots.append(str(index+1)+"_")
+
+        # loop door de savegame dir heen en sla alle bestanden op in 'files'.
         files = []
         for (dirpath, dirnames, filenames) in os.walk(SAVEPATH):
             files.extend(filenames)
             break
 
-        index = 1
+        # loop door alle files heen.
         for file in files:
-            timestamp = os.path.getmtime(os.path.join(SAVEPATH, file))
-            timestamp = datetime.datetime.fromtimestamp(timestamp).strftime('%Y-%m-%d %H:%M:%S')
-            self.inside[file] = "Slot {}:  {} [{}]".format(index, str(file), str(timestamp))
-            index += 1
-
-        while index <= MAXLOAD:
-            self.inside['Slot'+str(index)] = "Slot {}:  ...".format(index)
-            index += 1
+            # loop door alle prefixes heen.
+            for index, start in enumerate(number_of_slots):
+                # als een gevonden bestand start met een prefix en eindigd op .dat
+                if file.startswith(start) and file.endswith(".dat"):
+                    # haal dan de prefix en .dat weg en vervang dat door visuele text weergave
+                    visual = file.replace(start, "Slot "+str(index+1)+":  ").replace(".dat", "")
+                    timestamp = os.path.getmtime(os.path.join(SAVEPATH, file))
+                    timestamp = datetime.datetime.fromtimestamp(timestamp).strftime('%Y-%m-%d %H:%M:%S')
+                    # voeg ook de timestamp toe en zet het in de dict bij de juiste slot
+                    self.inside[index+1] = "{} [{}]".format(visual, timestamp)
 
         self.inside['Back'] = 'Back'
 
     def on_select(self, menu_item, title, animation, scr_capt, index):
         """
-        Zie BaseMenu.
+        Zie BaseMenu. Wanneer geen 'Back' of '...' in de text. Change de state naar Overworld,
+        converteer de gelecteerde tekst naar filename, laad die in over de Overworld Data.
         :param menu_item: zie BaseMenu
         :param title: zie BaseMenu
         :param animation: zie BaseMenu
@@ -53,12 +63,13 @@ class LoadMenu(screens.menu.basemenu.BaseMenu):
         """
         if menu_item.func == self.Back:
             self.on_exit()
-        elif menu_item.func not in (self.Slot1, self.Slot2, self.Slot3, self.Slot4, self.Slot5):
-            self.engine.gamestate.change(screens.overworld.Overworld(self.engine))
-            loadsave.Dialog(self.engine).load(menu_item.func)
-        else:
+        elif "..." in menu_item.text:
             self.engine.audio.stop_sound(self.engine.audio.select)
             self.engine.audio.play_sound(self.engine.audio.error)
+        else:
+            self.engine.gamestate.change(screens.overworld.Overworld(self.engine))
+            filename = self._convert_to_filename(menu_item.text, index)
+            loadsave.Dialog(self.engine).load(filename)
 
     def on_delete(self, menu_item, scr_capt, index):
         """
@@ -67,10 +78,25 @@ class LoadMenu(screens.menu.basemenu.BaseMenu):
         :param scr_capt: zie BaseMenu
         :param index: zie BaseMenu
         """
-        if menu_item.func not in (self.Back, self.Slot1, self.Slot2, self.Slot3, self.Slot4, self.Slot5):
-            loadsave.Dialog(self.engine).delete(menu_item.func)
-            self.engine.gamestate.pop()
+        if menu_item.func == self.Back:
+            self.engine.audio.stop_sound(self.engine.audio.select)
+            self.engine.audio.play_sound(self.engine.audio.error)
+        elif "..." in menu_item.text:
+            self.engine.audio.stop_sound(self.engine.audio.select)
+            self.engine.audio.play_sound(self.engine.audio.error)
+        else:
+            filename = self._convert_to_filename(menu_item.text, index)
+            loadsave.Dialog(self.engine).delete(filename)
+            # er is niet voor _reload() gekozen omdat bij het poppen de muziek van mainmenu omhoog kwam.
+            # bij savemenu is dat geen probleem omdat die dieper in het menu ligt.
+            menu_item.clear_save_slot(self.engine.screen, index+1)
 
-            push_object = screens.menu.manager.create_menu(statemachine.States.LoadMenu, self.engine,
-                                                           scr_capt=scr_capt, select=index)
-            self.engine.gamestate.push(push_object)
+    @staticmethod
+    def _convert_to_filename(menu_text, index):
+        """
+        Haal tekst ervoor weg en maak daar #_ van. Haal de hele datum erachter weg. Zet .dat erachter.
+        """
+        filename = menu_text.replace("Slot "+str(index+1)+":  ", str(index+1)+"_")
+        filename = filename[:-22]
+        filename += ".dat"
+        return filename

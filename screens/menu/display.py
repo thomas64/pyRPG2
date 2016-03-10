@@ -69,8 +69,7 @@ class Display(object):
                 pos_x += MENUX
                 pos_y += MENUY
 
-            menu_text.position = (pos_x, pos_y)
-            menu_text.rect.topleft = menu_text.position
+            menu_text.set_position(pos_x, pos_y)
             self.menu_texts.append(menu_text)
 
         if cur_item == -1:                          # als -1 wordt meegegeven als argument, selecteer dan de laatste
