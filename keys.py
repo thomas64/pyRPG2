@@ -27,9 +27,9 @@ MVSPEED1_2 = pygame.K_RCTRL
 MVSPEED3_1 = pygame.K_LSHIFT
 MVSPEED3_2 = pygame.K_RSHIFT
 
-ZOOMPLUS = pygame.K_KP_PLUS
-ZOOMMIN = pygame.K_KP_MINUS
-ZOOMRESET = pygame.K_KP_DIVIDE
+ZOOMPLUS = pygame.K_KP_PLUS, pygame.K_PERIOD
+ZOOMMIN = pygame.K_KP_MINUS, pygame.K_COMMA
+ZOOMRESET = pygame.K_KP_DIVIDE, pygame.K_SLASH
 
 INV = pygame.K_i
 PREV = pygame.K_q

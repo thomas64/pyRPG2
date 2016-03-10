@@ -70,7 +70,7 @@ class GameEngine(object):
             self.multi_input()
             self.update()
             self.render()
-            pygame.display.update()
+            pygame.display.flip()
 
     def single_input(self, event):
         """

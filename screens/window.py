@@ -110,15 +110,15 @@ class Window(object):
         :param mouse_pos: pygame.mouse.get_pos()
         :param dt: self.clock.tick(FPS)/1000.0
         """
-        if key_input[keys.ZOOMPLUS]:
+        if key_input[keys.ZOOMPLUS[0]] or key_input[keys.ZOOMPLUS[1]]:
             value = self.map1.map_layer.zoom + ZOOMSPEED
             if value < MAXZOOM:
                 self.map1.map_layer.zoom = value
-        elif key_input[keys.ZOOMMIN]:
+        elif key_input[keys.ZOOMMIN[0]] or key_input[keys.ZOOMMIN[1]]:
             value = self.map1.map_layer.zoom - ZOOMSPEED
             if value > MINZOOM:
                 self.map1.map_layer.zoom = value
-        elif key_input[keys.ZOOMRESET]:
+        elif key_input[keys.ZOOMRESET[0]] or key_input[keys.ZOOMRESET[1]]:
             self.map1.map_layer.zoom = DEFZOOM
 
         self.heroes[0].speed(key_input)
