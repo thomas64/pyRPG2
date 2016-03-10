@@ -55,7 +55,7 @@ class Text(object):
         """
         Wanneer op delete gedrukt in het load of save menu, reset dan de tekst naar '...'
         :param screen: het scherm
-        :param index: de hoeveelste slot is het om weer te geven
+        :param index: visusele weergave van de hoeveelste slot, het is dus eigenlijk index+1
         """
         # pas de tekst aan
         self.text = "Slot {}:  ...".format(index)

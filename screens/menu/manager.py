@@ -38,7 +38,7 @@ def create_menu(state_name, engine, title=None, animation=None, scr_capt=None, s
 
     elif state_name == statemachine.States.LoadMenu:
         content = screens.menu.loadmenu.LoadMenu(engine)
-        title = None
+        title = screens.menu.title.Title(title=None, sub="Load Game")
         animation = None
         if scr_capt is None:
             scr_capt = None
@@ -47,7 +47,7 @@ def create_menu(state_name, engine, title=None, animation=None, scr_capt=None, s
 
     elif state_name == statemachine.States.SaveMenu:
         content = screens.menu.savemenu.SaveMenu(engine)
-        title = None
+        title = screens.menu.title.Title(title=None, sub="Save Game")
         animation = None
         if scr_capt is None:
             scr_capt = None
