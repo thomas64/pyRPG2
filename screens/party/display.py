@@ -23,19 +23,19 @@ CLOSELBL = "Close"
 PREVLBL = "Previous"
 NEXTLBL = "Next"
 
-CLOSEX, CLOSEY = -90, 10    # negatieve x omdat de positie van rechts bepaald wordt.
-PREVX, PREVY = -90, 45
-NEXTX, NEXTY = -90, 80
-BTNWIDTH = 80
+CLOSEX, CLOSEY = -81, 10    # negatieve x omdat de positie van rechts bepaald wordt.
+PREVX, PREVY = -81, 44
+NEXTX, NEXTY = -81, 78
+BTNWIDTH = 71
 BTNHEIGHT = 30
 
 HEROBOXX, HEROBOXY = 10, 10
-HEROBOXVAR = 260
-STATBOXX, STATBOXY = 10, 120
-INFOBOXX, INFOBOXY = 10, 630
-SKILBOXX, SKILBOXY = 425, 120
-INVBOXX, INVBOXY = 750, 120
-SPELBOXX, SPELBOXY = 1075, 120
+HEROBOXVAR = 255
+STATBOXX, STATBOXY = 10, 118
+INFOBOXX, INFOBOXY = 10, 613
+SKILBOXX, SKILBOXY = 349, 118
+INVBOXX, INVBOXY = 688, 118
+SPELBOXX, SPELBOXY = 1027, 118
 
 
 class Display(object):
@@ -83,7 +83,7 @@ class Display(object):
         self.info_box = screens.party.infobox.InfoBox((INFOBOXX, INFOBOXY))
         self.skills_box = screens.party.skillsbox.SkillsBox((SKILBOXX, SKILBOXY))         # de grootte zit in de class
         self.inventory_box = screens.party.inventorybox.InventoryBox((INVBOXX, INVBOXY))  # zelf, de positie zit in deze
-        pygame.draw.rect(self.background, LINECOLOR, (SPELBOXX, SPELBOXY, 315, 670), 1)   # class, moet dat anders?
+        pygame.draw.rect(self.background, LINECOLOR, (SPELBOXX, SPELBOXY, 329, 640), 1)   # class, moet dat anders?
 
     def on_enter(self):
         """

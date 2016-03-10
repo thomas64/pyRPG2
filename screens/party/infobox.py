@@ -8,15 +8,15 @@ import pygame
 BACKGROUNDCOLOR = pygame.Color("black")
 LINECOLOR = pygame.Color("white")
 
-BOXWIDTH = 405
-BOXHEIGHT = 160
+BOXWIDTH = 329
+BOXHEIGHT = 145
 TEXTX, TEXTY = -20, -20     # positie van de tekst in de box. -20 betekent +10. -30 zou +15 betekenen.
 COL1, COL2 = 0, 150
 
 FONTCOLOR = pygame.Color("white")
 FONT = 'verdana'
 FONTSIZE = 12
-LINEHEIGHT = 18
+LINEHEIGHT = 15
 
 
 class InfoBox(object):

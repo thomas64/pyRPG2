@@ -9,26 +9,26 @@ import pygame.gfxdraw
 BACKGROUNDCOLOR = pygame.Color("black")
 LINECOLOR = pygame.Color("white")
 
-BOXWIDTH = 315
-BOXHEIGHT = 670
+BOXWIDTH = 329
+BOXHEIGHT = 640
 TITLEX, TITLEY = 7, 1
 
 TITLE = "Inventory"
 STICKMANPATH = "resources/sprites/stickman.png"
 STICKMANPOS = 60
 EQUIPMENTITEMBOXCOLOR = (100, 0, 0, 128)
-WPNBOX = pygame.Rect(70,  165, 33, 33)
-SLDBOX = pygame.Rect(206, 165, 33, 33)
-HLMBOX = pygame.Rect(136,  70, 33, 33)
-AMUBOX = pygame.Rect(136, 130, 33, 33)
-ARMBOX = pygame.Rect(153, 165, 33, 33)
-CLKBOX = pygame.Rect(121, 165, 33, 33)
-GLVBOX = pygame.Rect(70,  197, 33, 33)
-LRGBOX = pygame.Rect(206, 229, 33, 33)
-RRGBOX = pygame.Rect(70,  229, 33, 33)
-BLTBOX = pygame.Rect(136, 207, 33, 33)
-BTSBOX = pygame.Rect(136, 270, 33, 33)
-ACYBOX = pygame.Rect(206, 197, 33, 33)
+WPNBOX = pygame.Rect(77,  165, 33, 33)
+SLDBOX = pygame.Rect(213, 165, 33, 33)
+HLMBOX = pygame.Rect(143,  70, 33, 33)
+AMUBOX = pygame.Rect(143, 130, 33, 33)
+ARMBOX = pygame.Rect(160, 165, 33, 33)
+CLKBOX = pygame.Rect(128, 165, 33, 33)
+GLVBOX = pygame.Rect(77,  197, 33, 33)
+LRGBOX = pygame.Rect(213, 229, 33, 33)
+RRGBOX = pygame.Rect(77,  229, 33, 33)
+BLTBOX = pygame.Rect(143, 207, 33, 33)
+BTSBOX = pygame.Rect(143, 270, 33, 33)
+ACYBOX = pygame.Rect(213, 197, 33, 33)
 EQUIPMENTITEMBOXES = (WPNBOX, SLDBOX, HLMBOX, AMUBOX, ARMBOX, CLKBOX, GLVBOX, LRGBOX, RRGBOX, BLTBOX, BTSBOX, ACYBOX)
 SUBSURW, SUBSURH = 32, 32
 

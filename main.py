@@ -10,8 +10,8 @@ import pygame
 
 import engine
 
-SCREENWIDTH = 1400
-SCREENHEIGHT = 800  # 1600, 800  # 1920, 1080
+SCREENWIDTH = 1366
+SCREENHEIGHT = 768  # 1366, 768  # 1920, 1080
 
 
 def main():

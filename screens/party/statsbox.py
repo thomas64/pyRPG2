@@ -10,8 +10,8 @@ import pygame
 BACKGROUNDCOLOR = pygame.Color("black")
 LINECOLOR = pygame.Color("white")
 
-BOXWIDTH = 405
-BOXHEIGHT = 500
+BOXWIDTH = 329
+BOXHEIGHT = 490
 TITLEX, TITLEY = 7, 1
 COLUMN1X = 50
 COLUMN2X = 160
