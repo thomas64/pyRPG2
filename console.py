@@ -47,6 +47,7 @@ def state_clear():
 
 def corrupt_options():
     """
+    Video._load_cfg()
     Audio._load_cfg()
     """
     print('Corrupt options file.')

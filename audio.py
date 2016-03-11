@@ -70,11 +70,10 @@ class Audio(object):
         try:
             with open(OPTIONSFILE, 'rb') as f:
                 self.music, self.sound = pickle.load(f)
-        except (pickle.UnpicklingError, FileNotFoundError):
+        except (pickle.UnpicklingError, FileNotFoundError, EOFError):
             console.corrupt_options()
             self.music, self.sound = 1, 1
-            with open(OPTIONSFILE, 'wb') as f:
-                pickle.dump([self.music, self.sound], f)
+            self.write_cfg()
 
     def write_cfg(self):
         """

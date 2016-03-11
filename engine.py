@@ -12,6 +12,7 @@ import data
 import keys
 import screens.menu.manager
 import statemachine
+import video
 
 # todo, magic numbers overal opruimen
 
@@ -33,6 +34,7 @@ class GameEngine(object):
     def __init__(self):
         self.screen = pygame.display.get_surface()
         self.data = data.Data()
+        self.video = video.Video(self)
         self.audio = audio.Audio(self)
 
         self.running = False
@@ -50,14 +52,18 @@ class GameEngine(object):
 
         self.show_debug = False
 
-    def main_loop(self):
+    def on_enter(self):
         """
-        Start de game loop.
+        Voordat de loop van start gaat.
         """
         self.running = True
         push_object = screens.menu.manager.create_menu(statemachine.States.MainMenu, self)
         self.gamestate.push(push_object)
 
+    def main_loop(self):
+        """
+        Start de game loop.
+        """
         while self.running:
             # limit the redraw speed to 60 frames per second
             self.dt = self.clock.tick(FPS)/1000.0
@@ -86,10 +92,8 @@ class GameEngine(object):
                 # simple boolean swith
                 self.show_debug ^= True
             if event.key == keys.KILL:
-                # todo, deze, de key en de methode moeten uiteindelijk weg, dit geldt ook voor FULLSCR.
+                # todo, deze, de key en de methode moeten uiteindelijk weg.
                 self._kill_game()
-            if event.key == keys.FULLSCR:
-                self._full_screen()
 
         self.gamestate.peek().single_input(event)
 
@@ -124,12 +128,6 @@ class GameEngine(object):
         import sys
         pygame.quit()
         sys.exit()
-
-    @staticmethod
-    def _full_screen():
-        import main
-        pygame.display.set_mode((main.SCREENWIDTH, main.SCREENHEIGHT),
-                                pygame.FULLSCREEN | pygame.DOUBLEBUF | pygame.HWSURFACE)
 
     def _show_debug(self):
         if self.show_debug:

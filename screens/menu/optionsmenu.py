@@ -13,6 +13,10 @@ class OptionsMenu(screens.menu.basemenu.BaseMenu):
     def __init__(self, engine):
         super().__init__(engine)
 
+        if engine.video.fullscreen:
+            self.inside['FullScreen'] = 'Full screen: On'
+        else:
+            self.inside['FullScreen'] = 'Full screen: Off'
         if engine.audio.music == 1:
             self.inside['Music'] = 'Music: On'
         else:
@@ -33,13 +37,20 @@ class OptionsMenu(screens.menu.basemenu.BaseMenu):
         :param scr_capt: zie BaseMenu
         :param index: zie BaseMenu
         """
+        if menu_item.func == self.FullScreen:
+            menu_item.flip_switch()
+            self.engine.video.flip_fullscreen()
+            self.engine.video.write_cfg()
+
         if menu_item.func == self.Music:
             menu_item.flip_switch()             # hier wordt de weergave later aangepast
             self.engine.audio.flip_music()      # en de instelling zelf aangepast
             self.engine.audio.write_cfg()       # en weggeschreven
+
         elif menu_item.func == self.Sound:
             menu_item.flip_switch()
             self.engine.audio.flip_sound()
             self.engine.audio.write_cfg()
+
         elif menu_item.func == self.Back:
             self.on_exit()
