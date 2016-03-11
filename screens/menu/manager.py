@@ -15,6 +15,8 @@ import screens.menu.pausemenu
 import screens.menu.title
 import statemachine
 
+# todo, fade out mogelijk maken voor LoadMenu vanuit MainMenu? in bijv on_enter met for i, transp.
+
 
 def create_menu(state_name, engine, title=None, animation=None, scr_capt=None, select=None):
     """

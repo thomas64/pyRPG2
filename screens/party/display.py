@@ -116,7 +116,7 @@ class Display(object):
             elif self.invclick_box and self.invclick_box.rect.collidepoint(event.pos):
                 self.info_label = self.invclick_box.mouse_hover(event)
             elif self.inventory_box.rect.collidepoint(event.pos):
-                self.info_label = self.inventory_box.mouse_hover(event, self.cur_hero)
+                self.info_label = self.inventory_box.mouse_hover(event)
 
         elif event.type == pygame.MOUSEBUTTONDOWN:
 
@@ -132,7 +132,7 @@ class Display(object):
                 # als er in de inventory box wordt geklikt
                 if self.inventory_box.rect.collidepoint(event.pos):
                     # krijg de positie en equipment_type terug
-                    boxpos, equipment_type = self.inventory_box.mouse_click(event, self.cur_hero)
+                    boxpos, equipment_type = self.inventory_box.mouse_click(event)
                     # als er geen clickbox is en wel een equipment_type, geef dan een clickbox weer
                     if not self.invclick_box and equipment_type:
                         self.invclick_box = screens.party.invclickbox.InvClickBox(

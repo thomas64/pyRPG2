@@ -10,6 +10,7 @@ import pygame
 
 import engine
 
+# todo, variabele resolutie maken
 SCREENWIDTH = 1366
 SCREENHEIGHT = 768  # 1366, 768  # 1920, 1080
 

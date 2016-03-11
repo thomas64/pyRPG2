@@ -127,9 +127,9 @@ class InvClickBox(object):
 
         self.cur_item = None
 
-        self._update_rects_in_layer_rect()
+        self._update_rects_in_layer_rect_with_offset()
 
-    def _update_rects_in_layer_rect(self):
+    def _update_rects_in_layer_rect_with_offset(self):
         """
         Voeg de rects toe in row[5] van table_data waarmee gecorrespondeert kan worden met de muis bijvoorbeeld.
         Deze rects zijn variabel omdat er gescrollt kan worden, daarom wordt lay_rect voor de offset gebruikt.
@@ -152,7 +152,7 @@ class InvClickBox(object):
             if self.lay_rect.y - self.rect.y > self.rect.height - self.layer_height:
                 self.lay_rect.y -= SCROLLSPEED
 
-        self._update_rects_in_layer_rect()
+        self._update_rects_in_layer_rect_with_offset()
 
     def mouse_hover(self, event):
         """
@@ -167,7 +167,7 @@ class InvClickBox(object):
                 equipment_item = row[4]
                 if equipment_item:
                     return equipment_item.display()
-        return None
+                return None
 
     def render(self, screen):
         """

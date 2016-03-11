@@ -82,7 +82,7 @@ class SkillsBox(object):
 
         # vul de vijfde lege kolom. hierin staan de rects van de tweede kolom. rect is voor muisklik.
         for index, row in enumerate(self.table_data):
-            row[4] = self._rect(index, row[1])
+            row[4] = self._create_rect_with_offset(index, row[1])
 
         # maak dan een nieuwe tabel aan met de tekst en icons, maar dan gerendered.
         self.table_view = []
@@ -95,7 +95,7 @@ class SkillsBox(object):
                 color = FONTCOLOR1
             self.table_view[index].append(self.normalfont.render(row[1], True, color).convert_alpha())
             self.table_view[index].append(self.normalfont.render(row[2], True, FONTCOLOR1).convert_alpha())
-            self._line(row[3], self.table_view[index])
+            self._set_color(row[3], self.table_view[index])
 
     def render(self, screen):
         """
@@ -108,16 +108,13 @@ class SkillsBox(object):
         self.surface.blit(self.title, (TITLEX, TITLEY))
         for index, row in enumerate(self.table_view):
             self.surface.blit(row[0], (COLUMN1X, COLUMNSY + ICONOFFSET + index * ROWHEIGHT))
-        for index, row in enumerate(self.table_view):
             self.surface.blit(row[1], (COLUMN2X, COLUMNSY + index * ROWHEIGHT))
-        for index, row in enumerate(self.table_view):
             self.surface.blit(row[2], (COLUMN3X, COLUMNSY + index * ROWHEIGHT))
-        for index, row in enumerate(self.table_view):
             self.surface.blit(row[3], (COLUMN4X, COLUMNSY + index * ROWHEIGHT))
 
         screen.blit(self.surface, self.rect.topleft)
 
-    def _rect(self, index, text):
+    def _create_rect_with_offset(self, index, text):
         """
         self.rect is de hele box zelf. Die heeft ook een position op het scherm, vandaar dat de position een soort
         offset moet krijgen hier.
@@ -126,7 +123,7 @@ class SkillsBox(object):
         rect.topleft = self.rect.left + COLUMN2X, (self.rect.top + COLUMNSY) + index * ROWHEIGHT
         return rect
 
-    def _line(self, value, col):
+    def _set_color(self, value, col):
         """
         Geef een regel in een kolom een bepaalde format en kleur mee aan de hand van de waarde.
         :param value: dit is een van die waarden
