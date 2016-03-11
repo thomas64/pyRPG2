@@ -5,6 +5,7 @@ Alle keys uit het spel
 
 import pygame
 
+FULLSCR = pygame.K_TAB
 KILL = pygame.K_BACKSLASH
 GRID = pygame.K_F10
 CBOX = pygame.K_F11

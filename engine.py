@@ -86,8 +86,10 @@ class GameEngine(object):
                 # simple boolean swith
                 self.show_debug ^= True
             if event.key == keys.KILL:
-                # todo, deze, de key en de methode moeten uiteindelijk weg
+                # todo, deze, de key en de methode moeten uiteindelijk weg, dit geldt ook voor FULLSCR.
                 self._kill_game()
+            if event.key == keys.FULLSCR:
+                self._full_screen()
 
         self.gamestate.peek().single_input(event)
 
@@ -122,6 +124,12 @@ class GameEngine(object):
         import sys
         pygame.quit()
         sys.exit()
+
+    @staticmethod
+    def _full_screen():
+        import main
+        pygame.display.set_mode((main.SCREENWIDTH, main.SCREENHEIGHT),
+                                pygame.FULLSCREEN | pygame.DOUBLEBUF | pygame.HWSURFACE)
 
     def _show_debug(self):
         if self.show_debug:
@@ -176,8 +184,9 @@ class GameEngine(object):
             try:
                 import screens.party.invclickbox
                 text2 = (
-                    "max_box_height     {}".format(screens.party.invclickbox.MAXBOXHEIGHT),
-                    "layer_height       {}".format(self.gamestate.peek().invclick_box.layer_height),
+                    "max_box_height:    {}".format(screens.party.invclickbox.MAXBOXHEIGHT),
+                    "layer_height:      {}".format(self.gamestate.peek().invclick_box.layer_height),
+                    "cur_item:          {}".format(self.gamestate.peek().invclick_box.cur_item),
                     ""
                 )
                 text += text2
