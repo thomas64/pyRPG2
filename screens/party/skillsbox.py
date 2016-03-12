@@ -15,6 +15,7 @@ COLUMN1X = 50
 COLUMN2X = 90
 COLUMN3X = 190
 COLUMN4X = 220
+COLUMN5X = 250
 COLUMNSY = 60
 ROWHEIGHT = 30
 ICONOFFSET = -6
@@ -27,8 +28,10 @@ FONT = 'impact'
 LARGEFONTSIZE = 25
 NORMALFONTSIZE = 15
 
-POSCOLOR = pygame.Color("green")
-NEGCOLOR = pygame.Color("red")
+POSCOLOR1 = pygame.Color("green")
+POSCOLOR2 = pygame.Color("lightgreen")
+NEGCOLOR1 = pygame.Color("red")
+NEGCOLOR2 = pygame.Color("orangered")
 
 
 class SkillsBox(object):
@@ -56,7 +59,7 @@ class SkillsBox(object):
 
     def mouse_hover(self, event):
         """
-        Als de muis over een item in uit de eerste visuele gaat. row[4] dat zijn de rects.
+        Als de muis over een item in de uit row[4] geregistreerde rects gaat.
         Zet cur_item op de index van degene waar de muis over gaat.
         :param event: pygame.MOUSEMOTION uit partyscreen
         :return: row[5] is de kolom met de info.
@@ -67,17 +70,19 @@ class SkillsBox(object):
                 self.cur_item = index
                 return row[5]
 
-    def update(self, hero):
+    def update(self, hero, hovered_equipment_item):
         """
         Update eerst alle data.
         :param hero: de huidige geselecteerde hero uit partyscreen
+        :param hovered_equipment_item: het item waar de muis overheen hovered in invclickbox
         """
         self.table_data = []
         for skill in hero.skills_tuple:
             if skill.positive_quantity():
+                preview_value = self._get_difference(hero, hovered_equipment_item, skill)
                 self.table_data.append(
-                    # row[0],        row[1],            row[2],        row[3],    row[4],    row[5]
-                    [skill.ICON,  skill.NAM + " :",  str(skill.qty),  skill.ext,   None,   skill.DESC]
+                    # row[0],       row[1],           row[2],       row[3],  row[4],  row[5],     row[6]
+                    [skill.ICON, skill.NAM + " :", str(skill.qty), skill.ext, None, skill.DESC, preview_value]
                 )
 
         # vul de vijfde lege kolom. hierin staan de rects van de tweede kolom. rect is voor muisklik.
@@ -95,7 +100,8 @@ class SkillsBox(object):
                 color = FONTCOLOR1
             self.table_view[index].append(self.normalfont.render(row[1], True, color).convert_alpha())
             self.table_view[index].append(self.normalfont.render(row[2], True, FONTCOLOR1).convert_alpha())
-            self._set_color(row[3], self.table_view[index])
+            self._set_color(row[3], self.table_view[index], POSCOLOR1, NEGCOLOR1)
+            self._set_color(row[6], self.table_view[index], POSCOLOR2, NEGCOLOR2)
 
     def render(self, screen):
         """
@@ -111,8 +117,21 @@ class SkillsBox(object):
             self.surface.blit(row[1], (COLUMN2X, COLUMNSY + index * ROWHEIGHT))
             self.surface.blit(row[2], (COLUMN3X, COLUMNSY + index * ROWHEIGHT))
             self.surface.blit(row[3], (COLUMN4X, COLUMNSY + index * ROWHEIGHT))
+            self.surface.blit(row[4], (COLUMN5X, COLUMNSY + index * ROWHEIGHT))
 
         screen.blit(self.surface, self.rect.topleft)
+
+    @staticmethod
+    def _get_difference(hero, hovered_equipment_item, skill):
+        """
+        Berekent het verschil van het equipte item en hoverde item voor in col[6]. Voor de betreffende skill.
+        :return: hij moet bij niets "" en niet None teruggeven, vanwege de verwachting in _set_color().
+        """
+        if hovered_equipment_item:
+            eqp_skl = hero.get_equipped_item_of_type(hovered_equipment_item.TYP).get_value_of(skill.RAW)
+            new_skl = hovered_equipment_item.get_value_of(skill.RAW)
+            return new_skl - eqp_skl
+        return ""
 
     def _create_rect_with_offset(self, index, text):
         """
@@ -123,11 +142,12 @@ class SkillsBox(object):
         rect.topleft = self.rect.left + COLUMN2X, (self.rect.top + COLUMNSY) + index * ROWHEIGHT
         return rect
 
-    def _set_color(self, value, col):
+    def _set_color(self, value, col, poscolor, negcolor):
         """
         Geef een regel in een kolom een bepaalde format en kleur mee aan de hand van de waarde.
         :param value: dit is een van die waarden
         :param col: in welke kolom de regel zich bevind
+        :param poscolor: welke kleuren moet hij weergeven
         """
         if value == "":
             value = 0
@@ -136,7 +156,7 @@ class SkillsBox(object):
             col.append(self.normalfont.render(value, True, FONTCOLOR1).convert_alpha())
         elif value > 0:
             value = "(+"+str(value)+")"
-            col.append(self.normalfont.render(value, True, POSCOLOR).convert_alpha())
+            col.append(self.normalfont.render(value, True, poscolor).convert_alpha())
         elif value < 0:
             value = "("+str(value)+")"
-            col.append(self.normalfont.render(value, True, NEGCOLOR).convert_alpha())
+            col.append(self.normalfont.render(value, True, negcolor).convert_alpha())

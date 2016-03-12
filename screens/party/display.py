@@ -65,6 +65,7 @@ class Display(object):
 
         self.invclick_box = None
         self.info_label = ""
+        self.hovered_equipment_item = None
 
     def _init_buttons(self):
         bg_width = self.background.get_width()
@@ -109,12 +110,14 @@ class Display(object):
 
         if event.type == pygame.MOUSEMOTION:
 
+            self.hovered_equipment_item = None
+
             if self.stats_box.rect.collidepoint(event.pos):
                 self.info_label = self.stats_box.mouse_hover(event)
             elif self.skills_box.rect.collidepoint(event.pos):
                 self.info_label = self.skills_box.mouse_hover(event)
             elif self.invclick_box and self.invclick_box.rect.collidepoint(event.pos):
-                self.info_label = self.invclick_box.mouse_hover(event)
+                self.info_label, self.hovered_equipment_item = self.invclick_box.mouse_hover(event)
             elif self.inventory_box.rect.collidepoint(event.pos):
                 self.info_label = self.inventory_box.mouse_hover(event)
 
@@ -132,11 +135,11 @@ class Display(object):
                 # als er in de inventory box wordt geklikt
                 if self.inventory_box.rect.collidepoint(event.pos):
                     # krijg de positie en equipment_type terug
-                    boxpos, equipment_type = self.inventory_box.mouse_click(event)
+                    boxpos, empty_equipment_item = self.inventory_box.mouse_click(event)
                     # als er geen clickbox is en wel een equipment_type, geef dan een clickbox weer
-                    if not self.invclick_box and equipment_type:
+                    if not self.invclick_box and empty_equipment_item:
                         self.invclick_box = screens.party.invclickbox.InvClickBox(
-                                                                    boxpos, equipment_type, self.party, self.inventory)
+                                                            boxpos, empty_equipment_item, self.party, self.inventory)
 
                 for button in self.buttons:
                     button_press = button.single_click(event)
@@ -195,7 +198,7 @@ class Display(object):
         self.cur_hero = self.party[self.hc]
 
         self.stats_box.update(self.cur_hero)
-        self.skills_box.update(self.cur_hero)
+        self.skills_box.update(self.cur_hero, self.hovered_equipment_item)
         self.inventory_box.update(self.cur_hero)
 
     def render(self):

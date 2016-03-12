@@ -38,7 +38,7 @@ class InvClickBox(object):
     """
     Wanneer je klikt in de inventorybox op een equipment_item_box.
     """
-    def __init__(self, position, equipment_type, party, inventory):
+    def __init__(self, position, empty_equipment_item, party, inventory):
 
         normalfont = pygame.font.SysFont(FONT, NORMALFONTSIZE)
 
@@ -48,16 +48,17 @@ class InvClickBox(object):
         black_spr = pygame.image.load(TRANSP).convert_alpha()
 
         # de eerste rij
+        equipment_type = empty_equipment_item.TYP
         self.table_data.append(
-            # row[0],   row[1],  row[2],        row[3],           row[4], row[5]
-            [black_spr, black_spr, "", "Unequip " + equipment_type, None, None]
+            # row[0],   row[1],  row[2],        row[3],                   row[4],         row[5]
+            [black_spr, black_spr, "", "Unequip " + equipment_type, empty_equipment_item, None]
         )
         # de rijen van equipment van hero's
         for hero in party:
             # todo, bij rng en rrg en lrg zijn er nog problemen.
             # haal de equipment item op uit het type
             equipment_item = hero.get_equipped_item_of_type(equipment_type)
-            if equipment_item:
+            if equipment_item.is_not_empty():
                 # laad de hero subsprite
                 hero_spr = pygame.image.load(hero.SPR).subsurface(32, 0, SUBSURW, SUBSURW).convert_alpha()
                 # laad de item subsprite
@@ -74,6 +75,7 @@ class InvClickBox(object):
                     # en anders gewoon de naam
                     equipment_item_nam = equipment_item.NAM
                 self.table_data.append(
+                    # row[0],       row[1],       row[2],     row[3],           row[4],     row[5]
                     [hero_spr, equipment_item_spr, "1", equipment_item_nam, equipment_item, None]
                 )
         # de rijen van equipment uit inventory.
@@ -87,6 +89,7 @@ class InvClickBox(object):
             else:
                 equipment_item_nam = equipment_item.NAM
             self.table_data.append(
+                # row[0],        row[1],            row[2],                     row[3],          row[4],     row[5]
                 [black_spr, equipment_item_spr, str(equipment_item.qty), equipment_item_nam, equipment_item, None]
             )
 
@@ -165,9 +168,9 @@ class InvClickBox(object):
             if row[5].collidepoint(event.pos):
                 self.cur_item = index
                 equipment_item = row[4]
-                if equipment_item:
-                    return equipment_item.display()
-                return None
+                if equipment_item.is_not_empty():
+                    return equipment_item.display(), equipment_item
+                return None, equipment_item
 
     def render(self, screen):
         """
