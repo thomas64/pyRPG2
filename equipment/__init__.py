@@ -40,6 +40,37 @@ class EquipmentType(enum.Enum):
     bts = "Boots"
     acy = "Accessory"
 
+    @classmethod
+    def get_empty_equipment_item_of_this_type(cls, equipment_type):
+        """
+        Geeft een 'empty' item terug op verzoek.
+        :param equipment_type: Enum EquipmentType
+        """
+        if equipment_type == cls.wpn.value:
+            return WeaponDatabase.factory(None)
+        if equipment_type == cls.sld.value:
+            return ShieldDatabase.factory(None)
+        if equipment_type == cls.hlm.value:
+            return HelmetDatabase.factory(None)
+        if equipment_type == cls.amu.value:
+            return AmuletDatabase.factory(None)
+        if equipment_type == cls.arm.value:
+            return ArmorDatabase.factory(None)
+        if equipment_type == cls.clk.value:
+            return CloakDatabase.factory(None)
+        if equipment_type == cls.glv.value:
+            return GlovesDatabase.factory(None)
+        if equipment_type == cls.rng.value:           # todo, 2x rng, dat gaat natuurlijk niet goed. oplossing nodig.
+            return RingDatabase.factory(None)
+        if equipment_type == cls.rng.value:           # deze komt dan nooit aan de beurt.
+            return RingDatabase.factory(None)
+        if equipment_type == cls.blt.value:
+            return BeltDatabase.factory(None)
+        if equipment_type == cls.bts.value:
+            return BootsDatabase.factory(None)
+        if equipment_type == cls.acy.value:
+            return AccessoryDatabase.factory(None)
+
 
 class WeaponType(enum.Enum):
     """

@@ -5,6 +5,7 @@ class: InvClickBox
 
 import pygame
 
+import equipment
 import keys
 
 BACKGROUNDCOLOR = pygame.Color("black")
@@ -38,17 +39,16 @@ class InvClickBox(object):
     """
     Wanneer je klikt in de inventorybox op een equipment_item_box.
     """
-    def __init__(self, position, empty_equipment_item, party, inventory):
+    def __init__(self, position, equipment_type, party, inventory):
 
         normalfont = pygame.font.SysFont(FONT, NORMALFONTSIZE)
 
-        # todo, oranje en lichtgroen bij mouse hover fixen
         self.table_data = list()
 
         black_spr = pygame.image.load(TRANSP).convert_alpha()
 
         # de eerste rij
-        equipment_type = empty_equipment_item.TYP
+        empty_equipment_item = equipment.EquipmentType.get_empty_equipment_item_of_this_type(equipment_type)
         self.table_data.append(
             # row[0],   row[1],  row[2],        row[3],                   row[4],         row[5]
             [black_spr, black_spr, "", "Unequip " + equipment_type, empty_equipment_item, None]

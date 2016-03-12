@@ -6,8 +6,6 @@ class: InventoryBox
 import pygame
 import pygame.gfxdraw
 
-import equipment
-
 BACKGROUNDCOLOR = pygame.Color("black")
 LINECOLOR = pygame.Color("white")
 
@@ -19,18 +17,18 @@ TITLE = "Inventory"
 STICKMANPATH = "resources/sprites/stickman.png"
 STICKMANPOS = 60
 EQUIPMENTITEMBOXCOLOR = (100, 0, 0, 128)
-WPNBOX = pygame.Rect(77,  165, 33, 33), equipment.WeaponDatabase.factory(None)
-SLDBOX = pygame.Rect(213, 165, 33, 33), equipment.ShieldDatabase.factory(None)
-HLMBOX = pygame.Rect(143,  70, 33, 33), equipment.HelmetDatabase.factory(None)
-AMUBOX = pygame.Rect(143, 130, 33, 33), equipment.AmuletDatabase.factory(None)
-ARMBOX = pygame.Rect(160, 165, 33, 33), equipment.ArmorDatabase.factory(None)
-CLKBOX = pygame.Rect(128, 165, 33, 33), equipment.CloakDatabase.factory(None)
-GLVBOX = pygame.Rect(77,  197, 33, 33), equipment.GlovesDatabase.factory(None)
-LRGBOX = pygame.Rect(213, 229, 33, 33), equipment.RingDatabase.factory(None)
-RRGBOX = pygame.Rect(77,  229, 33, 33), equipment.RingDatabase.factory(None)
-BLTBOX = pygame.Rect(143, 207, 33, 33), equipment.BeltDatabase.factory(None)
-BTSBOX = pygame.Rect(143, 270, 33, 33), equipment.BootsDatabase.factory(None)
-ACYBOX = pygame.Rect(213, 197, 33, 33), equipment.AccessoryDatabase.factory(None)
+WPNBOX = pygame.Rect(77,  165, 33, 33)
+SLDBOX = pygame.Rect(213, 165, 33, 33)
+HLMBOX = pygame.Rect(143,  70, 33, 33)
+AMUBOX = pygame.Rect(143, 130, 33, 33)
+ARMBOX = pygame.Rect(160, 165, 33, 33)
+CLKBOX = pygame.Rect(128, 165, 33, 33)
+GLVBOX = pygame.Rect(77,  197, 33, 33)
+LRGBOX = pygame.Rect(213, 229, 33, 33)
+RRGBOX = pygame.Rect(77,  229, 33, 33)
+BLTBOX = pygame.Rect(143, 207, 33, 33)
+BTSBOX = pygame.Rect(143, 270, 33, 33)
+ACYBOX = pygame.Rect(213, 197, 33, 33)
 # de volgorde van deze lijst is belangrijk. hij moet gelijk zijn aan Hero.equipment_tuple()
 EQUIPMENTITEMBOXES = (WPNBOX, SLDBOX, HLMBOX, AMUBOX, ARMBOX, CLKBOX, GLVBOX, LRGBOX, RRGBOX, BLTBOX, BTSBOX, ACYBOX)
 SUBSURW, SUBSURH = 32, 32
@@ -66,7 +64,7 @@ class InventoryBox(object):
         # stel de offset in voor de boxen in een self.kopie van de BOXLIJST
         self.offset_boxes = []
         for BOX in EQUIPMENTITEMBOXES:
-            self.offset_boxes.append(BOX[0].copy())  # zonder .copy() stelt hij de offset in voor de originele rects
+            self.offset_boxes.append(BOX.copy())  # zonder .copy() stelt hij de offset in voor de originele rects
         for box in self.offset_boxes:
             box.topleft = self.rect.left + box.left, self.rect.top + box.top
 
@@ -87,14 +85,15 @@ class InventoryBox(object):
     def mouse_click(self, event):
         """
         Registreert of de muis op het boxje klikt. Gebruik hiervoor de self.offset_boxes.
-        Deze moet van de display de muispositie en een lege EquipmentItem teruggeven.
+        Deze moet van de display de muispositie en het EquipmentType teruggeven.
         Daar vraagt display om, zodat er een clickbox opgezet kan worden.
         :param event: pygame.MOUSEBUTTONDOWN uit partyscreen
         :return: None als er mis geklikt wordt.
         """
         for index, box in enumerate(self.offset_boxes):
             if box.collidepoint(event.pos):
-                return event.pos, EQUIPMENTITEMBOXES[index][1]
+                equipment_item = self.equipment_items[index]
+                return event.pos, equipment_item.TYP
         return None, None
 
     def update(self, hero):
@@ -129,10 +128,10 @@ class InventoryBox(object):
 
         for index, BOX in enumerate(EQUIPMENTITEMBOXES):
             # teken een doorzichtige box
-            pygame.gfxdraw.box(self.surface, BOX[0], EQUIPMENTITEMBOXCOLOR)
+            pygame.gfxdraw.box(self.surface, BOX, EQUIPMENTITEMBOXCOLOR)
             # teken het lijntje eromheen
-            pygame.draw.rect(self.surface, LINECOLOR, BOX[0], 1)
+            pygame.draw.rect(self.surface, LINECOLOR, BOX, 1)
             # teken de icon
-            self.surface.blit(self.equipment_item_sprites[index], BOX[0])
+            self.surface.blit(self.equipment_item_sprites[index], BOX)
 
         screen.blit(self.surface, self.rect.topleft)

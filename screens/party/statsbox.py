@@ -36,6 +36,7 @@ NEGCOLOR2 = pygame.Color("orangered")
 WHT_DESC = 'wht'
 MVP_DESC = 'mvp'
 PRT_DESC = 'prt'
+HIT_DESC = 'hit'
 
 
 class StatsBox(object):
@@ -109,7 +110,7 @@ class StatsBox(object):
             ["Movepoints :",   str(hero.sta_mvp),       hero.dif_mvp,              None,    self._desc(MVP_DESC), mvp],
             ["Protection :",   str(hero.prt),           hero.sld_prt,              None,    self._desc(PRT_DESC), prt],
             ["Defense :",      str(hero.tot_des),       "",                        None,    "",                   des],
-            ["Base Hit :",     str(hero.tot_hit)+" %",  hero.war.bonus(hero.wpn),  None,    "",                   hit],
+            ["Base Hit :",     str(hero.tot_hit)+" %",  hero.war.bonus(hero.wpn),  None,    self._desc(HIT_DESC), hit],
             ["Damage :",       str(hero.tot_dam),       "",                        None,    "",                   dam],
             ["",               "",                      "",                        None,    "",                   ""]
         ]
@@ -223,5 +224,12 @@ class StatsBox(object):
             return (
                 "Protection decreases the amount of health your character loses when hit in combat. There is no "
                 "Shield Protection when attacked from behind. The first column shows all the protection points from "
-                "your equipment combined, minus the shield. The second (green) column show the protection points from "
-                "your shield.")
+                "your equipment combined, minus the shield. The second (green) column shows the protection points "
+                "from your shield.")
+
+        if stat == HIT_DESC:
+            # Base Hit
+            return (
+                "Defines how much chance the weapon of your character has in striking the enemy successfully. "
+                "The higher the percentage, the higher the chance to hit. The first column shows the percentage "
+                "of the weapon. The second (green) column shows the amount your Warrior Skill adds to your Base Hit.")

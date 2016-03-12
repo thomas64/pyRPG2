@@ -135,11 +135,11 @@ class Display(object):
                 # als er in de inventory box wordt geklikt
                 if self.inventory_box.rect.collidepoint(event.pos):
                     # krijg de positie en equipment_type terug
-                    boxpos, empty_equipment_item = self.inventory_box.mouse_click(event)
+                    boxpos, equipment_type = self.inventory_box.mouse_click(event)
                     # als er geen clickbox is en wel een equipment_type, geef dan een clickbox weer
-                    if not self.invclick_box and empty_equipment_item:
+                    if not self.invclick_box and equipment_type:
                         self.invclick_box = screens.party.invclickbox.InvClickBox(
-                                                            boxpos, empty_equipment_item, self.party, self.inventory)
+                                                            boxpos, equipment_type, self.party, self.inventory)
 
                 for button in self.buttons:
                     button_press = button.single_click(event)
