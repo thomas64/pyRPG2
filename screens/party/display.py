@@ -197,7 +197,7 @@ class Display(object):
 
         self.cur_hero = self.party[self.hc]
 
-        self.stats_box.update(self.cur_hero)
+        self.stats_box.update(self.cur_hero, self.hovered_equipment_item)
         self.skills_box.update(self.cur_hero, self.hovered_equipment_item)
         self.inventory_box.update(self.cur_hero)
 

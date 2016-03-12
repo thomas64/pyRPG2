@@ -16,6 +16,7 @@ TITLEX, TITLEY = 7, 1
 COLUMN1X = 50
 COLUMN2X = 160
 COLUMN3X = 200
+COLUMN4X = 240
 COLUMNSY = 60
 ROWHEIGHT = 22
 
@@ -27,8 +28,10 @@ FONT = 'impact'
 LARGEFONTSIZE = 25
 NORMALFONTSIZE = 15
 
-POSCOLOR = pygame.Color("green")
-NEGCOLOR = pygame.Color("red")
+POSCOLOR1 = pygame.Color("green")
+POSCOLOR2 = pygame.Color("lightgreen")
+NEGCOLOR1 = pygame.Color("red")
+NEGCOLOR2 = pygame.Color("orangered")
 
 WHT_DESC = 'wht'
 MVP_DESC = 'mvp'
@@ -70,11 +73,12 @@ class StatsBox(object):
                 self.cur_item = index
                 return row[4]
 
-    def update(self, hero):
+    def update(self, hero, hovered_equipment_item):
         """
         Update eerst alle data.
         Let op: self.table_view bevat maar 3 kolommen in tegenstelling tot self.table_data met 5
         :param hero: de huidige geselecteerde hero uit partyscreen
+        :param hovered_equipment_item: het item waar de muis overheen hovered in invclickbox
         """
         # zet eerst even wat bepaalde waarden vast.
         if hero.lev.qty >= hero.lev.MAX:
@@ -84,25 +88,28 @@ class StatsBox(object):
             hero_exp_tot = str(hero.exp.tot)
             hero_lev_next = str(hero.lev.next(hero.exp.tot))
 
-        # zet dan alles in deze tabel met vijf kolommen. de vierde kolom is leeg voor de rects van de eerste kolom
+        # zet dan alles in deze tabel met zes kolommen. de vierde kolom is leeg voor de rects van de eerste kolom
         # todo, testen hoe dit: hero.war.bonus(hero.wpn), gaat met hero zonder wapen. bonus() checken.
         self.table_data = [
-            ["XP Remaining :", str(hero.exp.rem),       "",                        None,    ""],
-            ["Total XP :",     str(hero_exp_tot),       "",                        None,    ""],
-            ["Next Level :",   str(hero_lev_next),      "",                        None,    ""],
-            ["",               "",                      "",                        None,    ""],
-            ["Weight :",       str(hero.tot_wht),       "",                        None,    self._desc(WHT_DESC)],
-            ["Movepoints :",   str(hero.sta_mvp),       hero.dif_mvp,              None,    self._desc(MVP_DESC)],
-            ["Protection :",   str(hero.prt),           hero.sld_prt,              None,    ""],
-            ["Defense :",      str(hero.tot_des),       "",                        None,    ""],
-            ["Base Hit :",     str(hero.tot_hit)+" %",  hero.war.bonus(hero.wpn),  None,    ""],
-            ["Damage :",       str(hero.tot_dam),       "",                        None,    ""],
-            ["",               "",                      "",                        None,    ""],
+            # row[0],               row[1],                    row[2],           row[3],        row[4],         row[5]
+            ["XP Remaining :", str(hero.exp.rem),       "",                        None,    "",                   ""],
+            ["Total XP :",     str(hero_exp_tot),       "",                        None,    "",                   ""],
+            ["Next Level :",   str(hero_lev_next),      "",                        None,    "",                   ""],
+            ["",               "",                      "",                        None,    "",                   ""],
+            ["Weight :",       str(hero.tot_wht),       "",                        None,    self._desc(WHT_DESC), ""],
+            ["Movepoints :",   str(hero.sta_mvp),       hero.dif_mvp,              None,    self._desc(MVP_DESC), ""],
+            ["Protection :",   str(hero.prt),           hero.sld_prt,              None,    "",                   ""],
+            ["Defense :",      str(hero.tot_des),       "",                        None,    "",                   ""],
+            ["Base Hit :",     str(hero.tot_hit)+" %",  hero.war.bonus(hero.wpn),  None,    "",                   ""],
+            ["Damage :",       str(hero.tot_dam),       "",                        None,    "",                   ""],
+            ["",               "",                      "",                        None,    "",                   ""]
         ]
         # voeg ook de 7 stats aan de table_data toe
         for stat in hero.stats_tuple:
+            preview_value = self._get_difference(hero, hovered_equipment_item, stat)
             self.table_data.append(
-                [stat.NAM + " :",  str(stat.qty),  stat.ext,   None,   stat.DESC]
+                # row[0],           row[1],       row[2], row[3], row[4],       row[5]
+                [stat.NAM + " :", str(stat.qty), stat.ext, None, stat.DESC, preview_value]
             )
 
         # vul de vierde lege kolom. hierin staan de rects van de eerste kolom. rect is voor muisklik.
@@ -119,7 +126,8 @@ class StatsBox(object):
                 color = FONTCOLOR1
             self.table_view[index].append(self.normalfont.render(row[0], True, color).convert_alpha())
             self.table_view[index].append(self.normalfont.render(row[1], True, FONTCOLOR1).convert_alpha())
-            self._set_color(row[2], self.table_view[index])
+            self._set_color(row[2], self.table_view[index], POSCOLOR1, NEGCOLOR1)
+            self._set_color(row[5], self.table_view[index], POSCOLOR2, NEGCOLOR2)
 
     def render(self, screen):
         """
@@ -135,8 +143,21 @@ class StatsBox(object):
             self.surface.blit(row[0], (COLUMN1X, COLUMNSY + index * ROWHEIGHT))
             self.surface.blit(row[1], (COLUMN2X, COLUMNSY + index * ROWHEIGHT))
             self.surface.blit(row[2], (COLUMN3X, COLUMNSY + index * ROWHEIGHT))
+            self.surface.blit(row[3], (COLUMN4X, COLUMNSY + index * ROWHEIGHT))
 
         screen.blit(self.surface, self.rect.topleft)
+
+    @staticmethod
+    def _get_difference(hero, hovered_equipment_item, stat):
+        """
+        Berekent het verschil van het equipte item en hoverde item voor in col[6]. Voor de betreffende skill.
+        :return: hij moet bij niets "" en niet None teruggeven, vanwege de verwachting in _set_color().
+        """
+        if hovered_equipment_item:
+            eqp_stat = hero.get_equipped_item_of_type(hovered_equipment_item.TYP).get_value_of(stat.RAW)
+            new_stat = hovered_equipment_item.get_value_of(stat.RAW)
+            return new_stat - eqp_stat
+        return ""
 
     def _create_rect_with_offset(self, index, text):
         """
@@ -147,11 +168,12 @@ class StatsBox(object):
         rect.topleft = self.rect.left + COLUMN1X, (self.rect.top + COLUMNSY) + index * ROWHEIGHT
         return rect
 
-    def _set_color(self, value, col):
+    def _set_color(self, value, col, poscolor, negcolor):
         """
         Geef een regel in een kolom een bepaalde format en kleur mee aan de hand van de waarde.
         :param value: dit is een van die waarden
         :param col: in welke kolom de regel zich bevind
+        :param poscolor: welke kleuren moet hij weergeven
         """
         if value == "":
             value = 0
@@ -160,10 +182,10 @@ class StatsBox(object):
             col.append(self.normalfont.render(value, True, FONTCOLOR1).convert_alpha())
         elif value > 0:
             value = "(+"+str(value)+")"
-            col.append(self.normalfont.render(value, True, POSCOLOR).convert_alpha())
+            col.append(self.normalfont.render(value, True, poscolor).convert_alpha())
         elif value < 0:
             value = "("+str(value)+")"
-            col.append(self.normalfont.render(value, True, NEGCOLOR).convert_alpha())
+            col.append(self.normalfont.render(value, True, negcolor).convert_alpha())
 
     @staticmethod
     def _desc(stat):
