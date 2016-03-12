@@ -198,15 +198,13 @@ class Hero(object):
         """
         Geeft het item van het meegegeven Enum type wat de hero equipped heeft terug.
         :param equipment_type: Enum EquipmentType.value, dus bijv. "Shield".
-        :return: Als het geen empty is, geef dan het item. Anders None
+        :return: ook als het een 'empty' is, geef dan het item
         """
         # todo, Let op, bij ringen geeft hij er maar 1 terug. Denk ik, nog niet getest.
         # er moet een conversieslag komen oid. van rightring naar ring en andersom.
         for equipment_item in self.equipment_tuple:
             if equipment_item.TYP == equipment_type:
-                if equipment_item.is_not_empty():
-                    return equipment_item
-        return None
+                return equipment_item
 
     def set_equipment_item(self, new_equipment_item, verbose=True):
         """

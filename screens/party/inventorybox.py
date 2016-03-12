@@ -78,7 +78,7 @@ class InventoryBox(object):
         for index, box in enumerate(self.offset_boxes):
             if box.collidepoint(event.pos):
                 equipment_item = self.equipment_items[index]
-                if equipment_item:
+                if equipment_item.is_not_empty():
                     return equipment_item.display()
                 return None
 
