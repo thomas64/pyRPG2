@@ -35,6 +35,7 @@ NEGCOLOR2 = pygame.Color("orangered")
 
 WHT_DESC = 'wht'
 MVP_DESC = 'mvp'
+PRT_DESC = 'prt'
 
 
 class StatsBox(object):
@@ -88,6 +89,14 @@ class StatsBox(object):
             hero_exp_tot = str(hero.exp.tot)
             hero_lev_next = str(hero.lev.next(hero.exp.tot))
 
+        # de preview waarden, voor is row[5]
+        wht = self._get_difference(hero, hovered_equipment_item, 'WHT')
+        mvp = self._get_difference(hero, hovered_equipment_item, 'MVP')
+        prt = self._get_difference(hero, hovered_equipment_item, 'PRT')
+        des = self._get_difference(hero, hovered_equipment_item, 'DES')
+        hit = self._get_difference(hero, hovered_equipment_item, 'HIT')
+        dam = self._get_difference(hero, hovered_equipment_item, 'DAM')
+
         # zet dan alles in deze tabel met zes kolommen. de vierde kolom is leeg voor de rects van de eerste kolom
         # todo, testen hoe dit: hero.war.bonus(hero.wpn), gaat met hero zonder wapen. bonus() checken.
         self.table_data = [
@@ -96,17 +105,17 @@ class StatsBox(object):
             ["Total XP :",     str(hero_exp_tot),       "",                        None,    "",                   ""],
             ["Next Level :",   str(hero_lev_next),      "",                        None,    "",                   ""],
             ["",               "",                      "",                        None,    "",                   ""],
-            ["Weight :",       str(hero.tot_wht),       "",                        None,    self._desc(WHT_DESC), ""],
-            ["Movepoints :",   str(hero.sta_mvp),       hero.dif_mvp,              None,    self._desc(MVP_DESC), ""],
-            ["Protection :",   str(hero.prt),           hero.sld_prt,              None,    "",                   ""],
-            ["Defense :",      str(hero.tot_des),       "",                        None,    "",                   ""],
-            ["Base Hit :",     str(hero.tot_hit)+" %",  hero.war.bonus(hero.wpn),  None,    "",                   ""],
-            ["Damage :",       str(hero.tot_dam),       "",                        None,    "",                   ""],
+            ["Weight :",       str(hero.tot_wht),       "",                        None,    self._desc(WHT_DESC), wht],
+            ["Movepoints :",   str(hero.sta_mvp),       hero.dif_mvp,              None,    self._desc(MVP_DESC), mvp],
+            ["Protection :",   str(hero.prt),           hero.sld_prt,              None,    self._desc(PRT_DESC), prt],
+            ["Defense :",      str(hero.tot_des),       "",                        None,    "",                   des],
+            ["Base Hit :",     str(hero.tot_hit)+" %",  hero.war.bonus(hero.wpn),  None,    "",                   hit],
+            ["Damage :",       str(hero.tot_dam),       "",                        None,    "",                   dam],
             ["",               "",                      "",                        None,    "",                   ""]
         ]
         # voeg ook de 7 stats aan de table_data toe
         for stat in hero.stats_tuple:
-            preview_value = self._get_difference(hero, hovered_equipment_item, stat)
+            preview_value = self._get_difference(hero, hovered_equipment_item, stat.RAW)
             self.table_data.append(
                 # row[0],           row[1],       row[2], row[3], row[4],       row[5]
                 [stat.NAM + " :", str(stat.qty), stat.ext, None, stat.DESC, preview_value]
@@ -126,8 +135,8 @@ class StatsBox(object):
                 color = FONTCOLOR1
             self.table_view[index].append(self.normalfont.render(row[0], True, color).convert_alpha())
             self.table_view[index].append(self.normalfont.render(row[1], True, FONTCOLOR1).convert_alpha())
-            self._set_color(row[2], self.table_view[index], POSCOLOR1, NEGCOLOR1)
-            self._set_color(row[5], self.table_view[index], POSCOLOR2, NEGCOLOR2)
+            self._set_color(row[2], self.table_view[index], POSCOLOR1, NEGCOLOR1, None)
+            self._set_color(row[5], self.table_view[index], POSCOLOR2, NEGCOLOR2, row[0])  # dit is om weight te bepalen
 
     def render(self, screen):
         """
@@ -154,8 +163,8 @@ class StatsBox(object):
         :return: hij moet bij niets "" en niet None teruggeven, vanwege de verwachting in _set_color().
         """
         if hovered_equipment_item:
-            eqp_stat = hero.get_equipped_item_of_type(hovered_equipment_item.TYP).get_value_of(stat.RAW)
-            new_stat = hovered_equipment_item.get_value_of(stat.RAW)
+            eqp_stat = hero.get_equipped_item_of_type(hovered_equipment_item.TYP).get_value_of(stat)
+            new_stat = hovered_equipment_item.get_value_of(stat)
             return new_stat - eqp_stat
         return ""
 
@@ -168,15 +177,21 @@ class StatsBox(object):
         rect.topleft = self.rect.left + COLUMN1X, (self.rect.top + COLUMNSY) + index * ROWHEIGHT
         return rect
 
-    def _set_color(self, value, col, poscolor, negcolor):
+    def _set_color(self, value, col, poscolor, negcolor, weight_check):
         """
         Geef een regel in een kolom een bepaalde format en kleur mee aan de hand van de waarde.
         :param value: dit is een van die waarden
         :param col: in welke kolom de regel zich bevind
         :param poscolor: welke kleuren moet hij weergeven
         """
+        # hele lelijke weight check, maar omdat weight de enige is, doe ik dit zo.
+        # weight is de enige waarvan een grotere waarde niet positief is, vandaar de omdraaiing.
+        if weight_check is "Weight :":
+            poscolor, negcolor = negcolor, poscolor
+
         if value == "":
             value = 0
+
         if value == 0:
             value = ""
             col.append(self.normalfont.render(value, True, FONTCOLOR1).convert_alpha())
@@ -193,15 +208,20 @@ class StatsBox(object):
             # Weight
             return (
                 "Defines how heavy your character is equipped with equipment. "
-                "Weight has negative impact on movepoints and agility."
-            )
+                "Weight has negative impact on movepoints and agility.")
 
         if stat == MVP_DESC:
             # Movepoints
             return (
-                "Defines how many steps your character is able to take in one turn. "
-                "The more stamina your character has, the more movepoints. "
-                "The more weight your character has, the less movepoints. "
-                "The first column shows the number of movepoints calculated from your stamina. "
-                "The second (red) column shows the calculated weight subtracted."
-            )
+                "Defines how many steps your character is able to take in one turn. The more stamina your character "
+                "has, the more movepoints. The more weight your character has, the less movepoints. The first column "
+                "shows the number of movepoints calculated from your stamina. The second (red) column shows the "
+                "calculated weight subtracted.")
+
+        if stat == PRT_DESC:
+            # Protection
+            return (
+                "Protection decreases the amount of health your character loses when hit in combat. There is no "
+                "Shield Protection when attacked from behind. The first column shows all the protection points from "
+                "your equipment combined, minus the shield. The second (green) column show the protection points from "
+                "your shield.")

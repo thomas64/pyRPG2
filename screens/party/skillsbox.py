@@ -151,6 +151,7 @@ class SkillsBox(object):
         """
         if value == "":
             value = 0
+
         if value == 0:
             value = ""
             col.append(self.normalfont.render(value, True, FONTCOLOR1).convert_alpha())
