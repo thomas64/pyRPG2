@@ -99,7 +99,6 @@ class StatsBox(object):
         dam = self._get_difference(hero, hovered_equipment_item, 'DAM')
 
         # zet dan alles in deze tabel met zes kolommen. de vierde kolom is leeg voor de rects van de eerste kolom
-        # todo, testen hoe dit: hero.war.bonus(hero.wpn), gaat met hero zonder wapen. bonus() checken.
         self.table_data = [
             # row[0],               row[1],                    row[2],           row[3],        row[4],         row[5]
             ["XP Remaining :", str(hero.exp.rem),       "",                        None,    "",                   ""],

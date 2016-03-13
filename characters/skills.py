@@ -163,11 +163,11 @@ class Warrior(Skill):
 
     def bonus(self, wpn):
         """
-        ...
-        :param wpn:
-        :return:
+        Berekent de warrior bonus.
+        :param wpn: EquipmentItem object van weapon
+        :return: de formule of anders 0
         """
-        if self.positive_quantity():  # and "empty" not in wpn.RAW:     RAW bestaat niet meer, en empty is return 0 oid.
+        if self.positive_quantity() and wpn.is_not_empty():
             return round((47 - ((wpn.HIT / 10) * 5)) * (self.tot / 10))
         return 0
 

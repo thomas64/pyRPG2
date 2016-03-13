@@ -36,6 +36,8 @@ class EquipmentType(enum.Enum):
     clk = "Cloak"
     glv = "Gloves"
     rng = "Ring"
+    lrg = "LeftRing"
+    rrg = "RightRing"
     blt = "Belt"
     bts = "Boots"
     acy = "Accessory"
@@ -48,27 +50,27 @@ class EquipmentType(enum.Enum):
         """
         if equipment_type == cls.wpn.value:
             return WeaponDatabase.factory(None)
-        if equipment_type == cls.sld.value:
+        elif equipment_type == cls.sld.value:
             return ShieldDatabase.factory(None)
-        if equipment_type == cls.hlm.value:
+        elif equipment_type == cls.hlm.value:
             return HelmetDatabase.factory(None)
-        if equipment_type == cls.amu.value:
+        elif equipment_type == cls.amu.value:
             return AmuletDatabase.factory(None)
-        if equipment_type == cls.arm.value:
+        elif equipment_type == cls.arm.value:
             return ArmorDatabase.factory(None)
-        if equipment_type == cls.clk.value:
+        elif equipment_type == cls.clk.value:
             return CloakDatabase.factory(None)
-        if equipment_type == cls.glv.value:
+        elif equipment_type == cls.glv.value:
             return GlovesDatabase.factory(None)
-        if equipment_type == cls.rng.value:           # todo, 2x rng, dat gaat natuurlijk niet goed. oplossing nodig.
+        elif equipment_type == cls.rng.value:           # todo, 2x rng, dat gaat natuurlijk niet goed. oplossing nodig.
             return RingDatabase.factory(None)
-        if equipment_type == cls.rng.value:           # deze komt dan nooit aan de beurt.
+        elif equipment_type == cls.rng.value:           # deze komt dan nooit aan de beurt.
             return RingDatabase.factory(None)
-        if equipment_type == cls.blt.value:
+        elif equipment_type == cls.blt.value:
             return BeltDatabase.factory(None)
-        if equipment_type == cls.bts.value:
+        elif equipment_type == cls.bts.value:
             return BootsDatabase.factory(None)
-        if equipment_type == cls.acy.value:
+        elif equipment_type == cls.acy.value:
             return AccessoryDatabase.factory(None)
 
 

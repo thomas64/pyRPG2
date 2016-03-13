@@ -6,6 +6,7 @@ class: LoadMenu
 import datetime
 import os
 
+import data
 import loadsave
 import screens.menu.basemenu
 import screens.menu.manager
@@ -67,6 +68,7 @@ class LoadMenu(screens.menu.basemenu.BaseMenu):
             self.engine.audio.stop_sound(self.engine.audio.select)
             self.engine.audio.play_sound(self.engine.audio.error)
         else:
+            self.engine.data = data.Data()
             self.engine.gamestate.change(screens.overworld.Overworld(self.engine))
             filename = self._convert_to_filename(menu_item.text, index)
             loadsave.Dialog(self.engine).load(filename)

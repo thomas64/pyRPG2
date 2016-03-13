@@ -3,6 +3,7 @@
 class: MainMenu
 """
 
+import data
 import screens.menu.basemenu
 import screens.menu.manager
 import screens.overworld
@@ -31,6 +32,7 @@ class MainMenu(screens.menu.basemenu.BaseMenu):
         :param index: zie BaseMenu
         """
         if menu_item.func == self.NewGame:
+            self.engine.data = data.Data()
             push_object = screens.overworld.Overworld(self.engine)
             self.engine.gamestate.change(push_object)
 

@@ -8,7 +8,6 @@ import pygame.gfxdraw
 
 import audio
 import console
-import data
 import keys
 import screens.menu.manager
 import statemachine
@@ -33,7 +32,7 @@ class GameEngine(object):
     """
     def __init__(self):
         self.screen = pygame.display.get_surface()
-        self.data = data.Data()
+        self.data = None
         self.video = video.Video(self)
         self.audio = audio.Audio(self)
 
