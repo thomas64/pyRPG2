@@ -43,8 +43,8 @@ class EquipmentType(enum.Enum):
     @classmethod
     def get_empty_equipment_item_of_this_type(cls, equipment_type):
         """
-        Geeft een 'empty' item terug op verzoek.
-        :param equipment_type: Enum EquipmentType
+        Geeft een 'empty' equipment item terug op verzoek van het type.
+        :param equipment_type: Enum EquipmentType.value, dus bijv. "Shield".
         """
         if equipment_type == cls.wpn.value:
             return WeaponDatabase.factory(None)

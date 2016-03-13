@@ -143,11 +143,35 @@ def add_equipment_item(equipment_item_quantity, equipment_item_name, inventory_n
     print("Put {} {} in {}.".format(equipment_item_quantity, equipment_item_name, inventory_name))
 
 
+def remove_equipment_item(equipment_item_quantity, equipment_item_name, inventory_name):
+    """
+    Inventory.remove()
+    :param equipment_item_quantity: integer
+    :param equipment_item_name: string
+    :param inventory_name: string
+    """
+    print("Removed {} {} from {}.".format(equipment_item_quantity, equipment_item_name, inventory_name))
+
+
 def quantity_less_than_one():
     """
     Inventory.add()
     """
     print("That is not possible.")
+
+
+def no_equipment_item():
+    """
+    Inventory.remove()
+    """
+    print("Equipment item not in container.")
+
+
+def quantity_not_enough():
+    """
+    Inventory.remove()
+    """
+    print("Item quantity not in container.")
 
 
 def equipment_item_name_not_in_database(equipment_item_name):

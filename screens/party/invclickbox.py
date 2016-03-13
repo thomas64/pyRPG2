@@ -43,21 +43,24 @@ class InvClickBox(object):
 
         normalfont = pygame.font.SysFont(FONT, NORMALFONTSIZE)
 
+        self.equipment_type = equipment_type
+        self.inventory = inventory
+
         self.table_data = list()
 
         black_spr = pygame.image.load(TRANSP).convert_alpha()
 
         # de eerste rij
-        empty_equipment_item = equipment.EquipmentType.get_empty_equipment_item_of_this_type(equipment_type)
+        empty_equipment_item = equipment.EquipmentType.get_empty_equipment_item_of_this_type(self.equipment_type)
         self.table_data.append(
             # row[0],   row[1],  row[2],        row[3],                   row[4],         row[5]
-            [black_spr, black_spr, "", "Unequip " + equipment_type, empty_equipment_item, None]
+            [black_spr, black_spr, "", "Unequip " + self.equipment_type, empty_equipment_item, None]
         )
         # de rijen van equipment van hero's
         for hero in party:
             # todo, bij rng en rrg en lrg zijn er nog problemen.
             # haal de equipment item op uit het type
-            equipment_item = hero.get_equipped_item_of_type(equipment_type)
+            equipment_item = hero.get_equipped_item_of_type(self.equipment_type)
             if equipment_item.is_not_empty():
                 # laad de hero subsprite
                 hero_spr = pygame.image.load(hero.SPR).subsurface(32, 0, SUBSURW, SUBSURW).convert_alpha()
@@ -79,7 +82,7 @@ class InvClickBox(object):
                     [hero_spr, equipment_item_spr, "1", equipment_item_nam, equipment_item, None]
                 )
         # de rijen van equipment uit inventory.
-        for equipment_item in inventory.get_all_equipment_items_of_type(equipment_type):
+        for equipment_item in self.inventory.get_all_equipment_items_of_type(self.equipment_type):
             equipment_item_spr = pygame.image.load(equipment_item.SPR).subsurface(
                                             equipment_item.COL, equipment_item.ROW, SUBSURW, SUBSURH).convert_alpha()
             if equipment_item.get_value_of('SKL'):
@@ -171,6 +174,28 @@ class InvClickBox(object):
                 if equipment_item.is_not_empty():
                     return equipment_item.display(), equipment_item
                 return None, equipment_item
+
+    def mouse_click(self, event, hero):
+        """
+        :param event: pygame.MOUSEBUTTONDOWN uit partyscreen
+        :param hero: de huidige geselecteerde hero uit partyscreen
+        """
+        for index, row in enumerate(self.table_data):
+            if row[5].collidepoint(event.pos):
+                self.cur_item = index
+                selected_item = row[4]
+                equipped_item = hero.get_equipped_item_of_type(self.equipment_type)
+                # equip
+                if selected_item.is_not_empty():
+                    if hero.set_equipment_item(selected_item):
+                        self.inventory.add(equipped_item)
+                        self.inventory.remove(selected_item)
+                # unequip
+                else:
+                    self.inventory.add(equipped_item)
+                    hero.set_equipment_item(selected_item)
+        # todo, uitgebreid testen en afmaken.
+        # todo, todo, todo, dubbel unequip, dubbel equip. dat soort dingen
 
     def render(self, screen):
         """

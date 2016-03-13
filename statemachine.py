@@ -64,7 +64,7 @@ class StateMachine(object):
             self.prev_state = self.peek().name
             self.peek().on_exit()
             console.state_pop(self.peek().name)
-            self.statestack.pop()
+            del self.statestack[-1]
             self.peek().on_enter()
             return len(self.statestack) > 0
         except IndexError:

@@ -211,6 +211,7 @@ class Hero(object):
         Nog niet zo netjes opgelost, naar wat ik denk. Hier wordt een nieuw equipment item aan de hero gegeven.
         :param new_equipment_item: Object van EquipmentItem
         :param verbose: geef console output if True
+        :return: is het equippen gelukt?
         """
         # ga door de waarden van alle attributen van hero heen.
         for key_eqp_item, value_eqp_item in self.__dict__.items():
@@ -229,6 +230,8 @@ class Hero(object):
                                 console.is_equipping(self.NAM, new_equipment_item.NAM)
                             else:
                                 console.is_unequipping(self.NAM, value_eqp_item.NAM)
+                        return True
+        return False
 
     def is_able_to_equip(self, new_equipment_item):
         """

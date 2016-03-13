@@ -72,7 +72,7 @@ class InputBox(object):
                     self.textbox.insert(-1, event.unicode)
             if event.key == keys.REMOVE:
                 if len(self.textbox) > 1:
-                    self.textbox.pop(-2)
+                    del self.textbox[-2]
                 if len(self.textbox) == 0:
                     self.textbox = ["_"]
             if event.key == keys.EXIT:
