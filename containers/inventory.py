@@ -28,6 +28,15 @@ class Inventory(dict):
 
         return temp_list
 
+    def contains(self, equipment_item):
+        """
+        Bekijkt of het item in de inventory zit.
+        :param equipment_item: EquipmentItem Object
+        """
+        if equipment_item.RAW in self:
+            return True
+        return False
+
     def add(self, equipment_item, quantity=1, verbose=True):
         """
         Voeg equipment item toe aan de inventory.
@@ -35,24 +44,23 @@ class Inventory(dict):
         :param quantity: integer
         :param verbose: als False meegegeven wordt, print dan niets in de console
         """
-        if equipment_item.is_not_empty():
-            if quantity < 1:
-                console.quantity_less_than_one()
-                raise ValueError
-            if equipment_item.RAW in self:
-                self[equipment_item.RAW].qty += quantity
-                if self[equipment_item.RAW].qty > 99:
-                    console.container_is_full(self.NAM)  # todo, hij geeft alleen nu nog maar mee, hij doet er nog niets aan
-            else:
-                # als hij nog niet in de inv dict zit, voeg hem toe.
-                self[equipment_item.RAW] = equipment_item
-                # equipment_item bestaat uit zichzelf al uit quantity = 1,
-                # dus daarom, wanneer hij voor het eerst wordt toegevoegd: + qty - 1
-                self[equipment_item.RAW].qty += (quantity - 1)
-                if self[equipment_item.RAW].qty > 99:
-                    console.container_is_full(self.NAM)  # todo, hij geeft alleen nu nog maar mee, hij doet er nog niets aan
-            if verbose:
-                console.add_equipment_item(quantity, equipment_item.NAM, self.NAM)
+        if quantity < 1:
+            console.quantity_less_than_one()
+            raise ValueError
+        if equipment_item.RAW in self:
+            self[equipment_item.RAW].qty += quantity
+            if self[equipment_item.RAW].qty > 99:
+                console.container_is_full(self.NAM)  # todo, hij geeft alleen nu nog maar mee, hij doet er nog niets aan
+        else:
+            # als hij nog niet in de inv dict zit, voeg hem toe.
+            self[equipment_item.RAW] = equipment_item
+            # equipment_item bestaat uit zichzelf al uit quantity = 1,
+            # dus daarom, wanneer hij voor het eerst wordt toegevoegd: + qty - 1
+            self[equipment_item.RAW].qty += (quantity - 1)
+            if self[equipment_item.RAW].qty > 99:
+                console.container_is_full(self.NAM)  # todo, hij geeft alleen nu nog maar mee, hij doet er nog niets aan
+        if verbose:
+            console.add_equipment_item(quantity, equipment_item.NAM, self.NAM)
 
     def remove(self, equipment_item, quantity=1, verbose=True):
         """

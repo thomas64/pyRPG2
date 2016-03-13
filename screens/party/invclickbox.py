@@ -177,6 +177,7 @@ class InvClickBox(object):
 
     def mouse_click(self, event, hero):
         """
+        Equip het geselecteerde item.
         :param event: pygame.MOUSEBUTTONDOWN uit partyscreen
         :param hero: de huidige geselecteerde hero uit partyscreen
         """
@@ -185,17 +186,32 @@ class InvClickBox(object):
                 self.cur_item = index
                 selected_item = row[4]
                 equipped_item = hero.get_equipped_item_of_type(self.equipment_type)
+
                 # equip
+                # als de geselecteerde geen lege is
                 if selected_item.is_not_empty():
-                    if hero.set_equipment_item(selected_item):
-                        self.inventory.add(equipped_item)
-                        self.inventory.remove(selected_item)
+                    # als de geselecteerde niet dezelfde is als die je al aan hebt
+                    if selected_item.get_value_of('RAW') != equipped_item.get_value_of('RAW'):
+                        # als hij in de inventory zit
+                        if self.inventory.contains(selected_item):
+                            # als het aankleden gelukt is
+                            if hero.set_equipment_item(selected_item):
+                                # verwijder hem dan uit de inventory
+                                self.inventory.remove(selected_item)
+                                # als degene die je aan had niet een lege is
+                                if equipped_item.is_not_empty():
+                                    # voeg die dan toe aan de inventory
+                                    self.inventory.add(equipped_item)
+
                 # unequip
+                # als de geselecteerde wel een lege is
                 else:
-                    self.inventory.add(equipped_item)
-                    hero.set_equipment_item(selected_item)
-        # todo, uitgebreid testen en afmaken.
-        # todo, todo, todo, dubbel unequip, dubbel equip. dat soort dingen
+                    # als degene die je al aan hebt geen lege is
+                    if equipped_item.is_not_empty():
+                        # trek dan de lege aan
+                        hero.set_equipment_item(selected_item)
+                        # en voeg degene die je aan had toe aan de inventory
+                        self.inventory.add(equipped_item)
 
     def render(self, screen):
         """
