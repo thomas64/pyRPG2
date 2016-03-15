@@ -39,6 +39,7 @@ class Video(object):
         try:
             with open(OPTIONSFILE, 'rb') as f:
                 self.fullscreen = pickle.load(f)
+            console.load_options()
         except (pickle.UnpicklingError, FileNotFoundError, EOFError):
             console.corrupt_options()
             self.fullscreen = False
@@ -50,6 +51,7 @@ class Video(object):
         """
         with open(OPTIONSFILE, 'wb') as f:
             pickle.dump(self.fullscreen, f)
+        console.write_options()
 
     def flip_fullscreen(self):
         """

@@ -45,12 +45,28 @@ def state_clear():
     print("Game cleared all states from stack.")
 
 
+def load_options():
+    """
+    Audio._load_cfg()
+    Video._load_cfg()
+    """
+    print("Loading options file...")
+
+
+def write_options():
+    """
+    Audio.write_cfg()
+    Video.write_cfg()
+    """
+    print("Writing options files...")
+
+
 def corrupt_options():
     """
     Video._load_cfg()
     Audio._load_cfg()
     """
-    print('Corrupt options file.')
+    print("Corrupt options file.")
 
 
 def load_gamedata():
@@ -78,7 +94,7 @@ def corrupt_gamedata():
     """
     Dialog.load()
     """
-    print('Corrupt gamedata.')
+    print("Corrupt gamedata.")
 
 
 def container_is_full(container_name):
@@ -99,7 +115,7 @@ def hero_join_party(hero_name, party_name):
     print("{} joined {}.".format(hero_name, party_name))
 
 
-def hero_double_join(hero_name, party_name):
+def error_hero_double_join(hero_name, party_name):
     """
     Party.add()
     :param hero_name: string
@@ -117,7 +133,7 @@ def hero_leave_party(hero_name, party_name):
     print("{} left {}.".format(hero_name, party_name))
 
 
-def hero_not_in_party(hero_name, party_name):
+def error_hero_not_in_party(hero_name, party_name):
     """
     Party.remove()
     :param hero_name: string
@@ -153,28 +169,30 @@ def remove_equipment_item(equipment_item_quantity, equipment_item_name, inventor
     print("Removed {} {} from {}.".format(equipment_item_quantity, equipment_item_name, inventory_name))
 
 
-def quantity_less_than_one():
+def error_quantity_less_than_one(quantity):
     """
     Inventory.add()
+    Inventory.remove()
+    :param quantity: integer
     """
-    print("That is not possible.")
+    print("Quantity of {} is not possible.".format(quantity))
 
 
-def no_equipment_item():
+def error_no_equipment_item():
     """
     Inventory.remove()
     """
     print("Equipment item not in container.")
 
 
-def quantity_not_enough():
+def error_quantity_not_enough():
     """
     Inventory.remove()
     """
     print("Item quantity not in container.")
 
 
-def equipment_item_name_not_in_database(equipment_item_name):
+def error_equipment_item_name_not_in_database(equipment_item_name):
     """
     EquipmentDatabase.factory()
     :param equipment_item_name: string

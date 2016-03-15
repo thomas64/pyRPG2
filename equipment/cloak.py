@@ -55,4 +55,5 @@ class CloakDatabase(collections.OrderedDict):
             cloak['spr'] = SPRITEPATH
             return equipment.EquipmentItem(equipment.EquipmentType.clk.value, **cloak)
         except KeyError:
-            console.equipment_item_name_not_in_database(key_name)
+            console.error_equipment_item_name_not_in_database(key_name)
+            raise KeyError

@@ -35,4 +35,5 @@ class AmuletDatabase(collections.OrderedDict):
             amulet['spr'] = SPRITEPATH
             return equipment.EquipmentItem(equipment.EquipmentType.amu.value, **amulet)
         except KeyError:
-            console.equipment_item_name_not_in_database(key_name)
+            console.error_equipment_item_name_not_in_database(key_name)
+            raise KeyError

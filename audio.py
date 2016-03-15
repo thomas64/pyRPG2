@@ -70,6 +70,7 @@ class Audio(object):
         try:
             with open(OPTIONSFILE, 'rb') as f:
                 self.music, self.sound = pickle.load(f)
+            console.load_options()
         except (pickle.UnpicklingError, FileNotFoundError, EOFError):
             console.corrupt_options()
             self.music, self.sound = 1, 1
@@ -81,6 +82,7 @@ class Audio(object):
         """
         with open(OPTIONSFILE, 'wb') as f:
             pickle.dump([self.music, self.sound], f)
+        console.write_options()
 
     def flip_sound(self):
         """

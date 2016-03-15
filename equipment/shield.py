@@ -115,4 +115,5 @@ class ShieldDatabase(collections.OrderedDict):
             shield['skl'] = equipment.WeaponType.shd.value
             return equipment.EquipmentItem(equipment.EquipmentType.sld.value, **shield)
         except KeyError:
-            console.equipment_item_name_not_in_database(key_name)
+            console.error_equipment_item_name_not_in_database(key_name)
+            raise KeyError

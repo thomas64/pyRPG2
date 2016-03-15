@@ -24,7 +24,8 @@ class Party(collections.OrderedDict):
         :param verbose: als False meegegeven wordt, print dan niets in de console
         """
         if hero.RAW in self:
-            console.hero_double_join(hero.NAM, self.NAM)
+            console.error_hero_double_join(hero.NAM, self.NAM)
+            raise ValueError
         elif len(self) < self.MAX:
             self[hero.RAW] = hero
             if verbose:
@@ -45,4 +46,5 @@ class Party(collections.OrderedDict):
             if verbose:
                 console.hero_leave_party(hero.NAM, self.NAM)
         else:
-            console.hero_not_in_party(hero.NAM, self.NAM)
+            console.error_hero_not_in_party(hero.NAM, self.NAM)
+            raise AttributeError

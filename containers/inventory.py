@@ -45,7 +45,7 @@ class Inventory(dict):
         :param verbose: als False meegegeven wordt, print dan niets in de console
         """
         if quantity < 1:
-            console.quantity_less_than_one()
+            console.error_quantity_less_than_one(quantity)
             raise ValueError
         if equipment_item.RAW in self:
             self[equipment_item.RAW].qty += quantity
@@ -70,17 +70,17 @@ class Inventory(dict):
         :param verbose: als False meegegeven wordt, print dan niets in de console
         """
         if equipment_item.RAW not in self:
-            console.no_equipment_item()
+            console.error_no_equipment_item()
             raise AttributeError
         if quantity < 1:
-            console.quantity_less_than_one()
+            console.error_quantity_less_than_one(quantity)
             raise ValueError
         if equipment_item.qty > quantity:
             equipment_item.qty -= quantity
         elif equipment_item.qty == quantity:
             del self[equipment_item.RAW]
         else:
-            console.quantity_not_enough()
+            console.error_quantity_not_enough()
             raise ValueError
         if verbose:
             console.remove_equipment_item(quantity, equipment_item.NAM, self.NAM)
