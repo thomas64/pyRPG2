@@ -130,8 +130,8 @@ class Display(object):
                     self.invclick_box = None
 
                 elif self.invclick_box and self.invclick_box.rect.collidepoint(event.pos):
-                    self.invclick_box.mouse_click(event, self.cur_hero)
-                    self.invclick_box = None
+                    if self.invclick_box.mouse_click(event, self.cur_hero):
+                        self.invclick_box = None
                     return  # anders vangt hij ook nog andere clicks hieronder in deze methode af
 
                 for hero_box in self.hero_boxes:

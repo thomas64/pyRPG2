@@ -36,8 +36,6 @@ class EquipmentType(enum.Enum):
     clk = "Cloak"
     glv = "Gloves"
     rng = "Ring"
-    lrg = "LeftRing"
-    rrg = "RightRing"
     blt = "Belt"
     bts = "Boots"
     acy = "Accessory"
@@ -62,9 +60,7 @@ class EquipmentType(enum.Enum):
             return CloakDatabase.factory(None)
         elif equipment_type == cls.glv.value:
             return GlovesDatabase.factory(None)
-        elif equipment_type == cls.rng.value:           # todo, 2x rng, dat gaat natuurlijk niet goed. oplossing nodig.
-            return RingDatabase.factory(None)
-        elif equipment_type == cls.rng.value:           # deze komt dan nooit aan de beurt.
+        elif equipment_type == cls.rng.value:
             return RingDatabase.factory(None)
         elif equipment_type == cls.blt.value:
             return BeltDatabase.factory(None)

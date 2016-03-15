@@ -5,7 +5,7 @@ class: InvClickBox
 
 import pygame
 
-import equipment
+from equipment import EquipmentType
 import keys
 
 BACKGROUNDCOLOR = pygame.Color("black")
@@ -51,11 +51,12 @@ class InvClickBox(object):
         black_spr = pygame.image.load(TRANSP).convert_alpha()
 
         # de eerste rij
-        empty_equipment_item = equipment.EquipmentType.get_empty_equipment_item_of_this_type(self.equipment_type)
+        empty_equipment_item = EquipmentType.get_empty_equipment_item_of_this_type(self.equipment_type)
         self.table_data.append(
-            # row[0],   row[1],  row[2],        row[3],                   row[4],         row[5]
-            [black_spr, black_spr, "", "Unequip " + self.equipment_type, empty_equipment_item, None]
+            # row[0],   row[1],  row[2],        row[3],                         row[4],      row[5], row[6]
+            [black_spr, black_spr, "", "Unequip " + self.equipment_type, empty_equipment_item, None, "E"]
         )
+
         # de rijen van equipment van hero's
         for hero in party:
             # todo, bij rng en rrg en lrg zijn er nog problemen.
@@ -71,16 +72,17 @@ class InvClickBox(object):
                 if equipment_item.get_value_of('SKL'):
                     # zet dat dan voor de naam
                     equipment_item_nam = "[" + equipment_item.SKL + "] " + equipment_item.NAM
-                    # maar bij een schild niet, (want die heeft ook een skill waarde, maar niet om zichtbaar te maken
+                    # maar bij een schild niet, want die heeft ook een skill waarde, maar niet om zichtbaar te maken
                     if "Shield" in equipment_item_nam:
                         equipment_item_nam = equipment_item.NAM
                 else:
                     # en anders gewoon de naam
                     equipment_item_nam = equipment_item.NAM
                 self.table_data.append(
-                    # row[0],       row[1],       row[2],     row[3],           row[4],     row[5]
-                    [hero_spr, equipment_item_spr, "1", equipment_item_nam, equipment_item, None]
+                    # row[0],       row[1],       row[2],     row[3],           row[4],   row[5], row[6]
+                    [hero_spr, equipment_item_spr, "1", equipment_item_nam, equipment_item, None, "X"]
                 )
+
         # de rijen van equipment uit inventory.
         for equipment_item in self.inventory.get_all_equipment_items_of_type(self.equipment_type):
             equipment_item_spr = pygame.image.load(equipment_item.SPR).subsurface(
@@ -92,8 +94,8 @@ class InvClickBox(object):
             else:
                 equipment_item_nam = equipment_item.NAM
             self.table_data.append(
-                # row[0],        row[1],            row[2],                     row[3],          row[4],     row[5]
-                [black_spr, equipment_item_spr, str(equipment_item.qty), equipment_item_nam, equipment_item, None]
+                # row[0],        row[1],            row[2],                     row[3],          row[4],   row[5], [6]
+                [black_spr, equipment_item_spr, str(equipment_item.qty), equipment_item_nam, equipment_item, None, ""]
             )
 
         self.table_view = []
@@ -189,19 +191,22 @@ class InvClickBox(object):
 
                 # equip
                 # als de geselecteerde geen lege is
-                if selected_item.is_not_empty():
-                    # als de geselecteerde niet dezelfde is als die je al aan hebt
-                    if selected_item.get_value_of('RAW') != equipped_item.get_value_of('RAW'):
-                        # als hij in de inventory zit
-                        if self.inventory.contains(selected_item):
-                            # als het aankleden gelukt is
-                            if hero.set_equipment_item(selected_item):
-                                # verwijder hem dan uit de inventory
-                                self.inventory.remove(selected_item)
-                                # als degene die je aan had niet een lege is
-                                if equipped_item.is_not_empty():
-                                    # voeg die dan toe aan de inventory
-                                    self.inventory.add(equipped_item)
+                if row[6] != "E":
+                    # als de geselecteerde niet al van een hero is
+                    if row[6] != "X":
+                        # als de geselecteerde niet dezelfde is als die je al aan hebt
+                        if selected_item.get_value_of('RAW') != equipped_item.get_value_of('RAW'):
+                            # als hij in de inventory zit
+                            if self.inventory.contains(selected_item):
+                                # als het aankleden gelukt is
+                                if hero.set_equipment_item(selected_item):
+                                    # verwijder hem dan uit de inventory
+                                    self.inventory.remove(selected_item)
+                                    # als degene die je aan had niet een lege is
+                                    if equipped_item.is_not_empty():
+                                        # voeg die dan toe aan de inventory
+                                        self.inventory.add(equipped_item)
+                                    return True
 
                 # unequip
                 # als de geselecteerde wel een lege is
@@ -212,6 +217,8 @@ class InvClickBox(object):
                         hero.set_equipment_item(selected_item)
                         # en voeg degene die je aan had toe aan de inventory
                         self.inventory.add(equipped_item)
+                        return True
+        return False
 
     def render(self, screen):
         """
