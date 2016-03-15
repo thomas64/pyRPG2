@@ -33,19 +33,11 @@ class Data(object):
         self.party = containers.Party()
 
         self.party.add(self.heroes['alagos'], verbose=False)
-        self.party.add(self.heroes['alagos'], verbose=False)
+        self.party.add(self.heroes['galen'], verbose=False)
         self.party.add(self.heroes['luana'], verbose=False)
         self.party.add(self.heroes['grindan'], verbose=False)
         self.party.add(self.heroes['rydalin'], verbose=False)
-        self.party.add(self.heroes['luana'], verbose=False)
-        self.party.add(self.heroes['galen'], verbose=False)
         self.party.add(self.heroes['codrif'], verbose=False)
-        self.party.remove(self.heroes['alagos'], verbose=False)
-        self.party.remove(self.heroes['luana'], verbose=False)
-        self.party.add(self.heroes['grindan'], verbose=False)
-        self.party.add(self.heroes['rydalin'], verbose=False)
-        self.party.add(self.heroes['galen'], verbose=False)
-        self.party.add(self.heroes['luana'], verbose=False)
 
         self.inventory = containers.Inventory()
 
@@ -65,6 +57,8 @@ class Data(object):
             equipment.ShieldDatabase.factory('ironheater'),
             equipment.RingDatabase.factory('testring'),
             equipment.RingDatabase.factory('testring2'),
+            equipment.BraceletDatabase.factory('testbracelet'),
+            equipment.BraceletDatabase.factory('testbracelet2'),
             equipment.AccessoryDatabase.factory('testaccessory'),
             equipment.AccessoryDatabase.factory('testaccessory2'),
             equipment.AmuletDatabase.factory('testamulet'),
@@ -93,9 +87,3 @@ class Data(object):
 
         for eqp in test_eqp:
             self.inventory.add(eqp, quantity=random.randint(1, 999), verbose=False)
-
-        # todo, hoe bepaal je of een ring aan de linker of rechter hand kan?
-
-        self.heroes['alagos'].set_equipment_item(equipment.BootsDatabase.factory('ironboots'))
-        self.heroes['alagos'].set_equipment_item(equipment.BootsDatabase.factory(None))
-        self.heroes['alagos'].set_equipment_item(equipment.WeaponDatabase.factory('silverwarbow'))

@@ -7,17 +7,18 @@ class: WeaponType
 import enum
 
 from equipment.item import EquipmentItem
-import equipment.accessory
+import equipment.weapon
+import equipment.shield
+import equipment.helmet
 import equipment.amulet
 import equipment.armor
+import equipment.cloak
+import equipment.bracelet
+import equipment.gloves
+import equipment.ring
 import equipment.belt
 import equipment.boots
-import equipment.cloak
-import equipment.gloves
-import equipment.helmet
-import equipment.ring
-import equipment.shield
-import equipment.weapon
+import equipment.accessory
 
 # todo, uit colornote app:
 # - min int gebruiken voor items?
@@ -34,6 +35,7 @@ class EquipmentType(enum.Enum):
     amu = "Amulet"
     arm = "Armor"
     clk = "Cloak"
+    brc = "Bracelet"
     glv = "Gloves"
     rng = "Ring"
     blt = "Belt"
@@ -58,6 +60,8 @@ class EquipmentType(enum.Enum):
             return ArmorDatabase.factory(None)
         elif equipment_type == cls.clk.value:
             return CloakDatabase.factory(None)
+        elif equipment_type == cls.brc.value:
+            return BraceletDatabase.factory(None)
         elif equipment_type == cls.glv.value:
             return GlovesDatabase.factory(None)
         elif equipment_type == cls.rng.value:
@@ -89,6 +93,7 @@ ArmorDatabase = equipment.armor.ArmorDatabase()
 BeltDatabase = equipment.belt.BeltDatabase()
 BootsDatabase = equipment.boots.BootsDatabase()
 CloakDatabase = equipment.cloak.CloakDatabase()
+BraceletDatabase = equipment.bracelet.BraceletDatabase()
 GlovesDatabase = equipment.gloves.GlovesDatabase()
 HelmetDatabase = equipment.helmet.HelmetDatabase()
 RingDatabase = equipment.ring.RingDatabase()

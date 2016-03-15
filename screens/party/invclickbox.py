@@ -59,7 +59,6 @@ class InvClickBox(object):
 
         # de rijen van equipment van hero's
         for hero in party:
-            # todo, bij rng en rrg en lrg zijn er nog problemen.
             # haal de equipment item op uit het type
             equipment_item = hero.get_equipped_item_of_type(self.equipment_type)
             if equipment_item.is_not_empty():

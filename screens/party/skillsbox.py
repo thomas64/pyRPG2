@@ -127,6 +127,7 @@ class SkillsBox(object):
         Berekent het verschil van het equipte item en hoverde item voor in col[6]. Voor de betreffende skill.
         :return: hij moet bij niets "" en niet None teruggeven, vanwege de verwachting in _set_color().
         """
+        # hovered_equipment_item is None als er niets gehoverd is in party Display
         if hovered_equipment_item:
             eqp_skl = hero.get_equipped_item_of_type(hovered_equipment_item.TYP).get_value_of(skill.RAW)
             new_skl = hovered_equipment_item.get_value_of(skill.RAW)

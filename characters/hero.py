@@ -63,9 +63,9 @@ class Hero(object):
         self.amu = equipment.AmuletDatabase.factory(None)
         self.arm = equipment.ArmorDatabase.factory(kwargs['arm'])
         self.clk = equipment.CloakDatabase.factory(None)
+        self.brc = equipment.BraceletDatabase.factory(None)
         self.glv = equipment.GlovesDatabase.factory(None)
-        self.lrg = equipment.RingDatabase.factory(None)
-        self.rrg = equipment.RingDatabase.factory(None)
+        self.rng = equipment.RingDatabase.factory(None)
         self.blt = equipment.BeltDatabase.factory(None)
         self.bts = equipment.BootsDatabase.factory(None)
         self.acy = equipment.AccessoryDatabase.factory(None)
@@ -77,7 +77,7 @@ class Hero(object):
         :return: een tuple met alle equipment
         """
         return (self.wpn, self.sld, self.hlm, self.amu, self.arm, self.clk,
-                self.glv, self.lrg, self.rrg, self.blt, self.bts, self.acy)
+                self.brc, self.glv, self.rng, self.blt, self.bts, self.acy)
 
     @property
     def cur_hp(self):
@@ -200,8 +200,6 @@ class Hero(object):
         :param equipment_type: Enum EquipmentType.value, dus bijv. "Shield".
         :return: ook als het een 'empty' is, geef dan het item
         """
-        # todo, Let op, bij ringen geeft hij er maar 1 terug. Denk ik, nog niet getest.
-        # er moet een conversieslag komen oid. van rightring naar ring en andersom.
         for equipment_item in self.equipment_tuple:
             if equipment_item.TYP == equipment_type:
                 return equipment_item
