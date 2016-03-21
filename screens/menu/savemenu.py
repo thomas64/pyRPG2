@@ -3,8 +3,8 @@
 class: SaveMenu
 """
 
+import components.inputbox
 import loadsave
-import screens.menu.inputbox
 import screens.menu.loadmenu
 import statemachine
 
@@ -28,7 +28,7 @@ class SaveMenu(screens.menu.loadmenu.LoadMenu):
         if menu_item.func == self.Back:
             self.on_exit()
         elif "..." in menu_item.text:
-            new_name = screens.menu.inputbox.InputBox(self.engine.screen).input_loop()
+            new_name = components.inputbox.InputBox(self.engine.screen).input_loop()
             if new_name:
                 filename = str(index+1) + "_" + new_name + ".dat"
                 loadsave.Dialog(self.engine).save(filename)
