@@ -7,10 +7,11 @@ import collections
 
 import pygame
 
+import components.sprites
 import keys
 import screens.character
+import screens.direction
 import screens.map
-import screens.sprites
 
 BACKGROUNDCOLOR = pygame.Color("gray12")
 GRIDCOLOR = pygame.Color("gray36")
@@ -24,7 +25,10 @@ DEFZOOM = 1.0
 MINZOOM = .5
 
 # todo, mooiere map maken met variatie in het gras
-OVERWORLDPATH = 'resources/maps/start_forest.tmx'
+OVERWORLDPATH = 'resources/maps/'
+OVERWORLDNAME = 'start_forest'
+STARTPOSITION = 'start_game'
+STARTDIRECTION = screens.direction.Direction.South
 PLAYERLAYER = 3
 GRIDLAYER = 8
 CBOXLAYER = 9
@@ -36,24 +40,34 @@ class Window(object):
     De window met de kaart en hero's.
     """
     def __init__(self, width, height, engine):
+        self.width = width
+        self.height = height
         self.engine = engine
-        self.surface = pygame.Surface((width, height))
+        self.surface = pygame.Surface((self.width, self.height))
         self.surface.fill(BACKGROUNDCOLOR)
         self.surface = self.surface.convert()
 
-        self.map1 = screens.map.Map(OVERWORLDPATH, width, height, PLAYERLAYER)
+        self._new_map(OVERWORLDNAME, OVERWORLDPATH+OVERWORLDNAME+'.tmx', STARTPOSITION, STARTDIRECTION)
+
+        self.grid_sprite = None
+        self.cbox_sprites = []
+
+    def _new_map(self, overworldname, overworldpath, startposition, startdirection):
+        self.map1 = screens.map.Map(overworldname, overworldpath, self.width, self.height, PLAYERLAYER)
         self.group = self.map1.view
+
+        start_pos = (0, 0)
+        for pos in self.map1.start_pos:
+            if pos.name == startposition:
+                start_pos = (pos.x, pos.y)
 
         self.heroes = []
         self.party = list(self.engine.data.party.values())
         for hero in self.party:
-            self.heroes.append(screens.character.Hero(hero.SPR, self.map1.start_pos.topleft, self.engine.audio))
+            self.heroes.append(screens.character.Hero(hero.SPR, start_pos, startdirection, self.engine.audio))
         self.heroes.reverse()           # voeg de heroes in juiste volgorde toe
         self.group.add(self.heroes)     # maar als sprites moeten ze precies andersom staan
         self.heroes.reverse()           # want daar wil je heroes[0] bovenop weergegeven hebben
-
-        self.grid_sprite = None
-        self.cbox_sprites = []
 
         self.maxlen = ((len(self.party)-1)*GRIDSIZE)+1
         self.hero_history = collections.deque(maxlen=self.maxlen)
@@ -82,8 +96,8 @@ class Window(object):
 
             elif event.key == keys.GRID:
                 if self.grid_sprite is None:
-                    self.grid_sprite = screens.sprites.GridSprite(self.map1.width, self.map1.height,
-                                                                  GRIDCOLOR, GRIDSIZE, GRIDLAYER)
+                    self.grid_sprite = components.sprites.GridSprite(self.map1.width, self.map1.height,
+                                                                     GRIDCOLOR, GRIDSIZE, GRIDLAYER)
                     self.group.add(self.grid_sprite)
                 else:
                     self.group.remove(self.grid_sprite)
@@ -92,11 +106,11 @@ class Window(object):
             elif event.key == keys.CBOX:
                 if len(self.cbox_sprites) == 0:                             # als de lijst leeg is.
                     for hero in self.heroes:
-                        self.cbox_sprites.append(screens.sprites.ColorBoxSprite(hero.rect, HEROCOLOR, CBOXLAYER))
+                        self.cbox_sprites.append(components.sprites.ColorBoxSprite(hero.rect, HEROCOLOR, CBOXLAYER))
                     for rect in self.map1.high_blocker_rects:
-                        self.cbox_sprites.append(screens.sprites.ColorBoxSprite(rect, HIGHBLOCKERCOLOR, CBOXLAYER))
+                        self.cbox_sprites.append(components.sprites.ColorBoxSprite(rect, HIGHBLOCKERCOLOR, CBOXLAYER))
                     for rect in self.map1.low_blocker_rects:
-                        self.cbox_sprites.append(screens.sprites.ColorBoxSprite(rect, LOWBLOCKERCOLOR, CBOXLAYER))
+                        self.cbox_sprites.append(components.sprites.ColorBoxSprite(rect, LOWBLOCKERCOLOR, CBOXLAYER))
                     self.group.add(self.cbox_sprites)
                 else:
                     self.group.remove(self.cbox_sprites)
@@ -129,18 +143,13 @@ class Window(object):
 
         self.hero_trail(key_input, dt)
 
-    # noinspection PyMethodMayBeStatic
     def update(self, dt):
         """
-        Update de waarden van de bovenste state.
+        Is de hero tegen een portal aangelopen. Update locaties (indien F11). Centreer op de hero.
         :param dt: self.clock.tick(FPS)/1000.0
         """
-        pass
+        self.check_portals()
 
-    def render(self):
-        """
-        Update locaties (indien F11) -> centreer op de hero -> teken de window inhoud.
-        """
         # misschien gaat dit een probleem geven wanneer ingame de party grootte wordt gewijzigd.
         # dan heeft bijv een boom een hero.rect.topleft oid.
         if len(self.cbox_sprites) > 0:
@@ -148,6 +157,11 @@ class Window(object):
                 self.cbox_sprites[index].rect.topleft = hero.rect.topleft  # zijn toegevoegd zijn de hero.rects
 
         self.group.center(self.heroes[0].rect.center)
+
+    def render(self):
+        """
+        Teken de window inhoud.
+        """
         self.group.draw(self.surface)
 
     def hero_trail(self, key_input, dt):
@@ -173,3 +187,16 @@ class Window(object):
                 self.heroes[i].move_direction = self.hero_history[index*GRIDSIZE][3]
                 self.heroes[i].movespeed = self.hero_history[index*GRIDSIZE][4]
                 self.heroes[i].animate(dt, make_sound=False)
+
+    def check_portals(self):
+        """
+        Bekijk of hij collide met een portal.
+        Zo ja, haal dan de van en naar data uit de portal.
+        Hij gebruikt de van naam voor de startpositie in de nieuwe map.
+        """
+        if len(self.heroes[0].rect.collidelistall(self.map1.portals)) == 1:
+            portal_nr = self.heroes[0].rect.collidelist(self.map1.portals)
+            from_name = self.map1.portals[portal_nr].from_name
+            to_name = self.map1.portals[portal_nr].to_name
+            overworldpath = OVERWORLDPATH+to_name+'.tmx'
+            self._new_map(to_name, overworldpath, from_name, self.heroes[0].last_direction)

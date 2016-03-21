@@ -4,10 +4,9 @@ class: Direction
 class: Hero
 """
 
-import enum
-
 import pygame
 
+from screens.direction import Direction
 import keys
 
 
@@ -20,21 +19,11 @@ TURNDELAY = 7/60    # van een seconde
 VIEWSPEED = 8       # todo, deze moet nog aangepast worden
 
 
-class Direction(enum.Enum):
-    """
-    De vier richtingen waarheen een unit kan lopen.
-    """
-    North = 1
-    South = 2
-    West = 3
-    East = 4
-
-
 class Hero(pygame.sprite.Sprite):
     """
     Hero extends the pygame.sprite.Sprite class
     """
-    def __init__(self, spritesheet, position, audio):
+    def __init__(self, spritesheet, position, direction, audio):
         pygame.sprite.Sprite.__init__(self)
 
         self.west_states = {0:  (32, 32, 32, 32), 1: (0, 32, 32, 32), 2: (32, 32, 32, 32), 3: (64, 32, 32, 32)}
@@ -58,7 +47,7 @@ class Hero(pygame.sprite.Sprite):
         self.rect.topleft = position
         self.true_position = list(self.rect.topleft)    # true_pos is een float, dat is nodig voor timebased movement
         self.old_position = list(self.rect.topleft)
-        self.last_direction = Direction.South
+        self.last_direction = direction
         self.move_direction = None
 
         self.movespeed = 0
