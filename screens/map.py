@@ -7,9 +7,9 @@ import pygame
 import pytmx
 import pyscroll
 
-STARTPOSLAYER = "start_pos"
-TREESLAYER = "trees"
-WATERLAYER = "water"
+STARTPOSOBJECT = "start_pos"
+HIGHBLOCKERLAYER = "high_blocker"
+LOWBLOCKERLAYER = "low_blocker"
 
 
 class Map(object):
@@ -28,28 +28,24 @@ class Map(object):
         self.width = int(tmx_data.width * tilewidth)
         self.height = int(tmx_data.height * tileheight)
 
-        self.tree_rects = []
-        self.water_rects = []
-        self.obstacle_rects = []
-        self.low_obst_rects = []
+        self.high_blocker_rects = []
+        self.low_blocker_rects = []
 
         try:
-            for rect in tmx_data.get_layer_by_name(STARTPOSLAYER):
-                self.start_pos = self._pg_rect(rect)
+            rect = tmx_data.get_object_by_name(STARTPOSOBJECT)
+            self.start_pos = self._pg_rect(rect)
         except (AttributeError, ValueError):
             pass
 
         try:
-            for rect in tmx_data.get_layer_by_name(TREESLAYER):
-                self._add_rect_to_list(rect, self.tree_rects)
-                self._add_rect_to_list(rect, self.obstacle_rects)
+            for rect in tmx_data.get_layer_by_name(HIGHBLOCKERLAYER):
+                self._add_rect_to_list(rect, self.high_blocker_rects)
         except (AttributeError, ValueError):
             pass
 
         try:
-            for rect in tmx_data.get_layer_by_name(WATERLAYER):
-                self._add_rect_to_list(rect, self.water_rects)
-                self._add_rect_to_list(rect, self.low_obst_rects)
+            for rect in tmx_data.get_layer_by_name(LOWBLOCKERLAYER):
+                self._add_rect_to_list(rect, self.low_blocker_rects)
         except (AttributeError, ValueError):
             pass
 

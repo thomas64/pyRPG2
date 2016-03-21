@@ -15,8 +15,8 @@ import screens.sprites
 BACKGROUNDCOLOR = pygame.Color("gray12")
 GRIDCOLOR = pygame.Color("gray36")
 HEROCOLOR = pygame.Color("blue")
-TREECOLOR = pygame.Color("yellow")
-WATERCOLOR = pygame.Color("purple")
+HIGHBLOCKERCOLOR = pygame.Color("yellow")
+LOWBLOCKERCOLOR = pygame.Color("purple")
 
 ZOOMSPEED = .1
 MAXZOOM = 3.1
@@ -93,10 +93,10 @@ class Window(object):
                 if len(self.cbox_sprites) == 0:                             # als de lijst leeg is.
                     for hero in self.heroes:
                         self.cbox_sprites.append(screens.sprites.ColorBoxSprite(hero.rect, HEROCOLOR, CBOXLAYER))
-                    for rect in self.map1.tree_rects:
-                        self.cbox_sprites.append(screens.sprites.ColorBoxSprite(rect, TREECOLOR, CBOXLAYER))
-                    for rect in self.map1.water_rects:
-                        self.cbox_sprites.append(screens.sprites.ColorBoxSprite(rect, WATERCOLOR, CBOXLAYER))
+                    for rect in self.map1.high_blocker_rects:
+                        self.cbox_sprites.append(screens.sprites.ColorBoxSprite(rect, HIGHBLOCKERCOLOR, CBOXLAYER))
+                    for rect in self.map1.low_blocker_rects:
+                        self.cbox_sprites.append(screens.sprites.ColorBoxSprite(rect, LOWBLOCKERCOLOR, CBOXLAYER))
                     self.group.add(self.cbox_sprites)
                 else:
                     self.group.remove(self.cbox_sprites)
@@ -124,8 +124,8 @@ class Window(object):
         self.heroes[0].speed(key_input)
         self.heroes[0].direction(key_input, dt)
         # todo, moet dit niet naar de hero class?
-        self.heroes[0].check_obstacle(self.map1.obstacle_rects, self.map1.low_obst_rects,
-                                      None, self.map1.width, self.map1.height, dt)
+        self.heroes[0].check_blocker(self.map1.high_blocker_rects, self.map1.low_blocker_rects,
+                                     None, self.map1.width, self.map1.height, dt)
 
         self.hero_trail(key_input, dt)
 

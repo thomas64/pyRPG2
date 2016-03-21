@@ -184,11 +184,11 @@ class Hero(pygame.sprite.Sprite):
         """
         self.rect.topleft = (round(self.rect.x / grid_size) * grid_size, round(self.rect.y / grid_size) * grid_size)
 
-    def check_obstacle(self, obstacles, low_obsts, moverange, map_width, map_height, dt):
+    def check_blocker(self, high_blockers, low_blockers, moverange, map_width, map_height, dt):
         """
         Bekijk of de unit tegen een andere sprite aan loopt.
-        :param obstacles: lijst van rects van map1.obstacle_rects
-        :param low_obsts: lijst van rects van map1.low_obst_rects
+        :param high_blockers: lijst van rects van map1.high_blocker_rects
+        :param low_blockers: lijst van rects van map1.low_blocker_rects
         :param moverange: jouw moverange sprite
         :param map_width: breedte van de map
         :param map_height: hoogte van de map
@@ -196,23 +196,23 @@ class Hero(pygame.sprite.Sprite):
         """
         t = False   # deze variabele is er om te kijken of true_pos aangepast moet worden aan het eind.
 
-        # loop tegen de rand van een obstacle aan
-        # er mag maar 1 obstacle in deze lijst zijn
-        if len(self.rect.collidelistall(obstacles)) == 1:
-            # obj_nr is het nummer van de betreffende obstacle
-            obj_nr = self.rect.collidelist(obstacles)
-            self._move_side(obstacles[obj_nr], dt)
+        # loop tegen de rand van een high_blocker aan
+        # er mag maar 1 high_blocker in deze lijst zijn
+        if len(self.rect.collidelistall(high_blockers)) == 1:
+            # obj_nr is het nummer van de betreffende high_blocker
+            obj_nr = self.rect.collidelist(high_blockers)
+            self._move_side(high_blockers[obj_nr], dt)
             t = True
 
-        # loop tegen de rand van een low obstacle aan, bijv water
-        if len(self.rect.collidelistall(low_obsts)) == 1:
-            obj_nr = self.rect.collidelist(low_obsts)
-            self._move_side(low_obsts[obj_nr], dt)
+        # loop tegen de rand van een low_blocker aan, bijv water
+        if len(self.rect.collidelistall(low_blockers)) == 1:
+            obj_nr = self.rect.collidelist(low_blockers)
+            self._move_side(low_blockers[obj_nr], dt)
             t = True
 
-        # loop recht tegen een obstacle of low_obst aan
-        while self.rect.collidelist(obstacles) > -1 or \
-                self.rect.collidelist(low_obsts) > -1:
+        # loop recht tegen een high_ of low_blocker aan
+        while self.rect.collidelist(high_blockers) > -1 or \
+                self.rect.collidelist(low_blockers) > -1:
             self._move_back()
             t = True
 
@@ -255,47 +255,47 @@ class Hero(pygame.sprite.Sprite):
         self.rect.x = round(self.true_position[0])
         self.rect.y = round(self.true_position[1])
 
-    def _move_side(self, obst_rect, dt):
+    def _move_side(self, blocker_rect, dt):
         """
         Verzet de positie richting naast een object.
-        :param obst_rect: een obstacle rectangle, zoals bijv een tree
+        :param blocker_rect: een blocker rectangle, zoals bijv een tree
         """
         if self.move_direction in (Direction.North, Direction.South):
             # als midden van unit groter is dan rechts van object
-            # if self.rect.centerx > obst_rect.right:               # code comment out is van voor timebased movement
-            if self.true_position[0] + (self.rect.width / 2) > obst_rect.right:
+            # if self.rect.centerx > blocker_rect.right:               # code comment out is van voor timebased movement
+            if self.true_position[0] + (self.rect.width / 2) > blocker_rect.right:
                 self.true_position[0] += self.movespeed * dt
                 # als links van char groter is dan rechts van object
-                # if self.rect.left > obst_rect.right:
-                if self.true_position[0] > obst_rect.right:
-                    # self.rect.left = obst_rect.right
-                    self.true_position[0] = obst_rect.right
+                # if self.rect.left > blocker_rect.right:
+                if self.true_position[0] > blocker_rect.right:
+                    # self.rect.left = blocker_rect.right
+                    self.true_position[0] = blocker_rect.right
             # object oost van je
-            # if self.rect.centerx < obst_rect.left:
-            if self.true_position[0] + (self.rect.width / 2) < obst_rect.left:
+            # if self.rect.centerx < blocker_rect.left:
+            if self.true_position[0] + (self.rect.width / 2) < blocker_rect.left:
                 self.true_position[0] -= self.movespeed * dt
-                # if self.rect.right < obst_rect.left:
-                if self.true_position[0] + self.rect.width < obst_rect.left:
-                    # self.rect.left = obst_rect.left - self.rect.width
-                    self.true_position[0] = obst_rect.left - self.rect.width
+                # if self.rect.right < blocker_rect.left:
+                if self.true_position[0] + self.rect.width < blocker_rect.left:
+                    # self.rect.left = blocker_rect.left - self.rect.width
+                    self.true_position[0] = blocker_rect.left - self.rect.width
 
         if self.move_direction in (Direction.West, Direction.East):
             # object noord van je
-            # if self.rect.centery > obst_rect.bottom:
-            if self.true_position[1] + (self.rect.height / 2) > obst_rect.bottom:
+            # if self.rect.centery > blocker_rect.bottom:
+            if self.true_position[1] + (self.rect.height / 2) > blocker_rect.bottom:
                 self.true_position[1] += self.movespeed * dt
-                # if self.rect.top > obst_rect.bottom:
-                if self.true_position[1] > obst_rect.bottom:
-                    # self.rect.top = obst_rect.bottom
-                    self.true_position[1] = obst_rect.bottom
+                # if self.rect.top > blocker_rect.bottom:
+                if self.true_position[1] > blocker_rect.bottom:
+                    # self.rect.top = blocker_rect.bottom
+                    self.true_position[1] = blocker_rect.bottom
             # object zuid van je
-            # if self.rect.centery < obst_rect.top:
-            if self.true_position[1] + (self.rect.height / 2) < obst_rect.top:
+            # if self.rect.centery < blocker_rect.top:
+            if self.true_position[1] + (self.rect.height / 2) < blocker_rect.top:
                 self.true_position[1] -= self.movespeed * dt
-                # if self.rect.bottom < obst_rect.top:
-                if self.true_position[1] + self.rect.height < obst_rect.top:
-                    # self.rect.top = obst_rect.top - self.rect.height
-                    self.true_position[1] = obst_rect.top - self.rect.height
+                # if self.rect.bottom < blocker_rect.top:
+                if self.true_position[1] + self.rect.height < blocker_rect.top:
+                    # self.rect.top = blocker_rect.top - self.rect.height
+                    self.true_position[1] = blocker_rect.top - self.rect.height
 
         self.rect.x = round(self.true_position[0])
         self.rect.y = round(self.true_position[1])
