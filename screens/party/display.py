@@ -5,6 +5,7 @@ class: Screen
 
 import pygame
 
+import components.sprites
 import keys
 import screens.party.herobox
 import screens.party.infobox
@@ -12,7 +13,6 @@ import screens.party.invclickbox
 import screens.party.inventorybox
 import screens.party.skillsbox
 import screens.party.statsbox
-import screens.sprites
 import statemachine
 
 
@@ -69,9 +69,12 @@ class Display(object):
 
     def _init_buttons(self):
         bg_width = self.background.get_width()
-        button_c = screens.sprites.ButtonSprite(BTNWIDTH, BTNHEIGHT, (bg_width + CLOSEX, CLOSEY), CLOSELBL, keys.EXIT)
-        button_q = screens.sprites.ButtonSprite(BTNWIDTH, BTNHEIGHT, (bg_width + PREVX, PREVY), PREVLBL, keys.PREV)
-        button_w = screens.sprites.ButtonSprite(BTNWIDTH, BTNHEIGHT, (bg_width + NEXTX, NEXTY), NEXTLBL, keys.NEXT)
+        button_c = components.sprites.ButtonSprite(
+            BTNWIDTH, BTNHEIGHT, (bg_width + CLOSEX, CLOSEY), CLOSELBL, keys.EXIT)
+        button_q = components.sprites.ButtonSprite(
+            BTNWIDTH, BTNHEIGHT, (bg_width + PREVX,  PREVY),  PREVLBL,  keys.PREV)
+        button_w = components.sprites.ButtonSprite(
+            BTNWIDTH, BTNHEIGHT, (bg_width + NEXTX,  NEXTY),  NEXTLBL,  keys.NEXT)
         self.buttons = (button_c, button_q, button_w)
 
     def _init_boxes(self):
