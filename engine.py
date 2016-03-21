@@ -101,17 +101,25 @@ class GameEngine(object):
         Handelt de ingedrukt-houden muis en keyboard input af.
         Wordt op dit moment alleen maar gebruikt voor visuele oplichten van de buttons en character movement.
         """
-        self.key_input = pygame.key.get_pressed()
-        self.mouse_input = None
-        if pygame.mouse.get_pressed()[0]:
-            self.mouse_input = pygame.mouse.get_pos()
+        if self.timer == 0.0:
 
-        self.gamestate.peek().multi_input(self.key_input, self.mouse_input, self.dt)
+            self.key_input = pygame.key.get_pressed()
+            self.mouse_input = None
+            if pygame.mouse.get_pressed()[0]:
+                self.mouse_input = pygame.mouse.get_pos()
+
+            self.gamestate.peek().multi_input(self.key_input, self.mouse_input, self.dt)
 
     def update(self):
         """
+        Handelt de timer af.
         Update de waarden van de bovenste state.
         """
+        if self.timer > 0.0:
+            self.timer -= self.dt
+        if self.timer < 0.0:
+            self.timer = 0.0
+
         self.gamestate.peek().update(self.dt)
 
     def render(self):

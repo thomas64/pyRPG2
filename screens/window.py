@@ -34,7 +34,9 @@ GRIDLAYER = 8
 CBOXLAYER = 9
 GRIDSIZE = 32
 
-# todo, muziek in shop fixen en key block
+NEWMAPTIMEOUT = 0.1  # minimale keyblock. Zonder deze timer kun je op de movement keys drukken terwijl de map laadt.
+
+# todo, muziek in shop fixen en voetstappen
 
 
 class Window(object):
@@ -199,6 +201,7 @@ class Window(object):
         Hij gebruikt de van naam voor de startpositie in de nieuwe map.
         """
         if len(self.heroes[0].rect.collidelistall(self.map1.portals)) == 1:
+            self.engine.timer = NEWMAPTIMEOUT
             portal_nr = self.heroes[0].rect.collidelist(self.map1.portals)
             from_name = self.map1.portals[portal_nr].from_name
             to_name = self.map1.portals[portal_nr].to_name
