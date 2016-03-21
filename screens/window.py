@@ -156,7 +156,9 @@ class Window(object):
             for index, hero in enumerate(self.heroes):  # dit kan om dat de eerste paar die aan cbox_sprites bij F11
                 self.cbox_sprites[index].rect.topleft = hero.rect.topleft  # zijn toegevoegd zijn de hero.rects
 
-        self.group.center(self.heroes[0].rect.center)
+        if self.map1.width >= self.width and \
+           self.map1.height >= self.height:
+            self.group.center(self.heroes[0].rect.center)
 
     def render(self):
         """

@@ -373,6 +373,6 @@
   <object id="68" name="start_forest" x="416" y="480" width="32" height="16"/>
  </objectgroup>
  <objectgroup name="start_pos">
-  <object id="47" name="start_forest" x="416" y="416" width="16" height="16"/>
+  <object id="47" name="start_forest" x="416" y="448" width="16" height="16"/>
  </objectgroup>
 </map>
