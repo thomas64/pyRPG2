@@ -34,6 +34,8 @@ GRIDLAYER = 8
 CBOXLAYER = 9
 GRIDSIZE = 32
 
+# todo, muziek in shop fixen en key block
+
 
 class Window(object):
     """
@@ -77,7 +79,6 @@ class Window(object):
         """
         Zet de hero in het grid. Positioneer de party achter hem. Vul de geschiedenis met lege data.
         """
-        self.heroes[0].align_to_grid(GRIDSIZE)
         for hero in self.heroes:
             hero.rect.topleft = list(self.heroes[0].rect.topleft)
             hero.last_direction = self.heroes[0].last_direction
@@ -92,6 +93,7 @@ class Window(object):
         if event.type == pygame.KEYDOWN:
 
             if event.key == keys.ALIGN:
+                self.heroes[0].align_to_grid(GRIDSIZE)
                 self.align()
 
             elif event.key == keys.GRID:
