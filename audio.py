@@ -10,7 +10,7 @@ import random
 import pygame
 
 import console
-import maps
+from maps import Maps
 import statemachine
 
 
@@ -33,10 +33,6 @@ WIND = 'wind'
 
 # Alle muziek.
 TITLESCREEN = 'titlescreen'
-STARTFOREST = 'start_forest'
-
-# todo, muziek vinden voor de stad
-# todo, muziekwissel tussen de maps, maar overgang naar andere maps
 
 
 class Audio(object):
@@ -97,12 +93,12 @@ class Audio(object):
         Zet geluid aan als het uit staat en vice versa.
         """
         if self.sound == 1:
-            self.stop_sound(MENUSELECT)     # vanwege de enter knop in menu's speelt hij dit geluid af,
+            self.stop_sound(MENUSELECT)         # vanwege de enter knop in menu's speelt hij dit geluid af,
             self.sound = 0                      # stop hem daarom alsnog.
             self.stop_bg_sounds()
         elif self.sound == 0:
             self.sound = 1
-            self.play_sound(MENUSELECT)     # en speel weer een geluid af omdat er geluid is.
+            self.play_sound(MENUSELECT)         # en speel weer een geluid af omdat er geluid is.
             # kijkt 1 laag dieper om te zien of hij in mainmenu of pausemenu zit
             self.set_bg_sounds(self.engine.gamestate.deep_peek().name)
 
@@ -123,18 +119,29 @@ class Audio(object):
         Als mag, fade dan de huidige. Volume max, fade nieuwe muziek in.
         :param currentstate: self.gamestate.peek().name
         """
-        if self.music == 1:
-            # bij options menu moet er niets veranderen, en ook niet als hij van options komt.
-            if currentstate != statemachine.States.OptionsMenu and \
-                            self.engine.gamestate.prev_state != statemachine.States.OptionsMenu:
+        # bij options menu moet er niets veranderen, en ook niet als hij van options komt.
+        if currentstate != statemachine.States.OptionsMenu and \
+           self.engine.gamestate.prev_state != statemachine.States.OptionsMenu:
+
+            if currentstate == statemachine.States.MainMenu:
+                # de fade en setvolume staan nu in de if, want bij muziek moet het niet altijd
                 self.fade_bg_music()
                 self.bg_music_channel.set_volume(1)
-                if currentstate == statemachine.States.MainMenu:
-                    self.play_bg_music(TITLESCREEN)
-                elif currentstate == statemachine.States.Overworld:
-                    if self.engine.gamestate.peek().window.map1.name in (maps.STARTFOREST,
-                                                                         maps.BELOWSTARTFOREST):
-                        self.play_bg_music(STARTFOREST)
+                self.play_bg_music(TITLESCREEN)
+
+            elif currentstate == statemachine.States.Overworld:
+                for enum in Maps:
+                    if enum.value[0] == self.engine.gamestate.peek().window.map1.name:
+                        if enum.value[1] != self._get_prev_bg_music():
+                            self.fade_bg_music()
+                            self.bg_music_channel.set_volume(1)
+                            self.play_bg_music(enum.value[1])
+                            break
+
+    def _get_prev_bg_music(self):
+        for enum in Maps:
+            if enum.value[0] == self.engine.gamestate.peek().window.prev_map_name:
+                return enum.value[1]
 
     def set_bg_sounds(self, currentstate):
         """
@@ -150,8 +157,8 @@ class Audio(object):
                 self.play_sound(CROWS, loop=-1, channel=self.bg_sound_channel1)
                 self.play_sound(WIND, loop=-1, channel=self.bg_sound_channel2)
             elif currentstate == statemachine.States.Overworld:
-                if self.engine.gamestate.peek().window.map1.name in (maps.STARTFOREST,
-                                                                     maps.BELOWSTARTFOREST):
+                if self.engine.gamestate.peek().window.map1.name in (Maps.StartForest.value[0],
+                                                                     Maps.BelowStartForest.value[0]):
                     self.play_sound(BIRDS, loop=-1, channel=self.bg_sound_channel1)
 
     def play_sound(self, sound, loop=0, channel=None):
@@ -216,11 +223,12 @@ class Audio(object):
         Speel de juiste voetstap geluiden af op de juiste maps.
         """
         # todo, deze magic numbers moeten nog weg
-        if self.engine.gamestate.peek().window.map1.name in (maps.STARTFOREST,
-                                                             maps.BELOWSTARTFOREST):
+        # todo, stappen laten afhangen van ondergrond (objecten in de map, alleen bij overgang)
+        if self.engine.gamestate.peek().window.map1.name in (Maps.StartForest.value[0],
+                                                             Maps.BelowStartForest.value[0]):
             sfx_num = str(random.randint(1, 2))
             self.play_sound(STEPGRASS+sfx_num)
-        elif self.engine.gamestate.peek().window.map1.name in (maps.STARTTOWN,
-                                                               maps.STARTTOWNARMORSHOP):
+        elif self.engine.gamestate.peek().window.map1.name in (Maps.StartTown.value[0],
+                                                               Maps.StartTownArmorShop.value[0]):
             sfx_num = str(random.randint(1, 6))
             self.play_sound(STEPSTONE+sfx_num)

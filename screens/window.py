@@ -49,6 +49,7 @@ class Window(object):
         self.surface = self.surface.convert()
 
         self.map1 = None
+        self.prev_map_name = None
         self.group = None
         self.grid_sprite = None
         self.cbox_sprites = None
@@ -88,6 +89,9 @@ class Window(object):
         self.maxlen = ((len(self.party)-1)*GRIDSIZE)+1              # bereken de lengte van het deck
         self.hero_history = collections.deque(maxlen=self.maxlen)   # maak een lege deck aan
         self.align()
+
+        self.engine.audio.set_bg_music(self.engine.gamestate.peek().name)
+        self.engine.audio.set_bg_sounds(self.engine.gamestate.peek().name)
 
     def align(self):
         """
@@ -216,10 +220,7 @@ class Window(object):
         if len(self.heroes[0].rect.collidelistall(self.map1.portals)) == 1:
             self.engine.timer = NEWMAPTIMEOUT
             portal_nr = self.heroes[0].rect.collidelist(self.map1.portals)
-            from_name = self.map1.portals[portal_nr].from_name
+            self.prev_map_name = self.map1.portals[portal_nr].from_name
             to_name = self.map1.portals[portal_nr].to_name
             to_map_path = OVERWORLDPATH+to_name+'.tmx'
-            self.new_map(to_name, to_map_path, from_name, self.heroes[0].last_direction)
-            # todo, misschien moet de muziek bij door een portal heen, hier dus, aangepast worden
-            # self.engine.audio.set_bg_music(self.engine.gamestate.peek().name)
-            # self.engine.audio.set_bg_sounds(self.engine.gamestate.peek().name)
+            self.new_map(to_name, to_map_path, self.prev_map_name, self.heroes[0].last_direction)
