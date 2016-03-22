@@ -18,6 +18,7 @@ WINDOWHEIGHT = 600
 WINDOWPOS = 100, 100
 
 BACKGROUNDCOLOR = pygame.Color("black")
+LINECOLOR = pygame.Color("white")
 
 INVLBL = "I"
 UPLBL = "Up"
@@ -144,6 +145,7 @@ class Overworld(object):
         """
         self.window.render()
 
+        pygame.draw.rect(self.background, LINECOLOR, (WINDOWPOS[0]-1, WINDOWPOS[1]-1, WINDOWWIDTH+2, WINDOWHEIGHT+2), 1)
         self.screen.blit(self.background, (0, 0))
         self.screen.blit(self.window.surface, WINDOWPOS)
 

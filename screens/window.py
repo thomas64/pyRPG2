@@ -52,15 +52,14 @@ class Window(object):
 
         self.map1 = None
         self.group = None
+        self.grid_sprite = None
+        self.cbox_sprites = None
         self.heroes = None
         self.party = None
         self.maxlen = None
         self.hero_history = None
 
         self.new_map(OVERWORLDNAME, OVERWORLDPATH + OVERWORLDNAME + '.tmx', STARTPOSITION, STARTDIRECTION)
-
-        self.grid_sprite = None
-        self.cbox_sprites = []
 
     def new_map(self, map_name, map_path, startposition, startdirection):
         """
@@ -72,6 +71,8 @@ class Window(object):
         """
         self.map1 = screens.map.Map(map_name, map_path, self.width, self.height, PLAYERLAYER)
         self.group = self.map1.view
+        self.grid_sprite = None
+        self.cbox_sprites = []
 
         start_pos = startposition           # voor loadsave moet het point zijn ipv een naam
         for pos in self.map1.start_pos:     # kijk in de start_pos list van de map
