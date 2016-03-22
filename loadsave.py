@@ -31,9 +31,15 @@ class Dialog(object):
             console.load_gamedata()
             with open(filename, 'rb') as f:
                 (self.engine.data,
+                 self.engine.gamestate.peek().window.map1.name,
+                 self.engine.gamestate.peek().window.map1.tmxpath,
                  self.engine.gamestate.peek().window.heroes[0].rect.topleft,
                  self.engine.gamestate.peek().window.heroes[0].last_direction) = pickle.load(f)
-                self.engine.gamestate.peek().window.align()  # zet andere chars achter de hero
+                self.engine.gamestate.peek().window.new_map(self.engine.gamestate.peek().window.map1.name,
+                                                            self.engine.gamestate.peek().window.map1.tmxpath,
+                                                            self.engine.gamestate.peek().window.heroes[0].rect.topleft,
+                                                            self.engine.gamestate.peek().window.heroes[0].last_direction
+                                                            )
         except (pickle.UnpicklingError, EOFError):
             console.corrupt_gamedata()
 
@@ -47,6 +53,8 @@ class Dialog(object):
         with open(filename, 'wb') as f:
             # deep_peek(-3) moet, omdat normaal peek() niet werkt, er zitten twee lagen erboven op de stack.
             pickle.dump([self.engine.data,
+                         self.engine.gamestate.deep_peek(-3).window.map1.name,
+                         self.engine.gamestate.deep_peek(-3).window.map1.tmxpath,
                          self.engine.gamestate.deep_peek(-3).window.heroes[0].rect.topleft,
                          self.engine.gamestate.deep_peek(-3).window.heroes[0].last_direction], f)
 

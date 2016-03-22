@@ -24,10 +24,9 @@ MAXZOOM = 3.1
 DEFZOOM = 1.0
 MINZOOM = .5
 
-# todo, mooiere map maken met variatie in het gras
 OVERWORLDPATH = 'resources/maps/'
 OVERWORLDNAME = 'start_forest'
-STARTPOSITION = 'start_game'
+STARTPOSITION = 'start_game'    # dit is de naam van de startpositie object in de tmx map
 STARTDIRECTION = screens.direction.Direction.South
 PLAYERLAYER = 3
 GRIDLAYER = 8
@@ -36,7 +35,7 @@ GRIDSIZE = 32
 
 NEWMAPTIMEOUT = 0.1  # minimale keyblock. Zonder deze timer kun je op de movement keys drukken terwijl de map laadt.
 
-# todo, muziek in shop fixen en voetstappen
+# todo, muziek in verschillende maps fixen en voetstappen
 
 
 class Window(object):
@@ -51,30 +50,44 @@ class Window(object):
         self.surface.fill(BACKGROUNDCOLOR)
         self.surface = self.surface.convert()
 
-        self._new_map(OVERWORLDNAME, OVERWORLDPATH+OVERWORLDNAME+'.tmx', STARTPOSITION, STARTDIRECTION)
+        self.map1 = None
+        self.group = None
+        self.heroes = None
+        self.party = None
+        self.maxlen = None
+        self.hero_history = None
+
+        self.new_map(OVERWORLDNAME, OVERWORLDPATH + OVERWORLDNAME + '.tmx', STARTPOSITION, STARTDIRECTION)
 
         self.grid_sprite = None
         self.cbox_sprites = []
 
-    def _new_map(self, overworldname, overworldpath, startposition, startdirection):
-        self.map1 = screens.map.Map(overworldname, overworldpath, self.width, self.height, PLAYERLAYER)
+    def new_map(self, map_name, map_path, startposition, startdirection):
+        """
+        Maak een nieuwe map aan met de hero's in het veld.
+        :param map_name: naam van de map
+        :param map_path: het pad van de tmx
+        :param startposition: de positie van heroes[0] als naam van een tmx start_pos object layer
+        :param startdirection: welke kant kijkt heroes[0] op
+        """
+        self.map1 = screens.map.Map(map_name, map_path, self.width, self.height, PLAYERLAYER)
         self.group = self.map1.view
 
-        start_pos = (0, 0)
-        for pos in self.map1.start_pos:
-            if pos.name == startposition:
-                start_pos = (pos.x, pos.y)
+        start_pos = startposition           # voor loadsave moet het point zijn ipv een naam
+        for pos in self.map1.start_pos:     # kijk in de start_pos list van de map
+            if pos.name == startposition:   # van alle start_possen, welke komt overeen met waar de hero vandaan komt
+                start_pos = (pos.x, pos.y)  # zet dan de x,y waarde op dié start_pos
 
         self.heroes = []
         self.party = list(self.engine.data.party.values())
         for hero in self.party:
             self.heroes.append(screens.character.Hero(hero.SPR, start_pos, startdirection, self.engine.audio))
-        self.heroes.reverse()           # voeg de heroes in juiste volgorde toe
-        self.group.add(self.heroes)     # maar als sprites moeten ze precies andersom staan
-        self.heroes.reverse()           # want daar wil je heroes[0] bovenop weergegeven hebben
+        self.heroes.reverse()               # voeg de heroes in juiste volgorde toe
+        self.group.add(self.heroes)         # maar als sprites moeten ze precies andersom staan
+        self.heroes.reverse()               # want daar wil je heroes[0] bovenop weergegeven hebben
 
-        self.maxlen = ((len(self.party)-1)*GRIDSIZE)+1
-        self.hero_history = collections.deque(maxlen=self.maxlen)
+        self.maxlen = ((len(self.party)-1)*GRIDSIZE)+1              # bereken de lengte van het deck
+        self.hero_history = collections.deque(maxlen=self.maxlen)   # maak een lege deck aan
         self.align()
 
     def align(self):
@@ -205,5 +218,5 @@ class Window(object):
             portal_nr = self.heroes[0].rect.collidelist(self.map1.portals)
             from_name = self.map1.portals[portal_nr].from_name
             to_name = self.map1.portals[portal_nr].to_name
-            overworldpath = OVERWORLDPATH+to_name+'.tmx'
-            self._new_map(to_name, overworldpath, from_name, self.heroes[0].last_direction)
+            to_map_path = OVERWORLDPATH+to_name+'.tmx'
+            self.new_map(to_name, to_map_path, from_name, self.heroes[0].last_direction)

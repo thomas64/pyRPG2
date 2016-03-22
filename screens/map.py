@@ -22,8 +22,9 @@ class Map(object):
     """
     def __init__(self, name, tmxpath, windowwidth, windowheight, layer):
         self.name = name
+        self.tmxpath = tmxpath
 
-        tmx_data = pytmx.load_pygame(tmxpath)
+        tmx_data = pytmx.load_pygame(self.tmxpath)
         map_data = pyscroll.TiledMapData(tmx_data)
         self.map_layer = pyscroll.BufferedRenderer(map_data, (windowwidth, windowheight))
         self.view = pyscroll.PyscrollGroup(map_layer=self.map_layer, default_layer=layer)
