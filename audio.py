@@ -5,10 +5,12 @@ class: Audio
 
 import os
 import pickle
+import random
 
 import pygame
 
 import console
+import maps
 import statemachine
 
 
@@ -20,23 +22,23 @@ MAINMENU = os.path.join(MUSICPATH,  'mainmenu.ogg')
 OVERWORLD = os.path.join(MUSICPATH, 'overworld.ogg')
 
 SOUNDSPATH = 'resources/sounds'
-MENUSWITCH = os.path.join(SOUNDSPATH, 'menu_switch.ogg')
-MENUSELECT = os.path.join(SOUNDSPATH, 'menu_select.ogg')
-MENUERROR = os.path.join(SOUNDSPATH,  'menu_error.ogg')
-
-WIND = os.path.join(SOUNDSPATH, 'wind.ogg')
-CROWS = os.path.join(SOUNDSPATH, 'crows.ogg')
-BIRDS = os.path.join(SOUNDSPATH, 'birds.ogg')
-# todo, op andere ondergrond, ander stap geluid
-STEPGRASSL = os.path.join(SOUNDSPATH, 'step_grass_l.ogg')
-STEPGRASSR = os.path.join(SOUNDSPATH, 'step_grass_r.ogg')
 
 FADEOUTTIME = 500
+
+# Alle geluiden.
+MENUSWITCH = 'menu_switch'
+MENUSELECT = 'menu_select'
+MENUERROR = 'menu_error'
+STEPGRASS = 'step_grass'
+STEPSTONE = 'step_stone'
+BIRDS = 'birds'
+CROWS = 'crows'
+WIND = 'wind'
 
 
 class Audio(object):
     """
-    Alle geluiden.
+    De audio handler.
     """
     def __init__(self, engine):
         self.engine = engine
@@ -50,15 +52,20 @@ class Audio(object):
 
         self.bg_sound_channel1 = pygame.mixer.Channel(6)
         self.bg_sound_channel2 = pygame.mixer.Channel(5)
-        self.wind = pygame.mixer.Sound(WIND)
-        self.crows = pygame.mixer.Sound(CROWS)
-        self.birds = pygame.mixer.Sound(BIRDS)
 
-        self.switch = pygame.mixer.Sound(MENUSWITCH)
-        self.select = pygame.mixer.Sound(MENUSELECT)
-        self.error = pygame.mixer.Sound(MENUERROR)
-        self.step_grass_l = pygame.mixer.Sound(STEPGRASSL)
-        self.step_grass_r = pygame.mixer.Sound(STEPGRASSR)
+        self.sfx = self._load_all_sfx()
+
+    @staticmethod
+    def _load_all_sfx():
+        """
+        Laadt alle geluiden uit de map in een dict.
+        :return: de dict
+        """
+        effects = {}
+        for fx in os.listdir(SOUNDSPATH):
+            name, ext = os.path.splitext(fx)
+            effects[name] = pygame.mixer.Sound(os.path.join(SOUNDSPATH, fx))
+        return effects
 
     def _load_cfg(self):
         """
@@ -89,12 +96,12 @@ class Audio(object):
         Zet geluid aan als het uit staat en vice versa.
         """
         if self.sound == 1:
-            self.stop_sound(self.select)    # vanwege de enter knop in menu's speelt hij dit geluid af,
-            self.sound = 0                  # stop hem daarom alsnog.
+            self.stop_sound(MENUSELECT)     # vanwege de enter knop in menu's speelt hij dit geluid af,
+            self.sound = 0                      # stop hem daarom alsnog.
             self.stop_bg_sounds()
         elif self.sound == 0:
             self.sound = 1
-            self.play_sound(self.select)    # en speel weer een geluid af omdat er geluid is.
+            self.play_sound(MENUSELECT)     # en speel weer een geluid af omdat er geluid is.
             # kijkt 1 laag dieper om te zien of hij in mainmenu of pausemenu zit
             self.set_bg_sounds(self.engine.gamestate.deep_peek().name)
 
@@ -124,41 +131,47 @@ class Audio(object):
                 if currentstate == statemachine.States.MainMenu:
                     self.bg_music_channel.play(self.mainmenu, -1)
                 elif currentstate == statemachine.States.Overworld:
-                    self.bg_music_channel.play(self.overworld, -1)
+                    if self.engine.gamestate.peek().window.map1.name in (maps.STARTFOREST,
+                                                                         maps.BELOWSTARTFOREST):
+                        self.bg_music_channel.play(self.overworld, -1)
 
     def set_bg_sounds(self, currentstate):
         """
         Zet de achtergrond geluiden aan of uit afhankelijk van een state.
         :param currentstate: self.statemachine.peek()
         """
-        if self.sound == 1:
-            if currentstate != statemachine.States.OptionsMenu and \
-                            self.engine.gamestate.prev_state != statemachine.States.OptionsMenu:
-                self.fade_bg_sounds()
-                self.bg_sound_channel1.set_volume(1)
-                self.bg_sound_channel2.set_volume(1)
-                if currentstate == statemachine.States.MainMenu:
-                    self.bg_sound_channel1.play(self.crows, -1)
-                    self.bg_sound_channel2.play(self.wind, -1)
-                elif currentstate == statemachine.States.Overworld:
-                    self.bg_sound_channel1.play(self.birds, -1)
+        if currentstate != statemachine.States.OptionsMenu and \
+           self.engine.gamestate.prev_state != statemachine.States.OptionsMenu:
+            self.fade_bg_sounds()
+            self.bg_sound_channel1.set_volume(1)
+            self.bg_sound_channel2.set_volume(1)
+            if currentstate == statemachine.States.MainMenu:
+                self.play_sound(CROWS, loop=-1, channel=self.bg_sound_channel1)
+                self.play_sound(WIND, loop=-1, channel=self.bg_sound_channel2)
+            elif currentstate == statemachine.States.Overworld:
+                if self.engine.gamestate.peek().window.map1.name in (maps.STARTFOREST,
+                                                                     maps.BELOWSTARTFOREST):
+                    self.play_sound(BIRDS, loop=-1, channel=self.bg_sound_channel1)
 
-    def play_sound(self, sound, loop=0):
+    def play_sound(self, sound, loop=0, channel=None):
         """
         Als mag, speel dan geluid.
         :param sound: een geluidsfragment uit de init.
-        :param loop:
+        :param loop: -1 is oneindig loopen
+        :param channel: het kanaal waar de geluiden op afgespeeld moeten worden, is alleen voor bg_sounds
         """
         if self.sound == 1:
-            sound.play(loops=loop)
+            if channel:
+                channel.play(self.sfx[sound], loops=loop)
+            else:
+                self.sfx[sound].play()
 
-    @staticmethod
-    def stop_sound(sound):
+    def stop_sound(self, sound):
         """
         Stop het huidige geluid onmiddelijk.
         :param sound: een geluidsfragment uit de init.
         """
-        sound.stop()
+        self.sfx[sound].stop()
 
     def stop_bg_music(self):
         """
@@ -188,3 +201,17 @@ class Audio(object):
             self.bg_sound_channel1.fadeout(FADEOUTTIME)
         if self.bg_sound_channel2.get_sound() is not None:
             self.bg_sound_channel2.fadeout(FADEOUTTIME)
+
+    def play_step_sound(self):
+        """
+        Speel de juiste voetstap geluiden af op de juiste maps.
+        """
+        # todo, deze magic numbers moeten nog weg
+        if self.engine.gamestate.peek().window.map1.name in (maps.STARTFOREST,
+                                                             maps.BELOWSTARTFOREST):
+            sfx_num = str(random.randint(1, 2))
+            self.play_sound(STEPGRASS+sfx_num)
+        elif self.engine.gamestate.peek().window.map1.name in (maps.STARTTOWN,
+                                                               maps.STARTTOWNARMORSHOP):
+            sfx_num = str(random.randint(1, 6))
+            self.play_sound(STEPSTONE+sfx_num)

@@ -5,6 +5,7 @@ class: Overworld
 
 import pygame
 
+import audio as sfx
 import components.sprites
 import keys
 import screens.menu.manager
@@ -153,7 +154,7 @@ class Overworld(object):
             button.render(self.screen)
 
     def _show_pause_menu(self):
-        self.engine.audio.play_sound(self.engine.audio.select)
+        self.engine.audio.play_sound(sfx.MENUSELECT)
 
         push_object = screens.menu.manager.create_menu(statemachine.States.PauseMenu, self.engine)
         self.engine.gamestate.push(push_object)

@@ -19,7 +19,7 @@ SUBFONTCOLOR = pygame.Color("gray36")
 SUBPOSX = 140
 SUBPOSY = 160
 
-VERSIONTEXT = "PreAlpha v0.006"
+VERSIONTEXT = "PreAlpha v0.007"
 VERSIONFONT = 'verdana'
 VERSIONFONTSIZE = 12
 VERSIONFONTCOLOR = pygame.Color("black")

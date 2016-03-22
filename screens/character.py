@@ -339,10 +339,8 @@ class Hero(pygame.sprite.Sprite):
             self.step_count += self.movespeed * dt
             if self.step_count > STEPSPEED:
                 self.step_count = 0
-                if self.step_animation == 0 and make_sound:
-                    self.audio.play_sound(self.audio.step_grass_l)
-                elif self.step_animation == 2 and make_sound:
-                    self.audio.play_sound(self.audio.step_grass_r)
+                if self.step_animation in (0, 2) and make_sound:
+                    self.audio.play_step_sound()
                 self.step_animation += 1
                 if self.step_animation > 3:
                     self.step_animation = 0

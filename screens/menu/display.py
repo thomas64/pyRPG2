@@ -6,6 +6,7 @@ class: Display
 import pygame
 import pygame.gfxdraw
 
+import audio as sfx
 import keys
 import screens.menu.manager
 import screens.menu.text
@@ -107,40 +108,40 @@ class Display(object):
                 if item.rect.collidepoint(event.pos):
                     if self.cur_item != item.index:
                         self.cur_item = item.index
-                        self.audio.play_sound(self.audio.switch)
+                        self.audio.play_sound(sfx.MENUSWITCH)
 
         elif event.type == pygame.MOUSEBUTTONDOWN:
             if event.button == keys.LEFTCLICK:
                 for item in self.menu_texts:
                     if item.rect.collidepoint(event.pos):
-                        self.audio.play_sound(self.audio.select)
+                        self.audio.play_sound(sfx.MENUSELECT)
                         self.menu_content.on_select(item,
                                                     self.title, self.animation, self.scr_capt, self.cur_item)
 
         elif event.type == pygame.KEYDOWN:
             if event.key == keys.UP and self.cur_item > 0:
-                self.audio.play_sound(self.audio.switch)
+                self.audio.play_sound(sfx.MENUSWITCH)
                 self.cur_item -= 1
             elif event.key == keys.UP and self.cur_item == 0:
-                self.audio.play_sound(self.audio.error)
+                self.audio.play_sound(sfx.MENUERROR)
                 self.cur_item = 0
             elif event.key == keys.DOWN and self.cur_item < len(self.menu_texts) - 1:
-                self.audio.play_sound(self.audio.switch)
+                self.audio.play_sound(sfx.MENUSWITCH)
                 self.cur_item += 1
             elif event.key == keys.DOWN and self.cur_item == len(self.menu_texts) - 1:
-                self.audio.play_sound(self.audio.error)
+                self.audio.play_sound(sfx.MENUERROR)
                 self.cur_item = len(self.menu_texts) - 1
 
             if event.key in keys.SELECT:
-                self.audio.play_sound(self.audio.select)
+                self.audio.play_sound(sfx.MENUSELECT)
                 self.menu_content.on_select(self.menu_texts[self.cur_item],
                                             self.title, self.animation, self.scr_capt, self.cur_item)
             elif event.key == keys.DELETE:
-                self.audio.play_sound(self.audio.select)
+                self.audio.play_sound(sfx.MENUSELECT)
                 self.menu_content.on_delete(self.menu_texts[self.cur_item],
                                             self.scr_capt, self.cur_item)
             elif event.key == keys.EXIT:
-                self.audio.play_sound(self.audio.select)
+                self.audio.play_sound(sfx.MENUSELECT)
                 self.menu_content.on_exit()
 
     # noinspection PyMethodMayBeStatic

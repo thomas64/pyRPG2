@@ -35,7 +35,9 @@ GRIDSIZE = 32
 
 NEWMAPTIMEOUT = 0.1  # minimale keyblock. Zonder deze timer kun je op de movement keys drukken terwijl de map laadt.
 
-# todo, muziek in verschillende maps fixen en voetstappen
+# todo, muziek in verschillende maps fixen
+# todo, voetstappen van party te weinig
+# todo, testen met muis snel over menu's
 
 
 class Window(object):

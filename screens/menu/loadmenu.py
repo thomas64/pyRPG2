@@ -6,6 +6,7 @@ class: LoadMenu
 import datetime
 import os
 
+import audio as sfx
 import data
 import loadsave
 import screens.menu.basemenu
@@ -65,8 +66,8 @@ class LoadMenu(screens.menu.basemenu.BaseMenu):
         if menu_item.func == self.Back:
             self.on_exit()
         elif "..." in menu_item.text:
-            self.engine.audio.stop_sound(self.engine.audio.select)
-            self.engine.audio.play_sound(self.engine.audio.error)
+            self.engine.audio.stop_sound(sfx.MENUSELECT)
+            self.engine.audio.play_sound(sfx.MENUERROR)
         else:
             self.engine.data = data.Data()
             self.engine.gamestate.change(screens.overworld.Overworld(self.engine))
@@ -81,11 +82,11 @@ class LoadMenu(screens.menu.basemenu.BaseMenu):
         :param index: zie BaseMenu
         """
         if menu_item.func == self.Back:
-            self.engine.audio.stop_sound(self.engine.audio.select)
-            self.engine.audio.play_sound(self.engine.audio.error)
+            self.engine.audio.stop_sound(sfx.MENUSELECT)
+            self.engine.audio.play_sound(sfx.MENUERROR)
         elif "..." in menu_item.text:
-            self.engine.audio.stop_sound(self.engine.audio.select)
-            self.engine.audio.play_sound(self.engine.audio.error)
+            self.engine.audio.stop_sound(sfx.MENUSELECT)
+            self.engine.audio.play_sound(sfx.MENUERROR)
         else:
             filename = self._convert_to_filename(menu_item.text, index)
             loadsave.Dialog(self.engine).delete(filename)
