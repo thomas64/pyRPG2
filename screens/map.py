@@ -41,16 +41,21 @@ class Map(object):
         try:
             for obj in tmx_data.get_layer_by_name(STARTPOS):
                 self.start_pos.append(obj)
-
+        except (AttributeError, ValueError):
+            pass
+        try:
             for obj in tmx_data.get_layer_by_name(PORTALS):
                 self.portals.append(components.portal.Portal(self.name, self._pg_rect(obj), obj.name))
-
+        except (AttributeError, ValueError):
+            pass
+        try:
             for rect in tmx_data.get_layer_by_name(HIGHBLOCKER):
                 self.high_blocker_rects.append(self._pg_rect(rect))
-
+        except (AttributeError, ValueError):
+            pass
+        try:
             for rect in tmx_data.get_layer_by_name(LOWBLOCKER):
                 self.low_blocker_rects.append(self._pg_rect(rect))
-
         except (AttributeError, ValueError):
             pass
 
