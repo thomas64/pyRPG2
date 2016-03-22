@@ -168,6 +168,7 @@ class Window(object):
         Is de hero tegen een portal aangelopen. Update locaties (indien F11). Centreer op de hero.
         :param dt: self.clock.tick(FPS)/1000.0
         """
+        self.check_sounds()
         self.check_portals()
 
         # misschien gaat dit een probleem geven wanneer ingame de party grootte wordt gewijzigd.
@@ -210,6 +211,16 @@ class Window(object):
                 self.heroes[i].move_direction = self.hero_history[index*GRIDSIZE][3]
                 self.heroes[i].movespeed = self.hero_history[index*GRIDSIZE][4]
                 self.heroes[i].animate(dt, make_sound=False)
+
+    def check_sounds(self):
+        """
+        Bekijk op de kaart met welke sound de voeten colliden.
+        Zet die naam van het object van de kaart als audio.footstep.
+        """
+        if len(self.heroes[0].feet.collidelistall(self.map1.sounds)) == 1:
+            sound_nr = self.heroes[0].feet.collidelist(self.map1.sounds)
+            name = self.map1.sounds[sound_nr].name
+            self.engine.audio.footstep = name
 
     def check_portals(self):
         """

@@ -9,6 +9,8 @@ import pygame
 from screens.direction import Direction
 import keys
 
+FEETWIDTH = 2       # hele kleine voetjes
+FEETHEIGHT = 2
 
 MOVESPEED1 = 60
 MOVESPEED2 = 120    # pixels/second
@@ -39,12 +41,14 @@ class Hero(pygame.sprite.Sprite):
         # Create a rect to animate around the screen
         self.image = self.full_sprite.subsurface(self.full_sprite.get_clip())
         self.rect = self.image.get_rect()
+        self.feet = pygame.Rect(0, 0, FEETWIDTH, FEETHEIGHT)
         self.mask = pygame.mask.from_surface(self.image)
 
         self.audio = audio
 
         # Assign the position parameter value to the topleft x-y values of the rect
         self.rect.topleft = position
+        self.feet.midbottom = self.rect.midbottom
         self.true_position = list(self.rect.topleft)    # true_pos is een float, dat is nodig voor timebased movement
         self.old_position = list(self.rect.topleft)
         self.last_direction = direction
@@ -165,6 +169,7 @@ class Hero(pygame.sprite.Sprite):
 
         self.rect.x = round(self.true_position[0])
         self.rect.y = round(self.true_position[1])
+        self.feet.midbottom = self.rect.midbottom
 
     def align_to_grid(self, grid_size):
         """
@@ -172,6 +177,7 @@ class Hero(pygame.sprite.Sprite):
         :param grid_size: grootte van een hokje
         """
         self.rect.topleft = (round(self.rect.x / grid_size) * grid_size, round(self.rect.y / grid_size) * grid_size)
+        self.feet.midbottom = self.rect.midbottom
 
     def check_blocker(self, high_blockers, low_blockers, moverange, map_width, map_height, dt):
         """
@@ -223,6 +229,7 @@ class Hero(pygame.sprite.Sprite):
         if moverange is not None:
             if pygame.sprite.collide_mask(self, moverange):
                 self.rect.topleft = list(self.old_position)
+                self.feet.midbottom = self.rect.midbottom
                 t = True
 
         if t:
@@ -243,6 +250,7 @@ class Hero(pygame.sprite.Sprite):
 
         self.rect.x = round(self.true_position[0])
         self.rect.y = round(self.true_position[1])
+        self.feet.midbottom = self.rect.midbottom
 
     def _move_side(self, blocker_rect, dt):
         """
@@ -288,6 +296,7 @@ class Hero(pygame.sprite.Sprite):
 
         self.rect.x = round(self.true_position[0])
         self.rect.y = round(self.true_position[1])
+        self.feet.midbottom = self.rect.midbottom
 
     def _stand(self):
         """

@@ -7,6 +7,7 @@ import pygame
 import pytmx
 import pyscroll
 
+import components.namedrect
 import components.portal
 
 # de vier object layers in een tmx map
@@ -14,6 +15,7 @@ STARTPOS = "start_pos"
 PORTALS = "portals"
 HIGHBLOCKER = "high_blocker"
 LOWBLOCKER = "low_blocker"
+SOUNDS = "sounds"
 
 
 class Map(object):
@@ -38,6 +40,7 @@ class Map(object):
         self.portals = []
         self.high_blocker_rects = []
         self.low_blocker_rects = []
+        self.sounds = []
 
         try:
             for obj in tmx_data.get_layer_by_name(STARTPOS):
@@ -57,6 +60,11 @@ class Map(object):
         try:
             for rect in tmx_data.get_layer_by_name(LOWBLOCKER):
                 self.low_blocker_rects.append(self._pg_rect(rect))
+        except (AttributeError, ValueError):
+            pass
+        try:
+            for obj in tmx_data.get_layer_by_name(SOUNDS):
+                self.sounds.append(components.namedrect.NamedRect(obj.name, self._pg_rect(obj)))
         except (AttributeError, ValueError):
             pass
 

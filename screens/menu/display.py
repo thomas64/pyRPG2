@@ -109,6 +109,7 @@ class Display(object):
                     if self.cur_item != item.index:
                         self.cur_item = item.index
                         self.audio.play_sound(sfx.MENUSWITCH)
+                    break
 
         elif event.type == pygame.MOUSEBUTTONDOWN:
             if event.button == keys.LEFTCLICK:
@@ -117,6 +118,7 @@ class Display(object):
                         self.audio.play_sound(sfx.MENUSELECT)
                         self.menu_content.on_select(item,
                                                     self.title, self.animation, self.scr_capt, self.cur_item)
+                        break
 
         elif event.type == pygame.KEYDOWN:
             if event.key == keys.UP and self.cur_item > 0:

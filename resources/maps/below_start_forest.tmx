@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<map version="1.0" orientation="orthogonal" renderorder="right-down" width="76" height="46" tilewidth="16" tileheight="16" nextobjectid="221">
+<map version="1.0" orientation="orthogonal" renderorder="right-down" width="76" height="46" tilewidth="16" tileheight="16" nextobjectid="222">
  <tileset firstgid="1" name="outside_a4" tilewidth="16" tileheight="16" tilecount="960" columns="32">
   <image source="tilesets/outside_a4.png" width="512" height="480"/>
  </tileset>
@@ -309,6 +309,9 @@
 0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0
 </data>
  </layer>
+ <objectgroup name="sounds" visible="0">
+  <object id="221" name="step_grass" x="0" y="0" width="1216" height="736"/>
+ </objectgroup>
  <objectgroup name="low_blocker">
   <object id="202" x="896" y="224" width="32" height="16"/>
  </objectgroup>
