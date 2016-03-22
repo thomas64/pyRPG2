@@ -35,10 +35,6 @@ GRIDSIZE = 32
 
 NEWMAPTIMEOUT = 0.1  # minimale keyblock. Zonder deze timer kun je op de movement keys drukken terwijl de map laadt.
 
-# todo, muziek in verschillende maps fixen
-# todo, voetstappen van party te weinig
-# todo, testen met muis snel over menu's
-
 
 class Window(object):
     """
@@ -193,6 +189,7 @@ class Window(object):
         :param key_input: pygame.key.get_pressed()
         :param dt: self.clock.tick(FPS)/1000.0
         """
+        # todo, voetstappen van party te weinig, ligt aan omdat 2e deel van _clip nooit aangeroepen wordt.
         if (key_input[keys.UP] or key_input[keys.DOWN] or
             key_input[keys.LEFT] or key_input[keys.RIGHT]) and \
                 (self.heroes[0].rect.x != self.hero_history[-1][0] or   # bekijk de laatste uit de deque
@@ -223,3 +220,6 @@ class Window(object):
             to_name = self.map1.portals[portal_nr].to_name
             to_map_path = OVERWORLDPATH+to_name+'.tmx'
             self.new_map(to_name, to_map_path, from_name, self.heroes[0].last_direction)
+            # todo, misschien moet de muziek bij door een portal heen, hier dus, aangepast worden
+            # self.engine.audio.set_bg_music(self.engine.gamestate.peek().name)
+            # self.engine.audio.set_bg_sounds(self.engine.gamestate.peek().name)

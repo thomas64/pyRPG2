@@ -16,11 +16,7 @@ import statemachine
 
 OPTIONSPATH = 'options'
 OPTIONSFILE = os.path.join(OPTIONSPATH, 'audio.cfg')
-
 MUSICPATH = 'resources/music'
-MAINMENU = os.path.join(MUSICPATH,  'mainmenu.ogg')
-OVERWORLD = os.path.join(MUSICPATH, 'overworld.ogg')
-
 SOUNDSPATH = 'resources/sounds'
 
 FADEOUTTIME = 500
@@ -35,6 +31,13 @@ BIRDS = 'birds'
 CROWS = 'crows'
 WIND = 'wind'
 
+# Alle muziek.
+TITLESCREEN = 'titlescreen'
+STARTFOREST = 'start_forest'
+
+# todo, muziek vinden voor de stad
+# todo, muziekwissel tussen de maps, maar overgang naar andere maps
+
 
 class Audio(object):
     """
@@ -47,24 +50,22 @@ class Audio(object):
         self._load_cfg()
 
         self.bg_music_channel = pygame.mixer.Channel(7)
-        self.mainmenu = pygame.mixer.Sound(MAINMENU)
-        self.overworld = pygame.mixer.Sound(OVERWORLD)
-
         self.bg_sound_channel1 = pygame.mixer.Channel(6)
         self.bg_sound_channel2 = pygame.mixer.Channel(5)
 
-        self.sfx = self._load_all_sfx()
+        self.mfx = self._load_all_sfx(MUSICPATH)
+        self.sfx = self._load_all_sfx(SOUNDSPATH)
 
     @staticmethod
-    def _load_all_sfx():
+    def _load_all_sfx(path):
         """
         Laadt alle geluiden uit de map in een dict.
         :return: de dict
         """
         effects = {}
-        for fx in os.listdir(SOUNDSPATH):
-            name, ext = os.path.splitext(fx)
-            effects[name] = pygame.mixer.Sound(os.path.join(SOUNDSPATH, fx))
+        for file in os.listdir(path):
+            name, ext = os.path.splitext(file)
+            effects[name] = pygame.mixer.Sound(os.path.join(path, file))
         return effects
 
     def _load_cfg(self):
@@ -129,11 +130,11 @@ class Audio(object):
                 self.fade_bg_music()
                 self.bg_music_channel.set_volume(1)
                 if currentstate == statemachine.States.MainMenu:
-                    self.bg_music_channel.play(self.mainmenu, -1)
+                    self.play_bg_music(TITLESCREEN)
                 elif currentstate == statemachine.States.Overworld:
                     if self.engine.gamestate.peek().window.map1.name in (maps.STARTFOREST,
                                                                          maps.BELOWSTARTFOREST):
-                        self.bg_music_channel.play(self.overworld, -1)
+                        self.play_bg_music(STARTFOREST)
 
     def set_bg_sounds(self, currentstate):
         """
@@ -156,7 +157,7 @@ class Audio(object):
     def play_sound(self, sound, loop=0, channel=None):
         """
         Als mag, speel dan geluid.
-        :param sound: een geluidsfragment uit de init.
+        :param sound: de naam van het geluidsfragment
         :param loop: -1 is oneindig loopen
         :param channel: het kanaal waar de geluiden op afgespeeld moeten worden, is alleen voor bg_sounds
         """
@@ -165,6 +166,14 @@ class Audio(object):
                 channel.play(self.sfx[sound], loops=loop)
             else:
                 self.sfx[sound].play()
+
+    def play_bg_music(self, music):
+        """
+        Als mag, speel dan muziek.
+        :param music: de naam van het geluidsfragment
+        """
+        if self.music == 1:
+            self.bg_music_channel.play(self.mfx[music], loops=-1)
 
     def stop_sound(self, sound):
         """
