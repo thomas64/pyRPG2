@@ -499,6 +499,7 @@
   <object id="108" name="step_stone" x="1376" y="160" width="64" height="336"/>
   <object id="109" name="step_stone" x="1184" y="160" width="32" height="336"/>
  </objectgroup>
+ <objectgroup name="objects"/>
  <objectgroup name="low_blocker">
   <object id="50" x="512" y="896" width="416" height="16"/>
   <object id="51" x="512" y="448" width="32" height="112"/>
