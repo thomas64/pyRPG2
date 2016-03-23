@@ -19,6 +19,9 @@ LOWBLOCKER = "low_blocker"
 OBJECTS = "objects"
 SOUNDS = "sounds"
 
+OBJECTLAYER = 2
+TREASURECHEST = "treasurechest"
+
 
 class Map(object):
     """
@@ -53,13 +56,17 @@ class Map(object):
             self.high_blocker_rects.append(self._pg_rect(rect))
         for rect in tmx_data.get_layer_by_name(LOWBLOCKER):
             self.low_blocker_rects.append(self._pg_rect(rect))
-        for nrect in tmx_data.get_layer_by_name(OBJECTS):
-            temp_object = components.namedrect.NamedRect(nrect.name, self._pg_rect(nrect))
-            temp_dict = {}
-            for prop_key, prop_value in nrect.properties.items():
-                temp_dict[prop_key] = prop_value
-            setattr(temp_object, 'content', temp_dict)
-            self.objects.append(temp_object)
+
+        for obj in tmx_data.get_layer_by_name(OBJECTS):
+            if obj.name == TREASURECHEST:
+                content_dict = {}
+                for prop_key, prop_value in obj.properties.items():
+                    content_dict[prop_key] = prop_value
+                chest_object = components.sprites.TreasureChest(obj.name, self._pg_rect(obj), OBJECTLAYER, content_dict)
+                self.low_blocker_rects.append(chest_object.get_blocker())
+                self.objects.append(chest_object)
+                # todo, identificatie met id? om status te kunnen saven bijv.
+
         for nrect in tmx_data.get_layer_by_name(SOUNDS):
             self.sounds.append(components.namedrect.NamedRect(nrect.name, self._pg_rect(nrect)))
 

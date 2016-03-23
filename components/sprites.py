@@ -16,6 +16,10 @@ BUTTONFONTSIZE = 14
 BUTTONBGCOLOR = pygame.Color("black")
 BUTTONPRESSCOLOR = pygame.Color("gray12")
 
+CHESTSPRITE = 'resources/sprites/objects/chest.png'
+CHESTBLOCKERWIDTH = 32
+CHESTBLOCKERHEIGHT = 16
+
 
 class Button(pygame.sprite.Sprite):
     """
@@ -135,8 +139,7 @@ class TreasureChest(pygame.sprite.Sprite):
         self._layer = layer
         self.content = content
 
-        sprite_sheet = 'resources/sprites/objects/chest.png'
-        sprite_sheet = pygame.image.load(sprite_sheet).convert_alpha()
+        sprite_sheet = pygame.image.load(CHESTSPRITE).convert_alpha()
 
         self.spritesheet_dict = {'closed': self.get_image(0,  0, 32, 32, sprite_sheet),
                                  'opened': self.get_image(32, 0, 32, 32, sprite_sheet)}
@@ -147,13 +150,18 @@ class TreasureChest(pygame.sprite.Sprite):
         self.index = 0
         self.image = self.image_list[self.index]
 
-    def update(self):
+    def open(self):
         """
-        ...
+        Pas de image aan van de gesloten naar de open chest.
         """
         self.index = 1
         self.image = self.image_list[self.index]
-        # todo, docstring
+
+    def get_blocker(self):
+        """
+        :return: Een rect met zijn eigen locatie en opgegeven grootte.
+        """
+        return pygame.Rect(self.rect.x, self.rect.y, CHESTBLOCKERWIDTH, CHESTBLOCKERHEIGHT)
 
     @staticmethod
     def get_image(x, y, width, height, sprite_sheet):

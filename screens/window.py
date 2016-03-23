@@ -28,7 +28,6 @@ OVERWORLDPATH = 'resources/maps/'
 OVERWORLDNAME = 'start_forest'
 STARTPOSITION = 'start_game'    # dit is de naam van de startpositie object in de tmx map
 STARTDIRECTION = screens.direction.Direction.South
-OBJECTLAYER = 2
 PLAYERLAYER = 3
 GRIDLAYER = 8
 CBOXLAYER = 9
@@ -92,10 +91,7 @@ class Window(object):
         self.align()
 
         # voeg alle objecten toe van uit de map
-        for nrect in self.map1.objects:
-            if nrect.name == 'treasurechest':
-                self.group.add(components.sprites.TreasureChest(nrect.name, nrect.rect, OBJECTLAYER, nrect.content))
-                # todo, identificatie met id?
+        self.group.add(self.map1.objects)
 
         self.engine.audio.set_bg_music(self.engine.gamestate.peek().name)
         self.engine.audio.set_bg_sounds(self.engine.gamestate.peek().name)
@@ -122,13 +118,7 @@ class Window(object):
                 self.align()
 
             elif event.key in keys.SELECT:
-                if len(self.heroes[0].rect.collidelistall(self.map1.objects)) == 1:
-                    object_nr = self.heroes[0].rect.collidelist(self.map1.objects)
-                    chest = self.map1.objects[object_nr]
-                    print("got {}".format(chest.content))
-                    chest_sprite = self.group.get_sprite(0)
-                    chest_sprite.update()
-                    # todo, de specifieke sprite uit de group halen
+                self.check_chests()
 
             elif event.key == keys.GRID:
                 if self.grid_sprite is None:
@@ -251,3 +241,15 @@ class Window(object):
             to_name = self.map1.portals[portal_nr].to_name
             to_map_path = OVERWORLDPATH+to_name+'.tmx'
             self.new_map(to_name, to_map_path, self.prev_map_name, self.heroes[0].last_direction)
+
+    def check_chests(self):
+        """
+        Bekijk of collide met een chest.
+        """
+        if self.heroes[0].last_direction == screens.direction.Direction.North:
+            if len(self.heroes[0].rect.collidelistall(self.map1.objects)) == 1:
+                object_nr = self.heroes[0].rect.collidelist(self.map1.objects)
+                chest = self.map1.objects[object_nr]
+                print("got {}".format(chest.content))
+                chest.open()
+                # todo, dit afmaken op een juiste manier natuurlijk
