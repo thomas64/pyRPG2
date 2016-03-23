@@ -7,18 +7,18 @@ class: WeaponType
 import enum
 
 from equipment.item import EquipmentItem
-import equipment.weapon
-import equipment.shield
-import equipment.helmet
-import equipment.amulet
-import equipment.armor
-import equipment.cloak
-import equipment.bracelet
-import equipment.gloves
-import equipment.ring
-import equipment.belt
-import equipment.boots
-import equipment.accessory
+import database.weapon
+import database.shield
+import database.helmet
+import database.amulet
+import database.armor
+import database.cloak
+import database.bracelet
+import database.gloves
+import database.ring
+import database.belt
+import database.boots
+import database.accessory
 
 # todo, uit colornote app:
 # - min int gebruiken voor items?
@@ -87,15 +87,15 @@ class WeaponType(enum.Enum):
 
 
 # Maak van alle equipment databases objecten, om die te kunnen laten gebruiken in het spel.
-AccessoryDatabase = equipment.accessory.AccessoryDatabase()
-AmuletDatabase = equipment.amulet.AmuletDatabase()
-ArmorDatabase = equipment.armor.ArmorDatabase()
-BeltDatabase = equipment.belt.BeltDatabase()
-BootsDatabase = equipment.boots.BootsDatabase()
-CloakDatabase = equipment.cloak.CloakDatabase()
-BraceletDatabase = equipment.bracelet.BraceletDatabase()
-GlovesDatabase = equipment.gloves.GlovesDatabase()
-HelmetDatabase = equipment.helmet.HelmetDatabase()
-RingDatabase = equipment.ring.RingDatabase()
-ShieldDatabase = equipment.shield.ShieldDatabase()
-WeaponDatabase = equipment.weapon.WeaponDatabase()
+AccessoryDatabase = database.accessory.AccessoryDatabase()
+AmuletDatabase = database.amulet.AmuletDatabase()
+ArmorDatabase = database.armor.ArmorDatabase()
+BeltDatabase = database.belt.BeltDatabase()
+BootsDatabase = database.boots.BootsDatabase()
+CloakDatabase = database.cloak.CloakDatabase()
+BraceletDatabase = database.bracelet.BraceletDatabase()
+GlovesDatabase = database.gloves.GlovesDatabase()
+HelmetDatabase = database.helmet.HelmetDatabase()
+RingDatabase = database.ring.RingDatabase()
+ShieldDatabase = database.shield.ShieldDatabase()
+WeaponDatabase = database.weapon.WeaponDatabase()
