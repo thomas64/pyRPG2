@@ -1,8 +1,9 @@
 
 """
-class: ButtonSprite
-class: ColorBoxSprite
-class: GridSprite
+class: Button
+class: ColorBox
+class: Grid
+class: TreasureChest
 """
 
 import pygame
@@ -16,7 +17,7 @@ BUTTONBGCOLOR = pygame.Color("black")
 BUTTONPRESSCOLOR = pygame.Color("gray12")
 
 
-class ButtonSprite(pygame.sprite.Sprite):
+class Button(pygame.sprite.Sprite):
     """
     De gegevens van de knoppen in beeld.
     """
@@ -86,7 +87,7 @@ class ButtonSprite(pygame.sprite.Sprite):
             surface.blit(self.image, self.rect.topleft)
 
 
-class ColorBoxSprite(pygame.sprite.Sprite):
+class ColorBox(pygame.sprite.Sprite):
     """
     De gekleurde randen wanneer F11 is ingedrukt.
     """
@@ -103,7 +104,7 @@ class ColorBoxSprite(pygame.sprite.Sprite):
         self.rect.topleft = rect.topleft
 
 
-class GridSprite(pygame.sprite.Sprite):
+class Grid(pygame.sprite.Sprite):
     """
     Een grid over de window wanneer F10 is ingedrukt.
     """
@@ -120,3 +121,51 @@ class GridSprite(pygame.sprite.Sprite):
             pygame.draw.line(self.image, color, (i, 0), (i, map_height))
         self.image = self.image.convert()
         self.rect = self.image.get_rect()
+
+
+class TreasureChest(pygame.sprite.Sprite):
+    """
+    De TreasureChest Sprite.
+    """
+    def __init__(self, name, rect, layer, content):
+        pygame.sprite.Sprite.__init__(self)
+
+        self.name = name
+        self.rect = rect
+        self._layer = layer
+        self.content = content
+
+        sprite_sheet = 'resources/sprites/objects/chest.png'
+        sprite_sheet = pygame.image.load(sprite_sheet).convert_alpha()
+
+        self.spritesheet_dict = {'closed': self.get_image(0,  0, 32, 32, sprite_sheet),
+                                 'opened': self.get_image(32, 0, 32, 32, sprite_sheet)}
+
+        self.image_list = (self.spritesheet_dict['closed'],
+                           self.spritesheet_dict['opened'])
+
+        self.index = 0
+        self.image = self.image_list[self.index]
+
+    def update(self):
+        """
+        ...
+        """
+        self.index = 1
+        self.image = self.image_list[self.index]
+        # todo, docstring
+
+    @staticmethod
+    def get_image(x, y, width, height, sprite_sheet):
+        """
+        Extracts image from sprite sheet.
+        :param x:
+        :param y:
+        :param width:
+        :param height:
+        :param sprite_sheet:
+        """
+        image = pygame.Surface((width, height))
+        image.blit(sprite_sheet, (0, 0), (x, y, width, height))
+        image.set_colorkey(FILLCOLOR)
+        return image

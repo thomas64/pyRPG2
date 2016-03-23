@@ -69,11 +69,11 @@ class Display(object):
 
     def _init_buttons(self):
         bg_width = self.background.get_width()
-        button_c = components.sprites.ButtonSprite(
+        button_c = components.sprites.Button(
             BTNWIDTH, BTNHEIGHT, (bg_width + CLOSEX, CLOSEY), CLOSELBL, keys.EXIT)
-        button_q = components.sprites.ButtonSprite(
+        button_q = components.sprites.Button(
             BTNWIDTH, BTNHEIGHT, (bg_width + PREVX,  PREVY),  PREVLBL,  keys.PREV)
-        button_w = components.sprites.ButtonSprite(
+        button_w = components.sprites.Button(
             BTNWIDTH, BTNHEIGHT, (bg_width + NEXTX,  NEXTY),  NEXTLBL,  keys.NEXT)
         self.buttons = (button_c, button_q, button_w)
 

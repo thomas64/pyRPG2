@@ -9,12 +9,14 @@ import pyscroll
 
 import components.namedrect
 import components.portal
+import components.sprites
 
-# de vier object layers in een tmx map
+# de zes object layers in een tmx map
 STARTPOS = "start_pos"
 PORTALS = "portals"
 HIGHBLOCKER = "high_blocker"
 LOWBLOCKER = "low_blocker"
+OBJECTS = "objects"
 SOUNDS = "sounds"
 
 
@@ -40,33 +42,26 @@ class Map(object):
         self.portals = []
         self.high_blocker_rects = []
         self.low_blocker_rects = []
+        self.objects = []
         self.sounds = []
 
-        try:
-            for obj in tmx_data.get_layer_by_name(STARTPOS):
-                self.start_pos.append(obj)
-        except (AttributeError, ValueError):
-            pass
-        try:
-            for obj in tmx_data.get_layer_by_name(PORTALS):
-                self.portals.append(components.portal.Portal(self.name, self._pg_rect(obj), obj.name))
-        except (AttributeError, ValueError):
-            pass
-        try:
-            for rect in tmx_data.get_layer_by_name(HIGHBLOCKER):
-                self.high_blocker_rects.append(self._pg_rect(rect))
-        except (AttributeError, ValueError):
-            pass
-        try:
-            for rect in tmx_data.get_layer_by_name(LOWBLOCKER):
-                self.low_blocker_rects.append(self._pg_rect(rect))
-        except (AttributeError, ValueError):
-            pass
-        try:
-            for obj in tmx_data.get_layer_by_name(SOUNDS):
-                self.sounds.append(components.namedrect.NamedRect(obj.name, self._pg_rect(obj)))
-        except (AttributeError, ValueError):
-            pass
+        for obj in tmx_data.get_layer_by_name(STARTPOS):
+            self.start_pos.append(obj)
+        for obj in tmx_data.get_layer_by_name(PORTALS):
+            self.portals.append(components.portal.Portal(self.name, self._pg_rect(obj), obj.name))
+        for rect in tmx_data.get_layer_by_name(HIGHBLOCKER):
+            self.high_blocker_rects.append(self._pg_rect(rect))
+        for rect in tmx_data.get_layer_by_name(LOWBLOCKER):
+            self.low_blocker_rects.append(self._pg_rect(rect))
+        for nrect in tmx_data.get_layer_by_name(OBJECTS):
+            temp_object = components.namedrect.NamedRect(nrect.name, self._pg_rect(nrect))
+            temp_dict = {}
+            for prop_key, prop_value in nrect.properties.items():
+                temp_dict[prop_key] = prop_value
+            setattr(temp_object, 'content', temp_dict)
+            self.objects.append(temp_object)
+        for nrect in tmx_data.get_layer_by_name(SOUNDS):
+            self.sounds.append(components.namedrect.NamedRect(nrect.name, self._pg_rect(nrect)))
 
     @staticmethod
     def _pg_rect(rect):

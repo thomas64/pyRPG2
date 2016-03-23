@@ -28,6 +28,7 @@ OVERWORLDPATH = 'resources/maps/'
 OVERWORLDNAME = 'start_forest'
 STARTPOSITION = 'start_game'    # dit is de naam van de startpositie object in de tmx map
 STARTDIRECTION = screens.direction.Direction.South
+OBJECTLAYER = 2
 PLAYERLAYER = 3
 GRIDLAYER = 8
 CBOXLAYER = 9
@@ -90,6 +91,12 @@ class Window(object):
         self.hero_history = collections.deque(maxlen=self.maxlen)   # maak een lege deck aan
         self.align()
 
+        # voeg alle objecten toe van uit de map
+        for nrect in self.map1.objects:
+            if nrect.name == 'treasurechest':
+                self.group.add(components.sprites.TreasureChest(nrect.name, nrect.rect, OBJECTLAYER, nrect.content))
+                # todo, identificatie met id?
+
         self.engine.audio.set_bg_music(self.engine.gamestate.peek().name)
         self.engine.audio.set_bg_sounds(self.engine.gamestate.peek().name)
 
@@ -114,10 +121,19 @@ class Window(object):
                 self.heroes[0].align_to_grid(GRIDSIZE)
                 self.align()
 
+            elif event.key in keys.SELECT:
+                if len(self.heroes[0].rect.collidelistall(self.map1.objects)) == 1:
+                    object_nr = self.heroes[0].rect.collidelist(self.map1.objects)
+                    chest = self.map1.objects[object_nr]
+                    print("got {}".format(chest.content))
+                    chest_sprite = self.group.get_sprite(0)
+                    chest_sprite.update()
+                    # todo, de specifieke sprite uit de group halen
+
             elif event.key == keys.GRID:
                 if self.grid_sprite is None:
-                    self.grid_sprite = components.sprites.GridSprite(self.map1.width, self.map1.height,
-                                                                     GRIDCOLOR, GRIDSIZE, GRIDLAYER)
+                    self.grid_sprite = components.sprites.Grid(self.map1.width, self.map1.height,
+                                                               GRIDCOLOR, GRIDSIZE, GRIDLAYER)
                     self.group.add(self.grid_sprite)
                 else:
                     self.group.remove(self.grid_sprite)
@@ -126,11 +142,11 @@ class Window(object):
             elif event.key == keys.CBOX:
                 if len(self.cbox_sprites) == 0:                             # als de lijst leeg is.
                     for hero in self.heroes:
-                        self.cbox_sprites.append(components.sprites.ColorBoxSprite(hero.rect, HEROCOLOR, CBOXLAYER))
+                        self.cbox_sprites.append(components.sprites.ColorBox(hero.rect, HEROCOLOR, CBOXLAYER))
                     for rect in self.map1.high_blocker_rects:
-                        self.cbox_sprites.append(components.sprites.ColorBoxSprite(rect, HIGHBLOCKERCOLOR, CBOXLAYER))
+                        self.cbox_sprites.append(components.sprites.ColorBox(rect, HIGHBLOCKERCOLOR, CBOXLAYER))
                     for rect in self.map1.low_blocker_rects:
-                        self.cbox_sprites.append(components.sprites.ColorBoxSprite(rect, LOWBLOCKERCOLOR, CBOXLAYER))
+                        self.cbox_sprites.append(components.sprites.ColorBox(rect, LOWBLOCKERCOLOR, CBOXLAYER))
                     self.group.add(self.cbox_sprites)
                 else:
                     self.group.remove(self.cbox_sprites)

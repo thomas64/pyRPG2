@@ -64,18 +64,18 @@ class Overworld(object):
         bg_height = self.background.get_height()
 
         # todo, afhankelijk van situatie, buttons niet weergeven
-        # button_view = sprites.ButtonSprite((bg_width-200,   bg_height-300), "V",     pygame.K_v)
-        button_inv = components.sprites.ButtonSprite(
+        # button_view = sprites.Button((bg_width-200,   bg_height-300), "V",     pygame.K_v)
+        button_inv = components.sprites.Button(
                                     BTNWIDTH, BTNHEIGHT, (bg_width + INVX,   bg_height + INVY),   INVLBL,   keys.INV)
-        button_up = components.sprites.ButtonSprite(
+        button_up = components.sprites.Button(
                                     BTNWIDTH, BTNHEIGHT, (bg_width + UPX,    bg_height + UPY),    UPLBL,    keys.UP)
-        button_down = components.sprites.ButtonSprite(
+        button_down = components.sprites.Button(
                                     BTNWIDTH, BTNHEIGHT, (bg_width + DOWNX,  bg_height + DOWNY),  DOWNLBL,  keys.DOWN)
-        button_left = components.sprites.ButtonSprite(
+        button_left = components.sprites.Button(
                                     BTNWIDTH, BTNHEIGHT, (bg_width + LEFTX,  bg_height + LEFTY),  LEFTLBL,  keys.LEFT)
-        button_right = components.sprites.ButtonSprite(
+        button_right = components.sprites.Button(
                                     BTNWIDTH, BTNHEIGHT, (bg_width + RIGHTX, bg_height + RIGHTY), RIGHTLBL, keys.RIGHT)
-        # button_cancel = sprites.ButtonSprite((bg_width-100, bg_height-200), "C",     pygame.K_c)
+        # button_cancel = sprites.Button((bg_width-100, bg_height-200), "C",     pygame.K_c)
 
         # self.buttons = [button_view, button_up, button_down, button_left, button_right, button_cancel]
         self.buttons = [button_inv, button_up, button_down, button_left, button_right]
