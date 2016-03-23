@@ -1,8 +1,10 @@
 
 """
+class: MapMusic
 class: Audio
 """
 
+import enum
 import os
 import pickle
 import random
@@ -10,7 +12,6 @@ import random
 import pygame
 
 import console
-from maps import Maps
 import statemachine
 
 
@@ -35,6 +36,16 @@ WIND = 'wind'
 
 # Alle niet overworld kaart muziek.
 TITLESCREEN = 'titlescreen'
+
+
+class MapMusic(enum.Enum):
+    """
+    Alle tmx kaarten op een rij, met de muziek erachter.
+    """
+    StartForest = 'start_forest',                   'start_forest'
+    BelowStartForest = 'below_start_forest',        'start_forest'
+    StartTown = 'start_town',                       'start_town'
+    StartTownArmorShop = 'start_town_armor_shop',   'start_town'
 
 
 class Audio(object):
@@ -128,12 +139,15 @@ class Audio(object):
            self.engine.gamestate.prev_state != statemachine.States.OptionsMenu:
 
             if currentstate == statemachine.States.Overworld:
-                for enum in Maps:
-                    if enum.value[0] == self.engine.gamestate.peek().window.map1.name:
-                        if enum.value[1] != self._get_prev_bg_music():
+                for _enum in MapMusic:
+                    # als de naam in de MapMusic overeenkomt met de naam van de huidige map
+                    if _enum.value[0] == self.engine.gamestate.peek().window.map1.name:
+                        # als de muziek in de MapMusic NIET overeenkomt met de muziek van de vorige map
+                        if _enum.value[1] != self._get_prev_bg_music():
+                            # speel dan de nieuwe muziek
                             self.fade_bg_music()
                             self.bg_music_channel.set_volume(1)
-                            self.play_bg_music(enum.value[1])
+                            self.play_bg_music(_enum.value[1])
                             break
                 return
 
@@ -145,9 +159,9 @@ class Audio(object):
                 self.play_bg_music(TITLESCREEN)
 
     def _get_prev_bg_music(self):
-        for enum in Maps:
-            if enum.value[0] == self.engine.gamestate.peek().window.prev_map_name:
-                return enum.value[1]
+        for _enum in MapMusic:
+            if _enum.value[0] == self.engine.gamestate.peek().window.prev_map_name:
+                return _enum.value[1]
 
     def set_bg_sounds(self, currentstate):
         """
@@ -163,10 +177,10 @@ class Audio(object):
                 self.play_sound(CROWS, loop=-1, channel=self.bg_sound_channel1)
                 self.play_sound(WIND, loop=-1, channel=self.bg_sound_channel2)
             elif currentstate == statemachine.States.Overworld:
-                if self.engine.gamestate.peek().window.map1.name in (Maps.StartForest.value[0],
-                                                                     Maps.BelowStartForest.value[0]):
+                if self.engine.gamestate.peek().window.map1.name in (MapMusic.StartForest.value[0],
+                                                                     MapMusic.BelowStartForest.value[0]):
                     self.play_sound(BIRDS, loop=-1, channel=self.bg_sound_channel1)
-                elif self.engine.gamestate.peek().window.map1.name in Maps.StartTown.value[0]:
+                elif self.engine.gamestate.peek().window.map1.name in MapMusic.StartTown.value[0]:
                     self.play_sound(TOWN, loop=-1, channel=self.bg_sound_channel1)
 
     def play_sound(self, sound, loop=0, channel=None):
