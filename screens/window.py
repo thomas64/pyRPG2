@@ -9,7 +9,7 @@ import pygame
 
 import components.sprites
 import keys
-import screens.character
+import screens.unit
 import screens.direction
 import screens.map
 
@@ -53,10 +53,10 @@ class Window(object):
         self.group = None
         self.grid_sprite = None
         self.cbox_sprites = None
-        self.heroes = None
+        self.party_sprites = None
         self.party = None
         self.maxlen = None
-        self.hero_history = None
+        self.leader_history = None
 
         self.new_map(OVERWORLDNAME, OVERWORLDPATH + OVERWORLDNAME + '.tmx', STARTPOSITION, STARTDIRECTION)
 
@@ -65,8 +65,8 @@ class Window(object):
         Maak een nieuwe map aan met de hero's in het veld.
         :param map_name: naam van de map
         :param map_path: het pad van de tmx
-        :param startposition: de positie van heroes[0] als naam van een tmx start_pos object layer
-        :param startdirection: welke kant kijkt heroes[0] op
+        :param startposition: de positie van party_sprites[0] als naam van een tmx start_pos object layer
+        :param startdirection: welke kant kijkt party_sprites[0] op
         """
         self.map1 = screens.map.Map(map_name, map_path, self.width, self.height, PLAYERLAYER)
         self.group = self.map1.view
@@ -78,16 +78,16 @@ class Window(object):
             if pos.name == startposition:   # van alle start_possen, welke komt overeen met waar de hero vandaan komt
                 start_pos = (pos.x, pos.y)  # zet dan de x,y waarde op dié start_pos
 
-        self.heroes = []
+        self.party_sprites = []
         self.party = list(self.engine.data.party.values())
         for hero in self.party:
-            self.heroes.append(screens.character.Hero(hero.SPR, start_pos, startdirection, self.engine.audio))
-        self.heroes.reverse()               # voeg de heroes in juiste volgorde toe
-        self.group.add(self.heroes)         # maar als sprites moeten ze precies andersom staan
-        self.heroes.reverse()               # want daar wil je heroes[0] bovenop weergegeven hebben
+            self.party_sprites.append(screens.unit.Unit(hero.SPR, start_pos, startdirection, self.engine.audio))
+        self.party_sprites.reverse()               # voeg de party_sprites in juiste volgorde toe
+        self.group.add(self.party_sprites)         # maar als sprites moeten ze precies andersom staan
+        self.party_sprites.reverse()               # want daar wil je party_sprites[0] bovenop weergegeven hebben
 
         self.maxlen = ((len(self.party)-1)*GRIDSIZE)+1              # bereken de lengte van het deck
-        self.hero_history = collections.deque(maxlen=self.maxlen)   # maak een lege deck aan
+        self.leader_history = collections.deque(maxlen=self.maxlen)   # maak een lege deck aan
         self.align()
 
         # voeg alle objecten toe van uit de map
@@ -100,11 +100,11 @@ class Window(object):
         """
         Zet de hero in het grid. Positioneer de party achter hem. Vul de geschiedenis met lege data.
         """
-        for hero in self.heroes:
-            hero.rect.topleft = list(self.heroes[0].rect.topleft)
-            hero.last_direction = self.heroes[0].last_direction
+        for unit in self.party_sprites:
+            unit.rect.topleft = list(self.party_sprites[0].rect.topleft)
+            unit.last_direction = self.party_sprites[0].last_direction
         for _ in range(0, self.maxlen):
-            self.hero_history.append(self.heroes[0].get_history_data())
+            self.leader_history.append(self.party_sprites[0].get_history_data())
 
     def single_input(self, event):
         """
@@ -114,7 +114,7 @@ class Window(object):
         if event.type == pygame.KEYDOWN:
 
             if event.key == keys.ALIGN:
-                self.heroes[0].align_to_grid(GRIDSIZE)
+                self.party_sprites[0].align_to_grid(GRIDSIZE)
                 self.align()
 
             elif event.key in keys.SELECT:
@@ -131,8 +131,8 @@ class Window(object):
 
             elif event.key == keys.CBOX:
                 if len(self.cbox_sprites) == 0:                             # als de lijst leeg is.
-                    for hero in self.heroes:
-                        self.cbox_sprites.append(components.sprites.ColorBox(hero.rect, HEROCOLOR, CBOXLAYER))
+                    for unit in self.party_sprites:
+                        self.cbox_sprites.append(components.sprites.ColorBox(unit.rect, HEROCOLOR, CBOXLAYER))
                     for rect in self.map1.high_blocker_rects:
                         self.cbox_sprites.append(components.sprites.ColorBox(rect, HIGHBLOCKERCOLOR, CBOXLAYER))
                     for rect in self.map1.low_blocker_rects:
@@ -161,13 +161,13 @@ class Window(object):
         elif key_input[keys.ZOOMRESET[0]] or key_input[keys.ZOOMRESET[1]]:
             self.map1.map_layer.zoom = DEFZOOM
 
-        self.heroes[0].speed(key_input)
-        self.heroes[0].direction(key_input, dt)
-        # todo, moet dit niet naar de hero class?
-        self.heroes[0].check_blocker(self.map1.high_blocker_rects, self.map1.low_blocker_rects,
-                                     None, self.map1.width, self.map1.height, dt)
+        self.party_sprites[0].speed(key_input)
+        self.party_sprites[0].direction(key_input, dt)
+        # todo, moet dit niet naar de unit class?
+        self.party_sprites[0].check_blocker(self.map1.high_blocker_rects, self.map1.low_blocker_rects,
+                                            None, self.map1.width, self.map1.height, dt)
 
-        self.hero_trail(key_input, dt)
+        self.leader_trail(key_input, dt)
 
     def update(self, dt):
         """
@@ -178,14 +178,14 @@ class Window(object):
         self.check_portals()
 
         # misschien gaat dit een probleem geven wanneer ingame de party grootte wordt gewijzigd.
-        # dan heeft bijv een boom een hero.rect.topleft oid.
+        # dan heeft bijv een boom een unit.rect.topleft oid.
         if len(self.cbox_sprites) > 0:
-            for index, hero in enumerate(self.heroes):  # dit kan om dat de eerste paar die aan cbox_sprites bij F11
-                self.cbox_sprites[index].rect.topleft = hero.rect.topleft  # zijn toegevoegd zijn de hero.rects
+            for index, unit in enumerate(self.party_sprites):  # dit kan om dat de eerste paar die aan cbox_sprites bij
+                self.cbox_sprites[index].rect.topleft = unit.rect.topleft  # F11 zijn toegevoegd zijn de unit.rects
 
         if self.map1.width >= self.width and \
            self.map1.height >= self.height:
-            self.group.center(self.heroes[0].rect.center)
+            self.group.center(self.party_sprites[0].rect.center)
 
     def render(self):
         """
@@ -193,38 +193,38 @@ class Window(object):
         """
         self.group.draw(self.surface)
 
-    def hero_trail(self, key_input, dt):
+    def leader_trail(self, key_input, dt):
         """
         Als 1 van de 4 pijltoetsen gedrukt wordt en de zich ook daadwerkelijk verplaatst.
-        Vul de history van de hero dan aan met allemaal data uit een methode van character.
+        Vul de history van de leader dan aan met allemaal data uit een methode van Unit.
         :param key_input: pygame.key.get_pressed()
         :param dt: self.clock.tick(FPS)/1000.0
         """
         # todo, voetstappen van party te weinig, ligt aan omdat 2e deel van _clip nooit aangeroepen wordt.
         if (key_input[keys.UP] or key_input[keys.DOWN] or
             key_input[keys.LEFT] or key_input[keys.RIGHT]) and \
-                (self.heroes[0].rect.x != self.hero_history[-1][0] or   # bekijk de laatste uit de deque
-                 self.heroes[0].rect.y != self.hero_history[-1][1]):
+                (self.party_sprites[0].rect.x != self.leader_history[-1][0] or   # bekijk de laatste uit de deque
+                 self.party_sprites[0].rect.y != self.leader_history[-1][1]):
 
-            self.hero_history.append(self.heroes[0].get_history_data())
+            self.leader_history.append(self.party_sprites[0].get_history_data())
 
             # de index loopt op van 0, 1, 2, 3.
             # de i loopt af van 4, 3, 2, 1.
             for index, i in enumerate(range(len(self.party)-1, 0, -1)):
-                self.heroes[i].rect.x = self.hero_history[index*GRIDSIZE][0]
-                self.heroes[i].rect.y = self.hero_history[index*GRIDSIZE][1]
-                self.heroes[i].last_direction = self.hero_history[index*GRIDSIZE][2]
-                self.heroes[i].move_direction = self.hero_history[index*GRIDSIZE][3]
-                self.heroes[i].movespeed = self.hero_history[index*GRIDSIZE][4]
-                self.heroes[i].animate(dt, make_sound=False)
+                self.party_sprites[i].rect.x = self.leader_history[index * GRIDSIZE][0]
+                self.party_sprites[i].rect.y = self.leader_history[index * GRIDSIZE][1]
+                self.party_sprites[i].last_direction = self.leader_history[index * GRIDSIZE][2]
+                self.party_sprites[i].move_direction = self.leader_history[index * GRIDSIZE][3]
+                self.party_sprites[i].movespeed = self.leader_history[index * GRIDSIZE][4]
+                self.party_sprites[i].animate(dt, make_sound=False)
 
     def check_sounds(self):
         """
         Bekijk op de kaart met welke sound de voeten colliden.
         Zet die naam van het object van de kaart als audio.footstep.
         """
-        if len(self.heroes[0].feet.collidelistall(self.map1.sounds)) == 1:
-            sound_nr = self.heroes[0].feet.collidelist(self.map1.sounds)
+        if len(self.party_sprites[0].feet.collidelistall(self.map1.sounds)) == 1:
+            sound_nr = self.party_sprites[0].feet.collidelist(self.map1.sounds)
             name = self.map1.sounds[sound_nr].name
             self.engine.audio.footstep = name
 
@@ -234,21 +234,21 @@ class Window(object):
         Zo ja, haal dan de van en naar data uit de portal.
         Hij gebruikt de van naam voor de startpositie in de nieuwe map.
         """
-        if len(self.heroes[0].rect.collidelistall(self.map1.portals)) == 1:
+        if len(self.party_sprites[0].rect.collidelistall(self.map1.portals)) == 1:
             self.engine.timer = NEWMAPTIMEOUT
-            portal_nr = self.heroes[0].rect.collidelist(self.map1.portals)
+            portal_nr = self.party_sprites[0].rect.collidelist(self.map1.portals)
             self.prev_map_name = self.map1.portals[portal_nr].from_name
             to_name = self.map1.portals[portal_nr].to_name
             to_map_path = OVERWORLDPATH+to_name+'.tmx'
-            self.new_map(to_name, to_map_path, self.prev_map_name, self.heroes[0].last_direction)
+            self.new_map(to_name, to_map_path, self.prev_map_name, self.party_sprites[0].last_direction)
 
     def check_chests(self):
         """
         Bekijk of collide met een chest.
         """
-        if self.heroes[0].last_direction == screens.direction.Direction.North:
-            if len(self.heroes[0].rect.collidelistall(self.map1.objects)) == 1:
-                object_nr = self.heroes[0].rect.collidelist(self.map1.objects)
+        if self.party_sprites[0].last_direction == screens.direction.Direction.North:
+            if len(self.party_sprites[0].rect.collidelistall(self.map1.objects)) == 1:
+                object_nr = self.party_sprites[0].rect.collidelist(self.map1.objects)
                 chest = self.map1.objects[object_nr]
                 print("got {}".format(chest.content))
                 chest.open()

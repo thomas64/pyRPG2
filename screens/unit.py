@@ -1,7 +1,6 @@
 
 """
-class: Direction
-class: Hero
+class: Unit
 """
 
 import pygame
@@ -21,9 +20,9 @@ TURNDELAY = 7/60    # van een seconde
 VIEWSPEED = 8       # todo, deze moet nog aangepast worden
 
 
-class Hero(pygame.sprite.Sprite):
+class Unit(pygame.sprite.Sprite):
     """
-    Hero extends the pygame.sprite.Sprite class
+    Unit extends the pygame.sprite.Sprite class
     """
     def __init__(self, spritesheet, position, direction, audio):
         pygame.sprite.Sprite.__init__(self)
