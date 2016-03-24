@@ -29,11 +29,11 @@ class RingDatabase(collections.OrderedDict):
         :param key_name:
         """
         if key_name is None:
-            return equipment.EquipmentItem(equipment.EquipmentType.rng.value)
+            return equipment.EquipmentItem(equipment.EquipmentType.rng)
         try:
             ring = self[key_name]
             ring['spr'] = SPRITEPATH
-            return equipment.EquipmentItem(equipment.EquipmentType.rng.value, **ring)
+            return equipment.EquipmentItem(equipment.EquipmentType.rng, **ring)
         except KeyError:
             console.error_equipment_item_name_not_in_database(key_name)
             raise KeyError

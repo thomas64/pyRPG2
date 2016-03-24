@@ -186,7 +186,7 @@ class StatsBox(object):
         """
         # hele lelijke weight check, maar omdat weight de enige is, doe ik dit zo.
         # weight is de enige waarvan een grotere waarde niet positief is, vandaar de omdraaiing.
-        if weight_check is "Weight :":
+        if weight_check == "Weight :":
             poscolor, negcolor = negcolor, poscolor
 
         if value == "":

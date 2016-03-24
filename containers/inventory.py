@@ -17,7 +17,7 @@ class Inventory(dict):
     def get_all_equipment_items_of_type(self, equipment_type):
         """
         Geeft uit de inventory alle equipment items van een bepaald type op de juiste volgorde terug.
-        :param equipment_type: Enum EquipmentType.value, dus bijv. "Shield".
+        :param equipment_type: Enum EquipmentType, dus bijv. "sld" "Shield".
         :return: Een lijst met alleen de gewenste equipment items.
         """
         temp_list = []

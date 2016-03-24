@@ -32,7 +32,7 @@ class EquipmentItem(object):
         :return: een lijst van de geselecteerde attributen
         """
         #               attr[0]             attr[1]
-        attr_tuple = ((self.TYP,            'nam'),
+        attr_tuple = ((self.TYP.value,      'nam'),
                       ('Skill',             'skl'),
                       ('Min. Intelligence', 'min_int'),
                       ('Min. Strength',     'min_str'),

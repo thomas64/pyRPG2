@@ -132,11 +132,11 @@ class WeaponDatabase(collections.OrderedDict):
         :param key_name:
         """
         if key_name is None:
-            return equipment.EquipmentItem(equipment.EquipmentType.wpn.value)
+            return equipment.EquipmentItem(equipment.EquipmentType.wpn)
         try:
             weapon = self[key_name]
             weapon['spr'] = SPRITEPATH
-            return equipment.EquipmentItem(equipment.EquipmentType.wpn.value, **weapon)
+            return equipment.EquipmentItem(equipment.EquipmentType.wpn, **weapon)
         except KeyError:
             console.error_equipment_item_name_not_in_database(key_name)
             raise KeyError

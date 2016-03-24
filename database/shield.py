@@ -108,12 +108,12 @@ class ShieldDatabase(collections.OrderedDict):
         :param key_name:
         """
         if key_name is None:
-            return equipment.EquipmentItem(equipment.EquipmentType.sld.value)
+            return equipment.EquipmentItem(equipment.EquipmentType.sld)
         try:
             shield = self[key_name]
             shield['spr'] = SPRITEPATH
             shield['skl'] = equipment.WeaponType.shd.value
-            return equipment.EquipmentItem(equipment.EquipmentType.sld.value, **shield)
+            return equipment.EquipmentItem(equipment.EquipmentType.sld, **shield)
         except KeyError:
             console.error_equipment_item_name_not_in_database(key_name)
             raise KeyError
