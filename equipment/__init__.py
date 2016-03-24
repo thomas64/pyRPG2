@@ -43,7 +43,7 @@ class EquipmentType(enum.Enum):
     acy = "Accessory"
 
     @classmethod
-    def get_equipment_item_of_this_type(cls, equipment_type, equipment_item_key):
+    def factory_equipment_item(cls, equipment_type, equipment_item_key):
         """
         Geeft een equipment item terug op verzoek van het type en de key, geef een 'empty' terug bij key = None.
         :param equipment_type: Enum EquipmentType, dus bijv. "sld" "Shield".

@@ -8,6 +8,7 @@ import enum
 import characters.stats
 import characters.skills
 import console
+from equipment import EquipmentType as EqpT
 import equipment
 
 
@@ -57,18 +58,18 @@ class Hero(object):
         self.skills_tuple = (self.alc, self.dip, self.hlr, self.lor, self.mec, self.mer, self.ran, self.stl, self.thf,
                              self.trb, self.war, self.wiz, self.haf, self.mis, self.pol, self.shd, self.swd, self.thr)
 
-        self.wpn = equipment.WeaponDatabase.factory(kwargs['wpn'])
-        self.sld = equipment.ShieldDatabase.factory(kwargs['sld'])
-        self.hlm = equipment.HelmetDatabase.factory(None)
-        self.amu = equipment.AmuletDatabase.factory(None)
-        self.arm = equipment.ArmorDatabase.factory(kwargs['arm'])
-        self.clk = equipment.CloakDatabase.factory(None)
-        self.brc = equipment.BraceletDatabase.factory(None)
-        self.glv = equipment.GlovesDatabase.factory(None)
-        self.rng = equipment.RingDatabase.factory(None)
-        self.blt = equipment.BeltDatabase.factory(None)
-        self.bts = equipment.BootsDatabase.factory(None)
-        self.acy = equipment.AccessoryDatabase.factory(None)
+        self.wpn = EqpT.factory_equipment_item(EqpT.wpn, kwargs['wpn'])
+        self.sld = EqpT.factory_equipment_item(EqpT.sld, kwargs['sld'])
+        self.hlm = EqpT.factory_equipment_item(EqpT.hlm, None)
+        self.amu = EqpT.factory_equipment_item(EqpT.amu, None)
+        self.arm = EqpT.factory_equipment_item(EqpT.arm, kwargs['arm'])
+        self.clk = EqpT.factory_equipment_item(EqpT.clk, None)
+        self.brc = EqpT.factory_equipment_item(EqpT.brc, None)
+        self.glv = EqpT.factory_equipment_item(EqpT.glv, None)
+        self.rng = EqpT.factory_equipment_item(EqpT.rng, None)
+        self.blt = EqpT.factory_equipment_item(EqpT.blt, None)
+        self.bts = EqpT.factory_equipment_item(EqpT.bts, None)
+        self.acy = EqpT.factory_equipment_item(EqpT.acy, None)
 
     @property
     def equipment_tuple(self):
@@ -197,7 +198,7 @@ class Hero(object):
     def get_equipped_item_of_type(self, equipment_type):
         """
         Geeft het item van het meegegeven Enum type wat de hero equipped heeft terug.
-        :param equipment_type: Enum EquipmentType.value, dus bijv. "Shield".
+        :param equipment_type: Enum EquipmentType, dus bijv. "sld" "Shield".
         :return: ook als het een 'empty' is, geef dan het item
         """
         for equipment_item in self.equipment_tuple:

@@ -3,7 +3,7 @@
 class: TreasureChestDatabase
 """
 
-from equipment import EquipmentType as Eqp
+from equipment import EquipmentType as EqpT
 
 
 class TreasureChestDatabase(dict):
@@ -14,8 +14,8 @@ class TreasureChestDatabase(dict):
         super().__init__(**kwargs)
 
         # start_forest
-        self['chest1'] = dict(content=dict(eqp1=dict(typ=Eqp.wpn, nam='bronzeshortsword', qty=1),
-                                           eqp2=dict(typ=Eqp.hlm, nam='leathercap',       qty=1)))
+        self['chest1'] = dict(content=dict(eqp1=dict(typ=EqpT.wpn, nam='bronzeshortsword', qty=1),
+                                           eqp2=dict(typ=EqpT.hlm, nam='leathercap',       qty=1)))
         # self['chest1'] = dict(content=dict(gold=100,
         #                                    herbs=3,
         #                                    eqp1=dict(typ='wpn', nam='bronzeshortsword', qty=1),

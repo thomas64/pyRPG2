@@ -261,7 +261,7 @@ class Window(object):
                 chest_data = self.engine.data.treasure_chests[chest_sprite.chest_id]
                 chest_data['opened'] = 1
                 for eqp_item in chest_data['content'].values():
-                    equipment_item = EquipmentType.get_equipment_item_of_this_type(eqp_item['typ'], eqp_item['nam'])
+                    equipment_item = EquipmentType.factory_equipment_item(eqp_item['typ'], eqp_item['nam'])
                     self.engine.data.inventory.add(equipment_item, quantity=eqp_item['qty'], verbose=True)
                 chest_data['content'] = dict()
                 # todo, een popup window maken
