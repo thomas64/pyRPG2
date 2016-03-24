@@ -7,6 +7,8 @@ import collections
 
 import pygame
 
+import audio as sfx
+import components.messagebox
 import components.sprites
 from equipment import EquipmentType
 import keys
@@ -259,9 +261,13 @@ class Window(object):
                 object_nr = self.party_sprites[0].rect.collidelist(self.map1.objects)
                 chest_sprite = self.map1.objects[object_nr]
                 chest_data = self.engine.data.treasure_chests[chest_sprite.chest_id]
-                chest_data['opened'] = 1
-                for eqp_item in chest_data['content'].values():
-                    equipment_item = EquipmentType.factory_equipment_item(eqp_item['typ'], eqp_item['nam'])
-                    self.engine.data.inventory.add(equipment_item, quantity=eqp_item['qty'], verbose=True)
-                chest_data['content'] = dict()
-                # todo, een popup window maken
+                if chest_data['content']:
+                    chest_data['opened'] = 1
+                    message = ["Found:"]
+                    for eqp_item in chest_data['content'].values():
+                        equipment_item = EquipmentType.factory_equipment_item(eqp_item['typ'], eqp_item['nam'])
+                        self.engine.data.inventory.add(equipment_item, quantity=eqp_item['qty'], verbose=True)
+                        message.append("{} {}".format(str(equipment_item.qty), str(equipment_item.NAM)))
+                    self.engine.audio.play_sound(sfx.CHEST)
+                    components.messagebox.MessageBox(message).message_loop()
+                    chest_data['content'] = dict()
