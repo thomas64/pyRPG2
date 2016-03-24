@@ -14,9 +14,9 @@ import screens.window
 import statemachine
 
 
-WINDOWWIDTH = 800
-WINDOWHEIGHT = 600
-WINDOWPOS = 100, 100
+WINDOWWIDTH = 900
+WINDOWHEIGHT = 650
+WINDOWPOS = 10, 10
 
 BACKGROUNDCOLOR = pygame.Color("black")
 LINECOLOR = pygame.Color("white")
