@@ -10,6 +10,7 @@ import audio
 import console
 import keys
 import screens.menu.manager
+import script
 import statemachine
 import video
 
@@ -32,7 +33,9 @@ class GameEngine(object):
     """
     def __init__(self):
         self.screen = pygame.display.get_surface()
+        self.gamestate = statemachine.StateMachine()
         self.data = None
+        self.script = script.Script(self)
         self.video = video.Video(self)
         self.audio = audio.Audio(self)
 
@@ -42,8 +45,6 @@ class GameEngine(object):
         self.playtime = 0.0
         self.dt = 0.0
         self.timer = 0.0
-
-        self.gamestate = statemachine.StateMachine()
 
         self.debugfont = pygame.font.SysFont(DEBUGFONT, DEBUGFONTSIZE)
         self.key_input = None

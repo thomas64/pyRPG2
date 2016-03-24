@@ -33,6 +33,8 @@ GRIDLAYER = 8
 CBOXLAYER = 9
 GRIDSIZE = 32
 
+TREASURECHEST = "treasure_chest"    # naam van object in de tmx map
+
 NEWMAPTIMEOUT = 0.1  # minimale keyblock. Zonder deze timer kun je op de movement keys drukken terwijl de map laadt.
 
 
@@ -189,8 +191,14 @@ class Window(object):
 
     def render(self):
         """
+        Render de plaatjes van de objecten
         Teken de window inhoud.
         """
+        for obj in self.map1.objects:
+            if obj.name == TREASURECHEST:
+                chest_data = self.engine.data.treasure_chests[obj.chest_id]
+                obj.render(chest_data['opened'])
+
         self.group.draw(self.surface)
 
     def leader_trail(self, key_input, dt):
@@ -249,7 +257,9 @@ class Window(object):
         if self.party_sprites[0].last_direction == screens.direction.Direction.North:
             if len(self.party_sprites[0].rect.collidelistall(self.map1.objects)) == 1:
                 object_nr = self.party_sprites[0].rect.collidelist(self.map1.objects)
-                chest = self.map1.objects[object_nr]
-                print("got {}".format(chest.content))
-                chest.open()
-                # todo, dit afmaken op een juiste manier natuurlijk
+                chest_sprite = self.map1.objects[object_nr]
+                chest_data = self.engine.data.treasure_chests[chest_sprite.chest_id]
+                chest_data['opened'] = 1
+                print("got {}".format(chest_data['content']))
+                chest_data['content'] = dict()
+                # todo, items ook daadwerkelijk in inventory komen en een popup window maken

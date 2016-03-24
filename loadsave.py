@@ -33,13 +33,14 @@ class Dialog(object):
                 (self.engine.data,
                  self.engine.gamestate.peek().window.map1.name,
                  self.engine.gamestate.peek().window.map1.tmxpath,
-                 self.engine.gamestate.peek().window.heroes[0].rect.topleft,
-                 self.engine.gamestate.peek().window.heroes[0].last_direction) = pickle.load(f)
-                self.engine.gamestate.peek().window.new_map(self.engine.gamestate.peek().window.map1.name,
-                                                            self.engine.gamestate.peek().window.map1.tmxpath,
-                                                            self.engine.gamestate.peek().window.heroes[0].rect.topleft,
-                                                            self.engine.gamestate.peek().window.heroes[0].last_direction
-                                                            )
+                 self.engine.gamestate.peek().window.party_sprites[0].rect.topleft,
+                 self.engine.gamestate.peek().window.party_sprites[0].last_direction) = pickle.load(f)
+                self.engine.gamestate.peek().window.new_map(
+                    self.engine.gamestate.peek().window.map1.name,
+                    self.engine.gamestate.peek().window.map1.tmxpath,
+                    self.engine.gamestate.peek().window.party_sprites[0].rect.topleft,
+                    self.engine.gamestate.peek().window.party_sprites[0].last_direction
+                )
         except (pickle.UnpicklingError, EOFError):
             console.corrupt_gamedata()
 
@@ -55,8 +56,8 @@ class Dialog(object):
             pickle.dump([self.engine.data,
                          self.engine.gamestate.deep_peek(-3).window.map1.name,
                          self.engine.gamestate.deep_peek(-3).window.map1.tmxpath,
-                         self.engine.gamestate.deep_peek(-3).window.heroes[0].rect.topleft,
-                         self.engine.gamestate.deep_peek(-3).window.heroes[0].last_direction], f)
+                         self.engine.gamestate.deep_peek(-3).window.party_sprites[0].rect.topleft,
+                         self.engine.gamestate.deep_peek(-3).window.party_sprites[0].last_direction], f)
 
     @staticmethod
     def delete(filename):

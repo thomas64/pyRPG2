@@ -492,12 +492,7 @@
   <object id="178" name="step_grass" x="224" y="480" width="32" height="416"/>
  </objectgroup>
  <objectgroup name="objects">
-  <object id="179" name="treasurechest" x="1056" y="224" width="32" height="32">
-   <properties>
-    <property name="gold" value="100"/>
-    <property name="herbs" value="3"/>
-   </properties>
-  </object>
+  <object id="179" name="treasure_chest" type="chest1" x="1056" y="224" width="32" height="32"/>
  </objectgroup>
  <objectgroup name="low_blocker">
   <object id="157" x="864" y="608" width="32" height="112"/>

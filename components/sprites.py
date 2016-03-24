@@ -131,13 +131,13 @@ class TreasureChest(pygame.sprite.Sprite):
     """
     De TreasureChest Sprite.
     """
-    def __init__(self, name, rect, layer, content):
+    def __init__(self, chest_id, rect, objectlayer):
         pygame.sprite.Sprite.__init__(self)
 
-        self.name = name
+        self.chest_id = chest_id
         self.rect = rect
-        self._layer = layer
-        self.content = content
+        self._layer = objectlayer
+        self.image = None
 
         sprite_sheet = pygame.image.load(CHESTSPRITE).convert_alpha()
 
@@ -147,15 +147,12 @@ class TreasureChest(pygame.sprite.Sprite):
         self.image_list = (self.spritesheet_dict['closed'],
                            self.spritesheet_dict['opened'])
 
-        self.index = 0
-        self.image = self.image_list[self.index]
-
-    def open(self):
+    def render(self, opened):
         """
-        Pas de image aan van de gesloten naar de open chest.
+        Geef de weergave van de chest.
+        :param opened: integer 0 of 1, uit de TreasureChestDatabase.
         """
-        self.index = 1
-        self.image = self.image_list[self.index]
+        self.image = self.image_list[opened]
 
     def get_blocker(self):
         """

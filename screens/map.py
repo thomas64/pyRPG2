@@ -20,7 +20,7 @@ OBJECTS = "objects"
 SOUNDS = "sounds"
 
 OBJECTLAYER = 2
-TREASURECHEST = "treasurechest"
+TREASURECHEST = "treasure_chest"    # naam van object in de tmx map
 
 
 class Map(object):
@@ -59,13 +59,9 @@ class Map(object):
 
         for obj in tmx_data.get_layer_by_name(OBJECTS):
             if obj.name == TREASURECHEST:
-                content_dict = {}
-                for prop_key, prop_value in obj.properties.items():
-                    content_dict[prop_key] = prop_value
-                chest_object = components.sprites.TreasureChest(obj.name, self._pg_rect(obj), OBJECTLAYER, content_dict)
+                chest_object = components.sprites.TreasureChest(obj.type, self._pg_rect(obj), OBJECTLAYER)
                 self.low_blocker_rects.append(chest_object.get_blocker())
                 self.objects.append(chest_object)
-                # todo, identificatie met id? om status te kunnen saven bijv.
 
         for nrect in tmx_data.get_layer_by_name(SOUNDS):
             self.sounds.append(components.namedrect.NamedRect(nrect.name, self._pg_rect(nrect)))

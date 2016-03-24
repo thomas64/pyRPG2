@@ -33,6 +33,7 @@ class MainMenu(screens.menu.basemenu.BaseMenu):
         """
         if menu_item.func == self.NewGame:
             self.engine.data = data.Data()
+            self.engine.script.new_game()
             push_object = screens.overworld.Overworld(self.engine)
             self.engine.gamestate.change(push_object)
 
