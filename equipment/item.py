@@ -3,6 +3,8 @@
 class: EquipmentItem
 """
 
+import enum
+
 
 class EquipmentItem(object):
     """
@@ -58,6 +60,8 @@ class EquipmentItem(object):
         for attr in attr_tuple:
             value_of_attr = self.get_value_of(attr[1])
             if value_of_attr:
+                if isinstance(value_of_attr, enum.Enum):    # uitzondering alleen voor 'skl'
+                    value_of_attr = value_of_attr.value
                 attr_list.append((attr[0], str(value_of_attr)))
 
         return attr_list

@@ -9,7 +9,7 @@ import characters.stats
 import characters.skills
 import console
 from equipment import EquipmentType as EqpT
-import equipment
+from equipment import WeaponType as WpnT
 
 
 PATH = 'resources/sprites/heroes/'
@@ -256,11 +256,11 @@ class Hero(object):
         :return: Als het item geen skl waarde heeft, zoals bijv boots, return True.
         :return: als de qty waarde > 0 return True. Als de waarde 0 of -1 is return False.
         """
-        wpn_skl = new_equipment_item.get_value_of('SKL')    # wpn_skl is een Enum.value van WeaponType
+        wpn_skl = new_equipment_item.get_value_of('SKL')    # wpn_skl is een Enum van WeaponType
         if wpn_skl == 0:
             return True
-        for wpn_typ in equipment.WeaponType:
-            if wpn_skl == wpn_typ.value:
+        for wpn_typ in WpnT:    # = Enum WeaponType
+            if wpn_skl == wpn_typ:
                 attr = getattr(self, wpn_typ.name)
                 if attr.qty > 0:
                     return True

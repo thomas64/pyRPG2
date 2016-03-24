@@ -30,32 +30,32 @@ class WeaponDatabase(collections.OrderedDict):
             "Silver":       (2500,           3,  12, 400,  96),
             "Titanium":     (3300,           0,  12, 500, 128)
         }
-        #                     val, min int, min str, hit, dam,                            skl, typ,   srt, row
+        #                     val, min int, min str, hit, dam,                      skl, typ,   srt, row
         weapon_type = {
-            "Dagger":        (100,       0,       6,  40,   8, equipment.WeaponType.swd.value,   2,  1000,   0),
-            "Short Sword":   (200,       0,      10,  50,   9, equipment.WeaponType.swd.value,   2,  2000,  32),
-            "Longsword":     (400,       0,      14,  60,  10, equipment.WeaponType.swd.value,   2,  3000,  64),
-            "Broadsword":    (800,       0,      18,  70,  11, equipment.WeaponType.swd.value,   2,  4000,  96),
+            "Dagger":        (100,       0,       6,  40,   8, equipment.WeaponType.swd,   2,  1000,   0),
+            "Short Sword":   (200,       0,      10,  50,   9, equipment.WeaponType.swd,   2,  2000,  32),
+            "Longsword":     (400,       0,      14,  60,  10, equipment.WeaponType.swd,   2,  3000,  64),
+            "Broadsword":    (800,       0,      18,  70,  11, equipment.WeaponType.swd,   2,  4000,  96),
 
-            "Mace":          (150,       0,      12,  30,  14, equipment.WeaponType.haf.value,   3,  5000, 128),
-            "Axe":           (300,       0,      15,  40,  15, equipment.WeaponType.haf.value,   3,  6000, 160),
-            "Poleaxe":       (600,       0,      18,  50,  16, equipment.WeaponType.haf.value,   3,  7000, 192),
-            "Maul":         (1200,       0,      21,  60,  17, equipment.WeaponType.haf.value,   3,  8000, 224),
+            "Mace":          (150,       0,      12,  30,  14, equipment.WeaponType.haf,   3,  5000, 128),
+            "Axe":           (300,       0,      15,  40,  15, equipment.WeaponType.haf,   3,  6000, 160),
+            "Poleaxe":       (600,       0,      18,  50,  16, equipment.WeaponType.haf,   3,  7000, 192),
+            "Maul":         (1200,       0,      21,  60,  17, equipment.WeaponType.haf,   3,  8000, 224),
 
-            "Staff":          (75,       0,       8,  50,   2, equipment.WeaponType.pol.value,   1,  9000, 256),
-            "Spear":         (150,       0,      11,  60,   3, equipment.WeaponType.pol.value,   1, 10000, 288),
-            "Pike":          (300,       0,      14,  70,   4, equipment.WeaponType.pol.value,   1, 11000, 320),
-            "Lance":         (600,       0,      17,  80,   5, equipment.WeaponType.pol.value,   1, 12000, 352),
+            "Staff":          (75,       0,       8,  50,   2, equipment.WeaponType.pol,   1,  9000, 256),
+            "Spear":         (150,       0,      11,  60,   3, equipment.WeaponType.pol,   1, 10000, 288),
+            "Pike":          (300,       0,      14,  70,   4, equipment.WeaponType.pol,   1, 11000, 320),
+            "Lance":         (600,       0,      17,  80,   5, equipment.WeaponType.pol,   1, 12000, 352),
 
-            "Shortbow":      (200,      10,       0,  40,   8, equipment.WeaponType.mis.value,   4, 13000, 384),
-            "Longbow":       (400,      12,       0,  50,   9, equipment.WeaponType.mis.value,   4, 14000, 416),
-            "Great Bow":     (800,      14,       0,  60,  10, equipment.WeaponType.mis.value,   4, 15000, 448),
-            "War Bow":      (1600,      16,       0,  70,  11, equipment.WeaponType.mis.value,   4, 16000, 480),
+            "Shortbow":      (200,      10,       0,  40,   8, equipment.WeaponType.mis,   4, 13000, 384),
+            "Longbow":       (400,      12,       0,  50,   9, equipment.WeaponType.mis,   4, 14000, 416),
+            "Great Bow":     (800,      14,       0,  60,  10, equipment.WeaponType.mis,   4, 15000, 448),
+            "War Bow":      (1600,      16,       0,  70,  11, equipment.WeaponType.mis,   4, 16000, 480),
 
-            "Dart":           (50,       4,       0,  30,   2, equipment.WeaponType.thr.value,   2, 17000, 512),
-            "Knife":         (100,      10,       0,  40,   3, equipment.WeaponType.thr.value,   2, 18000, 544),
-            "Hatchet":       (200,      16,       0,  50,   4, equipment.WeaponType.thr.value,   2, 19000, 576),
-            "Javelin":       (400,      22,       0,  60,   5, equipment.WeaponType.thr.value,   2, 20000, 608)
+            "Dart":           (50,       4,       0,  30,   2, equipment.WeaponType.thr,   2, 17000, 512),
+            "Knife":         (100,      10,       0,  40,   3, equipment.WeaponType.thr,   2, 18000, 544),
+            "Hatchet":       (200,      16,       0,  50,   4, equipment.WeaponType.thr,   2, 19000, 576),
+            "Javelin":       (400,      22,       0,  60,   5, equipment.WeaponType.thr,   2, 20000, 608)
         }
         #                     val, hit, dam, srt
         weapon_upgraded = {
@@ -101,12 +101,12 @@ class WeaponDatabase(collections.OrderedDict):
         # min_int op 0 zetten voor close weapons
         # min_str op 0 zetten voor range weapons
         for weapon_key, weapon_value in self.items():
-            if weapon_value['skl'] in (equipment.WeaponType.swd.value,
-                                       equipment.WeaponType.haf.value,
-                                       equipment.WeaponType.pol.value):
+            if weapon_value['skl'] in (equipment.WeaponType.swd,
+                                       equipment.WeaponType.haf,
+                                       equipment.WeaponType.pol):
                 weapon_value['min_int'] = 0
-            elif weapon_value['skl'] in (equipment.WeaponType.mis.value,
-                                         equipment.WeaponType.thr.value):
+            elif weapon_value['skl'] in (equipment.WeaponType.mis,
+                                         equipment.WeaponType.thr):
                 weapon_value['min_str'] = 0
 
         # Shop uitzetten voor sommige equipment items.
