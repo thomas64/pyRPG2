@@ -43,35 +43,36 @@ class EquipmentType(enum.Enum):
     acy = "Accessory"
 
     @classmethod
-    def get_empty_equipment_item_of_this_type(cls, equipment_type):
+    def get_equipment_item_of_this_type(cls, equipment_type, equipment_item_key):
         """
-        Geeft een 'empty' equipment item terug op verzoek van het type.
+        Geeft een equipment item terug op verzoek van het type en de key, geef een 'empty' terug bij key = None.
         :param equipment_type: Enum EquipmentType.value, dus bijv. "Shield".
+        :param equipment_item_key: een sleutel uit de eqp items databases bijv "bronzeshortsword"
         """
         if equipment_type == cls.wpn.value:
-            return WeaponDatabase.factory(None)
+            return WeaponDatabase.factory(equipment_item_key)
         elif equipment_type == cls.sld.value:
-            return ShieldDatabase.factory(None)
+            return ShieldDatabase.factory(equipment_item_key)
         elif equipment_type == cls.hlm.value:
-            return HelmetDatabase.factory(None)
+            return HelmetDatabase.factory(equipment_item_key)
         elif equipment_type == cls.amu.value:
-            return AmuletDatabase.factory(None)
+            return AmuletDatabase.factory(equipment_item_key)
         elif equipment_type == cls.arm.value:
-            return ArmorDatabase.factory(None)
+            return ArmorDatabase.factory(equipment_item_key)
         elif equipment_type == cls.clk.value:
-            return CloakDatabase.factory(None)
+            return CloakDatabase.factory(equipment_item_key)
         elif equipment_type == cls.brc.value:
-            return BraceletDatabase.factory(None)
+            return BraceletDatabase.factory(equipment_item_key)
         elif equipment_type == cls.glv.value:
-            return GlovesDatabase.factory(None)
+            return GlovesDatabase.factory(equipment_item_key)
         elif equipment_type == cls.rng.value:
-            return RingDatabase.factory(None)
+            return RingDatabase.factory(equipment_item_key)
         elif equipment_type == cls.blt.value:
-            return BeltDatabase.factory(None)
+            return BeltDatabase.factory(equipment_item_key)
         elif equipment_type == cls.bts.value:
-            return BootsDatabase.factory(None)
+            return BootsDatabase.factory(equipment_item_key)
         elif equipment_type == cls.acy.value:
-            return AccessoryDatabase.factory(None)
+            return AccessoryDatabase.factory(equipment_item_key)
 
 
 class WeaponType(enum.Enum):

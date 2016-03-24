@@ -8,6 +8,7 @@ import collections
 import pygame
 
 import components.sprites
+from equipment import EquipmentType
 import keys
 import screens.unit
 import screens.direction
@@ -32,8 +33,6 @@ PLAYERLAYER = 3
 GRIDLAYER = 8
 CBOXLAYER = 9
 GRIDSIZE = 32
-
-TREASURECHEST = "treasure_chest"    # naam van object in de tmx map
 
 NEWMAPTIMEOUT = 0.1  # minimale keyblock. Zonder deze timer kun je op de movement keys drukken terwijl de map laadt.
 
@@ -191,13 +190,14 @@ class Window(object):
 
     def render(self):
         """
-        Render de plaatjes van de objecten
+        Render de plaatjes van de objecten.
         Teken de window inhoud.
         """
         for obj in self.map1.objects:
-            if obj.name == TREASURECHEST:
-                chest_data = self.engine.data.treasure_chests[obj.chest_id]
-                obj.render(chest_data['opened'])
+            # todo, hij doet dit nu bij alle objecten in de lijst, ook de niet chests. moet nog uitgesplit worden
+            # of voorwaarde scheppen als het een class van treasurechest is oid.
+            chest_data = self.engine.data.treasure_chests[obj.chest_id]
+            obj.render(chest_data['opened'])
 
         self.group.draw(self.surface)
 
@@ -260,6 +260,8 @@ class Window(object):
                 chest_sprite = self.map1.objects[object_nr]
                 chest_data = self.engine.data.treasure_chests[chest_sprite.chest_id]
                 chest_data['opened'] = 1
-                print("got {}".format(chest_data['content']))
+                for eqp_item in chest_data['content'].values():
+                    equipment_item = EquipmentType.get_equipment_item_of_this_type(eqp_item['typ'], eqp_item['nam'])
+                    self.engine.data.inventory.add(equipment_item, quantity=eqp_item['qty'], verbose=True)
                 chest_data['content'] = dict()
-                # todo, items ook daadwerkelijk in inventory komen en een popup window maken
+                # todo, een popup window maken
