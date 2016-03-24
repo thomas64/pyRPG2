@@ -4,7 +4,6 @@ class: Display
 """
 
 import pygame
-import pygame.gfxdraw
 
 import audio as sfx
 import keys
@@ -14,7 +13,6 @@ import statemachine
 
 BACKGROUNDCOLOR1 = pygame.Color("black")
 BACKGROUNDCOLOR2 = pygame.Color("white")
-BACKGROUNDTRANS = (0, 0, 0, 224)       # 1-255 hoger is zwarter
 
 MENUFONTCOLOR1 = pygame.Color("white")
 MENUFONTCOLOR2 = pygame.Color("yellow")
@@ -49,15 +47,10 @@ class Display(object):
         self.audio = audio
         self.name = state_name
         self.title = title
-
+        self.scr_capt = scr_capt
         self.animation = animation
         if self.animation:
             self.animation.set_position(bg_width, bg_height)
-
-        self.scr_capt = scr_capt
-        if self.scr_capt:
-            self.background.blit(self.scr_capt, (0, 0))         # gooi over het hele scherm de overworld achtergrond
-            pygame.gfxdraw.box(self.background, self.screen.get_rect(), BACKGROUNDTRANS)  # en een doorzichtige laag
 
         self.menu_content = menu_content                        # het object OrderedDict genaamd inside
         self.menu_texts = []                                    # een list van MenuText objecten
@@ -175,6 +168,9 @@ class Display(object):
         self.menu_texts[self.cur_item].set_font_color(self.color2)
 
         self.screen.blit(self.background, (0, 0))
+
+        if self.scr_capt:
+            self.scr_capt.render()
 
         if self.animation:
             self.animation.render(self.screen)

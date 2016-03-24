@@ -3,8 +3,7 @@
 def: create_menu
 """
 
-import pygame
-
+import components.screencapture
 import screens.menu.animation
 import screens.menu.display
 import screens.menu.mainmenu
@@ -70,8 +69,7 @@ def create_menu(state_name, engine, title=None, animation=None, scr_capt=None, s
         content = screens.menu.pausemenu.PauseMenu(engine)
         title = None
         animation = None
-        scr_data = pygame.image.tostring(engine.screen, 'RGBA')    # maak een screen capture
-        scr_capt = pygame.image.frombuffer(scr_data, engine.screen.get_size(), 'RGBA').convert()
+        scr_capt = components.screencapture.ScreenCapture(engine.screen)
         select = 0
 
     return screens.menu.display.Display(engine.screen, engine.audio, state_name,
