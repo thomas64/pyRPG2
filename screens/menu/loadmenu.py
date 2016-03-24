@@ -74,6 +74,7 @@ class LoadMenu(screens.menu.basemenu.BaseMenu):
             # het zit wel in mainmenu newgame, maar dat is logisch, hier niet!!
             self.engine.script.new_game()
             ###
+            # todo, geluid laden gaat ook niet goed, 2x
             self.engine.gamestate.change(screens.overworld.Overworld(self.engine))
             filename = self._convert_to_filename(menu_item.text, index)
             loadsave.Dialog(self.engine).load(filename)

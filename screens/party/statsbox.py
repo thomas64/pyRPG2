@@ -135,7 +135,7 @@ class StatsBox(object):
                 color = FONTCOLOR1
             self.table_view[index].append(self.normalfont.render(row[0], True, color).convert_alpha())
             self.table_view[index].append(self.normalfont.render(row[1], True, FONTCOLOR1).convert_alpha())
-            self._set_color(row[2], self.table_view[index], POSCOLOR1, NEGCOLOR1, None)
+            self._set_color(row[2], self.table_view[index], POSCOLOR1, NEGCOLOR1, "")  # "" = None, maar dat gaf melding
             self._set_color(row[5], self.table_view[index], POSCOLOR2, NEGCOLOR2, row[0])  # dit is om weight te bepalen
 
     def render(self, screen):
