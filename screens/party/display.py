@@ -42,9 +42,9 @@ class Display(object):
     """
     Overzicht scherm PartyScreen.
     """
-    def __init__(self, screen, engine):
+    def __init__(self, engine):
         self.engine = engine
-        self.screen = screen
+        self.screen = pygame.display.get_surface()
         self.background = pygame.Surface(self.screen.get_size())
         self.background.fill(BACKGROUNDCOLOR)
         self.background = self.background.convert()

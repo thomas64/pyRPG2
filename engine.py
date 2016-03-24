@@ -36,8 +36,8 @@ class GameEngine(object):
         self.gamestate = statemachine.StateMachine()
         self.data = None
         self.script = script.Script(self)
-        self.video = video.Video(self)
-        self.audio = audio.Audio(self)
+        self.video = video.Video()
+        self.audio = audio.Audio(self.gamestate)
 
         self.running = False
 

@@ -27,8 +27,8 @@ class InputBox(object):
     """
     Geeft een input box weer om te kunnen typen.
     """
-    def __init__(self, screen):
-        self.screen = screen
+    def __init__(self):
+        self.screen = pygame.display.get_surface()
         self.surface = pygame.Surface((BOXWIDTH, BOXHEIGHT))
         self.surface = self.surface.convert()
         self.rect = self.surface.get_rect()

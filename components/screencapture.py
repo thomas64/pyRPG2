@@ -13,14 +13,14 @@ class ScreenCapture(object):
     """
     Maak een schermafdruk en maak het wazig.
     """
-    def __init__(self, screen):
-        self.screen = screen
-        scr_data = pygame.image.tostring(screen, 'RGBA')                            # maak een screen capture
-        self.scr_capt = pygame.image.frombuffer(scr_data, screen.get_size(), 'RGBA').convert()
-        pygame.gfxdraw.box(self.scr_capt, self.screen.get_rect(), BACKGROUNDTRANS)  # en een doorzichtige laag
+    def __init__(self):
+        self.screen = pygame.display.get_surface()
+        scr_data = pygame.image.tostring(self.screen, 'RGBA')                       # maak een screen capture
+        self.image = pygame.image.frombuffer(scr_data, self.screen.get_size(), 'RGBA').convert()
+        pygame.gfxdraw.box(self.image, self.screen.get_rect(), BACKGROUNDTRANS)     # en een doorzichtige laag
 
     def render(self):
         """
         Teken het op het scherm.
         """
-        self.screen.blit(self.scr_capt, (0, 0))
+        self.screen.blit(self.image, (0, 0))

@@ -28,8 +28,8 @@ class Display(object):
     """
     Een menuscherm.
     """
-    def __init__(self, screen, audio, state_name, menu_content, title, animation, scr_capt, cur_item=0):
-        self.screen = screen
+    def __init__(self, audio, state_name, menu_content, title, animation, scr_capt, cur_item=0):
+        self.screen = pygame.display.get_surface()
         self.background = pygame.Surface(self.screen.get_size())
         if animation:
             self.background.fill(BACKGROUNDCOLOR2)

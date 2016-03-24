@@ -69,8 +69,8 @@ def create_menu(state_name, engine, title=None, animation=None, scr_capt=None, s
         content = screens.menu.pausemenu.PauseMenu(engine)
         title = None
         animation = None
-        scr_capt = components.screencapture.ScreenCapture(engine.screen)
+        scr_capt = components.screencapture.ScreenCapture()
         select = 0
 
-    return screens.menu.display.Display(engine.screen, engine.audio, state_name,
+    return screens.menu.display.Display(engine.audio, state_name,
                                         content, title, animation, scr_capt, select)

@@ -18,16 +18,16 @@ class Video(object):
     """
     Video instellingen.
     """
-    def __init__(self, engine):
-        self.engine = engine
+    def __init__(self):
+        self.screen = pygame.display.get_surface()
         self.fullscreen = False
         self._load_cfg()
 
         if self.fullscreen:
-            pygame.display.set_mode((self.engine.screen.get_size()),
+            pygame.display.set_mode((self.screen.get_size()),
                                     pygame.FULLSCREEN | pygame.DOUBLEBUF | pygame.HWSURFACE)
         else:
-            pygame.display.set_mode(self.engine.screen.get_size())
+            pygame.display.set_mode(self.screen.get_size())
 
     def _load_cfg(self):
         """
@@ -58,8 +58,8 @@ class Video(object):
         Zet fullscreen aan als het uit staat en vice versa.
         """
         if self.fullscreen:
-            pygame.display.set_mode(self.engine.screen.get_size())
+            pygame.display.set_mode(self.screen.get_size())
         else:
-            pygame.display.set_mode((self.engine.screen.get_size()),
+            pygame.display.set_mode((self.screen.get_size()),
                                     pygame.FULLSCREEN | pygame.DOUBLEBUF | pygame.HWSURFACE)
         self.fullscreen ^= True

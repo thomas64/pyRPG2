@@ -15,7 +15,7 @@ import statemachine
 
 
 WINDOWWIDTH = 900
-WINDOWHEIGHT = 650
+WINDOWHEIGHT = 740
 WINDOWPOS = 10, 10
 
 BACKGROUNDCOLOR = pygame.Color("black")
@@ -43,7 +43,7 @@ class Overworld(object):
     """
     def __init__(self, engine):
         self.engine = engine
-        self.screen = self.engine.screen
+        self.screen = pygame.display.get_surface()
         self.background = pygame.Surface(self.screen.get_size())
         self.background.fill(BACKGROUNDCOLOR)
         self.background = self.background.convert()
@@ -147,8 +147,9 @@ class Overworld(object):
         Handel de view af in de window -> teken de achtergrond -> teken de window -> teken de buttons.
         """
         self.window.render()
-
-        pygame.draw.rect(self.background, LINECOLOR, (WINDOWPOS[0]-1, WINDOWPOS[1]-1, WINDOWWIDTH+2, WINDOWHEIGHT+2), 1)
+        # lijn om de window
+        # pygame.draw.rect(
+        #     self.background, LINECOLOR, (WINDOWPOS[0]-1, WINDOWPOS[1]-1, WINDOWWIDTH+2, WINDOWHEIGHT+2), 1)
         self.screen.blit(self.background, (0, 0))
         self.screen.blit(self.window.surface, WINDOWPOS)
 
@@ -162,5 +163,5 @@ class Overworld(object):
         self.engine.gamestate.push(push_object)
 
     def _show_party_screen(self):
-        push_object = screens.party.display.Display(self.screen, self.engine)
+        push_object = screens.party.display.Display(self.engine)
         self.engine.gamestate.push(push_object)
