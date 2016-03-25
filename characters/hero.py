@@ -8,8 +8,8 @@ import enum
 import characters.stats
 import characters.skills
 import console
-from equipment import EquipmentType as EqpT
-from equipment import WeaponType as WpnT
+import database
+import equipment
 
 
 PATH = 'resources/sprites/heroes/'
@@ -58,18 +58,25 @@ class Hero(object):
         self.skills_tuple = (self.alc, self.dip, self.hlr, self.lor, self.mec, self.mer, self.ran, self.stl, self.thf,
                              self.trb, self.war, self.wiz, self.haf, self.mis, self.pol, self.shd, self.swd, self.thr)
 
-        self.wpn = EqpT.factory_equipment_item(EqpT.wpn, kwargs['wpn'])
-        self.sld = EqpT.factory_equipment_item(EqpT.sld, kwargs['sld'])
-        self.hlm = EqpT.factory_equipment_item(EqpT.hlm, None)
-        self.amu = EqpT.factory_equipment_item(EqpT.amu, None)
-        self.arm = EqpT.factory_equipment_item(EqpT.arm, kwargs['arm'])
-        self.clk = EqpT.factory_equipment_item(EqpT.clk, None)
-        self.brc = EqpT.factory_equipment_item(EqpT.brc, None)
-        self.glv = EqpT.factory_equipment_item(EqpT.glv, None)
-        self.rng = EqpT.factory_equipment_item(EqpT.rng, None)
-        self.blt = EqpT.factory_equipment_item(EqpT.blt, None)
-        self.bts = EqpT.factory_equipment_item(EqpT.bts, None)
-        self.acy = EqpT.factory_equipment_item(EqpT.acy, None)
+        self.wpn = equipment.factory_empty_equipment_item(database.EquipmentType.wpn)
+        self.sld = equipment.factory_empty_equipment_item(database.EquipmentType.sld)
+        self.hlm = equipment.factory_empty_equipment_item(database.EquipmentType.hlm)
+        self.amu = equipment.factory_empty_equipment_item(database.EquipmentType.amu)
+        self.arm = equipment.factory_empty_equipment_item(database.EquipmentType.arm)
+        self.clk = equipment.factory_empty_equipment_item(database.EquipmentType.clk)
+        self.brc = equipment.factory_empty_equipment_item(database.EquipmentType.brc)
+        self.glv = equipment.factory_empty_equipment_item(database.EquipmentType.glv)
+        self.rng = equipment.factory_empty_equipment_item(database.EquipmentType.rng)
+        self.blt = equipment.factory_empty_equipment_item(database.EquipmentType.blt)
+        self.bts = equipment.factory_empty_equipment_item(database.EquipmentType.bts)
+        self.acy = equipment.factory_empty_equipment_item(database.EquipmentType.acy)
+
+        if kwargs['wpn']:
+            self.set_equipment_item(equipment.factory_equipment_item(kwargs['wpn']))
+        if kwargs['sld']:
+            self.set_equipment_item(equipment.factory_equipment_item(kwargs['sld']))
+        if kwargs['arm']:
+            self.set_equipment_item(equipment.factory_equipment_item(kwargs['arm']))
 
     @property
     def equipment_tuple(self):
@@ -259,7 +266,7 @@ class Hero(object):
         wpn_skl = new_equipment_item.get_value_of('SKL')    # wpn_skl is een Enum van WeaponType
         if wpn_skl == 0:
             return True
-        for wpn_typ in WpnT:    # = Enum WeaponType
+        for wpn_typ in database.WeaponType:    # = Enum WeaponType
             if wpn_skl == wpn_typ:
                 attr = getattr(self, wpn_typ.name)
                 if attr.qty > 0:

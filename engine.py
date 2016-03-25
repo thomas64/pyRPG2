@@ -159,7 +159,7 @@ class GameEngine(object):
             except AttributeError:
                 pass
             try:
-                hero = self.gamestate.peek().window.heroes[0]
+                hero = self.gamestate.peek().window.party_sprites[0]
                 text2 = (
                     "map:               {}".format(self.gamestate.peek().window.map1.name),
                     "zoom:              {:.1f}".format(self.gamestate.peek().window.map1.map_layer.zoom),

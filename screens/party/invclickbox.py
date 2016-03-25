@@ -5,7 +5,7 @@ class: InvClickBox
 
 import pygame
 
-from equipment import EquipmentType
+import equipment
 import keys
 
 BACKGROUNDCOLOR = pygame.Color("black")
@@ -51,7 +51,7 @@ class InvClickBox(object):
         black_spr = pygame.image.load(TRANSP).convert_alpha()
 
         # de eerste rij
-        empty_equipment_item = EquipmentType.factory_equipment_item(self.equipment_type, None)
+        empty_equipment_item = equipment.factory_empty_equipment_item(self.equipment_type)
         self.table_data.append(
             # row[0],   row[1],  row[2],        row[3],                               row[4],      row[5], row[6]
             [black_spr, black_spr, "", "Unequip " + self.equipment_type.value, empty_equipment_item, None, "E"]

@@ -10,8 +10,7 @@ class EquipmentItem(object):
     """
     Een EquipmentItem object met attributen als de waarden van de extra's die het item heeft zoals THF.
     """
-    def __init__(self, equipment_type, **kwargs):
-        self.TYP = equipment_type                                       # Enum van EquipmentType.value
+    def __init__(self, **kwargs):
         self.qty = 1
 
         for eqp_value_key, eqp_value_value in kwargs.items():
@@ -28,6 +27,7 @@ class EquipmentItem(object):
         except AttributeError:
             pass
 
+    # noinspection PyUnresolvedReferences
     def display(self):
         """
         Deze is voor weergave. Voeg de gevonden attributen op volgorde samen.

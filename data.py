@@ -3,8 +3,6 @@
 class: Data
 """
 
-import collections
-
 import containers
 
 
@@ -14,7 +12,7 @@ class Data(object):
     """
     def __init__(self):
 
-        self.heroes = collections.OrderedDict()
+        self.heroes = dict()
         self.treasure_chests = dict()
 
         self.party = containers.Party()

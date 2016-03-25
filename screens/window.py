@@ -10,7 +10,7 @@ import pygame
 import audio as sfx
 import components.messagebox
 import components.sprites
-from equipment import EquipmentType
+import equipment
 import keys
 import screens.unit
 import screens.direction
@@ -265,7 +265,7 @@ class Window(object):
                     chest_data['opened'] = 1
                     message = ["Found:"]
                     for eqp_item in chest_data['content'].values():
-                        equipment_item = EquipmentType.factory_equipment_item(eqp_item['typ'], eqp_item['nam'])
+                        equipment_item = equipment.factory_equipment_item(eqp_item['nam'])
                         self.engine.data.inventory.add(equipment_item, quantity=eqp_item['qty'], verbose=True)
                         message.append("{} {}".format(str(equipment_item.qty), str(equipment_item.NAM)))
                     self.engine.audio.play_sound(sfx.CHEST)

@@ -1,12 +1,11 @@
 
 """
-class: EquipmentType
-class: WeaponType
+def: factory_empty_equipment_item
+def: factory_equipment_item
 """
 
-import enum
-
-from equipment.item import EquipmentItem
+import console
+import equipment.item
 import database.weapon
 import database.shield
 import database.helmet
@@ -25,78 +24,44 @@ import database.accessory
 # - mvp aan items
 
 
-class EquipmentType(enum.Enum):
+def factory_empty_equipment_item(equipment_type):
     """
-    Alle equipment typen op een rij.
+    Geeft een 'empty' EquipmentItem object terug op verzoek van een type.
+    Met **, hij verwacht een dict.
+    :param equipment_type: Enum EquipmentType, dus bijv. "sld" "Shield".
     """
-    wpn = "Weapon"
-    sld = "Shield"
-    hlm = "Helmet"
-    amu = "Amulet"
-    arm = "Armor"
-    clk = "Cloak"
-    brc = "Bracelet"
-    glv = "Gloves"
-    rng = "Ring"
-    blt = "Belt"
-    bts = "Boots"
-    acy = "Accessory"
-
-    @classmethod
-    def factory_equipment_item(cls, equipment_type, equipment_item_key):
-        """
-        Geeft een equipment item terug op verzoek van het type en de key, geef een 'empty' terug bij key = None.
-        :param equipment_type: Enum EquipmentType, dus bijv. "sld" "Shield".
-        :param equipment_item_key: een sleutel uit de eqp items databases bijv "bronzeshortsword"
-        """
-        if equipment_type == cls.wpn:
-            return WeaponDatabase.factory(equipment_item_key)
-        elif equipment_type == cls.sld:
-            return ShieldDatabase.factory(equipment_item_key)
-        elif equipment_type == cls.hlm:
-            return HelmetDatabase.factory(equipment_item_key)
-        elif equipment_type == cls.amu:
-            return AmuletDatabase.factory(equipment_item_key)
-        elif equipment_type == cls.arm:
-            return ArmorDatabase.factory(equipment_item_key)
-        elif equipment_type == cls.clk:
-            return CloakDatabase.factory(equipment_item_key)
-        elif equipment_type == cls.brc:
-            return BraceletDatabase.factory(equipment_item_key)
-        elif equipment_type == cls.glv:
-            return GlovesDatabase.factory(equipment_item_key)
-        elif equipment_type == cls.rng:
-            return RingDatabase.factory(equipment_item_key)
-        elif equipment_type == cls.blt:
-            return BeltDatabase.factory(equipment_item_key)
-        elif equipment_type == cls.bts:
-            return BootsDatabase.factory(equipment_item_key)
-        elif equipment_type == cls.acy:
-            return AccessoryDatabase.factory(equipment_item_key)
+    return equipment.item.EquipmentItem(**dict(typ=equipment_type))
 
 
-class WeaponType(enum.Enum):
+def factory_equipment_item(equipment_item_key):
     """
-    Alle weapon types en shield op een rij.
+    Geeft een EquipmentItem object terug op verzoek van een key.
+    :param equipment_item_key: een sleutel uit de eqp items databases bijv "bronzeshortsword"
     """
-    swd = "Sword"
-    haf = "Hafted"
-    pol = "Pole"
-    mis = "Missile"
-    thr = "Thrown"
-    shd = "Shield"
-
-
-# Maak van alle equipment databases objecten, om die te kunnen laten gebruiken in het spel.
-AccessoryDatabase = database.accessory.AccessoryDatabase()
-AmuletDatabase = database.amulet.AmuletDatabase()
-ArmorDatabase = database.armor.ArmorDatabase()
-BeltDatabase = database.belt.BeltDatabase()
-BootsDatabase = database.boots.BootsDatabase()
-CloakDatabase = database.cloak.CloakDatabase()
-BraceletDatabase = database.bracelet.BraceletDatabase()
-GlovesDatabase = database.gloves.GlovesDatabase()
-HelmetDatabase = database.helmet.HelmetDatabase()
-RingDatabase = database.ring.RingDatabase()
-ShieldDatabase = database.shield.ShieldDatabase()
-WeaponDatabase = database.weapon.WeaponDatabase()
+    if equipment_item_key in database.weapon.w:
+        return equipment.item.EquipmentItem(**database.weapon.w[equipment_item_key])
+    elif equipment_item_key in database.shield.s:
+        return equipment.item.EquipmentItem(**database.shield.s[equipment_item_key])
+    elif equipment_item_key in database.helmet.h:
+        return equipment.item.EquipmentItem(**database.helmet.h[equipment_item_key])
+    elif equipment_item_key in database.amulet.a:
+        return equipment.item.EquipmentItem(**database.amulet.a[equipment_item_key])
+    elif equipment_item_key in database.armor.a:
+        return equipment.item.EquipmentItem(**database.armor.a[equipment_item_key])
+    elif equipment_item_key in database.cloak.c:
+        return equipment.item.EquipmentItem(**database.cloak.c[equipment_item_key])
+    elif equipment_item_key in database.bracelet.b:
+        return equipment.item.EquipmentItem(**database.bracelet.b[equipment_item_key])
+    elif equipment_item_key in database.gloves.g:
+        return equipment.item.EquipmentItem(**database.gloves.g[equipment_item_key])
+    elif equipment_item_key in database.ring.r:
+        return equipment.item.EquipmentItem(**database.ring.r[equipment_item_key])
+    elif equipment_item_key in database.belt.b:
+        return equipment.item.EquipmentItem(**database.belt.b[equipment_item_key])
+    elif equipment_item_key in database.boots.b:
+        return equipment.item.EquipmentItem(**database.boots.b[equipment_item_key])
+    elif equipment_item_key in database.accessory.a:
+        return equipment.item.EquipmentItem(**database.accessory.a[equipment_item_key])
+    else:
+        console.error_equipment_item_name_not_in_database(equipment_item_key)
+        raise KeyError
