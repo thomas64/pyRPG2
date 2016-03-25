@@ -264,10 +264,14 @@ class Window(object):
                 if chest_data['content']:
                     chest_data['opened'] = 1
                     message = ["Found:"]
-                    for eqp_item in chest_data['content'].values():
-                        equipment_item = equipment.factory_equipment_item(eqp_item['nam'])
-                        self.engine.data.inventory.add(equipment_item, quantity=eqp_item['qty'], verbose=True)
-                        message.append("{} {}".format(str(equipment_item.qty), str(equipment_item.NAM)))
+                    for key, value in chest_data['content'].items():
+                        if key.startswith('eqp'):
+                            equipment_item = equipment.factory_equipment_item(value['nam'])
+                            self.engine.data.inventory.add(equipment_item, quantity=value['qty'])
+                            message.append("{} {}".format(str(equipment_item.qty), str(equipment_item.NAM)))
+                        elif key.startswith('itm'):
+                            self.engine.data.pouch.add(value['nam'], quantity=value['qty'])
+                            message.append("{} {}".format(str(value['qty']), str(value['nam'].name)))
                     self.engine.audio.play_sound(sfx.CHEST)
                     components.messagebox.MessageBox(message).message_loop()
                     chest_data['content'] = dict()

@@ -8,6 +8,7 @@ from pouchitems import PouchItem
 
 
 # todo, nog niet tevreden, eigenlijk moeten de pouchitems een apart object zijn met een qty attr.
+# en met een sprite icon attr, zodat plaatje kan weergegeven worden in messagebox bij openen van chest.
 
 class Pouch(dict):
     """
