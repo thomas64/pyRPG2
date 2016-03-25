@@ -6,6 +6,7 @@ class: Script
 import characters
 import database.treasurechest
 import equipment
+from pouchitems import PouchItem
 
 
 class Script(object):
@@ -32,11 +33,13 @@ class Script(object):
         # Vul de party aan met de eerste hero
         self.engine.data.party.add(self.engine.data.heroes['alagos'], verbose=False)
         # De hieronder zijn om te testen
-        # self.engine.data.party.add(self.engine.data.heroes['galen'], verbose=False)
-        # self.engine.data.party.add(self.engine.data.heroes['luana'], verbose=False)
-        # self.engine.data.party.add(self.engine.data.heroes['grindan'], verbose=False)
-        # self.engine.data.party.add(self.engine.data.heroes['rydalin'], verbose=False)
-        # self.engine.data.party.add(self.engine.data.heroes['codrif'], verbose=False)
+        self.engine.data.party.add(self.engine.data.heroes['galen'], verbose=False)
+        self.engine.data.party.add(self.engine.data.heroes['luana'], verbose=False)
+        self.engine.data.party.add(self.engine.data.heroes['grindan'], verbose=False)
+        self.engine.data.party.add(self.engine.data.heroes['rydalin'], verbose=False)
+        self.engine.data.party.add(self.engine.data.heroes['codrif'], verbose=False)
 
         eqp_item = equipment.factory_equipment_item('bronzemace')
         self.engine.data.inventory.add(eqp_item, verbose=False)
+
+        self.engine.data.pouch.add(PouchItem.Gold, 1, verbose=False)

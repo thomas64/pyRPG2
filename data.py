@@ -17,3 +17,4 @@ class Data(object):
 
         self.party = containers.Party()
         self.inventory = containers.Inventory()
+        self.pouch = containers.Pouch()

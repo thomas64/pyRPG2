@@ -13,6 +13,7 @@ class Inventory(dict):
     def __init__(self, **kwargs):
         super().__init__(**kwargs)
         self.NAM = "Inventory"
+        self.MAX = 99
 
     def get_all_equipment_items_of_type(self, equipment_type):
         """
@@ -49,7 +50,7 @@ class Inventory(dict):
             raise ValueError
         if equipment_item.RAW in self:
             self[equipment_item.RAW].qty += quantity
-            if self[equipment_item.RAW].qty > 99:
+            if self[equipment_item.RAW].qty > self.MAX:
                 console.container_is_full(self.NAM)  # todo, hij geeft alleen nu nog maar mee, hij doet er nog niets aan
         else:
             # als hij nog niet in de inv dict zit, voeg hem toe.
@@ -57,10 +58,10 @@ class Inventory(dict):
             # equipment_item bestaat uit zichzelf al uit quantity = 1,
             # dus daarom, wanneer hij voor het eerst wordt toegevoegd: + qty - 1
             self[equipment_item.RAW].qty += (quantity - 1)
-            if self[equipment_item.RAW].qty > 99:
+            if self[equipment_item.RAW].qty > self.MAX:
                 console.container_is_full(self.NAM)  # todo, hij geeft alleen nu nog maar mee, hij doet er nog niets aan
         if verbose:
-            console.add_equipment_item(quantity, equipment_item.NAM, self.NAM)
+            console.add_item_in_container(quantity, equipment_item.NAM, self.NAM)
 
     def remove(self, equipment_item, quantity=1, verbose=True):
         """

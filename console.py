@@ -101,6 +101,7 @@ def container_is_full(container_name):
     """
     Party.add()
     Inventory.add()
+    Pouch.add()
     :param container_name: string
     """
     print("{} is full.".format(container_name))
@@ -149,14 +150,15 @@ def leader_not_leave_party():
     print("The party leader cannot leave his own party!")
 
 
-def add_equipment_item(equipment_item_quantity, equipment_item_name, inventory_name):
+def add_item_in_container(item_quantity, item_name, container_name):
     """
     Inventory.add()
-    :param equipment_item_quantity: integer
-    :param equipment_item_name: string
-    :param inventory_name: string
+    Pouch.add()
+    :param item_quantity: integer
+    :param item_name: string
+    :param container_name: string
     """
-    print("Put {} {} in {}.".format(equipment_item_quantity, equipment_item_name, inventory_name))
+    print("Put {} {} in {}.".format(item_quantity, item_name, container_name))
 
 
 def remove_equipment_item(equipment_item_quantity, equipment_item_name, inventory_name):
@@ -173,6 +175,8 @@ def error_quantity_less_than_one(quantity):
     """
     Inventory.add()
     Inventory.remove()
+    Pouch.add()
+    Pouch.remove()
     :param quantity: integer
     """
     print("Quantity of {} is not possible.".format(quantity))
@@ -190,6 +194,14 @@ def error_quantity_not_enough():
     Inventory.remove()
     """
     print("Item quantity not in container.")
+
+
+def quantity_not_enough(item_name, item_price, item_quantity):
+    """
+    Pouch.remove()
+    """
+    print("Not enough {}.".format(item_name))
+    print("You need {} more {}.".format(item_price - item_quantity, item_name))
 
 
 def error_equipment_item_name_not_in_database(equipment_item_name):
