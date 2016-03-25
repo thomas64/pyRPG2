@@ -27,7 +27,7 @@ class Script(object):
         self.engine.data.heroes['codrif'] = characters.HeroData.factory(characters.HeroData.codrif)
         self.engine.data.heroes['galen'] = characters.HeroData.factory(characters.HeroData.galen)
 
-        self.engine.data.treasure_chests = database.treasurechest.TreasureChestDatabase()
+        self.engine.data.treasure_chests = database.treasurechest.t
 
         # Vul de party aan met de eerste hero
         self.engine.data.party.add(self.engine.data.heroes['alagos'], verbose=False)

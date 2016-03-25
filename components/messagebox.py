@@ -17,7 +17,7 @@ FONTPOSX = 40
 FONTPOSY = 40
 LINEHEIGHT = 25
 
-MESSAGESPRITE = 'resources/sprites/messagebox.png'
+MESSAGESPRITE = 'resources/sprites/parchment.png'
 
 
 class MessageBox(object):

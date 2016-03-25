@@ -72,11 +72,11 @@ class Hero(object):
         self.acy = equipment.factory_empty_equipment_item(database.EquipmentType.acy)
 
         if kwargs['wpn']:
-            self.set_equipment_item(equipment.factory_equipment_item(kwargs['wpn']))
+            self.set_equipment_item(equipment.factory_equipment_item(kwargs['wpn']), verbose=False)
         if kwargs['sld']:
-            self.set_equipment_item(equipment.factory_equipment_item(kwargs['sld']))
+            self.set_equipment_item(equipment.factory_equipment_item(kwargs['sld']), verbose=False)
         if kwargs['arm']:
-            self.set_equipment_item(equipment.factory_equipment_item(kwargs['arm']))
+            self.set_equipment_item(equipment.factory_equipment_item(kwargs['arm']), verbose=False)
 
     @property
     def equipment_tuple(self):
