@@ -6,6 +6,7 @@ class: TreasureChestDatabase
 from pouchitems import PouchItem
 
 
+# is een class en geen losse dict, want anders wordt de dict niet ververst bij een nieuwe game.
 class TreasureChestDatabase(dict):
     """
     Alle schatkisten met inhoud op een rij.
