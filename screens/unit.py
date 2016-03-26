@@ -25,7 +25,7 @@ class Unit(pygame.sprite.Sprite):
     Unit extends the pygame.sprite.Sprite class
     """
     def __init__(self, spritesheet, position, direction, audio):
-        pygame.sprite.Sprite.__init__(self)
+        super().__init__()
 
         self.west_states = {0:  (32, 32, 32, 32), 1: (0, 32, 32, 32), 2: (32, 32, 32, 32), 3: (64, 32, 32, 32)}
         self.east_states = {0:  (32, 64, 32, 32), 1: (0, 64, 32, 32), 2: (32, 64, 32, 32), 3: (64, 64, 32, 32)}

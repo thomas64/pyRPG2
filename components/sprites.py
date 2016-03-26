@@ -26,7 +26,7 @@ class Button(pygame.sprite.Sprite):
     De gegevens van de knoppen in beeld.
     """
     def __init__(self, width, height, position, label, key):
-        pygame.sprite.Sprite.__init__(self)
+        super().__init__()
 
         self.width = width
         self.height = height
@@ -96,7 +96,7 @@ class ColorBox(pygame.sprite.Sprite):
     De gekleurde randen wanneer F11 is ingedrukt.
     """
     def __init__(self, rect, color, layer):
-        pygame.sprite.Sprite.__init__(self)
+        super().__init__()
 
         self._layer = layer
         self.image = pygame.Surface((rect.width, rect.height))
@@ -113,7 +113,7 @@ class Grid(pygame.sprite.Sprite):
     Een grid over de window wanneer F10 is ingedrukt.
     """
     def __init__(self, map_width, map_height, color, grid_size, layer):
-        pygame.sprite.Sprite.__init__(self)
+        super().__init__()
 
         self._layer = layer
         self.image = pygame.Surface((map_width, map_height))
@@ -132,7 +132,7 @@ class TreasureChest(pygame.sprite.Sprite):
     De TreasureChest Sprite.
     """
     def __init__(self, chest_id, rect, objectlayer):
-        pygame.sprite.Sprite.__init__(self)
+        super().__init__()
 
         self.chest_id = chest_id
         self.rect = rect
