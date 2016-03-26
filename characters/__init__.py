@@ -3,4 +3,4 @@
 Characters Package
 """
 
-from characters.hero import HeroData
+from .hero import HeroData

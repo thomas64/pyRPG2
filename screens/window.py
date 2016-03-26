@@ -12,6 +12,7 @@ import components.messagebox
 import components.sprites
 import equipment
 import keys
+import pouchitems
 import screens.unit
 import screens.direction
 import screens.map
@@ -270,8 +271,9 @@ class Window(object):
                             self.engine.data.inventory.add(equipment_item, quantity=value['qty'])
                             message.append("{} {}".format(str(equipment_item.qty), str(equipment_item.NAM)))
                         elif key.startswith('itm'):
-                            self.engine.data.pouch.add(value['nam'], quantity=value['qty'])
-                            message.append("{} {}".format(str(value['qty']), str(value['nam'].name)))
+                            pouch_item = pouchitems.factory_pouch_item(value['nam'])
+                            self.engine.data.pouch.add(pouch_item, quantity=value['qty'])
+                            message.append("{} {}".format(str(pouch_item.qty), str(pouch_item.NAM)))
                     self.engine.audio.play_sound(sfx.CHEST)
                     components.messagebox.MessageBox(message).message_loop()
                     chest_data['content'] = dict()

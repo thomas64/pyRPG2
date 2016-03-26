@@ -5,7 +5,7 @@ class: Unit
 
 import pygame
 
-from screens.direction import Direction
+from .direction import Direction
 import keys
 
 FEETWIDTH = 2       # hele kleine voetjes

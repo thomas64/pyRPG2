@@ -63,5 +63,5 @@ def factory_equipment_item(equipment_item_key):
     elif equipment_item_key in database.accessory.a:
         return equipment.item.EquipmentItem(**database.accessory.a[equipment_item_key])
     else:
-        console.error_equipment_item_name_not_in_database(equipment_item_key)
+        console.error_item_name_not_in_database(equipment_item_key)
         raise KeyError

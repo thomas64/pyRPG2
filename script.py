@@ -6,7 +6,7 @@ class: Script
 import characters
 import database.treasurechest
 import equipment
-from pouchitems import PouchItem
+import pouchitems
 
 
 class Script(object):
@@ -42,4 +42,5 @@ class Script(object):
         eqp_item = equipment.factory_equipment_item('bronzemace')
         self.engine.data.inventory.add(eqp_item, verbose=False)
 
-        self.engine.data.pouch.add(PouchItem.Gold, 1, verbose=False)
+        pouch_item = pouchitems.factory_pouch_item('gold')
+        self.engine.data.pouch.add(pouch_item, verbose=False)

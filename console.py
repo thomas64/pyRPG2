@@ -204,12 +204,13 @@ def quantity_not_enough(item_name, item_price, item_quantity):
     print("You need {} more {}.".format(item_price - item_quantity, item_name))
 
 
-def error_equipment_item_name_not_in_database(equipment_item_name):
+def error_item_name_not_in_database(item_name):
     """
-    EquipmentDatabase.factory()
-    :param equipment_item_name: string
+    equipment.factory()
+    pouchitems.factory()
+    :param item_name: string
     """
-    print("Cannot find {} in database.".format(equipment_item_name))
+    print("Cannot find {} in database.".format(item_name))
 
 
 def is_equipping(hero_name, equipment_item_name):

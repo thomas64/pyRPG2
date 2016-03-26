@@ -3,8 +3,6 @@
 class: TreasureChestDatabase
 """
 
-from pouchitems import PouchItem
-
 
 # is een class en geen losse dict, want anders wordt de dict niet ververst bij een nieuwe game.
 class TreasureChestDatabase(dict):
@@ -15,8 +13,8 @@ class TreasureChestDatabase(dict):
         super().__init__(**kwargs)
 
         # start_forest
-        self['chest1'] = dict(content=dict(itm1=dict(nam=PouchItem.Gold,     qty=100),
-                                           itm2=dict(nam=PouchItem.Herbs,    qty=3),
+        self['chest1'] = dict(content=dict(itm1=dict(nam='gold',             qty=100),
+                                           itm2=dict(nam='herbs',            qty=3),
                                            eqp1=dict(nam='bronzeshortsword', qty=1),
                                            eqp2=dict(nam='leathercap',       qty=1)))
 
