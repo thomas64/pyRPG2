@@ -36,6 +36,7 @@ PLAYERLAYER = 3
 GRIDLAYER = 8
 CBOXLAYER = 9
 GRIDSIZE = 32
+ICONSIZE = 32
 
 NEWMAPTIMEOUT = 0.1  # minimale keyblock. Zonder deze timer kun je op de movement keys drukken terwijl de map laadt.
 
@@ -264,16 +265,22 @@ class Window(object):
                 chest_data = self.engine.data.treasure_chests[chest_sprite.chest_id]
                 if chest_data['content']:
                     chest_data['opened'] = 1
-                    message = ["Found:"]
+                    text = ["Found:"]
+                    image = []
                     for key, value in chest_data['content'].items():
                         if key.startswith('eqp'):
                             equipment_item = equipment.factory_equipment_item(value['nam'])
+                            equipment_item_spr = pygame.image.load(equipment_item.SPR).subsurface(
+                                equipment_item.COL, equipment_item.ROW, ICONSIZE, ICONSIZE).convert_alpha()
                             self.engine.data.inventory.add(equipment_item, quantity=value['qty'])
-                            message.append("{} {}".format(str(equipment_item.qty), str(equipment_item.NAM)))
+                            text.append("{} {}".format(str(value['qty']), str(equipment_item.NAM)))
+                            image.append(equipment_item_spr)
                         elif key.startswith('itm'):
                             pouch_item = pouchitems.factory_pouch_item(value['nam'])
+                            pouch_item_spr = pygame.image.load(pouch_item.SPR).convert_alpha()
                             self.engine.data.pouch.add(pouch_item, quantity=value['qty'])
-                            message.append("{} {}".format(str(pouch_item.qty), str(pouch_item.NAM)))
+                            text.append("{} {}".format(str(value['qty']), str(pouch_item.NAM)))
+                            image.append(pouch_item_spr)
                     self.engine.audio.play_sound(sfx.CHEST)
-                    components.messagebox.MessageBox(message).message_loop()
+                    components.messagebox.MessageBox(text, image).message_loop()
                     chest_data['content'] = dict()
