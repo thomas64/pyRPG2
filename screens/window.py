@@ -282,5 +282,6 @@ class Window(object):
                             text.append("{} {}".format(str(value['qty']), str(pouch_item.NAM)))
                             image.append(pouch_item_spr)
                     self.engine.audio.play_sound(sfx.CHEST)
-                    components.messagebox.MessageBox(text, image).message_loop()
                     chest_data['content'] = dict()
+                    push_object = components.messagebox.MessageBox(self.engine.gamestate, text, image)
+                    self.engine.gamestate.push(push_object)

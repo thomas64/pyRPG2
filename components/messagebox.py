@@ -7,6 +7,7 @@ import pygame
 
 import components.screencapture
 import keys
+import statemachine
 
 BACKGROUNDCOLOR = pygame.Color("black")
 
@@ -23,13 +24,15 @@ IMGSPACE = 30
 MESSAGESPRITE = 'resources/sprites/parchment.png'
 
 
+# noinspection PyMissingOrEmptyDocstring
 class MessageBox(object):
     """
     Geeft een bericht weer op het scherm.
     """
-    def __init__(self, text, image=None):
+    def __init__(self, gamestate, text, image=None):
+        self.gamestate = gamestate
         self.screen = pygame.display.get_surface()
-
+        self.name = statemachine.States.MessageBox
         self.scr_capt = components.screencapture.ScreenCapture()
 
         self.font = pygame.font.SysFont(FONT, FONTSIZE)
@@ -38,8 +41,6 @@ class MessageBox(object):
         self.img_space = 0
         if self.image:
             self.img_space = IMGSPACE
-
-        self.running = False
 
         text_widths = []
         for row in text:
@@ -59,21 +60,6 @@ class MessageBox(object):
         self.background = pygame.image.load(MESSAGESPRITE).convert_alpha()
         self.background = pygame.transform.scale(self.background, self.surface.get_size())
 
-    def message_loop(self):
-        """
-        De loop waarin hij blijft, totdat de juiste input komt.
-        """
-        self.running = True
-        while self.running:
-
-            for event in pygame.event.get():
-                if event.type == pygame.QUIT:
-                    self.running = False
-                self.single_input(event)
-
-            self.render()
-            pygame.display.update()
-
     def single_input(self, event):
         """
         Handelt de muis en keyboard input af.
@@ -81,12 +67,12 @@ class MessageBox(object):
         """
         if event.type == pygame.KEYDOWN:
             if event.key == keys.EXIT:
-                self.running = False
+                self.gamestate.pop()
             if event.key in keys.SELECT:
-                self.running = False
+                self.gamestate.pop()
         if event.type == pygame.MOUSEBUTTONDOWN:
             if event.button == keys.LEFTCLICK:
-                self.running = False
+                self.gamestate.pop()
 
     def render(self):
         """
@@ -106,3 +92,15 @@ class MessageBox(object):
                 self.surface.blit(line, (FONTPOSX + self.img_space, FONTPOSY + i * LINEHEIGHT))
 
         self.screen.blit(self.surface, self.rect.topleft)
+
+    def on_enter(self):
+        pass
+
+    def on_exit(self):
+        pass
+
+    def multi_input(self, key_input, mouse_pos, dt):
+        pass
+
+    def update(self, dt):
+        pass

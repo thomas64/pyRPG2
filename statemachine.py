@@ -23,6 +23,7 @@ class States(enum.Enum):
     Battle = 7
     Conversation = 8
     PartyScreen = 9
+    MessageBox = 10
 
 
 class StateMachine(object):

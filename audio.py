@@ -136,8 +136,10 @@ class Audio(object):
         :param currentstate: self.gamestate.peek().name
         """
         # bij options menu moet er niets veranderen, en ook niet als hij van options komt.
+        # ook niet als hij van messagebox komt. todo, dit begint wat lelijk te worden.
         if currentstate != statemachine.States.OptionsMenu and \
-           self.gamestate.prev_state != statemachine.States.OptionsMenu:
+           self.gamestate.prev_state != statemachine.States.OptionsMenu and \
+           self.gamestate.prev_state != statemachine.States.MessageBox:
 
             if currentstate == statemachine.States.Overworld:
                 for _enum in MapMusic:
@@ -170,7 +172,8 @@ class Audio(object):
         :param currentstate: self.statemachine.peek()
         """
         if currentstate != statemachine.States.OptionsMenu and \
-           self.gamestate.prev_state != statemachine.States.OptionsMenu:
+           self.gamestate.prev_state != statemachine.States.OptionsMenu and \
+           self.gamestate.prev_state != statemachine.States.MessageBox:
             self.fade_bg_sounds()
             self.bg_sound_channel1.set_volume(1)
             self.bg_sound_channel2.set_volume(1)
