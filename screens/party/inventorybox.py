@@ -10,7 +10,7 @@ BACKGROUNDCOLOR = pygame.Color("black")
 LINECOLOR = pygame.Color("white")
 
 BOXWIDTH = 329
-BOXHEIGHT = 640
+BOXHEIGHT = 340
 TITLEX, TITLEY = 7, 1
 
 TITLE = "Inventory"

@@ -16,7 +16,7 @@ class Pouch(Inventory):
         self.NAM = "Pouch"
         self.MAX = 999999
 
-    def __remove(self, pouch_item, quantity):
+    def remove(self, pouch_item, quantity=1, verbose=True):
         """
         Verwijdert quantity uit de pouch. Als je iets koopt bijv.
         """

@@ -11,7 +11,9 @@ import screens.party.herobox
 import screens.party.infobox
 import screens.party.invclickbox
 import screens.party.inventorybox
+import screens.party.pouchbox
 import screens.party.skillsbox
+import screens.party.spellsbox
 import screens.party.statsbox
 import statemachine
 
@@ -35,6 +37,7 @@ STATBOXX, STATBOXY = 10, 118
 INFOBOXX, INFOBOXY = 10, 613
 SKILBOXX, SKILBOXY = 349, 118
 INVBOXX, INVBOXY = 688, 118
+PCHBOXX, PCHBOXY = 688, 468
 SPELBOXX, SPELBOXY = 1027, 118
 
 
@@ -59,6 +62,7 @@ class Display(object):
         self.hc = self.party.index(self.cur_hero)
 
         self.inventory = self.engine.data.inventory
+        self.pouch = self.engine.data.pouch
 
         self._init_buttons()
         self._init_boxes()
@@ -87,7 +91,8 @@ class Display(object):
         self.info_box = screens.party.infobox.InfoBox((INFOBOXX, INFOBOXY))
         self.skills_box = screens.party.skillsbox.SkillsBox((SKILBOXX, SKILBOXY))         # de grootte zit in de class
         self.inventory_box = screens.party.inventorybox.InventoryBox((INVBOXX, INVBOXY))  # zelf, de positie zit in deze
-        pygame.draw.rect(self.background, LINECOLOR, (SPELBOXX, SPELBOXY, 329, 640), 1)   # class, moet dat anders?
+        self.pouch_box = screens.party.pouchbox.PouchBox((PCHBOXX, PCHBOXY))              # class, moet dat anders?
+        self.spells_box = screens.party.spellsbox.SpellsBox((SPELBOXX, SPELBOXY))
 
     def on_enter(self):
         """
@@ -208,6 +213,8 @@ class Display(object):
         self.stats_box.update(self.cur_hero, self.hovered_equipment_item)
         self.skills_box.update(self.cur_hero, self.hovered_equipment_item)
         self.inventory_box.update(self.cur_hero)
+        self.pouch_box.update(self.pouch)
+        self.spells_box.update(self.cur_hero)
 
     def render(self):
         """
@@ -227,6 +234,8 @@ class Display(object):
         self.inventory_box.render(self.screen)
         if self.invclick_box:
             self.invclick_box.render(self.screen)
+        self.pouch_box.render(self.screen)
+        self.spells_box.render(self.screen)
 
         # name2 = self.largefont.render(cur_hero.NAM, True, FONTCOLOR)   = voorbeeld van hoe een naam buiten een herobox
         # name2_rect = self.screen.blit(name2, (500, 300))
