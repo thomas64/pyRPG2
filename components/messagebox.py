@@ -13,11 +13,12 @@ BACKGROUNDCOLOR = pygame.Color("black")
 FONT = None
 FONTSIZE = 30
 FONTCOLOR = pygame.Color("black")
-FONTPOSX = 70
+FONTPOSX = 40
 FONTPOSY = 40
 LINEHEIGHT = 25
 IMGPOSX = 35
 IMGPOSY = 60
+IMGSPACE = 30
 
 MESSAGESPRITE = 'resources/sprites/parchment.png'
 
@@ -34,6 +35,9 @@ class MessageBox(object):
         self.font = pygame.font.SysFont(FONT, FONTSIZE)
         self.text = []
         self.image = image
+        self.img_space = 0
+        if self.image:
+            self.img_space = IMGSPACE
 
         self.running = False
 
@@ -41,7 +45,7 @@ class MessageBox(object):
         for row in text:
             self.text.append(self.font.render(row, True, FONTCOLOR).convert_alpha())
             text_widths.append(self.font.render(row, True, FONTCOLOR).get_width())
-        box_width = max(text_widths) + FONTPOSX * 2 - IMGPOSX
+        box_width = max(text_widths) + FONTPOSX * 2 + self.img_space
         box_height = len(self.text) * LINEHEIGHT + FONTPOSY * 2
 
         self.surface = pygame.Surface((box_width, box_height))
@@ -96,9 +100,9 @@ class MessageBox(object):
             self.surface.blit(line, (IMGPOSX, IMGPOSY + i * LINEHEIGHT))
 
         for i, line in enumerate(self.text):
-            if self.image and i == 0:
-                self.surface.blit(line, (FONTPOSX - IMGPOSX, FONTPOSY + i * LINEHEIGHT))
-            else:
+            if i == 0:
                 self.surface.blit(line, (FONTPOSX, FONTPOSY + i * LINEHEIGHT))
+            else:
+                self.surface.blit(line, (FONTPOSX + self.img_space, FONTPOSY + i * LINEHEIGHT))
 
         self.screen.blit(self.surface, self.rect.topleft)

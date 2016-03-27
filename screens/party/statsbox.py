@@ -129,11 +129,7 @@ class StatsBox(object):
         self.table_view = []
         for index, row in enumerate(self.table_data):
             self.table_view.append(list())
-            if index == self.cur_item:              # als de index van deze rij gelijk is aan waar de muis over zit,
-                color = FONTCOLOR2                  # maak hem geel
-            else:                                   # anders gewoon wit.
-                color = FONTCOLOR1
-            self.table_view[index].append(self.normalfont.render(row[0], True, color).convert_alpha())
+            self.table_view[index].append(self.normalfont.render(row[0], True, self._get_color(index)).convert_alpha())
             self.table_view[index].append(self.normalfont.render(row[1], True, FONTCOLOR1).convert_alpha())
             self._set_color(row[2], self.table_view[index], POSCOLOR1, NEGCOLOR1, "")  # "" = None, maar dat gaf melding
             self._set_color(row[5], self.table_view[index], POSCOLOR2, NEGCOLOR2, row[0])  # dit is om weight te bepalen
@@ -176,6 +172,16 @@ class StatsBox(object):
         rect = self.normalfont.render(text, True, FONTCOLOR1).get_rect()
         rect.topleft = self.rect.left + COLUMN1X, (self.rect.top + COLUMNSY) + index * ROWHEIGHT
         return rect
+
+    def _get_color(self, index):
+        """
+        Als de index van deze rij gelijk is aan waar de muis over zit, maak hem geel anders gewoon wit.
+        :param index: enumerate van for loop
+        """
+        if index == self.cur_item:
+            return FONTCOLOR2
+        else:
+            return FONTCOLOR1
 
     def _set_color(self, value, col, poscolor, negcolor, weight_check):
         """

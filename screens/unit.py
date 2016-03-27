@@ -190,25 +190,28 @@ class Unit(pygame.sprite.Sprite):
         """
         t = False   # deze variabele is er om te kijken of true_pos aangepast moet worden aan het eind.
 
-        # loop tegen de rand van een high_blocker aan
-        # er mag maar 1 high_blocker in deze lijst zijn
-        if len(self.rect.collidelistall(high_blockers)) == 1:
-            # obj_nr is het nummer van de betreffende high_blocker
-            obj_nr = self.rect.collidelist(high_blockers)
-            self._move_side(high_blockers[obj_nr], dt)
-            t = True
+        # als je snel rent, gewoon door muren heen gaan.
+        if self.movespeed != MOVESPEED4:
 
-        # loop tegen de rand van een low_blocker aan, bijv water
-        if len(self.rect.collidelistall(low_blockers)) == 1:
-            obj_nr = self.rect.collidelist(low_blockers)
-            self._move_side(low_blockers[obj_nr], dt)
-            t = True
+            # loop tegen de rand van een high_blocker aan
+            # er mag maar 1 high_blocker in deze lijst zijn
+            if len(self.rect.collidelistall(high_blockers)) == 1:
+                # obj_nr is het nummer van de betreffende high_blocker
+                obj_nr = self.rect.collidelist(high_blockers)
+                self._move_side(high_blockers[obj_nr], dt)
+                t = True
 
-        # loop recht tegen een high_ of low_blocker aan
-        while self.rect.collidelist(high_blockers) > -1 or \
-                self.rect.collidelist(low_blockers) > -1:
-            self._move_back()
-            t = True
+            # loop tegen de rand van een low_blocker aan, bijv water
+            if len(self.rect.collidelistall(low_blockers)) == 1:
+                obj_nr = self.rect.collidelist(low_blockers)
+                self._move_side(low_blockers[obj_nr], dt)
+                t = True
+
+            # loop recht tegen een high_ of low_blocker aan
+            while self.rect.collidelist(high_blockers) > -1 or \
+                    self.rect.collidelist(low_blockers) > -1:
+                self._move_back()
+                t = True
 
         # loop tegen de rand van de map aan
         if self.rect.top < 0:

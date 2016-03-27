@@ -94,11 +94,7 @@ class SkillsBox(object):
         for index, row in enumerate(self.table_data):
             self.table_view.append(list())
             self.table_view[index].append(pygame.image.load(row[0]).convert_alpha())
-            if index == self.cur_item:              # als de index van deze rij gelijk is aan waar de muis over zit,
-                color = FONTCOLOR2                  # maak hem geel
-            else:                                   # anders gewoon wit.
-                color = FONTCOLOR1
-            self.table_view[index].append(self.normalfont.render(row[1], True, color).convert_alpha())
+            self.table_view[index].append(self.normalfont.render(row[1], True, self._get_color(index)).convert_alpha())
             self.table_view[index].append(self.normalfont.render(row[2], True, FONTCOLOR1).convert_alpha())
             self._set_color(row[3], self.table_view[index], POSCOLOR1, NEGCOLOR1)
             self._set_color(row[6], self.table_view[index], POSCOLOR2, NEGCOLOR2)
@@ -142,6 +138,16 @@ class SkillsBox(object):
         rect = self.normalfont.render(text, True, FONTCOLOR1).get_rect()
         rect.topleft = self.rect.left + COLUMN2X, (self.rect.top + COLUMNSY) + index * ROWHEIGHT
         return rect
+
+    def _get_color(self, index):
+        """
+        Als de index van deze rij gelijk is aan waar de muis over zit, maak hem geel anders gewoon wit.
+        :param index: enumerate van for loop
+        """
+        if index == self.cur_item:
+            return FONTCOLOR2
+        else:
+            return FONTCOLOR1
 
     def _set_color(self, value, col, poscolor, negcolor):
         """

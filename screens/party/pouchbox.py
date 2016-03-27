@@ -56,7 +56,7 @@ class PouchBox(object):
         :param pouch:
         """
         self.table_data = []
-        for pouch_item in sorted(pouch.values(), key=lambda xx: xx.SRT):
+        for pouch_item in pouch.get_all_pouch_items():
             self.table_data.append(
                 # row[0],           row[1],                 row[2],         row[3]
                 [pouch_item.SPR, pouch_item.NAM + " :", str(pouch_item.qty), None]
@@ -69,11 +69,7 @@ class PouchBox(object):
         for index, row in enumerate(self.table_data):
             self.table_view.append(list())
             self.table_view[index].append(pygame.image.load(row[0]).convert_alpha())
-            if index == self.cur_item:      # als de index van deze rij gelijk is aan waar de muis over zit,
-                color = FONTCOLOR2          # maak hem geel
-            else:                           # anders gewoon wit.
-                color = FONTCOLOR1
-            self.table_view[index].append(self.normalfont.render(row[1], True, color).convert_alpha())
+            self.table_view[index].append(self.normalfont.render(row[1], True, self._get_color(index)).convert_alpha())
             self.table_view[index].append(self.normalfont.render(row[2], True, FONTCOLOR1).convert_alpha())
 
     def render(self, screen):
@@ -100,3 +96,13 @@ class PouchBox(object):
         rect = self.normalfont.render(text, True, FONTCOLOR1).get_rect()
         rect.topleft = self.rect.left + COLUMN2X, (self.rect.top + COLUMNSY) + index * ROWHEIGHT
         return rect
+
+    def _get_color(self, index):
+        """
+        Als de index van deze rij gelijk is aan waar de muis over zit, maak hem geel anders gewoon wit.
+        :param index: enumerate van for loop
+        """
+        if index == self.cur_item:
+            return FONTCOLOR2
+        else:
+            return FONTCOLOR1

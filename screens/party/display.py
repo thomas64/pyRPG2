@@ -232,10 +232,10 @@ class Display(object):
         self.info_box.render(self.screen, self.info_label)
         self.skills_box.render(self.screen)
         self.inventory_box.render(self.screen)
-        if self.invclick_box:
-            self.invclick_box.render(self.screen)
         self.pouch_box.render(self.screen)
         self.spells_box.render(self.screen)
+        if self.invclick_box:
+            self.invclick_box.render(self.screen)
 
         # name2 = self.largefont.render(cur_hero.NAM, True, FONTCOLOR)   = voorbeeld van hoe een naam buiten een herobox
         # name2_rect = self.screen.blit(name2, (500, 300))
