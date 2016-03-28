@@ -47,6 +47,7 @@ class MapMusic(enum.Enum):
     BelowStartForest = 'below_start_forest',        'start_forest'
     StartTown = 'start_town',                       'start_town'
     StartTownArmorShop = 'start_town_armor_shop',   'start_town'
+    StartTownWeaponShop = 'start_town_weapon_shop', 'start_town'
 
 
 class Audio(object):
