@@ -45,7 +45,7 @@ weapon_type = {
     "Shortbow":      (200,      10,       0,  40,   8, WeaponType.mis,   4, 13000, 384),
     "Longbow":       (400,      12,       0,  50,   9, WeaponType.mis,   4, 14000, 416),
     "Great Bow":     (800,      14,       0,  60,  10, WeaponType.mis,   4, 15000, 448),
-    "War Bow":      (1600,      16,       0,  70,  11, WeaponType.mis,   4, 16000, 480),
+    "Crossbow":     (1600,      16,       0,  70,  11, WeaponType.mis,   4, 16000, 480),
 
     "Dart":           (50,       4,       0,  30,   2, WeaponType.thr,   2, 17000, 512),
     "Knife":         (100,      10,       0,  40,   3, WeaponType.thr,   2, 18000, 544),

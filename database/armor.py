@@ -14,23 +14,23 @@ a = collections.OrderedDict()
 
 # Vul de OrderedDict self met de gecombineerde data.
 
-# todo, col, row, upgradable, min_mech, metals zijn nog niet verwerkt.
+# todo, upgradable, min_mech, metals zijn nog niet verwerkt.
 
-#                       val,    wht, prt, stl,  srt
+#                       val,    wht, prt, stl,  srt, row
 armor_material = {
-    "Leather Armor":   (100,      0,   0,   0, 1000),
-    "Bronze Armor":    (600,      3,   3,  -3, 2000),
-    "Iron Armor":     (1100,      6,   6,  -6, 3000),
-    "Steel Armor":    (1600,      9,   9,  -9, 4000),
-    "Silver Armor":   (2100,     12,  12, -12, 5000),
-    "Titanium Armor": (2600,      0,  12,   0, 6000)
+    "Leather Armor":   (100,      0,   0,   0, 1000,    0),
+    "Bronze Armor":    (600,      3,   3,  -3, 2000,   32),
+    "Iron Armor":     (1100,      6,   6,  -6, 3000,   64),
+    "Steel Armor":    (1600,      9,   9,  -9, 4000,   96),
+    "Silver Armor":   (2100,     12,  12, -12, 5000,  128),
+    "Titanium Armor": (2600,      0,  12,   0, 6000,  160)
     # "Stealth":        (16,     10,   1,   1)
 }
-#                       val,    wht, prt, stl,  srt
+#                       val,    wht, prt, stl,  srt, col
 armor_type = {
-    "Light":           (100,      1,   1,   0,  100),
-    "Medium":          (300,      2,   2,  -1,  200),
-    "Heavy":           (500,      3,   3,  -2,  300)
+    "Light":           (100,      1,   1,   0,  100,   0),
+    "Medium":          (300,      2,   2,  -1,  200,  32),
+    "Heavy":           (500,      3,   3,  -2,  300,  64)
 }
 #                       val,    wht, prt, stl,  srt
 armor_upgraded = {
@@ -67,8 +67,8 @@ for material_key, material_value in armor_material.items():
                 # berekening stealth: material + type + upgraded
                 stl=material_value[3] + type_value[3] + upgraded_value[3],
 
-                col=0,
-                row=0
+                col=type_value[5],
+                row=material_value[5]
             )
 
 # type en sprite toepassen.

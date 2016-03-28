@@ -9,7 +9,7 @@ from . import EquipmentType
 from . import WeaponType
 
 
-SPRITEPATH = 'resources/sprites/icons/equipment/shield3.png'
+SPRITEPATH = 'resources/sprites/icons/equipment/shield4.png'
 
 s = collections.OrderedDict()
 
