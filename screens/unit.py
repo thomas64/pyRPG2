@@ -241,13 +241,13 @@ class Unit(pygame.sprite.Sprite):
         """
         Verzet de positie in de tegenovergestelde richting.
         """
-        if self.move_direction == Direction.North:
+        if self.last_direction == Direction.North:
             self.true_position[1] += 1
-        elif self.move_direction == Direction.South:
+        elif self.last_direction == Direction.South:
             self.true_position[1] -= 1
-        elif self.move_direction == Direction.West:
+        elif self.last_direction == Direction.West:
             self.true_position[0] += 1
-        elif self.move_direction == Direction.East:
+        elif self.last_direction == Direction.East:
             self.true_position[0] -= 1
 
         self.rect.x = round(self.true_position[0])
