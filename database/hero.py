@@ -44,12 +44,11 @@ class HeroDatabase(enum.Enum):
                  alc=-1, dip=0, hlr=0, lor=0, mec=0, mer=0, ran=4, stl=3, thf=0, trb=0, war=5, wiz=-1,
                  haf=5, mis=3, pol=0, shd=3, swd=-1, thr=-1,
                  wpn='ironaxe', sld='irontarge', arm='mediumbronzearmor')
-    # name = dict(nam="", spr=PATH+"0s_.png", fac=PATH+"0f_.png",
-    #              lev=, exp=, int=, wil=, dex=, agi=, edu=, str=, sta=,
-    #              alc=0, dip=0, hlr=0, lor=0, mec=0, mer=0, ran=0, stl=0, thf=0, trb=0, war=0, wiz=0,
-    #              haf=0, mis=0, pol=0, shd=0, swd=0, thr=0,
-    #              wpn=items.weapon.WeaponsData.empty, sld=items.shield.ShieldsData.empty,
-    #              arm=items.armor.ArmorsData.empty)
+    raiko = dict(nam="Raiko", spr=PATH+"07s_Raiko.png", fac=PATH+"07f_Raiko.png",
+                 lev=12, exp=325000, int=6, wil=11, dex=14, agi=8, edu=30, str=30, sta=60,
+                 alc=-1, dip=0, hlr=0, lor=-1, mec=0, mer=0, ran=0, stl=1, thf=-1, trb=-1, war=6, wiz=-1,
+                 haf=0, mis=-1, pol=6, shd=4, swd=6, thr=-1,
+                 wpn='ironbroadsword', sld='ironkite', arm='heavyironarmor')
     # name = dict(nam="", spr=PATH+"0s_.png", fac=PATH+"0f_.png",
     #              lev=, exp=, int=, wil=, dex=, agi=, edu=, str=, sta=,
     #              alc=0, dip=0, hlr=0, lor=0, mec=0, mer=0, ran=0, stl=0, thf=0, trb=0, war=0, wiz=0,
