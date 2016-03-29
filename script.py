@@ -4,6 +4,7 @@ class: Script
 """
 
 import characters
+import database.hero
 import database.treasurechest
 import equipment
 
@@ -19,14 +20,9 @@ class Script(object):
         """
         Wat te doen bij het starten van een nieuw spel.
         """
-        # Vul de heroes database met alle heroes die er in het spel bestaan.
-        self.engine.data.heroes['alagos'] = characters.HeroData.factory(characters.HeroData.alagos)
-        self.engine.data.heroes['luana'] = characters.HeroData.factory(characters.HeroData.luana)
-        self.engine.data.heroes['grindan'] = characters.HeroData.factory(characters.HeroData.grindan)
-        self.engine.data.heroes['rydalin'] = characters.HeroData.factory(characters.HeroData.rydalin)
-        self.engine.data.heroes['codrif'] = characters.HeroData.factory(characters.HeroData.codrif)
-        self.engine.data.heroes['galen'] = characters.HeroData.factory(characters.HeroData.galen)
-
+        # Vul de heroes database met alle hero objecten die in factory zijn gemaakt.
+        self.engine.data.heroes = characters.factory_all_heroes(database.hero.HeroDatabase)
+        # Treasure chest worden geen objecten, maar blijven een object met dicts.
         self.engine.data.treasure_chests = database.treasurechest.TreasureChestDatabase()
 
         # Vul de party aan met de eerste hero
