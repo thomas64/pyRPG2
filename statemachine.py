@@ -67,6 +67,7 @@ class StateMachine(object):
             console.state_pop(self.peek().name)
             del self.statestack[-1]
             self.peek().on_enter()
+            self.prev_state = None
             return len(self.statestack) > 0
         except IndexError:
             return None                     # empty stack
@@ -84,6 +85,7 @@ class StateMachine(object):
         console.state_push(state.name)
         self.statestack.append(state)
         self.peek().on_enter()
+        self.prev_state = None
         return state
 
     def clear(self):

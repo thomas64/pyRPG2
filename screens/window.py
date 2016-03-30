@@ -101,6 +101,9 @@ class Window(object):
         self.engine.audio.set_bg_music(self.engine.gamestate.peek().name)
         self.engine.audio.set_bg_sounds(self.engine.gamestate.peek().name)
 
+        # want deze is alleen nodig voor de audio, dus nadien weghalen
+        self.prev_map_name = None
+
     def align(self):
         """
         Zet de hero in het grid. Positioneer de party achter hem. Vul de geschiedenis met lege data.

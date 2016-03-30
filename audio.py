@@ -30,9 +30,7 @@ STEPGRASS = 'step_grass'
 STEPSTONE = 'step_stone'
 STEPWOOD = 'step_wood'
 CHEST = 'chest'
-BIRDS = 'birds'
 CROWS = 'crows'
-TOWN = 'town'
 WIND = 'wind'
 
 # Alle niet overworld kaart muziek.
@@ -41,13 +39,13 @@ TITLESCREEN = 'titlescreen'
 
 class MapMusic(enum.Enum):
     """
-    Alle tmx kaarten op een rij, met de muziek erachter.
+    Alle tmx kaarten op een rij, met de muziek erachter en ambient sound.
     """
-    StartForest = 'start_forest',                   'start_forest'
-    BelowStartForest = 'below_start_forest',        'start_forest'
-    StartTown = 'start_town',                       'start_town'
-    StartTownArmorShop = 'start_town_armor_shop',   'start_town'
-    StartTownWeaponShop = 'start_town_weapon_shop', 'start_town'
+    StartForest = 'start_forest',                   'start_forest',     'birds'
+    BelowStartForest = 'below_start_forest',        'start_forest',     'birds'
+    StartTown = 'start_town',                       'start_town',       'town'
+    StartTownArmorShop = 'start_town_armor_shop',   'start_town',       None
+    StartTownWeaponShop = 'start_town_weapon_shop', 'start_town',       None
 
 
 class Audio(object):
@@ -138,55 +136,63 @@ class Audio(object):
         """
         # bij options menu moet er niets veranderen, en ook niet als hij van options komt.
         # ook niet als hij van messagebox komt. todo, dit begint wat lelijk te worden.
-        if currentstate != statemachine.States.OptionsMenu and \
-           self.gamestate.prev_state != statemachine.States.OptionsMenu and \
-           self.gamestate.prev_state != statemachine.States.MessageBox:
+        if currentstate == statemachine.States.OptionsMenu or \
+           self.gamestate.prev_state == statemachine.States.OptionsMenu or \
+           self.gamestate.prev_state == statemachine.States.MessageBox:
+            return
 
-            if currentstate == statemachine.States.Overworld:
-                for _enum in MapMusic:
-                    # als de naam in de MapMusic overeenkomt met de naam van de huidige map
-                    if _enum.value[0] == self.gamestate.peek().window.map1.name:
-                        # als de muziek in de MapMusic NIET overeenkomt met de muziek van de vorige map
-                        if _enum.value[1] != self._get_prev_bg_music():
-                            # speel dan de nieuwe muziek
-                            self.fade_bg_music()
-                            self.bg_music_channel.set_volume(1)
-                            self.play_bg_music(_enum.value[1])
-                            break
-                return
+        if currentstate == statemachine.States.Overworld:
+            for _enum in MapMusic:
+                # als de naam in de MapMusic overeenkomt met de naam van de huidige map
+                if _enum.value[0] == self.gamestate.peek().window.map1.name:
+                    # als de muziek in de MapMusic NIET overeenkomt met de muziek van de vorige map
+                    if _enum.value[1] != self._get_prev_bg_audio(1):
+                        # speel dan de nieuwe muziek
+                        self.fade_bg_music()
+                        self.bg_music_channel.set_volume(1)
+                        self.play_bg_music(_enum.value[1])
+                        break
+            return
 
-            self.fade_bg_music()
-            self.bg_music_channel.set_volume(1)
+        self.fade_bg_music()
+        self.bg_music_channel.set_volume(1)
 
-            if currentstate == statemachine.States.MainMenu:
-                # de fade en setvolume staan nu in de if, want bij muziek moet het niet altijd
-                self.play_bg_music(TITLESCREEN)
+        if currentstate == statemachine.States.MainMenu:
+            # de fade en setvolume staan nu in de if, want bij muziek moet het niet altijd
+            self.play_bg_music(TITLESCREEN)
 
-    def _get_prev_bg_music(self):
+    def _get_prev_bg_audio(self, index):
         for _enum in MapMusic:
             if _enum.value[0] == self.gamestate.peek().window.prev_map_name:
-                return _enum.value[1]
+                return _enum.value[index]
 
     def set_bg_sounds(self, currentstate):
         """
         Zet de achtergrond geluiden aan of uit afhankelijk van een state.
         :param currentstate: self.statemachine.peek()
         """
-        if currentstate != statemachine.States.OptionsMenu and \
-           self.gamestate.prev_state != statemachine.States.OptionsMenu and \
-           self.gamestate.prev_state != statemachine.States.MessageBox:
-            self.fade_bg_sounds()
-            self.bg_sound_channel1.set_volume(1)
-            self.bg_sound_channel2.set_volume(1)
-            if currentstate == statemachine.States.MainMenu:
-                self.play_sound(CROWS, loop=-1, channel=self.bg_sound_channel1)
-                self.play_sound(WIND, loop=-1, channel=self.bg_sound_channel2)
-            elif currentstate == statemachine.States.Overworld:
-                if self.gamestate.peek().window.map1.name in (MapMusic.StartForest.value[0],
-                                                              MapMusic.BelowStartForest.value[0]):
-                    self.play_sound(BIRDS, loop=-1, channel=self.bg_sound_channel1)
-                elif self.gamestate.peek().window.map1.name in MapMusic.StartTown.value[0]:
-                    self.play_sound(TOWN, loop=-1, channel=self.bg_sound_channel1)
+        if currentstate == statemachine.States.OptionsMenu or \
+           self.gamestate.prev_state == statemachine.States.OptionsMenu or \
+           self.gamestate.prev_state == statemachine.States.MessageBox:
+            return
+
+        if currentstate == statemachine.States.Overworld:
+            for _enum in MapMusic:
+                if _enum.value[0] == self.gamestate.peek().window.map1.name:
+                    if _enum.value[2] != self._get_prev_bg_audio(2):
+                        self.fade_bg_sounds()
+                        self.bg_sound_channel1.set_volume(1)
+                        self.play_sound(_enum.value[2], loop=-1, channel=self.bg_sound_channel1)
+                        break
+            return
+
+        self.fade_bg_sounds()
+        self.bg_sound_channel1.set_volume(1)
+        self.bg_sound_channel2.set_volume(1)
+
+        if currentstate == statemachine.States.MainMenu:
+            self.play_sound(CROWS, loop=-1, channel=self.bg_sound_channel1)
+            self.play_sound(WIND, loop=-1, channel=self.bg_sound_channel2)
 
     def play_sound(self, sound, loop=0, channel=None):
         """
@@ -196,10 +202,12 @@ class Audio(object):
         :param channel: het kanaal waar de geluiden op afgespeeld moeten worden, is alleen voor bg_sounds
         """
         if self.sound == 1:
-            if channel:
-                channel.play(self.sfx[sound], loops=loop)
-            else:
-                self.sfx[sound].play()
+            # als het aangestuurde geluid None is, niets doen natuurlijk.
+            if sound:
+                if channel:
+                    channel.play(self.sfx[sound], loops=loop)
+                else:
+                    self.sfx[sound].play()
 
     def play_bg_music(self, music):
         """
