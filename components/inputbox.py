@@ -66,9 +66,10 @@ class InputBox(object):
         Handelt de muis en keyboard input af.
         :param event: pygame.event.get()
         """
+        valid_characters = "1234567890abcdefghijklmnopqrstuvwxyz"
         if event.type == pygame.KEYDOWN:
             if len(self.textbox) <= INPUTLENGTH:
-                if 48 <= event.key <= 57 or 97 <= event.key <= 122:
+                if event.unicode in valid_characters:
                     self.textbox.insert(-1, event.unicode)
             if event.key == keys.REMOVE:
                 if len(self.textbox) > 1:
