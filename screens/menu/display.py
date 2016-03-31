@@ -20,7 +20,7 @@ MENUFONTCOLOR3 = pygame.Color("black")
 MENUFONTCOLOR4 = pygame.Color("red")
 
 MENUH = 1.5
-MENUX = -405
+MENUX = -305
 MENUY = -50
 
 

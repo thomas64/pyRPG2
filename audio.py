@@ -31,6 +31,7 @@ STEPSTONE = 'step_stone'
 STEPWOOD = 'step_wood'
 CHEST = 'chest'
 CROWS = 'crows'
+RIVER = 'river'
 WIND = 'wind'
 
 # Alle niet overworld kaart muziek.
@@ -191,7 +192,7 @@ class Audio(object):
         self.bg_sound_channel2.set_volume(1)
 
         if currentstate == statemachine.States.MainMenu:
-            self.play_sound(CROWS, loop=-1, channel=self.bg_sound_channel1)
+            self.play_sound(RIVER, loop=-1, channel=self.bg_sound_channel1)
             self.play_sound(WIND, loop=-1, channel=self.bg_sound_channel2)
 
     def play_sound(self, sound, loop=0, channel=None):
