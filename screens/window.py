@@ -111,7 +111,7 @@ class Window(object):
         for unit in self.party_sprites:
             unit.rect.topleft = list(self.party_sprites[0].rect.topleft)
             unit.last_direction = self.party_sprites[0].last_direction
-        for _ in range(0, self.maxlen):
+        for _ in range(self.maxlen):
             self.leader_history.append(self.party_sprites[0].get_history_data())
 
     def single_input(self, event):
@@ -175,8 +175,6 @@ class Window(object):
         self.party_sprites[0].check_blocker(self.map1.high_blocker_rects, self.map1.low_blocker_rects,
                                             None, self.map1.width, self.map1.height, dt)
 
-        self.leader_trail(dt)
-
     def update(self, dt):
         """
         Is de hero tegen een portal aangelopen. Update locaties (indien F11). Centreer op de hero.
@@ -194,6 +192,8 @@ class Window(object):
         if self.map1.width >= self.width and \
            self.map1.height >= self.height:
             self.group.center(self.party_sprites[0].rect.center)
+
+        self.leader_trail(dt)
 
     def render(self):
         """
@@ -216,19 +216,17 @@ class Window(object):
         """
         # todo, voetstappen van party te weinig, ligt aan omdat 2e deel van _clip nooit aangeroepen wordt.
         if self.party_sprites[0].is_moving() and \
-                (self.party_sprites[0].rect.x != self.leader_history[-1][0] or   # bekijk de laatste uit de deque
-                 self.party_sprites[0].rect.y != self.leader_history[-1][1]):
+                (self.party_sprites[0].rect.x != self.leader_history[0][0] or   # bekijk de laatste uit de deque
+                 self.party_sprites[0].rect.y != self.leader_history[0][1]):
 
-            self.leader_history.append(self.party_sprites[0].get_history_data())
+            self.leader_history.appendleft(self.party_sprites[0].get_history_data())
 
-            # de index loopt op van 0, 1, 2, 3.
-            # de i loopt af van 4, 3, 2, 1.
-            for index, i in enumerate(range(len(self.party)-1, 0, -1)):
-                self.party_sprites[i].rect.x = self.leader_history[index * GRIDSIZE][0]
-                self.party_sprites[i].rect.y = self.leader_history[index * GRIDSIZE][1]
-                self.party_sprites[i].last_direction = self.leader_history[index * GRIDSIZE][2]
-                self.party_sprites[i].move_direction = self.leader_history[index * GRIDSIZE][3]
-                self.party_sprites[i].movespeed = self.leader_history[index * GRIDSIZE][4]
+            for i in range(len(self.party)):
+                self.party_sprites[i].rect.x = self.leader_history[i * GRIDSIZE][0]
+                self.party_sprites[i].rect.y = self.leader_history[i * GRIDSIZE][1]
+                self.party_sprites[i].last_direction = self.leader_history[i * GRIDSIZE][2]
+                self.party_sprites[i].move_direction = self.leader_history[i * GRIDSIZE][3]
+                self.party_sprites[i].movespeed = self.leader_history[i * GRIDSIZE][4]
                 self.party_sprites[i].animate(dt, make_sound=False)
 
     def check_sounds(self):
