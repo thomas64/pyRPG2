@@ -106,7 +106,7 @@ class Window(object):
 
     def align(self):
         """
-        Zet de hero in het grid. Positioneer de party achter hem. Vul de geschiedenis met lege data.
+        Positioneer de party achter de hero. Vul de geschiedenis vol met de huidige positie data.
         """
         for unit in self.party_sprites:
             unit.rect.topleft = list(self.party_sprites[0].rect.topleft)
@@ -175,7 +175,7 @@ class Window(object):
         self.party_sprites[0].check_blocker(self.map1.high_blocker_rects, self.map1.low_blocker_rects,
                                             None, self.map1.width, self.map1.height, dt)
 
-        self.leader_trail(key_input, dt)
+        self.leader_trail(dt)
 
     def update(self, dt):
         """
@@ -208,16 +208,14 @@ class Window(object):
 
         self.group.draw(self.surface)
 
-    def leader_trail(self, key_input, dt):
+    def leader_trail(self, dt):
         """
         Als 1 van de 4 pijltoetsen gedrukt wordt en de zich ook daadwerkelijk verplaatst.
         Vul de history van de leader dan aan met allemaal data uit een methode van Unit.
-        :param key_input: pygame.key.get_pressed()
         :param dt: self.clock.tick(FPS)/1000.0
         """
         # todo, voetstappen van party te weinig, ligt aan omdat 2e deel van _clip nooit aangeroepen wordt.
-        if (key_input[keys.UP] or key_input[keys.DOWN] or
-            key_input[keys.LEFT] or key_input[keys.RIGHT]) and \
+        if self.party_sprites[0].is_moving() and \
                 (self.party_sprites[0].rect.x != self.leader_history[-1][0] or   # bekijk de laatste uit de deque
                  self.party_sprites[0].rect.y != self.leader_history[-1][1]):
 

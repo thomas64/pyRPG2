@@ -83,13 +83,6 @@ class Unit(pygame.sprite.Sprite):
         :param key_input: list van integers
         :param dt: self.clock.tick(FPS)/1000.0
         """
-        # Als je helemaal geen knoppen indrukt, ga dan in de stilstand pose.
-        if not (key_input[keys.UP] or key_input[keys.DOWN] or
-                key_input[keys.LEFT] or key_input[keys.RIGHT]):
-            self.time_delay = 0
-            self._stand()
-            self.animate(dt)
-
         if key_input[keys.UP]:
             self.time_up += 1
         else:
@@ -106,6 +99,12 @@ class Unit(pygame.sprite.Sprite):
             self.time_right += 1
         else:
             self.time_right = 0
+
+        # Als je helemaal geen knoppen indrukt, ga dan in de stilstand pose.
+        if not self.is_moving():
+            self.time_delay = 0
+            self._stand()
+            self.animate(dt)
 
         # Als hij nog geen stappen heeft gezet en hij kijkt naar een andere kant dan je drukt, stel een delay in.
         if self.move_direction is None and ((self.time_up > 0 and not self.last_direction == Direction.North) or
@@ -142,8 +141,7 @@ class Unit(pygame.sprite.Sprite):
             self.last_direction = Direction.East
 
         # Als je een knop indrukt, en er is geen delay, beweeg dan in die richting.
-        if key_input[keys.UP] or key_input[keys.DOWN] or \
-           key_input[keys.LEFT] or key_input[keys.RIGHT]:
+        if self.is_moving():
             if self.time_delay > 0:
                 self.time_delay -= 1 * dt
             else:
@@ -362,3 +360,12 @@ class Unit(pygame.sprite.Sprite):
         Geef een aantal waarden van de character terug.
         """
         return self.rect.x, self.rect.y, self.last_direction, self.move_direction, self.movespeed
+
+    def is_moving(self):
+        """
+        Bekijkt of de unit aan het bewegen is.
+        """
+        if self.time_up > 0 or self.time_down > 0 or \
+           self.time_left > 0 or self.time_right > 0:
+            return True
+        return False
