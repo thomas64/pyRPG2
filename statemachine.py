@@ -24,6 +24,7 @@ class States(enum.Enum):
     Conversation = 8
     PartyScreen = 9
     MessageBox = 10
+    Shop = 11
 
 
 class StateMachine(object):
