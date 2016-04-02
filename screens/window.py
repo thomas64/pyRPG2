@@ -224,7 +224,17 @@ class Window(object):
 
             for i in range(1, len(self.party)):
                 ps = self.party_sprites[i]
-                index = i * GRIDSIZE  # - round(self.party_sprites[0].movespeed * dt)
+                # mv = self.party_sprites[0].movespeed
+                # if mv == 60:
+                #     index = 32 * i
+                # if mv == 120:
+                #     index = 16 * i
+                # if mv == 240:
+                #     index = 8 * i
+                # if mv == 480:
+                #     index = 4 * i
+
+                index = i * GRIDSIZE
                 ps.rect.x = self.leader_history[index][0]
                 ps.rect.y = self.leader_history[index][1]
                 ps.last_direction = self.leader_history[index][2]
