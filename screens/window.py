@@ -175,6 +175,8 @@ class Window(object):
         self.party_sprites[0].check_blocker(self.map1.high_blocker_rects, self.map1.low_blocker_rects,
                                             None, self.map1.width, self.map1.height, dt)
 
+        self.leader_trail(dt)
+
     def update(self, dt):
         """
         Is de hero tegen een portal aangelopen. Update locaties (indien F11). Centreer op de hero.
@@ -192,8 +194,6 @@ class Window(object):
         if self.map1.width >= self.width and \
            self.map1.height >= self.height:
             self.group.center(self.party_sprites[0].rect.center)
-
-        self.leader_trail(dt)
 
     def render(self):
         """
