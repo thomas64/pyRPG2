@@ -19,6 +19,8 @@ ANIMATION01 = PATH+'animation01.jpg'
 ANIMATIONSPEED = 10
 
 
+# todo, alle animaties uit de dir halen zoals bij audio
+
 class Animation(object):
     """
     De bewegende achtergrond.

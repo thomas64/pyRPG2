@@ -91,8 +91,8 @@ class Window(object):
         self.group.add(self.party_sprites)         # maar als sprites moeten ze precies andersom staan
         self.party_sprites.reverse()               # want daar wil je party_sprites[0] bovenop weergegeven hebben
 
-        self.maxlen = ((len(self.party)-1)*GRIDSIZE)+1              # bereken de lengte van het deck
-        self.leader_history = collections.deque(maxlen=self.maxlen)   # maak een lege deck aan
+        self.maxlen = ((len(self.party)-1)*GRIDSIZE)+1                  # bereken de lengte van het deck
+        self.leader_history = collections.deque(maxlen=self.maxlen)     # maak een lege deck aan
         self.align()
 
         # voeg alle objecten toe van uit de map
@@ -216,17 +216,20 @@ class Window(object):
         """
         # todo, voetstappen van party te weinig, ligt aan omdat 2e deel van _clip nooit aangeroepen wordt.
         if self.party_sprites[0].is_moving() and \
-           self.party_sprites[0].rect.topleft != self.leader_history[0]:   # bekijk de eerste uit de deque
+                (self.party_sprites[0].rect.x != self.leader_history[0][0] or  # bekijk de eerste uit de deque
+                 self.party_sprites[0].rect.y != self.leader_history[0][1]):
 
+            # todo, visuele trail met cboxes
             self.leader_history.appendleft(self.party_sprites[0].get_history_data())
 
             for i in range(1, len(self.party)):
                 ps = self.party_sprites[i]
-                index = i * GRIDSIZE  # - (self.party_sprites[0].movespeed * dt))
-                ps.rect.topleft = list(self.leader_history[index][0])
-                ps.last_direction = self.leader_history[index][1]
-                ps.move_direction = self.leader_history[index][2]
-                ps.movespeed = self.leader_history[index][3]
+                index = i * GRIDSIZE  # - round(self.party_sprites[0].movespeed * dt)
+                ps.rect.x = self.leader_history[index][0]
+                ps.rect.y = self.leader_history[index][1]
+                ps.last_direction = self.leader_history[index][2]
+                ps.move_direction = self.leader_history[index][3]
+                ps.movespeed = self.leader_history[index][4]
                 ps.animate(dt, make_sound=False)
 
     def check_sounds(self):
