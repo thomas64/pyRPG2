@@ -112,7 +112,7 @@ class Window(object):
             unit.rect.topleft = list(self.party_sprites[0].rect.topleft)
             unit.last_direction = self.party_sprites[0].last_direction
         for _ in range(self.maxlen):
-            self.leader_history.append(self.party_sprites[0].get_history_data())
+            self.leader_history.appendleft(self.party_sprites[0].get_history_data())
 
     def single_input(self, event):
         """
@@ -216,18 +216,18 @@ class Window(object):
         """
         # todo, voetstappen van party te weinig, ligt aan omdat 2e deel van _clip nooit aangeroepen wordt.
         if self.party_sprites[0].is_moving() and \
-                (self.party_sprites[0].rect.x != self.leader_history[0][0] or   # bekijk de laatste uit de deque
-                 self.party_sprites[0].rect.y != self.leader_history[0][1]):
+           self.party_sprites[0].rect.topleft != self.leader_history[0]:   # bekijk de eerste uit de deque
 
             self.leader_history.appendleft(self.party_sprites[0].get_history_data())
 
-            for i in range(len(self.party)):
-                self.party_sprites[i].rect.x = self.leader_history[i * GRIDSIZE][0]
-                self.party_sprites[i].rect.y = self.leader_history[i * GRIDSIZE][1]
-                self.party_sprites[i].last_direction = self.leader_history[i * GRIDSIZE][2]
-                self.party_sprites[i].move_direction = self.leader_history[i * GRIDSIZE][3]
-                self.party_sprites[i].movespeed = self.leader_history[i * GRIDSIZE][4]
-                self.party_sprites[i].animate(dt, make_sound=False)
+            for i in range(1, len(self.party)):
+                ps = self.party_sprites[i]
+                index = i * GRIDSIZE  # - (self.party_sprites[0].movespeed * dt))
+                ps.rect.topleft = list(self.leader_history[index][0])
+                ps.last_direction = self.leader_history[index][1]
+                ps.move_direction = self.leader_history[index][2]
+                ps.movespeed = self.leader_history[index][3]
+                ps.animate(dt, make_sound=False)
 
     def check_sounds(self):
         """

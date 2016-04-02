@@ -359,7 +359,7 @@ class Unit(pygame.sprite.Sprite):
         """
         Geef een aantal waarden van de character terug.
         """
-        return self.rect.x, self.rect.y, self.last_direction, self.move_direction, self.movespeed
+        return self.rect.topleft, self.last_direction, self.move_direction, self.movespeed
 
     def is_moving(self):
         """
