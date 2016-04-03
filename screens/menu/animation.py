@@ -3,23 +3,13 @@
 class: Animation
 """
 
+import os
+
 import pygame
 
 PATH = 'resources/backgrounds/titlescreen/'
-ANIMATION01 = PATH+'animation01.jpg'
-# ANIMATION02 = PATH+'animation02.png'
-# ANIMATION03 = PATH+'animation03.png'
-# ANIMATION04 = PATH+'animation04.png'
-# ANIMATION05 = PATH+'animation05.png'
-# ANIMATION06 = PATH+'animation06.png'
-# ANIMATION07 = PATH+'animation07.png'
-# ANIMATION08 = PATH+'animation08.png'
-# ANIMATION09 = PATH+'animation09.png'
-
 ANIMATIONSPEED = 10
 
-
-# todo, alle animaties uit de dir halen zoals bij audio
 
 class Animation(object):
     """
@@ -29,20 +19,24 @@ class Animation(object):
 
         self.speed = 0
 
-        self.animation = {0: pygame.image.load(ANIMATION01).convert()}
-                          # 1: pygame.image.load(ANIMATION02).convert_alpha(),
-                          # 2: pygame.image.load(ANIMATION03).convert_alpha(),
-                          # 3: pygame.image.load(ANIMATION04).convert_alpha(),
-                          # 4: pygame.image.load(ANIMATION05).convert_alpha(),
-                          # 5: pygame.image.load(ANIMATION06).convert_alpha(),
-                          # 6: pygame.image.load(ANIMATION07).convert_alpha(),
-                          # 7: pygame.image.load(ANIMATION08).convert_alpha(),
-                          # 8: pygame.image.load(ANIMATION09).convert_alpha()}
+        self.animation = self._load_all_images(PATH)
+
         self.current = None
 
         self.width = self.animation[0].get_width()
         self.height = self.animation[0].get_height()
         self.position = (0, 0)
+
+    @staticmethod
+    def _load_all_images(path):
+        """
+        Laadt alle plaatjes uit de map in een dict.
+        :return: de dict
+        """
+        images = {}
+        for index, file in enumerate(os.listdir(path)):
+            images[index] = pygame.image.load(os.path.join(path, file)).convert()
+        return images
 
     def set_position(self, screen_width, screen_height):
         """
