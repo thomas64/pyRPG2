@@ -499,7 +499,7 @@
   <object id="108" name="step_stone" x="1376" y="160" width="64" height="336"/>
   <object id="109" name="step_stone" x="1184" y="160" width="32" height="336"/>
  </objectgroup>
- <objectgroup name="low_blocker">
+ <objectgroup name="low_blocker" visible="0">
   <object id="50" x="512" y="896" width="416" height="16"/>
   <object id="51" x="512" y="448" width="32" height="112"/>
   <object id="52" x="896" y="448" width="32" height="112"/>
@@ -510,7 +510,7 @@
   <object id="68" x="1280" y="384" width="64" height="48"/>
   <object id="69" x="512" y="320" width="416" height="16"/>
  </objectgroup>
- <objectgroup name="high_blocker">
+ <objectgroup name="high_blocker" visible="0">
   <object id="1" x="64" y="64" width="32" height="496"/>
   <object id="2" x="64" y="688" width="32" height="464"/>
   <object id="3" x="96" y="1072" width="1312" height="80"/>
@@ -574,13 +574,13 @@
   <object id="110" x="352" y="304" width="32" height="32"/>
   <object id="111" x="416" y="304" width="32" height="32"/>
  </objectgroup>
- <objectgroup name="portals">
-  <object id="11" name="below_start_forest" x="1424" y="576" width="16" height="96"/>
+ <objectgroup name="portals" visible="0">
+  <object id="11" name="start_forest_below" x="1424" y="576" width="16" height="96"/>
   <object id="14" name="start_town_armor_shop" x="192" y="304" width="32" height="16"/>
   <object id="112" name="start_town_weapon_shop" x="384" y="304" width="32" height="16"/>
  </objectgroup>
- <objectgroup name="start_pos">
-  <object id="13" name="below_start_forest" x="1392" y="608" width="16" height="16"/>
+ <objectgroup name="start_pos" visible="0">
+  <object id="13" name="start_forest_below" x="1392" y="608" width="16" height="16"/>
   <object id="16" name="start_town_armor_shop" x="192" y="320" width="16" height="16"/>
   <object id="113" name="start_town_weapon_shop" x="384" y="320" width="16" height="16"/>
  </objectgroup>

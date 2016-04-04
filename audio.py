@@ -42,11 +42,12 @@ class MapMusic(enum.Enum):
     """
     Alle tmx kaarten op een rij, met de muziek erachter en ambient sound.
     """
-    StartForest = 'start_forest',                   'start_forest',     'birds'
-    BelowStartForest = 'below_start_forest',        'start_forest',     'birds'
-    StartTown = 'start_town',                       'start_town',       'town'
-    StartTownArmorShop = 'start_town_armor_shop',   'start_town',       None
-    StartTownWeaponShop = 'start_town_weapon_shop', 'start_town',       None
+    StartForest = 'start_forest',                    'start_forest',     'birds'
+    StartForestBelow = 'start_forest_below',         'start_forest',     'birds'
+    StartForestWaterfall = 'start_forest_waterfall', 'start_forest',     'river'
+    StartTown = 'start_town',                        'start_town',       'town'
+    StartTownArmorShop = 'start_town_armor_shop',    'start_town',       None
+    StartTownWeaponShop = 'start_town_weapon_shop',  'start_town',       None
 
 
 class Audio(object):
