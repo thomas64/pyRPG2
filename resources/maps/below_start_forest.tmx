@@ -324,11 +324,10 @@
  <objectgroup name="sounds" visible="0">
   <object id="221" name="step_grass" x="0" y="0" width="1216" height="736"/>
  </objectgroup>
- <objectgroup name="objects"/>
  <objectgroup name="low_blocker">
   <object id="202" x="896" y="224" width="32" height="16"/>
  </objectgroup>
- <objectgroup name="high_blocker" visible="0">
+ <objectgroup name="high_blocker">
   <object id="168" x="1120" y="0" width="32" height="176"/>
   <object id="169" x="1088" y="160" width="32" height="16"/>
   <object id="170" x="1152" y="112" width="32" height="96"/>

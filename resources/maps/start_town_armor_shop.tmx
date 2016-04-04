@@ -246,7 +246,6 @@
  <objectgroup name="sounds" visible="0">
   <object id="69" name="step_stone" x="48" y="48" width="544" height="480"/>
  </objectgroup>
- <objectgroup name="objects"/>
  <objectgroup name="low_blocker">
   <object id="49" x="240" y="304" width="64" height="16"/>
   <object id="50" x="336" y="304" width="64" height="16"/>

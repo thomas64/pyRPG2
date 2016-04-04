@@ -13,9 +13,10 @@ import components.sprites
 import equipment
 import keys
 import pouchitems
-import screens.unit
 import screens.direction
 import screens.map
+import screens.shop.display
+import screens.unit
 
 BACKGROUNDCOLOR = pygame.Color("gray12")
 GRIDCOLOR = pygame.Color("gray36")
@@ -96,7 +97,7 @@ class Window(object):
         self.align()
 
         # voeg alle objecten toe van uit de map
-        self.group.add(self.map1.objects)
+        self.group.add(self.map1.chests)
 
         self.engine.audio.set_bg_music(self.engine.gamestate.peek().name)
         self.engine.audio.set_bg_sounds(self.engine.gamestate.peek().name)
@@ -200,9 +201,7 @@ class Window(object):
         Render de plaatjes van de objecten.
         Teken de window inhoud.
         """
-        for obj in self.map1.objects:
-            # todo, hij doet dit nu bij alle objecten in de lijst, ook de niet chests. moet nog uitgesplit worden
-            # of voorwaarde scheppen als het een class van treasurechest is oid.
+        for obj in self.map1.chests:
             chest_data = self.engine.data.treasure_chests[obj.chest_id]
             obj.render(chest_data['opened'])
 
@@ -271,9 +270,9 @@ class Window(object):
         Bekijk of collide met een chest.
         """
         if self.party_sprites[0].last_direction == screens.direction.Direction.North:
-            if len(self.party_sprites[0].rect.collidelistall(self.map1.objects)) == 1:
-                object_nr = self.party_sprites[0].rect.collidelist(self.map1.objects)
-                chest_sprite = self.map1.objects[object_nr]
+            if len(self.party_sprites[0].rect.collidelistall(self.map1.chests)) == 1:
+                object_nr = self.party_sprites[0].rect.collidelist(self.map1.chests)
+                chest_sprite = self.map1.chests[object_nr]
                 chest_data = self.engine.data.treasure_chests[chest_sprite.chest_id]
                 if chest_data['content']:
                     chest_data['opened'] = 1
@@ -296,4 +295,5 @@ class Window(object):
                     self.engine.audio.play_sound(sfx.CHEST)
                     chest_data['content'] = dict()
                     push_object = components.messagebox.MessageBox(self.engine.gamestate, text, image)
+                    # push_object = screens.shop.display.Display()
                     self.engine.gamestate.push(push_object)
