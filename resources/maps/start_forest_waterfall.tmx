@@ -1093,6 +1093,6 @@
  <objectgroup name="portals" visible="0"/>
  <objectgroup name="start_pos">
   <object id="184" name="start_forest_below" type="1" x="48" y="1360" width="16" height="16"/>
-  <object id="354" name="start_forest_below" type="2" x="704" y="576" width="16" height="16"/>
+  <object id="354" name="start_forest_below" type="2" x="208" y="1440" width="16" height="16"/>
  </objectgroup>
 </map>

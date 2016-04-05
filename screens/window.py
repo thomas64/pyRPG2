@@ -30,7 +30,7 @@ DEFZOOM = 1.0
 MINZOOM = .5
 
 OVERWORLDPATH = 'resources/maps/'
-OVERWORLDNAME = 'start_forest'
+OVERWORLDNAME = 'ersin_forest_start'
 STARTPOSITION = 'start_game'    # dit is de naam van de startpositie object in de tmx map
 STARTDIRECTION = screens.direction.Direction.South
 PLAYERLAYER = 3

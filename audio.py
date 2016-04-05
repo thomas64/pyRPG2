@@ -42,7 +42,7 @@ class MapMusic(enum.Enum):
     """
     Alle tmx kaarten op een rij, met de muziek erachter en ambient sound.
     """
-    StartForest = 'start_forest',                    'start_forest',     'birds'
+    ErsinForestStart = 'ersin_forest_start',         'ersin_forest',     'birds'
     StartForestBelow = 'start_forest_below',         'start_forest',     'birds'
     StartForestWaterfall = 'start_forest_waterfall', 'start_forest',     'river'
     StartTown = 'start_town',                        'start_town',       'town'
