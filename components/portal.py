@@ -16,10 +16,11 @@ class Portal(object):
     Hij krijgt een van en een naar naam mee. Hij laadt dan de naarmap en zoekt daarin naar de naam van de vanmap.
     Wanneer gevonden, dan wordt dat object de startpositie van de naarmap.
     """
-    def __init__(self, from_name, from_rect, to_name):
+    def __init__(self, from_name, from_rect, to_name, to_nr):
         self.from_name = from_name
         self.rect = from_rect
         self.to_name = to_name
+        self.to_nr = to_nr
         self.to_rect = (0, 0, 0, 0)
 
         temp_tmx_data = pytmx.load_pygame(MAPSPATH+to_name+".tmx")

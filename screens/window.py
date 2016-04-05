@@ -66,13 +66,14 @@ class Window(object):
 
         self.new_map(OVERWORLDNAME, OVERWORLDPATH + OVERWORLDNAME + '.tmx', STARTPOSITION, STARTDIRECTION)
 
-    def new_map(self, map_name, map_path, startposition, startdirection):
+    def new_map(self, map_name, map_path, startposition, startdirection, portal_id=None):
         """
         Maak een nieuwe map aan met de hero's in het veld.
         :param map_name: naam van de map
         :param map_path: het pad van de tmx
         :param startposition: de positie van party_sprites[0] als naam van een tmx start_pos object layer
         :param startdirection: welke kant kijkt party_sprites[0] op
+        :param portal_id: type van portal in tmx
         """
         self.map1 = screens.map.Map(map_name, map_path, self.width, self.height, PLAYERLAYER)
         self.group = self.map1.view
@@ -82,7 +83,9 @@ class Window(object):
         start_pos = startposition           # voor loadsave moet het point zijn ipv een naam
         for pos in self.map1.start_pos:     # kijk in de start_pos list van de map
             if pos.name == startposition:   # van alle start_possen, welke komt overeen met waar de hero vandaan komt
-                start_pos = (pos.x, pos.y)  # zet dan de x,y waarde op dié start_pos
+                if pos.type == portal_id:       # als het ook nog een portal ID heeft
+                    start_pos = (pos.x, pos.y)  # zet dan de x,y waarde op dié start_pos
+                    break
 
         self.party_sprites = []
         self.party = list(self.engine.data.party.values())
@@ -262,8 +265,9 @@ class Window(object):
             portal_nr = self.party_sprites[0].rect.collidelist(self.map1.portals)
             self.prev_map_name = self.map1.portals[portal_nr].from_name
             to_name = self.map1.portals[portal_nr].to_name
+            to_nr = self.map1.portals[portal_nr].to_nr
             to_map_path = OVERWORLDPATH+to_name+'.tmx'
-            self.new_map(to_name, to_map_path, self.prev_map_name, self.party_sprites[0].last_direction)
+            self.new_map(to_name, to_map_path, self.prev_map_name, self.party_sprites[0].last_direction, to_nr)
 
     def check_chests(self):
         """

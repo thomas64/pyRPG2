@@ -50,7 +50,7 @@ class Map(object):
         for obj in tmx_data.get_layer_by_name(STARTPOS):
             self.start_pos.append(obj)
         for obj in tmx_data.get_layer_by_name(PORTALS):
-            self.portals.append(components.portal.Portal(self.name, self._pg_rect(obj), obj.name))
+            self.portals.append(components.portal.Portal(self.name, self._pg_rect(obj), obj.name, obj.type))
         for rect in tmx_data.get_layer_by_name(HIGHBLOCKER):
             self.high_blocker_rects.append(self._pg_rect(rect))
         for rect in tmx_data.get_layer_by_name(LOWBLOCKER):
