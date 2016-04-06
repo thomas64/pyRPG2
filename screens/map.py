@@ -40,6 +40,8 @@ class Map(object):
         self.width = int(tmx_data.width * tilewidth)
         self.height = int(tmx_data.height * tileheight)
 
+        self.title = tmx_data.properties['title']
+
         self.start_pos = []
         self.portals = []
         self.high_blocker_rects = []

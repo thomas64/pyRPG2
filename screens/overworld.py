@@ -15,11 +15,17 @@ import statemachine
 
 
 WINDOWWIDTH = 900
-WINDOWHEIGHT = 740
-WINDOWPOS = 10, 10
+WINDOWHEIGHT = 718
+WINDOWPOS = 10, 40
 
 BACKGROUNDCOLOR = pygame.Color("black")
 LINECOLOR = pygame.Color("white")
+
+MAPTITLEFONT = None
+MAPTITLEFONTSIZE = 30
+MAPTITLEFONTCOLOR = pygame.Color("gray36")
+MAPTITLEPOSX = 100
+MAPTITLEPOSY = 10
 
 INVLBL = "I"
 UPLBL = "Up"
@@ -49,6 +55,8 @@ class Overworld(object):
         self.background = self.background.convert()
         self.window = screens.window.Window(WINDOWWIDTH, WINDOWHEIGHT, self.engine)
 
+        self.map_title_font = pygame.font.SysFont(MAPTITLEFONT, MAPTITLEFONTSIZE)
+        self.map_title_label = ""
         self.name = statemachine.States.Overworld
 
         self.buttons = None
@@ -139,6 +147,8 @@ class Overworld(object):
         """
         self.window.update(dt)
 
+        self.map_title_label = self.map_title_font.render(self.window.map1.title,
+                                                          True, MAPTITLEFONTCOLOR).convert_alpha()
         for button in self.buttons:
             button.update(self.key_input)
 
@@ -152,6 +162,8 @@ class Overworld(object):
         #     self.background, LINECOLOR, (WINDOWPOS[0]-1, WINDOWPOS[1]-1, WINDOWWIDTH+2, WINDOWHEIGHT+2), 1)
         self.screen.blit(self.background, (0, 0))
         self.screen.blit(self.window.surface, WINDOWPOS)
+
+        self.screen.blit(self.map_title_label, (MAPTITLEPOSX, MAPTITLEPOSY))
 
         for button in self.buttons:
             button.render(self.screen)
