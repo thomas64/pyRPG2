@@ -7,6 +7,7 @@ import characters
 import database.hero
 import database.treasurechest
 import equipment
+import screens.direction
 
 
 class Script(object):
@@ -35,3 +36,7 @@ class Script(object):
 
         eqp_item = equipment.factory_equipment_item('bronzemace')
         self.engine.data.inventory.add(eqp_item, verbose=False)
+
+        self.engine.data.map_name = 'ersin_forest_start'
+        self.engine.data.map_pos = 'start_game'     # dit is de naam van de startpositie object in de tmx map
+        self.engine.data.map_dir = screens.direction.Direction.South

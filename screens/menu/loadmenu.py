@@ -7,10 +7,10 @@ import datetime
 import os
 
 import audio as sfx
+import components.map
 import data
 import loadsave
 import screens.menu.basemenu
-import screens.menu.manager
 import screens.overworld
 
 SAVEPATH = 'savegame'
@@ -70,14 +70,11 @@ class LoadMenu(screens.menu.basemenu.BaseMenu):
             self.engine.audio.play_sound(sfx.MENUERROR)
         else:
             self.engine.data = data.Data()
-            # todo, dit moet hier echt niet tussen, iets anders verzinnen. deze regel weghalen om te testen
-            # het zit wel in mainmenu newgame, maar dat is logisch, hier niet!!
-            self.engine.script.new_game()
-            ###
-            # todo, geluid laden gaat ook niet goed, 2x
-            self.engine.gamestate.change(screens.overworld.Overworld(self.engine))
             filename = self._convert_to_filename(menu_item.text, index)
             loadsave.Dialog(self.engine).load(filename)
+            self.engine.current_map = components.map.Map(self.engine.data.map_name)
+            push_object = screens.overworld.Overworld(self.engine)
+            self.engine.gamestate.change(push_object)
 
     def on_delete(self, menu_item, scr_capt, index):
         """

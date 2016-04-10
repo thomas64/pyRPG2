@@ -11,6 +11,8 @@ import components.namedrect
 import components.portal
 import components.sprites
 
+MAPPATH = 'resources/maps/'
+
 # de zes object layers in een tmx map
 STARTPOS = "start_pos"
 PORTALS = "portals"
@@ -19,26 +21,31 @@ LOWBLOCKER = "low_blocker"
 CHESTS = "chests"
 SOUNDS = "sounds"
 
+WINDOWWIDTH = 900
+WINDOWHEIGHT = 718
+
 OBJECTLAYER = 2
+PLAYERLAYER = 3
 
 
 class Map(object):
     """
     Bevat allemaal lijsten van rects.
     """
-    def __init__(self, name, tmxpath, windowwidth, windowheight, layer):
-        self.name = name
-        self.tmxpath = tmxpath
+    def __init__(self, name):
+        map_tmx = MAPPATH + name + '.tmx'
 
-        tmx_data = pytmx.load_pygame(self.tmxpath)
+        tmx_data = pytmx.load_pygame(map_tmx)
         map_data = pyscroll.TiledMapData(tmx_data)
-        self.map_layer = pyscroll.BufferedRenderer(map_data, (windowwidth, windowheight))
-        self.view = pyscroll.PyscrollGroup(map_layer=self.map_layer, default_layer=layer)
+        self.map_layer = pyscroll.BufferedRenderer(map_data, (WINDOWWIDTH, WINDOWHEIGHT))
+        self.view = pyscroll.PyscrollGroup(map_layer=self.map_layer, default_layer=PLAYERLAYER)
 
         tilewidth = tmx_data.tilewidth
         tileheight = tmx_data.tileheight
         self.width = int(tmx_data.width * tilewidth)
         self.height = int(tmx_data.height * tileheight)
+        self.window_width = WINDOWWIDTH
+        self.window_height = WINDOWHEIGHT
 
         self.title = tmx_data.properties['title']
 
@@ -52,7 +59,7 @@ class Map(object):
         for obj in tmx_data.get_layer_by_name(STARTPOS):
             self.start_pos.append(obj)
         for obj in tmx_data.get_layer_by_name(PORTALS):
-            self.portals.append(components.portal.Portal(self.name, self._pg_rect(obj), obj.name, obj.type))
+            self.portals.append(components.portal.Portal(name, self._pg_rect(obj), obj.name, obj.type))
         for rect in tmx_data.get_layer_by_name(HIGHBLOCKER):
             self.high_blocker_rects.append(self._pg_rect(rect))
         for rect in tmx_data.get_layer_by_name(LOWBLOCKER):

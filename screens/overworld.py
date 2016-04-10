@@ -14,8 +14,6 @@ import screens.window
 import statemachine
 
 
-WINDOWWIDTH = 900
-WINDOWHEIGHT = 718
 WINDOWPOS = 10, 40
 
 BACKGROUNDCOLOR = pygame.Color("black")
@@ -23,9 +21,8 @@ LINECOLOR = pygame.Color("white")
 
 MAPTITLEFONT = None
 MAPTITLEFONTSIZE = 30
-MAPTITLEFONTCOLOR = pygame.Color("gray36")
-MAPTITLEPOSX = 100
-MAPTITLEPOSY = 10
+MAPTITLEFONTCOLOR = pygame.Color("white")
+MAPTITLEPOS = 100, 10
 
 INVLBL = "I"
 UPLBL = "Up"
@@ -53,7 +50,7 @@ class Overworld(object):
         self.background = pygame.Surface(self.screen.get_size())
         self.background.fill(BACKGROUNDCOLOR)
         self.background = self.background.convert()
-        self.window = screens.window.Window(WINDOWWIDTH, WINDOWHEIGHT, self.engine)
+        self.window = screens.window.Window(self.engine)
 
         self.map_title_font = pygame.font.SysFont(MAPTITLEFONT, MAPTITLEFONTSIZE)
         self.map_title_label = ""
@@ -93,8 +90,6 @@ class Overworld(object):
         Wanneer deze state op de stack komt, voer dit uit.
         Zet muziek en achtergrond geluiden indien nodig.
         """
-        # todo, hij laadt eerst forest muziek bij savegame, daarna zet hij er pas de juiste muziek overheen
-        # dat moet anders
         self.engine.audio.set_bg_music(self.name)
         self.engine.audio.set_bg_sounds(self.name)
 
@@ -147,7 +142,7 @@ class Overworld(object):
         """
         self.window.update(dt)
 
-        self.map_title_label = self.map_title_font.render(self.window.map1.title,
+        self.map_title_label = self.map_title_font.render(self.engine.current_map.title,
                                                           True, MAPTITLEFONTCOLOR).convert_alpha()
         for button in self.buttons:
             button.update(self.key_input)
@@ -163,7 +158,7 @@ class Overworld(object):
         self.screen.blit(self.background, (0, 0))
         self.screen.blit(self.window.surface, WINDOWPOS)
 
-        self.screen.blit(self.map_title_label, (MAPTITLEPOSX, MAPTITLEPOSY))
+        self.screen.blit(self.map_title_label, MAPTITLEPOS)
 
         for button in self.buttons:
             button.render(self.screen)

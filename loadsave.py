@@ -30,17 +30,7 @@ class Dialog(object):
         try:
             console.load_gamedata()
             with open(filename, 'rb') as f:
-                (self.engine.data,
-                 self.engine.gamestate.peek().window.map1.name,
-                 self.engine.gamestate.peek().window.map1.tmxpath,
-                 self.engine.gamestate.peek().window.party_sprites[0].rect.topleft,
-                 self.engine.gamestate.peek().window.party_sprites[0].last_direction) = pickle.load(f)
-                self.engine.gamestate.peek().window.new_map(
-                    self.engine.gamestate.peek().window.map1.name,
-                    self.engine.gamestate.peek().window.map1.tmxpath,
-                    self.engine.gamestate.peek().window.party_sprites[0].rect.topleft,
-                    self.engine.gamestate.peek().window.party_sprites[0].last_direction
-                )
+                self.engine.data = pickle.load(f)
         except (pickle.UnpicklingError, EOFError):
             console.corrupt_gamedata()
 
@@ -52,12 +42,7 @@ class Dialog(object):
         console.save_gamedata()
         filename = os.path.join(SAVEPATH, filename)
         with open(filename, 'wb') as f:
-            # deep_peek(-3) moet, omdat normaal peek() niet werkt, er zitten twee lagen erboven op de stack.
-            pickle.dump([self.engine.data,
-                         self.engine.gamestate.deep_peek(-3).window.map1.name,
-                         self.engine.gamestate.deep_peek(-3).window.map1.tmxpath,
-                         self.engine.gamestate.deep_peek(-3).window.party_sprites[0].rect.topleft,
-                         self.engine.gamestate.deep_peek(-3).window.party_sprites[0].last_direction], f)
+            pickle.dump(self.engine.data, f)
 
     @staticmethod
     def delete(filename):

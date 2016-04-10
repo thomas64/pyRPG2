@@ -18,3 +18,7 @@ class Data(object):
         self.party = containers.Party()
         self.inventory = containers.Inventory()
         self.pouch = containers.Pouch()
+
+        self.map_name = None
+        self.map_pos = None
+        self.map_dir = None

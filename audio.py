@@ -54,8 +54,8 @@ class Audio(object):
     """
     De audio handler.
     """
-    def __init__(self, gamestate):
-        self.gamestate = gamestate
+    def __init__(self, engine):
+        self.engine = engine
         self.music = 0
         self.sound = 0
         self._load_cfg()
@@ -117,7 +117,7 @@ class Audio(object):
             self.sound = 1
             self.play_sound(MENUSELECT)         # en speel weer een geluid af omdat er geluid is.
             # kijkt 1 laag dieper om te zien of hij in mainmenu of pausemenu zit
-            self.set_bg_sounds(self.gamestate.deep_peek().name)
+            self.set_bg_sounds(self.engine.gamestate.deep_peek().name)
 
     def flip_music(self):
         """
@@ -128,7 +128,7 @@ class Audio(object):
             self.stop_bg_music()
         elif self.music == 0:
             self.music = 1
-            self.set_bg_music(self.gamestate.deep_peek().name)
+            self.set_bg_music(self.engine.gamestate.deep_peek().name)
 
     # todo, muziek van mainmenu later in laten komen?
     def set_bg_music(self, currentstate):
@@ -139,14 +139,14 @@ class Audio(object):
         # bij options menu moet er niets veranderen, en ook niet als hij van options komt.
         # ook niet als hij van messagebox komt. todo, dit begint wat lelijk te worden.
         if currentstate == statemachine.States.OptionsMenu or \
-           self.gamestate.prev_state == statemachine.States.OptionsMenu or \
-           self.gamestate.prev_state == statemachine.States.MessageBox:
+           self.engine.gamestate.prev_state == statemachine.States.OptionsMenu or \
+           self.engine.gamestate.prev_state == statemachine.States.MessageBox:
             return
 
         if currentstate == statemachine.States.Overworld:
             for _enum in MapMusic:
                 # als de naam in de MapMusic overeenkomt met de naam van de huidige map
-                if _enum.value[0] == self.gamestate.peek().window.map1.name:
+                if _enum.value[0] == self.engine.data.map_name:
                     # als de muziek in de MapMusic NIET overeenkomt met de muziek van de vorige map
                     if _enum.value[1] != self._get_prev_bg_audio(1):
                         # speel dan de nieuwe muziek
@@ -165,7 +165,7 @@ class Audio(object):
 
     def _get_prev_bg_audio(self, index):
         for _enum in MapMusic:
-            if _enum.value[0] == self.gamestate.peek().window.prev_map_name:
+            if _enum.value[0] == self.engine.gamestate.peek().window.prev_map_name:
                 return _enum.value[index]
 
     def set_bg_sounds(self, currentstate):
@@ -174,13 +174,13 @@ class Audio(object):
         :param currentstate: self.statemachine.peek()
         """
         if currentstate == statemachine.States.OptionsMenu or \
-           self.gamestate.prev_state == statemachine.States.OptionsMenu or \
-           self.gamestate.prev_state == statemachine.States.MessageBox:
+           self.engine.gamestate.prev_state == statemachine.States.OptionsMenu or \
+           self.engine.gamestate.prev_state == statemachine.States.MessageBox:
             return
 
         if currentstate == statemachine.States.Overworld:
             for _enum in MapMusic:
-                if _enum.value[0] == self.gamestate.peek().window.map1.name:
+                if _enum.value[0] == self.engine.data.map_name:
                     if _enum.value[2] != self._get_prev_bg_audio(2):
                         self.fade_bg_sounds()
                         self.bg_sound_channel1.set_volume(1)

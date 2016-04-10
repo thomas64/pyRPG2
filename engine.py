@@ -37,7 +37,8 @@ class GameEngine(object):
         self.data = None
         self.script = script.Script(self)
         self.video = video.Video()
-        self.audio = audio.Audio(self.gamestate)
+        self.audio = audio.Audio(self)
+        self.current_map = None
 
         self.running = False
 
@@ -161,8 +162,8 @@ class GameEngine(object):
             try:
                 hero = self.gamestate.peek().window.party_sprites[0]
                 text2 = (
-                    "map:               {}".format(self.gamestate.peek().window.map1.name),
-                    "zoom:              {:.1f}".format(self.gamestate.peek().window.map1.map_layer.zoom),
+                    "map:               {}".format(self.data.map_name),
+                    "zoom:              {:.1f}".format(self.current_map.map_layer.zoom),
                     "time_up:           {}".format(hero.time_up),
                     "time_down:         {}".format(hero.time_down),
                     "time_left:         {}".format(hero.time_left),
@@ -200,9 +201,8 @@ class GameEngine(object):
             except AttributeError:
                 pass
             text2 = (
-                "prev_state:        {}".format(self.gamestate.prev_state),
-                "StateStack:",
-                ""
+                "",
+                "StateStack:"
             )
             textb = []
             for state in self.gamestate.statestack:

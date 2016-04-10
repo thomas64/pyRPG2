@@ -8,13 +8,13 @@ import collections
 import pygame
 
 import audio as sfx
+import components.map
 import components.messagebox
 import components.sprites
 import equipment
 import keys
 import pouchitems
 import screens.direction
-import screens.map
 import screens.shop.display
 import screens.unit
 
@@ -29,11 +29,6 @@ MAXZOOM = 3.1
 DEFZOOM = 1.0
 MINZOOM = .5
 
-OVERWORLDPATH = 'resources/maps/'
-OVERWORLDNAME = 'ersin_forest_start'
-STARTPOSITION = 'start_game'    # dit is de naam van de startpositie object in de tmx map
-STARTDIRECTION = screens.direction.Direction.South
-PLAYERLAYER = 3
 GRIDLAYER = 8
 CBOXLAYER = 9
 GRIDSIZE = 32
@@ -46,15 +41,9 @@ class Window(object):
     """
     De window met de kaart en hero's.
     """
-    def __init__(self, width, height, engine):
-        self.width = width
-        self.height = height
+    def __init__(self, engine):
         self.engine = engine
-        self.surface = pygame.Surface((self.width, self.height))
-        self.surface.fill(BACKGROUNDCOLOR)
-        self.surface = self.surface.convert()
 
-        self.map1 = None
         self.prev_map_name = None
         self.group = None
         self.grid_sprite = None
@@ -64,33 +53,34 @@ class Window(object):
         self.maxlen = None
         self.leader_history = None
 
-        self.new_map(OVERWORLDNAME, OVERWORLDPATH + OVERWORLDNAME + '.tmx', STARTPOSITION, STARTDIRECTION)
+        self.load_map()
 
-    def new_map(self, map_name, map_path, startposition, startdirection, portal_id=None):
+        self.width = self.engine.current_map.window_width
+        self.height = self.engine.current_map.window_height
+        self.surface = pygame.Surface((self.width, self.height))
+        self.surface.fill(BACKGROUNDCOLOR)
+        self.surface = self.surface.convert()
+
+    def load_map(self):
         """
         Maak een nieuwe map aan met de hero's in het veld.
-        :param map_name: naam van de map
-        :param map_path: het pad van de tmx
-        :param startposition: de positie van party_sprites[0] als naam van een tmx start_pos object layer
-        :param startdirection: welke kant kijkt party_sprites[0] op
-        :param portal_id: type van portal in tmx
         """
-        self.map1 = screens.map.Map(map_name, map_path, self.width, self.height, PLAYERLAYER)
-        self.group = self.map1.view
+        self.group = self.engine.current_map.view
         self.grid_sprite = None
         self.cbox_sprites = []
 
-        start_pos = startposition           # voor loadsave moet het point zijn ipv een naam
-        for pos in self.map1.start_pos:     # kijk in de start_pos list van de map
-            if pos.name == startposition:   # van alle start_possen, welke komt overeen met waar de hero vandaan komt
-                if pos.type == portal_id:       # als het ook nog een portal ID heeft
-                    start_pos = (pos.x, pos.y)  # zet dan de x,y waarde op dié start_pos
+        start_pos = self.engine.data.map_pos               # normaliter is start_pos een point, behalve bij het start
+        start_dir = self.engine.data.map_dir               # van het spel, dan is het een string.
+        if type(start_pos) is str:                         # maw, als start_pos = 'start_game'
+            for pos in self.engine.current_map.start_pos:  # kijk in de start_pos list van de map
+                if pos.name == start_pos:                  # van alle start_possen, welke komt overeen met 'start_game'
+                    start_pos = pos.x, pos.y               # zet dan de x,y waarde op dié start_pos
                     break
 
         self.party_sprites = []
         self.party = list(self.engine.data.party.values())
         for hero in self.party:
-            self.party_sprites.append(screens.unit.Unit(hero.SPR, start_pos, startdirection, self.engine.audio))
+            self.party_sprites.append(screens.unit.Unit(hero.SPR, start_pos, start_dir, self.engine.audio))
         self.party_sprites.reverse()               # voeg de party_sprites in juiste volgorde toe
         self.group.add(self.party_sprites)         # maar als sprites moeten ze precies andersom staan
         self.party_sprites.reverse()               # want daar wil je party_sprites[0] bovenop weergegeven hebben
@@ -100,7 +90,7 @@ class Window(object):
         self.align()
 
         # voeg alle objecten toe van uit de map
-        self.group.add(self.map1.chests)
+        self.group.add(self.engine.current_map.chests)
 
         self.engine.audio.set_bg_music(self.engine.gamestate.peek().name)
         self.engine.audio.set_bg_sounds(self.engine.gamestate.peek().name)
@@ -134,7 +124,8 @@ class Window(object):
 
             elif event.key == keys.GRID:
                 if self.grid_sprite is None:
-                    self.grid_sprite = components.sprites.Grid(self.map1.width, self.map1.height,
+                    self.grid_sprite = components.sprites.Grid(self.engine.current_map.width,
+                                                               self.engine.current_map.height,
                                                                GRIDCOLOR, GRIDSIZE, GRIDLAYER)
                     self.group.add(self.grid_sprite)
                 else:
@@ -145,9 +136,9 @@ class Window(object):
                 if len(self.cbox_sprites) == 0:                             # als de lijst leeg is.
                     for unit in self.party_sprites:
                         self.cbox_sprites.append(components.sprites.ColorBox(unit.rect, HEROCOLOR, CBOXLAYER))
-                    for rect in self.map1.high_blocker_rects:
+                    for rect in self.engine.current_map.high_blocker_rects:
                         self.cbox_sprites.append(components.sprites.ColorBox(rect, HIGHBLOCKERCOLOR, CBOXLAYER))
-                    for rect in self.map1.low_blocker_rects:
+                    for rect in self.engine.current_map.low_blocker_rects:
                         self.cbox_sprites.append(components.sprites.ColorBox(rect, LOWBLOCKERCOLOR, CBOXLAYER))
                     self.group.add(self.cbox_sprites)
                 else:
@@ -163,23 +154,31 @@ class Window(object):
         :param dt: self.clock.tick(FPS)/1000.0
         """
         if key_input[keys.ZOOMPLUS[0]] or key_input[keys.ZOOMPLUS[1]]:
-            value = self.map1.map_layer.zoom + ZOOMSPEED
+            value = self.engine.current_map.map_layer.zoom + ZOOMSPEED
             if value < MAXZOOM:
-                self.map1.map_layer.zoom = value
+                self.engine.current_map.map_layer.zoom = value
         elif key_input[keys.ZOOMMIN[0]] or key_input[keys.ZOOMMIN[1]]:
-            value = self.map1.map_layer.zoom - ZOOMSPEED
+            value = self.engine.current_map.map_layer.zoom - ZOOMSPEED
             if value > MINZOOM:
-                self.map1.map_layer.zoom = value
+                self.engine.current_map.map_layer.zoom = value
         elif key_input[keys.ZOOMRESET[0]] or key_input[keys.ZOOMRESET[1]]:
-            self.map1.map_layer.zoom = DEFZOOM
+            self.engine.current_map.map_layer.zoom = DEFZOOM
 
         self.party_sprites[0].speed(key_input)
         self.party_sprites[0].direction(key_input, dt)
         # todo, moet dit niet naar de unit class?
-        self.party_sprites[0].check_blocker(self.map1.high_blocker_rects, self.map1.low_blocker_rects,
-                                            None, self.map1.width, self.map1.height, dt)
+        self.party_sprites[0].check_blocker(self.engine.current_map.high_blocker_rects,
+                                            self.engine.current_map.low_blocker_rects,
+                                            None,
+                                            self.engine.current_map.width,
+                                            self.engine.current_map.height,
+                                            dt)
 
         self.leader_trail(dt)
+
+        # update ook in de data voor een savegame en nieuwe map
+        self.engine.data.map_pos = self.party_sprites[0].rect.topleft
+        self.engine.data.map_dir = self.party_sprites[0].last_direction
 
     def update(self, dt):
         """
@@ -195,8 +194,8 @@ class Window(object):
             for index, unit in enumerate(self.party_sprites):  # dit kan om dat de eerste paar die aan cbox_sprites bij
                 self.cbox_sprites[index].rect.topleft = unit.rect.topleft  # F11 zijn toegevoegd zijn de unit.rects
 
-        if self.map1.width >= self.width and \
-           self.map1.height >= self.height:
+        if self.engine.current_map.width >= self.width and \
+           self.engine.current_map.height >= self.height:
             self.group.center(self.party_sprites[0].rect.center)
 
     def render(self):
@@ -204,7 +203,7 @@ class Window(object):
         Render de plaatjes van de objecten.
         Teken de window inhoud.
         """
-        for obj in self.map1.chests:
+        for obj in self.engine.current_map.chests:
             chest_data = self.engine.data.treasure_chests[obj.chest_id]
             obj.render(chest_data['opened'])
 
@@ -249,9 +248,9 @@ class Window(object):
         Bekijk op de kaart met welke sound de voeten colliden.
         Zet die naam van het object van de kaart als audio.footstep.
         """
-        if len(self.party_sprites[0].feet.collidelistall(self.map1.sounds)) == 1:
-            sound_nr = self.party_sprites[0].feet.collidelist(self.map1.sounds)
-            name = self.map1.sounds[sound_nr].name
+        if len(self.party_sprites[0].feet.collidelistall(self.engine.current_map.sounds)) == 1:
+            sound_nr = self.party_sprites[0].feet.collidelist(self.engine.current_map.sounds)
+            name = self.engine.current_map.sounds[sound_nr].name
             self.engine.audio.footstep = name
 
     def check_portals(self):
@@ -260,23 +259,23 @@ class Window(object):
         Zo ja, haal dan de van en naar data uit de portal.
         Hij gebruikt de van naam voor de startpositie in de nieuwe map.
         """
-        if len(self.party_sprites[0].rect.collidelistall(self.map1.portals)) == 1:
+        if len(self.party_sprites[0].rect.collidelistall(self.engine.current_map.portals)) == 1:
             self.engine.timer = NEWMAPTIMEOUT
-            portal_nr = self.party_sprites[0].rect.collidelist(self.map1.portals)
-            self.prev_map_name = self.map1.portals[portal_nr].from_name
-            to_name = self.map1.portals[portal_nr].to_name
-            to_nr = self.map1.portals[portal_nr].to_nr
-            to_map_path = OVERWORLDPATH+to_name+'.tmx'
-            self.new_map(to_name, to_map_path, self.prev_map_name, self.party_sprites[0].last_direction, to_nr)
+            portal_nr = self.party_sprites[0].rect.collidelist(self.engine.current_map.portals)
+            self.prev_map_name = self.engine.current_map.portals[portal_nr].from_name
+            self.engine.data.map_name = self.engine.current_map.portals[portal_nr].to_name
+            self.engine.data.map_pos = self.engine.current_map.portals[portal_nr].to_pos
+            self.engine.current_map = components.map.Map(self.engine.data.map_name)
+            self.load_map()
 
     def check_chests(self):
         """
         Bekijk of collide met een chest.
         """
         if self.party_sprites[0].last_direction == screens.direction.Direction.North:
-            if len(self.party_sprites[0].rect.collidelistall(self.map1.chests)) == 1:
-                object_nr = self.party_sprites[0].rect.collidelist(self.map1.chests)
-                chest_sprite = self.map1.chests[object_nr]
+            if len(self.party_sprites[0].rect.collidelistall(self.engine.current_map.chests)) == 1:
+                object_nr = self.party_sprites[0].rect.collidelist(self.engine.current_map.chests)
+                chest_sprite = self.engine.current_map.chests[object_nr]
                 chest_data = self.engine.data.treasure_chests[chest_sprite.chest_id]
                 if chest_data['content']:
                     chest_data['opened'] = 1

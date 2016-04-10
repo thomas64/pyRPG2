@@ -3,7 +3,6 @@
 class: Portal
 """
 
-import pygame
 import pytmx
 
 MAPSPATH = 'resources/maps/'
@@ -21,9 +20,11 @@ class Portal(object):
         self.rect = from_rect
         self.to_name = to_name
         self.to_nr = to_nr
-        self.to_rect = (0, 0, 0, 0)
+        self.to_pos = self._load_position()
 
-        temp_tmx_data = pytmx.load_pygame(MAPSPATH+to_name+".tmx")
+    def _load_position(self):
+        temp_tmx_data = pytmx.load_pygame(MAPSPATH+self.to_name+".tmx")
         for obj in temp_tmx_data.get_layer_by_name(STARTPOS):
-            if obj.name == from_name:
-                self.to_rect = pygame.Rect(obj.x, obj.y, obj.width, obj.height)
+            if obj.name == self.from_name:
+                if obj.type == self.to_nr:
+                    return obj.x, obj.y
