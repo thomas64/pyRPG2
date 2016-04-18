@@ -212,18 +212,18 @@ class Unit(pygame.sprite.Sprite):
                 t = True
 
         # loop tegen de rand van de map aan
-        if self.rect.top < 0:
-            self.rect.top = 0
-            t = True
-        if self.rect.left < 0:
-            self.rect.left = 0
-            t = True
-        if self.rect.bottom > map_height:
-            self.rect.bottom = map_height
-            t = True
-        if self.rect.right > map_width:
-            self.rect.right = map_width
-            t = True
+        # if self.rect.top < 0:
+        #     self.rect.top = 0
+        #     t = True
+        # if self.rect.left < 0:
+        #     self.rect.left = 0
+        #     t = True
+        # if self.rect.bottom > map_height:
+        #     self.rect.bottom = map_height
+        #     t = True
+        # if self.rect.right > map_width:
+        #     self.rect.right = map_width
+        #     t = True
 
         # als er een moverange bestaat en je loopt tegen de rand van je moverange
         if moverange is not None:

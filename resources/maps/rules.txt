@@ -1,0 +1,69 @@
+# op under0 background, alles tot groenzwart van bomen.
+rules\rule_00.tmx
+
+# op under1 ground, groen tot gras.
+rules\rule_01.tmx
+
+# modder
+# op set, random bruine vlekken.
+rules\rule_02a.tmx
+# op set, bruine vlekken op elkaar aan laten sluiten.
+rules\rule_02b.tmx
+# op under1 ground, bruin tot modder.
+rules\rule_02c.tmx
+# op under1 ground, zijkanten van modder.
+rules\rule_02d.tmx
+# op under1 ground, hoeken van modder.
+rules\rule_02e.tmx
+# op set, maak bruine vlekken weer groen.
+rules\rule_02f.tmx
+
+# gras
+# op set, random donkergroene vlekken.
+rules\rule_03a.tmx
+# op set, donkergroene vlekke op elkaar aan laten sluiten.
+rules\rule_03b.tmx
+# op under2_grass, donkergroen tot gras.
+rules\rule_03c.tmx
+# op under2_grass, zijkanten van gras.
+rules\rule_03d.tmx
+# op under2_grass, hoeken van gras.
+rules\rule_03e.tmx
+# op set, maak donkergroene vlekken weer groen.
+rules\rule_03f.tmx
+
+# op under3 stuff, random dingetjes.
+rules\rule_04.tmx
+
+# op under4 en over5 trees, losse bomen, stenen, stompen van set1.
+rules\rule_05.tmx
+
+# water
+# op under1 ground, van blauw tot waterrand.
+rules\rule_07a.tmx
+# op under1 ground, buitenhoeken van water.
+rules\rule_07b.tmx
+# op under1 ground, binnenhoeken van water. en riviertjes.
+rules\rule_07c.tmx
+# op set, maak van blauw groen.
+rules\rule_07x.tmx
+
+# randbomen
+# op set, bomen aan de bovenkant van groen.
+rules\rule_06a.tmx
+# op over5 trees, boven en onder boomrand.
+rules\rule_06b.tmx
+# op over5 trees, links en rechts boomrand. ook naast bomen van set.
+rules\rule_06c.tmx
+# op over5 trees, binnen en buiten hoeken boomrand. ook naast bomen van set.
+rules\rule_06d.tmx
+# op under4 trees, bomen van set. en high blocker.
+rules\rule_06e.tmx
+# op temp_blocker, randen van groen.
+rules\rule_06f.tmx
+# op set, maak bomen weer zwart.
+rules\rule_06g.tmx
+
+# rotsen
+# op under4 trees, grijs tot rotsen
+rules\rule_08a.tmx

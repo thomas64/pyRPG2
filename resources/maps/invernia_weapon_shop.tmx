@@ -1,5 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <map version="1.0" orientation="orthogonal" renderorder="right-down" width="40" height="36" tilewidth="16" tileheight="16" nextobjectid="29">
+ <properties>
+  <property name="title" value="Invernia"/>
+ </properties>
  <tileset firstgid="1" name="start_town_weapon_shop" tilewidth="16" tileheight="16" tilecount="1596" columns="42">
   <image source="tilesets/start_town_weapon_shop.png" width="672" height="608"/>
  </tileset>
@@ -268,9 +271,9 @@
   <object id="16" x="528" y="128" width="32" height="32"/>
  </objectgroup>
  <objectgroup name="portals" visible="0">
-  <object id="28" name="start_town" x="176" y="528" width="32" height="16"/>
+  <object id="28" name="invernia" x="176" y="528" width="32" height="16"/>
  </objectgroup>
  <objectgroup name="start_pos" visible="0">
-  <object id="27" name="start_town" x="176" y="496" width="16" height="16"/>
+  <object id="27" name="invernia" x="176" y="496" width="16" height="16"/>
  </objectgroup>
 </map>

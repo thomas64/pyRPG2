@@ -42,12 +42,13 @@ class MapMusic(enum.Enum):
     """
     Alle tmx kaarten op een rij, met de muziek erachter en ambient sound.
     """
-    ErsinForestStart = 'ersin_forest_start',         'ersin_forest',     'birds'
-    StartForestBelow = 'start_forest_below',         'start_forest',     'birds'
-    StartForestWaterfall = 'start_forest_waterfall', 'start_forest',     'river'
-    StartTown = 'start_town',                        'start_town',       'town'
-    StartTownArmorShop = 'start_town_armor_shop',    'start_town',       None
-    StartTownWeaponShop = 'start_town_weapon_shop',  'start_town',       None
+    ErsinForestStart = 'ersin_forest_start',            'ersin_forest', 'birds'
+    ErsinForestWaterfall = 'ersin_forest_waterfall',    'ersin_forest', 'river'
+    ErsinForestCenter = 'ersin_forest_center',          'ersin_forest', 'birds'
+    ErsinForestCave = 'ersin_forest_cave',              'ersin_forest', 'birds'
+    Invernia = 'invernia',                              'invernia',     'town'
+    InverniaArmorShop = 'invernia_armor_shop',          'invernia',     None
+    InverniaWeaponShop = 'invernia_weapon_shop',        'invernia',     None
 
 
 class Audio(object):

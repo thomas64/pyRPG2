@@ -1,5 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <map version="1.0" orientation="orthogonal" renderorder="right-down" width="92" height="76" tilewidth="16" tileheight="16" nextobjectid="114">
+ <properties>
+  <property name="title" value="Invernia"/>
+ </properties>
  <tileset firstgid="1" name="outside_b" tilewidth="16" tileheight="16" tilecount="1024" columns="32">
   <image source="tilesets/outside_b.png" width="512" height="512"/>
  </tileset>
@@ -574,14 +577,14 @@
   <object id="110" x="352" y="304" width="32" height="32"/>
   <object id="111" x="416" y="304" width="32" height="32"/>
  </objectgroup>
- <objectgroup name="portals" visible="0">
-  <object id="11" name="start_forest_below" x="1424" y="576" width="16" height="96"/>
-  <object id="14" name="start_town_armor_shop" x="192" y="304" width="32" height="16"/>
-  <object id="112" name="start_town_weapon_shop" x="384" y="304" width="32" height="16"/>
+ <objectgroup name="portals">
+  <object id="11" name="ersin_forest_center" x="1424" y="576" width="16" height="96"/>
+  <object id="14" name="invernia_armor_shop" x="192" y="304" width="32" height="16"/>
+  <object id="112" name="invernia_weapon_shop" x="384" y="304" width="32" height="16"/>
  </objectgroup>
- <objectgroup name="start_pos" visible="0">
-  <object id="13" name="start_forest_below" x="1392" y="608" width="16" height="16"/>
-  <object id="16" name="start_town_armor_shop" x="192" y="320" width="16" height="16"/>
-  <object id="113" name="start_town_weapon_shop" x="384" y="320" width="16" height="16"/>
+ <objectgroup name="start_pos">
+  <object id="13" name="ersin_forest_center" x="1392" y="608" width="16" height="16"/>
+  <object id="16" name="invernia_armor_shop" x="192" y="320" width="16" height="16"/>
+  <object id="113" name="invernia_weapon_shop" x="384" y="320" width="16" height="16"/>
  </objectgroup>
 </map>
