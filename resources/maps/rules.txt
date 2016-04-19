@@ -64,6 +64,9 @@ rules\rule_06f.tmx
 # op set, maak bomen weer zwart.
 rules\rule_06g.tmx
 
+# vanaf deze worden geen .tsx meer gebruikt.
 # rotsen
 # op under4 trees, grijs tot rotsen
 rules\rule_08a.tmx
+# op under4 trees, rechter randen van rotsen
+#rules\rule_08b.tmx

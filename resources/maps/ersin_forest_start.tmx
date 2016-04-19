@@ -265,6 +265,8 @@
    <terrain name="sand" tile="101"/>
    <terrain name="grass" tile="113"/>
    <terrain name="stones" tile="105"/>
+   <terrain name="moss" tile="509"/>
+   <terrain name="fence" tile="121"/>
   </terraintypes>
   <tile id="4" terrain=",,,0"/>
   <tile id="5" terrain=",,0,"/>
@@ -278,6 +280,10 @@
   <tile id="17" terrain=",,1,"/>
   <tile id="18" terrain=",1,1,1"/>
   <tile id="19" terrain="1,,1,1"/>
+  <tile id="24" terrain=",,,4"/>
+  <tile id="25" terrain=",,4,"/>
+  <tile id="26" terrain=",4,4,4"/>
+  <tile id="27" terrain="4,,4,4"/>
   <tile id="36" terrain=",0,,"/>
   <tile id="37" terrain="0,,,"/>
   <tile id="38" terrain="0,0,,0"/>
@@ -290,6 +296,10 @@
   <tile id="49" terrain="1,,,"/>
   <tile id="50" terrain="1,1,,1"/>
   <tile id="51" terrain="1,1,1,"/>
+  <tile id="56" terrain=",4,,"/>
+  <tile id="57" terrain="4,,,"/>
+  <tile id="58" terrain="4,4,,4"/>
+  <tile id="59" terrain="4,4,4,"/>
   <tile id="68" terrain=",,,0"/>
   <tile id="69" terrain=",,0,0"/>
   <tile id="70" terrain=",,0,0"/>
@@ -302,6 +312,10 @@
   <tile id="81" terrain=",,1,1"/>
   <tile id="82" terrain=",,1,1"/>
   <tile id="83" terrain=",,1,"/>
+  <tile id="88" terrain=",,,4"/>
+  <tile id="89" terrain=",,4,4"/>
+  <tile id="90" terrain=",,4,4"/>
+  <tile id="91" terrain=",,4,"/>
   <tile id="100" terrain=",0,,0"/>
   <tile id="101" terrain="0,0,0,0"/>
   <tile id="102" terrain="0,0,0,0"/>
@@ -314,6 +328,10 @@
   <tile id="113" terrain="1,1,1,1"/>
   <tile id="114" terrain="1,1,1,1"/>
   <tile id="115" terrain="1,,1,"/>
+  <tile id="120" terrain=",4,,4"/>
+  <tile id="121" terrain="4,4,4,4"/>
+  <tile id="122" terrain="4,4,4,4"/>
+  <tile id="123" terrain="4,,4,"/>
   <tile id="132" terrain=",0,,0"/>
   <tile id="133" terrain="0,0,0,0"/>
   <tile id="134" terrain="0,0,0,0"/>
@@ -326,6 +344,10 @@
   <tile id="145" terrain="1,1,1,1"/>
   <tile id="146" terrain="1,1,1,1"/>
   <tile id="147" terrain="1,,1,"/>
+  <tile id="152" terrain=",4,,4"/>
+  <tile id="153" terrain="4,4,4,4"/>
+  <tile id="154" terrain="4,4,4,4"/>
+  <tile id="155" terrain="4,,4,"/>
   <tile id="164" terrain=",0,,"/>
   <tile id="165" terrain="0,0,,"/>
   <tile id="166" terrain="0,0,,"/>
@@ -338,6 +360,34 @@
   <tile id="177" terrain="1,1,,"/>
   <tile id="178" terrain="1,1,,"/>
   <tile id="179" terrain="1,,,"/>
+  <tile id="184" terrain=",4,,"/>
+  <tile id="185" terrain="4,4,,"/>
+  <tile id="186" terrain="4,4,,"/>
+  <tile id="187" terrain="4,,,"/>
+  <tile id="412" terrain=",,,3"/>
+  <tile id="413" terrain=",,3,"/>
+  <tile id="414" terrain=",3,3,3"/>
+  <tile id="415" terrain="3,,3,3"/>
+  <tile id="444" terrain=",3,,"/>
+  <tile id="445" terrain="3,,,"/>
+  <tile id="446" terrain="3,3,,3"/>
+  <tile id="447" terrain="3,3,3,"/>
+  <tile id="476" terrain=",,,3"/>
+  <tile id="477" terrain=",,3,3"/>
+  <tile id="478" terrain=",,3,3"/>
+  <tile id="479" terrain=",,3,"/>
+  <tile id="508" terrain=",3,,3"/>
+  <tile id="509" terrain="3,3,3,3"/>
+  <tile id="510" terrain="3,3,3,3"/>
+  <tile id="511" terrain="3,,3,"/>
+  <tile id="540" terrain=",3,,3"/>
+  <tile id="541" terrain="3,3,3,3"/>
+  <tile id="542" terrain="3,3,3,3"/>
+  <tile id="543" terrain="3,,3,"/>
+  <tile id="572" terrain=",3,,"/>
+  <tile id="573" terrain="3,3,,"/>
+  <tile id="574" terrain="3,3,,"/>
+  <tile id="575" terrain="3,,,"/>
  </tileset>
  <tileset firstgid="1572" name="outside_a4" tilewidth="16" tileheight="16" tilecount="960" columns="32">
   <image source="tilesets/outside_a4.png" width="512" height="480"/>
@@ -780,7 +830,7 @@
 0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0
 </data>
  </layer>
- <objectgroup name="low_blocker" visible="0">
+ <objectgroup name="low_blocker">
   <object id="18426" x="176" y="272" width="32" height="16"/>
   <object id="18427" x="624" y="272" width="32" height="16"/>
   <object id="18428" x="704" y="400" width="32" height="16"/>
@@ -838,7 +888,7 @@
   <object id="18514" name="ersin_forest_center" x="1088" y="304" width="16" height="16"/>
  </objectgroup>
  <objectgroup name="chests">
-  <object id="18509" name="chest1" x="112" y="208" width="32" height="32"/>
+  <object id="18509" name="chest1" x="112" y="192" width="32" height="32"/>
  </objectgroup>
  <objectgroup name="sounds" visible="0">
   <object id="18510" name="step_grass" x="16" y="112" width="1104" height="576"/>
