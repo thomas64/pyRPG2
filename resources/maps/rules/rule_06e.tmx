@@ -1,25 +1,25 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<map version="1.0" orientation="orthogonal" renderorder="right-down" width="20" height="20" tilewidth="16" tileheight="16" nextobjectid="2">
+<map version="1.0" orientation="orthogonal" renderorder="right-down" width="20" height="20" tilewidth="16" tileheight="16" nextobjectid="3">
  <properties>
   <property name="NoOverlappingRules" value="true"/>
  </properties>
- <tileset firstgid="1" name="rules_ersin_forest" tilewidth="16" tileheight="16" tilecount="35" columns="7">
-  <image source="../tilesets/rules_ersin_forest.png" width="120" height="90"/>
+ <tileset firstgid="1" name="rules_ersin_forest" tilewidth="16" tileheight="16" tilecount="60" columns="10">
+  <image source="../tilesets/rules_ersin_forest.png" width="160" height="96"/>
  </tileset>
- <tileset firstgid="36" name="outside_a2" tilewidth="16" tileheight="16" tilecount="768" columns="32">
+ <tileset firstgid="61" name="outside_a2" tilewidth="16" tileheight="16" tilecount="768" columns="32">
   <image source="../tilesets/outside_a2.png" width="512" height="384"/>
  </tileset>
- <tileset firstgid="804" name="outside_a4" tilewidth="16" tileheight="16" tilecount="960" columns="32">
+ <tileset firstgid="829" name="outside_a4" tilewidth="16" tileheight="16" tilecount="960" columns="32">
   <image source="../tilesets/outside_a4.png" width="512" height="480"/>
  </tileset>
  <layer name="regions" width="20" height="20">
   <data encoding="csv">
-0,1,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
-0,1,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
-0,1,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
-0,1,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
-0,1,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
 0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
+0,1,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
+0,1,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
+0,1,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
+0,1,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
+0,1,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
 0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
 0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
 0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
@@ -36,14 +36,14 @@
 0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0
 </data>
  </layer>
- <layer name="input_set" width="20" height="20">
+ <layer name="input_set" width="20" height="20" visible="0">
   <data encoding="csv">
 0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
-0,1656,1657,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
-0,1688,1689,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
-0,1720,1721,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
-0,1752,1753,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
 0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
+0,1681,1682,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
+0,1713,1714,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
+0,1745,1746,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
+0,1777,1778,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
 0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
 0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
 0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
@@ -60,14 +60,14 @@
 0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0
 </data>
  </layer>
- <layer name="output_under4 trees" width="20" height="20">
+ <layer name="output_under4 trees" width="20" height="20" visible="0">
   <data encoding="csv">
 0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
-0,1656,1657,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
-0,1688,1689,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
-0,1720,1721,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
-0,1752,1753,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
 0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
+0,1681,1682,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
+0,1713,1714,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
+0,1745,1746,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
+0,1777,1778,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
 0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
 0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
 0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
@@ -84,7 +84,7 @@
 0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0
 </data>
  </layer>
- <objectgroup name="output_high_blocker">
-  <object id="1" x="16" y="0" width="32" height="64"/>
+ <objectgroup name="output_high_blocker" visible="0">
+  <object id="2" x="16" y="16" width="32" height="64"/>
  </objectgroup>
 </map>

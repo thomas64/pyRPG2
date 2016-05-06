@@ -3,20 +3,23 @@
  <properties>
   <property name="NoOverlappingRules" value="true"/>
  </properties>
- <tileset firstgid="1" name="rules_ersin_forest" tilewidth="16" tileheight="16" tilecount="35" columns="7">
-  <image source="../tilesets/rules_ersin_forest.png" width="120" height="90"/>
+ <tileset firstgid="1" name="rules_ersin_forest" tilewidth="16" tileheight="16" tilecount="50" columns="10">
+  <image source="../tilesets/rules_ersin_forest.png" width="160" height="90"/>
  </tileset>
- <tileset firstgid="36" name="outside_a2" tilewidth="16" tileheight="16" tilecount="768" columns="32">
+ <tileset firstgid="51" name="outside_a2" tilewidth="16" tileheight="16" tilecount="768" columns="32">
   <image source="../tilesets/outside_a2.png" width="512" height="384"/>
  </tileset>
- <tileset firstgid="804" name="outside_a4" tilewidth="16" tileheight="16" tilecount="960" columns="32">
+ <tileset firstgid="819" name="outside_a4" tilewidth="16" tileheight="16" tilecount="960" columns="32">
   <image source="../tilesets/outside_a4.png" width="512" height="480"/>
+ </tileset>
+ <tileset firstgid="1779" name="dungeon_a4" tilewidth="16" tileheight="16" tilecount="960" columns="32">
+  <image source="../tilesets/dungeon_a4.png" width="512" height="480"/>
  </tileset>
  <layer name="regions" width="20" height="20">
   <data encoding="csv">
 0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
-0,1,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
-0,1,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
+0,1,1,0,1,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
+0,1,1,0,1,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
 0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
 0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
 0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
@@ -39,8 +42,8 @@
  <layer name="input_set" width="20" height="20">
   <data encoding="csv">
 0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
-0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
-0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
+0,2,2,0,12,12,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
+0,2,2,0,12,12,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
 0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
 0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
 0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
@@ -63,8 +66,8 @@
  <layer name="output_under0 background" width="20" height="20">
   <data encoding="csv">
 0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
-0,1561,1562,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
-0,1593,1594,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
+0,1576,1577,0,1876,1877,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
+0,1608,1609,0,1908,1909,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
 0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
 0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
 0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
