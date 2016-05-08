@@ -1,0 +1,59 @@
+# op under0 background, alles van donkergrijs tot oppervlakte randrots.
+rules_cave\rule_00.tmx
+
+# op under1 ground, alles van grijs tot oppervlakte grondrots.
+rules_cave\rule_01.tmx
+
+# modder
+# op set, random bruine vlekken.
+# rules_cave\rule_02a.tmx
+# op set, bruine vlekken op elkaar aan laten sluiten.
+# rules_cave\rule_02b.tmx
+# op under1 ground, bruin tot modder.
+# rules_cave\rule_02c.tmx
+# op under1 ground, zijkanten van modder.
+# rules_cave\rule_02d.tmx
+# op under1 ground, hoeken van modder.
+# rules_cave\rule_02e.tmx
+# op set, maak bruine vlekken weer groen.
+# rules_cave\rule_02f.tmx
+
+# mos
+rules_cave\rule_03a.tmx
+rules_cave\rule_03b.tmx
+rules_cave\rule_03c.tmx
+rules_cave\rule_03d.tmx
+rules_cave\rule_03e.tmx
+rules_cave\rule_03f.tmx
+
+# op under3 stuff, random dingetjes.
+# rules_cave\rule_04.tmx
+
+# op under4 en over5 trees, losse bomen, stenen, stompen van set1.
+# rules_cave\rule_05.tmx
+
+# water
+# op under1 ground, van blauw tot waterrand.
+# rules_cave\rule_07a.tmx
+# op under1 ground, buitenhoeken van water.
+# rules_cave\rule_07b.tmx
+# op under1 ground, binnenhoeken van water. en riviertjes.
+# rules_cave\rule_07c.tmx
+# op set, maak van blauw groen.
+# rules_cave\rule_07x.tmx
+
+# randrotsen
+rules_cave\rule_06a.tmx
+rules_cave\rule_06b.tmx
+rules_cave\rule_06c.tmx
+rules_cave\rule_06d.tmx
+rules_cave\rule_06e.tmx
+rules_cave\rule_06f.tmx
+rules_cave\rule_06g.tmx
+rules_cave\rule_06h.tmx
+# op under0 background, buitenmuren afronden.
+rules_cave\rule_06i.tmx
+rules_cave\rule_06j.tmx
+
+# vanaf deze worden geen .tsx meer gebruikt.
+# rotsen
