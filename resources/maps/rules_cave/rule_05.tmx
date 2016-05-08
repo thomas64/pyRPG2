@@ -6,17 +6,11 @@
  <tileset firstgid="1" name="rules_ersin_forest" tilewidth="16" tileheight="16" tilecount="60" columns="10">
   <image source="../tilesets/rules_ersin_forest.png" width="160" height="96"/>
  </tileset>
- <tileset firstgid="61" name="outside_a2" tilewidth="16" tileheight="16" tilecount="768" columns="32">
-  <image source="../tilesets/outside_a2.png" width="512" height="384"/>
+ <tileset firstgid="61" name="dungeon_a2" tilewidth="16" tileheight="16" tilecount="768" columns="32">
+  <image source="../tilesets/dungeon_a2.png" width="512" height="384"/>
  </tileset>
- <tileset firstgid="829" name="outside_a4" tilewidth="16" tileheight="16" tilecount="960" columns="32">
-  <image source="../tilesets/outside_a4.png" width="512" height="480"/>
- </tileset>
- <tileset firstgid="1789" name="outside_b" tilewidth="16" tileheight="16" tilecount="1024" columns="32">
-  <image source="../tilesets/outside_b.png" width="512" height="512"/>
- </tileset>
- <tileset firstgid="2813" name="rules_ersin_forest" tilewidth="16" tileheight="16" tilecount="60" columns="10">
-  <image source="../tilesets/rules_ersin_forest.png" width="160" height="96"/>
+ <tileset firstgid="829" name="dungeon_b" tilewidth="16" tileheight="16" tilecount="1024" columns="32">
+  <image source="../tilesets/dungeon_b.png" width="512" height="512"/>
  </tileset>
  <layer name="regions" width="20" height="20">
   <data encoding="csv">
@@ -46,9 +40,9 @@
   <data encoding="csv">
 0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
 0,21,21,21,21,0,21,21,0,21,21,0,21,21,0,0,0,0,0,0,
-0,21,21,21,21,0,21,21,0,25,21,0,35,21,0,0,0,0,0,0,
+0,21,21,21,21,0,21,21,0,16,21,0,26,21,0,0,0,0,0,0,
 0,21,21,21,21,0,21,21,0,0,0,0,0,0,0,0,0,0,0,0,
-0,15,21,21,21,0,5,21,0,0,0,0,0,0,0,0,0,0,0,0,
+0,15,21,21,21,0,6,21,0,0,0,0,0,0,0,0,0,0,0,0,
 0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
 0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
 0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
@@ -66,13 +60,13 @@
 0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0
 </data>
  </layer>
- <layer name="output_under4 trees" width="20" height="20" visible="0">
+ <layer name="output_under4 trees" width="20" height="20">
   <data encoding="csv">
 0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
 0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
-0,0,0,0,0,0,0,0,0,2603,2604,0,2597,2598,0,0,0,0,0,0,
-0,2749,2750,2751,2752,0,2567,2568,0,0,0,0,0,0,0,0,0,0,0,0,
-0,2781,2782,2783,2784,0,2599,2600,0,0,0,0,0,0,0,0,0,0,0,0,
+0,0,0,0,0,0,0,0,0,1309,1310,0,117,118,0,0,0,0,0,0,
+0,0,0,0,0,0,1405,1406,0,0,0,0,0,0,0,0,0,0,0,0,
+0,0,0,0,0,0,1437,1438,0,0,0,0,0,0,0,0,0,0,0,0,
 0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
 0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
 0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
@@ -90,11 +84,11 @@
 0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0
 </data>
  </layer>
- <layer name="output_over5 trees" width="20" height="20" visible="0">
+ <layer name="output_over5 trees" width="20" height="20">
   <data encoding="csv">
 0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
-0,2685,2686,2687,2688,0,2503,2504,0,2571,2572,0,2565,2566,0,0,0,0,0,0,
-0,2717,2718,2719,2720,0,2535,2536,0,0,0,0,0,0,0,0,0,0,0,0,
+0,0,0,0,0,0,1341,1342,0,1277,1278,0,85,86,0,0,0,0,0,0,
+0,0,0,0,0,0,1373,1374,0,0,0,0,0,0,0,0,0,0,0,0,
 0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
 0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
 0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
@@ -114,12 +108,11 @@
 0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0
 </data>
  </layer>
- <objectgroup name="output_low_blocker" visible="0">
+ <objectgroup name="output_low_blocker">
   <object id="9" x="144" y="16" width="32" height="16"/>
   <object id="10" x="192" y="16" width="32" height="16"/>
  </objectgroup>
- <objectgroup name="output_high_blocker" visible="0">
-  <object id="7" x="16" y="48" width="64" height="16"/>
+ <objectgroup name="output_high_blocker">
   <object id="8" x="96" y="48" width="32" height="16"/>
  </objectgroup>
 </map>

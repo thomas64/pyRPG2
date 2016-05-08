@@ -46,7 +46,7 @@ rules_forest\rule_07b.tmx
 # op under1 ground, binnenhoeken van water. en riviertjes.
 rules_forest\rule_07c.tmx
 # op set, maak van blauw groen.
-rules_forest\rule_07x.tmx
+# rules_forest\rule_07x.tmx
 
 # randbomen
 # op set, bomen aan de bovenkant van groen.

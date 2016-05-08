@@ -27,10 +27,11 @@ rules_cave\rule_03e.tmx
 rules_cave\rule_03f.tmx
 
 # op under3 stuff, random dingetjes.
-# rules_cave\rule_04.tmx
+rules_cave\rule_04a.tmx
+rules_cave\rule_04b.tmx
 
 # op under4 en over5 trees, losse bomen, stenen, stompen van set1.
-# rules_cave\rule_05.tmx
+rules_cave\rule_05.tmx
 
 # water
 # op under1 ground, van blauw tot waterrand.
