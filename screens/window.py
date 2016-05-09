@@ -277,6 +277,24 @@ class Window(object):
                 object_nr = self.party_sprites[0].rect.collidelist(self.engine.current_map.chests)
                 chest_sprite = self.engine.current_map.chests[object_nr]
                 chest_data = self.engine.data.treasure_chests[chest_sprite.chest_id]
+
+                if chest_data['condition'] and chest_data['content']:
+                    for key, value in chest_data['condition'].items():
+                        text = ["Error!"]
+                        if key == "mec":
+                            text = ["There's a dangerous trap on this treasurechest.",
+                                    "You need a level "+str(value)+" of the Mechanic Skill to",
+                                    "disarm the trap."]
+                        elif key == "thf":
+                            text = ["There's a lock on this treasurechest.",
+                                    "You need a level "+str(value)+" of the Thief Skill",
+                                    "to pick the lock."]
+                        highest = self.engine.data.party.get_highest_value_of_skill(key)
+                        if highest < value:
+                            push_object = components.messagebox.MessageBox(self.engine.gamestate, text)
+                            self.engine.gamestate.push(push_object)
+                            return
+
                 if chest_data['content']:
                     chest_data['opened'] = 1
                     text = ["Found:"]

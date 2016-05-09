@@ -82,8 +82,9 @@ class MessageBox(object):
 
         self.surface.blit(self.background, (0, 0))
 
-        for i, line in enumerate(self.image):
-            self.surface.blit(line, (IMGPOSX, IMGPOSY + i * LINEHEIGHT))
+        if self.image:
+            for i, line in enumerate(self.image):
+                self.surface.blit(line, (IMGPOSX, IMGPOSY + i * LINEHEIGHT))
 
         for i, line in enumerate(self.text):
             if i == 0:

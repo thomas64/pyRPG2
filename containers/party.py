@@ -48,3 +48,15 @@ class Party(collections.OrderedDict):
         else:
             console.error_hero_not_in_party(hero.NAM, self.NAM)
             raise AttributeError
+
+    def get_highest_value_of_skill(self, attr):
+        """
+        Vraagt een hoogste attribute op van alle Party members.
+        :param attr: sting, het opgevraagde attribute, bijvoorbeeld 'thf'.
+        :return: de hoogste waarde van het attribute.
+        """
+        skill_values = []
+        for member in self.values():
+            skill = getattr(member, attr)
+            skill_values.append(skill.tot)
+        return max(skill_values)
