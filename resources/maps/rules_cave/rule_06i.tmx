@@ -6,13 +6,7 @@
  <tileset firstgid="1" name="rules_ersin_forest" tilewidth="16" tileheight="16" tilecount="60" columns="10">
   <image source="../tilesets/rules_ersin_forest.png" width="160" height="96"/>
  </tileset>
- <tileset firstgid="61" name="outside_a2" tilewidth="16" tileheight="16" tilecount="768" columns="32">
-  <image source="../tilesets/outside_a2.png" width="512" height="384"/>
- </tileset>
- <tileset firstgid="829" name="outside_a4" tilewidth="16" tileheight="16" tilecount="960" columns="32">
-  <image source="../tilesets/outside_a4.png" width="512" height="480"/>
- </tileset>
- <tileset firstgid="1789" name="dungeon_a4" tilewidth="16" tileheight="16" tilecount="960" columns="32">
+ <tileset firstgid="61" name="dungeon_a4" tilewidth="16" tileheight="16" tilecount="960" columns="32">
   <image source="../tilesets/dungeon_a4.png" width="512" height="480"/>
  </tileset>
  <layer name="regions" width="20" height="20">
@@ -66,12 +60,12 @@
  <layer name="output_under0 background" width="20" height="20">
   <data encoding="csv">
 0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
-0,0,0,0,0,2576,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
-0,2607,2606,0,0,2544,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
-0,2639,2638,0,0,0,0,0,0,2511,2510,0,0,0,0,0,0,0,0,0,
-0,2671,2670,0,0,0,2573,0,0,0,0,0,0,0,0,0,0,0,0,0,
-0,2703,2702,0,0,0,2541,0,0,0,0,0,0,0,0,0,0,0,0,0,
-0,2735,2734,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
+0,0,0,0,0,192,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
+0,223,222,0,0,160,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
+0,255,254,0,0,0,0,0,0,127,126,0,0,0,0,0,0,0,0,0,
+0,287,286,0,0,0,189,0,0,0,0,0,0,0,0,0,0,0,0,0,
+0,319,318,0,0,0,157,0,0,0,0,0,0,0,0,0,0,0,0,0,
+0,351,350,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
 0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
 0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
 0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,

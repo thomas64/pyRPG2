@@ -9,9 +9,6 @@
  <tileset firstgid="61" name="outside_a2" tilewidth="16" tileheight="16" tilecount="768" columns="32">
   <image source="../tilesets/outside_a2.png" width="512" height="384"/>
  </tileset>
- <tileset firstgid="829" name="outside_a4" tilewidth="16" tileheight="16" tilecount="960" columns="32">
-  <image source="../tilesets/outside_a4.png" width="512" height="480"/>
- </tileset>
  <layer name="regions" width="20" height="30">
   <data encoding="csv">
 0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,

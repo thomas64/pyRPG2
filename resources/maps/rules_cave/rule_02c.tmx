@@ -3,14 +3,11 @@
  <properties>
   <property name="NoOverlappingRules" value="true"/>
  </properties>
- <tileset firstgid="1" name="rules_ersin_forest" tilewidth="16" tileheight="16" tilecount="50" columns="10">
-  <image source="../tilesets/rules_ersin_forest.png" width="160" height="90"/>
+ <tileset firstgid="1" name="rules_ersin_forest" tilewidth="16" tileheight="16" tilecount="60" columns="10">
+  <image source="../tilesets/rules_ersin_forest.png" width="160" height="96"/>
  </tileset>
- <tileset firstgid="51" name="outside_a2" tilewidth="16" tileheight="16" tilecount="768" columns="32">
-  <image source="../tilesets/outside_a2.png" width="512" height="384"/>
- </tileset>
- <tileset firstgid="819" name="outside_a4" tilewidth="16" tileheight="16" tilecount="960" columns="32">
-  <image source="../tilesets/outside_a4.png" width="512" height="480"/>
+ <tileset firstgid="61" name="dungeon_a2" tilewidth="16" tileheight="16" tilecount="768" columns="32">
+  <image source="../tilesets/dungeon_a2.png" width="512" height="384"/>
  </tileset>
  <layer name="regions" width="20" height="20">
   <data encoding="csv">
@@ -63,8 +60,8 @@
  <layer name="output_under1 ground" width="20" height="20">
   <data encoding="csv">
 0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
-0,152,153,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
-0,184,185,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
+0,199,198,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
+0,167,166,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
 0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
 0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
 0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
