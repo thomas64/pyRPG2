@@ -46,8 +46,9 @@ class MapMusic(enum.Enum):
     ErsinForestWaterfall = 'ersin_forest_waterfall',    'ersin_forest', 'river'
     ErsinForestCenter = 'ersin_forest_center',          'ersin_forest', 'birds'
     ErsinForestCave = 'ersin_forest_cave',              'ersin_forest', 'birds'
-    ErsinCaveEntrance = 'ersin_cave_entrance',          'ersin_cave',   None
-    ErsinCaveWater = 'ersin_cave_water',                'ersin_cave',   None
+    ErsinCaveRoom1 = 'ersin_cave_room1',                'ersin_cave',   None
+    ErsinCaveRoom2 = 'ersin_cave_room2',                'ersin_cave',   None
+    ErsinCaveRoom3 = 'ersin_cave_room3',                'ersin_cave',   None
     Invernia = 'invernia',                              'invernia',     'town'
     InverniaArmorShop = 'invernia_armor_shop',          'invernia',     None
     InverniaWeaponShop = 'invernia_weapon_shop',        'invernia',     None

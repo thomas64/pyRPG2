@@ -667,10 +667,10 @@
  </objectgroup>
  <objectgroup name="portals">
   <object id="41" name="ersin_forest_center" x="192" y="960" width="96" height="16"/>
-  <object id="2419" name="ersin_cave_entrance" x="896" y="176" width="32" height="16"/>
+  <object id="2419" name="ersin_cave_room1" x="896" y="176" width="32" height="16"/>
  </objectgroup>
  <objectgroup name="start_pos">
   <object id="44" name="ersin_forest_center" x="224" y="928" width="16" height="16"/>
-  <object id="2421" name="ersin_cave_entrance" x="896" y="192" width="16" height="16"/>
+  <object id="2421" name="ersin_cave_room1" x="896" y="192" width="16" height="16"/>
  </objectgroup>
 </map>

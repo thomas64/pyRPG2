@@ -25,8 +25,13 @@ class TreasureChestDatabase(dict):
         self['chest4'] = dict(condition=dict(mec=5, thf=5),
                               content=dict(itm1=dict(nam='gold',             qty=400)))
 
-        # ersin_cave_entrance
+        # ersin_cave_room1
         self['chest5'] = dict(condition=dict(),
+                              content=dict(itm1=dict(nam='gold',             qty=10)))
+        # ersin_cave_room3
+        self['chest6'] = dict(condition=dict(),
+                              content=dict(itm1=dict(nam='gold',             qty=10)))
+        self['chest7'] = dict(condition=dict(),
                               content=dict(itm1=dict(nam='gold',             qty=10)))
 
         for value in self.values():
