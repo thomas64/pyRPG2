@@ -122,7 +122,7 @@ class Window(object):
 
             elif event.key in keys.SELECT:
                 self.check_chests()
-                self.check_sparklies()
+                self.check_sparklies(self.get_check_rect())
 
             elif event.key == keys.GRID:
                 if self.grid_sprite is None:
@@ -324,12 +324,14 @@ class Window(object):
                     # push_object = screens.shop.display.Display()
                     self.engine.gamestate.push(push_object)
 
-    def check_sparklies(self):
+    def check_sparklies(self, check_rect):
         """
         Bekijk of collide met een sparkly.
+        :param check_rect: een iets verplaatste rect van de player sprite zodat hij kan colliden met een obj dat anders
+        niet collidebaar is. self.party_sprites[0].rect
         """
-        if len(self.party_sprites[0].rect.collidelistall(self.engine.current_map.sparkly)) == 1:
-            object_nr = self.party_sprites[0].rect.collidelist(self.engine.current_map.sparkly)
+        if len(check_rect.collidelistall(self.engine.current_map.sparkly)) == 1:
+            object_nr = check_rect.collidelist(self.engine.current_map.sparkly)
             sparkly_sprite = self.engine.current_map.sparkly[object_nr]
             sparkly_data = self.engine.data.sparklies[sparkly_sprite.sparkly_id]
 
@@ -358,3 +360,20 @@ class Window(object):
                 push_object = components.messagebox.MessageBox(self.engine.gamestate, text, image)
                 # push_object = screens.shop.display.Display()
                 self.engine.gamestate.push(push_object)
+
+    def get_check_rect(self):
+        """
+        Bij een check gebruik dan een rect op basis van de hero rect en verplaats die iets in de kijk richting.
+        :return: de tijdelijk verplaatste rect, gemaakt op basis van de huidige hero rect.
+        """
+        last_dir = self.party_sprites[0].last_direction
+        check_rect = self.party_sprites[0].rect
+        if last_dir == screens.direction.Direction.North:
+            check_rect = self.party_sprites[0].rect.move(0, -16)
+        elif last_dir == screens.direction.Direction.South:
+            check_rect = self.party_sprites[0].rect.move(0, 16)
+        elif last_dir == screens.direction.Direction.West:
+            check_rect = self.party_sprites[0].rect.move(-16, 0)
+        elif last_dir == screens.direction.Direction.East:
+            check_rect = self.party_sprites[0].rect.move(16, 0)
+        return check_rect

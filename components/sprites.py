@@ -202,6 +202,8 @@ class Sparkly(pygame.sprite.Sprite):
     def update(self, taken, dt):
         """
         Verandert elke zoveel milliseconde het sub plaatje.
+        :param taken: integer 0 of 1, uit de SparklyDatabase
+        :param dt: self.clock.tick(FPS)/1000.0
         """
         if taken == 1:
             self.image = self.image_list[0]
