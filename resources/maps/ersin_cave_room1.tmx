@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<map version="1.0" orientation="orthogonal" renderorder="right-down" width="28" height="34" tilewidth="16" tileheight="16" nextobjectid="23644">
+<map version="1.0" orientation="orthogonal" renderorder="right-down" width="28" height="34" tilewidth="16" tileheight="16" nextobjectid="23646">
  <properties>
   <property name="title" value="Ersin Cave"/>
  </properties>
@@ -284,6 +284,13 @@
 0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0
 </data>
  </layer>
+ <objectgroup name="chests">
+  <object id="23632" name="chest5" x="96" y="256" width="32" height="32"/>
+ </objectgroup>
+ <objectgroup name="portals">
+  <object id="23634" name="ersin_forest_cave" x="272" y="496" width="32" height="16"/>
+  <object id="23641" name="ersin_cave_room2" x="272" y="32" width="64" height="16"/>
+ </objectgroup>
  <objectgroup name="start_pos">
   <object id="23633" name="ersin_forest_cave" x="272" y="464" width="16" height="16"/>
   <object id="23643" name="ersin_cave_room2" x="288" y="48" width="16" height="16"/>
@@ -294,13 +301,6 @@
     <property name="title" value="Ersin Cave"/>
    </properties>
   </object>
- </objectgroup>
- <objectgroup name="portals">
-  <object id="23634" name="ersin_forest_cave" x="272" y="496" width="32" height="16"/>
-  <object id="23641" name="ersin_cave_room2" x="272" y="32" width="64" height="16"/>
- </objectgroup>
- <objectgroup name="chests" visible="0">
-  <object id="23632" name="chest5" x="96" y="256" width="32" height="32"/>
  </objectgroup>
  <objectgroup name="low_blocker" visible="0">
   <object id="23612" x="304" y="304" width="32" height="16"/>

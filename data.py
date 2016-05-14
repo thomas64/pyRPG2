@@ -14,6 +14,7 @@ class Data(object):
 
         self.heroes = dict()
         self.treasure_chests = dict()
+        self.sparklies = dict()
 
         self.party = containers.Party()
         self.inventory = containers.Inventory()

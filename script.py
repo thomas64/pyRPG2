@@ -6,6 +6,7 @@ class: Script
 import characters
 import database.hero
 import database.treasurechest
+import database.sparkly
 import equipment
 import screens.direction
 
@@ -25,6 +26,7 @@ class Script(object):
         self.engine.data.heroes = characters.factory_all_heroes(database.hero.HeroDatabase)
         # Treasure chest worden geen objecten, maar blijven een object met dicts.
         self.engine.data.treasure_chests = database.treasurechest.TreasureChestDatabase()
+        self.engine.data.sparklies = database.sparkly.SparklyDatabase()
 
         # Vul de party aan met de eerste hero
         self.engine.data.party.add(self.engine.data.heroes['alagos'], verbose=False)

@@ -19,6 +19,9 @@ BUTTONPRESSCOLOR = pygame.Color("gray12")
 CHESTSPRITE = 'resources/sprites/objects/chest.png'
 CHESTBLOCKERWIDTH = 32
 CHESTBLOCKERHEIGHT = 16
+SPARKLYSPRITE = 'resources/sprites/objects/sparkly.png'
+SPARKLYSPEED = .2
+TRANSP = 'resources/sprites/transp.png'
 
 
 class Button(pygame.sprite.Sprite):
@@ -127,6 +130,21 @@ class Grid(pygame.sprite.Sprite):
         self.rect = self.image.get_rect()
 
 
+def get_image(x, y, width, height, spritesheet):
+    """
+    Extracts image from spritesheet.
+    :param x:
+    :param y:
+    :param width:
+    :param height:
+    :param spritesheet:
+    """
+    image = pygame.Surface((width, height))
+    image.blit(spritesheet, (0, 0), (x, y, width, height))
+    image.set_colorkey(FILLCOLOR)
+    return image
+
+
 class TreasureChest(pygame.sprite.Sprite):
     """
     De TreasureChest Sprite.
@@ -139,15 +157,12 @@ class TreasureChest(pygame.sprite.Sprite):
         self._layer = objectlayer
         self.image = None
 
-        sprite_sheet = pygame.image.load(CHESTSPRITE).convert_alpha()
+        spritesheet = pygame.image.load(CHESTSPRITE).convert_alpha()
 
-        self.spritesheet_dict = {'closed': self.get_image(0,  0, 32, 32, sprite_sheet),
-                                 'opened': self.get_image(32, 0, 32, 32, sprite_sheet)}
+        self.image_list = (get_image(0,  0, 32, 32, spritesheet),  # closed
+                           get_image(32, 0, 32, 32, spritesheet))  # opened
 
-        self.image_list = (self.spritesheet_dict['closed'],
-                           self.spritesheet_dict['opened'])
-
-    def render(self, opened):
+    def update(self, opened):
         """
         Geef de weergave van de chest.
         :param opened: integer 0 of 1, uit de TreasureChestDatabase.
@@ -160,17 +175,43 @@ class TreasureChest(pygame.sprite.Sprite):
         """
         return pygame.Rect(self.rect.x, self.rect.y, CHESTBLOCKERWIDTH, CHESTBLOCKERHEIGHT)
 
-    @staticmethod
-    def get_image(x, y, width, height, sprite_sheet):
+
+class Sparkly(pygame.sprite.Sprite):
+    """
+    De animerende Sparkly Sprite.
+    """
+    def __init__(self, sparkly_id, rect, objectlayer):
+        super().__init__()
+
+        self.sparkly_id = sparkly_id
+        self.rect = rect
+        self._layer = objectlayer
+
+        spritesheet = pygame.image.load(SPARKLYSPRITE).convert_alpha()
+        self.speed = 0
+        self.index = 0
+        self.image_list = (get_image(0,  0, 32, 32, pygame.image.load(TRANSP).convert_alpha()),
+                           get_image(0,  0, 32, 32, spritesheet),
+                           get_image(32, 0, 32, 32, spritesheet),
+                           get_image(64, 0, 32, 32, spritesheet),
+                           get_image(0, 0, 32, 32, pygame.image.load(TRANSP).convert_alpha()),
+                           get_image(64, 0, 32, 32, spritesheet),
+                           get_image(32, 0, 32, 32, spritesheet))
+
+        self.image = self.image_list[self.index]
+
+    def update(self, taken, dt):
         """
-        Extracts image from sprite sheet.
-        :param x:
-        :param y:
-        :param width:
-        :param height:
-        :param sprite_sheet:
+        Verandert elke zoveel milliseconde het sub plaatje.
         """
-        image = pygame.Surface((width, height))
-        image.blit(sprite_sheet, (0, 0), (x, y, width, height))
-        image.set_colorkey(FILLCOLOR)
-        return image
+        if taken == 1:
+            self.image = self.image_list[0]
+            return
+
+        self.speed += dt
+        if self.speed > SPARKLYSPEED:
+            self.speed = 0
+            self.index += 1
+            if self.index >= len(self.image_list):
+                self.index = 1
+            self.image = self.image_list[self.index]

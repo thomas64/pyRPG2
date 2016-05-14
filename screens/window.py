@@ -91,6 +91,7 @@ class Window(object):
 
         # voeg alle objecten toe van uit de map
         self.group.add(self.engine.current_map.chests)
+        self.group.add(self.engine.current_map.sparkly)
 
         self.engine.audio.set_bg_music(self.engine.gamestate.peek().name)
         self.engine.audio.set_bg_sounds(self.engine.gamestate.peek().name)
@@ -121,6 +122,7 @@ class Window(object):
 
             elif event.key in keys.SELECT:
                 self.check_chests()
+                self.check_sparklies()
 
             elif event.key == keys.GRID:
                 if self.grid_sprite is None:
@@ -198,15 +200,18 @@ class Window(object):
            self.engine.current_map.height >= self.height:
             self.group.center(self.party_sprites[0].rect.center)
 
-    def render(self):
-        """
-        Render de plaatjes van de objecten.
-        Teken de window inhoud.
-        """
+        # update de plaatjes van de objecten
         for obj in self.engine.current_map.chests:
             chest_data = self.engine.data.treasure_chests[obj.chest_id]
-            obj.render(chest_data['opened'])
+            obj.update(chest_data['opened'])
+        for obj in self.engine.current_map.sparkly:
+            sparkly_data = self.engine.data.sparklies[obj.sparkly_id]
+            obj.update(sparkly_data['taken'], dt)
 
+    def render(self):
+        """
+        Teken de window inhoud.
+        """
         self.group.draw(self.surface)
 
     def leader_trail(self, dt):
@@ -318,3 +323,38 @@ class Window(object):
                     push_object = components.messagebox.MessageBox(self.engine.gamestate, text, image)
                     # push_object = screens.shop.display.Display()
                     self.engine.gamestate.push(push_object)
+
+    def check_sparklies(self):
+        """
+        Bekijk of collide met een sparkly.
+        """
+        if len(self.party_sprites[0].rect.collidelistall(self.engine.current_map.sparkly)) == 1:
+            object_nr = self.party_sprites[0].rect.collidelist(self.engine.current_map.sparkly)
+            sparkly_sprite = self.engine.current_map.sparkly[object_nr]
+            sparkly_data = self.engine.data.sparklies[sparkly_sprite.sparkly_id]
+
+            # hieronder is bijna een exacte kopie van check_chests() kan dat anders?
+            if sparkly_data['content']:
+                sparkly_data['taken'] = 1
+                text = ["Found:"]
+                image = []
+                for key, value in sparkly_data['content'].items():
+                    if key.startswith('eqp'):
+                        equipment_item = equipment.factory_equipment_item(value['nam'])
+                        equipment_item_spr = pygame.image.load(equipment_item.SPR).subsurface(
+                            equipment_item.COL, equipment_item.ROW, ICONSIZE, ICONSIZE).convert_alpha()
+                        self.engine.data.inventory.add(equipment_item, quantity=value['qty'])
+                        text.append("{} {}".format(str(value['qty']), str(equipment_item.NAM)))
+                        image.append(equipment_item_spr)
+                    elif key.startswith('itm'):
+                        pouch_item = pouchitems.factory_pouch_item(value['nam'])
+                        pouch_item_spr = pygame.image.load(pouch_item.SPR).convert_alpha()
+                        self.engine.data.pouch.add(pouch_item, quantity=value['qty'])
+                        text.append("{} {}".format(str(value['qty']), str(pouch_item.NAM)))
+                        image.append(pouch_item_spr)
+                self.engine.audio.play_sound(sfx.SPARKLY)
+                sparkly_data['content'] = dict()
+                sparkly_sprite.image = None
+                push_object = components.messagebox.MessageBox(self.engine.gamestate, text, image)
+                # push_object = screens.shop.display.Display()
+                self.engine.gamestate.push(push_object)

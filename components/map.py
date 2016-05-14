@@ -14,12 +14,13 @@ import components.sprites
 MAPPATH = 'resources/maps/'
 
 # de zes object layers in een tmx map
-STARTPOS = "start_pos"
-PORTALS = "portals"
 HIGHBLOCKER = "high_blocker"
 LOWBLOCKER = "low_blocker"
-CHESTS = "chests"
 SOUNDS = "sounds"
+STARTPOS = "start_pos"
+PORTALS = "portals"
+CHESTS = "chests"
+SPARKLY = "sparkly"
 
 WINDOWWIDTH = 900
 WINDOWHEIGHT = 718
@@ -49,29 +50,36 @@ class Map(object):
 
         self.title = tmx_data.properties['title']
 
-        self.start_pos = []
-        self.portals = []
         self.high_blocker_rects = []
         self.low_blocker_rects = []
-        self.chests = []
         self.sounds = []
+        self.start_pos = []
+        self.portals = []
+        self.chests = []
+        self.sparkly = []
 
-        for obj in tmx_data.get_layer_by_name(STARTPOS):
-            self.start_pos.append(obj)
-        for obj in tmx_data.get_layer_by_name(PORTALS):
-            self.portals.append(components.portal.Portal(name, self._pg_rect(obj), obj.name, obj.type))
         for rect in tmx_data.get_layer_by_name(HIGHBLOCKER):
             self.high_blocker_rects.append(self._pg_rect(rect))
         for rect in tmx_data.get_layer_by_name(LOWBLOCKER):
             self.low_blocker_rects.append(self._pg_rect(rect))
         for nrect in tmx_data.get_layer_by_name(SOUNDS):
             self.sounds.append(components.namedrect.NamedRect(nrect.name, self._pg_rect(nrect)))
+        for obj in tmx_data.get_layer_by_name(STARTPOS):
+            self.start_pos.append(obj)
+        for obj in tmx_data.get_layer_by_name(PORTALS):
+            self.portals.append(components.portal.Portal(name, self._pg_rect(obj), obj.name, obj.type))
 
         try:
             for obj in tmx_data.get_layer_by_name(CHESTS):
                 chest_object = components.sprites.TreasureChest(obj.name, self._pg_rect(obj), OBJECTLAYER)
                 self.low_blocker_rects.append(chest_object.get_blocker())
                 self.chests.append(chest_object)
+        except ValueError:
+            pass
+        try:
+            for obj in tmx_data.get_layer_by_name(SPARKLY):
+                sparkly_object = components.sprites.Sparkly(obj.name, self._pg_rect(obj), OBJECTLAYER)
+                self.sparkly.append(sparkly_object)
         except ValueError:
             pass
 
