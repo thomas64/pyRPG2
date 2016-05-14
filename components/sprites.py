@@ -8,7 +8,7 @@ class: TreasureChest
 
 import pygame
 
-FILLCOLOR = pygame.Color("black")
+FILLCOLOR = pygame.Color("gray60")  # gekke kleur vanwege sparkly color bug. hiermee opgelost.
 
 BUTTONFONT = 'impact'
 BUTTONFONTCOLOR = pygame.Color("white")
@@ -140,6 +140,7 @@ def get_image(x, y, width, height, spritesheet):
     :param spritesheet:
     """
     image = pygame.Surface((width, height))
+    image.fill(FILLCOLOR)
     image.blit(spritesheet, (0, 0), (x, y, width, height))
     image.set_colorkey(FILLCOLOR)
     return image
@@ -193,8 +194,6 @@ class Sparkly(pygame.sprite.Sprite):
         self.image_list = (get_image(0,  0, 32, 32, pygame.image.load(TRANSP).convert_alpha()),
                            get_image(0,  0, 32, 32, spritesheet),
                            get_image(32, 0, 32, 32, spritesheet),
-                           get_image(64, 0, 32, 32, spritesheet),
-                           get_image(0, 0, 32, 32, pygame.image.load(TRANSP).convert_alpha()),
                            get_image(64, 0, 32, 32, spritesheet),
                            get_image(32, 0, 32, 32, spritesheet))
 
