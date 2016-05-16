@@ -61,7 +61,7 @@ class InventoryBox(object):
         self.equipment_item_sprites = []
         self.equipment_items = []
 
-        # stel de offset in voor de boxen in een self.kopie van de BOXLIJST
+        # stel de offset in voor de boxen in een copy() van de BOXLIJST
         self.offset_boxes = []
         for BOX in EQUIPMENTITEMBOXES:
             self.offset_boxes.append(BOX.copy())  # zonder .copy() stelt hij de offset in voor de originele rects
