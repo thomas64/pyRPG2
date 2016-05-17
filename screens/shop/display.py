@@ -75,7 +75,15 @@ class Display(object):
         Handelt de muis en keyboard input af.
         :param event: pygame.event.get()
         """
-        if event.type == pygame.MOUSEBUTTONDOWN:
+        if event.type == pygame.MOUSEMOTION:
+
+            if self.sellbox.rect.collidepoint(event.pos):
+                # in partyscreen display geeft deze functie waarden terug, moet nog aanpassen later
+                self.sellbox.mouse_hover(event)
+            else:
+                self.sellbox.cur_item = None
+
+        elif event.type == pygame.MOUSEBUTTONDOWN:
             if event.button in (keys.SCROLLUP, keys.SCROLLDOWN):
                 if self.sellbox.rect.collidepoint(event.pos):
                     self.sellbox.mouse_scroll(event)

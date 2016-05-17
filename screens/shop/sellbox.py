@@ -9,7 +9,7 @@ import keys
 
 COLORKEY = pygame.Color("white")
 LINECOLOR = pygame.Color("black")
-SELECTCOLOR = pygame.Color("gray12")
+SELECTCOLOR = pygame.Color("gray60")
 
 FONTCOLOR = pygame.Color("black")
 FONT = 'impact'
@@ -135,7 +135,7 @@ class SellBox(object):
     def mouse_scroll(self, event):
         """
         Registreert of scrolwiel gebruikt wordt. Verplaatst de layer dan omhoog of omlaag.
-        :param event: pygame.MOUSEBUTTONDOWN uit partyscreen
+        :param event: pygame.MOUSEBUTTONDOWN uit shopscreen
         """
         if event.button == keys.SCROLLUP:
             if self.lay_rect.y - self.rect.y < 0:
@@ -145,6 +145,22 @@ class SellBox(object):
                 self.lay_rect.y -= SCROLLSPEED
 
         self._update_rects_in_layer_rect_with_offset()
+
+    def mouse_hover(self, event):
+        """
+        Als de muis over een item uit row[5] van table_data gaat. Dat zijn de rects.
+        Zet cur_item op de index van degene waar de muis over gaat.
+        :param event: pygame.MOUSEMOTION uit shopscreen
+        :return: row[4] is de kolom met het Object EquipmentItem.
+        """
+        for index, row in enumerate(self.table_data):
+            if row[5].collidepoint(event.pos):
+                self.cur_item = index
+                # dit hieronder is nog uit invclickbox, hier moet ik later nog wat mee
+                # equipment_item = row[4]
+                # if equipment_item.is_not_empty():
+                #     return equipment_item.display(), equipment_item
+                # return None, equipment_item
 
     def render(self, screen):
         """
