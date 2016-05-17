@@ -20,7 +20,7 @@ COLUMN1X = 0
 COLUMN2X = 34
 COLUMN3X = 68
 COLUMN4X = 102
-COLUMN5X = 300
+COLUMN5X = 285
 COLUMNSY = 0
 ROWHEIGHT = 34
 ICONOFFSET = 1
@@ -179,7 +179,6 @@ class SellBox(object):
         """
         self.surface.blit(self.layer, (0, self.lay_rect.y - self.rect.y))
         self.layer.blit(self.background, (0, 0))
-
         # omranding
         pygame.draw.rect(self.surface, LINECOLOR, self.surface.get_rect(), 1)
         # verticale lijnen

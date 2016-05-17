@@ -6,6 +6,7 @@ class: Display
 import pygame
 
 import database
+import database.armor
 import keys
 import screens.shop.buybox
 import screens.shop.sellbox
@@ -41,7 +42,7 @@ class Display(object):
         self._init_boxes()
 
     def _init_boxes(self):
-        width = self.screen.get_width() * SELLBOXWIDTH + EXTRAHEIGHT
+        width = self.screen.get_width() * SELLBOXWIDTH
         height = self.screen.get_height() * SELLBOXHEIGHT + EXTRAHEIGHT
         x = self.screen.get_width() * SELLBOXPOSX
         y = self.screen.get_height() * SELLBOXPOSY
@@ -49,10 +50,12 @@ class Display(object):
                                                     database.EquipmentType.arm,
                                                     self.engine.data.party, self.engine.data.inventory)
         width = self.screen.get_width() * BUYBOXWIDTH
-        height = self.screen.get_height() * BUYBOXHEIGHT
+        height = self.screen.get_height() * BUYBOXHEIGHT + EXTRAHEIGHT
         x = self.screen.get_width() * BUYBOXPOSX
         y = self.screen.get_height() * BUYBOXPOSY
-        self.buybox = screens.shop.buybox.BuyBox(x, y, width, height)
+        self.buybox = screens.shop.buybox.BuyBox(int(x), int(y), int(width), int(height),
+                                                 database.armor.a.values(),
+                                                 self.engine.data.party.get_sum_value_of_skill("mer"))
 
     def on_enter(self):
         """
@@ -75,6 +78,11 @@ class Display(object):
         """
         if event.type == pygame.MOUSEMOTION:
 
+            if self.buybox.rect.collidepoint(event.pos):
+                self.buybox.mouse_hover(event)
+            else:
+                self.buybox.cur_item = None
+
             if self.sellbox.rect.collidepoint(event.pos):
                 # in partyscreen display geeft deze functie waarden terug, moet nog aanpassen later
                 self.sellbox.mouse_hover(event)
@@ -83,6 +91,8 @@ class Display(object):
 
         elif event.type == pygame.MOUSEBUTTONDOWN:
             if event.button in (keys.SCROLLUP, keys.SCROLLDOWN):
+                if self.buybox.rect.collidepoint(event.pos):
+                    self.buybox.mouse_scroll(event)
                 if self.sellbox.rect.collidepoint(event.pos):
                     self.sellbox.mouse_scroll(event)
 
