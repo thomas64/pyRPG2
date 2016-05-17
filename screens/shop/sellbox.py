@@ -7,6 +7,7 @@ import pygame
 
 import keys
 
+COLORKEY = pygame.Color("white")
 LINECOLOR = pygame.Color("black")
 SELECTCOLOR = pygame.Color("gray12")
 
@@ -38,6 +39,7 @@ class SellBox(object):
         self.box_width = width
         self.box_height = height
         self.surface = pygame.Surface((width, height))
+        self.surface.set_colorkey(COLORKEY)
         self.surface = self.surface.convert()
 
         self.rect = self.surface.get_rect()
@@ -62,15 +64,13 @@ class SellBox(object):
         if self.layer_height < height:
             self.layer_height = height
         self.layer = pygame.Surface((width, self.layer_height))
-        self.layer.fill(pygame.Color("green"))
-        self.layer.set_colorkey(pygame.Color("green"))
         self.layer = self.layer.convert()
         self.lay_rect = self.layer.get_rect()
         self.lay_rect.topleft = x, y
 
-        self.background = pygame.Surface((width, height))
+        self.background = pygame.Surface((width, self.layer_height))
+        self.background.fill(COLORKEY)
         self.background = self.background.convert()
-        self.background.blit(pygame.display.get_surface(), (0, 0), area=self.rect)
 
         self.cur_item = None
 
@@ -151,10 +151,8 @@ class SellBox(object):
         Surface tekent layer, de rest gaat op de layer, en screen tekent de surface.
         :param screen: self.screen van shopscreen
         """
-        # self.surface.blit(self.layer, (0, self.lay_rect.y - self.rect.y))
-        # self.layer.blit(self.background, (0, 0))
-        self.surface.blit(self.background, (0, 0))
         self.surface.blit(self.layer, (0, self.lay_rect.y - self.rect.y))
+        self.layer.blit(self.background, (0, 0))
 
         # omranding
         pygame.draw.rect(self.surface, LINECOLOR, self.surface.get_rect(), 1)

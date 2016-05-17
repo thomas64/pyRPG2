@@ -37,8 +37,6 @@ class Display(object):
         self.name = statemachine.States.Shop
         self.background = pygame.image.load(BACKGROUNDSPRITE).convert_alpha()
         self.background = pygame.transform.scale(self.background, self.screen.get_size())
-        self.screen.fill(BACKGROUNDCOLOR)
-        self.screen.blit(self.background, (0, 0))
 
         self.party = list(engine.data.party.values())
         self.inventory = engine.data.inventory
@@ -104,5 +102,7 @@ class Display(object):
         """
         Teken
         """
+        self.screen.fill(BACKGROUNDCOLOR)
+        self.screen.blit(self.background, (0, 0))
         self.buybox.render(self.screen)
         self.sellbox.render(self.screen)
