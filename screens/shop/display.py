@@ -38,9 +38,6 @@ class Display(object):
         self.background = pygame.image.load(BACKGROUNDSPRITE).convert_alpha()
         self.background = pygame.transform.scale(self.background, self.screen.get_size())
 
-        self.party = list(engine.data.party.values())
-        self.inventory = engine.data.inventory
-
         self._init_boxes()
 
     def _init_boxes(self):
@@ -49,7 +46,8 @@ class Display(object):
         x = self.screen.get_width() * SELLBOXPOSX
         y = self.screen.get_height() * SELLBOXPOSY
         self.sellbox = screens.shop.sellbox.SellBox(int(x), int(y), int(width), int(height),
-                                                    database.EquipmentType.arm, self.party, self.inventory)
+                                                    database.EquipmentType.arm,
+                                                    self.engine.data.party, self.engine.data.inventory)
         width = self.screen.get_width() * BUYBOXWIDTH
         height = self.screen.get_height() * BUYBOXHEIGHT
         x = self.screen.get_width() * BUYBOXPOSX

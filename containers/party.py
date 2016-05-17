@@ -60,3 +60,15 @@ class Party(collections.OrderedDict):
             skill = getattr(member, attr)
             skill_values.append(skill.tot)
         return max(skill_values)
+
+    def get_sum_value_of_skill(self, attr):
+        """
+        Vraagt de opgetelde waarde van een attribute op van alle Party members
+        :param attr: sting, het opgevraagde attribute, bijvoorbeeld 'mer'.
+        :return: de opgetelde waarde van het attribute.
+        """
+        sum_skill_values = 0
+        for member in self.values():
+            skill = getattr(member, attr)
+            sum_skill_values += skill.tot
+        return sum_skill_values
