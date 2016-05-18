@@ -230,6 +230,7 @@ class Window(object):
 
             for i in range(1, len(self.party)):
                 ps = self.party_sprites[i]
+                # dit was een poging tot een andere manier van trailing. werkt niet goed genoeg.
                 # mv = self.party_sprites[0].movespeed
                 # if mv == 60:
                 #     index = 32 * i
@@ -321,7 +322,8 @@ class Window(object):
                     self.engine.audio.play_sound(sfx.CHEST)
                     chest_data['content'] = dict()
                     push_object = components.messagebox.MessageBox(self.engine.gamestate, text, image)
-                    # push_object = screens.shop.display.Display()
+                    # todo, weg uiteindelijk, de shop hier
+                    # push_object = screens.shop.display.Display(self.engine)
                     self.engine.gamestate.push(push_object)
 
     def check_sparklies(self, check_rect):
@@ -358,7 +360,8 @@ class Window(object):
                 sparkly_data['content'] = dict()
                 sparkly_sprite.image = None
                 push_object = components.messagebox.MessageBox(self.engine.gamestate, text, image)
-                # push_object = screens.shop.display.Display()
+                # todo, weg uiteindelijk, de shop hier
+                # push_object = screens.shop.display.Display(self.engine)
                 self.engine.gamestate.push(push_object)
 
     def get_check_rect(self):
@@ -369,11 +372,11 @@ class Window(object):
         last_dir = self.party_sprites[0].last_direction
         check_rect = self.party_sprites[0].rect
         if last_dir == screens.direction.Direction.North:
-            check_rect = self.party_sprites[0].rect.move(0, -16)
+            check_rect = self.party_sprites[0].rect.move(0, GRIDSIZE / -2)  # -16
         elif last_dir == screens.direction.Direction.South:
-            check_rect = self.party_sprites[0].rect.move(0, 16)
+            check_rect = self.party_sprites[0].rect.move(0, GRIDSIZE / 2)   # 16
         elif last_dir == screens.direction.Direction.West:
-            check_rect = self.party_sprites[0].rect.move(-16, 0)
+            check_rect = self.party_sprites[0].rect.move(GRIDSIZE / -2, 0)
         elif last_dir == screens.direction.Direction.East:
-            check_rect = self.party_sprites[0].rect.move(16, 0)
+            check_rect = self.party_sprites[0].rect.move(GRIDSIZE / 2, 0)
         return check_rect

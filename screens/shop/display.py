@@ -15,6 +15,10 @@ import statemachine
 BACKGROUNDCOLOR = pygame.Color("black")
 BACKGROUNDSPRITE = 'resources/sprites/parchment.png'
 
+FONTCOLOR = pygame.Color("black")
+FONT = 'colonna'
+LARGEFONTSIZE = 100
+
 BUYBOXWIDTH = 1/4
 BUYBOXHEIGHT = 2/3
 BUYBOXPOSX = 1/3
@@ -26,6 +30,10 @@ SELLBOXPOSX = 2/3       # x op 2/3 van het scherm
 SELLBOXPOSY = 1/6
 
 EXTRAHEIGHT = 16        # zodat de laatste item er voor helft op komt
+
+BUYTITLE = "Buy"
+SELLTITLE = "Sell"
+TITLEPOSY = 25
 
 
 class Display(object):
@@ -39,23 +47,28 @@ class Display(object):
         self.background = pygame.image.load(BACKGROUNDSPRITE).convert_alpha()
         self.background = pygame.transform.scale(self.background, self.screen.get_size())
 
+        largefont = pygame.font.SysFont(FONT, LARGEFONTSIZE)
+        self.buy_title = largefont.render(BUYTITLE, True, FONTCOLOR).convert_alpha()
+        self.sell_title = largefont.render(SELLTITLE, True, FONTCOLOR).convert_alpha()
+
         self._init_boxes()
 
     def _init_boxes(self):
+        sum_merchant = self.engine.data.party.get_sum_value_of_skill("mer")
+
         width = self.screen.get_width() * SELLBOXWIDTH
         height = self.screen.get_height() * SELLBOXHEIGHT + EXTRAHEIGHT
         x = self.screen.get_width() * SELLBOXPOSX
         y = self.screen.get_height() * SELLBOXPOSY
         self.sellbox = screens.shop.sellbox.SellBox(int(x), int(y), int(width), int(height),
                                                     database.EquipmentType.arm,
-                                                    self.engine.data.party, self.engine.data.inventory)
+                                                    self.engine.data.party, self.engine.data.inventory, sum_merchant)
         width = self.screen.get_width() * BUYBOXWIDTH
         height = self.screen.get_height() * BUYBOXHEIGHT + EXTRAHEIGHT
         x = self.screen.get_width() * BUYBOXPOSX
         y = self.screen.get_height() * BUYBOXPOSY
         self.buybox = screens.shop.buybox.BuyBox(int(x), int(y), int(width), int(height),
-                                                 database.armor.a.values(),
-                                                 self.engine.data.party.get_sum_value_of_skill("mer"))
+                                                 database.armor.a.values(), sum_merchant)
 
     def on_enter(self):
         """
@@ -120,5 +133,12 @@ class Display(object):
         """
         self.screen.fill(BACKGROUNDCOLOR)
         self.screen.blit(self.background, (0, 0))
+        # titels midden boven de boxen
+        self.screen.blit(self.buy_title, ((self.screen.get_width() * BUYBOXPOSX) +
+                                          (self.screen.get_width() * BUYBOXWIDTH / 2) -
+                                          (self.buy_title.get_width() / 2), TITLEPOSY))
+        self.screen.blit(self.sell_title, ((self.screen.get_width() * SELLBOXPOSX) +
+                                           (self.screen.get_width() * SELLBOXWIDTH / 2) -
+                                           (self.sell_title.get_width() / 2), TITLEPOSY))
         self.buybox.render(self.screen)
         self.sellbox.render(self.screen)

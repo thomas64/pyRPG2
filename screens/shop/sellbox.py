@@ -36,7 +36,7 @@ class SellBox(object):
     """
     ...
     """
-    def __init__(self, x, y, width, height, equipment_type, party, inventory):
+    def __init__(self, x, y, width, height, equipment_type, party, inventory, sum_merchant):
         self.box_width = width
         self.box_height = height
         self.surface = pygame.Surface((width, height))
@@ -49,7 +49,7 @@ class SellBox(object):
         largefont = pygame.font.SysFont(FONT, LARGEFONTSIZE)
         normalfont = pygame.font.SysFont(FONT, NORMALFONTSIZE)
 
-        self.sale = party.get_sum_value_of_skill("mer")
+        self.sale = sum_merchant
 
         self.table_data = list()
         self._fill_table_data(equipment_type, party, inventory)
