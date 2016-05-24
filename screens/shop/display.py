@@ -9,6 +9,7 @@ import database
 import database.armor
 import keys
 import screens.shop.buybox
+import screens.shop.infobox
 import screens.shop.sellbox
 import statemachine
 
@@ -35,6 +36,8 @@ BUYTITLE = "Buy"
 SELLTITLE = "Sell"
 TITLEPOSY = 25
 
+INFOBOXX, INFOBOXY = 30, 600
+
 
 class Display(object):
     """
@@ -53,6 +56,8 @@ class Display(object):
 
         self._init_boxes()
 
+        self.info_label = ""
+
     def _init_boxes(self):
         sum_merchant = self.engine.data.party.get_sum_value_of_skill("mer")
 
@@ -68,7 +73,9 @@ class Display(object):
         x = self.screen.get_width() * BUYBOXPOSX
         y = self.screen.get_height() * BUYBOXPOSY
         self.buybox = screens.shop.buybox.BuyBox(int(x), int(y), int(width), int(height),
-                                                 database.armor.a.values(), sum_merchant)
+                                                 database.armor.a.items(), sum_merchant)
+
+        self.infobox = screens.shop.infobox.InfoBox((INFOBOXX, INFOBOXY))
 
     def on_enter(self):
         """
@@ -91,14 +98,15 @@ class Display(object):
         """
         if event.type == pygame.MOUSEMOTION:
 
+            self.info_label = ""
+
             if self.buybox.rect.collidepoint(event.pos):
-                self.buybox.mouse_hover(event)
+                self.info_label = self.buybox.mouse_hover(event)
             else:
                 self.buybox.cur_item = None
 
             if self.sellbox.rect.collidepoint(event.pos):
-                # in partyscreen display geeft deze functie waarden terug, moet nog aanpassen later
-                self.sellbox.mouse_hover(event)
+                self.info_label = self.sellbox.mouse_hover(event)
             else:
                 self.sellbox.cur_item = None
 
@@ -140,5 +148,6 @@ class Display(object):
         self.screen.blit(self.sell_title, ((self.screen.get_width() * SELLBOXPOSX) +
                                            (self.screen.get_width() * SELLBOXWIDTH / 2) -
                                            (self.sell_title.get_width() / 2), TITLEPOSY))
+        self.infobox.render(self.screen, self.info_label)
         self.buybox.render(self.screen)
         self.sellbox.render(self.screen)

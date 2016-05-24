@@ -5,6 +5,7 @@ class: BuyBox
 
 import pygame
 
+import equipment
 import keys
 
 COLORKEY = pygame.Color("white")
@@ -50,15 +51,16 @@ class BuyBox(object):
         self.sale = sum_merchant
 
         self.table_data = list()
-        for equipment_item in equipment_database:
+        for equipment_item_raw, equipment_item in equipment_database:
             if equipment_item['shp']:
-                equipment_item_spr = pygame.image.load(equipment_item['spr']).subsurface(
-                    equipment_item['col'], equipment_item['row'], SUBSURW, SUBSURH).convert_alpha()
-                equipment_item_nam = equipment_item['nam']
-                equipment_item_val = str(round(equipment_item['val'] - ((equipment_item['val'] / 100) * self.sale)))
+                equipment_item_obj = equipment.factory_equipment_item(equipment_item_raw)
+                equipment_item_spr = pygame.image.load(equipment_item_obj.SPR).subsurface(
+                    equipment_item_obj.COL, equipment_item_obj.ROW, SUBSURW, SUBSURH).convert_alpha()
+                equipment_item_nam = equipment_item_obj.NAM
+                equipment_item_val = str(round(equipment_item_obj.VAL - ((equipment_item_obj.VAL / 100) * self.sale)))
                 self.table_data.append(
-                    # row[0],                   row[1],         row[2],         row[3]
-                    [equipment_item_spr, equipment_item_nam, equipment_item_val, None]
+                    # row[0],                   row[1],         row[2],         row[3],     row[4]
+                    [equipment_item_spr, equipment_item_nam, equipment_item_val, None, equipment_item_obj]
                 )
 
         self.table_view = []
@@ -119,11 +121,10 @@ class BuyBox(object):
         for index, row in enumerate(self.table_data):
             if row[3].collidepoint(event.pos):
                 self.cur_item = index
-                # dit hieronder is nog uit invclickbox, hier moet ik later nog wat mee
-                # equipment_item = row[4]
-                # if equipment_item.is_not_empty():
-                #     return equipment_item.display(), equipment_item
-                # return None, equipment_item
+                equipment_item = row[4]
+                if equipment_item.is_not_empty():
+                    return equipment_item.display()
+                return ""
 
     def render(self, screen):
         """
