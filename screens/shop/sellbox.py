@@ -151,8 +151,8 @@ class SellBox(object):
             if self.lay_rect.y - self.rect.y < 0:
                 self.lay_rect.y += SCROLLSPEED
         elif event.button == keys.SCROLLDOWN:
-            if self.lay_rect.y - self.rect.y > self.rect.height - self.layer_height:
-                self.lay_rect.y -= SCROLLSPEED
+            if self.lay_rect.y - self.rect.y > self.rect.height - self.layer_height + 2:  # +2 is nodig tegen scroll-
+                self.lay_rect.y -= SCROLLSPEED                                            # ghosting bij hoogte 1/4
 
         self._update_rects_in_layer_rect_with_offset()
 
