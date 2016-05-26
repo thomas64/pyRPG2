@@ -19,6 +19,7 @@ BACKGROUNDSPRITE = 'resources/sprites/parchment.png'
 FONTCOLOR = pygame.Color("black")
 FONT = 'colonna'
 LARGEFONTSIZE = 100
+NORMALFONTSIZE = 50
 
 BUYBOXWIDTH = 1/4
 BUYBOXHEIGHT = 3/4
@@ -30,16 +31,19 @@ SELLBOXHEIGHT = 3/4
 SELLBOXPOSX = 2/3       # x op 2/3 van het scherm
 SELLBOXPOSY = 1/6
 
-EXTRAHEIGHT = 0        # zodat de laatste item er voor helft op komt
+EXTRAHEIGHT = 0         # zodat de laatste item er voor helft op komt
 
 BUYTITLE = "Buy"
 SELLTITLE = "Sell"
+GOLDTITLE = "Gold: "
 TITLEPOSY = 25
 
 INFOBOXWIDTH = 1/4
 INFOBOXHEIGHT = 1/6
 INFOBOXPOSX = 1/16
 INFOBOXPOSY = 6/8
+
+GOLDTITLEPOSY = -50    # -50 boven infobox
 
 
 class Display(object):
@@ -53,9 +57,12 @@ class Display(object):
         self.background = pygame.image.load(BACKGROUNDSPRITE).convert_alpha()
         self.background = pygame.transform.scale(self.background, self.screen.get_size())
 
-        largefont = pygame.font.SysFont(FONT, LARGEFONTSIZE)
-        self.buy_title = largefont.render(BUYTITLE, True, FONTCOLOR).convert_alpha()
-        self.sell_title = largefont.render(SELLTITLE, True, FONTCOLOR).convert_alpha()
+        self.largefont = pygame.font.SysFont(FONT, LARGEFONTSIZE)
+        self.normalfont = pygame.font.SysFont(FONT, NORMALFONTSIZE)
+        self.buy_title = self.largefont.render(BUYTITLE, True, FONTCOLOR).convert_alpha()
+        self.sell_title = self.largefont.render(SELLTITLE, True, FONTCOLOR).convert_alpha()
+        self.gold_amount = None
+        self.gold_title = None
 
         self._init_boxes()
 
@@ -136,13 +143,14 @@ class Display(object):
 
     def update(self, dt):
         """
+        Update de gold quantity.
         :param dt: self.clock.tick(FPS)/1000.0
         """
-        pass
+        self.gold_amount = self.engine.data.pouch['gold'].qty
 
     def render(self):
         """
-        Teken
+        Teken alles op het scherm, de titels, de boxen.
         """
         self.screen.fill(BACKGROUNDCOLOR)
         self.screen.blit(self.background, (0, 0))
@@ -153,6 +161,9 @@ class Display(object):
         self.screen.blit(self.sell_title, ((self.screen.get_width() * SELLBOXPOSX) +
                                            (self.screen.get_width() * SELLBOXWIDTH / 2) -
                                            (self.sell_title.get_width() / 2), TITLEPOSY))
+        self.gold_title = self.normalfont.render(GOLDTITLE + str(self.gold_amount), True, FONTCOLOR).convert_alpha()
+        self.screen.blit(self.gold_title, (self.screen.get_width() * INFOBOXPOSX,
+                                           self.screen.get_height() * INFOBOXPOSY + GOLDTITLEPOSY))
         self.infobox.render(self.screen, self.info_label)
         self.buybox.render(self.screen)
         self.sellbox.render(self.screen)

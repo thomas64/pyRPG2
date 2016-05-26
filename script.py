@@ -8,6 +8,7 @@ import database.hero
 import database.treasurechest
 import database.sparkly
 import equipment
+import pouchitems
 import screens.direction
 
 
@@ -38,6 +39,8 @@ class Script(object):
 
         eqp_item = equipment.factory_equipment_item('bronzemace')
         self.engine.data.inventory.add(eqp_item, verbose=False)
+        pouch_item = pouchitems.factory_pouch_item('gold')
+        self.engine.data.pouch.add(pouch_item, 1, verbose=False)
 
         self.engine.data.map_name = 'ersin_forest_start'
         self.engine.data.map_pos = 'start_game'     # dit is de naam van de startpositie object in de tmx map
