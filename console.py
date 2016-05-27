@@ -40,7 +40,7 @@ def state_pop(state):
 
 def state_clear():
     """
-    StateMachine.clear()
+    StateMachine._clear()
     """
     print("Game cleared all states from stack.")
 

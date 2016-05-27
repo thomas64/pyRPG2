@@ -49,8 +49,8 @@ class StateMachine(object):
 
     def deep_peek(self, stackindex=-2):
         """
-        Kijk in de enerbovenste laag van de stack.
-        :param stackindex: -1 is de bovenste, -2 is de enerbovenste, -3 etc.
+        Kijk in de op een na bovenste laag van de stack.
+        :param stackindex: -1 is de bovenste, -2 is de op een na bovenste, -3 etc.
         """
         try:
             return self.statestack[stackindex]
@@ -89,7 +89,7 @@ class StateMachine(object):
         self.prev_state = None
         return state
 
-    def clear(self):
+    def _clear(self):
         """
         Clear the whole stack.
         """
@@ -103,5 +103,5 @@ class StateMachine(object):
         Clear the whole stack. And pushes one.
         :param state: Push a new state onto the stack.
         """
-        self.clear()
+        self._clear()
         self.push(state)
