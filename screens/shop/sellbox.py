@@ -13,8 +13,7 @@ SELECTCOLOR = pygame.Color("gray60")
 
 FONTCOLOR = pygame.Color("black")
 FONT = 'impact'
-LARGEFONTSIZE = 25
-NORMALFONTSIZE = 15
+FONTSIZE = 15
 
 COLUMN1X = 0
 COLUMN2X = 34
@@ -34,7 +33,7 @@ TRANSP = 'resources/sprites/transp.png'
 
 class SellBox(object):
     """
-    ...
+    De box waar je inventory in te zien is.
     """
     def __init__(self, x, y, width, height, equipment_type, party, inventory, sum_merchant):
         self.box_width = width
@@ -46,31 +45,12 @@ class SellBox(object):
         self.rect = self.surface.get_rect()
         self.rect.topleft = x, y
 
-        largefont = pygame.font.SysFont(FONT, LARGEFONTSIZE)
-        normalfont = pygame.font.SysFont(FONT, NORMALFONTSIZE)
-
         self.sale = sum_merchant
 
-        self.table_data = list()
+        self.table_data = []
         self._fill_table_data(equipment_type, party, inventory)
-
         self.table_view = []
-        for index, row in enumerate(self.table_data):
-            self.table_view.append(list())
-            self.table_view[index].append(row[0])
-            self.table_view[index].append(row[1])
-            self.table_view[index].append(normalfont.render(row[2], True, FONTCOLOR).convert_alpha())
-            self.table_view[index].append(normalfont.render(row[3], True, FONTCOLOR).convert_alpha())
-            self.table_view[index].append(normalfont.render(row[4], True, FONTCOLOR).convert_alpha())
-
-        # stel de scroll layer in
-        self.layer_height = COLUMNSY + len(self.table_view) * ROWHEIGHT
-        if self.layer_height < height:
-            self.layer_height = height
-        self.layer = pygame.Surface((width, self.layer_height))
-        self.layer = self.layer.convert()
-        self.lay_rect = self.layer.get_rect()
-        self.lay_rect.topleft = x, y
+        self._setup_table_view()
 
         self.background = pygame.Surface((width, self.layer_height))
         self.background.fill(COLORKEY)
@@ -131,6 +111,29 @@ class SellBox(object):
                  equipment_item, None, ""]
             )
 
+    def _setup_table_view(self):
+        """
+        Zet table_data om in een visuele weergave.
+        """
+        normalfont = pygame.font.SysFont(FONT, FONTSIZE)
+
+        for index, row in enumerate(self.table_data):
+            self.table_view.append(list())
+            self.table_view[index].append(row[0])
+            self.table_view[index].append(row[1])
+            self.table_view[index].append(normalfont.render(row[2], True, FONTCOLOR).convert_alpha())
+            self.table_view[index].append(normalfont.render(row[3], True, FONTCOLOR).convert_alpha())
+            self.table_view[index].append(normalfont.render(row[4], True, FONTCOLOR).convert_alpha())
+
+        # stel de scroll layer in
+        self.layer_height = COLUMNSY + len(self.table_view) * ROWHEIGHT
+        if self.layer_height < self.box_height:
+            self.layer_height = self.box_height
+        self.layer = pygame.Surface((self.box_width, self.layer_height))
+        self.layer = self.layer.convert()
+        self.lay_rect = self.layer.get_rect()
+        self.lay_rect.topleft = self.rect.topleft
+
     def _update_rects_in_layer_rect_with_offset(self):
         """
         Voeg de rects toe in row[6] van table_data waarmee gecorrespondeert kan worden met de muis bijvoorbeeld.
@@ -170,6 +173,22 @@ class SellBox(object):
                 if equipment_item.is_not_empty():
                     return equipment_item.display()
                 return ""
+
+    def mouse_click(self, event):
+        """
+        :param event: pygame.MOUSEBUTTONDOWN uit shopscreen
+        """
+        for index, row in enumerate(self.table_data):
+            if row[6].collidepoint(event.pos):
+                self.cur_item = index
+                selected_item = row[5]
+                quantity = int(row[2])
+                value = int(row[4])
+
+                if row[7] != "X":
+                    return True, selected_item, quantity, value
+
+        return False, None, None, None
 
     def render(self, screen):
         """

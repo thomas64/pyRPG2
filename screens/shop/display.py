@@ -5,10 +5,13 @@ class: Display
 
 import pygame
 
+import audio as sfx
 import database
 import database.armor
 import keys
+import pouchitems
 import screens.shop.buybox
+import screens.shop.confirmbox
 import screens.shop.infobox
 import screens.shop.sellbox
 import statemachine
@@ -64,27 +67,36 @@ class Display(object):
         self.gold_amount = None
         self.gold_title = None
 
+        self.sum_merchant = self.engine.data.party.get_sum_value_of_skill("mer")
         self._init_boxes()
 
         self.info_label = ""
 
     def _init_boxes(self):
-        sum_merchant = self.engine.data.party.get_sum_value_of_skill("mer")
+        self._init_sellbox()
+        self._init_buybox()
+        self._init_infobox()
 
+    def _init_sellbox(self):
         width = self.screen.get_width() * SELLBOXWIDTH
         height = self.screen.get_height() * SELLBOXHEIGHT + EXTRAHEIGHT
         x = self.screen.get_width() * SELLBOXPOSX
         y = self.screen.get_height() * SELLBOXPOSY
         self.sellbox = screens.shop.sellbox.SellBox(int(x), int(y), int(width), int(height),
                                                     database.EquipmentType.arm,
-                                                    self.engine.data.party, self.engine.data.inventory, sum_merchant)
+                                                    self.engine.data.party, self.engine.data.inventory,
+                                                    self.sum_merchant)
+
+    def _init_buybox(self):
         width = self.screen.get_width() * BUYBOXWIDTH
         height = self.screen.get_height() * BUYBOXHEIGHT + EXTRAHEIGHT
         x = self.screen.get_width() * BUYBOXPOSX
         y = self.screen.get_height() * BUYBOXPOSY
         self.buybox = screens.shop.buybox.BuyBox(int(x), int(y), int(width), int(height),
-                                                 database.armor.a.items(), sum_merchant)
+                                                 database.armor.a.items(),
+                                                 self.sum_merchant)
 
+    def _init_infobox(self):
         width = self.screen.get_width() * INFOBOXWIDTH
         height = self.screen.get_height() * INFOBOXHEIGHT
         x = self.screen.get_width() * INFOBOXPOSX
@@ -123,7 +135,20 @@ class Display(object):
                 self.info_label = self.sellbox.mouse_hover(event)
 
         elif event.type == pygame.MOUSEBUTTONDOWN:
-            if event.button in (keys.SCROLLUP, keys.SCROLLDOWN):
+
+            if event.button == keys.LEFTCLICK:
+                success, selected_item, quantity, value = self.sellbox.mouse_click(event)
+                if success:
+                    self.engine.data.inventory.remove(selected_item, quantity)
+                    gold = pouchitems.factory_pouch_item('gold')
+                    self.engine.data.pouch.add(gold, value * quantity)
+                    self.engine.audio.play_sound(sfx.COINS)
+                    self._init_sellbox()
+                    text = ["piet"]
+                    push_object = screens.shop.confirmbox.ConfirmBox(self.engine.gamestate, text)
+                    self.engine.gamestate.push(push_object)
+
+            elif event.button in (keys.SCROLLUP, keys.SCROLLDOWN):
                 if self.buybox.rect.collidepoint(event.pos):
                     self.buybox.mouse_scroll(event)
                 if self.sellbox.rect.collidepoint(event.pos):
