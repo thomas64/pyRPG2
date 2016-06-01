@@ -237,11 +237,14 @@ class Display(object):
     def update(self, dt):
         """
         Update de gold quantity.
+        Handel af als er een sell confirmbox is geweest.
         :param dt: self.clock.tick(FPS)/1000.0
         """
         self.gold_amount = self.engine.data.pouch['gold'].qty
 
-        self.close_button.update(self.key_input, COLORKEY)
+        # todo, buybox met confirm
+        # todo, sellbox en buybox met toetsenbord
+        # todo, equipment die hero's aanhebben kunnen sellen
 
         if self.sell_click:
             selected_quantity = self.confirm_box.on_exit()
