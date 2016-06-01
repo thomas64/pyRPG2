@@ -169,11 +169,14 @@ class Display(object):
                             if self.tot_quantity == 4:
                                 text.append("Sell 3 of them for " + str(int(self.value * 3)) + " gold.")
                                 text.append("Sell 4 of them for " + str(int(self.value * 4)) + " gold.")
+                                self.sel_quantity.append(3)
                                 self.sel_quantity.append(4)
                             if self.tot_quantity == 5:
                                 text.append("Sell 3 of them for " + str(int(self.value * 3)) + " gold.")
                                 text.append("Sell 4 of them for " + str(int(self.value * 4)) + " gold.")
                                 text.append("Sell 5 of them for " + str(int(self.value * 5)) + " gold.")
+                                self.sel_quantity.append(3)
+                                self.sel_quantity.append(4)
                                 self.sel_quantity.append(5)
                             if self.tot_quantity > 5:
                                 text.append("Sell " + str(int(self.tot_quantity/2)) +
