@@ -32,7 +32,7 @@ class TreasureChestDatabase(dict):
                                            eqp14=dict(nam='lighttitaniumarmor', qty=14),
                                            eqp15=dict(nam='mediumtitaniumarmor', qty=15),
                                            eqp16=dict(nam='heavytitaniumarmor', qty=16),
-                                           eqp17=dict(nam='lightsteelarmor',    qty=17),
+                                           eqp17=dict(nam='lightsteelarmor',    qty=1),
                                            eqp18=dict(nam='leathercap',         qty=18)))
         self['chest2'] = dict(condition=dict(thf=5),
                               content=dict(itm1=dict(nam='gold',             qty=200)))

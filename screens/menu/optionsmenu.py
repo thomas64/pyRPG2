@@ -42,7 +42,7 @@ class OptionsMenu(screens.menu.basemenu.BaseMenu):
             self.engine.video.flip_fullscreen()
             self.engine.video.write_cfg()
 
-        if menu_item.func == self.Music:
+        elif menu_item.func == self.Music:
             menu_item.flip_switch()             # hier wordt de weergave later aangepast
             self.engine.audio.flip_music()      # en de instelling zelf aangepast
             self.engine.audio.write_cfg()       # en weggeschreven

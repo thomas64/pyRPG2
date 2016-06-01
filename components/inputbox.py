@@ -76,9 +76,9 @@ class InputBox(object):
                     del self.textbox[-2]
                 if len(self.textbox) == 0:
                     self.textbox = ["_"]
-            if event.key == keys.EXIT:
+            elif event.key == keys.EXIT:
                 self.running = False
-            if event.key in keys.SELECT:
+            elif event.key in keys.SELECT:
                 self.confirm = True
                 self.running = False
 

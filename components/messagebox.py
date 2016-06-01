@@ -68,9 +68,9 @@ class MessageBox(object):
         if event.type == pygame.KEYDOWN:
             if event.key == keys.EXIT:
                 self.gamestate.pop()
-            if event.key in keys.SELECT:
+            elif event.key in keys.SELECT:
                 self.gamestate.pop()
-        if event.type == pygame.MOUSEBUTTONDOWN:
+        elif event.type == pygame.MOUSEBUTTONDOWN:
             if event.button == keys.LEFTCLICK:
                 self.gamestate.pop()
 
