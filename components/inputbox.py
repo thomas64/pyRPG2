@@ -74,7 +74,7 @@ class InputBox(object):
             if event.key == keys.REMOVE:
                 if len(self.textbox) > 1:
                     del self.textbox[-2]
-                if len(self.textbox) == 0:
+                elif len(self.textbox) == 0:
                     self.textbox = ["_"]
             elif event.key == keys.EXIT:
                 self.running = False
