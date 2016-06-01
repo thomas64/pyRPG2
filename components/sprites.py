@@ -28,12 +28,12 @@ class Button(pygame.sprite.Sprite):
     """
     De gegevens van de knoppen in beeld.
     """
-    def __init__(self, width, height, position, label, key):
+    def __init__(self, width, height, position, label, key, bgcolor=BUTTONBGCOLOR, fontcolor=BUTTONFONTCOLOR):
         super().__init__()
 
         self.width = width
         self.height = height
-        self.bgcolor = BUTTONBGCOLOR
+        self.bgcolor = bgcolor
         self.visible = True
 
         self.image = pygame.Surface((self.width, self.height))
@@ -42,7 +42,7 @@ class Button(pygame.sprite.Sprite):
         self.rect.topleft = position
 
         self.font = pygame.font.SysFont(BUTTONFONT, BUTTONFONTSIZE)
-        self.label = self.font.render(label, True, BUTTONFONTCOLOR).convert_alpha()
+        self.label = self.font.render(label, True, fontcolor).convert_alpha()
         self.labelrect = self.label.get_rect()
         self.labelrect.center = self.rect.width / 2, self.rect.height / 2
 
@@ -72,24 +72,29 @@ class Button(pygame.sprite.Sprite):
                 key_input[self.key] = 1
         return key_input
 
-    def update(self, key_input):
+    def update(self, key_input, bgcolor=BUTTONBGCOLOR):
         """
         Update de kleur van de knop.
         :param key_input: self.key_input uit engine
+        :param bgcolor: als hij moet afwijken van de standaard zwart, dan kan dat hier
         """
         if key_input[self.key]:
             self.bgcolor = BUTTONPRESSCOLOR
         else:
-            self.bgcolor = BUTTONBGCOLOR
+            self.bgcolor = bgcolor
 
-    def render(self, surface):
+    def render(self, surface, linecolor=BUTTONFONTCOLOR, colorkey=False):
         """
         Teken de zichtbare knoppen op de gegeven surface.
         :param surface: self.screen uit engine
+        :param linecolor: als hij moet afwijken van de standaard wit, dan kan dat hier
+        :param colorkey: als hij transparant moet afwijken ipv de standaard zwart, dan kan dat hier
         """
         if self.visible:
             self.image.fill(self.bgcolor)
-            pygame.draw.rect(self.image, BUTTONFONTCOLOR, (0, 0, self.width, self.height), 1)
+            if colorkey:
+                self.image.set_colorkey(self.bgcolor)
+            pygame.draw.rect(self.image, linecolor, (0, 0, self.width, self.height), 1)
             self.image.blit(self.label, self.labelrect)
             surface.blit(self.image, self.rect.topleft)
 

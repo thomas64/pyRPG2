@@ -146,7 +146,8 @@ class Audio(object):
         # ook niet als hij van messagebox komt. todo, dit begint wat lelijk te worden.
         if currentstate == statemachine.States.OptionsMenu or \
            self.engine.gamestate.prev_state == statemachine.States.OptionsMenu or \
-           self.engine.gamestate.prev_state == statemachine.States.MessageBox:
+           self.engine.gamestate.prev_state == statemachine.States.MessageBox or \
+           self.engine.gamestate.prev_state == statemachine.States.Shop:
             return
 
         if currentstate == statemachine.States.Overworld:
@@ -181,7 +182,8 @@ class Audio(object):
         """
         if currentstate == statemachine.States.OptionsMenu or \
            self.engine.gamestate.prev_state == statemachine.States.OptionsMenu or \
-           self.engine.gamestate.prev_state == statemachine.States.MessageBox:
+           self.engine.gamestate.prev_state == statemachine.States.MessageBox or \
+           self.engine.gamestate.prev_state == statemachine.States.Shop:
             return
 
         if currentstate == statemachine.States.Overworld:

@@ -6,6 +6,7 @@ class: Display
 import pygame
 
 import audio as sfx
+import components
 import database
 import database.armor
 import keys
@@ -18,6 +19,7 @@ import statemachine
 
 BACKGROUNDCOLOR = pygame.Color("black")
 BACKGROUNDSPRITE = 'resources/sprites/parchment.png'
+COLORKEY = pygame.Color("white")
 
 FONTCOLOR = pygame.Color("black")
 FONT = 'colonna'
@@ -48,6 +50,11 @@ INFOBOXPOSY = 6/8
 
 GOLDTITLEPOSY = -50    # -50 boven infobox
 
+BTNWIDTH = 40
+BTNHEIGHT = 40
+CLOSELBL = "X"
+CLOSEX, CLOSEY = -70, 40    # negatieve x omdat de positie van rechts bepaald wordt.
+
 
 class Display(object):
     """
@@ -69,6 +76,12 @@ class Display(object):
 
         self.sum_merchant = self.engine.data.party.get_sum_value_of_skill("mer")
         self._init_boxes()
+
+        self.key_input = None           # dit is voor de mousepress op een button.
+
+        self.close_button = components.sprites.Button(
+            BTNWIDTH, BTNHEIGHT, (self.background.get_width() + CLOSEX, CLOSEY), CLOSELBL, keys.EXIT,
+            COLORKEY, FONTCOLOR)
 
         self.info_label = ""
 
@@ -144,50 +157,13 @@ class Display(object):
         elif event.type == pygame.MOUSEBUTTONDOWN:
 
             if event.button == keys.LEFTCLICK:
+
+                if self.close_button.single_click(event) == keys.EXIT:
+                    self.engine.gamestate.pop()
+
                 self.sell_click, self.selected_item, self.tot_quantity, self.value = self.sellbox.mouse_click(event)
                 if self.sell_click:
-                    text = ["I'll give you " + str(self.value) + " gold for 1 " + self.selected_item.NAM + ".",
-                            "",
-                            "Oops, don't sell any."]
-                    self.sel_quantity = ["",
-                                         "",
-                                         0]
-
-                    if self.tot_quantity > 0:
-                        if self.tot_quantity == 1:
-                            text.append("Sell 1 for " + str(int(self.value * 1)) + " gold.")
-                            self.sel_quantity.append(1)
-                        else:
-                            text.append("Sell 1 of them for " + str(int(self.value * 1)) + " gold.")
-                            self.sel_quantity.append(1)
-                        if self.tot_quantity > 1:
-                            text.append("Sell 2 of them for " + str(int(self.value * 2)) + " gold.")
-                            self.sel_quantity.append(2)
-                            if self.tot_quantity == 3:
-                                text.append("Sell 3 of them for " + str(int(self.value * 3)) + " gold.")
-                                self.sel_quantity.append(3)
-                            if self.tot_quantity == 4:
-                                text.append("Sell 3 of them for " + str(int(self.value * 3)) + " gold.")
-                                text.append("Sell 4 of them for " + str(int(self.value * 4)) + " gold.")
-                                self.sel_quantity.append(3)
-                                self.sel_quantity.append(4)
-                            if self.tot_quantity == 5:
-                                text.append("Sell 3 of them for " + str(int(self.value * 3)) + " gold.")
-                                text.append("Sell 4 of them for " + str(int(self.value * 4)) + " gold.")
-                                text.append("Sell 5 of them for " + str(int(self.value * 5)) + " gold.")
-                                self.sel_quantity.append(3)
-                                self.sel_quantity.append(4)
-                                self.sel_quantity.append(5)
-                            if self.tot_quantity > 5:
-                                text.append("Sell " + str(int(self.tot_quantity/2)) +
-                                            " of them for " + str(int(self.value * (self.tot_quantity/2))) + " gold.")
-                                self.sel_quantity.append(int(self.tot_quantity/2))
-                                text.append("Sell " + str(self.tot_quantity-1) +
-                                            " of them for " + str(int(self.value * (self.tot_quantity-1))) + " gold.")
-                                self.sel_quantity.append(self.tot_quantity - 1)
-                                text.append("Sell " + str(self.tot_quantity) +
-                                            " of them for " + str(int(self.value * self.tot_quantity)) + " gold.")
-                                self.sel_quantity.append(self.tot_quantity)
+                    text = self._fill_confirm_box_with_sell_text()
 
                     self.engine.audio.play_sound(sfx.MENUSELECT)
                     self.confirm_box = screens.shop.confirmbox.ConfirmBox(self.engine.gamestate, self.engine.audio,
@@ -204,13 +180,59 @@ class Display(object):
             if event.key == keys.EXIT:
                 self.engine.gamestate.pop()
 
+    def _fill_confirm_box_with_sell_text(self):
+        text = ["I'll give you " + str(self.value) + " gold for 1 " + self.selected_item.NAM + ".",
+                "",
+                "Oops, don't sell any."]
+
+        self.sel_quantity = ["",
+                             "",
+                             0]
+
+        if self.tot_quantity > 0:
+            if self.tot_quantity == 1:
+                text.append("Sell 1 for " + str(int(self.value * 1)) + " gold.")
+                self.sel_quantity.append(1)
+            else:
+                text.append("Sell 1 of them for " + str(int(self.value * 1)) + " gold.")
+                self.sel_quantity.append(1)
+            if self.tot_quantity > 1:
+                text.append("Sell 2 of them for " + str(int(self.value * 2)) + " gold.")
+                self.sel_quantity.append(2)
+                if self.tot_quantity == 3:
+                    text.append("Sell 3 of them for " + str(int(self.value * 3)) + " gold.")
+                    self.sel_quantity.append(3)
+                if self.tot_quantity == 4:
+                    text.append("Sell 3 of them for " + str(int(self.value * 3)) + " gold.")
+                    text.append("Sell 4 of them for " + str(int(self.value * 4)) + " gold.")
+                    self.sel_quantity.append(3)
+                    self.sel_quantity.append(4)
+                if self.tot_quantity == 5:
+                    text.append("Sell 3 of them for " + str(int(self.value * 3)) + " gold.")
+                    text.append("Sell 4 of them for " + str(int(self.value * 4)) + " gold.")
+                    text.append("Sell 5 of them for " + str(int(self.value * 5)) + " gold.")
+                    self.sel_quantity.append(3)
+                    self.sel_quantity.append(4)
+                    self.sel_quantity.append(5)
+                if self.tot_quantity > 5:
+                    text.append("Sell " + str(int(self.tot_quantity / 2)) +
+                                " of them for " + str(int(self.value * (self.tot_quantity / 2))) + " gold.")
+                    self.sel_quantity.append(int(self.tot_quantity / 2))
+                    text.append("Sell " + str(self.tot_quantity - 1) +
+                                " of them for " + str(int(self.value * (self.tot_quantity - 1))) + " gold.")
+                    self.sel_quantity.append(self.tot_quantity - 1)
+                    text.append("Sell " + str(self.tot_quantity) +
+                                " of them for " + str(int(self.value * self.tot_quantity)) + " gold.")
+                    self.sel_quantity.append(self.tot_quantity)
+        return text
+
     def multi_input(self, key_input, mouse_pos, dt):
         """
         :param key_input: pygame.key.get_pressed()
         :param mouse_pos: pygame.mouse.get_pos()
         :param dt: self.clock.tick(FPS)/1000.0
         """
-        pass
+        self.key_input = key_input
 
     def update(self, dt):
         """
@@ -218,6 +240,8 @@ class Display(object):
         :param dt: self.clock.tick(FPS)/1000.0
         """
         self.gold_amount = self.engine.data.pouch['gold'].qty
+
+        self.close_button.update(self.key_input, COLORKEY)
 
         if self.sell_click:
             selected_quantity = self.confirm_box.on_exit()
@@ -258,3 +282,4 @@ class Display(object):
         self.infobox.render(self.screen, self.info_label)
         self.buybox.render(self.screen)
         self.sellbox.render(self.screen)
+        self.close_button.render(self.screen, FONTCOLOR, True)
