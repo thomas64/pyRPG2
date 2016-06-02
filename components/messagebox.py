@@ -5,7 +5,7 @@ class: MessageBox
 
 import pygame
 
-import components.screencapture
+import components
 import keys
 import statemachine
 
@@ -29,25 +29,26 @@ class MessageBox(object):
     """
     Geeft een bericht weer op het scherm.
     """
-    def __init__(self, gamestate, text, image=None):
+    def __init__(self, gamestate, raw_text, image=None):
         self.gamestate = gamestate
         self.screen = pygame.display.get_surface()
         self.name = statemachine.States.MessageBox
-        self.scr_capt = components.screencapture.ScreenCapture()
+        self.scr_capt = components.ScreenCapture()
 
         self.font = pygame.font.SysFont(FONT, FONTSIZE)
-        self.text = []
+        self.raw_text = raw_text
+        self.vis_text = []
         self.image = image
         self.img_space = 0
         if self.image:
             self.img_space = IMGSPACE
 
         text_widths = []
-        for row in text:
-            self.text.append(self.font.render(row, True, FONTCOLOR).convert_alpha())
+        for row in raw_text:
+            self.vis_text.append(self.font.render(row, True, FONTCOLOR).convert_alpha())
             text_widths.append(self.font.render(row, True, FONTCOLOR).get_width())
         box_width = max(text_widths) + FONTPOSX * 2 + self.img_space
-        box_height = len(self.text) * LINEHEIGHT + FONTPOSY * 2
+        box_height = len(self.vis_text) * LINEHEIGHT + FONTPOSY * 2
 
         self.surface = pygame.Surface((box_width, box_height))
         self.surface = self.surface.convert()
@@ -86,7 +87,7 @@ class MessageBox(object):
             for i, line in enumerate(self.image):
                 self.surface.blit(line, (IMGPOSX, IMGPOSY + i * LINEHEIGHT))
 
-        for i, line in enumerate(self.text):
+        for i, line in enumerate(self.vis_text):
             if i == 0:
                 self.surface.blit(line, (FONTPOSX, FONTPOSY + i * LINEHEIGHT))
             else:

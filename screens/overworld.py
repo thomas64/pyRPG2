@@ -6,7 +6,7 @@ class: Overworld
 import pygame
 
 import audio as sfx
-import components.sprites
+import components
 import keys
 import screens.menu.manager
 import screens.party.display
@@ -30,8 +30,8 @@ DOWNLBL = "Down"
 LEFTLBL = "Left"
 RIGHTLBL = "Right"
 
-BTNWIDTH = 40
-BTNHEIGHT = 40
+BTN_W = 40
+BTN_H = 40
 
 INVX, INVY = -200, -300
 UPX, UPY = -150, -300
@@ -70,16 +70,11 @@ class Overworld(object):
 
         # todo, afhankelijk van situatie, buttons niet weergeven
         # button_view = sprites.Button((bg_width-200,   bg_height-300), "V",     pygame.K_v)
-        button_inv = components.sprites.Button(
-                                    BTNWIDTH, BTNHEIGHT, (bg_width + INVX,   bg_height + INVY),   INVLBL,   keys.INV)
-        button_up = components.sprites.Button(
-                                    BTNWIDTH, BTNHEIGHT, (bg_width + UPX,    bg_height + UPY),    UPLBL,    keys.UP)
-        button_down = components.sprites.Button(
-                                    BTNWIDTH, BTNHEIGHT, (bg_width + DOWNX,  bg_height + DOWNY),  DOWNLBL,  keys.DOWN)
-        button_left = components.sprites.Button(
-                                    BTNWIDTH, BTNHEIGHT, (bg_width + LEFTX,  bg_height + LEFTY),  LEFTLBL,  keys.LEFT)
-        button_right = components.sprites.Button(
-                                    BTNWIDTH, BTNHEIGHT, (bg_width + RIGHTX, bg_height + RIGHTY), RIGHTLBL, keys.RIGHT)
+        button_inv = components.Button(BTN_W,   BTN_H, (bg_width + INVX,   bg_height + INVY),   INVLBL,   keys.INV)
+        button_up = components.Button(BTN_W,    BTN_H, (bg_width + UPX,    bg_height + UPY),    UPLBL,    keys.UP)
+        button_down = components.Button(BTN_W,  BTN_H, (bg_width + DOWNX,  bg_height + DOWNY),  DOWNLBL,  keys.DOWN)
+        button_left = components.Button(BTN_W,  BTN_H, (bg_width + LEFTX,  bg_height + LEFTY),  LEFTLBL,  keys.LEFT)
+        button_right = components.Button(BTN_W, BTN_H, (bg_width + RIGHTX, bg_height + RIGHTY), RIGHTLBL, keys.RIGHT)
         # button_cancel = sprites.Button((bg_width-100, bg_height-200), "C",     pygame.K_c)
 
         # self.buttons = [button_view, button_up, button_down, button_left, button_right, button_cancel]

@@ -185,8 +185,10 @@ class SellBox(object):
                 quantity = int(row[2])
                 value = int(row[4])
 
-                if row[7] != "X":
+                if row[7] != "X":       # verschil tussen heroes en equipment
                     return True, selected_item, quantity, value
+                else:
+                    return True, None, None, None
 
         return False, None, None, None
 

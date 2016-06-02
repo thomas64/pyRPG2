@@ -7,9 +7,7 @@ import pygame
 import pytmx
 import pyscroll
 
-import components.namedrect
-import components.portal
-import components.sprites
+import components
 
 MAPPATH = 'resources/maps/'
 
@@ -63,22 +61,22 @@ class Map(object):
         for rect in tmx_data.get_layer_by_name(LOWBLOCKER):
             self.low_blocker_rects.append(self._pg_rect(rect))
         for nrect in tmx_data.get_layer_by_name(SOUNDS):
-            self.sounds.append(components.namedrect.NamedRect(nrect.name, self._pg_rect(nrect)))
+            self.sounds.append(components.NamedRect(nrect.name, self._pg_rect(nrect)))
         for obj in tmx_data.get_layer_by_name(STARTPOS):
             self.start_pos.append(obj)
         for obj in tmx_data.get_layer_by_name(PORTALS):
-            self.portals.append(components.portal.Portal(name, self._pg_rect(obj), obj.name, obj.type))
+            self.portals.append(components.Portal(name, self._pg_rect(obj), obj.name, obj.type))
 
         try:
             for obj in tmx_data.get_layer_by_name(CHESTS):
-                chest_object = components.sprites.TreasureChest(obj.name, self._pg_rect(obj), OBJECTLAYER)
+                chest_object = components.TreasureChest(obj.name, self._pg_rect(obj), OBJECTLAYER)
                 self.low_blocker_rects.append(chest_object.get_blocker())
                 self.chests.append(chest_object)
         except ValueError:
             pass
         try:
             for obj in tmx_data.get_layer_by_name(SPARKLY):
-                sparkly_object = components.sprites.Sparkly(obj.name, self._pg_rect(obj), OBJECTLAYER)
+                sparkly_object = components.Sparkly(obj.name, self._pg_rect(obj), OBJECTLAYER)
                 self.sparkly.append(sparkly_object)
         except ValueError:
             pass

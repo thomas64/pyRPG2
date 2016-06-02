@@ -6,7 +6,7 @@ class: ConfirmBox
 import pygame
 
 import audio as sfx
-import components.screencapture
+import components
 import keys
 import statemachine
 
@@ -25,7 +25,6 @@ TOPINDEX = 2
 MESSAGESPRITE = 'resources/sprites/parchment.png'
 
 
-# noinspection PyMissingOrEmptyDocstring
 class ConfirmBox(object):
     """
     Geeft een selectie weer op het scherm.
@@ -35,7 +34,7 @@ class ConfirmBox(object):
         self.audio = audio
         self.screen = pygame.display.get_surface()
         self.name = statemachine.States.MessageBox
-        self.scr_capt = components.screencapture.ScreenCapture()
+        self.scr_capt = components.ScreenCapture()
 
         self.font = pygame.font.SysFont(FONT, FONTSIZE)
         self.raw_text = raw_text    # de onopgemaakte tekst

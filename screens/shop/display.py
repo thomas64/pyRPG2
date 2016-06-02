@@ -12,7 +12,6 @@ import database.armor
 import keys
 import pouchitems
 import screens.shop.buybox
-import screens.shop.confirmbox
 import screens.shop.infobox
 import screens.shop.sellbox
 import statemachine
@@ -50,10 +49,10 @@ INFOBOXPOSY = 6/8
 
 GOLDTITLEPOSY = -50    # -50 boven infobox
 
-BTNWIDTH = 40
+BTNWIDTH = 70
 BTNHEIGHT = 40
-CLOSELBL = "X"
-CLOSEX, CLOSEY = -70, 40    # negatieve x omdat de positie van rechts bepaald wordt.
+CLOSELBL = "Close"
+CLOSEX, CLOSEY = -100, 40    # negatieve x omdat de positie van rechts bepaald wordt.
 
 
 class Display(object):
@@ -77,9 +76,7 @@ class Display(object):
         self.sum_merchant = self.engine.data.party.get_sum_value_of_skill("mer")
         self._init_boxes()
 
-        self.key_input = None           # dit is voor de mousepress op een button.
-
-        self.close_button = components.sprites.Button(
+        self.close_button = components.Button(
             BTNWIDTH, BTNHEIGHT, (self.background.get_width() + CLOSEX, CLOSEY), CLOSELBL, keys.EXIT,
             COLORKEY, FONTCOLOR)
 
@@ -162,13 +159,19 @@ class Display(object):
                     self.engine.gamestate.pop()
 
                 self.sell_click, self.selected_item, self.tot_quantity, self.value = self.sellbox.mouse_click(event)
-                if self.sell_click:
+                if self.sell_click and self.selected_item:
                     text = self._fill_confirm_box_with_sell_text()
 
                     self.engine.audio.play_sound(sfx.MENUSELECT)
-                    self.confirm_box = screens.shop.confirmbox.ConfirmBox(self.engine.gamestate, self.engine.audio,
-                                                                          text)
+                    self.confirm_box = components.ConfirmBox(self.engine.gamestate, self.engine.audio, text)
                     self.engine.gamestate.push(self.confirm_box)
+                elif self.sell_click and not self.selected_item:
+                    self.engine.audio.play_sound(sfx.MENUERROR)
+                    text = ["You can not sell it to me",
+                            "if you won't unequip it first."]
+                    push_object = components.MessageBox(self.engine.gamestate, text)
+                    self.engine.gamestate.push(push_object)
+                    self.sell_click = False
 
             elif event.button in (keys.SCROLLUP, keys.SCROLLDOWN):
                 if self.buybox.rect.collidepoint(event.pos):
@@ -232,7 +235,6 @@ class Display(object):
         :param mouse_pos: pygame.mouse.get_pos()
         :param dt: self.clock.tick(FPS)/1000.0
         """
-        self.key_input = key_input
 
     def update(self, dt):
         """

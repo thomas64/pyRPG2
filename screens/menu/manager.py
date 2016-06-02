@@ -3,7 +3,7 @@
 def: create_menu
 """
 
-import components.screencapture
+import components
 import screens.menu.animation
 import screens.menu.display
 import screens.menu.mainmenu
@@ -69,7 +69,7 @@ def create_menu(state_name, engine, title=None, animation=None, scr_capt=None, s
         content = screens.menu.pausemenu.PauseMenu(engine)
         title = None
         animation = None
-        scr_capt = components.screencapture.ScreenCapture()
+        scr_capt = components.ScreenCapture()
         select = 0
 
     return screens.menu.display.Display(engine.audio, state_name,

@@ -4,6 +4,7 @@ class: Button
 class: ColorBox
 class: Grid
 class: TreasureChest
+class: Sparkly
 """
 
 import pygame

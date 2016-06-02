@@ -8,9 +8,7 @@ import collections
 import pygame
 
 import audio as sfx
-import components.map
-import components.messagebox
-import components.sprites
+import components
 import equipment
 import keys
 import pouchitems
@@ -126,9 +124,9 @@ class Window(object):
 
             elif event.key == keys.GRID:
                 if self.grid_sprite is None:
-                    self.grid_sprite = components.sprites.Grid(self.engine.current_map.width,
-                                                               self.engine.current_map.height,
-                                                               GRIDCOLOR, GRIDSIZE, GRIDLAYER)
+                    self.grid_sprite = components.Grid(self.engine.current_map.width,
+                                                       self.engine.current_map.height,
+                                                       GRIDCOLOR, GRIDSIZE, GRIDLAYER)
                     self.group.add(self.grid_sprite)
                 else:
                     self.group.remove(self.grid_sprite)
@@ -137,11 +135,11 @@ class Window(object):
             elif event.key == keys.CBOX:
                 if len(self.cbox_sprites) == 0:                             # als de lijst leeg is.
                     for unit in self.party_sprites:
-                        self.cbox_sprites.append(components.sprites.ColorBox(unit.rect, HEROCOLOR, CBOXLAYER))
+                        self.cbox_sprites.append(components.ColorBox(unit.rect, HEROCOLOR, CBOXLAYER))
                     for rect in self.engine.current_map.high_blocker_rects:
-                        self.cbox_sprites.append(components.sprites.ColorBox(rect, HIGHBLOCKERCOLOR, CBOXLAYER))
+                        self.cbox_sprites.append(components.ColorBox(rect, HIGHBLOCKERCOLOR, CBOXLAYER))
                     for rect in self.engine.current_map.low_blocker_rects:
-                        self.cbox_sprites.append(components.sprites.ColorBox(rect, LOWBLOCKERCOLOR, CBOXLAYER))
+                        self.cbox_sprites.append(components.ColorBox(rect, LOWBLOCKERCOLOR, CBOXLAYER))
                     self.group.add(self.cbox_sprites)
                 else:
                     self.group.remove(self.cbox_sprites)
@@ -271,7 +269,7 @@ class Window(object):
             self.prev_map_name = self.engine.current_map.portals[portal_nr].from_name
             self.engine.data.map_name = self.engine.current_map.portals[portal_nr].to_name
             self.engine.data.map_pos = self.engine.current_map.portals[portal_nr].to_pos
-            self.engine.current_map = components.map.Map(self.engine.data.map_name)
+            self.engine.current_map = components.Map(self.engine.data.map_name)
             self.load_map()
 
     def check_chests(self):
@@ -297,7 +295,7 @@ class Window(object):
                                     "to pick the lock."]
                         highest = self.engine.data.party.get_highest_value_of_skill(key)
                         if highest < value:
-                            push_object = components.messagebox.MessageBox(self.engine.gamestate, text)
+                            push_object = components.MessageBox(self.engine.gamestate, text)
                             self.engine.gamestate.push(push_object)
                             return
 
@@ -321,9 +319,9 @@ class Window(object):
                             image.append(pouch_item_spr)
                     self.engine.audio.play_sound(sfx.CHEST)
                     chest_data['content'] = dict()
-                    push_object = components.messagebox.MessageBox(self.engine.gamestate, text, image)
+                    # push_object = components.MessageBox(self.engine.gamestate, text, image)
                     # todo, weg uiteindelijk, de shop hier
-                    # push_object = screens.shop.display.Display(self.engine)
+                    push_object = screens.shop.display.Display(self.engine)
                     self.engine.gamestate.push(push_object)
 
     def check_sparklies(self, check_rect):
@@ -359,7 +357,7 @@ class Window(object):
                 self.engine.audio.play_sound(sfx.SPARKLY)
                 sparkly_data['content'] = dict()
                 sparkly_sprite.image = None
-                push_object = components.messagebox.MessageBox(self.engine.gamestate, text, image)
+                push_object = components.MessageBox(self.engine.gamestate, text, image)
                 # todo, weg uiteindelijk, de shop hier
                 # push_object = screens.shop.display.Display(self.engine)
                 self.engine.gamestate.push(push_object)
