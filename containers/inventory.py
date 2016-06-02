@@ -76,9 +76,9 @@ class Inventory(dict):
         if quantity < 1:
             console.error_quantity_less_than_one(quantity)
             raise ValueError
-        if equipment_item.qty > quantity:
-            equipment_item.qty -= quantity
-        elif equipment_item.qty == quantity:
+        if self[equipment_item.RAW].qty > quantity:
+            self[equipment_item.RAW].qty -= quantity
+        elif self[equipment_item.RAW].qty == quantity:
             del self[equipment_item.RAW]
         else:
             console.error_quantity_not_enough()

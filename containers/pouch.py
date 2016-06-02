@@ -38,14 +38,14 @@ class Pouch(dict):
             raise ValueError
 
         if pouch_item.RAW not in self:
-            console.quantity_not_enough(pouch_item.NAM, cost, pouch_item.qty - 1)
+            console.quantity_not_enough(pouch_item.NAM, cost, 0)
             return False
-        elif pouch_item.qty < cost:
-            console.quantity_not_enough(pouch_item.NAM, cost, pouch_item.qty)
+        elif self[pouch_item.RAW].qty < cost:
+            console.quantity_not_enough(pouch_item.NAM, cost, self[pouch_item.RAW].qty)
             return False
-        elif pouch_item.qty == cost and pouch_item.RAW != 'gold':   # goud is de enige uitzondering,
+        elif self[pouch_item.RAW].qty == cost and pouch_item.RAW != 'gold':   # goud is de enige uitzondering,
             del self[pouch_item.RAW]                                # die moet in de pouch blijven, ook met 0.
             return True
         else:
-            pouch_item.qty -= cost
+            self[pouch_item.RAW].qty -= cost
             return True
