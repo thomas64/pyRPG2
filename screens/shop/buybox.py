@@ -14,8 +14,7 @@ SELECTCOLOR = pygame.Color("gray60")
 
 FONTCOLOR = pygame.Color("black")
 FONT = 'impact'
-LARGEFONTSIZE = 25
-NORMALFONTSIZE = 15
+FONTSIZE = 15
 
 COLUMN1X = 0
 COLUMN2X = 34
@@ -33,7 +32,7 @@ TRANSP = 'resources/sprites/transp.png'
 
 class BuyBox(object):
     """
-    ...
+    De box waar alle items uit de database te zien zijn, mits ze de 'shop' eigenschap hebben.
     """
     def __init__(self, x, y, width, height, equipment_database, sum_merchant):
         self.box_width = width
@@ -45,10 +44,9 @@ class BuyBox(object):
         self.rect = self.surface.get_rect()
         self.rect.topleft = x, y
 
-        largefont = pygame.font.SysFont(FONT, LARGEFONTSIZE)
-        normalfont = pygame.font.SysFont(FONT, NORMALFONTSIZE)
-
         self.sale = sum_merchant
+
+        normalfont = pygame.font.SysFont(FONT, FONTSIZE)
 
         self.table_data = list()
         for equipment_item_raw, equipment_item in equipment_database:
