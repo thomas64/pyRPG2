@@ -82,6 +82,7 @@ class Display(object):
 
         self.info_label = ""
 
+        self.buy_click = False
         self.sell_click = False
         self.selected_item = None
         self.tot_quantity = 0
@@ -160,11 +161,12 @@ class Display(object):
 
                 self.sell_click, self.selected_item, self.tot_quantity, self.value = self.sellbox.mouse_click(event)
                 if self.sell_click and self.selected_item:
+                    self.engine.audio.play_sound(sfx.MENUSELECT)
                     text = self._fill_confirm_box_with_sell_text()
 
-                    self.engine.audio.play_sound(sfx.MENUSELECT)
                     self.confirm_box = components.ConfirmBox(self.engine.gamestate, self.engine.audio, text)
                     self.engine.gamestate.push(self.confirm_box)
+                    return
                 elif self.sell_click and not self.selected_item:
                     self.engine.audio.play_sound(sfx.MENUERROR)
                     text = ["You can not sell it to me",
@@ -172,6 +174,28 @@ class Display(object):
                     push_object = components.MessageBox(self.engine.gamestate, text)
                     self.engine.gamestate.push(push_object)
                     self.sell_click = False
+                    return
+
+                self.buy_click, self.selected_item, self.value = self.buybox.mouse_click(event)
+                if self.buy_click and self.value <= self.gold_amount:
+                    self.engine.audio.play_sound(sfx.MENUSELECT)
+                    text = ["The price for 1 {} is {} gold.".format(self.selected_item.NAM, str(self.value)),
+                            "",
+                            "Oops, don't buy it.",
+                            "Buy 1 for " + str(self.value) + " gold."]
+                    self.confirm_box = components.ConfirmBox(self.engine.gamestate, self.engine.audio, text)
+                    self.engine.gamestate.push(self.confirm_box)
+                    return
+                elif self.buy_click and self.value > self.gold_amount:
+                    self.engine.audio.play_sound(sfx.MENUERROR)
+                    text = ["You need {} more gold to".format(self.value - self.gold_amount),
+                            "buy that {}.".format(self.selected_item.NAM)]
+                    push_object = components.MessageBox(self.engine.gamestate, text)
+                    self.engine.gamestate.push(push_object)
+                    self.buy_click = False
+                    self.selected_item = None
+                    self.value = 0
+                    return
 
             elif event.button in (keys.SCROLLUP, keys.SCROLLDOWN):
                 if self.buybox.rect.collidepoint(event.pos):
@@ -235,6 +259,14 @@ class Display(object):
         :param mouse_pos: pygame.mouse.get_pos()
         :param dt: self.clock.tick(FPS)/1000.0
         """
+        # cheat voor geld erbij ctrl+
+        if key_input[pygame.K_LCTRL] or key_input[pygame.K_RCTRL]:
+            if key_input[pygame.K_KP_PLUS]:
+                gold = pouchitems.factory_pouch_item('gold')
+                self.engine.data.pouch.add(gold, 100, False)
+            elif key_input[pygame.K_KP_MINUS]:
+                gold = pouchitems.factory_pouch_item('gold')
+                self.engine.data.pouch.remove(gold, 100, False)
 
     def update(self, dt):
         """
@@ -244,23 +276,36 @@ class Display(object):
         """
         self.gold_amount = self.engine.data.pouch['gold'].qty
 
-        # todo, buybox met confirm
         # todo, sellbox en buybox met toetsenbord
         # todo, equipment die hero's aanhebben kunnen sellen
 
-        if self.sell_click:
-            selected_quantity = self.confirm_box.on_exit()
-            quantity = self.sel_quantity[selected_quantity]
+        if self.sell_click or self.buy_click:
+            if self.buy_click:
+                choice = self.confirm_box.on_exit()
 
-            if quantity:
-                self.engine.data.inventory.remove(self.selected_item, quantity)
-                gold = pouchitems.factory_pouch_item('gold')
-                self.engine.data.pouch.add(gold, self.value * quantity)
-                self.engine.audio.play_sound(sfx.COINS)
-                self._init_sellbox()
-            else:
-                self.engine.audio.play_sound(sfx.MENUSELECT)
+                if choice == 2:
+                    self.engine.audio.play_sound(sfx.MENUSELECT)
+                elif choice == 3:
+                    gold = pouchitems.factory_pouch_item('gold')
+                    if self.engine.data.pouch.remove(gold, self.value):     # deze if is eigenlijk overbodig maar
+                        self.engine.data.inventory.add(self.selected_item)  # van origineel zit hij erin. maar hij
+                        self.engine.audio.play_sound(sfx.COINS)             # filtert nu al bij het klikken.
+                        self._init_sellbox()
 
+            elif self.sell_click:
+                selected_quantity = self.confirm_box.on_exit()
+                quantity = self.sel_quantity[selected_quantity]
+
+                if quantity:
+                    self.engine.data.inventory.remove(self.selected_item, quantity)
+                    gold = pouchitems.factory_pouch_item('gold')
+                    self.engine.data.pouch.add(gold, self.value * quantity)
+                    self.engine.audio.play_sound(sfx.COINS)
+                    self._init_sellbox()
+                else:
+                    self.engine.audio.play_sound(sfx.MENUSELECT)
+
+            self.buy_click = False
             self.sell_click = False
             self.selected_item = None
             self.tot_quantity = 0

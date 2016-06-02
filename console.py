@@ -161,14 +161,15 @@ def add_item_in_container(item_quantity, item_name, container_name):
     print("Put {} {} in {}.".format(item_quantity, item_name, container_name))
 
 
-def remove_equipment_item(equipment_item_quantity, equipment_item_name, inventory_name):
+def remove_item_from_container(item_quantity, item_name, container_name):
     """
     Inventory.remove()
-    :param equipment_item_quantity: integer
-    :param equipment_item_name: string
-    :param inventory_name: string
+    Pouch.remove()
+    :param item_quantity: integer
+    :param item_name: string
+    :param container_name: string
     """
-    print("Removed {} {} from {}.".format(equipment_item_quantity, equipment_item_name, inventory_name))
+    print("Removed {} {} from {}.".format(item_quantity, item_name, container_name))
 
 
 def error_quantity_less_than_one(quantity):

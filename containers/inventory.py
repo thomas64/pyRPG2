@@ -84,4 +84,4 @@ class Inventory(dict):
             console.error_quantity_not_enough()
             raise ValueError
         if verbose:
-            console.remove_equipment_item(quantity, equipment_item.NAM, self.NAM)
+            console.remove_item_from_container(quantity, equipment_item.NAM, self.NAM)

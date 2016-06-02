@@ -65,7 +65,9 @@ class StateMachine(object):
         try:
             self.prev_state = self.peek().name
             self.peek().on_exit()
-            console.state_pop(self.peek().name)
+            # bij messagebox geen console output
+            if self.peek().name != States.MessageBox:
+                console.state_pop(self.peek().name)
             del self.statestack[-1]
             self.peek().on_enter()
             self.prev_state = None
@@ -83,7 +85,9 @@ class StateMachine(object):
             self.peek().on_exit()
         except AttributeError:
             pass                            # doe niet on_exit() bij lege stack
-        console.state_push(state.name)
+        # bij messagebox geen console output
+        if state.name != States.MessageBox:
+            console.state_push(state.name)
         self.statestack.append(state)
         self.peek().on_enter()
         self.prev_state = None

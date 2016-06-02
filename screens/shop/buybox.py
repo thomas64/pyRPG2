@@ -126,6 +126,20 @@ class BuyBox(object):
                     return equipment_item.display()
                 return ""
 
+    def mouse_click(self, event):
+        """
+        :param event: pygame.MOUSEBUTTONDOWN uit shopscreen
+        """
+        for index, row in enumerate(self.table_data):
+            if row[3].collidepoint(event.pos):
+                self.cur_item = index
+                selected_item = row[4]
+                value = int(row[2])
+
+                return True, selected_item, value
+
+        return False, None, None
+
     def render(self, screen):
         """
         Surface tekent layer, de rest gaat op de layer, en screen tekent de surface.

@@ -29,7 +29,7 @@ class Pouch(dict):
         """
         Inventory.add(self, pouch_item, quantity, verbose)
 
-    def remove(self, pouch_item, cost):
+    def remove(self, pouch_item, cost, verbose=True):
         """
         Verwijdert quantity uit de pouch. Als je iets koopt bijv.
         """
@@ -48,4 +48,6 @@ class Pouch(dict):
             return True
         else:
             self[pouch_item.RAW].qty -= cost
+            if verbose:
+                console.remove_item_from_container(cost, pouch_item.NAM, self.NAM)
             return True
