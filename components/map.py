@@ -17,6 +17,7 @@ LOWBLOCKER = "low_blocker"
 SOUNDS = "sounds"
 STARTPOS = "start_pos"
 PORTALS = "portals"
+SHOPS = "shops"
 CHESTS = "chests"
 SPARKLY = "sparkly"
 
@@ -53,6 +54,7 @@ class Map(object):
         self.sounds = []
         self.start_pos = []
         self.portals = []
+        self.shops = []
         self.chests = []
         self.sparkly = []
 
@@ -66,6 +68,13 @@ class Map(object):
             self.start_pos.append(obj)
         for obj in tmx_data.get_layer_by_name(PORTALS):
             self.portals.append(components.Portal(name, self._pg_rect(obj), obj.name, obj.type))
+
+        try:
+            for obj in tmx_data.get_layer_by_name(SHOPS):
+                shop_object = components.Shop(obj.type, self._pg_rect(obj), OBJECTLAYER)
+                self.shops.append(shop_object)
+        except ValueError:
+            pass
 
         try:
             for obj in tmx_data.get_layer_by_name(CHESTS):

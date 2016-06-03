@@ -5,6 +5,7 @@ class: ColorBox
 class: Grid
 class: TreasureChest
 class: Sparkly
+class: Shop
 """
 
 import pygame
@@ -222,3 +223,15 @@ class Sparkly(pygame.sprite.Sprite):
             if self.index >= len(self.image_list):
                 self.index = 1
             self.image = self.image_list[self.index]
+
+
+class Shop(pygame.sprite.Sprite):
+    """
+    Winkelverkoper
+    """
+    def __init__(self, shop_content, rect, objectlayer):
+        super().__init__()
+
+        self.content = shop_content.split(",")
+        self.rect = rect
+        self._layer = objectlayer

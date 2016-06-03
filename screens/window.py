@@ -21,6 +21,7 @@ GRIDCOLOR = pygame.Color("gray36")
 HEROCOLOR = pygame.Color("blue")
 HIGHBLOCKERCOLOR = pygame.Color("yellow")
 LOWBLOCKERCOLOR = pygame.Color("purple")
+SHOPCOLOR = pygame.Color("black")
 
 ZOOMSPEED = .1
 MAXZOOM = 3.1
@@ -119,6 +120,7 @@ class Window(object):
                 self.align()
 
             elif event.key in keys.SELECT:
+                self.check_shops()
                 self.check_chests()
                 self.check_sparklies(self.get_check_rect())
 
@@ -140,6 +142,8 @@ class Window(object):
                         self.cbox_sprites.append(components.ColorBox(rect, HIGHBLOCKERCOLOR, CBOXLAYER))
                     for rect in self.engine.current_map.low_blocker_rects:
                         self.cbox_sprites.append(components.ColorBox(rect, LOWBLOCKERCOLOR, CBOXLAYER))
+                    for obj in self.engine.current_map.shops:
+                        self.cbox_sprites.append(components.ColorBox(obj.rect, SHOPCOLOR, CBOXLAYER))
                     self.group.add(self.cbox_sprites)
                 else:
                     self.group.remove(self.cbox_sprites)
@@ -272,6 +276,18 @@ class Window(object):
             self.engine.current_map = components.Map(self.engine.data.map_name)
             self.load_map()
 
+    def check_shops(self):
+        """
+        ...
+        """
+        hero = self.party_sprites[0].rect
+        if len(hero.collidelistall(self.engine.current_map.shops)) == 1:
+            object_nr = hero.collidelist(self.engine.current_map.shops)
+            shop_content = self.engine.current_map.shops[object_nr].content
+
+            push_object = screens.shop.display.Display(self.engine, shop_content)
+            self.engine.gamestate.push(push_object)
+
     def check_chests(self):
         """
         Bekijk of collide met een chest.
@@ -319,9 +335,7 @@ class Window(object):
                             image.append(pouch_item_spr)
                     self.engine.audio.play_sound(sfx.CHEST)
                     chest_data['content'] = dict()
-                    # push_object = components.MessageBox(self.engine.gamestate, text, image)
-                    # todo, weg uiteindelijk, de shop hier
-                    push_object = screens.shop.display.Display(self.engine)
+                    push_object = components.MessageBox(self.engine.gamestate, text, image)
                     self.engine.gamestate.push(push_object)
 
     def check_sparklies(self, check_rect):
@@ -358,8 +372,6 @@ class Window(object):
                 sparkly_data['content'] = dict()
                 sparkly_sprite.image = None
                 push_object = components.MessageBox(self.engine.gamestate, text, image)
-                # todo, weg uiteindelijk, de shop hier
-                # push_object = screens.shop.display.Display(self.engine)
                 self.engine.gamestate.push(push_object)
 
     def get_check_rect(self):

@@ -8,7 +8,6 @@ import pygame
 import audio as sfx
 import components
 import database
-import database.armor
 import keys
 import pouchitems
 import screens.shop.buybox
@@ -59,8 +58,10 @@ class Display(object):
     """
     ...
     """
-    def __init__(self, engine):
+    def __init__(self, engine, shoptype):
         self.engine = engine
+        self.shoptype = shoptype
+
         self.screen = pygame.display.get_surface()
         self.name = statemachine.States.Shop
         self.background = pygame.image.load(BACKGROUNDSPRITE).convert_alpha()
@@ -100,8 +101,14 @@ class Display(object):
         height = self.screen.get_height() * SELLBOXHEIGHT + EXTRAHEIGHT
         x = self.screen.get_width() * SELLBOXPOSX
         y = self.screen.get_height() * SELLBOXPOSY
+
+        if self.shoptype == ["arm"]:
+            shoptype = database.EquipmentType.arm
+        elif self.shoptype == ["sld"]:
+            shoptype = database.EquipmentType.sld
+
         self.sellbox = screens.shop.sellbox.SellBox(int(x), int(y), int(width), int(height),
-                                                    database.EquipmentType.arm,
+                                                    shoptype,
                                                     self.engine.data.party, self.engine.data.inventory,
                                                     self.sum_merchant)
 
@@ -110,8 +117,16 @@ class Display(object):
         height = self.screen.get_height() * BUYBOXHEIGHT + EXTRAHEIGHT
         x = self.screen.get_width() * BUYBOXPOSX
         y = self.screen.get_height() * BUYBOXPOSY
+
+        if self.shoptype == ["arm"]:
+            import database.armor
+            shoptype = database.armor.a.items()
+        elif self.shoptype == ["sld"]:
+            import database.shield
+            shoptype = database.shield.s.items()
+
         self.buybox = screens.shop.buybox.BuyBox(int(x), int(y), int(width), int(height),
-                                                 database.armor.a.items(),
+                                                 shoptype,
                                                  self.sum_merchant)
 
     def _init_infobox(self):
