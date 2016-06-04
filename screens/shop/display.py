@@ -3,6 +3,7 @@
 class: Display
 """
 
+import collections
 import importlib
 
 import pygame
@@ -42,19 +43,21 @@ EXTRAHEIGHT = 0         # zodat de laatste item er voor helft op komt
 BUYTITLE = "Buy"
 SELLTITLE = "Sell"
 GOLDTITLE = "Gold: "
-TITLEPOSY = 25
+TITLEPOSY = 1/32
 
 INFOBOXWIDTH = 1/4
 INFOBOXHEIGHT = 1/6
 INFOBOXPOSX = 1/16
 INFOBOXPOSY = 6/8
 
+GOLDTITLEPOSX = 1/16
 GOLDTITLEPOSY = 11/16
 
 SELECTORPOSX = 1/16
 SELECTORPOSY = 10/16
 SELECTORWIDTH = 31
 
+SHOPTITLEPOSX = 1/16
 
 BTNWIDTH = 70
 BTNHEIGHT = 40
@@ -83,18 +86,26 @@ class Display(object):
         self.buy_title = self.largefont.render(BUYTITLE, True, FONTCOLOR).convert_alpha()
         self.sell_title = self.largefont.render(SELLTITLE, True, FONTCOLOR).convert_alpha()
         self.gold_amount = None
-        self.gold_title = None
 
         self.sum_merchant = self.engine.data.party.get_sum_value_of_skill("mer")
 
         self.selectors = pygame.sprite.Group()
         for index, shoptype in enumerate(self.shoptype_list):
-            lib = importlib.import_module("database." + shoptype.value.lower())  # importeer de juiste db's voor de shop
-            self.databases[shoptype.name] = getattr(lib, shoptype.name)          # zet de dicts in die db's in een dict
+            if isinstance(shoptype, database.WeaponType):
+                from database.weapon import wpn
+                self.databases[shoptype.name] = collections.OrderedDict()
+                for key, weapon in wpn.items():
+                    if weapon['skl'] == shoptype:
+                        self.databases[shoptype.name][key] = weapon
+            else:
+                # importeer de juiste db's voor de shop
+                lib = importlib.import_module("database." + shoptype.value.lower())
+                # zet de dicts in die db's in een dict
+                self.databases[shoptype.name] = getattr(lib, shoptype.name)
 
-            self.selectors.add(screens.shop.selector.Selector(
-                self.screen.get_width() * SELECTORPOSX + index * SELECTORWIDTH,
-                self.screen.get_height() * SELECTORPOSY, shoptype))              # voeg selector objecten toe
+            # voeg selector objecten toe
+            self.selectors.add(screens.shop.selector.Selector(self._set_x(SELECTORPOSX) + index * SELECTORWIDTH,
+                                                              self._set_y(SELECTORPOSY), shoptype))
         self.selectors.draw(self.background)
 
         self._init_boxes()
@@ -121,10 +132,8 @@ class Display(object):
     def _init_sellbox(self):
         width = self.screen.get_width() * SELLBOXWIDTH
         height = self.screen.get_height() * SELLBOXHEIGHT + EXTRAHEIGHT
-        x = self.screen.get_width() * SELLBOXPOSX
-        y = self.screen.get_height() * SELLBOXPOSY
-
-        self.sellbox = screens.shop.sellbox.SellBox(int(x), int(y), int(width), int(height),
+        self.sellbox = screens.shop.sellbox.SellBox(self._set_x(SELLBOXPOSX), self._set_y(SELLBOXPOSY),
+                                                    int(width), int(height),
                                                     self.shoptype,
                                                     self.engine.data.party, self.engine.data.inventory,
                                                     self.sum_merchant)
@@ -132,25 +141,25 @@ class Display(object):
     def _init_buybox(self):
         width = self.screen.get_width() * BUYBOXWIDTH
         height = self.screen.get_height() * BUYBOXHEIGHT + EXTRAHEIGHT
-        x = self.screen.get_width() * BUYBOXPOSX
-        y = self.screen.get_height() * BUYBOXPOSY
-
-        self.buybox = screens.shop.buybox.BuyBox(int(x), int(y), int(width), int(height),
+        self.buybox = screens.shop.buybox.BuyBox(self._set_x(BUYBOXPOSX), self._set_y(BUYBOXPOSY),
+                                                 int(width), int(height),
                                                  self.databases[self.shoptype.name],
                                                  self.sum_merchant)
 
     def _init_infobox(self):
         width = self.screen.get_width() * INFOBOXWIDTH
         height = self.screen.get_height() * INFOBOXHEIGHT
-        x = self.screen.get_width() * INFOBOXPOSX
-        y = self.screen.get_height() * INFOBOXPOSY
-        self.infobox = screens.shop.infobox.InfoBox(int(x), int(y), int(width), int(height))
+        self.infobox = screens.shop.infobox.InfoBox(self._set_x(INFOBOXPOSX), self._set_y(INFOBOXPOSY),
+                                                    int(width), int(height))
 
     @staticmethod
     def _convert_shoptype_list_to_enum(shoptype_list):
         new_list = []
         for shoptype in shoptype_list:
-            new_list.append(database.EquipmentType[shoptype])
+            if shoptype in ('swd', 'haf', 'pol', 'mis', 'thr'):
+                new_list.append(database.WeaponType[shoptype])
+            else:
+                new_list.append(database.EquipmentType[shoptype])
         return new_list
 
     def on_enter(self):
@@ -352,16 +361,26 @@ class Display(object):
         self.screen.fill(BACKGROUNDCOLOR)
         self.screen.blit(self.background, (0, 0))
         # titels midden boven de boxen
-        self.screen.blit(self.buy_title, ((self.screen.get_width() * BUYBOXPOSX) +
+        self.screen.blit(self.buy_title, ((self._set_x(BUYBOXPOSX)) +
                                           (self.screen.get_width() * BUYBOXWIDTH / 2) -
-                                          (self.buy_title.get_width() / 2), TITLEPOSY))
-        self.screen.blit(self.sell_title, ((self.screen.get_width() * SELLBOXPOSX) +
+                                          (self.buy_title.get_width() / 2),
+                                          self._set_y(TITLEPOSY)))
+        self.screen.blit(self.sell_title, ((self._set_x(SELLBOXPOSX)) +
                                            (self.screen.get_width() * SELLBOXWIDTH / 2) -
-                                           (self.sell_title.get_width() / 2), TITLEPOSY))
-        self.gold_title = self.normalfont.render(GOLDTITLE + str(self.gold_amount), True, FONTCOLOR).convert_alpha()
-        self.screen.blit(self.gold_title, (self.screen.get_width() * INFOBOXPOSX,
-                                           self.screen.get_height() * GOLDTITLEPOSY))
+                                           (self.sell_title.get_width() / 2),
+                                           self._set_y(TITLEPOSY)))
+        gold_title = self.normalfont.render(GOLDTITLE + str(self.gold_amount), True, FONTCOLOR).convert_alpha()
+        self.screen.blit(gold_title, (self._set_x(GOLDTITLEPOSX), self._set_y(GOLDTITLEPOSY)))
+        shoptype_title = self.largefont.render(self.shoptype.value, True, FONTCOLOR).convert_alpha()
+        self.screen.blit(shoptype_title, (self._set_x(SHOPTITLEPOSX), self._set_y(TITLEPOSY)))
+
         self.infobox.render(self.screen, self.info_label)
         self.buybox.render(self.screen)
         self.sellbox.render(self.screen)
         self.close_button.render(self.screen, FONTCOLOR, True)
+
+    def _set_x(self, posx):
+        return self.screen.get_width() * posx
+
+    def _set_y(self, posy):
+        return self.screen.get_height() * posy

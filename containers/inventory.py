@@ -23,9 +23,16 @@ class Inventory(dict):
         """
         temp_list = []
 
+        from database import WeaponType
         for equipment_item in sorted(self.values(), key=lambda xx: xx.SRT):
-            if equipment_item.TYP == equipment_type:
-                temp_list.append(equipment_item)
+            # uitzondering gemaakt voor sellbox in shop. geef dan alleen maar een bepaald type weapon terug
+            if isinstance(equipment_type, WeaponType):
+                if equipment_item.get_value_of('SKL'):
+                    if equipment_item.SKL == equipment_type:
+                        temp_list.append(equipment_item)
+            else:
+                if equipment_item.TYP == equipment_type:
+                    temp_list.append(equipment_item)
 
         return temp_list
 

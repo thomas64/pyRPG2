@@ -165,26 +165,26 @@ class Hero(object):
         return total
 
     @property
-    def tot_des(self):
+    def sld_des(self):
         """
-        Totale Defense
-        :return: zie: def tot_wht()
+        Wat nu gecomment is, is aangepast. Geen total des maar sld des. Er hoeft helemaal geen total des te zijn?
         """
-        total = 0
-        for equipment_item in self.equipment_tuple:
-            total += equipment_item.get_value_of('DES')
-        return total
+        # total = 0
+        # for equipment_item in self.equipment_tuple:
+        #     total += equipment_item.get_value_of('DES')
+        # return total
+        return self.sld.get_value_of('DES')
 
     @property
-    def tot_hit(self):
+    def wpn_hit(self):
         """
-        Totale BaseHit
-        :return: zie: def tot_wht()
+        Wat nu gecomment is, is aangepast. Geen total hit maar wpn hit. Er hoeft helemaal geen total hit te zijn?
         """
-        total = 0
-        for equipment_item in self.equipment_tuple:
-            total += equipment_item.get_value_of('HIT')
-        return total
+        # total = 0
+        # for equipment_item in self.equipment_tuple:
+        #     total += equipment_item.get_value_of('HIT')
+        # return total
+        return self.wpn.get_value_of('HIT')
 
     @property
     def tot_dam(self):
@@ -203,9 +203,14 @@ class Hero(object):
         :param equipment_type: Enum EquipmentType, dus bijv. "sld" "Shield".
         :return: ook als het een 'empty' is, geef dan het item
         """
-        for equipment_item in self.equipment_tuple:
-            if equipment_item.TYP == equipment_type:
-                return equipment_item
+        # uitzondering gemaakt voor sellbox in shop. geef dan alleen maar een bepaald type weapon terug
+        if isinstance(equipment_type, database.WeaponType):
+            if self.wpn.SKL == equipment_type:
+                return self.wpn
+        else:
+            for equipment_item in self.equipment_tuple:
+                if equipment_item.TYP == equipment_type:
+                    return equipment_item
 
     def set_equipment_item(self, new_equipment_item, verbose=True):
         """

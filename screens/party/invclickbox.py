@@ -63,7 +63,7 @@ class InvClickBox(object):
             equipment_item = hero.get_equipped_item_of_type(self.equipment_type)
             if equipment_item.is_not_empty():
                 # laad de hero subsprite
-                hero_spr = pygame.image.load(hero.SPR).subsurface(32, 0, SUBSURW, SUBSURW).convert_alpha()
+                hero_spr = pygame.image.load(hero.SPR).subsurface(32, 0, SUBSURW, SUBSURH).convert_alpha()
                 # laad de item subsprite
                 equipment_item_spr = pygame.image.load(equipment_item.SPR).subsurface(
                                             equipment_item.COL, equipment_item.ROW, SUBSURW, SUBSURH).convert_alpha()

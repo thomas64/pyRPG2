@@ -108,8 +108,8 @@ class StatsBox(object):
             ["Weight :",       str(hero.tot_wht),       "",                        None,    self._desc(WHT_DESC), wht],
             ["Movepoints :",   str(hero.sta_mvp),       hero.dif_mvp,              None,    self._desc(MVP_DESC), mvp],
             ["Protection :",   str(hero.prt),           hero.sld_prt,              None,    self._desc(PRT_DESC), prt],
-            ["Defense :",      str(hero.tot_des),       "",                        None,    "",                   des],
-            ["Base Hit :",     str(hero.tot_hit)+" %",  hero.war.bonus(hero.wpn),  None,    self._desc(HIT_DESC), hit],
+            ["Defense :",      str(hero.sld_des),       "",                        None,    "",                   des],
+            ["Base Hit :",     str(hero.wpn_hit)+" %",  hero.war.bonus(hero.wpn),  None,    self._desc(HIT_DESC), hit],
             ["Damage :",       str(hero.tot_dam),       "",                        None,    "",                   dam],
             ["",               "",                      "",                        None,    "",                   ""]
         ]

@@ -69,9 +69,11 @@ class SellBox(object):
         for hero in list(party.values()):
             # haal de equipment item op uit het type
             equipment_item = hero.get_equipped_item_of_type(equipment_type)
-            if equipment_item.is_not_empty():
+            # "if equipment_item" is voor sellbox, bijv bij sword dan geeft iemand met een pole None terug en
+            # dan werkt .is_not_empty() niet.
+            if equipment_item and equipment_item.is_not_empty():
                 # laad de hero subsprite
-                hero_spr = pygame.image.load(hero.SPR).subsurface(32, 0, SUBSURW, SUBSURW).convert_alpha()
+                hero_spr = pygame.image.load(hero.SPR).subsurface(32, 0, SUBSURW, SUBSURH).convert_alpha()
                 # laad de item subsprite
                 equipment_item_spr = pygame.image.load(equipment_item.SPR).subsurface(
                     equipment_item.COL, equipment_item.ROW, SUBSURW, SUBSURH).convert_alpha()
