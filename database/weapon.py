@@ -11,7 +11,7 @@ from . import WeaponType
 
 SPRITEPATH = 'resources/sprites/icons/equipment/weapon1.png'
 
-w = collections.OrderedDict()
+wpn = collections.OrderedDict()
 
 # Vul de OrderedDict self met de gecombineerde data.
 
@@ -68,7 +68,7 @@ for material_key, material_value in weapon_material.items():
 
             price = int((material_value[0] + type_value[0]) * (material_value[0] + type_value[0]) / 400)
 
-            w[raw_key_name] = dict(
+            wpn[raw_key_name] = dict(
                 nam=(material_key + " " + type_key + " " + upgraded_key).strip(),
 
                 # puur voor sortering in de winkels
@@ -95,7 +95,7 @@ for material_key, material_value in weapon_material.items():
 
 # min_int op 0 zetten voor close weapons
 # min_str op 0 zetten voor range weapons
-for weapon_key, weapon_value in w.items():
+for weapon_key, weapon_value in wpn.items():
     if weapon_value['skl'] in (WeaponType.swd,
                                WeaponType.haf,
                                WeaponType.pol):
@@ -105,7 +105,7 @@ for weapon_key, weapon_value in w.items():
         weapon_value['min_str'] = 0
 
 # Shop uitzetten voor sommige equipment items.
-for eqp_key, eqp_value in w.items():
+for eqp_key, eqp_value in wpn.items():
     eqp_value['typ'] = EquipmentType.wpn
     eqp_value['spr'] = SPRITEPATH
     if "+" in eqp_key or "titanium" in eqp_key:
@@ -115,10 +115,10 @@ for eqp_key, eqp_value in w.items():
 # Herschik de volgorde van de gecreerde dataset.
 temp_dict = collections.OrderedDict()
 # sorteer en zet in nieuwe database
-for eqp_key, eqp_value in sorted(w.items(), key=lambda xx: xx[1]['srt']):
+for eqp_key, eqp_value in sorted(wpn.items(), key=lambda xx: xx[1]['srt']):
     temp_dict[eqp_key] = eqp_value
 # maak eigen database leeg
-w.clear()
+wpn.clear()
 # zet de gesorteerde neer
 for eqp_key, eqp_value in temp_dict.items():
-    w[eqp_key] = eqp_value
+    wpn[eqp_key] = eqp_value

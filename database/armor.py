@@ -10,7 +10,7 @@ from . import EquipmentType
 SPRITEPATH = 'resources/sprites/icons/equipment/armor1.png'
 
 
-a = collections.OrderedDict()
+arm = collections.OrderedDict()
 
 # Vul de OrderedDict self met de gecombineerde data.
 
@@ -48,7 +48,7 @@ for material_key, material_value in armor_material.items():
             # todo, deze int was alleen bij weapon, moet de int hier weer weg?
             price = int((material_value[0] + type_value[0]) * (material_value[0] + type_value[0]) / 400)
 
-            a[raw_key_name] = dict(
+            arm[raw_key_name] = dict(
                 nam=(type_key + " " + material_key + " " + upgraded_key).strip(),
 
                 # puur voor sortering in de database, omdat geen enum is
@@ -73,7 +73,7 @@ for material_key, material_value in armor_material.items():
 
 # type en sprite toepassen.
 # shop uitzetten voor sommige equipment items.
-for eqp_key, eqp_value in a.items():
+for eqp_key, eqp_value in arm.items():
     eqp_value['typ'] = EquipmentType.arm
     eqp_value['spr'] = SPRITEPATH
     if "+" in eqp_key or "titanium" in eqp_key:
@@ -83,10 +83,10 @@ for eqp_key, eqp_value in a.items():
 # Herschik de volgorde van de gecreerde dataset.
 temp_dict = collections.OrderedDict()
 # sorteer en zet in nieuwe database
-for eqp_key, eqp_value in sorted(a.items(), key=lambda xx: xx[1]['srt']):
+for eqp_key, eqp_value in sorted(arm.items(), key=lambda xx: xx[1]['srt']):
     temp_dict[eqp_key] = eqp_value
 # maak eigen database leeg
-a.clear()
+arm.clear()
 # zet de gesorteerde neer
 for eqp_key, eqp_value in temp_dict.items():
-    a[eqp_key] = eqp_value
+    arm[eqp_key] = eqp_value

@@ -12,11 +12,11 @@ from . import EquipmentType
 
 SPRITEPATH = 'resources/sprites/icons/equipment/ring1.png'
 
-r = collections.OrderedDict()
+rng = collections.OrderedDict()
 
-r['testring'] = dict(nam="Test Ring",    srt=1, val=100, shp=True, wht=1, prt=1, col=0, row=0)
-r['testring2'] = dict(nam="Test Ring 2", srt=2, val=200, shp=True, wht=2, prt=2, col=0, row=0)
+rng['testring'] = dict(nam="Test Ring",    srt=1, val=100, shp=True, wht=1, prt=1, col=0, row=0)
+rng['testring2'] = dict(nam="Test Ring 2", srt=2, val=200, shp=True, wht=2, prt=2, col=0, row=0)
 
-for value in r.values():
+for value in rng.values():
     value['typ'] = EquipmentType.rng
     value['spr'] = SPRITEPATH
