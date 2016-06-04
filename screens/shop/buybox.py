@@ -49,7 +49,7 @@ class BuyBox(object):
         normalfont = pygame.font.SysFont(FONT, FONTSIZE)
 
         self.table_data = list()
-        for equipment_item_raw, equipment_item in equipment_database:
+        for equipment_item_raw, equipment_item in equipment_database.items():
             if equipment_item['shp']:
                 equipment_item_obj = equipment.factory_equipment_item(equipment_item_raw)
                 equipment_item_spr = pygame.image.load(equipment_item_obj.SPR).subsurface(
