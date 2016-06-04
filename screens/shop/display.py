@@ -238,6 +238,13 @@ class Display(object):
                     self.value = 0
                     return
 
+                for selector in self.selectors:
+                    shoptype = selector.mouse_click(event)
+                    if shoptype:
+                        self.shoptype = shoptype
+                        self._init_boxes()
+                        break
+
             elif event.button in (keys.SCROLLUP, keys.SCROLLDOWN):
                 if self.buybox.rect.collidepoint(event.pos):
                     self.buybox.mouse_scroll(event)

@@ -32,8 +32,16 @@ class Selector(pygame.sprite.Sprite):
         Laadt alle plaatjes uit de map in een dict.
         :return: de dict
         """
+        # todo, icon van bracelet toevoegen
         images = {}
         for file in os.listdir(path):
             name, ext = os.path.splitext(file)
             images[name] = pygame.image.load(os.path.join(path, file)).convert_alpha()
         return images
+
+    def mouse_click(self, event):
+        """
+        :param event: pygame.MOUSEBUTTONDOWN uit shopscreen
+        """
+        if self.rect.collidepoint(event.pos):
+            return self.shop_type
