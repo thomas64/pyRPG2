@@ -89,6 +89,7 @@ class Window(object):
         self.align()
 
         # voeg alle objecten toe van uit de map
+        self.group.add(self.engine.current_map.shops)
         self.group.add(self.engine.current_map.chests)
         self.group.add(self.engine.current_map.sparkly)
 
@@ -120,7 +121,7 @@ class Window(object):
                 self.align()
 
             elif event.key in keys.SELECT:
-                self.check_shops()
+                self.check_shops(self.get_check_rect())
                 self.check_chests()
                 self.check_sparklies(self.get_check_rect())
 
@@ -203,6 +204,25 @@ class Window(object):
             self.group.center(self.party_sprites[0].rect.center)
 
         # update de plaatjes van de objecten
+        for obj in self.engine.current_map.shops:
+            if obj.rect.left < self.party_sprites[0].rect.left and \
+                    abs(obj.rect.centery - self.party_sprites[0].rect.centery) < \
+                    abs(obj.rect.centerx - self.party_sprites[0].rect.centerx):
+                obj.update('east')
+            elif obj.rect.left > self.party_sprites[0].rect.left and \
+                    abs(obj.rect.centery - self.party_sprites[0].rect.centery) < \
+                    abs(obj.rect.centerx - self.party_sprites[0].rect.centerx):
+                obj.update('west')
+            elif obj.rect.top < self.party_sprites[0].rect.top and \
+                    abs(obj.rect.centery - self.party_sprites[0].rect.centery) > \
+                    abs(obj.rect.centerx - self.party_sprites[0].rect.centerx):
+                obj.update('south')
+            elif obj.rect.top > self.party_sprites[0].rect.top and \
+                    abs(obj.rect.centery - self.party_sprites[0].rect.centery) > \
+                    abs(obj.rect.centerx - self.party_sprites[0].rect.centerx):
+                obj.update('north')
+            else:
+                obj.update('south')
         for obj in self.engine.current_map.chests:
             chest_data = self.engine.data.treasure_chests[obj.chest_id]
             obj.update(chest_data['opened'])
@@ -276,13 +296,12 @@ class Window(object):
             self.engine.current_map = components.Map(self.engine.data.map_name)
             self.load_map()
 
-    def check_shops(self):
+    def check_shops(self, check_rect):
         """
         ...
         """
-        hero = self.party_sprites[0].rect
-        if len(hero.collidelistall(self.engine.current_map.shops)) == 1:
-            object_nr = hero.collidelist(self.engine.current_map.shops)
+        if len(check_rect.collidelistall(self.engine.current_map.shops)) == 1:
+            object_nr = check_rect.collidelist(self.engine.current_map.shops)
             shop_content = self.engine.current_map.shops[object_nr].content
 
             push_object = screens.shop.display.Display(self.engine, shop_content)

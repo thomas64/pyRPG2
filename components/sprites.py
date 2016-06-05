@@ -23,6 +23,7 @@ CHESTBLOCKERWIDTH = 32
 CHESTBLOCKERHEIGHT = 16
 SPARKLYSPRITE = 'resources/sprites/objects/sparkly.png'
 SPARKLYSPEED = .2
+SHOPSPRITE = 'resources/sprites/npcs/01s_Shop.png'
 TRANSP = 'resources/sprites/transp.png'
 
 
@@ -232,6 +233,36 @@ class Shop(pygame.sprite.Sprite):
     def __init__(self, shop_content, rect, objectlayer):
         super().__init__()
 
+        self.west_states = {0:  (32, 32, 32, 32), 1: (0, 32, 32, 32), 2: (32, 32, 32, 32), 3: (64, 32, 32, 32)}
+        self.east_states = {0:  (32, 64, 32, 32), 1: (0, 64, 32, 32), 2: (32, 64, 32, 32), 3: (64, 64, 32, 32)}
+        self.north_states = {0: (32, 96, 32, 32), 1: (0, 96, 32, 32), 2: (32, 96, 32, 32), 3: (64, 96, 32, 32)}
+        self.south_states = {0: (32,  0, 32, 32), 1: (0,  0, 32, 32), 2: (32,  0, 32, 32), 3: (64,  0, 32, 32)}
+
         self.content = shop_content.split(",")
         self.rect = rect
         self._layer = objectlayer
+        self.full_sprite = pygame.image.load(SHOPSPRITE).convert_alpha()
+        self.full_sprite.set_clip(self.south_states[0])
+        self.image = self.full_sprite.subsurface(self.full_sprite.get_clip())
+
+    def update(self, states):
+        """
+        Met welke string waarde hij meekrijgt kies een ander subsurface.
+        """
+        if states == 'north':
+            states = self.north_states[0]
+        elif states == 'south':
+            states = self.south_states[0]
+        elif states == 'west':
+            states = self.west_states[0]
+        elif states == 'east':
+            states = self.east_states[0]
+
+        self.full_sprite.set_clip(states)
+        self.image = self.full_sprite.subsurface(self.full_sprite.get_clip())
+
+    def get_blocker(self):
+        """
+        :return: Een rect met zijn eigen locatie en opgegeven grootte.
+        """
+        return pygame.Rect(self.rect.x, self.rect.y, CHESTBLOCKERWIDTH, CHESTBLOCKERHEIGHT)
