@@ -3,13 +3,10 @@
  <properties>
   <property name="NoOverlappingRules" value="true"/>
  </properties>
- <tileset firstgid="1" name="rules_ersin_forest" tilewidth="16" tileheight="16" tilecount="50" columns="10">
-  <image source="../tilesets/rules_ersin_forest.png" width="160" height="90"/>
+ <tileset firstgid="1" name="ruleset" tilewidth="16" tileheight="16" tilecount="60" columns="10">
+  <image source="../tilesets/ruleset.png" width="160" height="96"/>
  </tileset>
- <tileset firstgid="51" name="outside_a2" tilewidth="16" tileheight="16" tilecount="768" columns="32">
-  <image source="../tilesets/outside_a2.png" width="512" height="384"/>
- </tileset>
- <tileset firstgid="819" name="outside_a4" tilewidth="16" tileheight="16" tilecount="960" columns="32">
+ <tileset firstgid="61" name="outside_a4" tilewidth="16" tileheight="16" tilecount="960" columns="32">
   <image source="../tilesets/outside_a4.png" width="512" height="480"/>
  </tileset>
  <layer name="regions" width="20" height="20">
@@ -39,11 +36,11 @@
  <layer name="input_set" width="20" height="20">
   <data encoding="csv">
 0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
-0,2,3,0,1672,2,0,2,1671,0,0,0,0,0,0,0,0,0,0,0,
-0,2,3,0,1704,2,0,2,1703,0,0,0,0,0,0,0,0,0,0,0,
+0,2,3,0,914,2,0,2,913,0,0,0,0,0,0,0,0,0,0,0,
+0,2,3,0,946,2,0,2,945,0,0,0,0,0,0,0,0,0,0,0,
 0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
-0,3,2,0,1736,2,0,2,1735,0,0,0,0,0,0,0,0,0,0,0,
-0,3,2,0,1768,2,0,2,1767,0,0,0,0,0,0,0,0,0,0,0,
+0,3,2,0,978,2,0,2,977,0,0,0,0,0,0,0,0,0,0,0,
+0,3,2,0,1010,2,0,2,1009,0,0,0,0,0,0,0,0,0,0,0,
 0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
 0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
 0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
@@ -63,11 +60,11 @@
  <layer name="output_over5 trees" width="20" height="20" visible="0">
   <data encoding="csv">
 0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
-0,1610,0,0,0,1607,0,1610,0,0,0,0,0,0,0,0,0,0,0,0,
-0,1578,0,0,0,1575,0,1578,0,0,0,0,0,0,0,0,0,0,0,0,
+0,852,0,0,0,849,0,852,0,0,0,0,0,0,0,0,0,0,0,0,
+0,820,0,0,0,817,0,820,0,0,0,0,0,0,0,0,0,0,0,0,
 0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
-0,0,1607,0,0,1607,0,1610,0,0,0,0,0,0,0,0,0,0,0,0,
-0,0,1575,0,0,1575,0,1578,0,0,0,0,0,0,0,0,0,0,0,0,
+0,0,849,0,0,849,0,852,0,0,0,0,0,0,0,0,0,0,0,0,
+0,0,817,0,0,817,0,820,0,0,0,0,0,0,0,0,0,0,0,0,
 0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
 0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
 0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,

@@ -3,8 +3,8 @@
  <properties>
   <property name="title" value="Invernia"/>
  </properties>
- <tileset firstgid="1" name="start_town_armor_shop" tilewidth="16" tileheight="16" tilecount="1596" columns="42">
-  <image source="tilesets/start_town_armor_shop.png" width="672" height="608"/>
+ <tileset firstgid="1" name="invernia_armor_shop" tilewidth="16" tileheight="16" tilecount="1596" columns="42">
+  <image source="tilesets/invernia_armor_shop.png" width="672" height="608"/>
  </tileset>
  <layer name="under0 none" width="40" height="36">
   <data encoding="csv">

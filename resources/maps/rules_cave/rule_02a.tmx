@@ -3,8 +3,8 @@
  <properties>
   <property name="NoOverlappingRules" value="true"/>
  </properties>
- <tileset firstgid="1" name="rules_ersin_forest" tilewidth="16" tileheight="16" tilecount="60" columns="10">
-  <image source="../tilesets/rules_ersin_forest.png" width="160" height="96"/>
+ <tileset firstgid="1" name="ruleset" tilewidth="16" tileheight="16" tilecount="60" columns="10">
+  <image source="../tilesets/ruleset.png" width="160" height="96"/>
  </tileset>
  <layer name="regions" width="24" height="24">
   <data encoding="csv">
