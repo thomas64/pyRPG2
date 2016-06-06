@@ -204,25 +204,6 @@ class Window(object):
             self.group.center(self.party_sprites[0].rect.center)
 
         # update de plaatjes van de objecten
-        for obj in self.engine.current_map.shops:
-            if obj.rect.left < self.party_sprites[0].rect.left and \
-                    abs(obj.rect.centery - self.party_sprites[0].rect.centery) < \
-                    abs(obj.rect.centerx - self.party_sprites[0].rect.centerx):
-                obj.update('east')
-            elif obj.rect.left > self.party_sprites[0].rect.left and \
-                    abs(obj.rect.centery - self.party_sprites[0].rect.centery) < \
-                    abs(obj.rect.centerx - self.party_sprites[0].rect.centerx):
-                obj.update('west')
-            elif obj.rect.top < self.party_sprites[0].rect.top and \
-                    abs(obj.rect.centery - self.party_sprites[0].rect.centery) > \
-                    abs(obj.rect.centerx - self.party_sprites[0].rect.centerx):
-                obj.update('south')
-            elif obj.rect.top > self.party_sprites[0].rect.top and \
-                    abs(obj.rect.centery - self.party_sprites[0].rect.centery) > \
-                    abs(obj.rect.centerx - self.party_sprites[0].rect.centerx):
-                obj.update('north')
-            else:
-                obj.update('south')
         for obj in self.engine.current_map.chests:
             chest_data = self.engine.data.treasure_chests[obj.chest_id]
             obj.update(chest_data['opened'])
@@ -298,13 +279,33 @@ class Window(object):
 
     def check_shops(self, check_rect):
         """
-        ...
+        Bekijk of collide met een shopkeeper. Update de richting van de sprite.
         """
         if len(check_rect.collidelistall(self.engine.current_map.shops)) == 1:
             object_nr = check_rect.collidelist(self.engine.current_map.shops)
-            shop_content = self.engine.current_map.shops[object_nr].content
+            shop_sprite = self.engine.current_map.shops[object_nr]
+            shop_data = self.engine.data.shops[shop_sprite.shop_id]
 
-            push_object = screens.shop.display.Display(self.engine, shop_content)
+            if shop_sprite.rect.left < self.party_sprites[0].rect.left and \
+                    abs(shop_sprite.rect.centery - self.party_sprites[0].rect.centery) < \
+                    abs(shop_sprite.rect.centerx - self.party_sprites[0].rect.centerx):
+                shop_sprite.update(screens.direction.Direction.East)
+            elif shop_sprite.rect.left > self.party_sprites[0].rect.left and \
+                    abs(shop_sprite.rect.centery - self.party_sprites[0].rect.centery) < \
+                    abs(shop_sprite.rect.centerx - self.party_sprites[0].rect.centerx):
+                shop_sprite.update(screens.direction.Direction.West)
+            elif shop_sprite.rect.top < self.party_sprites[0].rect.top and \
+                    abs(shop_sprite.rect.centery - self.party_sprites[0].rect.centery) > \
+                    abs(shop_sprite.rect.centerx - self.party_sprites[0].rect.centerx):
+                shop_sprite.update(screens.direction.Direction.South)
+            elif shop_sprite.rect.top > self.party_sprites[0].rect.top and \
+                    abs(shop_sprite.rect.centery - self.party_sprites[0].rect.centery) > \
+                    abs(shop_sprite.rect.centerx - self.party_sprites[0].rect.centerx):
+                shop_sprite.update(screens.direction.Direction.North)
+            else:
+                shop_sprite.update(screens.direction.Direction.South)
+
+            push_object = screens.shop.display.Display(self.engine, shop_data['content'])
             self.engine.gamestate.push(push_object)
 
     def check_chests(self):

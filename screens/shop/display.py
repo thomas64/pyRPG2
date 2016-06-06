@@ -71,8 +71,8 @@ class Display(object):
     """
     def __init__(self, engine, shoptype_list):
         self.engine = engine
-        # is een list van bijv: ["arm", "sld"], er wordt een enum list van gemaakt
-        self.shoptype_list = self._convert_shoptype_list_to_enum(shoptype_list)
+        # is een list van bijv: [EquipmentType.arm, WeaponType.swd]
+        self.shoptype_list = shoptype_list
         self.shoptype = self.shoptype_list[0]
         self.databases = {}
 
@@ -151,16 +151,6 @@ class Display(object):
         height = self.screen.get_height() * INFOBOXHEIGHT
         self.infobox = screens.shop.infobox.InfoBox(self._set_x(INFOBOXPOSX), self._set_y(INFOBOXPOSY),
                                                     int(width), int(height))
-
-    @staticmethod
-    def _convert_shoptype_list_to_enum(shoptype_list):
-        new_list = []
-        for shoptype in shoptype_list:
-            if shoptype in ('swd', 'haf', 'pol', 'mis', 'thr'):
-                new_list.append(database.WeaponType[shoptype])
-            else:
-                new_list.append(database.EquipmentType[shoptype])
-        return new_list
 
     def on_enter(self):
         """

@@ -71,7 +71,7 @@ class Map(object):
 
         try:
             for obj in tmx_data.get_layer_by_name(SHOPS):
-                shop_object = components.Shop(obj.type, self._pg_rect(obj), OBJECTLAYER)
+                shop_object = components.Shop(obj.name, self._pg_rect(obj), OBJECTLAYER)
                 self.high_blocker_rects.append(shop_object.get_blocker())
                 self.shops.append(shop_object)
         except ValueError:

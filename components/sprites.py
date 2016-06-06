@@ -10,6 +10,9 @@ class: Shop
 
 import pygame
 
+from screens.direction import Direction
+
+
 FILLCOLOR = pygame.Color("gray60")  # gekke kleur vanwege sparkly color bug. hiermee opgelost.
 
 BUTTONFONT = 'impact'
@@ -24,6 +27,8 @@ CHESTBLOCKERHEIGHT = 16
 SPARKLYSPRITE = 'resources/sprites/objects/sparkly.png'
 SPARKLYSPEED = .2
 SHOPSPRITE = 'resources/sprites/npcs/01s_Shop.png'
+SHOPBLOCKERWIDTH = 32
+SHOPBLOCKERHEIGHT = 16
 TRANSP = 'resources/sprites/transp.png'
 
 
@@ -230,7 +235,7 @@ class Shop(pygame.sprite.Sprite):
     """
     Winkelverkoper
     """
-    def __init__(self, shop_content, rect, objectlayer):
+    def __init__(self, shop_id, rect, objectlayer):
         super().__init__()
 
         self.west_states = {0:  (32, 32, 32, 32), 1: (0, 32, 32, 32), 2: (32, 32, 32, 32), 3: (64, 32, 32, 32)}
@@ -238,7 +243,7 @@ class Shop(pygame.sprite.Sprite):
         self.north_states = {0: (32, 96, 32, 32), 1: (0, 96, 32, 32), 2: (32, 96, 32, 32), 3: (64, 96, 32, 32)}
         self.south_states = {0: (32,  0, 32, 32), 1: (0,  0, 32, 32), 2: (32,  0, 32, 32), 3: (64,  0, 32, 32)}
 
-        self.content = shop_content.split(",")
+        self.shop_id = shop_id
         self.rect = rect
         self._layer = objectlayer
         self.full_sprite = pygame.image.load(SHOPSPRITE).convert_alpha()
@@ -249,13 +254,13 @@ class Shop(pygame.sprite.Sprite):
         """
         Met welke string waarde hij meekrijgt kies een ander subsurface.
         """
-        if states == 'north':
+        if states == Direction.North:
             states = self.north_states[0]
-        elif states == 'south':
+        elif states == Direction.South:
             states = self.south_states[0]
-        elif states == 'west':
+        elif states == Direction.West:
             states = self.west_states[0]
-        elif states == 'east':
+        elif states == Direction.East:
             states = self.east_states[0]
 
         self.full_sprite.set_clip(states)
@@ -265,4 +270,4 @@ class Shop(pygame.sprite.Sprite):
         """
         :return: Een rect met zijn eigen locatie en opgegeven grootte.
         """
-        return pygame.Rect(self.rect.x, self.rect.y, CHESTBLOCKERWIDTH, CHESTBLOCKERHEIGHT)
+        return pygame.Rect(self.rect.x, self.rect.y, SHOPBLOCKERWIDTH, SHOPBLOCKERHEIGHT)

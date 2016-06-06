@@ -287,7 +287,7 @@
 </data>
  </layer>
  <objectgroup name="shops">
-  <object id="72" name="shop" type="arm" x="368" y="144" width="32" height="48"/>
+  <object id="72" name="shop2" x="368" y="144" width="32" height="48"/>
  </objectgroup>
  <objectgroup name="portals" visible="0">
   <object id="68" name="invernia" x="464" y="528" width="32" height="16"/>
