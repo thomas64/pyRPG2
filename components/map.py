@@ -70,8 +70,10 @@ class Map(object):
             self.portals.append(components.Portal(name, self._pg_rect(obj), obj.name, obj.type))
 
         try:
+            from database.shop import ShopDatabase
             for obj in tmx_data.get_layer_by_name(SHOPS):
-                shop_object = components.Shop(obj.name, self._pg_rect(obj), OBJECTLAYER)
+                shop_object = components.Shop(obj.name, ShopDatabase[obj.name]['sprite'],
+                                              self._pg_rect(obj), OBJECTLAYER)
                 self.high_blocker_rects.append(shop_object.get_blocker())
                 self.shops.append(shop_object)
         except ValueError:

@@ -23,10 +23,18 @@ BACKGROUNDCOLOR = pygame.Color("black")
 BACKGROUNDSPRITE = 'resources/sprites/parchment.png'
 COLORKEY = pygame.Color("white")
 
+FACEPOSX = 1/16
+FACEPOSY = 3/16
+
 FONTCOLOR = pygame.Color("black")
 FONT = 'colonna'
 LARGEFONTSIZE = 100
 NORMALFONTSIZE = 50
+SMALLFONTSIZE = 20
+
+SMALLLINEHEIGHT = 30
+EXTRAFACESIZE = 20
+LINESNEXTTOFACE = 3
 
 BUYBOXWIDTH = 1/4
 BUYBOXHEIGHT = 3/4
@@ -69,7 +77,7 @@ class Display(object):
     """
     ...
     """
-    def __init__(self, engine, shoptype_list):
+    def __init__(self, engine, shoptype_list, face):
         self.engine = engine
         # is een list van bijv: [EquipmentType.arm, WeaponType.swd]
         self.shoptype_list = shoptype_list
@@ -83,12 +91,32 @@ class Display(object):
 
         self.largefont = pygame.font.SysFont(FONT, LARGEFONTSIZE)
         self.normalfont = pygame.font.SysFont(FONT, NORMALFONTSIZE)
+        self.smallfont = pygame.font.SysFont(FONT, SMALLFONTSIZE)
         self.buy_title = self.largefont.render(BUYTITLE, True, FONTCOLOR).convert_alpha()
         self.sell_title = self.largefont.render(SELLTITLE, True, FONTCOLOR).convert_alpha()
         self.gold_amount = None
 
         self.sum_merchant = self.engine.data.party.get_sum_value_of_skill("mer")
 
+        self._init_selectors()
+        self._init_face(face)
+        self._init_boxes()
+
+        self.close_button = components.Button(
+            BTNWIDTH, BTNHEIGHT, (self.background.get_width() + CLOSEX, CLOSEY), CLOSELBL, keys.EXIT,
+            COLORKEY, FONTCOLOR)
+
+        self.info_label = ""
+
+        self.buy_click = False
+        self.sell_click = False
+        self.selected_item = None
+        self.tot_quantity = 0
+        self.sel_quantity = []
+        self.value = 0
+        self.confirm_box = None
+
+    def _init_selectors(self):
         self.selectors = pygame.sprite.Group()
         for index, shoptype in enumerate(self.shoptype_list):
             if isinstance(shoptype, database.WeaponType):
@@ -108,21 +136,31 @@ class Display(object):
                                                               self._set_y(SELECTORPOSY), shoptype))
         self.selectors.draw(self.background)
 
-        self._init_boxes()
+    def _init_face(self, face):
+        face_image = pygame.image.load(face).convert_alpha()
+        self.background.blit(face_image, (self._set_x(FACEPOSX), self._set_y(FACEPOSY)))
 
-        self.close_button = components.Button(
-            BTNWIDTH, BTNHEIGHT, (self.background.get_width() + CLOSEX, CLOSEY), CLOSELBL, keys.EXIT,
-            COLORKEY, FONTCOLOR)
-
-        self.info_label = ""
-
-        self.buy_click = False
-        self.sell_click = False
-        self.selected_item = None
-        self.tot_quantity = 0
-        self.sel_quantity = []
-        self.value = 0
-        self.confirm_box = None
+        line01 = "Good day sir, and welcome to my shop."
+        line02 = "In the 'Buy' box you can find all what"
+        line03 = "my shop has to offer.  And in the 'Sell'"
+        line04 = "box your own inventory is shown."
+        line05 = "Click once on a selected item to buy or to sell."
+        line06 = "You can scroll through the lists with your mouse-"
+        line07 = "wheel if the list is longer than what you can see."
+        line08 = "Below here, you see one or multiple icons."
+        line09 = "They represent different sections of my shop."
+        line10 = "Click on it to enter one of those sections."
+        lines = (line01, line02, line03, line04, line05, line06, line07, line08, line09, line10)
+        for index, line in enumerate(lines):
+            rline = self.smallfont.render(line, True, FONTCOLOR).convert_alpha()
+            if index < LINESNEXTTOFACE:
+                self.background.blit(rline,
+                                     (self._set_x(FACEPOSX) + face_image.get_width() + EXTRAFACESIZE,
+                                      self._set_y(FACEPOSY) + EXTRAFACESIZE + index * SMALLLINEHEIGHT))
+            else:
+                self.background.blit(rline,
+                                     (self._set_x(FACEPOSX),
+                                      self._set_y(FACEPOSY) + EXTRAFACESIZE + index * SMALLLINEHEIGHT))
 
     def _init_boxes(self):
         self._init_sellbox()

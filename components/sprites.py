@@ -26,7 +26,6 @@ CHESTBLOCKERWIDTH = 32
 CHESTBLOCKERHEIGHT = 16
 SPARKLYSPRITE = 'resources/sprites/objects/sparkly.png'
 SPARKLYSPEED = .2
-SHOPSPRITE = 'resources/sprites/npcs/01s_Shop.png'
 SHOPBLOCKERWIDTH = 32
 SHOPBLOCKERHEIGHT = 16
 TRANSP = 'resources/sprites/transp.png'
@@ -235,7 +234,7 @@ class Shop(pygame.sprite.Sprite):
     """
     Winkelverkoper
     """
-    def __init__(self, shop_id, rect, objectlayer):
+    def __init__(self, shop_id, sprite, rect, objectlayer):
         super().__init__()
 
         self.west_states = {0:  (32, 32, 32, 32), 1: (0, 32, 32, 32), 2: (32, 32, 32, 32), 3: (64, 32, 32, 32)}
@@ -246,7 +245,7 @@ class Shop(pygame.sprite.Sprite):
         self.shop_id = shop_id
         self.rect = rect
         self._layer = objectlayer
-        self.full_sprite = pygame.image.load(SHOPSPRITE).convert_alpha()
+        self.full_sprite = pygame.image.load(sprite).convert_alpha()
         self.full_sprite.set_clip(self.south_states[0])
         self.image = self.full_sprite.subsurface(self.full_sprite.get_clip())
 

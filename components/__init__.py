@@ -1,6 +1,6 @@
 
 """
-Containters Package
+Components Package
 """
 
 from .confirmbox import ConfirmBox

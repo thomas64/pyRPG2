@@ -305,7 +305,7 @@ class Window(object):
             else:
                 shop_sprite.update(screens.direction.Direction.South)
 
-            push_object = screens.shop.display.Display(self.engine, shop_data['content'])
+            push_object = screens.shop.display.Display(self.engine, shop_data['content'], shop_data['face'])
             self.engine.gamestate.push(push_object)
 
     def check_chests(self):
