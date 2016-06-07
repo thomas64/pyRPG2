@@ -33,7 +33,7 @@ CBOXLAYER = 9
 GRIDSIZE = 32
 ICONSIZE = 32
 
-NEWMAPTIMEOUT = 0.1  # minimale keyblock. Zonder deze timer kun je op de movement keys drukken terwijl de map laadt.
+NEWMAPTIMEOUT = 0.5  # minimale keyblock. Zonder deze timer kun je op de movement keys drukken terwijl de map laadt.
 
 
 class Window(object):
@@ -75,6 +75,11 @@ class Window(object):
                 if pos.name == start_pos:                  # van alle start_possen, welke komt overeen met 'start_game'
                     start_pos = pos.x, pos.y               # zet dan de x,y waarde op dié start_pos
                     break
+
+        for pos in self.engine.current_map.start_pos:                            # in een .tmx map kun je bij start_pos
+            if getattr(pos, 'direction', None) and (pos.x, pos.y) == start_pos:  # een 'direction' property meegeven.
+                start_dir = screens.direction.Direction[pos.direction]           # als dat een Direction Enum is dan
+                break                                   # dan start de unit in de nieuw geladen map in die kijkrichting.
 
         self.party_sprites = []
         self.party = list(self.engine.data.party.values())

@@ -29,6 +29,7 @@ MENUERROR = 'menu_error'
 STEPGRASS = 'step_grass'
 STEPSTONE = 'step_stone'
 STEPWOOD = 'step_wood'
+STEPCARPET = 'step_carpet'
 COINS = 'coins'
 CHEST = 'chest'
 SPARKLY = 'sparkly'
@@ -55,6 +56,7 @@ class MapMusic(enum.Enum):
     InverniaArmorShop = 'invernia_armor_shop',          'invernia',     None
     InverniaWeaponShop = 'invernia_weapon_shop',        'invernia',     None
     InverniaInn1F = 'invernia_inn_1f',                  'invernia',     None
+    InverniaInn2F = 'invernia_inn_2f',                  'invernia',     None
 
 
 class Audio(object):

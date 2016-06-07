@@ -23,6 +23,10 @@ class Portal(object):
         self.to_pos = self._load_position()
 
     def _load_position(self):
+        """
+        to_nr kan gebruikt worden als er 2 locaties aan elkaar verbonden zijn met meerdere verbindingen.
+        Dan kan de .Type in een .tmx file met dezelfde cijfers in portal en start_pos aan elkaar verbonden worden.
+        """
         temp_tmx_data = pytmx.load_pygame(MAPSPATH+self.to_name+".tmx")
         for obj in temp_tmx_data.get_layer_by_name(STARTPOS):
             if obj.name == self.from_name:
