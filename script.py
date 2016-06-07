@@ -5,6 +5,7 @@ class: Script
 
 import characters
 import database.hero
+import database.inn
 import database.shop
 import database.treasurechest
 import database.sparkly
@@ -28,6 +29,7 @@ class Script(object):
         self.engine.data.heroes = characters.factory_all_heroes(database.hero.HeroDatabase)
         # Shops veranderen niet, dus dit blijft gewoon een dict.
         self.engine.data.shops = database.shop.ShopDatabase
+        self.engine.data.inns = database.inn.InnDatabase
         # Treasure chest worden geen objecten, maar blijven een object met dicts.
         self.engine.data.treasure_chests = database.treasurechest.TreasureChestDatabase()
         self.engine.data.sparklies = database.sparkly.SparklyDatabase()

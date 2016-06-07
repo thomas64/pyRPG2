@@ -14,6 +14,7 @@ class Data(object):
 
         self.heroes = dict()
         self.shops = dict()
+        self.inns = dict()
         self.treasure_chests = dict()
         self.sparklies = dict()
 

@@ -18,6 +18,7 @@ SOUNDS = "sounds"
 STARTPOS = "start_pos"
 PORTALS = "portals"
 SHOPS = "shops"
+INNS = "inns"
 CHESTS = "chests"
 SPARKLY = "sparkly"
 
@@ -55,6 +56,7 @@ class Map(object):
         self.start_pos = []
         self.portals = []
         self.shops = []
+        self.inns = []
         self.chests = []
         self.sparkly = []
 
@@ -76,6 +78,16 @@ class Map(object):
                                               self._pg_rect(obj), OBJECTLAYER)
                 self.high_blocker_rects.append(shop_object.get_blocker())
                 self.shops.append(shop_object)
+        except ValueError:
+            pass
+
+        try:
+            from database.inn import InnDatabase
+            for obj in tmx_data.get_layer_by_name(INNS):
+                inn_object = components.Inn(obj.name, InnDatabase[obj.name]['sprite'],
+                                            self._pg_rect(obj), OBJECTLAYER)
+                self.high_blocker_rects.append(inn_object.get_blocker())
+                self.inns.append(inn_object)
         except ValueError:
             pass
 

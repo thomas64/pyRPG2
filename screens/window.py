@@ -95,6 +95,7 @@ class Window(object):
 
         # voeg alle objecten toe van uit de map
         self.group.add(self.engine.current_map.shops)
+        self.group.add(self.engine.current_map.inns)
         self.group.add(self.engine.current_map.chests)
         self.group.add(self.engine.current_map.sparkly)
 
@@ -149,6 +150,8 @@ class Window(object):
                     for rect in self.engine.current_map.low_blocker_rects:
                         self.cbox_sprites.append(components.ColorBox(rect, LOWBLOCKERCOLOR, CBOXLAYER))
                     for obj in self.engine.current_map.shops:
+                        self.cbox_sprites.append(components.ColorBox(obj.rect, SHOPCOLOR, CBOXLAYER))
+                    for obj in self.engine.current_map.inns:
                         self.cbox_sprites.append(components.ColorBox(obj.rect, SHOPCOLOR, CBOXLAYER))
                     self.group.add(self.cbox_sprites)
                 else:

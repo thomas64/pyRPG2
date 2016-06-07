@@ -301,7 +301,7 @@
   <object id="37" name="step_stone" x="160" y="304" width="592" height="224"/>
   <object id="38" name="step_carpet" x="160" y="48" width="592" height="256"/>
  </objectgroup>
- <objectgroup name="low_blocker">
+ <objectgroup name="low_blocker" visible="0">
   <object id="6" x="272" y="176" width="32" height="80"/>
   <object id="7" x="176" y="144" width="64" height="48"/>
   <object id="8" x="464" y="176" width="32" height="80"/>

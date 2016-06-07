@@ -270,3 +270,10 @@ class Shop(pygame.sprite.Sprite):
         :return: Een rect met zijn eigen locatie en opgegeven grootte.
         """
         return pygame.Rect(self.rect.x, self.rect.y, SHOPBLOCKERWIDTH, SHOPBLOCKERHEIGHT)
+
+
+class Inn(Shop):
+    """
+    Overnachting
+    """
+    pass
