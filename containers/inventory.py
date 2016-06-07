@@ -4,6 +4,7 @@ class: Inventory
 """
 
 import console
+from database import WeaponType
 
 
 class Inventory(dict):
@@ -23,7 +24,6 @@ class Inventory(dict):
         """
         temp_list = []
 
-        from database import WeaponType
         for equipment_item in sorted(self.values(), key=lambda xx: xx.SRT):
             # uitzondering gemaakt voor sellbox in shop. geef dan alleen maar een bepaald type weapon terug
             if isinstance(equipment_type, WeaponType):

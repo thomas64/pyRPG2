@@ -122,6 +122,7 @@ class Display(object):
             if isinstance(shoptype, database.WeaponType):
                 from database.weapon import wpn
                 self.databases[shoptype.name] = collections.OrderedDict()
+                # omdat alle wapens in wpn zitten moet de database opnieuw opgebouwd worden met alleen de juiste wapens
                 for key, weapon in wpn.items():
                     if weapon['skl'] == shoptype:
                         self.databases[shoptype.name][key] = weapon

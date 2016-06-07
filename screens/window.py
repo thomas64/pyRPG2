@@ -9,6 +9,7 @@ import pygame
 
 import audio as sfx
 import components
+import database.shop
 import equipment
 import keys
 import pouchitems
@@ -292,7 +293,7 @@ class Window(object):
         if len(check_rect.collidelistall(self.engine.current_map.shops)) == 1:
             object_nr = check_rect.collidelist(self.engine.current_map.shops)
             shop_sprite = self.engine.current_map.shops[object_nr]
-            shop_data = self.engine.data.shops[shop_sprite.shop_id]
+            shop_data = database.shop.ShopDatabase[shop_sprite.shop_id].value
 
             if shop_sprite.rect.left < self.party_sprites[0].rect.left and \
                     abs(shop_sprite.rect.centery - self.party_sprites[0].rect.centery) < \

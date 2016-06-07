@@ -1,7 +1,9 @@
 
 """
-dict: InnDatabase
+class: InnDatabase
 """
+
+import enum
 
 
 PATH = 'resources/sprites/npcs/'
@@ -10,8 +12,9 @@ FACE = 'f'
 SPRITE = 's'
 
 
-InnDatabase = dict()
+class InnDatabase(enum.Enum):
+    """
+    ...
+    """
 
-InnDatabase['inn1'] = dict(cost=50,
-                           face=PATH+'01'+FACE+PATHEXT,
-                           sprite=PATH+'01'+SPRITE+PATHEXT)
+    inn1 = dict(cost=50, face=PATH+'01'+FACE+PATHEXT, sprite=PATH+'01'+SPRITE+PATHEXT)

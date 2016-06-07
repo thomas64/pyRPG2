@@ -8,6 +8,8 @@ import pytmx
 import pyscroll
 
 import components
+import database.shop
+import database.inn
 
 MAPPATH = 'resources/maps/'
 
@@ -72,9 +74,8 @@ class Map(object):
             self.portals.append(components.Portal(name, self._pg_rect(obj), obj.name, obj.type))
 
         try:
-            from database.shop import ShopDatabase
             for obj in tmx_data.get_layer_by_name(SHOPS):
-                shop_object = components.Shop(obj.name, ShopDatabase[obj.name]['sprite'],
+                shop_object = components.Shop(obj.name, database.shop.ShopDatabase[obj.name].value['sprite'],
                                               self._pg_rect(obj), OBJECTLAYER)
                 self.high_blocker_rects.append(shop_object.get_blocker())
                 self.shops.append(shop_object)
@@ -82,9 +83,8 @@ class Map(object):
             pass
 
         try:
-            from database.inn import InnDatabase
             for obj in tmx_data.get_layer_by_name(INNS):
-                inn_object = components.Inn(obj.name, InnDatabase[obj.name]['sprite'],
+                inn_object = components.Inn(obj.name, database.inn.InnDatabase[obj.name].value['sprite'],
                                             self._pg_rect(obj), OBJECTLAYER)
                 self.high_blocker_rects.append(inn_object.get_blocker())
                 self.inns.append(inn_object)
