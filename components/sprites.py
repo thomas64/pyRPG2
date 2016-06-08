@@ -276,4 +276,12 @@ class Inn(Shop):
     """
     Overnachting
     """
-    pass
+    def __init__(self, inn_id, sprite, rect, objectlayer, dont_show_sprite):
+        super().__init__(inn_id, sprite, rect, objectlayer)
+
+        self.inn_id = inn_id
+
+        self.show_sprite = True
+        if dont_show_sprite:
+            self.show_sprite = False
+            self.image = pygame.image.load(TRANSP).convert_alpha()

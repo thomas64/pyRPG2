@@ -17,4 +17,4 @@ class InnDatabase(enum.Enum):
     ...
     """
 
-    inn1 = dict(cost=50, face=PATH+'01'+FACE+PATHEXT, sprite=PATH+'01'+SPRITE+PATHEXT)
+    inn1 = dict(price=50, face=PATH+'01'+FACE+PATHEXT, sprite=PATH+'01'+SPRITE+PATHEXT)

@@ -10,6 +10,7 @@ import pygame
 import audio as sfx
 import components
 import database.shop
+import database.inn
 import equipment
 import keys
 import pouchitems
@@ -129,6 +130,7 @@ class Window(object):
 
             elif event.key in keys.SELECT:
                 self.check_shops(self.get_check_rect())
+                self.check_inns(self.get_check_rect())
                 self.check_chests()
                 self.check_sparklies(self.get_check_rect())
 
@@ -315,6 +317,51 @@ class Window(object):
                 shop_sprite.update(screens.direction.Direction.South)
 
             push_object = screens.shop.display.Display(self.engine, shop_data['content'], shop_data['face'])
+            self.engine.gamestate.push(push_object)
+
+    def check_inns(self, check_rect):
+        """
+        ...
+        :param check_rect:
+        :return:
+        """
+        if len(check_rect.collidelistall(self.engine.current_map.inns)) == 1:
+            object_nr = check_rect.collidelist(self.engine.current_map.inns)
+            inn_sprite = self.engine.current_map.inns[object_nr]
+            inn_data = database.inn.InnDatabase[inn_sprite.inn_id].value
+
+            for inn_sprite in self.engine.current_map.inns:
+                if inn_sprite.show_sprite:
+                    if inn_sprite.rect.left < self.party_sprites[0].rect.left and \
+                            abs(inn_sprite.rect.centery - self.party_sprites[0].rect.centery) < \
+                            abs(inn_sprite.rect.centerx - self.party_sprites[0].rect.centerx):
+                        inn_sprite.update(screens.direction.Direction.East)
+                    elif inn_sprite.rect.left > self.party_sprites[0].rect.left and \
+                            abs(inn_sprite.rect.centery - self.party_sprites[0].rect.centery) < \
+                            abs(inn_sprite.rect.centerx - self.party_sprites[0].rect.centerx):
+                        inn_sprite.update(screens.direction.Direction.West)
+                    elif inn_sprite.rect.top < self.party_sprites[0].rect.top and \
+                            abs(inn_sprite.rect.centery - self.party_sprites[0].rect.centery) > \
+                            abs(inn_sprite.rect.centerx - self.party_sprites[0].rect.centerx):
+                        inn_sprite.update(screens.direction.Direction.South)
+                    elif inn_sprite.rect.top > self.party_sprites[0].rect.top and \
+                            abs(inn_sprite.rect.centery - self.party_sprites[0].rect.centery) > \
+                            abs(inn_sprite.rect.centerx - self.party_sprites[0].rect.centerx):
+                        inn_sprite.update(screens.direction.Direction.North)
+                    else:
+                        inn_sprite.update(screens.direction.Direction.South)
+
+            # todo, deze tekst moet wellicht in de inn database komen.
+            # todo, plaatje van hoofd van shopkeeper
+            # todo, selectie van confirmbox niet zo statisch. let bij aanpassing ook op shop.
+            # todo, docstring
+            text = ["Good day sir, and welcome to my inn.",
+                    "For {} gold, your health will be fully restored.".format(inn_data['price']),
+                    "",
+                    "Yes please.",
+                    "No thanks."]
+
+            push_object = components.ConfirmBox(self.engine.gamestate, self.engine.audio, text)
             self.engine.gamestate.push(push_object)
 
     def check_chests(self):
