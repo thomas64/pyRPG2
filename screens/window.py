@@ -352,9 +352,8 @@ class Window(object):
                     else:
                         inn_sprite.update(screens.direction.Direction.South)
 
-            # todo, plaatje van hoofd van shopkeeper
-
-            push_object = components.ConfirmBox(self.engine.gamestate, self.engine.audio, inn_data['text'])
+            push_object = components.ConfirmBox(self.engine.gamestate, self.engine.audio,
+                                                inn_data['text'], inn_data['face'])
             self.engine.gamestate.push(push_object)
 
     def check_chests(self):

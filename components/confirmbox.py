@@ -19,6 +19,7 @@ FONTCOLOR2 = pygame.Color("red")
 FONTPOSX = 40
 FONTPOSY = 40
 LINEHEIGHT = 25
+FACEPOSX, FACEPOSY = 30, 25
 
 MESSAGESPRITE = 'resources/sprites/parchment.png'
 
@@ -27,7 +28,7 @@ class ConfirmBox(object):
     """
     Geeft een selectie weer op het scherm.
     """
-    def __init__(self, gamestate, audio, raw_text):
+    def __init__(self, gamestate, audio, raw_text, face_image=None):
         self.gamestate = gamestate
         self.audio = audio
         self.screen = pygame.display.get_surface()
@@ -37,12 +38,17 @@ class ConfirmBox(object):
         self.font = pygame.font.SysFont(FONT, FONTSIZE)
         self.raw_text = raw_text    # de onopgemaakte tekst
         self.vis_text = []          # de visuele tekst
+        self.face_image = face_image
+        self.face_image_space = 0
+        if self.face_image:
+            self.face_image = pygame.image.load(face_image).convert_alpha()
+            self.face_image_space = self.face_image.get_width()
 
         text_widths = []
         for row in raw_text:
             self.vis_text.append(self.font.render(row, True, FONTCOLOR1).convert_alpha())
             text_widths.append(self.font.render(row, True, FONTCOLOR1).get_width())
-        box_width = max(text_widths) + FONTPOSX * 2
+        box_width = max(text_widths) + FONTPOSX * 2 + self.face_image_space
         box_height = len(self.vis_text) * LINEHEIGHT + FONTPOSY * 2
 
         # wanneer komt de eerste blanke regel, de volgende is dan de eerste selectie mogelijkheid.
@@ -147,7 +153,10 @@ class ConfirmBox(object):
 
         self.surface.blit(self.background, (0, 0))
 
+        if self.face_image:
+            self.surface.blit(self.face_image, (FACEPOSX, FACEPOSY))
+
         for i, line in enumerate(self.vis_text):
-            self.surface.blit(line, (FONTPOSX, FONTPOSY + i * LINEHEIGHT))
+            self.surface.blit(line, (FONTPOSX + self.face_image_space, FONTPOSY + i * LINEHEIGHT))
 
         self.screen.blit(self.surface, self.rect.topleft)
