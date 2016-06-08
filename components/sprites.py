@@ -274,13 +274,14 @@ class Shop(pygame.sprite.Sprite):
 
 class Inn(Shop):
     """
-    Overnachting
+    Innkeepster
     """
     def __init__(self, inn_id, sprite, rect, objectlayer, dont_show_sprite):
         super().__init__(inn_id, sprite, rect, objectlayer)
 
         self.inn_id = inn_id
 
+        # als er in dont_show_sprite iets staat, dan is het een transparante sprite.
         self.show_sprite = True
         if dont_show_sprite:
             self.show_sprite = False

@@ -86,7 +86,7 @@ class Map(object):
             for obj in tmx_data.get_layer_by_name(INNS):
                 inn_object = components.Inn(obj.name, database.inn.InnDatabase[obj.name].value['sprite'],
                                             self._pg_rect(obj), OBJECTLAYER, obj.type)
-                # als er in obj.type iets staat, dan geen blocker.
+                # als er in obj.type iets staat, dan is het een lege sprite en dus geen blocker.
                 if not obj.type:
                     self.high_blocker_rects.append(inn_object.get_blocker())
                 self.inns.append(inn_object)

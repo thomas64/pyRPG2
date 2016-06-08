@@ -288,7 +288,7 @@
  </layer>
  <objectgroup name="inns">
   <object id="42" name="inn1" x="176" y="240" width="32" height="48"/>
-  <object id="43" name="inn1" type="No" x="144" y="240" width="32" height="32"/>
+  <object id="43" name="inn1" type="geen sprite iets" x="144" y="240" width="32" height="32"/>
  </objectgroup>
  <objectgroup name="portals" visible="0">
   <object id="1" name="invernia" x="144" y="528" width="32" height="16"/>

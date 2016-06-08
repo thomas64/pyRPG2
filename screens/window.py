@@ -291,6 +291,8 @@ class Window(object):
     def check_shops(self, check_rect):
         """
         Bekijk of collide met een shopkeeper. Update de richting van de sprite.
+        :param check_rect: een iets verplaatste rect van de player sprite zodat hij kan colliden met een obj dat anders
+        niet collidebaar is. self.party_sprites[0].rect
         """
         if len(check_rect.collidelistall(self.engine.current_map.shops)) == 1:
             object_nr = check_rect.collidelist(self.engine.current_map.shops)
@@ -321,9 +323,8 @@ class Window(object):
 
     def check_inns(self, check_rect):
         """
-        ...
-        :param check_rect:
-        :return:
+        Er kunnen ook inns zijn zonder sprite, die moeten dan geupdate worden. Maar alle anderen met sprite wel omdat
+        de lege een verlengde is van de gevulde. Er is altijd maar 1 innkeeper per scherm, dus dan komt dat goed.
         """
         if len(check_rect.collidelistall(self.engine.current_map.inns)) == 1:
             object_nr = check_rect.collidelist(self.engine.current_map.inns)
@@ -351,17 +352,9 @@ class Window(object):
                     else:
                         inn_sprite.update(screens.direction.Direction.South)
 
-            # todo, deze tekst moet wellicht in de inn database komen.
             # todo, plaatje van hoofd van shopkeeper
-            # todo, docstring
-            text = ["Good day sir, and welcome to my inn.",
-                    "For {} gold, you may rest here now".format(inn_data['price']),
-                    "and your health will be fully restored.",
-                    "",
-                    "Yes please.",
-                    "No thanks."]
 
-            push_object = components.ConfirmBox(self.engine.gamestate, self.engine.audio, text)
+            push_object = components.ConfirmBox(self.engine.gamestate, self.engine.audio, inn_data['text'])
             self.engine.gamestate.push(push_object)
 
     def check_chests(self):
