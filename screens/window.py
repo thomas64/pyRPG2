@@ -353,10 +353,10 @@ class Window(object):
 
             # todo, deze tekst moet wellicht in de inn database komen.
             # todo, plaatje van hoofd van shopkeeper
-            # todo, selectie van confirmbox niet zo statisch. let bij aanpassing ook op shop.
             # todo, docstring
             text = ["Good day sir, and welcome to my inn.",
-                    "For {} gold, your health will be fully restored.".format(inn_data['price']),
+                    "For {} gold, you may rest here now".format(inn_data['price']),
+                    "and your health will be fully restored.",
                     "",
                     "Yes please.",
                     "No thanks."]

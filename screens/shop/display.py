@@ -289,6 +289,7 @@ class Display(object):
                 "",
                 "Oops, don't sell any."]
 
+        # dit begin moet omdat er ook eerst tekst is voor 1 regel en 1 regel met niets.
         self.sel_quantity = ["",
                              "",
                              0]
@@ -306,19 +307,19 @@ class Display(object):
                 if self.tot_quantity == 3:
                     text.append("Sell 3 of them for " + str(int(self.value * 3)) + " gold.")
                     self.sel_quantity.append(3)
-                if self.tot_quantity == 4:
+                elif self.tot_quantity == 4:
                     text.append("Sell 3 of them for " + str(int(self.value * 3)) + " gold.")
                     text.append("Sell 4 of them for " + str(int(self.value * 4)) + " gold.")
                     self.sel_quantity.append(3)
                     self.sel_quantity.append(4)
-                if self.tot_quantity == 5:
+                elif self.tot_quantity == 5:
                     text.append("Sell 3 of them for " + str(int(self.value * 3)) + " gold.")
                     text.append("Sell 4 of them for " + str(int(self.value * 4)) + " gold.")
                     text.append("Sell 5 of them for " + str(int(self.value * 5)) + " gold.")
                     self.sel_quantity.append(3)
                     self.sel_quantity.append(4)
                     self.sel_quantity.append(5)
-                if self.tot_quantity > 5:
+                elif self.tot_quantity > 5:
                     text.append("Sell " + str(int(self.tot_quantity / 2)) +
                                 " of them for " + str(int(self.value * (self.tot_quantity / 2))) + " gold.")
                     self.sel_quantity.append(int(self.tot_quantity / 2))
@@ -360,6 +361,7 @@ class Display(object):
             if self.buy_click:
                 choice = self.confirm_box.on_exit()
 
+                # dit gaat helemaal uit van dat de tekst van de shop maar 1 regel heeft en dan 1 regel niets.
                 if choice == 2:
                     self.engine.audio.play_sound(sfx.MENUSELECT)
                 elif choice == 3:
@@ -371,6 +373,7 @@ class Display(object):
 
             elif self.sell_click:
                 selected_quantity = self.confirm_box.on_exit()
+                # dit gaat helemaal uit van dat de tekst van de shop maar 1 regel heeft en dan 1 regel niets.
                 quantity = self.sel_quantity[selected_quantity]
 
                 if quantity:

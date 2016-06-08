@@ -20,8 +20,6 @@ FONTPOSX = 40
 FONTPOSY = 40
 LINEHEIGHT = 25
 
-TOPINDEX = 2
-
 MESSAGESPRITE = 'resources/sprites/parchment.png'
 
 
@@ -47,6 +45,12 @@ class ConfirmBox(object):
         box_width = max(text_widths) + FONTPOSX * 2
         box_height = len(self.vis_text) * LINEHEIGHT + FONTPOSY * 2
 
+        # wanneer komt de eerste blanke regel, de volgende is dan de eerste selectie mogelijkheid.
+        for index, row in enumerate(raw_text):
+            if row == "":
+                self.TOPINDEX = index + 1
+                break
+
         self.surface = pygame.Surface((box_width, box_height))
         self.surface = self.surface.convert()
         self.rect = self.surface.get_rect()
@@ -62,7 +66,7 @@ class ConfirmBox(object):
         self.background = pygame.image.load(MESSAGESPRITE).convert_alpha()
         self.background = pygame.transform.scale(self.background, self.surface.get_size())
 
-        self.cur_item = TOPINDEX
+        self.cur_item = self.TOPINDEX
 
     def _create_rect_with_offset(self, index, text):
         """
@@ -90,7 +94,7 @@ class ConfirmBox(object):
         """
         if event.type == pygame.MOUSEMOTION:
             for index, item in enumerate(self.text_rects):
-                if item.collidepoint(event.pos) and index >= TOPINDEX:
+                if item.collidepoint(event.pos) and index >= self.TOPINDEX:
                     if self.cur_item != index:
                         self.cur_item = index
                     break
@@ -98,22 +102,22 @@ class ConfirmBox(object):
         elif event.type == pygame.MOUSEBUTTONDOWN:
             if event.button == keys.LEFTCLICK:
                 for index, item in enumerate(self.text_rects):
-                    if item.collidepoint(event.pos) and index >= TOPINDEX:
+                    if item.collidepoint(event.pos) and index >= self.TOPINDEX:
                         self.gamestate.pop()
 
         elif event.type == pygame.KEYDOWN:
             if event.key == keys.EXIT:
-                self.cur_item = TOPINDEX
+                self.cur_item = self.TOPINDEX
                 self.gamestate.pop()
 
             elif event.key in keys.SELECT:
                 self.gamestate.pop()
 
-            if event.key == keys.UP and self.cur_item > TOPINDEX:
+            if event.key == keys.UP and self.cur_item > self.TOPINDEX:
                 self.cur_item -= 1
-            elif event.key == keys.UP and self.cur_item == TOPINDEX:
+            elif event.key == keys.UP and self.cur_item == self.TOPINDEX:
                 self.audio.play_sound(sfx.MENUERROR)
-                self.cur_item = TOPINDEX
+                self.cur_item = self.TOPINDEX
             elif event.key == keys.DOWN and self.cur_item < len(self.raw_text) - 1:
                 self.cur_item += 1
             elif event.key == keys.DOWN and self.cur_item == len(self.raw_text) - 1:
