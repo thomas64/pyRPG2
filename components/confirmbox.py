@@ -90,8 +90,9 @@ class ConfirmBox(object):
         """
         Bij het sluiten van het venster.
         :return: geef het geselecteerde item en de topindex terug, topindex is ter verificatie
+        Geef ook voor als het nodig is de schermachtergrond voor een eventuele volgende messagebox.
         """
-        return self.cur_item, self.TOPINDEX
+        return self.cur_item, self.TOPINDEX, self.scr_capt
 
     def single_input(self, event):
         """

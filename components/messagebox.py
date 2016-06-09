@@ -29,11 +29,15 @@ class MessageBox(object):
     """
     Geeft een bericht weer op het scherm.
     """
-    def __init__(self, gamestate, raw_text, image=None):
+    def __init__(self, gamestate, raw_text, image=None, scr_capt=None):
         self.gamestate = gamestate
         self.screen = pygame.display.get_surface()
         self.name = statemachine.States.MessageBox
-        self.scr_capt = components.ScreenCapture()
+
+        if scr_capt is None:
+            self.scr_capt = components.ScreenCapture()
+        else:
+            self.scr_capt = scr_capt
 
         self.font = pygame.font.SysFont(FONT, FONTSIZE)
         self.raw_text = raw_text

@@ -64,6 +64,7 @@ class Window(object):
 
         self.inn_box = None
         self.inn_data = None
+        self.scr_capt = None
 
     def load_map(self):
         """
@@ -205,15 +206,23 @@ class Window(object):
         """
         # als de inn confirmbox in beeld is geweest
         if self.inn_box:
-            choice, yes = self.inn_box.on_exit()
+            choice, yes, self.scr_capt = self.inn_box.on_exit()
             if choice == yes:
                 gold = pouchitems.factory_pouch_item('gold')
                 if self.engine.data.pouch.remove(gold, self.inn_data['price']):
                     self.engine.audio.play_sound(sfx.COINS)
-                # todo, een meerdere messagebox systeem maken
+                    push_object = components.MessageBox(self.engine.gamestate,
+                                                        ["Enjoy your stay."], scr_capt=self.scr_capt)
+                    self.engine.gamestate.push(push_object)
+
+                else:
+                    push_object = components.MessageBox(self.engine.gamestate,
+                                                        ["Not enough."], scr_capt=self.scr_capt)
+                    self.engine.gamestate.push(push_object)
 
             self.inn_box = None
             self.inn_data = None
+            self.scr_capt = None
 
         # Is de hero tegen een soundobject of een portal aangelopen
         self.check_sounds()
