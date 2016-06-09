@@ -62,6 +62,9 @@ class Window(object):
         self.surface.fill(BACKGROUNDCOLOR)
         self.surface = self.surface.convert()
 
+        self.inn_box = None
+        self.inn_data = None
+
     def load_map(self):
         """
         Maak een nieuwe map aan met de hero's in het veld.
@@ -198,18 +201,32 @@ class Window(object):
 
     def update(self, dt):
         """
-        Is de hero tegen een portal aangelopen. Update locaties (indien F11). Centreer op de hero.
         :param dt: self.clock.tick(FPS)/1000.0
         """
+        # als de inn confirmbox in beeld is geweest
+        if self.inn_box:
+            choice, yes = self.inn_box.on_exit()
+            if choice == yes:
+                gold = pouchitems.factory_pouch_item('gold')
+                if self.engine.data.pouch.remove(gold, self.inn_data['price']):
+                    self.engine.audio.play_sound(sfx.COINS)
+                # todo, een meerdere messagebox systeem maken
+
+            self.inn_box = None
+            self.inn_data = None
+
+        # Is de hero tegen een soundobject of een portal aangelopen
         self.check_sounds()
         self.check_portals()
 
+        # Update locaties (indien F11).
         # misschien gaat dit een probleem geven wanneer ingame de party grootte wordt gewijzigd.
         # dan heeft bijv een boom een unit.rect.topleft oid.
         if len(self.cbox_sprites) > 0:
             for index, unit in enumerate(self.party_sprites):  # dit kan om dat de eerste paar die aan cbox_sprites bij
                 self.cbox_sprites[index].rect.topleft = unit.rect.topleft  # F11 zijn toegevoegd zijn de unit.rects
 
+        # Centreer op de hero als de kaart groter is dan de window.
         if self.engine.current_map.width >= self.width and \
            self.engine.current_map.height >= self.height:
             self.group.center(self.party_sprites[0].rect.center)
@@ -329,7 +346,7 @@ class Window(object):
         if len(check_rect.collidelistall(self.engine.current_map.inns)) == 1:
             object_nr = check_rect.collidelist(self.engine.current_map.inns)
             inn_sprite = self.engine.current_map.inns[object_nr]
-            inn_data = database.inn.InnDatabase[inn_sprite.inn_id].value
+            self.inn_data = database.inn.InnDatabase[inn_sprite.inn_id].value
 
             for inn_sprite in self.engine.current_map.inns:
                 if inn_sprite.show_sprite:
@@ -352,9 +369,9 @@ class Window(object):
                     else:
                         inn_sprite.update(screens.direction.Direction.South)
 
-            push_object = components.ConfirmBox(self.engine.gamestate, self.engine.audio,
-                                                inn_data['text'], inn_data['face'])
-            self.engine.gamestate.push(push_object)
+            self.inn_box = components.ConfirmBox(self.engine.gamestate, self.engine.audio,
+                                                 self.inn_data['text'], self.inn_data['face'])
+            self.engine.gamestate.push(self.inn_box)
 
     def check_chests(self):
         """
