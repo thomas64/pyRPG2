@@ -359,7 +359,8 @@ class Display(object):
 
         if self.sell_click or self.buy_click:
             if self.buy_click:
-                choice, topindex = self.confirm_box.on_exit()
+                # hij gebruikt nothing hier niet
+                choice, topindex, nothing = self.confirm_box.on_exit()
                 # de no is in dit geval boven de yes, dus lager in nummer.
                 if choice == topindex:
                     self.engine.audio.play_sound(sfx.MENUSELECT)
