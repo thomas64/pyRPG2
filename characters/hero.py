@@ -205,7 +205,7 @@ class Hero(object):
         """
         # uitzondering gemaakt voor sellbox in shop. geef dan alleen maar een bepaald type weapon terug
         if isinstance(equipment_type, database.WeaponType):
-            if self.wpn.SKL == equipment_type:
+            if self.wpn.get_value_of('SKL') == equipment_type:
                 return self.wpn
         else:
             for equipment_item in self.equipment_tuple:
