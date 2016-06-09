@@ -373,7 +373,7 @@ class Display(object):
 
             elif self.sell_click:
                 # hij gebruikt nothing hier niet
-                selected_quantity, nothing = self.confirm_box.on_exit()
+                selected_quantity, nothing, nothing = self.confirm_box.on_exit()
                 # dit gaat helemaal uit van dat de tekst van de shop maar 1 regel heeft en dan 1 regel niets.
                 quantity = self.sel_quantity[selected_quantity]
 
