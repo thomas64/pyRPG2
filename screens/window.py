@@ -211,14 +211,17 @@ class Window(object):
                 gold = pouchitems.factory_pouch_item('gold')
                 if self.engine.data.pouch.remove(gold, self.inn_data['price']):
                     self.engine.audio.play_sound(sfx.COINS)
-                    push_object = components.MessageBox(self.engine.gamestate,
-                                                        ["Enjoy your stay."], scr_capt=self.scr_capt)
+                    push_object = components.MessageBox(self.engine.gamestate, self.inn_data['paid'],
+                                                        face_image=self.inn_data['face'], scr_capt=self.scr_capt)
                     self.engine.gamestate.push(push_object)
-
                 else:
-                    push_object = components.MessageBox(self.engine.gamestate,
-                                                        ["Not enough."], scr_capt=self.scr_capt)
+                    push_object = components.MessageBox(self.engine.gamestate, self.inn_data['fail'],
+                                                        face_image=self.inn_data['face'], scr_capt=self.scr_capt)
                     self.engine.gamestate.push(push_object)
+            else:
+                push_object = components.MessageBox(self.engine.gamestate, self.inn_data['deny'],
+                                                    face_image=self.inn_data['face'], scr_capt=self.scr_capt)
+                self.engine.gamestate.push(push_object)
 
             self.inn_box = None
             self.inn_data = None
@@ -379,7 +382,7 @@ class Window(object):
                         inn_sprite.update(screens.direction.Direction.South)
 
             self.inn_box = components.ConfirmBox(self.engine.gamestate, self.engine.audio,
-                                                 self.inn_data['text'], self.inn_data['face'])
+                                                 self.inn_data['welcome'], self.inn_data['face'])
             self.engine.gamestate.push(self.inn_box)
 
     def check_chests(self):
@@ -429,7 +432,7 @@ class Window(object):
                             image.append(pouch_item_spr)
                     self.engine.audio.play_sound(sfx.CHEST)
                     chest_data['content'] = dict()
-                    push_object = components.MessageBox(self.engine.gamestate, text, image)
+                    push_object = components.MessageBox(self.engine.gamestate, text, spr_image=image)
                     self.engine.gamestate.push(push_object)
 
     def check_sparklies(self, check_rect):
@@ -465,7 +468,7 @@ class Window(object):
                 self.engine.audio.play_sound(sfx.SPARKLY)
                 sparkly_data['content'] = dict()
                 sparkly_sprite.image = None
-                push_object = components.MessageBox(self.engine.gamestate, text, image)
+                push_object = components.MessageBox(self.engine.gamestate, text, spr_image=image)
                 self.engine.gamestate.push(push_object)
 
     def get_check_rect(self):

@@ -17,9 +17,8 @@ FONTCOLOR = pygame.Color("black")
 FONTPOSX = 40
 FONTPOSY = 40
 LINEHEIGHT = 25
-IMGPOSX = 35
-IMGPOSY = 60
-IMGSPACE = 30
+IMGPOSX, IMGPOSY = 35, 60
+FACEPOSX, FACEPOSY = 30, 25
 
 MESSAGESPRITE = 'resources/sprites/parchment.png'
 
@@ -29,7 +28,10 @@ class MessageBox(object):
     """
     Geeft een bericht weer op het scherm.
     """
-    def __init__(self, gamestate, raw_text, image=None, scr_capt=None):
+    def __init__(self, gamestate, raw_text, face_image=None, spr_image=None, scr_capt=None):
+        """
+        :param spr_image: list van loaded images
+        """
         self.gamestate = gamestate
         self.screen = pygame.display.get_surface()
         self.name = statemachine.States.MessageBox
@@ -42,17 +44,24 @@ class MessageBox(object):
         self.font = pygame.font.SysFont(FONT, FONTSIZE)
         self.raw_text = raw_text
         self.vis_text = []
-        self.image = image
-        self.img_space = 0
-        if self.image:
-            self.img_space = IMGSPACE
+        self.face_image = face_image
+        self.face_image_space = 0
+        self.spr_image = spr_image
+        self.spr_img_space = 0
+        if self.face_image:
+            self.face_image = pygame.image.load(face_image).convert_alpha()
+            self.face_image_space = self.face_image.get_width()
+        if self.spr_image:
+            self.spr_img_space = self.spr_image[0].get_width()  # de breedte van de eerste uit de list
 
         text_widths = []
         for row in raw_text:
             self.vis_text.append(self.font.render(row, True, FONTCOLOR).convert_alpha())
             text_widths.append(self.font.render(row, True, FONTCOLOR).get_width())
-        box_width = max(text_widths) + FONTPOSX * 2 + self.img_space
+        box_width = max(text_widths) + FONTPOSX * 2 + self.face_image_space + self.spr_img_space
         box_height = len(self.vis_text) * LINEHEIGHT + FONTPOSY * 2
+        if box_height < self.face_image_space + FACEPOSY * 2:
+            box_height = self.face_image_space + FACEPOSY * 2
 
         self.surface = pygame.Surface((box_width, box_height))
         self.surface = self.surface.convert()
@@ -87,15 +96,20 @@ class MessageBox(object):
 
         self.surface.blit(self.background, (0, 0))
 
-        if self.image:
-            for i, line in enumerate(self.image):
+        if self.face_image:
+            self.surface.blit(self.face_image, (FACEPOSX, FACEPOSY))
+
+        if self.spr_image:
+            for i, line in enumerate(self.spr_image):
                 self.surface.blit(line, (IMGPOSX, IMGPOSY + i * LINEHEIGHT))
 
         for i, line in enumerate(self.vis_text):
             if i == 0:
-                self.surface.blit(line, (FONTPOSX, FONTPOSY + i * LINEHEIGHT))
+                self.surface.blit(line, (FONTPOSX + self.face_image_space,
+                                         FONTPOSY + i * LINEHEIGHT))
             else:
-                self.surface.blit(line, (FONTPOSX + self.img_space, FONTPOSY + i * LINEHEIGHT))
+                self.surface.blit(line, (FONTPOSX + self.face_image_space + self.spr_img_space,
+                                         FONTPOSY + i * LINEHEIGHT))
 
         self.screen.blit(self.surface, self.rect.topleft)
 
