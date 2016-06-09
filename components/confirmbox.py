@@ -89,9 +89,9 @@ class ConfirmBox(object):
     def on_exit(self):
         """
         Bij het sluiten van het venster.
-        :return: geef de geselecteerde item terug
+        :return: geef het geselecteerde item en de topindex terug, topindex is ter verificatie
         """
-        return self.cur_item
+        return self.cur_item, self.TOPINDEX
 
     def single_input(self, event):
         """

@@ -359,12 +359,11 @@ class Display(object):
 
         if self.sell_click or self.buy_click:
             if self.buy_click:
-                choice = self.confirm_box.on_exit()
-
-                # dit gaat helemaal uit van dat de tekst van de shop maar 1 regel heeft en dan 1 regel niets.
-                if choice == 2:
+                choice, topindex = self.confirm_box.on_exit()
+                # de no is in dit geval boven de yes, dus lager in nummer.
+                if choice == topindex:
                     self.engine.audio.play_sound(sfx.MENUSELECT)
-                elif choice == 3:
+                elif choice > topindex:
                     gold = pouchitems.factory_pouch_item('gold')
                     if self.engine.data.pouch.remove(gold, self.value):     # deze if is eigenlijk overbodig maar
                         self.engine.data.inventory.add(self.selected_item)  # van origineel zit hij erin. maar hij
@@ -372,7 +371,8 @@ class Display(object):
                         self._init_sellbox()
 
             elif self.sell_click:
-                selected_quantity = self.confirm_box.on_exit()
+                # hij gebruikt nothing hier niet
+                selected_quantity, nothing = self.confirm_box.on_exit()
                 # dit gaat helemaal uit van dat de tekst van de shop maar 1 regel heeft en dan 1 regel niets.
                 quantity = self.sel_quantity[selected_quantity]
 
