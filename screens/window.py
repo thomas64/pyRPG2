@@ -214,6 +214,7 @@ class Window(object):
                     push_object = components.MessageBox(self.engine.gamestate, self.inn_data['paid'],
                                                         face_image=self.inn_data['face'], scr_capt=self.scr_capt)
                     self.engine.gamestate.push(push_object)
+                    # todo, health afhandelen. en iets van een fade out animatie?
                 else:
                     push_object = components.MessageBox(self.engine.gamestate, self.inn_data['fail'],
                                                         face_image=self.inn_data['face'], scr_capt=self.scr_capt)
@@ -395,22 +396,29 @@ class Window(object):
                 chest_sprite = self.engine.current_map.chests[object_nr]
                 chest_data = self.engine.data.treasure_chests[chest_sprite.chest_id]
 
-                if chest_data['condition'] and chest_data['content']:
+                if chest_data.get('condition') and chest_data['content']:
                     for key, value in chest_data['condition'].items():
                         text = ["Error!"]
                         if key == "mec":
-                            text = ["There's a dangerous trap on this treasurechest.",
-                                    "You need a level "+str(value)+" of the Mechanic Skill to",
-                                    "disarm the trap."]
+                            text = chest_data['mec_text']
                         elif key == "thf":
-                            text = ["There's a lock on this treasurechest.",
-                                    "You need a level "+str(value)+" of the Thief Skill",
-                                    "to pick the lock."]
+                            text = chest_data['thf_text']
                         highest = self.engine.data.party.get_highest_value_of_skill(key)
                         if highest < value:
                             push_object = components.MessageBox(self.engine.gamestate, text)
                             self.engine.gamestate.push(push_object)
                             return
+                        else:
+                            # todo, naam van de hero moet erbij.
+                            # todo, trap disarming maken als confirmbox?
+                            # todo, geen swap, maar in de 'found:' regel vermelden?
+                            text = ["Error!"]
+                            if key == "mec":
+                                text = ['Trap was disarmed.']
+                            elif key == "thf":
+                                text = ['Lock was picked.']
+                            push_object = components.MessageBox(self.engine.gamestate, text)
+                            self.engine.gamestate.push(push_object)
 
                 if chest_data['content']:
                     chest_data['opened'] = 1
@@ -434,6 +442,9 @@ class Window(object):
                     chest_data['content'] = dict()
                     push_object = components.MessageBox(self.engine.gamestate, text, spr_image=image)
                     self.engine.gamestate.push(push_object)
+
+                    # swap zodat lock message eerder komt.
+                    self.engine.gamestate.swap()
 
     def check_sparklies(self, check_rect):
         """

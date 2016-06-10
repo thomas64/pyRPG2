@@ -32,7 +32,6 @@ class Selector(pygame.sprite.Sprite):
         Laadt alle plaatjes uit de map in een dict.
         :return: de dict
         """
-        # todo, icon van bracelet toevoegen
         images = {}
         for file in os.listdir(path):
             name, ext = os.path.splitext(file)

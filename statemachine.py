@@ -109,3 +109,10 @@ class StateMachine(object):
         """
         self._clear()
         self.push(state)
+
+    def swap(self):
+        """
+        Als de laatste 2 op de stack een messagebox zijn, draai ze dan om.
+        """
+        if self.statestack[-1].name == States.MessageBox and self.statestack[-2].name == States.MessageBox:
+            self.statestack[-1], self.statestack[-2] = self.statestack[-2], self.statestack[-1]
