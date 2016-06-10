@@ -9,8 +9,9 @@ import pygame
 
 import audio as sfx
 import components
-import database.shop
 import database.inn
+import database.shop
+import database.sign
 import equipment
 import keys
 import pouchitems
@@ -102,6 +103,7 @@ class Window(object):
         # voeg alle objecten toe van uit de map
         self.group.add(self.engine.current_map.shops)
         self.group.add(self.engine.current_map.inns)
+        self.group.add(self.engine.current_map.signs)
         self.group.add(self.engine.current_map.chests)
         self.group.add(self.engine.current_map.sparkly)
 
@@ -135,6 +137,7 @@ class Window(object):
             elif event.key in keys.SELECT:
                 self.check_shops(self.get_check_rect())
                 self.check_inns(self.get_check_rect())
+                self.check_signs()
                 self.check_chests()
                 self.check_sparklies(self.get_check_rect())
 
@@ -391,6 +394,19 @@ class Window(object):
             self.inn_box = None
             self.inn_data = None
             self.scr_capt = None
+
+    def check_signs(self):
+        """
+        Bekijk of collide met een sign.
+        """
+        if self.party_sprites[0].last_direction == screens.direction.Direction.North:
+            if len(self.party_sprites[0].rect.collidelistall(self.engine.current_map.signs)) == 1:
+                object_nr = self.party_sprites[0].rect.collidelist(self.engine.current_map.signs)
+                sign_sprite = self.engine.current_map.signs[object_nr]
+                sign_data = database.sign.SignDatabase[sign_sprite.sign_id].value
+
+                push_object = components.MessageBox(self.engine.gamestate, sign_data)
+                self.engine.gamestate.push(push_object)
 
     def check_chests(self):
         """

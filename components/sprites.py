@@ -3,9 +3,11 @@
 class: Button
 class: ColorBox
 class: Grid
+class: Sign
 class: TreasureChest
 class: Sparkly
 class: Shop
+class: Inn
 """
 
 import pygame
@@ -22,12 +24,14 @@ BUTTONBGCOLOR = pygame.Color("black")
 BUTTONPRESSCOLOR = pygame.Color("gray12")
 
 CHESTSPRITE = 'resources/sprites/objects/chest.png'
-CHESTBLOCKERWIDTH = 32
-CHESTBLOCKERHEIGHT = 16
 SPARKLYSPRITE = 'resources/sprites/objects/sparkly.png'
+SIGN1SPRITE = 'resources/sprites/objects/sign1.png'
+SIGN2SPRITE = 'resources/sprites/objects/sign2.png'
+
 SPARKLYSPEED = .2
-SHOPBLOCKERWIDTH = 32
-SHOPBLOCKERHEIGHT = 16
+HALFBLOCKERWIDTH = 32
+HALFBLOCKERHEIGHT = 16
+
 TRANSP = 'resources/sprites/transp.png'
 
 
@@ -158,6 +162,28 @@ def get_image(x, y, width, height, spritesheet):
     return image
 
 
+class Sign(pygame.sprite.Sprite):
+    """
+    De Sign Sprite
+    """
+    def __init__(self, sign_id, rect, objectlayer, sign_type):
+        super().__init__()
+
+        self.sign_id = sign_id
+        self.rect = rect
+        self._layer = objectlayer
+        if int(sign_type) == 1:
+            self.image = pygame.image.load(SIGN1SPRITE).convert_alpha()
+        elif int(sign_type) == 2:
+            self.image = pygame.image.load(SIGN2SPRITE).convert_alpha()
+
+    def get_blocker(self):
+        """
+        :return: Een rect met zijn eigen locatie en opgegeven grootte.
+        """
+        return pygame.Rect(self.rect.x, self.rect.y, HALFBLOCKERWIDTH, HALFBLOCKERHEIGHT)
+
+
 class TreasureChest(pygame.sprite.Sprite):
     """
     De TreasureChest Sprite.
@@ -186,7 +212,7 @@ class TreasureChest(pygame.sprite.Sprite):
         """
         :return: Een rect met zijn eigen locatie en opgegeven grootte.
         """
-        return pygame.Rect(self.rect.x, self.rect.y, CHESTBLOCKERWIDTH, CHESTBLOCKERHEIGHT)
+        return pygame.Rect(self.rect.x, self.rect.y, HALFBLOCKERWIDTH, HALFBLOCKERHEIGHT)
 
 
 class Sparkly(pygame.sprite.Sprite):
@@ -269,7 +295,7 @@ class Shop(pygame.sprite.Sprite):
         """
         :return: Een rect met zijn eigen locatie en opgegeven grootte.
         """
-        return pygame.Rect(self.rect.x, self.rect.y, SHOPBLOCKERWIDTH, SHOPBLOCKERHEIGHT)
+        return pygame.Rect(self.rect.x, self.rect.y, HALFBLOCKERWIDTH, HALFBLOCKERHEIGHT)
 
 
 class Inn(Shop):

@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<map version="1.0" orientation="orthogonal" renderorder="right-down" width="80" height="100" tilewidth="16" tileheight="16" nextobjectid="359">
+<map version="1.0" orientation="orthogonal" renderorder="right-down" width="80" height="100" tilewidth="16" tileheight="16" nextobjectid="360">
  <properties>
   <property name="title" value="Ersin Forest"/>
  </properties>
@@ -1057,6 +1057,9 @@
   <object id="186" name="step_grass" x="704" y="112" width="576" height="1456"/>
   <object id="187" name="step_grass" x="480" y="832" width="224" height="736"/>
   <object id="188" name="step_wood" x="480" y="176" width="224" height="64"/>
+ </objectgroup>
+ <objectgroup name="signs">
+  <object id="359" name="sign3" type="2" x="448" y="560" width="32" height="32"/>
  </objectgroup>
  <objectgroup name="chests" visible="0"/>
  <objectgroup name="low_blocker" visible="0">

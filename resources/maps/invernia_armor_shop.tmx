@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <map version="1.0" orientation="orthogonal" renderorder="right-down" width="40" height="36" tilewidth="16" tileheight="16" nextobjectid="73">
  <properties>
-  <property name="title" value="Invernia"/>
+  <property name="title" value="Invernia Town"/>
  </properties>
  <tileset firstgid="1" name="invernia_armor_shop" tilewidth="16" tileheight="16" tilecount="1596" columns="42">
   <image source="tilesets/invernia_armor_shop.png" width="672" height="608"/>
@@ -290,10 +290,10 @@
   <object id="72" name="shop2" x="368" y="144" width="32" height="48"/>
  </objectgroup>
  <objectgroup name="portals" visible="0">
-  <object id="68" name="invernia" x="464" y="528" width="32" height="16"/>
+  <object id="68" name="invernia_town" x="464" y="528" width="32" height="16"/>
  </objectgroup>
  <objectgroup name="start_pos" visible="0">
-  <object id="47" name="invernia" x="464" y="496" width="16" height="16"/>
+  <object id="47" name="invernia_town" x="464" y="496" width="16" height="16"/>
  </objectgroup>
  <objectgroup name="sounds" visible="0">
   <object id="69" name="step_stone" x="48" y="48" width="544" height="480"/>

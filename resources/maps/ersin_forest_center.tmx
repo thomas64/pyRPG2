@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<map version="1.0" orientation="orthogonal" renderorder="right-down" width="40" height="40" tilewidth="16" tileheight="16" nextobjectid="26305">
+<map version="1.0" orientation="orthogonal" renderorder="right-down" width="40" height="40" tilewidth="16" tileheight="16" nextobjectid="26306">
  <properties>
   <property name="title" value="Ersin Forest"/>
  </properties>
@@ -764,17 +764,20 @@
 0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0
 </data>
  </layer>
+ <objectgroup name="signs">
+  <object id="26305" name="sign1" type="1" x="224" y="256" width="32" height="32"/>
+ </objectgroup>
  <objectgroup name="portals" visible="0">
   <object id="18537" name="ersin_forest_start" x="-16" y="144" width="16" height="128"/>
   <object id="18555" name="ersin_forest_cave" x="160" y="-16" width="96" height="16"/>
   <object id="18558" name="ersin_forest_waterfall" x="640" y="272" width="16" height="128"/>
-  <object id="18628" name="invernia" x="-16" y="464" width="16" height="128"/>
+  <object id="18628" name="invernia_town" x="-16" y="464" width="16" height="128"/>
  </objectgroup>
  <objectgroup name="start_pos" visible="0">
   <object id="18536" name="ersin_forest_start" x="0" y="176" width="16" height="16"/>
   <object id="18556" name="ersin_forest_cave" x="192" y="0" width="16" height="16"/>
   <object id="18559" name="ersin_forest_waterfall" x="608" y="304" width="16" height="16"/>
-  <object id="18629" name="invernia" x="0" y="496" width="16" height="16"/>
+  <object id="18629" name="invernia_town" x="0" y="496" width="16" height="16"/>
  </objectgroup>
  <objectgroup name="sounds" visible="0">
   <object id="18662" name="step_grass" x="0" y="0" width="640" height="640"/>

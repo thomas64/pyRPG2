@@ -1,13 +1,13 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<map version="1.0" orientation="orthogonal" renderorder="right-down" width="92" height="76" tilewidth="16" tileheight="16" nextobjectid="119">
+<map version="1.0" orientation="orthogonal" renderorder="right-down" width="92" height="76" tilewidth="16" tileheight="16" nextobjectid="120">
  <properties>
-  <property name="title" value="Invernia"/>
+  <property name="title" value="Invernia Town"/>
  </properties>
  <tileset firstgid="1" name="outside_b" tilewidth="16" tileheight="16" tilecount="1024" columns="32">
   <image source="tilesets/outside_b.png" width="512" height="512"/>
  </tileset>
- <tileset firstgid="1025" name="invernia" tilewidth="16" tileheight="16" tilecount="6992" columns="92">
-  <image source="tilesets/invernia.png" width="1472" height="1216"/>
+ <tileset firstgid="1025" name="invernia_town" tilewidth="16" tileheight="16" tilecount="6992" columns="92">
+  <image source="tilesets/invernia_town.png" width="1472" height="1216"/>
  </tileset>
  <layer name="under0 none" width="92" height="76">
   <data encoding="csv">
@@ -569,6 +569,9 @@
 0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0
 </data>
  </layer>
+ <objectgroup name="signs">
+  <object id="119" name="sign4" type="2" x="1344" y="528" width="32" height="32"/>
+ </objectgroup>
  <objectgroup name="sounds" visible="0">
   <object id="90" name="step_grass" x="1024" y="160" width="160" height="336"/>
   <object id="91" name="step_grass" x="1216" y="160" width="160" height="336"/>

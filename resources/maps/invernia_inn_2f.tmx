@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <map version="1.0" orientation="orthogonal" renderorder="right-down" width="50" height="36" tilewidth="16" tileheight="16" nextobjectid="40">
  <properties>
-  <property name="title" value="Invernia"/>
+  <property name="title" value="Invernia Town"/>
  </properties>
  <tileset firstgid="1" name="invernia_inn_2f" tilewidth="16" tileheight="16" tilecount="1976" columns="52">
   <image source="tilesets/invernia_inn_2f.png" width="832" height="608"/>

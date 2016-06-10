@@ -21,6 +21,7 @@ STARTPOS = "start_pos"
 PORTALS = "portals"
 SHOPS = "shops"
 INNS = "inns"
+SIGNS = "signs"
 CHESTS = "chests"
 SPARKLY = "sparkly"
 
@@ -59,6 +60,7 @@ class Map(object):
         self.portals = []
         self.shops = []
         self.inns = []
+        self.signs = []
         self.chests = []
         self.sparkly = []
 
@@ -93,6 +95,13 @@ class Map(object):
         except ValueError:
             pass
 
+        try:
+            for obj in tmx_data.get_layer_by_name(SIGNS):
+                sign_object = components.Sign(obj.name, self._pg_rect(obj), OBJECTLAYER, obj.type)
+                self.low_blocker_rects.append(sign_object.get_blocker())
+                self.signs.append(sign_object)
+        except ValueError:
+            pass
         try:
             for obj in tmx_data.get_layer_by_name(CHESTS):
                 chest_object = components.TreasureChest(obj.name, self._pg_rect(obj), OBJECTLAYER)

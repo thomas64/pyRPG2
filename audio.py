@@ -45,18 +45,18 @@ class MapMusic(enum.Enum):
     """
     Alle tmx kaarten op een rij, met de muziek erachter en ambient sound.
     """
-    ErsinForestStart = 'ersin_forest_start',            'ersin_forest', 'birds'
-    ErsinForestWaterfall = 'ersin_forest_waterfall',    'ersin_forest', 'river'
-    ErsinForestCenter = 'ersin_forest_center',          'ersin_forest', 'birds'
-    ErsinForestCave = 'ersin_forest_cave',              'ersin_forest', 'birds'
-    ErsinCaveRoom1 = 'ersin_cave_room1',                'ersin_cave',   None
-    ErsinCaveRoom2 = 'ersin_cave_room2',                'ersin_cave',   None
-    ErsinCaveRoom3 = 'ersin_cave_room3',                'ersin_cave',   None
-    Invernia = 'invernia',                              'invernia',     'town'
-    InverniaArmorShop = 'invernia_armor_shop',          'invernia',     None
-    InverniaWeaponShop = 'invernia_weapon_shop',        'invernia',     None
-    InverniaInn1F = 'invernia_inn_1f',                  'invernia',     None
-    InverniaInn2F = 'invernia_inn_2f',                  'invernia',     None
+    ErsinForestStart = 'ersin_forest_start',            'ersin_forest',  'birds'
+    ErsinForestWaterfall = 'ersin_forest_waterfall',    'ersin_forest',  'river'
+    ErsinForestCenter = 'ersin_forest_center',          'ersin_forest',  'birds'
+    ErsinForestCave = 'ersin_forest_cave',              'ersin_forest',  'birds'
+    ErsinCaveRoom1 = 'ersin_cave_room1',                'ersin_cave',    None
+    ErsinCaveRoom2 = 'ersin_cave_room2',                'ersin_cave',    None
+    ErsinCaveRoom3 = 'ersin_cave_room3',                'ersin_cave',    None
+    InverniaTown = 'invernia_town',                     'invernia_town', 'town'
+    InverniaArmorShop = 'invernia_armor_shop',          'invernia_town', None
+    InverniaWeaponShop = 'invernia_weapon_shop',        'invernia_town', None
+    InverniaInn1F = 'invernia_inn_1f',                  'invernia_town', None
+    InverniaInn2F = 'invernia_inn_2f',                  'invernia_town', None
 
 
 class Audio(object):

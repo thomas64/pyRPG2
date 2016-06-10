@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<map version="1.0" orientation="orthogonal" renderorder="right-down" width="74" height="60" tilewidth="16" tileheight="16" nextobjectid="2422">
+<map version="1.0" orientation="orthogonal" renderorder="right-down" width="74" height="60" tilewidth="16" tileheight="16" nextobjectid="2423">
  <properties>
   <property name="title" value="Ersin Forest"/>
  </properties>
@@ -575,6 +575,9 @@
 0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0
 </data>
  </layer>
+ <objectgroup name="signs">
+  <object id="2422" name="sign2" type="2" x="928" y="208" width="32" height="32"/>
+ </objectgroup>
  <objectgroup name="sounds" visible="0">
   <object id="167" name="step_wood" x="192" y="512" width="32" height="32"/>
   <object id="174" name="step_grass" x="0" y="0" width="192" height="960"/>
@@ -582,7 +585,6 @@
   <object id="177" name="step_grass" x="192" y="0" width="32" height="512"/>
   <object id="178" name="step_grass" x="192" y="544" width="32" height="416"/>
  </objectgroup>
- <objectgroup name="chests" visible="0"/>
  <objectgroup name="low_blocker">
   <object id="157" x="832" y="672" width="32" height="112"/>
   <object id="158" x="864" y="640" width="32" height="64"/>

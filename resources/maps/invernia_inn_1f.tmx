@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <map version="1.0" orientation="orthogonal" renderorder="right-down" width="50" height="36" tilewidth="16" tileheight="16" nextobjectid="44">
  <properties>
-  <property name="title" value="Invernia"/>
+  <property name="title" value="Invernia Town"/>
  </properties>
  <tileset firstgid="1" name="invernia_inn_1f" tilewidth="16" tileheight="16" tilecount="1976" columns="52">
   <image source="tilesets/invernia_inn_1f.png" width="832" height="608"/>
@@ -291,11 +291,11 @@
   <object id="43" name="inn1" type="geen sprite iets" x="144" y="240" width="32" height="32"/>
  </objectgroup>
  <objectgroup name="portals" visible="0">
-  <object id="1" name="invernia" x="144" y="528" width="32" height="16"/>
+  <object id="1" name="invernia_town" x="144" y="528" width="32" height="16"/>
   <object id="36" name="invernia_inn_2f" x="64" y="128" width="16" height="32"/>
  </objectgroup>
  <objectgroup name="start_pos" visible="0">
-  <object id="2" name="invernia" x="144" y="496" width="16" height="16"/>
+  <object id="2" name="invernia_town" x="144" y="496" width="16" height="16"/>
   <object id="37" name="invernia_inn_2f" x="96" y="128" width="16" height="16">
    <properties>
     <property name="direction" value="East"/>
