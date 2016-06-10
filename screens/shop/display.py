@@ -249,10 +249,10 @@ class Display(object):
                 self.buy_click, self.selected_item, self.value = self.buybox.mouse_click(event)
                 if self.buy_click and self.value <= self.gold_amount:
                     self.engine.audio.play_sound(sfx.MENUSELECT)
-                    text = ["The price for 1 {} is {} gold.".format(self.selected_item.NAM, str(self.value)),
+                    text = ["You may buy 1 {} for {} gold.".format(self.selected_item.NAM, self.value),
                             "",
-                            "Oops, don't buy it.",
-                            "Buy 1 for " + str(self.value) + " gold."]
+                            "Yes please.",
+                            "No thanks."]
                     self.confirm_box = components.ConfirmBox(self.engine.gamestate, self.engine.audio, text)
                     self.engine.gamestate.push(self.confirm_box)
                     return
@@ -359,23 +359,24 @@ class Display(object):
 
         if self.sell_click or self.buy_click:
             if self.buy_click:
-                # hij gebruikt nothing hier niet
-                choice, topindex, nothing = self.confirm_box.on_exit()
-                # de no is in dit geval boven de yes, dus lager in nummer.
-                if choice == topindex:
-                    self.engine.audio.play_sound(sfx.MENUSELECT)
-                elif choice > topindex:
+                # hij gebruikt nothing=scr_capt hier niet
+                choice, yes, nothing = self.confirm_box.on_exit()
+                if choice == yes:
                     gold = pouchitems.factory_pouch_item('gold')
                     if self.engine.data.pouch.remove(gold, self.value):     # deze if is eigenlijk overbodig maar
                         self.engine.data.inventory.add(self.selected_item)  # van origineel zit hij erin. maar hij
                         self.engine.audio.play_sound(sfx.COINS)             # filtert nu al bij het klikken.
                         self._init_sellbox()
+                else:
+                    self.engine.audio.play_sound(sfx.MENUSELECT)
 
             elif self.sell_click:
                 # hij gebruikt nothing hier niet
                 selected_quantity, nothing, nothing = self.confirm_box.on_exit()
                 # dit gaat helemaal uit van dat de tekst van de shop maar 1 regel heeft en dan 1 regel niets.
-                quantity = self.sel_quantity[selected_quantity]
+                quantity = None
+                if selected_quantity:   # omdat selected_quantity None kan zijn vanwege ESC toets.
+                    quantity = self.sel_quantity[selected_quantity]
 
                 if quantity:
                     self.engine.data.inventory.remove(self.selected_item, quantity)

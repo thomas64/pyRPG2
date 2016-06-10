@@ -115,7 +115,7 @@ class ConfirmBox(object):
 
         elif event.type == pygame.KEYDOWN:
             if event.key == keys.EXIT:
-                self.cur_item = self.TOPINDEX
+                self.cur_item = None
                 self.gamestate.pop()
 
             elif event.key in keys.SELECT:

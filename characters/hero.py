@@ -68,11 +68,11 @@ class Hero(object):
 
         # hier kan zeker None ingevuld worden omdat gamestate hierbij zeker weten niet zal pushen een messagebox.
         if kwargs['wpn']:
-            self.set_equipment_item(None, equipment.factory_equipment_item(kwargs['wpn']), verbose=False)
+            self.set_equipment_item(None, equipment.factory_equipment_item(kwargs['wpn']))
         if kwargs['sld']:
-            self.set_equipment_item(None, equipment.factory_equipment_item(kwargs['sld']), verbose=False)
+            self.set_equipment_item(None, equipment.factory_equipment_item(kwargs['sld']))
         if kwargs['arm']:
-            self.set_equipment_item(None, equipment.factory_equipment_item(kwargs['arm']), verbose=False)
+            self.set_equipment_item(None, equipment.factory_equipment_item(kwargs['arm']))
 
     @property
     def equipment_tuple(self):
