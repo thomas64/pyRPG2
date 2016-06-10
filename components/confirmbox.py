@@ -80,7 +80,8 @@ class ConfirmBox(object):
         offset moet krijgen hier.
         """
         text_rect = self.font.render(text, True, FONTCOLOR1).get_rect()
-        text_rect.topleft = self.rect.left + FONTPOSX, self.rect.top + FONTPOSY + index * LINEHEIGHT
+        text_rect.topleft = (self.rect.left + FONTPOSX + self.face_image_space,
+                             self.rect.top + FONTPOSY + index * LINEHEIGHT)
         return text_rect
 
     def on_enter(self):
