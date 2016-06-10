@@ -410,27 +410,22 @@ class Window(object):
                         if key == "mec":
                             mec_v, mec_h = self.engine.data.party.get_highest_value_of_skill(key)
                             if mec_v < value:
-                                push_object = components.MessageBox(self.engine.gamestate, chest_data['mec_text'])
+                                text = self.engine.data.treasure_chests.mec_text(chest_data['condition'][key])
+                                push_object = components.MessageBox(self.engine.gamestate, text)
                                 self.engine.gamestate.push(push_object)
                                 return
                         elif key == "thf":
                             thf_v, thf_h = self.engine.data.party.get_highest_value_of_skill(key)
                             if thf_v < value:
-                                push_object = components.MessageBox(self.engine.gamestate, chest_data['thf_text'])
+                                text = self.engine.data.treasure_chests.thf_text(chest_data['condition'][key])
+                                push_object = components.MessageBox(self.engine.gamestate, text)
                                 self.engine.gamestate.push(push_object)
                                 return
 
                 if chest_data['content']:
                     chest_data['opened'] = 1
-                    text = ["Found:"]
-                    if mec_v and not thf_v:
-                        text = ["{} disarmed the trap and found:".format(mec_h)]
-                    elif thf_v and not mec_v:
-                        text = ["{} picked the lock and found:".format(thf_h)]
-                    elif mec_v and thf_v:
-                        text = ["{} disarmed the trap and {} picked the lock:".format(mec_h, thf_h)]
-                    if mec_h == thf_h:
-                        text = ["{} disarmed the trap and picked the lock:".format(mec_h)]
+                    text = self.engine.data.treasure_chests.open_chest(chest_data.get('condition'),
+                                                                       mec_v, mec_h, thf_v, thf_h)
                     image = []
                     for key, value in chest_data['content'].items():
                         if key.startswith('eqp'):
