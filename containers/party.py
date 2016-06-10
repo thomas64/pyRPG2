@@ -51,15 +51,22 @@ class Party(collections.OrderedDict):
 
     def get_highest_value_of_skill(self, attr):
         """
-        Vraagt een hoogste attribute op van alle Party members.
+        Vraagt een hoogste attribute op van alle Party members en zijn/haar naam.
         :param attr: sting, het opgevraagde attribute, bijvoorbeeld 'thf'.
-        :return: de hoogste waarde van het attribute.
+        :return: de hoogste waarde van het attribute en de bijbehorende hero naam.
         """
         skill_values = []
+        hero_names = []
         for member in self.values():
             skill = getattr(member, attr)
             skill_values.append(skill.tot)
-        return max(skill_values)
+            hero_names.append(member.NAM)
+
+        max_value = max(skill_values)
+        max_index = skill_values.index(max(skill_values))
+        max_hero = hero_names[max_index]
+
+        return max_value, max_hero
 
     def get_sum_value_of_skill(self, attr):
         """

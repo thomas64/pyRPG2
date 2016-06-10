@@ -116,3 +116,12 @@ class StateMachine(object):
         """
         if self.statestack[-1].name == States.MessageBox and self.statestack[-2].name == States.MessageBox:
             self.statestack[-1], self.statestack[-2] = self.statestack[-2], self.statestack[-1]
+
+        """
+        Interessant om later misschien eens (ongeveer) te gebruiken. Deze draait een gedeelte van de list om.
+        def reverse_sublist(lst,start,end):
+            sublist=lst[start:end]
+            sublist.reverse()
+            lst[start:end]=sublist
+            print(lst)
+        """
