@@ -190,6 +190,13 @@ class GameEngine(object):
             except AttributeError:
                 pass
             try:
+                text2 = (
+                    "hc:                {}".format(self.gamestate.peek().hc),
+                )
+                text += text2
+            except AttributeError:
+                pass
+            try:
                 import screens.party.invclickbox
                 text2 = (
                     "max_box_height:    {}".format(screens.party.invclickbox.MAXBOXHEIGHT),

@@ -5,6 +5,8 @@ class: HeroBox
 
 import pygame
 
+import components
+
 BACKGROUNDCOLOR = pygame.Color("black")
 LINECOLOR = pygame.Color("white")
 HEROCOLOR = pygame.Color("gray24")
@@ -34,6 +36,10 @@ HPCOLORNORM = pygame.Color("yellow")
 HPCOLORLOW = pygame.Color("orange")
 HPCOLORCRIT = pygame.Color("red")
 
+LEAVEW, LEAVEH = 18, 18
+LEAVEX, LEAVEY = -20, +2
+LEAVELBL = "X"
+
 
 class HeroBox(object):
     """
@@ -57,6 +63,8 @@ class HeroBox(object):
 
         self.face = pygame.image.load(self.hero.FAC).convert_alpha()
         self.name = self.largefont.render(self.hero.NAM, True, FONTCOLOR).convert_alpha()
+        self.leave = components.Button(LEAVEW, LEAVEH,
+                                       (self.rect.right + LEAVEX, self.rect.top + LEAVEY), LEAVELBL, True)
         self.level = None
         self.hitpoints = None
         self.full_hp = None
@@ -68,16 +76,29 @@ class HeroBox(object):
         Ontvang mouse event. Kijk of het met de de surface collide.
         :param event: pygame.MOUSEBUTTONDOWN uit party display.py
         :param cur_hc: het huidige party hero nummer
-        :return: het volgorde nummer van de hero van de party, of gewoon het oude huidige nummer
+        :return: het volgorde nummer van de hero van de party, of gewoon het oude huidige nummer,
+        :return: ook de key van het leave knopje, wanneer die gedrukt is, anders is dat None.
         """
-        if self.rect.collidepoint(event.pos):
-            return self.party_index
-        return cur_hc
+        leave_press = self.leave.single_click(event)
 
-    def update(self):
+        if self.rect.collidepoint(event.pos):
+            return self.party_index, leave_press
+        return cur_hc, leave_press
+
+    def update(self, cur_hc):
         """
         Update eerst alle data.
+        :param cur_hc: het huidige party hero nummer uit display
         """
+        # alagos moet zo'n knop niet hebben, en hij heeft index 0.
+        if cur_hc == self.party_index:
+            if self.party_index:
+                self.leave.visible = True
+            else:
+                self.leave.visible = False
+        else:
+            self.leave.visible = False
+
         self.level = self.normalfont.render(LEVEL.format(self.hero.lev.qty), True, FONTCOLOR).convert_alpha()
         self.hitpoints = self.normalfont.render(
                         HITPOINTS.format(self.hero.cur_hp, self.hero.max_hp), True, FONTCOLOR).convert_alpha()
@@ -117,3 +138,5 @@ class HeroBox(object):
         pygame.draw.rect(self.surface, LINECOLOR, (HEALTHBARX, HEALTHBARY, self.full_hp, HEALTHBARHEIGHT), 1)
 
         screen.blit(self.surface, self.rect.topleft)
+
+        self.leave.render(screen)

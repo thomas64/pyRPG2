@@ -125,15 +125,6 @@ def error_hero_double_join(hero_name, party_name):
     print("{} is already in {}.".format(hero_name, party_name))
 
 
-def hero_leave_party(hero_name, party_name):
-    """
-    Party.remove()
-    :param hero_name: string
-    :param party_name: string
-    """
-    print("{} left {}.".format(hero_name, party_name))
-
-
 def error_hero_not_in_party(hero_name, party_name):
     """
     Party.remove()
@@ -143,7 +134,7 @@ def error_hero_not_in_party(hero_name, party_name):
     print("{} is not in {}.".format(hero_name, party_name))
 
 
-def leader_not_leave_party():
+def error_leader_not_leave_party():
     """
     Party.remove()
     """

@@ -71,6 +71,9 @@ class Display(object):
         self.info_label = ""
         self.hovered_equipment_item = None
 
+        self.leave_box = None
+        self.party_changed = False
+
     def _init_buttons(self):
         bg_width = self.background.get_width()
         button_c = components.Button(BTNWIDTH, BTNHEIGHT, (bg_width + CLOSEX, CLOSEY), CLOSELBL, keys.EXIT)
@@ -99,13 +102,14 @@ class Display(object):
         self.engine.audio.set_bg_music(self.name)
         self.engine.audio.set_bg_sounds(self.name)
 
-    # noinspection PyMethodMayBeStatic
     def on_exit(self):
         """
         Wanneer deze state onder een andere state van de stack komt, voer dit uit.
-        Op dit moment nog niets echts
+        Wanneer de party is aangepast herlaadt dan de map voor visuele update.
         """
-        pass
+        if self.party_changed:
+            self.engine.current_map = components.Map(self.engine.data.map_name)
+            self.engine.gamestate.deep_peek().window.load_map()
 
     def single_input(self, event):
         """
@@ -140,7 +144,15 @@ class Display(object):
                     return  # anders vangt hij ook nog andere clicks hieronder in deze methode af
 
                 for hero_box in self.hero_boxes:
-                    self.hc = hero_box.mouse_click(event, self.hc)
+                    self.hc, leave_party = hero_box.mouse_click(event, self.hc)
+                    if leave_party:
+                        text = ["Do you want me to leave your party?",
+                                "",
+                                "Yes, you may leave.",
+                                "No, I want you to stay."]
+                        self.leave_box = components.ConfirmBox(self.engine.gamestate, self.engine.audio,
+                                                               text, self.cur_hero.FAC)
+                        self.engine.gamestate.push(self.leave_box)
 
                 # als er in de inventory box wordt geklikt
                 if self.inventory_box.rect.collidepoint(event.pos):
@@ -199,11 +211,24 @@ class Display(object):
         Update alle waarden in de boxen.
         :param dt: self.clock.tick(FPS)/1000.0
         """
+        # Als de leave party confirmbox in beeld is geweest.
+        if self.leave_box:
+            choice, yes, nothing = self.leave_box.on_exit()
+            if choice == yes:
+                self.engine.data.party.remove(self.cur_hero)
+                # update daarna het party scherm
+                self.cur_hero = self.engine.data.party['alagos']
+                self.party = list(self.engine.data.party.values())
+                self.hc = self.party.index(self.cur_hero)
+                self._init_boxes()
+                self.party_changed = True
+            self.leave_box = None
+
         for button in self.buttons:
             button.update(self.key_input)
 
         for hero_box in self.hero_boxes:
-            hero_box.update()
+            hero_box.update(self.hc)
 
         self.cur_hero = self.party[self.hc]
 

@@ -65,8 +65,9 @@ class Button(pygame.sprite.Sprite):
         :param event: pygame.MOUSEBUTTONDOWN uit engine.py
         :return: de knop die aan de button verbonden zit
         """
-        if self.rect.collidepoint(event.pos):
-            return self.key
+        if self.visible:
+            if self.rect.collidepoint(event.pos):
+                return self.key
 
     def multi_click(self, mouse_pos, key_input):
         """
