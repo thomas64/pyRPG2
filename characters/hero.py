@@ -5,7 +5,7 @@ class: Hero
 
 import characters.stats
 import characters.skills
-import console
+import components
 import database
 import equipment
 
@@ -66,12 +66,13 @@ class Hero(object):
         self.bts = equipment.factory_empty_equipment_item(database.EquipmentType.bts)
         self.acy = equipment.factory_empty_equipment_item(database.EquipmentType.acy)
 
+        # hier kan zeker None ingevuld worden omdat gamestate hierbij zeker weten niet zal pushen een messagebox.
         if kwargs['wpn']:
-            self.set_equipment_item(equipment.factory_equipment_item(kwargs['wpn']), verbose=False)
+            self.set_equipment_item(None, equipment.factory_equipment_item(kwargs['wpn']), verbose=False)
         if kwargs['sld']:
-            self.set_equipment_item(equipment.factory_equipment_item(kwargs['sld']), verbose=False)
+            self.set_equipment_item(None, equipment.factory_equipment_item(kwargs['sld']), verbose=False)
         if kwargs['arm']:
-            self.set_equipment_item(equipment.factory_equipment_item(kwargs['arm']), verbose=False)
+            self.set_equipment_item(None, equipment.factory_equipment_item(kwargs['arm']), verbose=False)
 
     @property
     def equipment_tuple(self):
@@ -212,11 +213,11 @@ class Hero(object):
                 if equipment_item.TYP == equipment_type:
                     return equipment_item
 
-    def set_equipment_item(self, new_equipment_item, verbose=True):
+    def set_equipment_item(self, gamestate, new_equipment_item):
         """
         Nog niet zo netjes opgelost, naar wat ik denk. Hier wordt een nieuw equipment item aan de hero gegeven.
+        :param gamestate: self.engine.gamestate uit partydisplay
         :param new_equipment_item: Object van EquipmentItem
-        :param verbose: geef console output if True
         :return: is het equippen gelukt?
         """
         # ga door de waarden van alle attributen van hero heen.
@@ -226,33 +227,38 @@ class Hero(object):
                 # als de type van het equipment item overeenkomt met het type van de nieuwe equipment item
                 if value_eqp_item.TYP == new_equipment_item.TYP:
                     # als de hero het equipment item mag/kan gebruiken:
-                    if self.is_able_to_equip(new_equipment_item):
+                    if self.is_able_to_equip(gamestate, new_equipment_item):
                         # stel de gekozen attribute bijv self.bts in op de nieuwe equipment
                         setattr(self, key_eqp_item, new_equipment_item)
                         self.calc_stats()
                         self.calc_skills()
-                        if verbose:
-                            if new_equipment_item.is_not_empty():
-                                console.is_equipping(self.NAM, new_equipment_item.NAM)
-                            else:
-                                console.is_unequipping(self.NAM, value_eqp_item.NAM)
                         return True
         return False
 
-    def is_able_to_equip(self, new_equipment_item):
+    def is_able_to_equip(self, gamestate, new_equipment_item):
         """
         Hier bekijkt hij of hij het nieuwe equipment item wel mag/kan dragen.
+        :param gamestate: self.engine.gamestate uit partydisplay
         :param new_equipment_item: Object van EquipmentItem
         :return: False of True of hij mag/kan
         """
         if not self.has_enough_weapon_skill_to_equip(new_equipment_item):
-            console.not_equipping_skill(self.NAM, new_equipment_item.NAM)
+            text = ["{} doesn't have the skill to equip that {}.".format(
+                                                        self.NAM, new_equipment_item.NAM)]
+            push_object = components.MessageBox(gamestate, text)
+            gamestate.push(push_object)
             return False
         if new_equipment_item.get_value_of('MIN_INT') > self.int.qty:
-            console.not_equipping_min_int(self.NAM, new_equipment_item.NAM, new_equipment_item.MIN_INT)
+            text = ["{} needs {} intelligence to equip that {}.".format(
+                                                        self.NAM, new_equipment_item.MIN_INT, new_equipment_item.NAM)]
+            push_object = components.MessageBox(gamestate, text)
+            gamestate.push(push_object)
             return False
         if new_equipment_item.get_value_of('MIN_STR') > self.str.qty:
-            console.not_equipping_min_str(self.NAM, new_equipment_item.NAM, new_equipment_item.MIN_STR)
+            text = ["{} needs {} strength to equip that {}.".format(
+                                                        self.NAM, new_equipment_item.MIN_STR, new_equipment_item.NAM)]
+            push_object = components.MessageBox(gamestate, text)
+            gamestate.push(push_object)
             return False
         return True
 

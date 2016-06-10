@@ -176,10 +176,11 @@ class InvClickBox(object):
                     return equipment_item.display(), equipment_item
                 return None, equipment_item
 
-    def mouse_click(self, event, hero):
+    def mouse_click(self, event, gamestate, hero):
         """
         Equip het geselecteerde item.
         :param event: pygame.MOUSEBUTTONDOWN uit partyscreen
+        :param gamestate: self.engine.gamestate uit partydisplay
         :param hero: de huidige geselecteerde hero uit partyscreen
         """
         for index, row in enumerate(self.table_data):
@@ -198,7 +199,7 @@ class InvClickBox(object):
                             # als hij in de inventory zit
                             if self.inventory.contains(selected_item):
                                 # als het aankleden gelukt is
-                                if hero.set_equipment_item(selected_item):
+                                if hero.set_equipment_item(gamestate, selected_item):
                                     # verwijder hem dan uit de inventory
                                     self.inventory.remove(selected_item)
                                     # als degene die je aan had niet een lege is
@@ -213,7 +214,7 @@ class InvClickBox(object):
                     # als degene die je al aan hebt geen lege is
                     if equipped_item.is_not_empty():
                         # trek dan de lege aan
-                        hero.set_equipment_item(selected_item)
+                        hero.set_equipment_item(gamestate, selected_item)
                         # en voeg degene die je aan had toe aan de inventory
                         self.inventory.add(equipped_item)
                         return True
