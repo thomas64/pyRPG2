@@ -91,3 +91,19 @@ class HeroDatabase(enum.Enum):
     #              haf=0, mis=0, pol=0, shd=0, swd=0, thr=0,
     #              wpn=items.weapon.WeaponsData.empty, sld=items.shield.ShieldsData.empty,
     #              arm=items.armor.ArmorsData.empty)
+
+    @staticmethod
+    def opening(hero_raw):
+        """
+        ...
+        :param hero_raw:
+        """
+        if hero_raw == 'galen':
+            return ["Good day young man.",
+                    "It has been a while since I've seen battle,",
+                    "but in my younger days my reputation was fearsome.",
+                    "I even saved the King's life once...",
+                    "But enough about that.",
+                    "I need to be in 'Area 3' and I would like to join",
+                    "you when you are ready to go to there.",
+                    "My axe will be of service to you."]

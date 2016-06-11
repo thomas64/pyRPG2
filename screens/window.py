@@ -10,6 +10,7 @@ import pygame
 import audio as sfx
 import components
 import database.inn
+import database.hero
 import database.shop
 import database.sign
 import equipment
@@ -63,7 +64,7 @@ class Window(object):
         self.surface.fill(BACKGROUNDCOLOR)
         self.surface = self.surface.convert()
 
-        self.inn_box = None
+        self.inn_box = None     # confirmbox
         self.inn_data = None
         self.scr_capt = None
 
@@ -334,7 +335,7 @@ class Window(object):
 
     def check_heroes(self, check_rect):
         """
-        ...
+        Bekijk of collide met een hero.
         """
         if len(check_rect.collidelistall(self.engine.current_map.heroes)) == 1:
             object_name = check_rect.collidelist(self.engine.current_map.heroes)
@@ -342,6 +343,11 @@ class Window(object):
             hero_data = self.engine.data.heroes[hero_sprite.sprite_id]
 
             self._sprite_turn(hero_sprite)
+
+            push_object = components.MessageBox(self.engine.gamestate,
+                                                database.hero.HeroDatabase.opening(hero_data.RAW),
+                                                face_image=hero_data.FAC)
+            self.engine.gamestate.push(push_object)
 
     def check_shops(self, check_rect):
         """

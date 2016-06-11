@@ -19,7 +19,7 @@ FONTCOLOR2 = pygame.Color("red")
 FONTPOSX = 40
 FONTPOSY = 40
 LINEHEIGHT = 25
-FACEPOSX, FACEPOSY = 30, 25
+FACEPOSX, FACEPOSY = 30, 42
 
 MESSAGESPRITE = 'resources/sprites/parchment.png'
 
