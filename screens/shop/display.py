@@ -194,9 +194,45 @@ class Display(object):
     def on_enter(self):
         """
         Wanneer deze state op de stack komt, voer dit uit.
-        Op dit moment nog niets echts.
+        Handel af als er een sell confirmbox is geweest.
         """
-        pass
+        if self.sell_click or self.buy_click:
+            if self.buy_click:
+                # hij gebruikt nothing=scr_capt hier niet
+                choice, yes, nothing = self.confirm_box.on_exit()
+                if choice == yes:
+                    gold = pouchitems.factory_pouch_item('gold')
+                    if self.engine.data.pouch.remove(gold, self.value):     # deze if is eigenlijk overbodig maar
+                        self.engine.data.inventory.add(self.selected_item)  # van origineel zit hij erin. maar hij
+                        self.engine.audio.play_sound(sfx.COINS)             # filtert nu al bij het klikken.
+                        self._init_sellbox()
+                else:
+                    self.engine.audio.play_sound(sfx.MENUSELECT)
+
+            elif self.sell_click:
+                # hij gebruikt nothing hier niet
+                selected_quantity, nothing, nothing = self.confirm_box.on_exit()
+                # dit gaat helemaal uit van dat de tekst van de shop maar 1 regel heeft en dan 1 regel niets.
+                quantity = None
+                if selected_quantity:   # omdat selected_quantity None kan zijn vanwege ESC toets.
+                    quantity = self.sel_quantity[selected_quantity]
+
+                if quantity:
+                    self.engine.data.inventory.remove(self.selected_item, quantity)
+                    gold = pouchitems.factory_pouch_item('gold')
+                    self.engine.data.pouch.add(gold, self.value * quantity)
+                    self.engine.audio.play_sound(sfx.COINS)
+                    self._init_sellbox()
+                else:
+                    self.engine.audio.play_sound(sfx.MENUSELECT)
+
+            self.buy_click = False
+            self.sell_click = False
+            self.selected_item = None
+            self.tot_quantity = 0
+            self.sel_quantity = []
+            self.value = 0
+            self.confirm_box = None
 
     def on_exit(self):
         """
@@ -210,6 +246,10 @@ class Display(object):
         Handelt de muis en keyboard input af.
         :param event: pygame.event.get()
         """
+
+        # todo, sellbox en buybox met toetsenbord
+        # todo, equipment die hero's aanhebben kunnen sellen
+
         if event.type == pygame.MOUSEMOTION:
 
             self.info_label = ""
@@ -229,50 +269,18 @@ class Display(object):
                 if self.close_button.single_click(event) == keys.EXIT:
                     self.engine.gamestate.pop()
 
-                self.sell_click, self.selected_item, self.tot_quantity, self.value = self.sellbox.mouse_click(event)
-                if self.sell_click and self.selected_item:
-                    self.engine.audio.play_sound(sfx.MENUSELECT)
-                    text = self._fill_confirm_box_with_sell_text()
-
-                    self.confirm_box = components.ConfirmBox(self.engine.gamestate, self.engine.audio, text)
-                    self.engine.gamestate.push(self.confirm_box)
-                    return
-                elif self.sell_click and not self.selected_item:
-                    self.engine.audio.play_sound(sfx.MENUERROR)
-                    text = ["You can not sell it to me",
-                            "if you won't unequip it first."]
-                    push_object = components.MessageBox(self.engine.gamestate, text)
-                    self.engine.gamestate.push(push_object)
-                    self.sell_click = False
-                    return
-
-                self.buy_click, self.selected_item, self.value = self.buybox.mouse_click(event)
-                if self.buy_click and self.value <= self.gold_amount:
-                    self.engine.audio.play_sound(sfx.MENUSELECT)
-                    text = ["You may buy 1 {} for {} gold.".format(self.selected_item.NAM, self.value),
-                            "",
-                            "Yes please.",
-                            "No thanks."]
-                    self.confirm_box = components.ConfirmBox(self.engine.gamestate, self.engine.audio, text)
-                    self.engine.gamestate.push(self.confirm_box)
-                    return
-                elif self.buy_click and self.value > self.gold_amount:
-                    self.engine.audio.play_sound(sfx.MENUERROR)
-                    text = ["You need {} more gold to".format(self.value - self.gold_amount),
-                            "buy that {}.".format(self.selected_item.NAM)]
-                    push_object = components.MessageBox(self.engine.gamestate, text)
-                    self.engine.gamestate.push(push_object)
-                    self.buy_click = False
-                    self.selected_item = None
-                    self.value = 0
-                    return
-
                 for selector in self.selectors:
                     shoptype = selector.mouse_click(event)
                     if shoptype:
                         self.shoptype = shoptype
                         self._init_boxes()
                         break
+
+                # return of anders worden sommigen variabelen weer overschreven.
+                if self._handle_buy_box_click(event):
+                    return
+                if self._handle_sell_box_click(event):
+                    return
 
             elif event.button in (keys.SCROLLUP, keys.SCROLLDOWN):
                 if self.buybox.rect.collidepoint(event.pos):
@@ -283,6 +291,100 @@ class Display(object):
         elif event.type == pygame.KEYDOWN:
             if event.key == keys.EXIT:
                 self.engine.gamestate.pop()
+
+    def multi_input(self, key_input, mouse_pos, dt):
+        """
+        :param key_input: pygame.key.get_pressed()
+        :param mouse_pos: pygame.mouse.get_pos()
+        :param dt: self.clock.tick(FPS)/1000.0
+        """
+        # cheat voor geld erbij ctrl+
+        if key_input[pygame.K_LCTRL] or key_input[pygame.K_RCTRL]:
+            if key_input[pygame.K_KP_PLUS]:
+                gold = pouchitems.factory_pouch_item('gold')
+                self.engine.data.pouch.add(gold, 100, False)
+            elif key_input[pygame.K_KP_MINUS]:
+                gold = pouchitems.factory_pouch_item('gold')
+                self.engine.data.pouch.remove(gold, 100, False)
+
+    def update(self, dt):
+        """
+        Update de gold quantity.
+        :param dt: self.clock.tick(FPS)/1000.0
+        """
+        self.gold_amount = self.engine.data.pouch['gold'].qty
+
+    def render(self):
+        """
+        Teken alles op het scherm, de titels, de boxen.
+        """
+        self.screen.fill(BACKGROUNDCOLOR)
+        self.screen.blit(self.background, (0, 0))
+        # titels midden boven de boxen
+        self.screen.blit(self.buy_title, ((self._set_x(BUYBOXPOSX)) +
+                                          (self.screen.get_width() * BUYBOXWIDTH / 2) -
+                                          (self.buy_title.get_width() / 2),
+                                          self._set_y(TITLEPOSY)))
+        self.screen.blit(self.sell_title, ((self._set_x(SELLBOXPOSX)) +
+                                           (self.screen.get_width() * SELLBOXWIDTH / 2) -
+                                           (self.sell_title.get_width() / 2),
+                                           self._set_y(TITLEPOSY)))
+        gold_title = self.normalfont.render(GOLDTITLE + str(self.gold_amount), True, FONTCOLOR).convert_alpha()
+        self.screen.blit(gold_title, (self._set_x(GOLDTITLEPOSX), self._set_y(GOLDTITLEPOSY)))
+        shoptype_title = self.largefont.render(self.shoptype.value, True, FONTCOLOR).convert_alpha()
+        self.screen.blit(shoptype_title, (self._set_x(SHOPTITLEPOSX), self._set_y(TITLEPOSY)))
+
+        self.infobox.render(self.screen, self.info_label)
+        self.buybox.render(self.screen)
+        self.sellbox.render(self.screen)
+        self.close_button.render(self.screen, FONTCOLOR, True)
+
+    def _handle_buy_box_click(self, event):
+        self.buy_click, self.selected_item, self.value = self.buybox.mouse_click(event)
+        if self.buy_click and self.value <= self.gold_amount:
+            self.engine.audio.play_sound(sfx.MENUSELECT)
+            text = ["You may buy 1 {} for {} gold.".format(self.selected_item.NAM, self.value),
+                    "",
+                    "Yes please.",
+                    "No thanks."]
+            self.confirm_box = components.ConfirmBox(self.engine.gamestate, self.engine.audio, text)
+            self.engine.gamestate.push(self.confirm_box)
+            return True
+        elif self.buy_click and self.value > self.gold_amount:
+            self.engine.audio.play_sound(sfx.MENUERROR)
+            text = ["You need {} more gold to".format(self.value - self.gold_amount),
+                    "buy that {}.".format(self.selected_item.NAM)]
+            push_object = components.MessageBox(self.engine.gamestate, text)
+            self.engine.gamestate.push(push_object)
+            self.buy_click = False
+            self.selected_item = None
+            self.value = 0
+            return True
+        return False
+
+    def _handle_sell_box_click(self, event):
+        self.sell_click, self.selected_item, self.tot_quantity, self.value = self.sellbox.mouse_click(event)
+        if self.sell_click and self.selected_item:
+            self.engine.audio.play_sound(sfx.MENUSELECT)
+            text = self._fill_confirm_box_with_sell_text()
+            self.confirm_box = components.ConfirmBox(self.engine.gamestate, self.engine.audio, text)
+            self.engine.gamestate.push(self.confirm_box)
+            return True
+        elif self.sell_click and not self.selected_item:
+            self.engine.audio.play_sound(sfx.MENUERROR)
+            text = ["You can not sell it to me",
+                    "if you won't unequip it first."]
+            push_object = components.MessageBox(self.engine.gamestate, text)
+            self.engine.gamestate.push(push_object)
+            self.sell_click = False
+            return True
+        return False
+
+    def _set_x(self, posx):
+        return self.screen.get_width() * posx
+
+    def _set_y(self, posy):
+        return self.screen.get_height() * posy
 
     def _fill_confirm_box_with_sell_text(self):
         text = ["I'll give you " + str(self.value) + " gold for 1 " + self.selected_item.NAM + ".",
@@ -330,98 +432,3 @@ class Display(object):
                                 " of them for " + str(int(self.value * self.tot_quantity)) + " gold.")
                     self.sel_quantity.append(self.tot_quantity)
         return text
-
-    def multi_input(self, key_input, mouse_pos, dt):
-        """
-        :param key_input: pygame.key.get_pressed()
-        :param mouse_pos: pygame.mouse.get_pos()
-        :param dt: self.clock.tick(FPS)/1000.0
-        """
-        # cheat voor geld erbij ctrl+
-        if key_input[pygame.K_LCTRL] or key_input[pygame.K_RCTRL]:
-            if key_input[pygame.K_KP_PLUS]:
-                gold = pouchitems.factory_pouch_item('gold')
-                self.engine.data.pouch.add(gold, 100, False)
-            elif key_input[pygame.K_KP_MINUS]:
-                gold = pouchitems.factory_pouch_item('gold')
-                self.engine.data.pouch.remove(gold, 100, False)
-
-    def update(self, dt):
-        """
-        Update de gold quantity.
-        Handel af als er een sell confirmbox is geweest.
-        :param dt: self.clock.tick(FPS)/1000.0
-        """
-        self.gold_amount = self.engine.data.pouch['gold'].qty
-
-        # todo, sellbox en buybox met toetsenbord
-        # todo, equipment die hero's aanhebben kunnen sellen
-
-        if self.sell_click or self.buy_click:
-            if self.buy_click:
-                # hij gebruikt nothing=scr_capt hier niet
-                choice, yes, nothing = self.confirm_box.on_exit()
-                if choice == yes:
-                    gold = pouchitems.factory_pouch_item('gold')
-                    if self.engine.data.pouch.remove(gold, self.value):     # deze if is eigenlijk overbodig maar
-                        self.engine.data.inventory.add(self.selected_item)  # van origineel zit hij erin. maar hij
-                        self.engine.audio.play_sound(sfx.COINS)             # filtert nu al bij het klikken.
-                        self._init_sellbox()
-                else:
-                    self.engine.audio.play_sound(sfx.MENUSELECT)
-
-            elif self.sell_click:
-                # hij gebruikt nothing hier niet
-                selected_quantity, nothing, nothing = self.confirm_box.on_exit()
-                # dit gaat helemaal uit van dat de tekst van de shop maar 1 regel heeft en dan 1 regel niets.
-                quantity = None
-                if selected_quantity:   # omdat selected_quantity None kan zijn vanwege ESC toets.
-                    quantity = self.sel_quantity[selected_quantity]
-
-                if quantity:
-                    self.engine.data.inventory.remove(self.selected_item, quantity)
-                    gold = pouchitems.factory_pouch_item('gold')
-                    self.engine.data.pouch.add(gold, self.value * quantity)
-                    self.engine.audio.play_sound(sfx.COINS)
-                    self._init_sellbox()
-                else:
-                    self.engine.audio.play_sound(sfx.MENUSELECT)
-
-            self.buy_click = False
-            self.sell_click = False
-            self.selected_item = None
-            self.tot_quantity = 0
-            self.sel_quantity = []
-            self.value = 0
-            self.confirm_box = None
-
-    def render(self):
-        """
-        Teken alles op het scherm, de titels, de boxen.
-        """
-        self.screen.fill(BACKGROUNDCOLOR)
-        self.screen.blit(self.background, (0, 0))
-        # titels midden boven de boxen
-        self.screen.blit(self.buy_title, ((self._set_x(BUYBOXPOSX)) +
-                                          (self.screen.get_width() * BUYBOXWIDTH / 2) -
-                                          (self.buy_title.get_width() / 2),
-                                          self._set_y(TITLEPOSY)))
-        self.screen.blit(self.sell_title, ((self._set_x(SELLBOXPOSX)) +
-                                           (self.screen.get_width() * SELLBOXWIDTH / 2) -
-                                           (self.sell_title.get_width() / 2),
-                                           self._set_y(TITLEPOSY)))
-        gold_title = self.normalfont.render(GOLDTITLE + str(self.gold_amount), True, FONTCOLOR).convert_alpha()
-        self.screen.blit(gold_title, (self._set_x(GOLDTITLEPOSX), self._set_y(GOLDTITLEPOSY)))
-        shoptype_title = self.largefont.render(self.shoptype.value, True, FONTCOLOR).convert_alpha()
-        self.screen.blit(shoptype_title, (self._set_x(SHOPTITLEPOSX), self._set_y(TITLEPOSY)))
-
-        self.infobox.render(self.screen, self.info_label)
-        self.buybox.render(self.screen)
-        self.sellbox.render(self.screen)
-        self.close_button.render(self.screen, FONTCOLOR, True)
-
-    def _set_x(self, posx):
-        return self.screen.get_width() * posx
-
-    def _set_y(self, posy):
-        return self.screen.get_height() * posy

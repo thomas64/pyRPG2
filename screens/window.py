@@ -123,6 +123,33 @@ class Window(object):
         for _ in range(self.maxlen):
             self.leader_history.appendleft(self.party_sprites[0].get_history_data())
 
+    def on_enter(self):
+        """
+        Als de inn confirmbox in beeld is geweest.
+        """
+        if self.inn_box:
+            choice, yes, self.scr_capt = self.inn_box.on_exit()
+            if choice == yes:
+                gold = pouchitems.factory_pouch_item('gold')
+                if self.engine.data.pouch.remove(gold, self.inn_data['price']):
+                    self.engine.audio.play_sound(sfx.COINS)
+                    push_object = components.MessageBox(self.engine.gamestate, self.inn_data['paid'],
+                                                        face_image=self.inn_data['face'], scr_capt=self.scr_capt)
+                    self.engine.gamestate.push(push_object)
+                    # todo, health afhandelen. en iets van een fade out animatie?
+                else:
+                    push_object = components.MessageBox(self.engine.gamestate, self.inn_data['fail'],
+                                                        face_image=self.inn_data['face'], scr_capt=self.scr_capt)
+                    self.engine.gamestate.push(push_object)
+            else:
+                push_object = components.MessageBox(self.engine.gamestate, self.inn_data['deny'],
+                                                    face_image=self.inn_data['face'], scr_capt=self.scr_capt)
+                self.engine.gamestate.push(push_object)
+
+            self.inn_box = None
+            self.inn_data = None
+            self.scr_capt = None
+
     def single_input(self, event):
         """
         Handelt de muis en keyboard input af.
@@ -162,6 +189,8 @@ class Window(object):
                     for obj in self.engine.current_map.shops:
                         self.cbox_sprites.append(components.ColorBox(obj.rect, SHOPCOLOR, CBOXLAYER))
                     for obj in self.engine.current_map.inns:
+                        self.cbox_sprites.append(components.ColorBox(obj.rect, SHOPCOLOR, CBOXLAYER))
+                    for obj in self.engine.current_map.signs:
                         self.cbox_sprites.append(components.ColorBox(obj.rect, SHOPCOLOR, CBOXLAYER))
                     self.group.add(self.cbox_sprites)
                 else:
@@ -207,9 +236,6 @@ class Window(object):
         """
         :param dt: self.clock.tick(FPS)/1000.0
         """
-        # is de confirmbox van de inn in beeld geweest?
-        self.check_inn_confirmbox()
-
         # Is de hero tegen een soundobject of een portal aangelopen
         self.check_sounds()
         self.check_portals()
@@ -367,33 +393,6 @@ class Window(object):
             self.inn_box = components.ConfirmBox(self.engine.gamestate, self.engine.audio,
                                                  self.inn_data['welcome'], self.inn_data['face'])
             self.engine.gamestate.push(self.inn_box)
-
-    def check_inn_confirmbox(self):
-        """
-        Als de inn confirmbox in beeld is geweest.
-        """
-        if self.inn_box:
-            choice, yes, self.scr_capt = self.inn_box.on_exit()
-            if choice == yes:
-                gold = pouchitems.factory_pouch_item('gold')
-                if self.engine.data.pouch.remove(gold, self.inn_data['price']):
-                    self.engine.audio.play_sound(sfx.COINS)
-                    push_object = components.MessageBox(self.engine.gamestate, self.inn_data['paid'],
-                                                        face_image=self.inn_data['face'], scr_capt=self.scr_capt)
-                    self.engine.gamestate.push(push_object)
-                    # todo, health afhandelen. en iets van een fade out animatie?
-                else:
-                    push_object = components.MessageBox(self.engine.gamestate, self.inn_data['fail'],
-                                                        face_image=self.inn_data['face'], scr_capt=self.scr_capt)
-                    self.engine.gamestate.push(push_object)
-            else:
-                push_object = components.MessageBox(self.engine.gamestate, self.inn_data['deny'],
-                                                    face_image=self.inn_data['face'], scr_capt=self.scr_capt)
-                self.engine.gamestate.push(push_object)
-
-            self.inn_box = None
-            self.inn_data = None
-            self.scr_capt = None
 
     def check_signs(self):
         """

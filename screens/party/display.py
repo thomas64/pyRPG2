@@ -102,6 +102,19 @@ class Display(object):
         self.engine.audio.set_bg_music(self.name)
         self.engine.audio.set_bg_sounds(self.name)
 
+        # Als de leave party confirmbox in beeld is geweest.
+        if self.leave_box:
+            choice, yes, nothing = self.leave_box.on_exit()
+            if choice == yes:
+                self.engine.data.party.remove(self.cur_hero)
+                # update daarna het party scherm
+                self.cur_hero = self.engine.data.party['alagos']
+                self.party = list(self.engine.data.party.values())
+                self.hc = self.party.index(self.cur_hero)
+                self._init_boxes()
+                self.party_changed = True
+            self.leave_box = None
+
     def on_exit(self):
         """
         Wanneer deze state onder een andere state van de stack komt, voer dit uit.
@@ -211,19 +224,6 @@ class Display(object):
         Update alle waarden in de boxen.
         :param dt: self.clock.tick(FPS)/1000.0
         """
-        # Als de leave party confirmbox in beeld is geweest.
-        if self.leave_box:
-            choice, yes, nothing = self.leave_box.on_exit()
-            if choice == yes:
-                self.engine.data.party.remove(self.cur_hero)
-                # update daarna het party scherm
-                self.cur_hero = self.engine.data.party['alagos']
-                self.party = list(self.engine.data.party.values())
-                self.hc = self.party.index(self.cur_hero)
-                self._init_boxes()
-                self.party_changed = True
-            self.leave_box = None
-
         for button in self.buttons:
             button.update(self.key_input)
 

@@ -88,6 +88,8 @@ class Overworld(object):
         self.engine.audio.set_bg_music(self.name)
         self.engine.audio.set_bg_sounds(self.name)
 
+        self.window.on_enter()
+
     # noinspection PyMethodMayBeStatic
     def on_exit(self):
         """

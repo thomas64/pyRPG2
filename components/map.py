@@ -98,7 +98,7 @@ class Map(object):
         try:
             for obj in tmx_data.get_layer_by_name(SIGNS):
                 sign_object = components.Sign(obj.name, self._pg_rect(obj), OBJECTLAYER, obj.type)
-                self.low_blocker_rects.append(sign_object.get_blocker())
+                self.high_blocker_rects.append(sign_object.get_blocker())
                 self.signs.append(sign_object)
         except ValueError:
             pass
