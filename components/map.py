@@ -8,8 +8,9 @@ import pytmx
 import pyscroll
 
 import components
-import database.shop
 import database.inn
+import database.hero
+import database.shop
 
 MAPPATH = 'resources/maps/'
 
@@ -19,6 +20,7 @@ LOWBLOCKER = "low_blocker"
 SOUNDS = "sounds"
 STARTPOS = "start_pos"
 PORTALS = "portals"
+HEROES = "heroes"
 SHOPS = "shops"
 INNS = "inns"
 SIGNS = "signs"
@@ -58,6 +60,7 @@ class Map(object):
         self.sounds = []
         self.start_pos = []
         self.portals = []
+        self.heroes = []
         self.shops = []
         self.inns = []
         self.signs = []
@@ -74,6 +77,15 @@ class Map(object):
             self.start_pos.append(obj)
         for obj in tmx_data.get_layer_by_name(PORTALS):
             self.portals.append(components.Portal(name, self._pg_rect(obj), obj.name, obj.type))
+
+        try:
+            for obj in tmx_data.get_layer_by_name(HEROES):
+                hero_object = components.Hero(obj.name, database.hero.HeroDatabase[obj.name].value['spr'],
+                                              self._pg_rect(obj), OBJECTLAYER, False)
+                self.high_blocker_rects.append(hero_object.get_blocker())
+                self.heroes.append(hero_object)
+        except ValueError:
+            pass
 
         try:
             for obj in tmx_data.get_layer_by_name(SHOPS):

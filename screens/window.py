@@ -101,6 +101,7 @@ class Window(object):
         self.align()
 
         # voeg alle objecten toe van uit de map
+        self.group.add(self.engine.current_map.heroes)
         self.group.add(self.engine.current_map.shops)
         self.group.add(self.engine.current_map.inns)
         self.group.add(self.engine.current_map.signs)
@@ -162,6 +163,7 @@ class Window(object):
                 self.align()
 
             elif event.key in keys.SELECT:
+                self.check_heroes()
                 self.check_shops(self.get_check_rect())
                 self.check_inns(self.get_check_rect())
                 self.check_signs()
@@ -326,6 +328,15 @@ class Window(object):
             self.engine.current_map = components.Map(self.engine.data.map_name)
             self.load_map()
 
+    def check_heroes(self):
+        """
+        ...
+        """
+        if len(self.party_sprites[0].rect.collidelistall(self.engine.current_map.heroes)) == 1:
+            object_name = self.party_sprites[0].rect.collidelist(self.engine.current_map.heroes)
+            hero_sprite = self.engine.current_map.heroes[object_name]
+            hero_data = self.engine.data.heroes[hero_sprite.sprite_id]
+
     def check_shops(self, check_rect):
         """
         Bekijk of collide met een shopkeeper. Update de richting van de sprite.
@@ -335,26 +346,9 @@ class Window(object):
         if len(check_rect.collidelistall(self.engine.current_map.shops)) == 1:
             object_nr = check_rect.collidelist(self.engine.current_map.shops)
             shop_sprite = self.engine.current_map.shops[object_nr]
-            shop_data = database.shop.ShopDatabase[shop_sprite.shop_id].value
+            shop_data = database.shop.ShopDatabase[shop_sprite.sprite_id].value
 
-            if shop_sprite.rect.left < self.party_sprites[0].rect.left and \
-                    abs(shop_sprite.rect.centery - self.party_sprites[0].rect.centery) < \
-                    abs(shop_sprite.rect.centerx - self.party_sprites[0].rect.centerx):
-                shop_sprite.update(screens.direction.Direction.East)
-            elif shop_sprite.rect.left > self.party_sprites[0].rect.left and \
-                    abs(shop_sprite.rect.centery - self.party_sprites[0].rect.centery) < \
-                    abs(shop_sprite.rect.centerx - self.party_sprites[0].rect.centerx):
-                shop_sprite.update(screens.direction.Direction.West)
-            elif shop_sprite.rect.top < self.party_sprites[0].rect.top and \
-                    abs(shop_sprite.rect.centery - self.party_sprites[0].rect.centery) > \
-                    abs(shop_sprite.rect.centerx - self.party_sprites[0].rect.centerx):
-                shop_sprite.update(screens.direction.Direction.South)
-            elif shop_sprite.rect.top > self.party_sprites[0].rect.top and \
-                    abs(shop_sprite.rect.centery - self.party_sprites[0].rect.centery) > \
-                    abs(shop_sprite.rect.centerx - self.party_sprites[0].rect.centerx):
-                shop_sprite.update(screens.direction.Direction.North)
-            else:
-                shop_sprite.update(screens.direction.Direction.South)
+            self._sprite_turn(shop_sprite)
 
             push_object = screens.shop.display.Display(self.engine, shop_data['content'], shop_data['face'])
             self.engine.gamestate.push(push_object)
@@ -367,28 +361,11 @@ class Window(object):
         if len(check_rect.collidelistall(self.engine.current_map.inns)) == 1:
             object_nr = check_rect.collidelist(self.engine.current_map.inns)
             inn_sprite = self.engine.current_map.inns[object_nr]
-            self.inn_data = database.inn.InnDatabase[inn_sprite.inn_id].value
+            self.inn_data = database.inn.InnDatabase[inn_sprite.sprite_id].value
 
             for inn_sprite in self.engine.current_map.inns:
                 if inn_sprite.show_sprite:
-                    if inn_sprite.rect.left < self.party_sprites[0].rect.left and \
-                            abs(inn_sprite.rect.centery - self.party_sprites[0].rect.centery) < \
-                            abs(inn_sprite.rect.centerx - self.party_sprites[0].rect.centerx):
-                        inn_sprite.update(screens.direction.Direction.East)
-                    elif inn_sprite.rect.left > self.party_sprites[0].rect.left and \
-                            abs(inn_sprite.rect.centery - self.party_sprites[0].rect.centery) < \
-                            abs(inn_sprite.rect.centerx - self.party_sprites[0].rect.centerx):
-                        inn_sprite.update(screens.direction.Direction.West)
-                    elif inn_sprite.rect.top < self.party_sprites[0].rect.top and \
-                            abs(inn_sprite.rect.centery - self.party_sprites[0].rect.centery) > \
-                            abs(inn_sprite.rect.centerx - self.party_sprites[0].rect.centerx):
-                        inn_sprite.update(screens.direction.Direction.South)
-                    elif inn_sprite.rect.top > self.party_sprites[0].rect.top and \
-                            abs(inn_sprite.rect.centery - self.party_sprites[0].rect.centery) > \
-                            abs(inn_sprite.rect.centerx - self.party_sprites[0].rect.centerx):
-                        inn_sprite.update(screens.direction.Direction.North)
-                    else:
-                        inn_sprite.update(screens.direction.Direction.South)
+                    self._sprite_turn(inn_sprite)
 
             self.inn_box = components.ConfirmBox(self.engine.gamestate, self.engine.audio,
                                                  self.inn_data['welcome'], self.inn_data['face'])
@@ -513,3 +490,26 @@ class Window(object):
         elif last_dir == screens.direction.Direction.East:
             check_rect = self.party_sprites[0].rect.move(GRIDSIZE / 2, 0)
         return check_rect
+
+    def _sprite_turn(self, sprite):
+        """
+        De meegegeven sprite draait naar de speler toe.
+        """
+        if sprite.rect.left < self.party_sprites[0].rect.left and \
+                abs(sprite.rect.centery - self.party_sprites[0].rect.centery) < \
+                abs(sprite.rect.centerx - self.party_sprites[0].rect.centerx):
+            sprite.update(screens.direction.Direction.East)
+        elif sprite.rect.left > self.party_sprites[0].rect.left and \
+                abs(sprite.rect.centery - self.party_sprites[0].rect.centery) < \
+                abs(sprite.rect.centerx - self.party_sprites[0].rect.centerx):
+            sprite.update(screens.direction.Direction.West)
+        elif sprite.rect.top < self.party_sprites[0].rect.top and \
+                abs(sprite.rect.centery - self.party_sprites[0].rect.centery) > \
+                abs(sprite.rect.centerx - self.party_sprites[0].rect.centerx):
+            sprite.update(screens.direction.Direction.South)
+        elif sprite.rect.top > self.party_sprites[0].rect.top and \
+                abs(sprite.rect.centery - self.party_sprites[0].rect.centery) > \
+                abs(sprite.rect.centerx - self.party_sprites[0].rect.centerx):
+            sprite.update(screens.direction.Direction.North)
+        else:
+            sprite.update(screens.direction.Direction.South)

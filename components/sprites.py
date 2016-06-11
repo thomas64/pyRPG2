@@ -269,7 +269,7 @@ class Shop(pygame.sprite.Sprite):
         self.north_states = {0: (32, 96, 32, 32), 1: (0, 96, 32, 32), 2: (32, 96, 32, 32), 3: (64, 96, 32, 32)}
         self.south_states = {0: (32,  0, 32, 32), 1: (0,  0, 32, 32), 2: (32,  0, 32, 32), 3: (64,  0, 32, 32)}
 
-        self.shop_id = shop_id
+        self.sprite_id = shop_id
         self.rect = rect
         self._layer = objectlayer
         self.full_sprite = pygame.image.load(sprite).convert_alpha()
@@ -306,10 +306,21 @@ class Inn(Shop):
     def __init__(self, inn_id, sprite, rect, objectlayer, dont_show_sprite):
         super().__init__(inn_id, sprite, rect, objectlayer)
 
-        self.inn_id = inn_id
-
         # als er in dont_show_sprite iets staat, dan is het een transparante sprite.
         self.show_sprite = True
         if dont_show_sprite:
+            self.show_sprite = False
+            self.image = pygame.image.load(TRANSP).convert_alpha()
+
+
+class Hero(Shop):
+    """
+    Een hero voor in je party.
+    """
+    def __init__(self, hero_name, sprite, rect, objectlayer, in_party):
+        super().__init__(hero_name, sprite, rect, objectlayer)
+
+        self.show_sprite = True
+        if in_party:
             self.show_sprite = False
             self.image = pygame.image.load(TRANSP).convert_alpha()
