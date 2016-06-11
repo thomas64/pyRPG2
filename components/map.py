@@ -81,8 +81,7 @@ class Map(object):
         try:
             for obj in tmx_data.get_layer_by_name(HEROES):
                 hero_object = components.Hero(obj.name, database.hero.HeroDatabase[obj.name].value['spr'],
-                                              self._pg_rect(obj), OBJECTLAYER, False)
-                self.high_blocker_rects.append(hero_object.get_blocker())
+                                              self._pg_rect(obj), OBJECTLAYER)
                 self.heroes.append(hero_object)
         except ValueError:
             pass

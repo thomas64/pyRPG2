@@ -101,7 +101,11 @@ class Window(object):
         self.align()
 
         # voeg alle objecten toe van uit de map
-        self.group.add(self.engine.current_map.heroes)
+        for hero in self.engine.current_map.heroes:
+            if not self.engine.data.party.contains(hero.sprite_id):
+                self.group.add(hero)
+                # voeg alleen nu een blocker toe als de hero er daadwerkelijk is.
+                self.engine.current_map.high_blocker_rects.append(hero.get_blocker())
         self.group.add(self.engine.current_map.shops)
         self.group.add(self.engine.current_map.inns)
         self.group.add(self.engine.current_map.signs)
@@ -163,7 +167,7 @@ class Window(object):
                 self.align()
 
             elif event.key in keys.SELECT:
-                self.check_heroes()
+                self.check_heroes(self.get_check_rect())
                 self.check_shops(self.get_check_rect())
                 self.check_inns(self.get_check_rect())
                 self.check_signs()
@@ -328,14 +332,16 @@ class Window(object):
             self.engine.current_map = components.Map(self.engine.data.map_name)
             self.load_map()
 
-    def check_heroes(self):
+    def check_heroes(self, check_rect):
         """
         ...
         """
-        if len(self.party_sprites[0].rect.collidelistall(self.engine.current_map.heroes)) == 1:
-            object_name = self.party_sprites[0].rect.collidelist(self.engine.current_map.heroes)
+        if len(check_rect.collidelistall(self.engine.current_map.heroes)) == 1:
+            object_name = check_rect.collidelist(self.engine.current_map.heroes)
             hero_sprite = self.engine.current_map.heroes[object_name]
             hero_data = self.engine.data.heroes[hero_sprite.sprite_id]
+
+            self._sprite_turn(hero_sprite)
 
     def check_shops(self, check_rect):
         """

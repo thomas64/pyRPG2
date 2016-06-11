@@ -317,10 +317,5 @@ class Hero(Shop):
     """
     Een hero voor in je party.
     """
-    def __init__(self, hero_name, sprite, rect, objectlayer, in_party):
+    def __init__(self, hero_name, sprite, rect, objectlayer):
         super().__init__(hero_name, sprite, rect, objectlayer)
-
-        self.show_sprite = True
-        if in_party:
-            self.show_sprite = False
-            self.image = pygame.image.load(TRANSP).convert_alpha()

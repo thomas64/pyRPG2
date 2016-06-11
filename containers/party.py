@@ -17,6 +17,15 @@ class Party(collections.OrderedDict):
         self.NAM = "Party"
         self.MAX = 5
 
+    def contains(self, hero_raw):
+        """
+        Bevat de party de opgegeven naam?
+        :return: Ja of Nee
+        """
+        if hero_raw in self:
+            return True
+        return False
+
     def add(self, hero, verbose=True):
         """
         Voeg heroes toe aan de party.

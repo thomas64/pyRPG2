@@ -25,7 +25,7 @@ class Script(object):
         """
         # Vul de heroes database met alle hero objecten die in factory zijn gemaakt.
         self.engine.data.heroes = characters.factory_all_heroes(database.hero.HeroDatabase)
-        # Treasure chest worden geen objecten, maar blijven een object met dicts.
+        # Treasure chest en Sparklies worden geen losse objecten, maar blijven 1 object met meerdere dicts.
         self.engine.data.treasure_chests = database.treasurechest.TreasureChestDatabase()
         self.engine.data.sparklies = database.sparkly.SparklyDatabase()
 
