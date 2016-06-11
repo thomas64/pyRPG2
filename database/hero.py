@@ -101,9 +101,12 @@ class HeroDatabase(enum.Enum):
         if hero_raw == 'galen':
             return ["Good day young man.",
                     "It has been a while since I've seen battle,",
-                    "but in my younger days my reputation was fearsome.",
-                    "I even saved the King's life once...",
+                    "but in my younger days my reputation was",
+                    "fearsome. I even saved the King's life once...",
                     "But enough about that.",
-                    "I need to be in 'Area 3' and I would like to join",
-                    "you when you are ready to go to there.",
-                    "My axe will be of service to you."]
+                    "I need to be in Dalenok Town and I would like",
+                    "to join you when you are ready to go to there.",
+                    "My axe will be of service to you.",
+                    "",
+                    "I would definitely need your axe and reputation.",
+                    "I don't want to go to Dalenok Town."]

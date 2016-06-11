@@ -344,7 +344,7 @@ class Window(object):
 
             self._sprite_turn(hero_sprite)
 
-            push_object = components.MessageBox(self.engine.gamestate,
+            push_object = components.ConfirmBox(self.engine.gamestate, self.engine.audio,
                                                 database.hero.HeroDatabase.opening(hero_data.RAW),
                                                 face_image=hero_data.FAC)
             self.engine.gamestate.push(push_object)
