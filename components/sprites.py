@@ -276,18 +276,29 @@ class Shop(pygame.sprite.Sprite):
         self.full_sprite.set_clip(self.south_states[0])
         self.image = self.full_sprite.subsurface(self.full_sprite.get_clip())
 
-    def update(self, states):
+    def turn(self, player_rect):
         """
-        Met welke string waarde hij meekrijgt kies een ander subsurface.
+        De meegegeven sprite draait naar de speler toe.
+        Met welke berekening hij meekrijgt kies een ander subsurface.
         """
-        if states == Direction.North:
-            states = self.north_states[0]
-        elif states == Direction.South:
-            states = self.south_states[0]
-        elif states == Direction.West:
-            states = self.west_states[0]
-        elif states == Direction.East:
+        if self.rect.left < player_rect.left and \
+                abs(self.rect.centery - player_rect.centery) < \
+                abs(self.rect.centerx - player_rect.centerx):
             states = self.east_states[0]
+        elif self.rect.left > player_rect.left and \
+                abs(self.rect.centery - player_rect.centery) < \
+                abs(self.rect.centerx - player_rect.centerx):
+            states = self.west_states[0]
+        elif self.rect.top < player_rect.top and \
+                abs(self.rect.centery - player_rect.centery) > \
+                abs(self.rect.centerx - player_rect.centerx):
+            states = self.south_states[0]
+        elif self.rect.top > player_rect.top and \
+                abs(self.rect.centery - player_rect.centery) > \
+                abs(self.rect.centerx - player_rect.centerx):
+            states = self.north_states[0]
+        else:
+            states = self.south_states[0]
 
         self.full_sprite.set_clip(states)
         self.image = self.full_sprite.subsurface(self.full_sprite.get_clip())

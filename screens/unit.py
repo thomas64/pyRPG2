@@ -19,6 +19,8 @@ STEPSPEED = 30      # een waarde? lager is snellere stappen
 TURNDELAY = 7/60    # van een seconde
 VIEWSPEED = 8       # todo, deze moet nog aangepast worden
 
+GRIDSIZE = 32
+
 
 class Unit(pygame.sprite.Sprite):
     """
@@ -369,3 +371,19 @@ class Unit(pygame.sprite.Sprite):
            self.time_left > 0 or self.time_right > 0:
             return True
         return False
+
+    def get_check_rect(self):
+        """
+        Bij een check gebruik dan een rect op basis van de hero rect en verplaats die iets in de kijk richting.
+        :return: de tijdelijk verplaatste rect, gemaakt op basis van de huidige hero rect.
+        """
+        check_rect = self.rect
+        if self.last_direction == Direction.North:
+            check_rect = self.rect.move(0, GRIDSIZE / -2)  # -16
+        elif self.last_direction == Direction.South:
+            check_rect = self.rect.move(0, GRIDSIZE / 2)   # 16
+        elif self.last_direction == Direction.West:
+            check_rect = self.rect.move(GRIDSIZE / -2, 0)
+        elif self.last_direction == Direction.East:
+            check_rect = self.rect.move(GRIDSIZE / 2, 0)
+        return check_rect
