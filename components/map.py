@@ -81,7 +81,7 @@ class Map(object):
         try:
             for obj in tmx_data.get_layer_by_name(HEROES):
                 hero_object = components.Hero(obj.name, database.hero.HeroDatabase[obj.name].value['spr'],
-                                              self._pg_rect(obj), OBJECTLAYER)
+                                              self._pg_rect(obj), OBJECTLAYER, self.has_attr(obj, 'direction'))
                 self.heroes.append(hero_object)
         except ValueError:
             pass
@@ -89,7 +89,7 @@ class Map(object):
         try:
             for obj in tmx_data.get_layer_by_name(SHOPS):
                 shop_object = components.Shop(obj.name, database.shop.ShopDatabase[obj.name].value['sprite'],
-                                              self._pg_rect(obj), OBJECTLAYER)
+                                              self._pg_rect(obj), OBJECTLAYER, self.has_attr(obj, 'direction'))
                 self.high_blocker_rects.append(shop_object.get_blocker())
                 self.shops.append(shop_object)
         except ValueError:
@@ -98,7 +98,7 @@ class Map(object):
         try:
             for obj in tmx_data.get_layer_by_name(INNS):
                 inn_object = components.Inn(obj.name, database.inn.InnDatabase[obj.name].value['sprite'],
-                                            self._pg_rect(obj), OBJECTLAYER, obj.type)
+                                            self._pg_rect(obj), OBJECTLAYER, self.has_attr(obj, 'direction'), obj.type)
                 # als er in obj.type iets staat, dan is het een lege sprite en dus geen blocker.
                 if not obj.type:
                     self.high_blocker_rects.append(inn_object.get_blocker())
@@ -135,3 +135,15 @@ class Map(object):
         :return: pygame rect
         """
         return pygame.Rect(rect.x, rect.y, rect.width, rect.height)
+
+    @staticmethod
+    def has_attr(obj, attr):
+        """
+        Kijkt of de attribute bestaat.
+        :param obj: Het object
+        :param attr: De attribute
+        :return: de waarde of None
+        """
+        if hasattr(obj, attr):
+            return obj.direction
+        return None

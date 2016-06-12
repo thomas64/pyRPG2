@@ -261,7 +261,7 @@ class Shop(pygame.sprite.Sprite):
     """
     Winkelverkoper
     """
-    def __init__(self, shop_id, sprite, rect, objectlayer):
+    def __init__(self, shop_id, sprite, rect, objectlayer, direction):
         super().__init__()
 
         self.west_states = {0:  (32, 32, 32, 32), 1: (0, 32, 32, 32), 2: (32, 32, 32, 32), 3: (64, 32, 32, 32)}
@@ -273,7 +273,14 @@ class Shop(pygame.sprite.Sprite):
         self.rect = rect
         self._layer = objectlayer
         self.full_sprite = pygame.image.load(sprite).convert_alpha()
-        self.full_sprite.set_clip(self.south_states[0])
+        if direction == "north":
+            self.full_sprite.set_clip(self.north_states[0])
+        elif direction == "west":
+            self.full_sprite.set_clip(self.west_states[0])
+        elif direction == "east":
+            self.full_sprite.set_clip(self.east_states[0])
+        else:
+            self.full_sprite.set_clip(self.south_states[0])
         self.image = self.full_sprite.subsurface(self.full_sprite.get_clip())
 
     def turn(self, player_rect):
@@ -314,8 +321,8 @@ class Inn(Shop):
     """
     Innkeepster
     """
-    def __init__(self, inn_id, sprite, rect, objectlayer, dont_show_sprite):
-        super().__init__(inn_id, sprite, rect, objectlayer)
+    def __init__(self, inn_id, sprite, rect, objectlayer, direction, dont_show_sprite):
+        super().__init__(inn_id, sprite, rect, objectlayer, direction)
 
         # als er in dont_show_sprite iets staat, dan is het een transparante sprite.
         self.show_sprite = True
@@ -328,5 +335,5 @@ class Hero(Shop):
     """
     Een hero voor in je party.
     """
-    def __init__(self, hero_name, sprite, rect, objectlayer):
-        super().__init__(hero_name, sprite, rect, objectlayer)
+    def __init__(self, hero_name, sprite, rect, objectlayer, direction):
+        super().__init__(hero_name, sprite, rect, objectlayer, direction)

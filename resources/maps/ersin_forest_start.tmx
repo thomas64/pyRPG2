@@ -904,7 +904,11 @@
  <objectgroup name="heroes">
   <object id="18636" name="raiko" x="480" y="224" width="32" height="32"/>
   <object id="18637" name="luana" x="528" y="224" width="32" height="32"/>
-  <object id="18638" name="galen" x="576" y="224" width="32" height="32"/>
+  <object id="18638" name="galen" x="576" y="224" width="32" height="32">
+   <properties>
+    <property name="direction" value="west"/>
+   </properties>
+  </object>
   <object id="18639" name="codrif" x="624" y="224" width="32" height="32"/>
  </objectgroup>
 </map>
