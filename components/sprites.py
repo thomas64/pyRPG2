@@ -12,7 +12,7 @@ class: Inn
 
 import pygame
 
-from screens.direction import Direction
+from database import Direction
 
 
 FILLCOLOR = pygame.Color("gray60")  # gekke kleur vanwege sparkly color bug. hiermee opgelost.
@@ -273,11 +273,11 @@ class Shop(pygame.sprite.Sprite):
         self.rect = rect
         self._layer = objectlayer
         self.full_sprite = pygame.image.load(sprite).convert_alpha()
-        if direction == "north":
+        if direction == Direction.North:
             self.full_sprite.set_clip(self.north_states[0])
-        elif direction == "west":
+        elif direction == Direction.West:
             self.full_sprite.set_clip(self.west_states[0])
-        elif direction == "east":
+        elif direction == Direction.East:
             self.full_sprite.set_clip(self.east_states[0])
         else:
             self.full_sprite.set_clip(self.south_states[0])

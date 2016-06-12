@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<map version="1.0" orientation="orthogonal" renderorder="right-down" width="36" height="28" tilewidth="16" tileheight="16" nextobjectid="28">
+<map version="1.0" orientation="orthogonal" renderorder="right-down" width="36" height="28" tilewidth="16" tileheight="16" nextobjectid="42">
  <properties>
   <property name="title" value="Invernia Town"/>
  </properties>
@@ -68,11 +68,11 @@
  <tileset firstgid="1281" name="inside_a2" tilewidth="16" tileheight="16" tilecount="768" columns="32">
   <image source="tilesets/inside_a2.png" width="512" height="384"/>
  </tileset>
- <tileset firstgid="2049" name="outside_a2" tilewidth="16" tileheight="16" tilecount="768" columns="32">
-  <image source="tilesets/outside_a2.png" width="512" height="384"/>
+ <tileset firstgid="2049" name="inside_b" tilewidth="16" tileheight="16" tilecount="1024" columns="32">
+  <image source="tilesets/inside_b.png" width="512" height="512"/>
  </tileset>
- <tileset firstgid="2817" name="dungeon_c" tilewidth="16" tileheight="16" tilecount="1024" columns="32">
-  <image source="tilesets/dungeon_c.png" width="512" height="512"/>
+ <tileset firstgid="3073" name="outside_a2" tilewidth="16" tileheight="16" tilecount="768" columns="32">
+  <image source="tilesets/outside_a2.png" width="512" height="384"/>
  </tileset>
  <tileset firstgid="3841" name="other3" tilewidth="16" tileheight="16" tilecount="768" columns="24">
   <image source="tilesets/other3.png" width="384" height="512"/>
@@ -152,8 +152,8 @@
 0,0,0,196,197,230,231,232,233,202,202,202,203,204,205,206,207,202,202,240,241,210,211,212,213,246,247,248,249,218,219,220,221,0,0,0,
 0,0,0,228,229,262,263,264,265,244,245,234,235,236,237,238,239,244,245,272,273,242,243,244,245,278,279,280,281,250,251,252,253,0,0,0,
 0,0,0,260,261,294,295,296,297,276,277,266,267,268,269,270,271,276,277,304,305,274,275,276,277,310,311,312,313,282,283,284,285,0,0,0,
-0,0,0,292,293,326,327,328,329,430,431,298,299,300,301,302,303,430,431,336,337,306,307,308,309,2702,2703,344,345,314,315,316,317,0,0,0,
-0,0,0,324,325,390,391,526,527,398,399,2221,333,332,333,334,335,398,399,398,399,338,339,340,341,346,347,346,347,346,347,348,349,0,0,0,
+0,0,0,292,293,326,327,328,329,430,431,298,299,300,301,302,303,430,431,336,337,306,307,308,309,342,343,344,345,314,315,316,317,0,0,0,
+0,0,0,324,325,390,391,526,527,398,399,3245,333,332,333,334,335,398,399,398,399,338,339,340,341,346,347,346,347,346,347,348,349,0,0,0,
 0,0,0,356,357,358,359,1281,1282,1283,1284,1281,1282,1283,1284,366,367,430,431,368,369,370,371,372,373,378,379,378,379,378,379,380,381,0,0,0,
 0,0,0,388,389,390,391,1313,1314,1315,1316,1313,1314,1315,1316,398,399,398,399,398,399,402,403,404,405,346,347,346,347,410,411,412,413,0,0,0,
 0,0,0,420,421,422,423,1345,1346,1347,1348,1345,1346,1347,1348,430,431,430,431,430,431,434,435,436,437,378,379,378,379,442,443,444,445,0,0,0,
@@ -184,12 +184,12 @@
 0,0,0,0,0,0,0,0,0,1065,1066,0,0,0,0,0,0,1065,1066,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
 0,0,0,0,0,0,0,0,0,0,0,0,0,957,958,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
 0,0,0,0,0,0,0,0,0,0,0,0,0,981,982,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
-0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,3325,3326,0,0,0,0,0,0,0,0,0,
-0,0,0,0,0,0,0,0,3035,3036,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
-0,0,0,0,0,0,0,0,3067,3068,0,0,0,0,0,0,3035,3036,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
-0,0,0,0,0,0,3035,3036,2971,2972,3035,3036,0,0,0,0,3067,3068,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
-0,0,0,0,0,0,3067,3068,3003,3004,3067,3068,0,0,3035,3036,2971,2972,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
-0,0,0,0,0,0,0,0,0,0,0,0,0,0,3067,3068,3003,3004,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
+0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
+0,0,0,0,0,0,0,0,2881,2882,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
+0,0,0,0,0,0,0,0,2913,2914,0,0,0,0,0,0,2881,2882,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
+0,0,0,0,0,0,2881,2882,2817,2818,2881,2882,0,0,0,0,2913,2914,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
+0,0,0,0,0,0,2913,2914,2849,2850,2913,2914,0,0,2881,2882,2817,2818,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
+0,0,0,0,0,0,0,0,0,0,0,0,0,0,2913,2914,2849,2850,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
 0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
 0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
 0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
@@ -302,24 +302,27 @@
 </data>
  </layer>
  <objectgroup name="portals" visible="0">
-  <object id="25" name="invernia_town" x="288" y="400" width="64" height="16"/>
+  <object id="25" name="invernia_town" x="304" y="400" width="32" height="16"/>
  </objectgroup>
  <objectgroup name="start_pos" visible="0">
-  <object id="26" name="invernia_town" x="304" y="352" width="16" height="16"/>
+  <object id="26" name="invernia_town" x="304" y="368" width="16" height="16"/>
  </objectgroup>
  <objectgroup name="sounds" visible="0">
-  <object id="24" name="step_stone" x="48" y="48" width="480" height="352"/>
+  <object id="24" name="step_stone" x="48" y="48" width="320" height="352"/>
+  <object id="35" name="step_carpet" x="368" y="48" width="160" height="352"/>
  </objectgroup>
- <objectgroup name="low_blocker">
+ <objectgroup name="low_blocker" visible="0">
   <object id="13" x="464" y="208" width="32" height="48"/>
-  <object id="14" x="336" y="144" width="64" height="80"/>
+  <object id="14" x="368" y="144" width="32" height="80"/>
   <object id="15" x="224" y="208" width="64" height="16"/>
   <object id="17" x="256" y="176" width="32" height="16"/>
   <object id="19" x="96" y="192" width="96" height="16"/>
   <object id="20" x="128" y="160" width="32" height="16"/>
   <object id="21" x="144" y="272" width="96" height="16"/>
+  <object id="33" x="336" y="176" width="32"/>
+  <object id="34" x="336" y="208" width="32"/>
  </objectgroup>
- <objectgroup name="high_blocker">
+ <objectgroup name="high_blocker" visible="0">
   <object id="1" x="48" y="320" width="256" height="80"/>
   <object id="2" x="336" y="320" width="192" height="80"/>
   <object id="3" x="48" y="48" width="32" height="272"/>
@@ -331,5 +334,32 @@
   <object id="11" x="80" y="256" width="32" height="64"/>
   <object id="12" x="112" y="288" width="32" height="32"/>
   <object id="27" x="464" y="48" width="32" height="64"/>
+  <object id="32" x="336" y="144" width="32" height="16"/>
+ </objectgroup>
+ <objectgroup name="inns">
+  <object id="36" name="inn1" x="400" y="176" width="32" height="32">
+   <properties>
+    <property name="direction" value="west"/>
+   </properties>
+  </object>
+  <object id="37" name="inn1" type="no sprite" x="368" y="176" width="32" height="32"/>
+ </objectgroup>
+ <objectgroup name="heroes">
+  <object id="38" name="grindan" x="208" y="272" width="32" height="32">
+   <properties>
+    <property name="direction" value="west"/>
+   </properties>
+  </object>
+  <object id="39" name="codrif" x="224" y="208" width="32" height="32">
+   <properties>
+    <property name="direction" value="east"/>
+   </properties>
+  </object>
+  <object id="40" name="luana" x="128" y="160" width="32" height="32"/>
+  <object id="41" name="rydalin" x="96" y="192" width="32" height="32">
+   <properties>
+    <property name="direction" value="east"/>
+   </properties>
+  </object>
  </objectgroup>
 </map>

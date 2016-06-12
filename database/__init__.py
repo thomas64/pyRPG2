@@ -2,6 +2,7 @@
 """
 class: EquipmentType
 class: WeaponType
+class: Direction
 """
 
 import enum
@@ -35,3 +36,13 @@ class WeaponType(enum.Enum):
     mis = "Missile"
     thr = "Thrown"
     shd = "Shield"
+
+
+class Direction(enum.Enum):
+    """
+    De vier richtingen waarheen een unit kan lopen.
+    """
+    North = 1
+    South = 2
+    West = 3
+    East = 4

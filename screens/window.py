@@ -9,6 +9,7 @@ import pygame
 
 import audio as sfx
 import components
+from database import Direction
 import database.inn
 import database.hero
 import database.shop
@@ -16,7 +17,6 @@ import database.sign
 import equipment
 import keys
 import pouchitems
-import screens.direction
 import screens.shop.display
 import screens.unit
 
@@ -86,7 +86,7 @@ class Window(object):
 
         for pos in self.engine.current_map.start_pos:                            # in een .tmx map kun je bij start_pos
             if getattr(pos, 'direction', None) and (pos.x, pos.y) == start_pos:  # een 'direction' property meegeven.
-                start_dir = screens.direction.Direction[pos.direction]           # als dat een Direction Enum is dan
+                start_dir = Direction[pos.direction]                             # als dat een Direction Enum is dan
                 break                                   # dan start de unit in de nieuw geladen map in die kijkrichting.
 
         self.party_sprites = []
@@ -387,7 +387,7 @@ class Window(object):
         """
         Bekijk of collide met een sign.
         """
-        if self.party_sprites[0].last_direction == screens.direction.Direction.North:
+        if self.party_sprites[0].last_direction == Direction.North:
             if len(self.party_sprites[0].rect.collidelistall(self.engine.current_map.signs)) == 1:
                 object_nr = self.party_sprites[0].rect.collidelist(self.engine.current_map.signs)
                 sign_sprite = self.engine.current_map.signs[object_nr]
@@ -400,7 +400,7 @@ class Window(object):
         """
         Bekijk of collide met een chest.
         """
-        if self.party_sprites[0].last_direction == screens.direction.Direction.North:
+        if self.party_sprites[0].last_direction == Direction.North:
             if len(self.party_sprites[0].rect.collidelistall(self.engine.current_map.chests)) == 1:
                 object_nr = self.party_sprites[0].rect.collidelist(self.engine.current_map.chests)
                 chest_sprite = self.engine.current_map.chests[object_nr]

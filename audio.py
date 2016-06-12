@@ -33,9 +33,6 @@ STEPCARPET = 'step_carpet'
 COINS = 'coins'
 CHEST = 'chest'
 SPARKLY = 'sparkly'
-CROWS = 'crows'
-RIVER = 'river'
-WIND = 'wind'
 
 # Alle niet overworld kaart muziek.
 TITLESCREEN = 'titlescreen'
@@ -57,6 +54,7 @@ class MapMusic(enum.Enum):
     InverniaWeaponShop = 'invernia_weapon_shop',        'invernia_town', None
     InverniaInn1F = 'invernia_inn_1f',                  'invernia_town', None
     InverniaInn2F = 'invernia_inn_2f',                  'invernia_town', None
+    InverviaPub = 'invernia_pub',                       'invernia_town', 'fire2'  # later .ogg renamen naar fire
 
 
 class Audio(object):

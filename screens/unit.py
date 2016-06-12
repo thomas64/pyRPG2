@@ -5,7 +5,7 @@ class: Unit
 
 import pygame
 
-from .direction import Direction
+from database import Direction
 import keys
 
 FEETWIDTH = 2       # hele kleine voetjes
@@ -37,7 +37,14 @@ class Unit(pygame.sprite.Sprite):
         # Assign the spritesheet to self.full_sprite
         self.full_sprite = pygame.image.load(spritesheet).convert_alpha()
         # 'Clip' the sheet so that only one frame is displayed (the first frame of _south_states)
-        self.full_sprite.set_clip(pygame.Rect(self.south_states[0]))
+        if direction == Direction.North:
+            self.full_sprite.set_clip(self.north_states[0])
+        elif direction == Direction.West:
+            self.full_sprite.set_clip(self.west_states[0])
+        elif direction == Direction.East:
+            self.full_sprite.set_clip(self.east_states[0])
+        else:
+            self.full_sprite.set_clip(self.south_states[0])
 
         # Create a rect to animate around the screen
         self.image = self.full_sprite.subsurface(self.full_sprite.get_clip())
