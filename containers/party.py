@@ -39,8 +39,9 @@ class Party(collections.OrderedDict):
             self[hero.RAW] = hero
             if verbose:
                 console.hero_join_party(hero.NAM, self.NAM)
+            return True
         else:
-            console.container_is_full(self.NAM)
+            return False
 
     def remove(self, hero):
         """

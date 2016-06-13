@@ -66,7 +66,8 @@ class Window(object):
 
         self.inn_box = None     # confirmbox
         self.inn_data = None
-        self.scr_capt = None
+        self.hero_box = None    # confirmbox
+        self.hero_data = None
 
     def load_map(self):
         """
@@ -106,6 +107,7 @@ class Window(object):
             if not self.engine.data.party.contains(hero.sprite_id):
                 self.group.add(hero)
                 # voeg alleen nu een blocker toe als de hero er daadwerkelijk is.
+                # dit zit niet in de map class vanwege imports. maar nu moet hij in window al 2x checken op dit.
                 self.engine.current_map.high_blocker_rects.append(hero.get_blocker())
         self.group.add(self.engine.current_map.shops)
         self.group.add(self.engine.current_map.inns)
@@ -131,30 +133,45 @@ class Window(object):
 
     def on_enter(self):
         """
+        Als een hero confirmbox in beeld is geweest.
         Als de inn confirmbox in beeld is geweest.
         """
-        if self.inn_box:
-            choice, yes, self.scr_capt = self.inn_box.on_exit()
+        if self.hero_box:
+            choice, yes, scr_capt = self.hero_box.on_exit()
+            if choice == yes:
+                if self.engine.data.party.add(self.hero_data):
+                    self.engine.current_map = components.Map(self.engine.data.map_name)
+                    self.load_map()
+                else:
+                    text = ["It seems the party is full already."]
+                    push_object = components.MessageBox(self.engine.gamestate, text,
+                                                        face_image=self.hero_data.FAC, scr_capt=scr_capt)
+                    self.engine.gamestate.push(push_object)
+
+            self.hero_box = None
+            self.hero_data = None
+
+        elif self.inn_box:
+            choice, yes, scr_capt = self.inn_box.on_exit()
             if choice == yes:
                 gold = pouchitems.factory_pouch_item('gold')
                 if self.engine.data.pouch.remove(gold, self.inn_data['price']):
                     self.engine.audio.play_sound(sfx.COINS)
                     push_object = components.MessageBox(self.engine.gamestate, self.inn_data['paid'],
-                                                        face_image=self.inn_data['face'], scr_capt=self.scr_capt)
+                                                        face_image=self.inn_data['face'], scr_capt=scr_capt)
                     self.engine.gamestate.push(push_object)
                     # todo, health afhandelen. en iets van een fade out animatie?
                 else:
                     push_object = components.MessageBox(self.engine.gamestate, self.inn_data['fail'],
-                                                        face_image=self.inn_data['face'], scr_capt=self.scr_capt)
+                                                        face_image=self.inn_data['face'], scr_capt=scr_capt)
                     self.engine.gamestate.push(push_object)
             else:
                 push_object = components.MessageBox(self.engine.gamestate, self.inn_data['deny'],
-                                                    face_image=self.inn_data['face'], scr_capt=self.scr_capt)
+                                                    face_image=self.inn_data['face'], scr_capt=scr_capt)
                 self.engine.gamestate.push(push_object)
 
             self.inn_box = None
             self.inn_data = None
-            self.scr_capt = None
 
     def single_input(self, event):
         """
@@ -342,14 +359,16 @@ class Window(object):
         if len(check_rect.collidelistall(self.engine.current_map.heroes)) == 1:
             object_name = check_rect.collidelist(self.engine.current_map.heroes)
             hero_sprite = self.engine.current_map.heroes[object_name]
-            hero_data = self.engine.data.heroes[hero_sprite.sprite_id]
+            # ook hier moet een hero in party niet gecheckt worden
+            if not self.engine.data.party.contains(hero_sprite.sprite_id):
+                self.hero_data = self.engine.data.heroes[hero_sprite.sprite_id]
 
-            hero_sprite.turn(self.party_sprites[0].rect)
+                hero_sprite.turn(self.party_sprites[0].rect)
 
-            push_object = components.ConfirmBox(self.engine.gamestate, self.engine.audio,
-                                                database.hero.HeroDatabase.opening(hero_data.RAW),
-                                                face_image=hero_data.FAC)
-            self.engine.gamestate.push(push_object)
+                self.hero_box = components.ConfirmBox(self.engine.gamestate, self.engine.audio,
+                                                      database.hero.HeroDatabase.opening(self.hero_data.RAW),
+                                                      face_image=self.hero_data.FAC)
+                self.engine.gamestate.push(self.hero_box)
 
     def check_shops(self, check_rect):
         """
