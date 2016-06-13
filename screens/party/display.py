@@ -40,6 +40,8 @@ INVBOXX, INVBOXY = 688, 118
 PCHBOXX, PCHBOXY = 688, 468
 SPELBOXX, SPELBOXY = 1027, 118
 
+NEWMAPTIMEOUT = 0.5
+
 
 class Display(object):
     """
@@ -121,6 +123,7 @@ class Display(object):
         Wanneer de party is aangepast herlaadt dan de map voor visuele update.
         """
         if self.party_changed:
+            self.engine.timer = NEWMAPTIMEOUT
             self.engine.current_map = components.Map(self.engine.data.map_name)
             self.engine.gamestate.deep_peek().window.load_map()
 

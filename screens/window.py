@@ -140,10 +140,11 @@ class Window(object):
             choice, yes, scr_capt = self.hero_box.on_exit()
             if choice == yes:
                 if self.engine.data.party.add(self.hero_data):
+                    self.engine.timer = NEWMAPTIMEOUT
                     self.engine.current_map = components.Map(self.engine.data.map_name)
                     self.load_map()
                 else:
-                    text = ["It seems the party is full already."]
+                    text = ["It seems your party is full already."]
                     push_object = components.MessageBox(self.engine.gamestate, text,
                                                         face_image=self.hero_data.FAC, scr_capt=scr_capt)
                     self.engine.gamestate.push(push_object)
