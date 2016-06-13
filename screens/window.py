@@ -193,6 +193,8 @@ class Window(object):
                         self.cbox_sprites.append(components.ColorBox(rect, HIGHBLOCKERCOLOR, CBOXLAYER))
                     for rect in self.engine.current_map.low_blocker_rects:
                         self.cbox_sprites.append(components.ColorBox(rect, LOWBLOCKERCOLOR, CBOXLAYER))
+                    for obj in self.engine.current_map.heroes:
+                        self.cbox_sprites.append(components.ColorBox(obj.rect, SHOPCOLOR, CBOXLAYER))
                     for obj in self.engine.current_map.shops:
                         self.cbox_sprites.append(components.ColorBox(obj.rect, SHOPCOLOR, CBOXLAYER))
                     for obj in self.engine.current_map.inns:

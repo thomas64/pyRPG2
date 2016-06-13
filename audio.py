@@ -54,7 +54,7 @@ class MapMusic(enum.Enum):
     InverniaWeaponShop = 'invernia_weapon_shop',        'invernia_town', None
     InverniaInn1F = 'invernia_inn_1f',                  'invernia_town', None
     InverniaInn2F = 'invernia_inn_2f',                  'invernia_town', None
-    InverviaPub = 'invernia_pub',                       'invernia_town', 'fire2'  # later .ogg renamen naar fire
+    InverviaGuild = 'invernia_guild',                   'invernia_town', 'fire'
 
 
 class Audio(object):
