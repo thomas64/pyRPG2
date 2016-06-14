@@ -18,17 +18,23 @@ class: Stamina
 
 class Stat(object):
     """
-    Stat baseclass voor stats en skills.
+    Stat baseclass voor stats.
     """
     def __init__(self, name, raw, maximum, upgrade, quantity):
         self.NAM = name
         self.RAW = raw
-        self.MAX = maximum          # maximum mogelijk, bijv 10 bij skill of 30 bij int
-        self.UPG = upgrade          # upgrade formule constante
-        self.qty = quantity         # standaard hoeveelheid op te waarderen stat (tot bijv 30)
-        self.ext = 0                # extra: wat geeft equipment item voor pos/neg extra
-        self.tot = quantity         # total: quantity + extra
-        self.cur = quantity         # current: gaat af wanneer er bijv schade is (sta, edu, lev)
+        self.MAX = maximum              # maximum mogelijk, bijv 10 bij skill of 30 bij int
+        self.UPG = upgrade              # upgrade formule constante
+        self.qty = quantity             # standaard hoeveelheid op te waarderen stat (tot bijv 30)
+        self.ext = 0                    # extra: wat geeft equipment item voor pos/neg extra
+
+    @property
+    def tot(self):
+        """
+        self.tot = self.qty + self.ext
+        total: quantity + extra
+        """
+        return self.qty + self.ext
 
 
 class Level(Stat):
@@ -37,6 +43,7 @@ class Level(Stat):
     """
     def __init__(self, quantity):
         super().__init__("Level", "lev", 40, None, quantity)
+        self.cur = quantity             # current: gaat af wanneer er bijv schade is (sta, edu, lev)
 
     def next(self, totalxp):
         """
@@ -108,6 +115,7 @@ class Endurance(Stat):
     """
     def __init__(self, quantity):
         super().__init__("Endurance", "edu", 40, 12, quantity)
+        self.cur = quantity             # current: gaat af wanneer er bijv schade is (sta, edu, lev)
         self.DESC = ("Dit is een ",
                      "test.",
                      "Endurance")
@@ -130,6 +138,7 @@ class Stamina(Stat):
     """
     def __init__(self, quantity):
         super().__init__("Stamina", "sta", 90, 4, quantity)
+        self.cur = quantity             # current: gaat af wanneer er bijv schade is (sta, edu, lev)
         self.DESC = ("Dit is een ",
                      "test.",
                      "Stamina")
