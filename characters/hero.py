@@ -282,8 +282,8 @@ class Hero(object):
     def calc_stats(self):
         """
         Hier worden voor de 7 hero stats in alle equipment items gekeken en toegevoegd aan extra.
-        En uiteindelijk ook aan total. Dit moet uitgevoerd worden aan het begin van het spel en
-        wanneer een equipment item van een hero wordt verwisseld.
+        Dit moet uitgevoerd worden aan het begin van het spel en wanneer een equipment item van
+        een hero wordt verwisseld.
         Agility extra wordt op een andere manier gevuld voor een tweede keer, met weight. De eerste keer is
         soort van nutteloos.
         """
@@ -294,24 +294,16 @@ class Hero(object):
 
         self.agi.ext = -round(self.tot_wht / 3)
 
-        for stat in self.stats_tuple:
-            stat.tot = stat.qty + stat.ext
-            if stat.tot < 1:  # het origineel uit vb.net is < 0, klopt dat?
-                stat.tot = 1
-
     def calc_skills(self):
         """
         Hetzelfde als calc_stats ongeveer, maar dan alles in een keer.
         Ga alle skills langs en ga daarmee alle equipment items langs en voeg die toe aan .ext.
-        Ext en qty vormen samen totaal.
         """
         for skill in self.skills_tuple:
             skill.ext = 0
             for equipment_item in self.equipment_tuple:
                 skill.ext += equipment_item.get_value_of(skill.RAW)
-            skill.tot = skill.qty + skill.ext
-            if skill.tot < 0 or skill.qty <= 0:
-                skill.tot = 0
+
             # visueel aanpassen als het negatieve van de item groter is dan de skill van de hero
-            if skill.ext < 0 and skill.ext < -skill.qty and skill.positive_quantity:
+            if skill.ext < 0 and skill.ext < -skill.qty and skill.positive_quantity():
                 skill.ext = -skill.qty

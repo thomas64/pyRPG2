@@ -13,7 +13,6 @@ class: Stamina
 """
 
 # todo, descriptions van stats, en docstrings
-# todo, stats en skills aparte base classes, niet meer van elkaar erven. ook self.cur uit de base, maar naar sta, edu en lev
 
 
 class Stat(object):
@@ -23,7 +22,7 @@ class Stat(object):
     def __init__(self, name, raw, maximum, upgrade, quantity):
         self.NAM = name
         self.RAW = raw
-        self.MAX = maximum              # maximum mogelijk, bijv 10 bij skill of 30 bij int
+        self.MAX = maximum              # maximum mogelijk, bijv 30 bij int of 40 bij edu
         self.UPG = upgrade              # upgrade formule constante
         self.qty = quantity             # standaard hoeveelheid op te waarderen stat (tot bijv 30)
         self.ext = 0                    # extra: wat geeft equipment item voor pos/neg extra
@@ -34,7 +33,10 @@ class Stat(object):
         self.tot = self.qty + self.ext
         total: quantity + extra
         """
-        return self.qty + self.ext
+        total = self.qty + self.ext
+        if total < 1:                   # het origineel uit vb.net is < 0, klopt dat?
+            total = 1
+        return total
 
 
 class Level(Stat):
@@ -62,7 +64,7 @@ class Experience(object):
     """
     def __init__(self, total):
         self.tot = total
-        self.rem = 0        # remaining
+        self.rem = 0                    # remaining
 
 
 class Intelligence(Stat):
