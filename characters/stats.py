@@ -13,6 +13,7 @@ class: Stamina
 """
 
 # todo, descriptions van stats, en docstrings
+# todo, stats en skills aparte base classes, niet meer van elkaar erven. ook self.cur uit de base, maar naar sta, edu en lev
 
 
 class Stat(object):
