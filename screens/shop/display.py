@@ -302,10 +302,10 @@ class Display(object):
         if key_input[pygame.K_LCTRL] or key_input[pygame.K_RCTRL]:
             if key_input[pygame.K_KP_PLUS]:
                 gold = pouchitems.factory_pouch_item('gold')
-                self.engine.data.pouch.add(gold, 100, False)
+                self.engine.data.pouch.add(gold, 1, False)
             elif key_input[pygame.K_KP_MINUS]:
                 gold = pouchitems.factory_pouch_item('gold')
-                self.engine.data.pouch.remove(gold, 100, False)
+                self.engine.data.pouch.remove(gold, 1, False)
 
     def update(self, dt):
         """

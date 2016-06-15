@@ -7,8 +7,8 @@ import collections
 
 from . import EquipmentType
 
-SPRITEPATH = 'resources/sprites/icons/equipment/armor1.png'
 
+SPRITEPATH = 'resources/sprites/icons/equipment/armor1.png'
 
 arm = collections.OrderedDict()
 
@@ -16,27 +16,26 @@ arm = collections.OrderedDict()
 
 # todo, upgradable, min_mech, metals zijn nog niet verwerkt.
 
-#                       val,    wht, prt, stl,  srt, row
+#                     val, wht, prt, stl,  srt, row
 armor_material = {
-    "Leather Armor":   (100,      0,   0,   0, 1000,    0),
-    "Bronze Armor":    (600,      3,   3,  -3, 2000,   32),
-    "Iron Armor":     (1100,      6,   6,  -6, 3000,   64),
-    "Steel Armor":    (1600,      9,   9,  -9, 4000,   96),
-    "Silver Armor":   (2100,     12,  12, -12, 5000,  128),
-    "Titanium Armor": (2600,      0,  12,   0, 6000,  160)
-    # "Stealth":        (16,     10,   1,   1)
+    "Leather Armor":   (0,   0,   0,   0, 1000,   0),
+    "Bronze Armor":    (3,   3,   3,  -3, 2000,  32),
+    "Iron Armor":      (6,   6,   6,  -6, 3000,  64),
+    "Steel Armor":     (9,   9,   9,  -9, 4000,  96),
+    "Silver Armor":   (12,  12,  12, -12, 5000, 128),
+    "Titanium Armor": (15,   0,  12,   0, 6000, 160)
 }
-#                       val,    wht, prt, stl,  srt, col
+#                     val, wht, prt, stl,  srt, col
 armor_type = {
-    "Light":           (100,      1,   1,   0,  100,   0),
-    "Medium":          (300,      2,   2,  -1,  200,  32),
-    "Heavy":           (500,      3,   3,  -2,  300,  64)
+    "Light":           (1,   1,   1,   0,  100,   0),
+    "Medium":          (2,   2,   2,  -1,  200,  32),
+    "Heavy":           (3,   3,   3,  -2,  300,  64)
 }
-#                       val,    wht, prt, stl,  srt
+#                     val, wht, prt, stl,  srt
 armor_upgraded = {
-    "":                (1.0,      0,   0,   0,   10),
-    "+":               (1.1,      0,   0,   1,   20),
-    "++":              (1.2,     -1,   0,   2,   30)
+    "":              (1.0,   0,   0,   0,   10),
+    "+":             (1.1,   0,   0,   1,   20),
+    "++":            (1.2,  -1,   0,   2,   30)
 }
 # hoogste protection mogelijk is 15: Heavy Silver/Titanium Armor /+/++
 
@@ -45,8 +44,7 @@ for material_key, material_value in armor_material.items():
         for upgraded_key, upgraded_value in armor_upgraded.items():
 
             raw_key_name = (type_key + material_key + upgraded_key).strip().lower().replace(" ", "")
-            # todo, deze int was alleen bij weapon, moet de int hier weer weg?
-            price = int((material_value[0] + type_value[0]) * (material_value[0] + type_value[0]) / 400)
+            price = (material_value[0] + type_value[0])**2 + 10
 
             arm[raw_key_name] = dict(
                 nam=(type_key + " " + material_key + " " + upgraded_key).strip(),

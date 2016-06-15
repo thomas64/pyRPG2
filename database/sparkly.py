@@ -13,7 +13,7 @@ class SparklyDatabase(dict):
         super().__init__(**kwargs)
 
         # ersin_forest_start
-        self['sparkly1'] = dict(content=dict(itm1=dict(nam='gold', qty=5)))
+        self['sparkly1'] = dict(content=dict(itm1=dict(nam='gold', qty=1)))
 
         for value in self.values():
             value['taken'] = 0

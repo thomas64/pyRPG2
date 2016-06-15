@@ -19,21 +19,20 @@ sld = collections.OrderedDict()
 
 #                     val, min str, prt, des, dex, stl,  srt, col
 shield_material = {
-    "Wooden":        (200,       3,   2,   1,  -1,  -1,  100,   0),
-    "Bronze":        (500,       6,   4,   2,  -2,  -2,  200,  32),
-    "Iron":          (800,       9,   6,   3,  -3,  -3,  300,  64),
-    "Steel":        (1100,      12,   8,   4,  -4,  -4,  400,  96),
-    "Silver":       (1400,      15,  10,   5,  -5,  -5,  500, 128),
-    "Titanium":     (1700,       3,  10,   5,  -1,  -1,  600, 160)
-    # "Stealth":      (16,       1,   0,   0,  -1,  -1)
+    "Wooden":          (3,       3,   2,   1,  -1,  -1,  100,   0),
+    "Bronze":          (6,       6,   4,   2,  -2,  -2,  200,  32),
+    "Iron":            (9,       9,   6,   3,  -3,  -3,  300,  64),
+    "Steel":          (12,      12,   8,   4,  -4,  -4,  400,  96),
+    "Silver":         (15,      15,  10,   5,  -5,  -5,  500, 128),
+    "Titanium":       (18,       3,  10,   5,  -1,  -1,  600, 160)
 }
 #                     val, min str, prt, des, dex, stl,  srt, row
 shield_type = {
-    "Buckler":       (100,       3,   1,   5,  -1,  -3, 1000,   0),
-    "Targe":         (700,       6,   2,  10,  -2,  -6, 2000,  32),
-    "Heater":       (1300,       9,   3,  15,  -3,  -9, 3000,  64),
-    "Kite":         (1900,      12,   4,  20,  -4, -12, 4000,  96),
-    "Scutum":       (2500,      15,   5,  25,  -5, -15, 5000, 128)
+    "Buckler":         (6,       3,   1,   5,  -1,  -3, 1000,   0),
+    "Targe":          (12,       6,   2,  10,  -2,  -6, 2000,  32),
+    "Heater":         (18,       9,   3,  15,  -3,  -9, 3000,  64),
+    "Kite":           (24,      12,   4,  20,  -4, -12, 4000,  96),
+    "Scutum":         (30,      15,   5,  25,  -5, -15, 5000, 128)
 }
 #                     val, min str, prt, des, dex, stl,  srt
 shield_upgraded = {
@@ -48,8 +47,7 @@ for material_key, material_value in shield_material.items():
         for upgraded_key, upgraded_value in shield_upgraded.items():
 
             raw_key_name = (material_key + type_key + upgraded_key).strip().lower().replace(" ", "")
-            # todo, deze int was alleen bij weapon, moet de int hier weer weg?
-            price = int((material_value[0] + type_value[0]) * (material_value[0] + type_value[0]) / 900)
+            price = (material_value[0] + type_value[0])**1.6 - 25
 
             sld[raw_key_name] = dict(
                 nam=(material_key + " " + type_key + " " + upgraded_key).strip(),

@@ -13,22 +13,22 @@ class TreasureChestDatabase(dict):
         super().__init__(**kwargs)
 
         # ersin_forest_start
-        self['chest1'] = dict(content=dict(itm1=dict(nam='gold',             qty=100),
+        self['chest1'] = dict(content=dict(itm1=dict(nam='gold',             qty=2),
                                            itm2=dict(nam='herbs',            qty=3),
                                            eqp1=dict(nam='bronzeshortsword', qty=1),
                                            eqp2=dict(nam='leathercap',       qty=1)))
         self['chest2'] = dict(condition=dict(thf=3),
-                              content=dict(itm1=dict(nam='gold',             qty=200)))
+                              content=dict(itm1=dict(nam='gold',             qty=3)))
         self['chest3'] = dict(condition=dict(mec=2),
-                              content=dict(itm1=dict(nam='gold',             qty=300)))
+                              content=dict(itm1=dict(nam='gold',             qty=4)))
         self['chest4'] = dict(condition=dict(mec=1, thf=1),
-                              content=dict(itm1=dict(nam='gold',             qty=400)))
+                              content=dict(itm1=dict(nam='gold',             qty=5)))
 
         # ersin_cave_room1
-        self['chest5'] = dict(content=dict(itm1=dict(nam='gold',             qty=10)))
+        self['chest5'] = dict(content=dict(itm1=dict(nam='gold',             qty=2)))
         # ersin_cave_room3
-        self['chest6'] = dict(content=dict(itm1=dict(nam='gold',             qty=10)))
-        self['chest7'] = dict(content=dict(itm1=dict(nam='gold',             qty=10)))
+        self['chest6'] = dict(content=dict(itm1=dict(nam='gold',             qty=2)))
+        self['chest7'] = dict(content=dict(itm1=dict(nam='gold',             qty=2)))
 
         for value in self.values():
             value['opened'] = 0

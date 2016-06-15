@@ -104,7 +104,7 @@ class BuyBox(object):
             if self.lay_rect.y - self.rect.y < 0:
                 self.lay_rect.y += SCROLLSPEED
         elif event.button == keys.SCROLLDOWN:
-            if self.lay_rect.y - self.rect.y > self.rect.height - self.layer_height:
+            if self.lay_rect.y - self.rect.y > self.rect.height - self.layer_height + 2:  # zie sellbox voor de +2
                 self.lay_rect.y -= SCROLLSPEED
 
         self._update_rects_in_layer_rect_with_offset()

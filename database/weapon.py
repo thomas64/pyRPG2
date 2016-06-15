@@ -19,38 +19,38 @@ wpn = collections.OrderedDict()
 
 #                     val, min int/str, dam, srt, col
 weapon_material = {
-    "Bronze":        (100,           0,   3, 100,   0),
-    "Iron":          (900,           1,   6, 200,  32),
-    "Steel":        (1700,           2,   9, 300,  64),
-    "Silver":       (2500,           3,  12, 400,  96),
-    "Titanium":     (3300,           0,  12, 500, 128)
+    "Bronze":          (1,           0,   3, 100,   0),
+    "Iron":            (2,           1,   6, 200,  32),
+    "Steel":           (3,           2,   9, 300,  64),
+    "Silver":          (4,           3,  12, 400,  96),
+    "Titanium":        (5,           0,  12, 500, 128)
 }
 #                     val, min int, min str, hit, dam,            skl, typ,   srt, row
 weapon_type = {
-    "Dagger":        (100,       0,       6,  40,   8, WeaponType.swd,   2,  1000,   0),
-    "Short Sword":   (200,       0,      10,  50,   9, WeaponType.swd,   2,  2000,  32),
-    "Longsword":     (400,       0,      14,  60,  10, WeaponType.swd,   2,  3000,  64),
-    "Broadsword":    (800,       0,      18,  70,  11, WeaponType.swd,   2,  4000,  96),
+    "Dagger":         (10,       0,       6,  40,   8, WeaponType.swd,   2,  1000,   0),
+    "Short Sword":    (13,       0,      10,  50,   9, WeaponType.swd,   2,  2000,  32),
+    "Longsword":      (16,       0,      14,  60,  10, WeaponType.swd,   2,  3000,  64),
+    "Broadsword":     (19,       0,      18,  70,  11, WeaponType.swd,   2,  4000,  96),
 
-    "Mace":          (150,       0,      12,  30,  14, WeaponType.haf,   3,  5000, 128),
-    "Axe":           (300,       0,      15,  40,  15, WeaponType.haf,   3,  6000, 160),
-    "Poleaxe":       (600,       0,      18,  50,  16, WeaponType.haf,   3,  7000, 192),
-    "Maul":         (1200,       0,      21,  60,  17, WeaponType.haf,   3,  8000, 224),
+    "Mace":           (15,       0,      12,  30,  14, WeaponType.haf,   3,  5000, 128),
+    "Axe":            (30,       0,      15,  40,  15, WeaponType.haf,   3,  6000, 160),
+    "Poleaxe":        (45,       0,      18,  50,  16, WeaponType.haf,   3,  7000, 192),
+    "Maul":           (60,       0,      21,  60,  17, WeaponType.haf,   3,  8000, 224),
 
-    "Staff":          (75,       0,       8,  50,   2, WeaponType.pol,   1,  9000, 256),
-    "Spear":         (150,       0,      11,  60,   3, WeaponType.pol,   1, 10000, 288),
-    "Pike":          (300,       0,      14,  70,   4, WeaponType.pol,   1, 11000, 320),
-    "Lance":         (600,       0,      17,  80,   5, WeaponType.pol,   1, 12000, 352),
+    "Staff":           (7,       0,       8,  50,   2, WeaponType.pol,   1,  9000, 256),
+    "Spear":          (15,       0,      11,  60,   3, WeaponType.pol,   1, 10000, 288),
+    "Pike":           (22,       0,      14,  70,   4, WeaponType.pol,   1, 11000, 320),
+    "Lance":          (30,       0,      17,  80,   5, WeaponType.pol,   1, 12000, 352),
 
-    "Shortbow":      (200,      10,       0,  40,   8, WeaponType.mis,   4, 13000, 384),
-    "Longbow":       (400,      12,       0,  50,   9, WeaponType.mis,   4, 14000, 416),
-    "Great Bow":     (800,      14,       0,  60,  10, WeaponType.mis,   4, 15000, 448),
-    "Crossbow":     (1600,      16,       0,  70,  11, WeaponType.mis,   4, 16000, 480),
+    "Shortbow":       (20,      10,       0,  40,   8, WeaponType.mis,   4, 13000, 384),
+    "Longbow":        (40,      12,       0,  50,   9, WeaponType.mis,   4, 14000, 416),
+    "Great Bow":      (60,      14,       0,  60,  10, WeaponType.mis,   4, 15000, 448),
+    "Crossbow":       (80,      16,       0,  70,  11, WeaponType.mis,   4, 16000, 480),
 
-    "Dart":           (50,       4,       0,  30,   2, WeaponType.thr,   2, 17000, 512),
-    "Knife":         (100,      10,       0,  40,   3, WeaponType.thr,   2, 18000, 544),
-    "Hatchet":       (200,      16,       0,  50,   4, WeaponType.thr,   2, 19000, 576),
-    "Javelin":       (400,      22,       0,  60,   5, WeaponType.thr,   2, 20000, 608)
+    "Dart":            (5,       4,       0,  30,   2, WeaponType.thr,   2, 17000, 512),
+    "Knife":          (10,      10,       0,  40,   3, WeaponType.thr,   2, 18000, 544),
+    "Hatchet":        (15,      16,       0,  50,   4, WeaponType.thr,   2, 19000, 576),
+    "Javelin":        (20,      22,       0,  60,   5, WeaponType.thr,   2, 20000, 608)
 }
 #                     val, hit, dam, srt
 weapon_upgraded = {
@@ -65,8 +65,7 @@ for material_key, material_value in weapon_material.items():
         for upgraded_key, upgraded_value in weapon_upgraded.items():
 
             raw_key_name = (material_key + type_key + upgraded_key).strip().lower().replace(" ", "")
-
-            price = int((material_value[0] + type_value[0]) * (material_value[0] + type_value[0]) / 400)
+            price = (material_value[0] + type_value[0])**1.8
 
             wpn[raw_key_name] = dict(
                 nam=(material_key + " " + type_key + " " + upgraded_key).strip(),
