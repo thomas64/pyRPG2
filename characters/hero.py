@@ -21,7 +21,7 @@ class Hero(object):
         self.FAC = kwargs['fac']
 
         self.lev = characters.stats.Level(kwargs['lev'])
-        self.exp = characters.stats.Experience(kwargs['exp'])
+        self.exp = characters.stats.Experience(kwargs['lev'])   # initiele experience berekening
 
         self.int = characters.stats.Intelligence(kwargs['int'])
         self.wil = characters.stats.Willpower(kwargs['wil'])

@@ -55,15 +55,18 @@ class Level(Stat):
         if self.qty >= self.MAX:
             return 1
         else:
-            return int((250 / 3) * (2 * self.qty ** 3 + 9 * self.qty ** 2 + 13 * self.qty + 6) - totalxp)
+            # return int((250 / 3) * (2 * self.qty ** 3 + 9 * self.qty ** 2 + 13 * self.qty + 6) - totalxp)
+            # de nieuwe lage xp berekening
+            return int((5/6) * (2*self.qty + 3) * (self.qty**2 + 3*self.qty + 2) - totalxp)
 
 
 class Experience(object):
     """
-    Erft niet van Stat.
+    Erft niet van Stat. Hier wordt eenmalig de eerste keer bij het aanmaken van
+    de hero de experience berekend aan de hand van het gegeven level.
     """
-    def __init__(self, total):
-        self.tot = total
+    def __init__(self, level):
+        self.tot = int((5/6) * (2*level + 1) * (level**2 + level))
         self.rem = 0                    # remaining
 
 
