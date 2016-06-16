@@ -27,30 +27,30 @@ weapon_material = {
 }
 #                     val, min int, min str, hit, dam,            skl, typ,   srt, row
 weapon_type = {
-    "Dagger":         (10,       0,       6,  40,   8, WeaponType.swd,   2,  1000,   0),
-    "Short Sword":    (13,       0,      10,  50,   9, WeaponType.swd,   2,  2000,  32),
-    "Longsword":      (16,       0,      14,  60,  10, WeaponType.swd,   2,  3000,  64),
-    "Broadsword":     (19,       0,      18,  70,  11, WeaponType.swd,   2,  4000,  96),
+    "Dagger":          (3,       0,       6,  40,   8, WeaponType.swd,   2,  1000,   0),
+    "Short Sword":     (5,       0,      10,  50,   9, WeaponType.swd,   2,  2000,  32),
+    "Longsword":       (7,       0,      14,  60,  10, WeaponType.swd,   2,  3000,  64),
+    "Broadsword":      (9,       0,      18,  70,  11, WeaponType.swd,   2,  4000,  96),
 
-    "Mace":           (15,       0,      12,  30,  14, WeaponType.haf,   3,  5000, 128),
-    "Axe":            (30,       0,      15,  40,  15, WeaponType.haf,   3,  6000, 160),
-    "Poleaxe":        (45,       0,      18,  50,  16, WeaponType.haf,   3,  7000, 192),
-    "Maul":           (60,       0,      21,  60,  17, WeaponType.haf,   3,  8000, 224),
+    "Mace":            (4,       0,      12,  30,  14, WeaponType.haf,   3,  5000, 128),
+    "Axe":             (6,       0,      15,  40,  15, WeaponType.haf,   3,  6000, 160),
+    "Poleaxe":         (8,       0,      18,  50,  16, WeaponType.haf,   3,  7000, 192),
+    "Maul":           (10,       0,      21,  60,  17, WeaponType.haf,   3,  8000, 224),
 
-    "Staff":           (7,       0,       8,  50,   2, WeaponType.pol,   1,  9000, 256),
-    "Spear":          (15,       0,      11,  60,   3, WeaponType.pol,   1, 10000, 288),
-    "Pike":           (22,       0,      14,  70,   4, WeaponType.pol,   1, 11000, 320),
-    "Lance":          (30,       0,      17,  80,   5, WeaponType.pol,   1, 12000, 352),
+    "Staff":           (2,       0,       8,  50,   2, WeaponType.pol,   1,  9000, 256),
+    "Spear":           (4,       0,      11,  60,   3, WeaponType.pol,   1, 10000, 288),
+    "Pike":            (6,       0,      14,  70,   4, WeaponType.pol,   1, 11000, 320),
+    "Lance":           (8,       0,      17,  80,   5, WeaponType.pol,   1, 12000, 352),
 
-    "Shortbow":       (20,      10,       0,  40,   8, WeaponType.mis,   4, 13000, 384),
-    "Longbow":        (40,      12,       0,  50,   9, WeaponType.mis,   4, 14000, 416),
-    "Great Bow":      (60,      14,       0,  60,  10, WeaponType.mis,   4, 15000, 448),
-    "Crossbow":       (80,      16,       0,  70,  11, WeaponType.mis,   4, 16000, 480),
+    "Shortbow":        (5,      10,       0,  40,   8, WeaponType.mis,   4, 13000, 384),
+    "Longbow":         (7,      12,       0,  50,   9, WeaponType.mis,   4, 14000, 416),
+    "Great Bow":       (9,      14,       0,  60,  10, WeaponType.mis,   4, 15000, 448),
+    "Crossbow":       (11,      16,       0,  70,  11, WeaponType.mis,   4, 16000, 480),
 
-    "Dart":            (5,       4,       0,  30,   2, WeaponType.thr,   2, 17000, 512),
-    "Knife":          (10,      10,       0,  40,   3, WeaponType.thr,   2, 18000, 544),
-    "Hatchet":        (15,      16,       0,  50,   4, WeaponType.thr,   2, 19000, 576),
-    "Javelin":        (20,      22,       0,  60,   5, WeaponType.thr,   2, 20000, 608)
+    "Dart":            (1,       4,       0,  30,   2, WeaponType.thr,   2, 17000, 512),
+    "Knife":           (3,      10,       0,  40,   3, WeaponType.thr,   2, 18000, 544),
+    "Hatchet":         (5,      16,       0,  50,   4, WeaponType.thr,   2, 19000, 576),
+    "Javelin":         (7,      22,       0,  60,   5, WeaponType.thr,   2, 20000, 608)
 }
 #                     val, hit, dam, srt
 weapon_upgraded = {
@@ -65,7 +65,7 @@ for material_key, material_value in weapon_material.items():
         for upgraded_key, upgraded_value in weapon_upgraded.items():
 
             raw_key_name = (material_key + type_key + upgraded_key).strip().lower().replace(" ", "")
-            price = (material_value[0] + type_value[0])**1.8
+            price = (material_value[0] + type_value[0])**2.3
 
             wpn[raw_key_name] = dict(
                 nam=(material_key + " " + type_key + " " + upgraded_key).strip(),

@@ -28,11 +28,11 @@ shield_material = {
 }
 #                     val, min str, prt, des, dex, stl,  srt, row
 shield_type = {
-    "Buckler":         (6,       3,   1,   5,  -1,  -3, 1000,   0),
-    "Targe":          (12,       6,   2,  10,  -2,  -6, 2000,  32),
-    "Heater":         (18,       9,   3,  15,  -3,  -9, 3000,  64),
-    "Kite":           (24,      12,   4,  20,  -4, -12, 4000,  96),
-    "Scutum":         (30,      15,   5,  25,  -5, -15, 5000, 128)
+    "Buckler":         (4,       3,   1,   5,  -1,  -3, 1000,   0),
+    "Targe":           (8,       6,   2,  10,  -2,  -6, 2000,  32),
+    "Heater":         (12,       9,   3,  15,  -3,  -9, 3000,  64),
+    "Kite":           (16,      12,   4,  20,  -4, -12, 4000,  96),
+    "Scutum":         (20,      15,   5,  25,  -5, -15, 5000, 128)
 }
 #                     val, min str, prt, des, dex, stl,  srt
 shield_upgraded = {
@@ -47,7 +47,7 @@ for material_key, material_value in shield_material.items():
         for upgraded_key, upgraded_value in shield_upgraded.items():
 
             raw_key_name = (material_key + type_key + upgraded_key).strip().lower().replace(" ", "")
-            price = (material_value[0] + type_value[0])**1.6 - 25
+            price = (material_value[0] + type_value[0])**1.6 - 10
 
             sld[raw_key_name] = dict(
                 nam=(material_key + " " + type_key + " " + upgraded_key).strip(),
