@@ -17,13 +17,13 @@ wpn = collections.OrderedDict()
 
 # todo, upgradable, min_mech, metals zijn nog niet verwerkt.
 
-#                     val, min int/str, dam, srt, col
+#                     val, min int, min str, dam, srt, col
 weapon_material = {
-    "Bronze":          (1,           0,   3, 100,   0),
-    "Iron":            (2,           1,   6, 200,  32),
-    "Steel":           (3,           2,   9, 300,  64),
-    "Silver":          (4,           3,  12, 400,  96),
-    "Titanium":        (5,           0,  12, 500, 128)
+    "Bronze":          (1,       0,       0,   3, 100,   0),
+    "Iron":            (2,       1,       1,   6, 200,  32),
+    "Steel":           (3,       2,       2,   9, 300,  64),
+    "Silver":          (4,       3,       3,  12, 400,  96),
+    "Titanium":        (5,       0,       0,  12, 500, 128)
 }
 #                     val, min int, min str, hit, dam,            skl, typ,   srt, row
 weapon_type = {
@@ -42,15 +42,15 @@ weapon_type = {
     "Pike":            (6,       0,      14,  70,   4, WeaponType.pol,   1, 11000, 320),
     "Lance":           (8,       0,      17,  80,   5, WeaponType.pol,   1, 12000, 352),
 
-    "Shortbow":        (5,      10,       0,  40,   8, WeaponType.mis,   4, 13000, 384),
-    "Longbow":         (7,      12,       0,  50,   9, WeaponType.mis,   4, 14000, 416),
-    "Great Bow":       (9,      14,       0,  60,  10, WeaponType.mis,   4, 15000, 448),
-    "Crossbow":       (11,      16,       0,  70,  11, WeaponType.mis,   4, 16000, 480),
+    "Shortbow":        (5,      14,       0,  40,   8, WeaponType.mis,   4, 13000, 384),
+    "Longbow":         (7,      18,       0,  50,   9, WeaponType.mis,   4, 14000, 416),
+    "Great Bow":       (9,      22,       0,  60,  10, WeaponType.mis,   4, 15000, 448),
+    "Crossbow":       (11,      26,       0,  70,  11, WeaponType.mis,   4, 16000, 480),
 
-    "Dart":            (1,       4,       0,  30,   2, WeaponType.thr,   2, 17000, 512),
-    "Knife":           (3,      10,       0,  40,   3, WeaponType.thr,   2, 18000, 544),
-    "Hatchet":         (5,      16,       0,  50,   4, WeaponType.thr,   2, 19000, 576),
-    "Javelin":         (7,      22,       0,  60,   5, WeaponType.thr,   2, 20000, 608)
+    "Dart":            (1,       0,       4,  30,   2, WeaponType.thr,   2, 17000, 512),
+    "Knife":           (3,       0,      10,  40,   3, WeaponType.thr,   2, 18000, 544),
+    "Hatchet":         (5,       0,      16,  50,   4, WeaponType.thr,   2, 19000, 576),
+    "Javelin":         (7,       0,      22,  60,   5, WeaponType.thr,   2, 20000, 608)
 }
 #                     val, hit, dam, srt
 weapon_upgraded = {
@@ -71,7 +71,7 @@ for material_key, material_value in weapon_material.items():
                 nam=(material_key + " " + type_key + " " + upgraded_key).strip(),
 
                 # puur voor sortering in de winkels
-                srt=material_value[3] + type_value[7] + upgraded_value[3],
+                srt=material_value[4] + type_value[7] + upgraded_value[3],
 
                 # berekening value: material * type * upgraded
                 val=int(price * upgraded_value[0]),
@@ -79,30 +79,26 @@ for material_key, material_value in weapon_material.items():
                 skl=type_value[5],
 
                 # berekening min int/str: material * type_const + type
-                min_int=material_value[1] * type_value[6] + type_value[1],
-                min_str=material_value[1] * type_value[6] + type_value[2],
+                min_int=material_value[1] + type_value[1],
+                min_str=material_value[2] * type_value[6] + type_value[2],
 
                 # berekening base hit: type + upgraded
                 hit=type_value[3] + upgraded_value[1],
 
                 # berekening damage: material + type + upgraded
-                dam=material_value[2] + type_value[4] + upgraded_value[2],
+                dam=material_value[3] + type_value[4] + upgraded_value[2],
 
-                col=material_value[4],
+                col=material_value[5],
                 row=type_value[8]
             )
 
 # min_int op 0 zetten voor close weapons
 # min_str op 0 zetten voor range weapons
 for weapon_key, weapon_value in wpn.items():
-    if weapon_value['skl'] in (WeaponType.swd,
-                               WeaponType.haf,
-                               WeaponType.pol):
-        weapon_value['min_int'] = 0
-    elif weapon_value['skl'] in (WeaponType.mis,
-                                 WeaponType.thr):
+    if weapon_value['skl'] == WeaponType.mis:
         weapon_value['min_str'] = 0
-
+    else:
+        weapon_value['min_int'] = 0
 # Shop uitzetten voor sommige equipment items.
 for eqp_key, eqp_value in wpn.items():
     eqp_value['typ'] = EquipmentType.wpn

@@ -260,6 +260,20 @@ class Hero(object):
             push_object = components.MessageBox(gamestate, text)
             gamestate.push(push_object)
             return False
+
+        if (new_equipment_item.get_value_of('SKL') == database.WeaponType.mis and
+                self.sld.is_not_empty()):
+            text = ['{} can not use a bow when a shield is equipped.'.format(self.NAM)]
+            push_object = components.MessageBox(gamestate, text)
+            gamestate.push(push_object)
+            return False
+        elif (new_equipment_item.get_value_of('SKL') == database.WeaponType.shd and
+                self.wpn.get_value_of('SKL') == database.WeaponType.mis):
+            text = ['{} can not use a shield when a bow is equipped.'.format(self.NAM)]
+            push_object = components.MessageBox(gamestate, text)
+            gamestate.push(push_object)
+            return False
+
         return True
 
     def has_enough_weapon_skill_to_equip(self, new_equipment_item):
