@@ -46,3 +46,16 @@ class Direction(enum.Enum):
     South = 2
     West = 3
     East = 4
+
+
+class School(enum.Enum):
+    """
+    De 7 wizard schools.
+    """
+    non = "None"
+    spl = "Special"
+    ntl = "Neutral"
+    elm = "Elemental"
+    nmg = "Naming"
+    ncy = "Necromancy"
+    str = "Star"

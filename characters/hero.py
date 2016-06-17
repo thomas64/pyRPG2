@@ -5,7 +5,9 @@ class: Hero
 
 import characters.stats
 import characters.skills
+import characters.spells
 import components
+import containers
 import database
 import equipment
 
@@ -69,10 +71,18 @@ class Hero(object):
         # hier kan zeker None ingevuld worden omdat gamestate hierbij zeker weten niet zal pushen een messagebox.
         if kwargs['wpn']:
             self.set_equipment_item(None, equipment.factory_equipment_item(kwargs['wpn']))
+        # kwargs['sld'] moet bestaan om de if te mogen doen.
+        # maar de uitkomst moet niet None zijn om aan de voorwaarde te voldoen.
         if kwargs['sld']:
             self.set_equipment_item(None, equipment.factory_equipment_item(kwargs['sld']))
         if kwargs['arm']:
             self.set_equipment_item(None, equipment.factory_equipment_item(kwargs['arm']))
+
+        self.scl = containers.School(kwargs['scl'])
+        if kwargs.get('spl'):
+            for spell_class_name, spell_quantity in kwargs['spl'].items():
+                ClassName = getattr(characters.spells, spell_class_name)
+                self.scl.add(ClassName(spell_quantity))
 
     @property
     def equipment_tuple(self):

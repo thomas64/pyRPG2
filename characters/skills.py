@@ -16,12 +16,12 @@ class Skill(object):
     Skill baseclass voor skills.
     """
     TRAININGSCOSTS = (200, 80, 120, 160, 200, 240, 280, 320, 360, 400, "Max")
+    MAXIMUM = 10                        # maximum mogelijk, is voor alle skills 10
 
     def __init__(self, name, raw, upgrade, quantity):
         self.NAM = name
         self.RAW = raw
         self.ICON = PATH+name.lower()+'.png'
-        self.MAX = 10                   # maximum mogelijk, is voor alle skills 10
         self.UPG = upgrade              # upgrade formule constante
         self.qty = quantity             # standaard hoeveelheid op te waarderen stat (tot bijv 30)
         self.ext = 0                    # extra: wat geeft equipment item voor pos/neg extra
