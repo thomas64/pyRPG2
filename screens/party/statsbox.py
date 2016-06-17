@@ -216,7 +216,7 @@ class StatsBox(object):
                 "Defines how heavy your character is equipped with equipment. "
                 "Weight has negative impact on movepoints and agility.")
 
-        if stat == MVP_DESC:
+        elif stat == MVP_DESC:
             # Movepoints
             return (
                 "Defines how many steps your character is able to take in one turn. The more stamina your character "
@@ -224,7 +224,7 @@ class StatsBox(object):
                 "shows the number of movepoints calculated from your stamina. The second (red) column shows the "
                 "calculated weight subtracted.")
 
-        if stat == PRT_DESC:
+        elif stat == PRT_DESC:
             # Protection
             return (
                 "Protection decreases the amount of health your character loses when hit in combat. There is no "
@@ -232,7 +232,7 @@ class StatsBox(object):
                 "your equipment combined, minus the shield. The second (green) column shows the protection points "
                 "from your shield.")
 
-        if stat == HIT_DESC:
+        elif stat == HIT_DESC:
             # Base Hit
             return (
                 "Defines how much chance the weapon of your character has in striking the enemy successfully. "

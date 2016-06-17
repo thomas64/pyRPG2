@@ -48,7 +48,7 @@ class Direction(enum.Enum):
     East = 4
 
 
-class School(enum.Enum):
+class SchoolType(enum.Enum):
     """
     De 7 wizard schools.
     """

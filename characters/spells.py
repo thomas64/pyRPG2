@@ -3,7 +3,7 @@
 class: Spell
 """
 
-from database import School
+from database import SchoolType
 
 
 class Spell(object):
@@ -42,5 +42,5 @@ class AirShield(Spell):
     ...
     """
     def __init__(self, quantity):
-        super().__init__("Air Shield", 'air_sld', School.elm, 1, 320, quantity)
+        super().__init__("Air Shield", 'air_sld', SchoolType.elm, 1, 320, quantity)
         self.DESC = "test"
