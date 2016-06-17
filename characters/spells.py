@@ -24,6 +24,18 @@ class Spell(object):
         self.UPG = upgrade
         self.qty = quantity
 
+    def upgrade(self, quantity):
+        """
+        ...
+        :param quantity:
+        :return:
+        """
+        if self.qty >= self.MAXIMUM:
+            return print("Spell is al aan de max, kan niet.")
+        else:
+            self.qty += quantity
+            return print("Spell met 1 opgehoogd, gelukt.")
+
 
 class AirShield(Spell):
     """
