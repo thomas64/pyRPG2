@@ -83,7 +83,7 @@ class Hero(object):
             for spell_class_name, spell_quantity in kwargs['spl'].items():
                 ClassName = getattr(characters.spells, spell_class_name)
                 new_spell = ClassName(spell_quantity)
-                self.scl.add(new_spell, self.wiz.qty)
+                self.scl.add(new_spell, self.wiz.qty, force=True)
 
     @property
     def equipment_tuple(self):

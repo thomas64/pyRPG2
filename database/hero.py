@@ -37,13 +37,15 @@ class HeroDatabase(enum.Enum):
                    int=22, wil=16, dex=20, agi=15, edu=16, str=10, sta=31,
                    alc=0, dip=0, hlr=0, lor=1, mec=0, mer=1, ran=0, stl=0, thf=0, trb=0, war=0, wiz=4,
                    haf=0, mis=-1, pol=3, shd=0, swd=3, thr=-1,
-                   wpn='bronzestaff', sld=None, arm='mediumleatherarmor')
+                   wpn='bronzestaff', sld=None, arm='mediumleatherarmor',
+                   spl=dict(VsNecromancy=1, Endurance=4, SenseAura=1, Weakness=4))
     codrif = dict(nam="Codrif", spr=PATH+"05s_Codrif.png", fac=PATH+"05f_Codrif.png",
                   lev=2, scl=SchoolType.elm,
                   int=22, wil=18, dex=15, agi=12, edu=15, str=10, sta=20,
                   alc=3, dip=0, hlr=0, lor=2, mec=2, mer=0, ran=0, stl=0, thf=0, trb=0, war=0, wiz=2,
                   haf=-1, mis=-1, pol=0, shd=-1, swd=1, thr=1,
-                  wpn='bronzedagger', sld=None, arm='lightleatherarmor')
+                  wpn='bronzedagger', sld=None, arm='lightleatherarmor',
+                  spl=dict(DragonFlames=2))
     galen = dict(nam="Galen", spr=PATH+"06s_Galen.png", fac=PATH+"06f_Galen.png",
                  lev=4, scl=SchoolType.non,
                  int=15, wil=15, dex=18, agi=10, edu=20, str=25, sta=40,
@@ -61,19 +63,22 @@ class HeroDatabase(enum.Enum):
                  int=15, wil=10, dex=30, agi=30, edu=20, str=15, sta=40,
                  alc=0, dip=0, hlr=1, lor=0, mec=0, mer=4, ran=0, stl=5, thf=8, trb=0, war=0, wiz=4,
                  haf=-1, mis=7, pol=2, shd=-1, swd=7, thr=-1,
-                 wpn='silverdagger', sld=None, arm='lightbronzearmor')
+                 wpn='silverdagger', sld=None, arm='lightbronzearmor',
+                 spl=dict(VsElemental=2, RemovePoison=3, Wind=3))
     luthais = dict(nam="Luthais", spr=PATH+"09s_Luthais.png", fac=PATH+"09f_Luthais.png",
                    lev=20, scl=SchoolType.elm,
                    int=30, wil=30, dex=20, agi=12, edu=18, str=8, sta=50,
                    alc=7, dip=0, hlr=8, lor=9, mec=6, mer=0, ran=0, stl=5, thf=0, trb=0, war=0, wiz=10,
                    haf=0, mis=-1, pol=8, shd=-1, swd=0, thr=8,
-                   wpn='bronzestaff', sld=None, arm='lightironarmor')
+                   wpn='bronzestaff', sld=None, arm='lightironarmor',
+                   spl=dict(VsStar=8, VsNecromancy=10, Fireball=8, Mirror=8, DispelNecro=10))
     elias = dict(nam="Elias", spr=PATH+"10s_Elias.png", fac=PATH+"10f_Elias.png",
                  lev=18, scl=SchoolType.nmg,
                  int=30, wil=30, dex=25, agi=18, edu=30, str=20, sta=60,
                  alc=0, dip=8, hlr=0, lor=0, mec=0, mer=0, ran=0, stl=0, thf=0, trb=0, war=7, wiz=7,
                  haf=5, mis=-1, pol=5, shd=-1, swd=7, thr=-1,
-                 wpn='steellongsword', sld=None, arm='mediumsteelarmor')
+                 wpn='steellongsword', sld=None, arm='mediumsteelarmor',
+                 spl=dict(VsStar=7, Banishing=7, SenseAura=7, Teleportation=7))
     onarr = dict(nam="Onarr", spr=PATH+"11s_Onarr.png", fac=PATH+"11f_Onarr.png",
                  lev=18, scl=SchoolType.non,
                  int=30, wil=25, dex=23, agi=15, edu=30, str=25, sta=60,
@@ -86,13 +91,14 @@ class HeroDatabase(enum.Enum):
                   alc=5, dip=10, hlr=0, lor=5, mec=0, mer=5, ran=5, stl=5, thf=5, trb=10, war=10, wiz=10,
                   haf=10, mis=-1, pol=10, shd=10, swd=10, thr=10,
                   wpn='silvershortsword', sld='silvertarge', arm='mediumsilverarmor',
-                  spl=dict(AirShield=6))
+                  spl=dict(Fireball=6, AirShield=9, Strength=9, Debilitation=9, Mirror=9))
     iellwen = dict(nam="Iellwen", spr=PATH+"13s_Iellwen.png", fac=PATH+"13f_Iellwen.png",
                    lev=20, scl=SchoolType.str,
                    int=30, wil=25, dex=30, agi=25, edu=30, str=20, sta=60,
                    alc=0, dip=0, hlr=10, lor=0, mec=0, mer=0, ran=6, stl=6, thf=0, trb=0, war=10, wiz=8,
                    haf=5, mis=7, pol=0, shd=-1, swd=10, thr=-1,
-                   wpn='silverlongsword', sld=None, arm='lightsilverarmor')
+                   wpn='silverlongsword', sld=None, arm='lightsilverarmor',
+                   spl=dict(WebOfStarlight=8, DispelStar=8, StellarGravity=8, DispelNaming=8, SolarWrath=8))
     faeron = dict(nam="Faeron", spr=PATH+"14s_Faeron.png", fac=PATH+"14f_Faeron.png",
                   lev=25, scl=SchoolType.nmg,
                   int=30, wil=30, dex=30, agi=30, edu=25, str=15, sta=80,

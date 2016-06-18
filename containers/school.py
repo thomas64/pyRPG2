@@ -14,12 +14,14 @@ class School(dict):
         super().__init__(**kwargs)
         self.NAM = name
 
-    def add(self, spell_object, wiz_qty, quantity=1):
+    def add(self, spell_object, wiz_qty, quantity=1, force=False):
         """
         ...
         :param spell_object:
         :param wiz_qty:
         :param quantity: is alleen maar voor het upgraden, de quantity zit in de spell_object zelf.
+        :param force: forceer bij opstarten van game sommige spells op characters wat eigenlijk niet kan.
+         bijvoorbeeld elias, teleportation, level 7 -> 8.
         :return:
         """
         if self.NAM == SchoolType.non:
@@ -28,7 +30,7 @@ class School(dict):
         elif wiz_qty < 1:
             return print("Je hebt geen wizard skill, kan niet.")
 
-        elif wiz_qty < spell_object.MIN:
+        elif wiz_qty < spell_object.MIN and force is False:
             return print("Je wizard level is te laag, kan niet.")
 
         elif spell_object.RAW in self:
