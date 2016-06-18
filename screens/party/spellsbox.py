@@ -5,48 +5,58 @@ class: SpellsBox
 
 import pygame
 
-BACKGROUNDCOLOR = pygame.Color("black")
+from screens.party.basebox import BaseBox
+
+
 LINECOLOR = pygame.Color("white")
 
-BOXWIDTH = 329
-BOXHEIGHT = 640
 TITLEX, TITLEY = 7, 1
+COLUMN1X = 50
+COLUMN2X = 90
+COLUMN3X = 220
+COLUMNSY = 60
+ROWHEIGHT = 34
+ICONOFFSET = -6
+
 
 TITLE = "Spells"
 
-FONTCOLOR1 = pygame.Color("white")
-FONTCOLOR2 = pygame.Color("yellow")
-FONT = 'impact'
-LARGEFONTSIZE = 25
-NORMALFONTSIZE = 15
 
-
-class SpellsBox(object):
+class SpellsBox(BaseBox):
     """
     Alle weergegeven informatie van alle spells van een hero.
     """
-    def __init__(self, position):
-        self.surface = pygame.Surface((BOXWIDTH, BOXHEIGHT))
-        self.surface = self.surface.convert()
-        self.rect = self.surface.get_rect()
-        self.rect.topleft = position
+    def __init__(self, position, width, height):
+        super().__init__(position, width, height)
 
-        self.background = pygame.Surface(self.surface.get_size())
-        self.background.fill(BACKGROUNDCOLOR)
-        self.background = self.background.convert()
-
-        self.largefont = pygame.font.SysFont(FONT, LARGEFONTSIZE)
-        self.normalfont = pygame.font.SysFont(FONT, NORMALFONTSIZE)
-
-        self.title = self.largefont.render(TITLE, True, FONTCOLOR1).convert_alpha()
+        self.title = None
 
     def update(self, hero):
         """
         Update eerst alle data.
         :param hero: de huidige geselecteerde hero uit partyscreen
         """
+        self.title = self.largefont.render(
+                                    "{} {}".format(hero.scl.NAM.value, TITLE), True, self.fontcolor1).convert_alpha()
 
-        pass
+        self.table_data = []
+        for spell in hero.scl.values():
+            self.table_data.append(
+                # row[0],       row[1],           row[2],     row[3],  row[4],     row[5],    row[6]
+                [spell.ICON, spell.NAM + " :", str(spell.qty), None, spell.DESC, spell.COL, spell.ROW]
+            )
+
+        # vul row[3] kolom. hierin staan de rects van row[1]. rect is voor muisklik.
+        for index, row in enumerate(self.table_data):
+            row[3] = self._create_rect_with_offset(index, row[1], COLUMN1X, COLUMNSY, ROWHEIGHT)
+
+        # maak dan een nieuwe tabel aan met de tekst en icons, maar dan gerendered.
+        self.table_view = []
+        for index, row in enumerate(self.table_data):
+            self.table_view.append(list())
+            self.table_view[index].append(pygame.image.load(row[0]).subsurface(row[5], row[6], 32, 32).convert())
+            self.table_view[index].append(self.normalfont.render(row[1], True, self._get_color(index)).convert_alpha())
+            self.table_view[index].append(self.normalfont.render(row[2], True, self.fontcolor1).convert_alpha())
 
     def render(self, screen):
         """
@@ -57,5 +67,9 @@ class SpellsBox(object):
         pygame.draw.rect(self.background, LINECOLOR, self.surface.get_rect(), 1)
 
         self.surface.blit(self.title, (TITLEX, TITLEY))
+        for index, row in enumerate(self.table_view):
+            self.surface.blit(row[0], (COLUMN1X, COLUMNSY + ICONOFFSET + index * ROWHEIGHT))
+            self.surface.blit(row[1], (COLUMN2X, COLUMNSY + index * ROWHEIGHT))
+            self.surface.blit(row[2], (COLUMN3X, COLUMNSY + index * ROWHEIGHT))
 
         screen.blit(self.surface, self.rect.topleft)

@@ -52,7 +52,7 @@ class SchoolType(enum.Enum):
     """
     De 7 wizard schools.
     """
-    non = "None"
+    non = ""
     spl = "Special"
     ntl = "Neutral"
     elm = "Elemental"
