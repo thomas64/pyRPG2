@@ -57,6 +57,19 @@ class BaseBox(object):
                 self.cur_item = index
                 return row[4]
 
+    @staticmethod
+    def _get_difference(hero, hovered_equipment_item, skill_raw):
+        """
+        Berekent het verschil van het equipte item en hoverde item voor in col[6]. Voor de betreffende skill.
+        :return: hij moet bij niets "" en niet None teruggeven, vanwege de verwachting in _set_color().
+        """
+        # hovered_equipment_item is None als er niets gehoverd is in party Display
+        if hovered_equipment_item:
+            eqp_skl = hero.get_equipped_item_of_type(hovered_equipment_item.TYP).get_value_of(skill_raw)
+            new_skl = hovered_equipment_item.get_value_of(skill_raw)
+            return new_skl - eqp_skl
+        return ""
+
     def _create_rect_with_offset(self, index, text, columnxx, columnsy, rowheight):
         """
         self.rect is de hele box zelf. Die heeft ook een position op het scherm, vandaar dat de position een soort

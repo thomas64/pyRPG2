@@ -115,18 +115,6 @@ class StatsBox(BaseBox):
         screen.blit(self.surface, self.rect.topleft)
 
     @staticmethod
-    def _get_difference(hero, hovered_equipment_item, stat):
-        """
-        Berekent het verschil van het equipte item en hoverde item voor in col[6]. Voor de betreffende skill.
-        :return: hij moet bij niets "" en niet None teruggeven, vanwege de verwachting in _set_color().
-        """
-        if hovered_equipment_item:
-            eqp_stat = hero.get_equipped_item_of_type(hovered_equipment_item.TYP).get_value_of(stat)
-            new_stat = hovered_equipment_item.get_value_of(stat)
-            return new_stat - eqp_stat
-        return ""
-
-    @staticmethod
     def _desc(stat):
         if stat == WHT_DESC:
             # Weight

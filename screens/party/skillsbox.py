@@ -41,7 +41,7 @@ class SkillsBox(BaseBox):
         self.table_data = []
         for skill in hero.skills_tuple:
             if skill.positive_quantity():
-                preview_value = self._get_difference(hero, hovered_equipment_item, skill)
+                preview_value = self._get_difference(hero, hovered_equipment_item, skill.RAW)
                 self.table_data.append(
                     # row[0],       row[1],           row[2],       row[3],  row[4],  row[5],     row[6]
                     [skill.ICON, skill.NAM + " :", str(skill.qty), None, skill.DESC, skill.ext, preview_value]
@@ -78,16 +78,3 @@ class SkillsBox(BaseBox):
             self.surface.blit(row[4], (COLUMN5X, COLUMNSY + index * ROWHEIGHT))
 
         screen.blit(self.surface, self.rect.topleft)
-
-    @staticmethod
-    def _get_difference(hero, hovered_equipment_item, skill):
-        """
-        Berekent het verschil van het equipte item en hoverde item voor in col[6]. Voor de betreffende skill.
-        :return: hij moet bij niets "" en niet None teruggeven, vanwege de verwachting in _set_color().
-        """
-        # hovered_equipment_item is None als er niets gehoverd is in party Display
-        if hovered_equipment_item:
-            eqp_skl = hero.get_equipped_item_of_type(hovered_equipment_item.TYP).get_value_of(skill.RAW)
-            new_skl = hovered_equipment_item.get_value_of(skill.RAW)
-            return new_skl - eqp_skl
-        return ""
