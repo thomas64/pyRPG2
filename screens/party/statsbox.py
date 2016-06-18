@@ -37,19 +37,6 @@ class StatsBox(BaseBox):
 
         self.title = self.largefont.render(TITLE, True, self.fontcolor1).convert_alpha()
 
-    def mouse_hover(self, event):
-        """
-        Als de muis over een item in de uit row[3] geregistreerde rects gaat.
-        Zet cur_item op de index van degene waar de muis over gaat.
-        :param event: pygame.MOUSEMOTION uit partyscreen
-        :return: row[4] is de kolom met de info.
-        """
-        self.cur_item = None
-        for index, row in enumerate(self.table_data):
-            if row[3].collidepoint(event.pos):
-                self.cur_item = index
-                return row[4]
-
     def update(self, hero, hovered_equipment_item):
         """
         Update eerst alle data.

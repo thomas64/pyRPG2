@@ -15,7 +15,7 @@ COLUMN1X = 50
 COLUMN2X = 90
 COLUMN3X = 220
 COLUMNSY = 60
-ROWHEIGHT = 34
+ROWHEIGHT = 30
 ICONOFFSET = -6
 
 
@@ -48,7 +48,7 @@ class SpellsBox(BaseBox):
 
         # vul row[3] kolom. hierin staan de rects van row[1]. rect is voor muisklik.
         for index, row in enumerate(self.table_data):
-            row[3] = self._create_rect_with_offset(index, row[1], COLUMN1X, COLUMNSY, ROWHEIGHT)
+            row[3] = self._create_rect_with_offset(index, row[1], COLUMN2X, COLUMNSY, ROWHEIGHT)
 
         # maak dan een nieuwe tabel aan met de tekst en icons, maar dan gerendered.
         self.table_view = []

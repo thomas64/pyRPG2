@@ -44,6 +44,19 @@ class BaseBox(object):
         self.table_data = []
         self.table_view = []
 
+    def mouse_hover(self, event):
+        """
+        Als de muis over een item in de uit row[3] geregistreerde rects gaat.
+        Zet cur_item op de index van degene waar de muis over gaat.
+        :param event: pygame.MOUSEMOTION uit partyscreen
+        :return: row[4] is de kolom met de info.
+        """
+        self.cur_item = None
+        for index, row in enumerate(self.table_data):
+            if row[3].collidepoint(event.pos):
+                self.cur_item = index
+                return row[4]
+
     def _create_rect_with_offset(self, index, text, columnxx, columnsy, rowheight):
         """
         self.rect is de hele box zelf. Die heeft ook een position op het scherm, vandaar dat de position een soort

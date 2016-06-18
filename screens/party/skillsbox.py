@@ -32,19 +32,6 @@ class SkillsBox(BaseBox):
 
         self.title = self.largefont.render(TITLE, True, self.fontcolor1).convert_alpha()
 
-    def mouse_hover(self, event):
-        """
-        Als de muis over een item in de uit row[4] geregistreerde rects gaat.
-        Zet cur_item op de index van degene waar de muis over gaat.
-        :param event: pygame.MOUSEMOTION uit partyscreen
-        :return: row[5] is de kolom met de info.
-        """
-        self.cur_item = None
-        for index, row in enumerate(self.table_data):
-            if row[4].collidepoint(event.pos):
-                self.cur_item = index
-                return row[5]
-
     def update(self, hero, hovered_equipment_item):
         """
         Update eerst alle data.
@@ -57,12 +44,12 @@ class SkillsBox(BaseBox):
                 preview_value = self._get_difference(hero, hovered_equipment_item, skill)
                 self.table_data.append(
                     # row[0],       row[1],           row[2],       row[3],  row[4],  row[5],     row[6]
-                    [skill.ICON, skill.NAM + " :", str(skill.qty), skill.ext, None, skill.DESC, preview_value]
+                    [skill.ICON, skill.NAM + " :", str(skill.qty), None, skill.DESC, skill.ext, preview_value]
                 )
 
-        # vul de vijfde lege kolom. hierin staan de rects van de tweede kolom. rect is voor muisklik.
+        # vul de vierde lege kolom. hierin staan de rects van de tweede kolom. rect is voor muisklik.
         for index, row in enumerate(self.table_data):
-            row[4] = self._create_rect_with_offset(index, row[1], COLUMN2X, COLUMNSY, ROWHEIGHT)
+            row[3] = self._create_rect_with_offset(index, row[1], COLUMN2X, COLUMNSY, ROWHEIGHT)
 
         # maak dan een nieuwe tabel aan met de tekst en icons, maar dan gerendered.
         self.table_view = []
@@ -71,7 +58,7 @@ class SkillsBox(BaseBox):
             self.table_view[index].append(pygame.image.load(row[0]).convert_alpha())
             self.table_view[index].append(self.normalfont.render(row[1], True, self._get_color(index)).convert_alpha())
             self.table_view[index].append(self.normalfont.render(row[2], True, self.fontcolor1).convert_alpha())
-            self._set_color(row[3], self.table_view[index], 1)
+            self._set_color(row[5], self.table_view[index], 1)
             self._set_color(row[6], self.table_view[index], 2)
 
     def render(self, screen):
