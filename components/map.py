@@ -11,6 +11,7 @@ import components
 from database import Direction
 import database.inn
 import database.hero
+import database.school
 import database.shop
 
 MAPPATH = 'resources/maps/'
@@ -23,6 +24,7 @@ STARTPOS = "start_pos"
 PORTALS = "portals"
 HEROES = "heroes"
 SHOPS = "shops"
+SCHOOLS = "schools"
 INNS = "inns"
 SIGNS = "signs"
 CHESTS = "chests"
@@ -63,6 +65,7 @@ class Map(object):
         self.portals = []
         self.heroes = []
         self.shops = []
+        self.schools = []
         self.inns = []
         self.signs = []
         self.chests = []
@@ -93,6 +96,15 @@ class Map(object):
                                               self._pg_rect(obj), OBJECTLAYER, self._has_dir(obj, 'direction'))
                 self.high_blocker_rects.append(shop_object.get_blocker())
                 self.shops.append(shop_object)
+        except ValueError:
+            pass
+
+        try:
+            for obj in tmx_data.get_layer_by_name(SCHOOLS):
+                school_object = components.School(obj.name, database.school.SchoolDatabase[obj.name].value['sprite'],
+                                                  self._pg_rect(obj), OBJECTLAYER, self._has_dir(obj, 'direction'))
+                self.high_blocker_rects.append(school_object.get_blocker())
+                self.schools.append(school_object)
         except ValueError:
             pass
 

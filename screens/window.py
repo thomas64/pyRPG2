@@ -12,6 +12,7 @@ import components
 from database import Direction
 import database.inn
 import database.hero
+import database.school
 import database.shop
 import database.sign
 import equipment
@@ -110,6 +111,7 @@ class Window(object):
                 # dit zit niet in de map class vanwege imports. maar nu moet hij in window al 2x checken op dit.
                 self.engine.current_map.high_blocker_rects.append(hero.get_blocker())
         self.group.add(self.engine.current_map.shops)
+        self.group.add(self.engine.current_map.schools)
         self.group.add(self.engine.current_map.inns)
         self.group.add(self.engine.current_map.signs)
         self.group.add(self.engine.current_map.chests)
@@ -188,6 +190,7 @@ class Window(object):
             elif event.key in keys.SELECT:
                 self.check_heroes(self.party_sprites[0].get_check_rect())
                 self.check_shops(self.party_sprites[0].get_check_rect())
+                self.check_schools(self.party_sprites[0].get_check_rect())
                 self.check_inns(self.party_sprites[0].get_check_rect())
                 self.check_signs()
                 self.check_chests()
@@ -211,14 +214,13 @@ class Window(object):
                         self.cbox_sprites.append(components.ColorBox(rect, HIGHBLOCKERCOLOR, CBOXLAYER))
                     for rect in self.engine.current_map.low_blocker_rects:
                         self.cbox_sprites.append(components.ColorBox(rect, LOWBLOCKERCOLOR, CBOXLAYER))
-                    for obj in self.engine.current_map.heroes:
-                        self.cbox_sprites.append(components.ColorBox(obj.rect, SHOPCOLOR, CBOXLAYER))
-                    for obj in self.engine.current_map.shops:
-                        self.cbox_sprites.append(components.ColorBox(obj.rect, SHOPCOLOR, CBOXLAYER))
-                    for obj in self.engine.current_map.inns:
-                        self.cbox_sprites.append(components.ColorBox(obj.rect, SHOPCOLOR, CBOXLAYER))
-                    for obj in self.engine.current_map.signs:
-                        self.cbox_sprites.append(components.ColorBox(obj.rect, SHOPCOLOR, CBOXLAYER))
+                    for obj_group in (self.engine.current_map.heroes,
+                                      self.engine.current_map.shops,
+                                      self.engine.current_map.schools,
+                                      self.engine.current_map.inns,
+                                      self.engine.current_map.signs):
+                        for obj in obj_group:
+                            self.cbox_sprites.append(components.ColorBox(obj.rect, SHOPCOLOR, CBOXLAYER))
                     self.group.add(self.cbox_sprites)
                 else:
                     self.group.remove(self.cbox_sprites)
@@ -386,6 +388,17 @@ class Window(object):
 
             push_object = screens.shop.display.Display(self.engine, shop_data['content'], shop_data['face'])
             self.engine.gamestate.push(push_object)
+
+    def check_schools(self, check_rect):
+        """
+        Bekijk of je collide met een school.
+        """
+        if len(check_rect.collidelistall(self.engine.current_map.schools)) == 1:
+            object_nr = check_rect.collidelist(self.engine.current_map.schools)
+            school_sprite = self.engine.current_map.schools[object_nr]
+            school_data = database.school.SchoolDatabase[school_sprite.sprite_id].value
+
+            school_sprite.turn(self.party_sprites[0].rect)
 
     def check_inns(self, check_rect):
         """

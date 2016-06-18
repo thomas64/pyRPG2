@@ -337,3 +337,11 @@ class Hero(Shop):
     """
     def __init__(self, hero_name, sprite, rect, objectlayer, direction):
         super().__init__(hero_name, sprite, rect, objectlayer, direction)
+
+
+class School(Shop):
+    """
+    Leer magie hier.
+    """
+    def __init__(self, school_id, sprite, rect, objectlayer, direction):
+        super().__init__(school_id, sprite, rect, objectlayer, direction)
