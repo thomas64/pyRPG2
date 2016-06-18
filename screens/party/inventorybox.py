@@ -6,11 +6,11 @@ class: InventoryBox
 import pygame
 import pygame.gfxdraw
 
-BACKGROUNDCOLOR = pygame.Color("black")
+from screens.party.basebox import BaseBox
+
+
 LINECOLOR = pygame.Color("white")
 
-BOXWIDTH = 329
-BOXHEIGHT = 340
 TITLEX, TITLEY = 7, 1
 
 TITLE = "Inventory"
@@ -33,30 +33,15 @@ ACYBOX = pygame.Rect(213, 197, 33, 33)
 EQUIPMENTITEMBOXES = (WPNBOX, SLDBOX, HLMBOX, AMUBOX, ARMBOX, CLKBOX, BRCBOX, GLVBOX, RNGBOX, BLTBOX, BTSBOX, ACYBOX)
 SUBSURW, SUBSURH = 32, 32
 
-FONTCOLOR = pygame.Color("white")
-FONT = 'impact'
-LARGEFONTSIZE = 25
-NORMALFONTSIZE = 15
 
-
-class InventoryBox(object):
+class InventoryBox(BaseBox):
     """
     Alle weergegeven informatie van alle inventory van de party.
     """
-    def __init__(self, position):
-        self.surface = pygame.Surface((BOXWIDTH, BOXHEIGHT))
-        self.surface = self.surface.convert()
-        self.rect = self.surface.get_rect()
-        self.rect.topleft = position
+    def __init__(self, position, width, height):
+        super().__init__(position, width, height)
 
-        self.background = pygame.Surface(self.surface.get_size())
-        self.background.fill(BACKGROUNDCOLOR)
-        self.background = self.background.convert()
-
-        self.largefont = pygame.font.SysFont(FONT, LARGEFONTSIZE)
-        self.normalfont = pygame.font.SysFont(FONT, NORMALFONTSIZE)
-
-        self.title = self.largefont.render(TITLE, True, FONTCOLOR).convert_alpha()
+        self.title = self.largefont.render(TITLE, True, self.fontcolor1).convert_alpha()
         self.stickman = pygame.image.load(STICKMANPATH).convert()
         self.equipment_item_sprites = []
         self.equipment_items = []

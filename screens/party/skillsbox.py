@@ -5,11 +5,11 @@ class: SkillsBox
 
 import pygame
 
-BACKGROUNDCOLOR = pygame.Color("black")
+from screens.party.basebox import BaseBox
+
+
 LINECOLOR = pygame.Color("white")
 
-BOXWIDTH = 329
-BOXHEIGHT = 640
 TITLEX, TITLEY = 7, 1
 COLUMN1X = 50
 COLUMN2X = 90
@@ -22,40 +22,15 @@ ICONOFFSET = -6
 
 TITLE = "Skills"
 
-FONTCOLOR1 = pygame.Color("white")
-FONTCOLOR2 = pygame.Color("yellow")
-FONT = 'impact'
-LARGEFONTSIZE = 25
-NORMALFONTSIZE = 15
 
-POSCOLOR1 = pygame.Color("green")
-POSCOLOR2 = pygame.Color("lightgreen")
-NEGCOLOR1 = pygame.Color("red")
-NEGCOLOR2 = pygame.Color("orangered")
-
-
-class SkillsBox(object):
+class SkillsBox(BaseBox):
     """
     Alle weergegeven informatie van alle skills van een hero.
     """
-    def __init__(self, position):
-        self.surface = pygame.Surface((BOXWIDTH, BOXHEIGHT))
-        self.surface = self.surface.convert()
-        self.rect = self.surface.get_rect()
-        self.rect.topleft = position
+    def __init__(self, position, width, height):
+        super().__init__(position, width, height)
 
-        self.background = pygame.Surface(self.surface.get_size())
-        self.background.fill(BACKGROUNDCOLOR)
-        self.background = self.background.convert()
-
-        self.largefont = pygame.font.SysFont(FONT, LARGEFONTSIZE)
-        self.normalfont = pygame.font.SysFont(FONT, NORMALFONTSIZE)
-
-        self.cur_item = None
-
-        self.title = self.largefont.render(TITLE, True, FONTCOLOR1).convert_alpha()
-        self.table_data = []
-        self.table_view = []
+        self.title = self.largefont.render(TITLE, True, self.fontcolor1).convert_alpha()
 
     def mouse_hover(self, event):
         """
@@ -87,7 +62,7 @@ class SkillsBox(object):
 
         # vul de vijfde lege kolom. hierin staan de rects van de tweede kolom. rect is voor muisklik.
         for index, row in enumerate(self.table_data):
-            row[4] = self._create_rect_with_offset(index, row[1])
+            row[4] = self._create_rect_with_offset(index, row[1], COLUMN2X, COLUMNSY, ROWHEIGHT)
 
         # maak dan een nieuwe tabel aan met de tekst en icons, maar dan gerendered.
         self.table_view = []
@@ -95,9 +70,9 @@ class SkillsBox(object):
             self.table_view.append(list())
             self.table_view[index].append(pygame.image.load(row[0]).convert_alpha())
             self.table_view[index].append(self.normalfont.render(row[1], True, self._get_color(index)).convert_alpha())
-            self.table_view[index].append(self.normalfont.render(row[2], True, FONTCOLOR1).convert_alpha())
-            self._set_color(row[3], self.table_view[index], POSCOLOR1, NEGCOLOR1)
-            self._set_color(row[6], self.table_view[index], POSCOLOR2, NEGCOLOR2)
+            self.table_view[index].append(self.normalfont.render(row[2], True, self.fontcolor1).convert_alpha())
+            self._set_color(row[3], self.table_view[index], 1)
+            self._set_color(row[6], self.table_view[index], 2)
 
     def render(self, screen):
         """
@@ -129,42 +104,3 @@ class SkillsBox(object):
             new_skl = hovered_equipment_item.get_value_of(skill.RAW)
             return new_skl - eqp_skl
         return ""
-
-    def _create_rect_with_offset(self, index, text):
-        """
-        self.rect is de hele box zelf. Die heeft ook een position op het scherm, vandaar dat de position een soort
-        offset moet krijgen hier.
-        """
-        rect = self.normalfont.render(text, True, FONTCOLOR1).get_rect()
-        rect.topleft = self.rect.left + COLUMN2X, (self.rect.top + COLUMNSY) + index * ROWHEIGHT
-        return rect
-
-    def _get_color(self, index):
-        """
-        Als de index van deze rij gelijk is aan waar de muis over zit, maak hem geel anders gewoon wit.
-        :param index: enumerate van for loop
-        """
-        if index == self.cur_item:
-            return FONTCOLOR2
-        else:
-            return FONTCOLOR1
-
-    def _set_color(self, value, col, poscolor, negcolor):
-        """
-        Geef een regel in een kolom een bepaalde format en kleur mee aan de hand van de waarde.
-        :param value: dit is een van die waarden
-        :param col: in welke kolom de regel zich bevind
-        :param poscolor: welke kleuren moet hij weergeven
-        """
-        if value == "":
-            value = 0
-
-        if value == 0:
-            value = ""
-            col.append(self.normalfont.render(value, True, FONTCOLOR1).convert_alpha())
-        elif value > 0:
-            value = "(+"+str(value)+")"
-            col.append(self.normalfont.render(value, True, poscolor).convert_alpha())
-        elif value < 0:
-            value = "("+str(value)+")"
-            col.append(self.normalfont.render(value, True, negcolor).convert_alpha())

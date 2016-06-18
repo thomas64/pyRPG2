@@ -33,12 +33,18 @@ BTNHEIGHT = 30
 
 HEROBOXX, HEROBOXY = 10, 10
 HEROBOXVAR = 255
-STATBOXX, STATBOXY = 10, 118
-INFOBOXX, INFOBOXY = 10, 613
+STATBOXX, STATBOXY = 10,  118
+STATBOXW, STATBOXH = 329, 490
+INFOBOXX, INFOBOXY = 10,  613
+INFOBOXW, INFOBOXH = 329, 145
 SKILBOXX, SKILBOXY = 349, 118
+SKILBOXW, SKILBOXH = 329, 640
 INVBOXX, INVBOXY = 688, 118
+INVBOXW, INVBOXH = 329, 340
 PCHBOXX, PCHBOXY = 688, 468
+PCHBOXW, PCHBOXH = 329, 290
 SPELBOXX, SPELBOXY = 1027, 118
+SPELBOXW, SPELBOXH = 329, 640
 
 NEWMAPTIMEOUT = 0.5
 
@@ -89,12 +95,12 @@ class Display(object):
             self.hero_boxes.append(screens.party.herobox.HeroBox(
                                                                 (HEROBOXX + index * HEROBOXVAR, HEROBOXY), index, hero))
 
-        self.stats_box = screens.party.statsbox.StatsBox((STATBOXX, STATBOXY))
-        self.info_box = screens.party.infobox.InfoBox((INFOBOXX, INFOBOXY))
-        self.skills_box = screens.party.skillsbox.SkillsBox((SKILBOXX, SKILBOXY))         # de grootte zit in de class
-        self.inventory_box = screens.party.inventorybox.InventoryBox((INVBOXX, INVBOXY))  # zelf, de positie zit in deze
-        self.pouch_box = screens.party.pouchbox.PouchBox((PCHBOXX, PCHBOXY))              # class, moet dat anders?
-        self.spells_box = screens.party.spellsbox.SpellsBox((SPELBOXX, SPELBOXY))
+        self.stats_box = screens.party.statsbox.StatsBox((STATBOXX,             STATBOXY), STATBOXW, STATBOXH)
+        self.info_box = screens.party.infobox.InfoBox((INFOBOXX,                INFOBOXY), INFOBOXW, INFOBOXH)
+        self.skills_box = screens.party.skillsbox.SkillsBox((SKILBOXX,          SKILBOXY), SKILBOXW, SKILBOXH)
+        self.inventory_box = screens.party.inventorybox.InventoryBox((INVBOXX,  INVBOXY),  INVBOXW,  INVBOXH)
+        self.pouch_box = screens.party.pouchbox.PouchBox((PCHBOXX,              PCHBOXY),  PCHBOXW,  PCHBOXH)
+        self.spells_box = screens.party.spellsbox.SpellsBox((SPELBOXX,          SPELBOXY), SPELBOXW, SPELBOXH)
 
     def on_enter(self):
         """

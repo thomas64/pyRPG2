@@ -5,11 +5,11 @@ class: PouchBox
 
 import pygame
 
-BACKGROUNDCOLOR = pygame.Color("black")
+from screens.party.basebox import BaseBox
+
+
 LINECOLOR = pygame.Color("white")
 
-BOXWIDTH = 329
-BOXHEIGHT = 290
 TITLEX, TITLEY = 7, 1
 COLUMN1X = 50
 COLUMN2X = 90
@@ -20,35 +20,15 @@ ICONOFFSET = -6
 
 TITLE = "Pouch"
 
-FONTCOLOR1 = pygame.Color("white")
-FONTCOLOR2 = pygame.Color("yellow")
-FONT = 'impact'
-LARGEFONTSIZE = 25
-NORMALFONTSIZE = 15
 
-
-class PouchBox(object):
+class PouchBox(BaseBox):
     """
     Alle weergegeven informatie van alle pouchitems van de party.
     """
-    def __init__(self, position):
-        self.surface = pygame.Surface((BOXWIDTH, BOXHEIGHT))
-        self.surface = self.surface.convert()
-        self.rect = self.surface.get_rect()
-        self.rect.topleft = position
+    def __init__(self, position, width, height):
+        super().__init__(position, width, height)
 
-        self.background = pygame.Surface(self.surface.get_size())
-        self.background.fill(BACKGROUNDCOLOR)
-        self.background = self.background.convert()
-
-        self.largefont = pygame.font.SysFont(FONT, LARGEFONTSIZE)
-        self.normalfont = pygame.font.SysFont(FONT, NORMALFONTSIZE)
-
-        self.cur_item = None
-
-        self.title = self.largefont.render(TITLE, True, FONTCOLOR1).convert_alpha()
-        self.table_data = []
-        self.table_view = []
+        self.title = self.largefont.render(TITLE, True, self.fontcolor1).convert_alpha()
 
     def update(self, pouch):
         """
@@ -63,14 +43,14 @@ class PouchBox(object):
             )
 
         for index, row in enumerate(self.table_data):
-            row[3] = self._create_rect_with_offset(index, row[1])
+            row[3] = self._create_rect_with_offset(index, row[1], COLUMN2X, COLUMNSY, ROWHEIGHT)
 
         self.table_view = []
         for index, row in enumerate(self.table_data):
             self.table_view.append(list())
             self.table_view[index].append(pygame.image.load(row[0]).convert_alpha())
             self.table_view[index].append(self.normalfont.render(row[1], True, self._get_color(index)).convert_alpha())
-            self.table_view[index].append(self.normalfont.render(row[2], True, FONTCOLOR1).convert_alpha())
+            self.table_view[index].append(self.normalfont.render(row[2], True, self.fontcolor1).convert_alpha())
 
     def render(self, screen):
         """
@@ -87,22 +67,3 @@ class PouchBox(object):
             self.surface.blit(row[2], (COLUMN3X, COLUMNSY + index * ROWHEIGHT))
 
         screen.blit(self.surface, self.rect.topleft)
-
-    def _create_rect_with_offset(self, index, text):
-        """
-        self.rect is de hele box zelf. Die heeft ook een position op het scherm, vandaar dat de position een soort
-        offset moet krijgen hier.
-        """
-        rect = self.normalfont.render(text, True, FONTCOLOR1).get_rect()
-        rect.topleft = self.rect.left + COLUMN2X, (self.rect.top + COLUMNSY) + index * ROWHEIGHT
-        return rect
-
-    def _get_color(self, index):
-        """
-        Als de index van deze rij gelijk is aan waar de muis over zit, maak hem geel anders gewoon wit.
-        :param index: enumerate van for loop
-        """
-        if index == self.cur_item:
-            return FONTCOLOR2
-        else:
-            return FONTCOLOR1

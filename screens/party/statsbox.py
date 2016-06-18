@@ -7,11 +7,11 @@ class: StatsBox
 
 import pygame
 
-BACKGROUNDCOLOR = pygame.Color("black")
+from screens.party.basebox import BaseBox
+
+
 LINECOLOR = pygame.Color("white")
 
-BOXWIDTH = 329
-BOXHEIGHT = 490
 TITLEX, TITLEY = 7, 1
 COLUMN1X = 50
 COLUMN2X = 160
@@ -22,45 +22,20 @@ ROWHEIGHT = 22
 
 TITLE = "Stats"
 
-FONTCOLOR1 = pygame.Color("white")
-FONTCOLOR2 = pygame.Color("yellow")
-FONT = 'impact'
-LARGEFONTSIZE = 25
-NORMALFONTSIZE = 15
-
-POSCOLOR1 = pygame.Color("green")
-POSCOLOR2 = pygame.Color("lightgreen")
-NEGCOLOR1 = pygame.Color("red")
-NEGCOLOR2 = pygame.Color("orangered")
-
 WHT_DESC = 'wht'
 MVP_DESC = 'mvp'
 PRT_DESC = 'prt'
 HIT_DESC = 'hit'
 
 
-class StatsBox(object):
+class StatsBox(BaseBox):
     """
     Alle weergegeven informatie van alle stats van een hero.
     """
-    def __init__(self, position):
-        self.surface = pygame.Surface((BOXWIDTH, BOXHEIGHT))
-        self.surface = self.surface.convert()
-        self.rect = self.surface.get_rect()
-        self.rect.topleft = position
+    def __init__(self, position, width, height):
+        super().__init__(position, width, height)
 
-        self.background = pygame.Surface(self.surface.get_size())
-        self.background.fill(BACKGROUNDCOLOR)
-        self.background = self.background.convert()
-
-        self.largefont = pygame.font.SysFont(FONT, LARGEFONTSIZE)
-        self.normalfont = pygame.font.SysFont(FONT, NORMALFONTSIZE)
-
-        self.cur_item = None
-
-        self.title = self.largefont.render(TITLE, True, FONTCOLOR1).convert_alpha()
-        self.table_data = []
-        self.table_view = []
+        self.title = self.largefont.render(TITLE, True, self.fontcolor1).convert_alpha()
 
     def mouse_hover(self, event):
         """
@@ -123,16 +98,16 @@ class StatsBox(object):
 
         # vul de vierde lege kolom. hierin staan de rects van de eerste kolom. rect is voor muisklik.
         for index, row in enumerate(self.table_data):
-            row[3] = self._create_rect_with_offset(index, row[0])
+            row[3] = self._create_rect_with_offset(index, row[0], COLUMN1X, COLUMNSY, ROWHEIGHT)
 
         # maak dan een nieuwe tabel aan met de tekst, maar dan gerendered.
         self.table_view = []
         for index, row in enumerate(self.table_data):
             self.table_view.append(list())
             self.table_view[index].append(self.normalfont.render(row[0], True, self._get_color(index)).convert_alpha())
-            self.table_view[index].append(self.normalfont.render(row[1], True, FONTCOLOR1).convert_alpha())
-            self._set_color(row[2], self.table_view[index], POSCOLOR1, NEGCOLOR1, "")  # "" = None, maar dat gaf melding
-            self._set_color(row[5], self.table_view[index], POSCOLOR2, NEGCOLOR2, row[0])  # dit is om weight te bepalen
+            self.table_view[index].append(self.normalfont.render(row[1], True, self.fontcolor1).convert_alpha())
+            self._set_color(row[2], self.table_view[index], 1)
+            self._set_color(row[5], self.table_view[index], 2, row[0])  # dit is om weight te bepalen
 
     def render(self, screen):
         """
@@ -163,50 +138,6 @@ class StatsBox(object):
             new_stat = hovered_equipment_item.get_value_of(stat)
             return new_stat - eqp_stat
         return ""
-
-    def _create_rect_with_offset(self, index, text):
-        """
-        self.rect is de hele box zelf. Die heeft ook een position op het scherm, vandaar dat de position een soort
-        offset moet krijgen hier.
-        """
-        rect = self.normalfont.render(text, True, FONTCOLOR1).get_rect()
-        rect.topleft = self.rect.left + COLUMN1X, (self.rect.top + COLUMNSY) + index * ROWHEIGHT
-        return rect
-
-    def _get_color(self, index):
-        """
-        Als de index van deze rij gelijk is aan waar de muis over zit, maak hem geel anders gewoon wit.
-        :param index: enumerate van for loop
-        """
-        if index == self.cur_item:
-            return FONTCOLOR2
-        else:
-            return FONTCOLOR1
-
-    def _set_color(self, value, col, poscolor, negcolor, weight_check):
-        """
-        Geef een regel in een kolom een bepaalde format en kleur mee aan de hand van de waarde.
-        :param value: dit is een van die waarden
-        :param col: in welke kolom de regel zich bevind
-        :param poscolor: welke kleuren moet hij weergeven
-        """
-        # hele lelijke weight check, maar omdat weight de enige is, doe ik dit zo.
-        # weight is de enige waarvan een grotere waarde niet positief is, vandaar de omdraaiing.
-        if weight_check == "Weight :":
-            poscolor, negcolor = negcolor, poscolor
-
-        if value == "":
-            value = 0
-
-        if value == 0:
-            value = ""
-            col.append(self.normalfont.render(value, True, FONTCOLOR1).convert_alpha())
-        elif value > 0:
-            value = "(+"+str(value)+")"
-            col.append(self.normalfont.render(value, True, poscolor).convert_alpha())
-        elif value < 0:
-            value = "("+str(value)+")"
-            col.append(self.normalfont.render(value, True, negcolor).convert_alpha())
 
     @staticmethod
     def _desc(stat):

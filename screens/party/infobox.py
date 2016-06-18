@@ -8,8 +8,6 @@ import pygame
 BACKGROUNDCOLOR = pygame.Color("black")
 LINECOLOR = pygame.Color("white")
 
-BOXWIDTH = 329
-BOXHEIGHT = 145
 TEXTX, TEXTY = -20, -20     # positie van de tekst in de box. -20 betekent +10. -30 zou +15 betekenen.
 COL1, COL2 = 0, 150
 
@@ -23,8 +21,8 @@ class InfoBox(object):
     """
     Waar in het partyscreen alle omschrijvingen worden weergegeven.
     """
-    def __init__(self, position):
-        self.surface = pygame.Surface((BOXWIDTH, BOXHEIGHT))
+    def __init__(self, position, width, height):
+        self.surface = pygame.Surface((width, height))
         self.surface = self.surface.convert()
         self.rect = self.surface.get_rect()
         self.rect.topleft = position
