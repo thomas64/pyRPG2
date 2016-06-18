@@ -59,9 +59,10 @@ class DispelNecro(Spell):
     """
     def __init__(self, quantity):
         super().__init__("Dispel Necro", 'dis_ncy', 20, SchoolType.ntl, 2, 320, quantity)
-        self.DESC = "Dispel Necro test"
         self.ROW = 0
         self.COL = 0
+        self.DESC = "This spell attempts to dispel any Necromantic spell currently in effect. " \
+                    "Requires: Gemstone"
 
 
 class DispelStar(Spell):
@@ -103,9 +104,10 @@ class VsNecromancy(Spell):
     """
     def __init__(self, quantity):
         super().__init__("vs. Necromancy", 'vs_ncy', 60, SchoolType.ntl, 1, 240, quantity)
-        self.DESC = "vs. Necromancy test"
         self.ROW = 0
         self.COL = 64
+        self.DESC = "Increases the magic resistance to any Necromancy spell by 6 percent per Rank. " \
+                    "Requires: Gemstone"
 
 
 class VsStar(Spell):
@@ -126,9 +128,10 @@ class AirShield(Spell):
     """
     def __init__(self, quantity):
         super().__init__("Air Shield", 'air_sld', 110, SchoolType.elm, 1, 320, quantity)
-        self.DESC = "Air Shield test"
         self.ROW = 32
         self.COL = 0
+        self.DESC = "All friendly entities within the range of the spell add 1 per Rank to their Protection value. " \
+                    "Requires: Gemstone"
 
 
 class Debilitation(Spell):
@@ -181,9 +184,10 @@ class Strength(Spell):
     """
     def __init__(self, quantity):
         super().__init__("Strength", 'str', 160, SchoolType.elm, 1, 160, quantity)
-        self.DESC = "Strength test"
         self.ROW = 32
         self.COL = 160
+        self.DESC = "Target gains 2 Strength for each Rank of the spell. May only be cast once on each target. " \
+                    "Requires: Herb"
 
 
 class Wind(Spell):
@@ -215,9 +219,11 @@ class Endurance(Spell):
     """
     def __init__(self, quantity):
         super().__init__("Endurance", 'edu', 220, SchoolType.nmg, 2, 320, quantity)
-        self.DESC = "Endurance test"
         self.ROW = 64
         self.COL = 32
+        self.DESC = "Target gains 2 Endurance for each Rank of the spell. " \
+                    "May only be cast once on each target. " \
+                    "Requires: Spice"
 
 
 class SenseAura(Spell):
@@ -226,9 +232,11 @@ class SenseAura(Spell):
     """
     def __init__(self, quantity):
         super().__init__("Sense Aura", 'sen_aur', 230, SchoolType.nmg, 3, 400, quantity)
-        self.DESC = "Sense Aura test"
         self.ROW = 64
         self.COL = 64
+        self.DESC = "Reveals a variety of information about the target: the higher the caster's rank in Sense " \
+                    "Aura, the more information is revealed. May only be cast once on each target. " \
+                    "Requires: Herb"
 
 
 class Teleportation(Spell):
@@ -248,9 +256,10 @@ class Weakness(Spell):
     """
     def __init__(self, quantity):
         super().__init__("Weakness", 'wks', 250, SchoolType.nmg, 2, 320, quantity)
-        self.DESC = "Weakness test"
         self.ROW = 64
         self.COL = 128
+        self.DESC = "Target loses 2 Endurance for each Rank of the spell. May only be cast once on each target. " \
+                    "Requires: Herb"
 
 
 # Star #################################################################################################################

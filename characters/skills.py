@@ -191,7 +191,7 @@ class Hafted(Skill):
     """
     def __init__(self, quantity):
         super().__init__("Hafted", "haf", 320, quantity)
-        self.DESC = "Improves character's chance to hit and increseas damage inflicted with Hafted weapons in " \
+        self.DESC = "Improves character's chance to hit and increases damage inflicted with Hafted weapons in " \
                     "combat. For every 1 Hafted rank gained, 2% more chance to hit and 1% more damage."
 
 
@@ -201,7 +201,7 @@ class Missile(Skill):
     """
     def __init__(self, quantity):
         super().__init__("Missile", "mis", 480, quantity)
-        self.DESC = "Improves character's chance to hit and increseas damage inflicted with Missile weapons in " \
+        self.DESC = "Improves character's chance to hit and increases damage inflicted with Missile weapons in " \
                     "combat. For every 1 Missile rank gained, 2% more chance to hit and 1% more damage."
 
 
@@ -211,7 +211,7 @@ class Pole(Skill):
     """
     def __init__(self, quantity):
         super().__init__("Pole", "pol", 320, quantity)
-        self.DESC = "Improves character's chance to hit and increseas damage inflicted with Pole weapons in combat. " \
+        self.DESC = "Improves character's chance to hit and increases damage inflicted with Pole weapons in combat. " \
                     "For every 1 Pole rank gained, 2% more chance to hit and 1% more damage."
 
 
@@ -231,7 +231,7 @@ class Sword(Skill):
     """
     def __init__(self, quantity):
         super().__init__("Sword", "swd", 480, quantity)
-        self.DESC = "Improves character's chance to hit and increseas damage inflicted with all types of swords " \
+        self.DESC = "Improves character's chance to hit and increases damage inflicted with all types of swords " \
                     "and daggers in combat. For every 1 Sword rank gained, 2% more chance to hit and 1% more damage."
 
 
@@ -241,5 +241,5 @@ class Thrown(Skill):
     """
     def __init__(self, quantity):
         super().__init__("Thrown", "thr", 320, quantity)
-        self.DESC = "Improves character's chance to hit and increseas damage inflicted with Thrown weapons in " \
+        self.DESC = "Improves character's chance to hit and increases damage inflicted with Thrown weapons in " \
                     "combat. For every 1 Thrown rank gained, 2% more chance to hit and 1% more damage."
