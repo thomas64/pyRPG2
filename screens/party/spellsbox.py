@@ -40,7 +40,7 @@ class SpellsBox(BaseBox):
                                     "{} {}".format(hero.scl.NAM.value, TITLE), True, self.fontcolor1).convert_alpha()
 
         self.table_data = []
-        for spell in hero.scl.values():
+        for spell in hero.scl.get_all_spells():
             self.table_data.append(
                 # row[0],       row[1],           row[2],     row[3],  row[4],     row[5],    row[6]
                 [spell.ICON, spell.NAM + " :", str(spell.qty), None, spell.DESC, spell.COL, spell.ROW]

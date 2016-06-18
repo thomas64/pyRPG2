@@ -14,6 +14,12 @@ class School(dict):
         super().__init__(**kwargs)
         self.NAM = name
 
+    def get_all_spells(self):
+        """
+        Geeft een gesorteerde lijst terug.
+        """
+        return sorted(self.values(), key=lambda xx: xx.SRT)
+
     def add(self, spell_object, wiz_qty, quantity=1, force=False):
         """
         ...

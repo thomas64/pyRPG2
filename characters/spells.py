@@ -18,9 +18,10 @@ class Spell(object):
 
     # todo, descriptions en docstrings
 
-    def __init__(self, name, raw, school, minimum_rank, upgrade, quantity):
+    def __init__(self, name, raw, srt, school, minimum_rank, upgrade, quantity):
         self.NAM = name
         self.RAW = raw
+        self.SRT = srt
         self.ICON = SPRITEPATH
         self.SCL = school
         self.MIN = minimum_rank
@@ -46,7 +47,7 @@ class DispelNaming(Spell):
     ...
     """
     def __init__(self, quantity):
-        super().__init__("Dispel Naming", 'dis_nmg', SchoolType.ntl, 2, 320, quantity)
+        super().__init__("Dispel Naming", 'dis_nmg', 10, SchoolType.ntl, 2, 320, quantity)
         self.DESC = "Dispel Naming test"
         self.ROW = 0
         self.COL = 0
@@ -57,7 +58,7 @@ class DispelNecro(Spell):
     ...
     """
     def __init__(self, quantity):
-        super().__init__("Dispel Necro", 'dis_ncy', SchoolType.ntl, 2, 320, quantity)
+        super().__init__("Dispel Necro", 'dis_ncy', 20, SchoolType.ntl, 2, 320, quantity)
         self.DESC = "Dispel Necro test"
         self.ROW = 0
         self.COL = 0
@@ -68,7 +69,7 @@ class DispelStar(Spell):
     ...
     """
     def __init__(self, quantity):
-        super().__init__("Dispel Star", 'dis_str', SchoolType.ntl, 2, 320, quantity)
+        super().__init__("Dispel Star", 'dis_str', 30, SchoolType.ntl, 2, 320, quantity)
         self.DESC = "Dispel Star test"
         self.ROW = 0
         self.COL = 0
@@ -79,7 +80,7 @@ class Mirror(Spell):
     ...
     """
     def __init__(self, quantity):
-        super().__init__("Mirror", 'mir', SchoolType.ntl, 6, 200, quantity)
+        super().__init__("Mirror", 'mir', 40, SchoolType.ntl, 6, 200, quantity)
         self.DESC = "Mirror test"
         self.ROW = 0
         self.COL = 32
@@ -90,7 +91,7 @@ class VsElemental(Spell):
     ...
     """
     def __init__(self, quantity):
-        super().__init__("vs. Elemental", 'vs_elm', SchoolType.ntl, 1, 240, quantity)
+        super().__init__("vs. Elemental", 'vs_elm', 50, SchoolType.ntl, 1, 240, quantity)
         self.DESC = "vs. Elemental test"
         self.ROW = 0
         self.COL = 64
@@ -101,7 +102,7 @@ class VsNecromancy(Spell):
     ...
     """
     def __init__(self, quantity):
-        super().__init__("vs. Necromancy", 'vs_ncy', SchoolType.ntl, 1, 240, quantity)
+        super().__init__("vs. Necromancy", 'vs_ncy', 60, SchoolType.ntl, 1, 240, quantity)
         self.DESC = "vs. Necromancy test"
         self.ROW = 0
         self.COL = 64
@@ -112,7 +113,7 @@ class VsStar(Spell):
     ...
     """
     def __init__(self, quantity):
-        super().__init__("vs. Star", 'vs_str', SchoolType.ntl, 1, 240, quantity)
+        super().__init__("vs. Star", 'vs_str', 70, SchoolType.ntl, 1, 240, quantity)
         self.DESC = "vs. Star test"
         self.ROW = 0
         self.COL = 64
@@ -124,7 +125,7 @@ class AirShield(Spell):
     ...
     """
     def __init__(self, quantity):
-        super().__init__("Air Shield", 'air_sld', SchoolType.elm, 1, 320, quantity)
+        super().__init__("Air Shield", 'air_sld', 110, SchoolType.elm, 1, 320, quantity)
         self.DESC = "Air Shield test"
         self.ROW = 32
         self.COL = 0
@@ -135,7 +136,7 @@ class Debilitation(Spell):
     ...
     """
     def __init__(self, quantity):
-        super().__init__("Debilitation", 'deb', SchoolType.elm, 2, 320, quantity)
+        super().__init__("Debilitation", 'deb', 120, SchoolType.elm, 2, 320, quantity)
         self.DESC = "Debilitation test"
         self.ROW = 32
         self.COL = 32
@@ -146,7 +147,7 @@ class DragonFlames(Spell):
     ...
     """
     def __init__(self, quantity):
-        super().__init__("Dragon Flames", 'drg_flm', SchoolType.elm, 2, 520, quantity)
+        super().__init__("Dragon Flames", 'drg_flm', 130, SchoolType.elm, 2, 520, quantity)
         self.DESC = "Dragon Flames test"
         self.ROW = 32
         self.COL = 64
@@ -157,7 +158,7 @@ class Fireball(Spell):
     ...
     """
     def __init__(self, quantity):
-        super().__init__("Fireball", 'frb', SchoolType.elm, 5, 400, quantity)
+        super().__init__("Fireball", 'frb', 140, SchoolType.elm, 5, 400, quantity)
         self.DESC = "Fireball test"
         self.ROW = 32
         self.COL = 96
@@ -168,7 +169,7 @@ class RemovePoison(Spell):
     ...
     """
     def __init__(self, quantity):
-        super().__init__("Remove Poison", 'rem_psn', SchoolType.elm, 2, 80, quantity)
+        super().__init__("Remove Poison", 'rem_psn', 150, SchoolType.elm, 2, 80, quantity)
         self.DESC = "Remove Poison test"
         self.ROW = 32
         self.COL = 128
@@ -179,7 +180,7 @@ class Strength(Spell):
     ...
     """
     def __init__(self, quantity):
-        super().__init__("Strength", 'str', SchoolType.elm, 1, 160, quantity)
+        super().__init__("Strength", 'str', 160, SchoolType.elm, 1, 160, quantity)
         self.DESC = "Strength test"
         self.ROW = 32
         self.COL = 160
@@ -190,7 +191,7 @@ class Wind(Spell):
     ...
     """
     def __init__(self, quantity):
-        super().__init__("Wind", 'wnd', SchoolType.elm, 4, 520, quantity)
+        super().__init__("Wind", 'wnd', 170, SchoolType.elm, 4, 520, quantity)
         self.DESC = "Wind test"
         self.ROW = 32
         self.COL = 192
@@ -202,7 +203,7 @@ class Banishing(Spell):
     ...
     """
     def __init__(self, quantity):
-        super().__init__("Banishing", 'ban', SchoolType.nmg, 4, 520, quantity)
+        super().__init__("Banishing", 'ban', 210, SchoolType.nmg, 4, 520, quantity)
         self.DESC = "Banishing test"
         self.ROW = 64
         self.COL = 0
@@ -213,7 +214,7 @@ class Endurance(Spell):
     ...
     """
     def __init__(self, quantity):
-        super().__init__("Endurance", 'edu', SchoolType.nmg, 2, 320, quantity)
+        super().__init__("Endurance", 'edu', 220, SchoolType.nmg, 2, 320, quantity)
         self.DESC = "Endurance test"
         self.ROW = 64
         self.COL = 32
@@ -224,7 +225,7 @@ class SenseAura(Spell):
     ...
     """
     def __init__(self, quantity):
-        super().__init__("Sense Aura", 'sen_aur', SchoolType.nmg, 3, 400, quantity)
+        super().__init__("Sense Aura", 'sen_aur', 230, SchoolType.nmg, 3, 400, quantity)
         self.DESC = "Sense Aura test"
         self.ROW = 64
         self.COL = 64
@@ -235,7 +236,7 @@ class Teleportation(Spell):
     ...
     """
     def __init__(self, quantity):
-        super().__init__("Teleportation", 'tlp', SchoolType.nmg, 8, 320, quantity)
+        super().__init__("Teleportation", 'tlp', 240, SchoolType.nmg, 8, 320, quantity)
         self.DESC = "Teleportation test"
         self.ROW = 64
         self.COL = 96
@@ -246,7 +247,7 @@ class Weakness(Spell):
     ...
     """
     def __init__(self, quantity):
-        super().__init__("Weakness", 'wks', SchoolType.nmg, 2, 320, quantity)
+        super().__init__("Weakness", 'wks', 250, SchoolType.nmg, 2, 320, quantity)
         self.DESC = "Weakness test"
         self.ROW = 64
         self.COL = 128
@@ -258,7 +259,7 @@ class SolarWrath(Spell):
     ...
     """
     def __init__(self, quantity):
-        super().__init__("Solar Wrath", 'sol_wrt', SchoolType.str, 4, 80, quantity)
+        super().__init__("Solar Wrath", 'sol_wrt', 310, SchoolType.str, 4, 80, quantity)
         self.DESC = "Solar Wrath test"
         self.ROW = 96
         self.COL = 0
@@ -269,7 +270,7 @@ class StellarGravity(Spell):
     ...
     """
     def __init__(self, quantity):
-        super().__init__("Stellar Gravity", 'stl_gty', SchoolType.str, 2, 320, quantity)
+        super().__init__("Stellar Gravity", 'stl_gty', 320, SchoolType.str, 2, 320, quantity)
         self.DESC = "Stellar Gravity test"
         self.ROW = 96
         self.COL = 32
@@ -280,7 +281,7 @@ class WebOfStarlight(Spell):
     ...
     """
     def __init__(self, quantity):
-        super().__init__("Web of Starlight", 'wos', SchoolType.str, 3, 400, quantity)
+        super().__init__("Web of Starlight", 'wos', 330, SchoolType.str, 3, 400, quantity)
         self.DESC = "Web of Starlight test"
         self.ROW = 96
         self.COL = 64
