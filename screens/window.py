@@ -187,7 +187,7 @@ class Window(object):
                 self.party_sprites[0].align_to_grid(GRIDSIZE)
                 self.align()
 
-            elif event.key in keys.SELECT:
+            elif event.key == keys.ACTION:
                 self.check_heroes(self.party_sprites[0].get_check_rect())
                 self.check_shops(self.party_sprites[0].get_check_rect())
                 self.check_schools(self.party_sprites[0].get_check_rect())

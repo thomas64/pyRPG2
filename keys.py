@@ -31,6 +31,7 @@ ZOOMPLUS = pygame.K_KP_PLUS, pygame.K_PERIOD
 ZOOMMIN = pygame.K_KP_MINUS, pygame.K_COMMA
 ZOOMRESET = pygame.K_KP_DIVIDE, pygame.K_SLASH
 
+ACTION = pygame.K_a
 INV = pygame.K_i
 PREV = pygame.K_q
 NEXT = pygame.K_w

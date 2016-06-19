@@ -24,6 +24,7 @@ MAPTITLEFONTSIZE = 30
 MAPTITLEFONTCOLOR = pygame.Color("white")
 MAPTITLEPOS = 100, 10
 
+ACTLBL = "A"
 INVLBL = "I"
 UPLBL = "Up"
 DOWNLBL = "Down"
@@ -33,7 +34,8 @@ RIGHTLBL = "Right"
 BTN_W = 40
 BTN_H = 40
 
-INVX, INVY = -200, -300
+ACTX, ACTY = -200, -300
+INVX, INVY = -100, -300
 UPX, UPY = -150, -300
 DOWNX, DOWNY = -150, -250
 LEFTX, LEFTY = -200, -250
@@ -70,6 +72,7 @@ class Overworld(object):
 
         # todo, afhankelijk van situatie, buttons niet weergeven
         # button_view = sprites.Button((bg_width-200,   bg_height-300), "V",     pygame.K_v)
+        button_act = components.Button(BTN_W,   BTN_H, (bg_width + ACTX,   bg_height + ACTY),   ACTLBL,   keys.ACTION)
         button_inv = components.Button(BTN_W,   BTN_H, (bg_width + INVX,   bg_height + INVY),   INVLBL,   keys.INV)
         button_up = components.Button(BTN_W,    BTN_H, (bg_width + UPX,    bg_height + UPY),    UPLBL,    keys.UP)
         button_down = components.Button(BTN_W,  BTN_H, (bg_width + DOWNX,  bg_height + DOWNY),  DOWNLBL,  keys.DOWN)
@@ -78,7 +81,7 @@ class Overworld(object):
         # button_cancel = sprites.Button((bg_width-100, bg_height-200), "C",     pygame.K_c)
 
         # self.buttons = [button_view, button_up, button_down, button_left, button_right, button_cancel]
-        self.buttons = [button_inv, button_up, button_down, button_left, button_right]
+        self.buttons = [button_act, button_inv, button_up, button_down, button_left, button_right]
 
     def on_enter(self):
         """
