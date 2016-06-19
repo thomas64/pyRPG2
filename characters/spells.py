@@ -48,7 +48,7 @@ class Spell(object):
         :param text:
         :return:
         """
-        return (self.NAM,
+        return ("{} ({})".format(self.NAM, self.SCL.value),
                 text,
                 " ",
                 "Min. Wizard Rank: {}".format(self.MIN),
@@ -99,7 +99,9 @@ class Mirror(Spell):
         super().__init__("Mirror", 'mir', 40, SchoolType.ntl, 6, 200, quantity)
         self.ROW = 0
         self.COL = 32
-        self.DESC = self.set_desc("Text")
+        self.DESC = self.set_desc(
+            "Creates a shield that provides total resistance against the next incoming attack spells.")
+        # Gemstone
 
 
 class VsElemental(Spell):
@@ -110,7 +112,20 @@ class VsElemental(Spell):
         super().__init__("vs. Elemental", 'vs_elm', 50, SchoolType.ntl, 1, 240, quantity)
         self.ROW = 0
         self.COL = 64
-        self.DESC = self.set_desc("Text")
+        self.DESC = self.set_desc("Increases the magic resistance to any Elemental Magic spell by 6 percent per Rank.")
+        # Gemstone
+
+
+class VsNaming(Spell):
+    """
+    ...
+    """
+    def __init__(self, quantity):
+        super().__init__("vs. Naming", 'vs_nmg', 55, SchoolType.ntl, 1, 240, quantity)
+        self.ROW = 0
+        self.COL = 64
+        self.DESC = self.set_desc("Increases the magic resistance to any Naming Magic spell by 6 percent per Rank.")
+        # Gemstone
 
 
 class VsNecromancy(Spell):
@@ -133,7 +148,8 @@ class VsStar(Spell):
         super().__init__("vs. Star", 'vs_str', 70, SchoolType.ntl, 1, 240, quantity)
         self.ROW = 0
         self.COL = 64
-        self.DESC = self.set_desc("Text")
+        self.DESC = self.set_desc("Increases the magic resistance to any Star Magic spell by 6 percent per Rank.")
+        # Gemstone
 
 
 # Elemental ############################################################################################################
@@ -265,7 +281,8 @@ class Teleportation(Spell):
         super().__init__("Teleportation", 'tlp', 240, SchoolType.nmg, 8, 320, quantity)
         self.ROW = 64
         self.COL = 96
-        self.DESC = self.set_desc("Text")
+        self.DESC = self.set_desc("Caster teleports to a chosen point on the battlefield.")
+        # "Requires: Gemstone"
 
 
 class Weakness(Spell):
@@ -282,6 +299,19 @@ class Weakness(Spell):
 
 
 # Star #################################################################################################################
+class FrozenDoom(Spell):
+    """
+    ...
+    """
+    def __init__(self, quantity):
+        super().__init__("Frozen Doom", 'frz_dom', 305, SchoolType.str, 6, 600, quantity)
+        self.ROW = 96
+        self.COL = 128
+        self.DESC = self.set_desc("The target of this spell is frozen solid for the duration of the spell. "
+                                  "Only affects targets of human size or smaller.")
+        # Herb
+
+
 class SolarWrath(Spell):
     """
     ...
@@ -312,4 +342,19 @@ class WebOfStarlight(Spell):
         super().__init__("Web of Starlight", 'wos', 330, SchoolType.str, 3, 400, quantity)
         self.ROW = 96
         self.COL = 64
-        self.DESC = self.set_desc("Text")
+        self.DESC = self.set_desc("Target is encased in a web of energy that causes damage each round. "
+                                  "Depending on their Strength, there is a chance that they may break out of the web. "
+                                  "Only affects targets of human size or smaller.")
+        # Gemstone
+
+
+class Whitefire(Spell):
+    """
+    ...
+    """
+    def __init__(self, quantity):
+        super().__init__("Whitefire", 'wfi', 340, SchoolType.str, 6, 600, quantity)
+        self.ROW = 96
+        self.COL = 96
+        self.DESC = self.set_desc("Any single target within range is flash-fried by white fire.")
+        # Spice
