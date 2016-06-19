@@ -61,8 +61,11 @@ class DispelNecro(Spell):
         super().__init__("Dispel Necro", 'dis_ncy', 20, SchoolType.ntl, 2, 320, quantity)
         self.ROW = 0
         self.COL = 0
-        self.DESC = "This spell attempts to dispel any Necromantic spell currently in effect. " \
-                    "Requires: Gemstone"
+        self.DESC = ("Dispel Necro",
+                     "This spell attempts to dispel any Necromantic spell currently in effect.",
+                     " ",
+                     "Min. Wizard Rank: 2",
+                     "Requires: Gemstone")
 
 
 class DispelStar(Spell):
@@ -106,8 +109,11 @@ class VsNecromancy(Spell):
         super().__init__("vs. Necromancy", 'vs_ncy', 60, SchoolType.ntl, 1, 240, quantity)
         self.ROW = 0
         self.COL = 64
-        self.DESC = "Increases the magic resistance to any Necromancy spell by 6 percent per Rank. " \
-                    "Requires: Gemstone"
+        self.DESC = ("vs. Necromancy",
+                     "Increases the magic resistance to any Necromancy spell by 6 percent per Rank.",
+                     " ",
+                     "Min. Wizard Rank: 1",
+                     "Requires: Gemstone")
 
 
 class VsStar(Spell):
@@ -130,8 +136,11 @@ class AirShield(Spell):
         super().__init__("Air Shield", 'air_sld', 110, SchoolType.elm, 1, 320, quantity)
         self.ROW = 32
         self.COL = 0
-        self.DESC = "All friendly entities within the range of the spell add 1 per Rank to their Protection value. " \
-                    "Requires: Gemstone"
+        self.DESC = ("Air Shield",
+                     "All friendly entities within the range of the spell add 1 per Rank to their Protection value.",
+                     " ",
+                     "Min. Wizard Rank: 1",
+                     "Requires: Gemstone")
 
 
 class Debilitation(Spell):
@@ -186,8 +195,11 @@ class Strength(Spell):
         super().__init__("Strength", 'str', 160, SchoolType.elm, 1, 160, quantity)
         self.ROW = 32
         self.COL = 160
-        self.DESC = "Target gains 2 Strength for each Rank of the spell. May only be cast once on each target. " \
-                    "Requires: Herb"
+        self.DESC = ("Strength",
+                     "Target gains 2 Strength for each Rank of the spell. May only be cast once on each target.",
+                     " ",
+                     "Min. Wizard Rank: 1",
+                     "Requires: Herb")
 
 
 class Wind(Spell):
@@ -221,9 +233,12 @@ class Endurance(Spell):
         super().__init__("Endurance", 'edu', 220, SchoolType.nmg, 2, 320, quantity)
         self.ROW = 64
         self.COL = 32
-        self.DESC = "Target gains 2 Endurance for each Rank of the spell. " \
-                    "May only be cast once on each target. " \
-                    "Requires: Spice"
+        self.DESC = ("Endurance",
+                     "Target gains 2 Endurance for each Rank of the spell. "
+                     "May only be cast once on each target.",
+                     " ",
+                     "Min. Wizard Rank: 2",
+                     "Requires: Spice")
 
 
 class SenseAura(Spell):
@@ -234,9 +249,12 @@ class SenseAura(Spell):
         super().__init__("Sense Aura", 'sen_aur', 230, SchoolType.nmg, 3, 400, quantity)
         self.ROW = 64
         self.COL = 64
-        self.DESC = "Reveals a variety of information about the target: the higher the caster's rank in Sense " \
-                    "Aura, the more information is revealed. May only be cast once on each target. " \
-                    "Requires: Herb"
+        self.DESC = ("Sense Aura",
+                     "Reveals a variety of information about the target: the higher the caster's rank in Sense "
+                     "Aura, the more information is revealed. May only be cast once on each target.",
+                     " ",
+                     "Min. Wizard Rank: 3",
+                     "Requires: Herb")
 
 
 class Teleportation(Spell):
@@ -258,8 +276,11 @@ class Weakness(Spell):
         super().__init__("Weakness", 'wks', 250, SchoolType.nmg, 2, 320, quantity)
         self.ROW = 64
         self.COL = 128
-        self.DESC = "Target loses 2 Endurance for each Rank of the spell. May only be cast once on each target. " \
-                    "Requires: Herb"
+        self.DESC = ("Weakness",
+                     "Target loses 2 Endurance for each Rank of the spell. May only be cast once on each target.",
+                     " ",
+                     "Min. Wizard Rank: 2",
+                     "Requires: Herb")
 
 
 # Star #################################################################################################################
