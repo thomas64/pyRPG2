@@ -5,6 +5,7 @@ Components Package
 
 from .confirmbox import ConfirmBox
 from .inputbox import InputBox
+from .textbox import TextBox
 from .map import Map
 from .messagebox import MessageBox
 from .namedrect import NamedRect
