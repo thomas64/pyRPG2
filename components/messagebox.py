@@ -5,7 +5,7 @@ class: MessageBox
 
 import pygame
 
-import components
+from components import ScreenCapture
 import keys
 import statemachine
 
@@ -37,7 +37,7 @@ class MessageBox(object):
         self.name = statemachine.States.MessageBox
 
         if scr_capt is None:
-            self.scr_capt = components.ScreenCapture()
+            self.scr_capt = ScreenCapture()
         else:
             self.scr_capt = scr_capt
 

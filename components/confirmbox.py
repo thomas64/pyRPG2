@@ -6,7 +6,7 @@ class: ConfirmBox
 import pygame
 
 import audio as sfx
-import components
+from components import ScreenCapture
 import keys
 import statemachine
 
@@ -33,7 +33,7 @@ class ConfirmBox(object):
         self.audio = audio
         self.screen = pygame.display.get_surface()
         self.name = statemachine.States.MessageBox
-        self.scr_capt = components.ScreenCapture()
+        self.scr_capt = ScreenCapture()
 
         self.font = pygame.font.SysFont(FONT, FONTSIZE)
         self.raw_text = raw_text    # de onopgemaakte tekst
@@ -84,6 +84,7 @@ class ConfirmBox(object):
                              self.rect.top + FONTPOSY + index * LINEHEIGHT)
         return text_rect
 
+    # noinspection PyMissingOrEmptyDocstring
     def on_enter(self):
         pass
 
@@ -132,6 +133,7 @@ class ConfirmBox(object):
                 self.audio.play_sound(sfx.MENUERROR)
                 self.cur_item = len(self.raw_text) - 1
 
+    # noinspection PyMissingOrEmptyDocstring
     def multi_input(self, key_input, mouse_pos, dt):
         pass
 

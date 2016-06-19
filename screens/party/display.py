@@ -5,7 +5,9 @@ class: Screen
 
 import pygame
 
-import components
+from components import Button
+from components import ConfirmBox
+from components import Map
 import keys
 import screens.party.herobox
 import screens.party.infobox
@@ -84,9 +86,9 @@ class Display(object):
 
     def _init_buttons(self):
         bg_width = self.background.get_width()
-        button_c = components.Button(BTNWIDTH, BTNHEIGHT, (bg_width + CLOSEX, CLOSEY), CLOSELBL, keys.EXIT)
-        button_q = components.Button(BTNWIDTH, BTNHEIGHT, (bg_width + PREVX,  PREVY),  PREVLBL,  keys.PREV)
-        button_w = components.Button(BTNWIDTH, BTNHEIGHT, (bg_width + NEXTX,  NEXTY),  NEXTLBL,  keys.NEXT)
+        button_c = Button(BTNWIDTH, BTNHEIGHT, (bg_width + CLOSEX, CLOSEY), CLOSELBL, keys.EXIT)
+        button_q = Button(BTNWIDTH, BTNHEIGHT, (bg_width + PREVX,  PREVY),  PREVLBL,  keys.PREV)
+        button_w = Button(BTNWIDTH, BTNHEIGHT, (bg_width + NEXTX,  NEXTY),  NEXTLBL,  keys.NEXT)
         self.buttons = (button_c, button_q, button_w)
 
     def _init_boxes(self):
@@ -130,7 +132,7 @@ class Display(object):
         """
         if self.party_changed:
             self.engine.timer = NEWMAPTIMEOUT
-            self.engine.current_map = components.Map(self.engine.data.map_name)
+            self.engine.current_map = Map(self.engine.data.map_name)
             self.engine.gamestate.deep_peek().window.load_map()
 
     def single_input(self, event):
@@ -174,8 +176,7 @@ class Display(object):
                                 "",
                                 "Yes, you may leave.",
                                 "No, I want you to stay."]
-                        self.leave_box = components.ConfirmBox(self.engine.gamestate, self.engine.audio,
-                                                               text, self.cur_hero.FAC)
+                        self.leave_box = ConfirmBox(self.engine.gamestate, self.engine.audio, text, self.cur_hero.FAC)
                         self.engine.gamestate.push(self.leave_box)
 
                 # als er in de inventory box wordt geklikt

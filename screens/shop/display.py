@@ -9,7 +9,9 @@ import importlib
 import pygame
 
 import audio as sfx
-import components
+from components import Button
+from components import ConfirmBox
+from components import MessageBox
 import database
 import keys
 import pouchitems
@@ -102,7 +104,7 @@ class Display(object):
         self._init_face(face)
         self._init_boxes()
 
-        self.close_button = components.Button(
+        self.close_button = Button(
             BTNWIDTH, BTNHEIGHT, (self.background.get_width() + CLOSEX, CLOSEY), CLOSELBL, keys.EXIT,
             COLORKEY, FONTCOLOR)
 
@@ -347,14 +349,14 @@ class Display(object):
                     "",
                     "Yes please.",
                     "No thanks."]
-            self.confirm_box = components.ConfirmBox(self.engine.gamestate, self.engine.audio, text)
+            self.confirm_box = ConfirmBox(self.engine.gamestate, self.engine.audio, text)
             self.engine.gamestate.push(self.confirm_box)
             return True
         elif self.buy_click and self.value > self.gold_amount:
             self.engine.audio.play_sound(sfx.MENUERROR)
             text = ["You need {} more gold to".format(self.value - self.gold_amount),
                     "buy that {}.".format(self.selected_item.NAM)]
-            push_object = components.MessageBox(self.engine.gamestate, text)
+            push_object = MessageBox(self.engine.gamestate, text)
             self.engine.gamestate.push(push_object)
             self.buy_click = False
             self.selected_item = None
@@ -367,14 +369,14 @@ class Display(object):
         if self.sell_click and self.selected_item:
             self.engine.audio.play_sound(sfx.MENUSELECT)
             text = self._fill_confirm_box_with_sell_text()
-            self.confirm_box = components.ConfirmBox(self.engine.gamestate, self.engine.audio, text)
+            self.confirm_box = ConfirmBox(self.engine.gamestate, self.engine.audio, text)
             self.engine.gamestate.push(self.confirm_box)
             return True
         elif self.sell_click and not self.selected_item:
             self.engine.audio.play_sound(sfx.MENUERROR)
             text = ["You can not sell it to me",
                     "if you won't unequip it first."]
-            push_object = components.MessageBox(self.engine.gamestate, text)
+            push_object = MessageBox(self.engine.gamestate, text)
             self.engine.gamestate.push(push_object)
             self.sell_click = False
             return True

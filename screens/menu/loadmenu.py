@@ -7,7 +7,7 @@ import datetime
 import os
 
 import audio as sfx
-import components
+from components import Map
 import data
 import loadsave
 import screens.menu.basemenu
@@ -72,7 +72,7 @@ class LoadMenu(screens.menu.basemenu.BaseMenu):
             self.engine.data = data.Data()
             filename = self._convert_to_filename(menu_item.text, index)
             loadsave.Dialog(self.engine).load(filename)
-            self.engine.current_map = components.Map(self.engine.data.map_name)
+            self.engine.current_map = Map(self.engine.data.map_name)
             push_object = screens.overworld.Overworld(self.engine)
             self.engine.gamestate.change(push_object)
 

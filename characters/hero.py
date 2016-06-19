@@ -6,7 +6,7 @@ class: Hero
 import characters.stats
 import characters.skills
 import characters.spells
-import components
+from components import MessageBox
 import containers
 import database
 import equipment
@@ -81,6 +81,7 @@ class Hero(object):
         self.scl = containers.School(kwargs['scl'])
         if kwargs.get('spl'):
             for spell_class_name, spell_quantity in kwargs['spl'].items():
+                # noinspection PyPep8Naming
                 ClassName = getattr(characters.spells, spell_class_name)
                 new_spell = ClassName(spell_quantity)
                 self.scl.add(new_spell, self.wiz.qty, force=True)
@@ -256,32 +257,32 @@ class Hero(object):
         if not self.has_enough_weapon_skill_to_equip(new_equipment_item):
             text = ["{} doesn't have the skill to equip that {}.".format(
                                                         self.NAM, new_equipment_item.NAM)]
-            push_object = components.MessageBox(gamestate, text)
+            push_object = MessageBox(gamestate, text)
             gamestate.push(push_object)
             return False
         if new_equipment_item.get_value_of('MIN_INT') > self.int.qty:
             text = ["{} needs {} intelligence to equip that {}.".format(
                                                         self.NAM, new_equipment_item.MIN_INT, new_equipment_item.NAM)]
-            push_object = components.MessageBox(gamestate, text)
+            push_object = MessageBox(gamestate, text)
             gamestate.push(push_object)
             return False
         if new_equipment_item.get_value_of('MIN_STR') > self.str.qty:
             text = ["{} needs {} strength to equip that {}.".format(
                                                         self.NAM, new_equipment_item.MIN_STR, new_equipment_item.NAM)]
-            push_object = components.MessageBox(gamestate, text)
+            push_object = MessageBox(gamestate, text)
             gamestate.push(push_object)
             return False
 
         if (new_equipment_item.get_value_of('SKL') == database.WeaponType.mis and
                 self.sld.is_not_empty()):
             text = ['{} can not use a bow when a shield is equipped.'.format(self.NAM)]
-            push_object = components.MessageBox(gamestate, text)
+            push_object = MessageBox(gamestate, text)
             gamestate.push(push_object)
             return False
         elif (new_equipment_item.get_value_of('SKL') == database.WeaponType.shd and
                 self.wpn.get_value_of('SKL') == database.WeaponType.mis):
             text = ['{} can not use a shield when a bow is equipped.'.format(self.NAM)]
-            push_object = components.MessageBox(gamestate, text)
+            push_object = MessageBox(gamestate, text)
             gamestate.push(push_object)
             return False
 

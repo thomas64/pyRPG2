@@ -8,7 +8,11 @@ import collections
 import pygame
 
 import audio as sfx
-import components
+from components import ColorBox
+from components import ConfirmBox
+from components import Grid
+from components import Map
+from components import MessageBox
 from database import Direction
 import database.inn
 import database.hero
@@ -143,12 +147,12 @@ class Window(object):
             if choice == yes:
                 if self.engine.data.party.add(self.hero_data):
                     self.engine.timer = NEWMAPTIMEOUT
-                    self.engine.current_map = components.Map(self.engine.data.map_name)
+                    self.engine.current_map = Map(self.engine.data.map_name)
                     self.load_map()
                 else:
                     text = ["It seems your party is full already."]
-                    push_object = components.MessageBox(self.engine.gamestate, text,
-                                                        face_image=self.hero_data.FAC, scr_capt=scr_capt)
+                    push_object = MessageBox(self.engine.gamestate, text,
+                                             face_image=self.hero_data.FAC, scr_capt=scr_capt)
                     self.engine.gamestate.push(push_object)
 
             self.hero_box = None
@@ -160,17 +164,17 @@ class Window(object):
                 gold = pouchitems.factory_pouch_item('gold')
                 if self.engine.data.pouch.remove(gold, self.inn_data['price']):
                     self.engine.audio.play_sound(sfx.COINS)
-                    push_object = components.MessageBox(self.engine.gamestate, self.inn_data['paid'],
-                                                        face_image=self.inn_data['face'], scr_capt=scr_capt)
+                    push_object = MessageBox(self.engine.gamestate, self.inn_data['paid'],
+                                             face_image=self.inn_data['face'], scr_capt=scr_capt)
                     self.engine.gamestate.push(push_object)
                     # todo, health afhandelen. en iets van een fade out animatie?
                 else:
-                    push_object = components.MessageBox(self.engine.gamestate, self.inn_data['fail'],
-                                                        face_image=self.inn_data['face'], scr_capt=scr_capt)
+                    push_object = MessageBox(self.engine.gamestate, self.inn_data['fail'],
+                                             face_image=self.inn_data['face'], scr_capt=scr_capt)
                     self.engine.gamestate.push(push_object)
             else:
-                push_object = components.MessageBox(self.engine.gamestate, self.inn_data['deny'],
-                                                    face_image=self.inn_data['face'], scr_capt=scr_capt)
+                push_object = MessageBox(self.engine.gamestate, self.inn_data['deny'],
+                                         face_image=self.inn_data['face'], scr_capt=scr_capt)
                 self.engine.gamestate.push(push_object)
 
             self.inn_box = None
@@ -198,9 +202,9 @@ class Window(object):
 
             elif event.key == keys.GRID:
                 if self.grid_sprite is None:
-                    self.grid_sprite = components.Grid(self.engine.current_map.width,
-                                                       self.engine.current_map.height,
-                                                       GRIDCOLOR, GRIDSIZE, GRIDLAYER)
+                    self.grid_sprite = Grid(self.engine.current_map.width,
+                                            self.engine.current_map.height,
+                                            GRIDCOLOR, GRIDSIZE, GRIDLAYER)
                     self.group.add(self.grid_sprite)
                 else:
                     self.group.remove(self.grid_sprite)
@@ -209,18 +213,18 @@ class Window(object):
             elif event.key == keys.CBOX:
                 if len(self.cbox_sprites) == 0:                             # als de lijst leeg is.
                     for unit in self.party_sprites:
-                        self.cbox_sprites.append(components.ColorBox(unit.rect, HEROCOLOR, CBOXLAYER))
+                        self.cbox_sprites.append(ColorBox(unit.rect, HEROCOLOR, CBOXLAYER))
                     for rect in self.engine.current_map.high_blocker_rects:
-                        self.cbox_sprites.append(components.ColorBox(rect, HIGHBLOCKERCOLOR, CBOXLAYER))
+                        self.cbox_sprites.append(ColorBox(rect, HIGHBLOCKERCOLOR, CBOXLAYER))
                     for rect in self.engine.current_map.low_blocker_rects:
-                        self.cbox_sprites.append(components.ColorBox(rect, LOWBLOCKERCOLOR, CBOXLAYER))
+                        self.cbox_sprites.append(ColorBox(rect, LOWBLOCKERCOLOR, CBOXLAYER))
                     for obj_group in (self.engine.current_map.heroes,
                                       self.engine.current_map.shops,
                                       self.engine.current_map.schools,
                                       self.engine.current_map.inns,
                                       self.engine.current_map.signs):
                         for obj in obj_group:
-                            self.cbox_sprites.append(components.ColorBox(obj.rect, SHOPCOLOR, CBOXLAYER))
+                            self.cbox_sprites.append(ColorBox(obj.rect, SHOPCOLOR, CBOXLAYER))
                     self.group.add(self.cbox_sprites)
                 else:
                     self.group.remove(self.cbox_sprites)
@@ -352,7 +356,7 @@ class Window(object):
             self.prev_map_name = self.engine.current_map.portals[portal_nr].from_name
             self.engine.data.map_name = self.engine.current_map.portals[portal_nr].to_name
             self.engine.data.map_pos = self.engine.current_map.portals[portal_nr].to_pos
-            self.engine.current_map = components.Map(self.engine.data.map_name)
+            self.engine.current_map = Map(self.engine.data.map_name)
             self.load_map()
 
     def check_heroes(self, check_rect):
@@ -368,9 +372,9 @@ class Window(object):
 
                 hero_sprite.turn(self.party_sprites[0].rect)
 
-                self.hero_box = components.ConfirmBox(self.engine.gamestate, self.engine.audio,
-                                                      database.hero.HeroDatabase.opening(self.hero_data.RAW),
-                                                      face_image=self.hero_data.FAC)
+                self.hero_box = ConfirmBox(self.engine.gamestate, self.engine.audio,
+                                           database.hero.HeroDatabase.opening(self.hero_data.RAW),
+                                           face_image=self.hero_data.FAC)
                 self.engine.gamestate.push(self.hero_box)
 
     def check_shops(self, check_rect):
@@ -414,8 +418,8 @@ class Window(object):
                 if inn_sprite.show_sprite:
                     inn_sprite.turn(self.party_sprites[0].rect)
 
-            self.inn_box = components.ConfirmBox(self.engine.gamestate, self.engine.audio,
-                                                 self.inn_data['welcome'], self.inn_data['face'])
+            self.inn_box = ConfirmBox(self.engine.gamestate, self.engine.audio,
+                                      self.inn_data['welcome'], self.inn_data['face'])
             self.engine.gamestate.push(self.inn_box)
 
     def check_signs(self):
@@ -428,7 +432,7 @@ class Window(object):
                 sign_sprite = self.engine.current_map.signs[object_nr]
                 sign_data = database.sign.SignDatabase[sign_sprite.sign_id].value
 
-                push_object = components.MessageBox(self.engine.gamestate, sign_data)
+                push_object = MessageBox(self.engine.gamestate, sign_data)
                 self.engine.gamestate.push(push_object)
 
     def check_chests(self):
@@ -450,14 +454,14 @@ class Window(object):
                             mec_v, mec_h = self.engine.data.party.get_highest_value_of_skill(key)
                             if mec_v < value:
                                 text = self.engine.data.treasure_chests.mec_text(chest_data['condition'][key])
-                                push_object = components.MessageBox(self.engine.gamestate, text)
+                                push_object = MessageBox(self.engine.gamestate, text)
                                 self.engine.gamestate.push(push_object)
                                 return
                         elif key == "thf":
                             thf_v, thf_h = self.engine.data.party.get_highest_value_of_skill(key)
                             if thf_v < value:
                                 text = self.engine.data.treasure_chests.thf_text(chest_data['condition'][key])
-                                push_object = components.MessageBox(self.engine.gamestate, text)
+                                push_object = MessageBox(self.engine.gamestate, text)
                                 self.engine.gamestate.push(push_object)
                                 return
 
@@ -482,7 +486,7 @@ class Window(object):
                             image.append(pouch_item_spr)
                     self.engine.audio.play_sound(sfx.CHEST)
                     chest_data['content'] = dict()
-                    push_object = components.MessageBox(self.engine.gamestate, text, spr_image=image)
+                    push_object = MessageBox(self.engine.gamestate, text, spr_image=image)
                     self.engine.gamestate.push(push_object)
 
     def check_sparklies(self, check_rect):
@@ -518,5 +522,5 @@ class Window(object):
                 self.engine.audio.play_sound(sfx.SPARKLY)
                 sparkly_data['content'] = dict()
                 sparkly_sprite.image = None
-                push_object = components.MessageBox(self.engine.gamestate, text, spr_image=image)
+                push_object = MessageBox(self.engine.gamestate, text, spr_image=image)
                 self.engine.gamestate.push(push_object)

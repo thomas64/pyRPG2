@@ -3,7 +3,7 @@
 class: MainMenu
 """
 
-import components
+from components import Map
 import data
 import screens.menu.basemenu
 import screens.menu.manager
@@ -35,7 +35,7 @@ class MainMenu(screens.menu.basemenu.BaseMenu):
         if menu_item.func == self.NewGame:
             self.engine.data = data.Data()
             self.engine.script.new_game()
-            self.engine.current_map = components.Map(self.engine.data.map_name)
+            self.engine.current_map = Map(self.engine.data.map_name)
             push_object = screens.overworld.Overworld(self.engine)
             self.engine.gamestate.change(push_object)
 

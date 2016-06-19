@@ -5,7 +5,7 @@ class: HeroBox
 
 import pygame
 
-import components
+from components import Button
 
 BACKGROUNDCOLOR = pygame.Color("black")
 LINECOLOR = pygame.Color("white")
@@ -63,8 +63,7 @@ class HeroBox(object):
 
         self.face = pygame.image.load(self.hero.FAC).convert_alpha()
         self.name = self.largefont.render(self.hero.NAM, True, FONTCOLOR).convert_alpha()
-        self.leave = components.Button(LEAVEW, LEAVEH,
-                                       (self.rect.right + LEAVEX, self.rect.top + LEAVEY), LEAVELBL, True)
+        self.leave = Button(LEAVEW, LEAVEH, (self.rect.right + LEAVEX, self.rect.top + LEAVEY), LEAVELBL, True)
         self.level = None
         self.hitpoints = None
         self.full_hp = None
