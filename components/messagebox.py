@@ -5,7 +5,7 @@ class: MessageBox
 
 import pygame
 
-from components import ScreenCapture
+from .screencapture import ScreenCapture
 import keys
 import statemachine
 

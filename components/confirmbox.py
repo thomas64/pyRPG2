@@ -6,7 +6,7 @@ class: ConfirmBox
 import pygame
 
 import audio as sfx
-from components import ScreenCapture
+from .screencapture import ScreenCapture
 import keys
 import statemachine
 
