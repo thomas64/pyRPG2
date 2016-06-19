@@ -8,7 +8,7 @@ import pygame
 BACKGROUNDCOLOR = pygame.Color("black")
 LINECOLOR = pygame.Color("white")
 
-TEXTX, TEXTY = -20, -20     # positie van de tekst in de box. -20 betekent +10. -30 zou +15 betekenen.
+TEXTOFFSET = 10
 COL1, COL2 = 0, 150
 
 FONTCOLOR = pygame.Color("white")
@@ -27,13 +27,9 @@ class InfoBox(object):
         self.rect = self.surface.get_rect()
         self.rect.topleft = position
 
-        self.subrect = self.rect.inflate(TEXTX, TEXTY)
-        self.subsurf = pygame.Surface((self.subrect.width, self.subrect.height))
+        self.subsurf = pygame.Surface((width - TEXTOFFSET*2, height - TEXTOFFSET*2))
         self.subsurf = self.subsurf.convert()
-
-        self.background = pygame.Surface(self.surface.get_size())
-        self.background.fill(BACKGROUNDCOLOR)
-        self.background = self.background.convert()
+        self.subrect = self.subsurf.get_rect()
 
         self.font = pygame.font.SysFont(FONT, FONTSIZE)
 
@@ -45,10 +41,9 @@ class InfoBox(object):
         :param screen: self.screen van partyscreen
         :param text: de tekst om weer te geven
         """
-        self.surface.blit(self.background, (0, 0))
-        pygame.draw.rect(self.background, LINECOLOR, self.surface.get_rect(), 1)
-        screen.blit(self.surface, self.rect.topleft)
+        self.surface.blit(self.subsurf, (TEXTOFFSET, TEXTOFFSET))
         self.subsurf.fill(BACKGROUNDCOLOR)
+        pygame.draw.rect(self.surface, LINECOLOR, self.surface.get_rect(), 1)
 
         self.index = 0
 
@@ -66,7 +61,7 @@ class InfoBox(object):
         elif type(text) == str:
             self.string_text(text)
 
-        screen.blit(self.subsurf, self.subrect.topleft)
+        screen.blit(self.surface, self.rect.topleft)
 
     def tuple_pair_text(self, text):
         """
