@@ -5,6 +5,7 @@ class: InvClickBox
 
 import pygame
 
+from components import MessageBox
 import equipment
 import keys
 
@@ -79,7 +80,7 @@ class InvClickBox(object):
                     equipment_item_nam = equipment_item.NAM
                 self.table_data.append(
                     # row[0],       row[1],       row[2],     row[3],           row[4],   row[5], row[6]
-                    [hero_spr, equipment_item_spr, "1", equipment_item_nam, equipment_item, None, "X"]
+                    [hero_spr, equipment_item_spr, "1", equipment_item_nam, equipment_item, None, hero.NAM]
                 )
 
         # de rijen van equipment uit inventory.
@@ -94,7 +95,7 @@ class InvClickBox(object):
                 equipment_item_nam = equipment_item.NAM
             self.table_data.append(
                 # row[0],        row[1],            row[2],                     row[3],          row[4],   row[5], [6]
-                [black_spr, equipment_item_spr, str(equipment_item.qty), equipment_item_nam, equipment_item, None, ""]
+                [black_spr, equipment_item_spr, str(equipment_item.qty), equipment_item_nam, equipment_item, None, "Y"]
             )
 
         self.table_view = []
@@ -192,8 +193,8 @@ class InvClickBox(object):
                 # equip
                 # als de geselecteerde geen lege is
                 if row[6] != "E":
-                    # als de geselecteerde niet al van een hero is
-                    if row[6] != "X":
+                    # als de geselecteerde een selecteerbare is
+                    if row[6] == "Y":
                         # als de geselecteerde niet dezelfde is als die je al aan hebt
                         if selected_item.get_value_of('RAW') != equipped_item.get_value_of('RAW'):
                             # als hij in de inventory zit
@@ -207,6 +208,11 @@ class InvClickBox(object):
                                         # voeg die dan toe aan de inventory
                                         self.inventory.add(equipped_item)
                                     return True
+                    # of niet al van een hero is
+                    else:
+                        text = ["That {} is already equipped by {}.".format(selected_item.NAM, row[6])]
+                        push_object = MessageBox(gamestate, text)
+                        gamestate.push(push_object)
 
                 # unequip
                 # als de geselecteerde wel een lege is
