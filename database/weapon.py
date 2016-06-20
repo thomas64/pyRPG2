@@ -7,6 +7,7 @@ import collections
 
 from . import EquipmentType
 from . import WeaponType
+from . import ItemMaterial
 
 
 SPRITEPATH = 'resources/sprites/icons/equipment/weapon1.png'
@@ -17,13 +18,13 @@ wpn = collections.OrderedDict()
 
 # todo, upgradable, min_mech, metals zijn nog niet verwerkt.
 
-#                     val, min int, min str, dam, srt, col
+#                     val, min int, min str, dam, srt, col,     mtr[6]
 weapon_material = {
-    "Bronze":          (1,       0,       0,   3, 100,   0),
-    "Iron":            (2,       1,       1,   6, 200,  32),
-    "Steel":           (3,       2,       2,   9, 300,  64),
-    "Silver":          (4,       3,       3,  12, 400,  96),
-    "Titanium":        (5,       0,       0,  12, 500, 128)
+    "Bronze":          (1,       0,       0,   3, 100,   0, ItemMaterial.brz),
+    "Iron":            (2,       1,       1,   6, 200,  32, ItemMaterial.irn),
+    "Steel":           (3,       2,       2,   9, 300,  64, ItemMaterial.stl),
+    "Silver":          (4,       3,       3,  12, 400,  96, ItemMaterial.slv),
+    "Titanium":        (5,       0,       0,  12, 500, 128, ItemMaterial.tnm)
 }
 #                     val, min int, min str, hit, dam,            skl, typ,   srt, row
 weapon_type = {
@@ -76,7 +77,9 @@ for material_key, material_value in weapon_material.items():
                 # berekening value: material * type * upgraded
                 val=int(price * upgraded_value[0]),
                 shp=True,
+
                 skl=type_value[5],
+                mtr=material_value[6],
 
                 # berekening min int/str: material * type_const + type
                 min_int=material_value[1] + type_value[1],

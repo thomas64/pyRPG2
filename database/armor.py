@@ -6,6 +6,7 @@ Armor
 import collections
 
 from . import EquipmentType
+from . import ItemMaterial
 
 
 SPRITEPATH = 'resources/sprites/icons/equipment/armor1.png'
@@ -16,14 +17,14 @@ arm = collections.OrderedDict()
 
 # todo, upgradable, min_mech, metals zijn nog niet verwerkt.
 
-#                     val, wht, prt, stl,  srt, row
+#                     val, wht, prt, stl,  srt, row,      mtr[6]
 armor_material = {
-    "Leather Armor":   (0,   0,   0,   0, 1000,   0),
-    "Bronze Armor":    (3,   3,   3,  -3, 2000,  32),
-    "Iron Armor":      (6,   6,   6,  -6, 3000,  64),
-    "Steel Armor":     (9,   9,   9,  -9, 4000,  96),
-    "Silver Armor":   (12,  12,  12, -12, 5000, 128),
-    "Titanium Armor": (15,   0,  12,   0, 6000, 160)
+    "Leather Armor":   (0,   0,   0,   0, 1000,   0, ItemMaterial.ltr),
+    "Bronze Armor":    (3,   3,   3,  -3, 2000,  32, ItemMaterial.brz),
+    "Iron Armor":      (6,   6,   6,  -6, 3000,  64, ItemMaterial.irn),
+    "Steel Armor":     (9,   9,   9,  -9, 4000,  96, ItemMaterial.stl),
+    "Silver Armor":   (12,  12,  12, -12, 5000, 128, ItemMaterial.slv),
+    "Titanium Armor": (15,   0,  12,   0, 6000, 160, ItemMaterial.tnm)
 }
 #                     val, wht, prt, stl,  srt, col
 armor_type = {
@@ -55,6 +56,8 @@ for material_key, material_value in armor_material.items():
                 # berekening value: material * type * upgraded
                 val=int(price * upgraded_value[0]),
                 shp=True,
+
+                mtr=material_value[6],
 
                 # berekening weight: material + type + upgraded
                 wht=material_value[1] + type_value[1] + upgraded_value[1],

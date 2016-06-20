@@ -38,6 +38,19 @@ class WeaponType(enum.Enum):
     shd = "Shield"
 
 
+class ItemMaterial(enum.Enum):
+    """
+    Alle materialen op een rij.
+    """
+    ltr = "Leather"
+    wdn = "Wooden"
+    brz = "Bronze"
+    irn = "Iron"
+    stl = "Steel"
+    slv = "Silver"
+    tnm = "Titanium"
+
+
 class Direction(enum.Enum):
     """
     De vier richtingen waarheen een unit kan lopen.

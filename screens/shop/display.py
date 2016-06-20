@@ -12,7 +12,7 @@ import audio as sfx
 from components import Button
 from components import ConfirmBox
 from components import MessageBox
-import database
+from database import WeaponType
 import keys
 import pouchitems
 import screens.shop.buybox
@@ -79,11 +79,12 @@ class Display(object):
     """
     ...
     """
-    def __init__(self, engine, shoptype_list, face):
+    def __init__(self, engine, shoptype_list, shopmaterial_list, face):
         self.engine = engine
         # is een list van bijv: [EquipmentType.arm, WeaponType.swd]
         self.shoptype_list = shoptype_list
         self.shoptype = self.shoptype_list[0]
+        self.material_list = shopmaterial_list
         self.databases = {}
 
         self.screen = pygame.display.get_surface()
@@ -121,7 +122,7 @@ class Display(object):
     def _init_selectors(self):
         self.selectors = pygame.sprite.Group()
         for index, shoptype in enumerate(self.shoptype_list):
-            if isinstance(shoptype, database.WeaponType):
+            if isinstance(shoptype, WeaponType):
                 from database.weapon import wpn
                 self.databases[shoptype.name] = collections.OrderedDict()
                 # omdat alle wapens in wpn zitten moet de database opnieuw opgebouwd worden met alleen de juiste wapens
@@ -182,9 +183,17 @@ class Display(object):
     def _init_buybox(self):
         width = self.screen.get_width() * BUYBOXWIDTH
         height = self.screen.get_height() * BUYBOXHEIGHT + EXTRAHEIGHT
+
+        buy_database = self.databases[self.shoptype.name]
+        # extra stukje voor als er een bepaalde materiaal lijst is, delete dan de rest uit die database.
+        if self.material_list:
+            for itm_key, itm_value in list(buy_database.items()):
+                if itm_value.get('mtr') not in self.material_list:
+                    # hij loopt door een list() want anders kun je niet deleten uit een dict, blijkbaar.
+                    del buy_database[itm_key]
         self.buybox = screens.shop.buybox.BuyBox(self._set_x(BUYBOXPOSX), self._set_y(BUYBOXPOSY),
                                                  int(width), int(height),
-                                                 self.databases[self.shoptype.name],
+                                                 buy_database,
                                                  self.sum_merchant)
 
     def _init_infobox(self):
@@ -293,6 +302,10 @@ class Display(object):
         elif event.type == pygame.KEYDOWN:
             if event.key == keys.EXIT:
                 self.engine.gamestate.pop()
+            elif event.key == keys.PREV:
+                self._previous()
+            elif event.key == keys.NEXT:
+                self._next()
 
     def multi_input(self, key_input, mouse_pos, dt):
         """
@@ -434,3 +447,23 @@ class Display(object):
                                 " of them for " + str(int(self.value * self.tot_quantity)) + " gold.")
                     self.sel_quantity.append(self.tot_quantity)
         return text
+
+    def _previous(self):
+        for index, shoptype in enumerate(self.shoptype_list):
+            if shoptype == self.shoptype:
+                i = index - 1
+                if i < 0:
+                    i = len(self.shoptype_list)-1
+                self.shoptype = self.shoptype_list[i]
+                self._init_boxes()
+                break
+
+    def _next(self):
+        for index, shoptype in enumerate(self.shoptype_list):
+            if shoptype == self.shoptype:
+                i = index + 1
+                if i >= len(self.shoptype_list):
+                    i = 0
+                self.shoptype = self.shoptype_list[i]
+                self._init_boxes()
+                break

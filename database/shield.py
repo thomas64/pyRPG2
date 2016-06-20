@@ -7,6 +7,7 @@ import collections
 
 from . import EquipmentType
 from . import WeaponType
+from . import ItemMaterial
 
 
 SPRITEPATH = 'resources/sprites/icons/equipment/shield4.png'
@@ -17,14 +18,14 @@ sld = collections.OrderedDict()
 
 # todo, upgradable, min_mech, metals zijn nog niet verwerkt.
 
-#                     val, min str, prt, des, dex, stl,  srt, col
+#                     val, min str, prt, des, dex, stl,  srt, col,      mtr[8]
 shield_material = {
-    "Wooden":          (3,       3,   2,   1,  -1,  -1,  100,   0),
-    "Bronze":          (6,       6,   4,   2,  -2,  -2,  200,  32),
-    "Iron":            (9,       9,   6,   3,  -3,  -3,  300,  64),
-    "Steel":          (12,      12,   8,   4,  -4,  -4,  400,  96),
-    "Silver":         (15,      15,  10,   5,  -5,  -5,  500, 128),
-    "Titanium":       (18,       3,  10,   5,  -1,  -1,  600, 160)
+    "Wooden":          (3,       3,   2,   1,  -1,  -1,  100,   0, ItemMaterial.wdn),
+    "Bronze":          (6,       6,   4,   2,  -2,  -2,  200,  32, ItemMaterial.brz),
+    "Iron":            (9,       9,   6,   3,  -3,  -3,  300,  64, ItemMaterial.irn),
+    "Steel":          (12,      12,   8,   4,  -4,  -4,  400,  96, ItemMaterial.stl),
+    "Silver":         (15,      15,  10,   5,  -5,  -5,  500, 128, ItemMaterial.slv),
+    "Titanium":       (18,       3,  10,   5,  -1,  -1,  600, 160, ItemMaterial.tnm)
 }
 #                     val, min str, prt, des, dex, stl,  srt, row
 shield_type = {
@@ -58,6 +59,8 @@ for material_key, material_value in shield_material.items():
                 # berekening value: material * type * upgraded
                 val=int(price * upgraded_value[0]),
                 shp=True,
+
+                mtr=material_value[8],
 
                 # berekening min str: material + type
                 min_str=material_value[1] + type_value[1],

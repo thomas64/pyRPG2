@@ -390,7 +390,9 @@ class Window(object):
 
             shop_sprite.turn(self.party_sprites[0].rect)
 
-            push_object = screens.shop.display.Display(self.engine, shop_data['content'], shop_data['face'])
+            push_object = screens.shop.display.Display(self.engine, shop_data['content'],
+                                                       shop_data.get('material'),  # material is geen garantie
+                                                       shop_data['face'],)
             self.engine.gamestate.push(push_object)
 
     def check_schools(self, check_rect):
