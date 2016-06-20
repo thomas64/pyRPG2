@@ -6,10 +6,9 @@ class: InnDatabase
 import enum
 
 
-PATH = 'resources/sprites/npcs/'
-PATHEXT = '_Inn.png'
-FACE = 'f'
-SPRITE = 's'
+PATH = 'resources/sprites/npcs/Inn_'
+FACE = 'f.png'
+SPRITE = 's.png'
 
 
 def welcome_text(price):
@@ -41,5 +40,5 @@ def deny_text():
 class InnDatabase(enum.Enum):
     """..."""
     # het getal dat je meegeeft aan welcome() moet uiteraard hetzelfde zijn als die je meegeeft aan price=
-    inn1 = dict(price=50, face=PATH+'01'+FACE+PATHEXT, sprite=PATH+'01'+SPRITE+PATHEXT,
+    inn1 = dict(price=50, face=PATH+'01'+FACE, sprite=PATH+'01'+SPRITE,
                 welcome=welcome_text(50), paid=paid_text(), fail=fail_text(), deny=deny_text())
