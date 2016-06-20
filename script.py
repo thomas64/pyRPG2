@@ -38,7 +38,7 @@ class Script(object):
         # self.engine.data.party.add(self.engine.data.heroes['rydalin'], verbose=False)
 
         eqp_item = equipment.factory_equipment_item('bronzemace')
-        self.engine.data.inventory.add(eqp_item, verbose=False)
+        self.engine.data.inventory.add_i(eqp_item, verbose=False)
         pouch_item = pouchitems.factory_pouch_item('gold')
         self.engine.data.pouch.add(pouch_item, 1, verbose=False)
 
