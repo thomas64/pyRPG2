@@ -15,8 +15,8 @@ class TreasureChestDatabase(dict):
         # ersin_forest_start
         self['chest1'] = dict(content=dict(itm1=dict(nam='gold',             qty=2),
                                            itm2=dict(nam='herbs',            qty=3),
-                                           eqp1=dict(nam='bronzeshortsword'),
-                                           eqp2=dict(nam='leathercap')))
+                                           eqp1=dict(nam='bronzeshortsword', qty=1),
+                                           eqp2=dict(nam='leathercap',       qty=1)))
         self['chest2'] = dict(condition=dict(thf=3),
                               content=dict(itm1=dict(nam='gold',             qty=3)))
         self['chest3'] = dict(condition=dict(mec=2),

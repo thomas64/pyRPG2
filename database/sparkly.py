@@ -14,8 +14,6 @@ class SparklyDatabase(dict):
 
         # ersin_forest_start
         self['sparkly1'] = dict(content=dict(itm1=dict(nam='gold', qty=1)))
-        # ersin_cave_room2
-        self['sparkly2'] = dict(content=dict(itm1=dict(nam='herbs', qty=4)))
 
         for value in self.values():
             value['taken'] = 0

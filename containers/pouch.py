@@ -4,6 +4,7 @@ class: Pouch
 """
 
 import console
+from . import Inventory
 
 
 class Pouch(dict):
@@ -21,30 +22,12 @@ class Pouch(dict):
         """
         return sorted(self.values(), key=lambda xx: xx.SRT)
 
+    # noinspection PyTypeChecker,PyCallByClass
     def add(self, pouch_item, quantity=1, verbose=True):
         """
-        Voeg equipment item toe aan de inventory.
-        :param pouch_item: PouchItem Object
-        :param quantity: integer
-        :param verbose: als False meegegeven wordt, print dan niets in de console
+        Hetzelfde als add van Inventory.
         """
-        if quantity < 1:
-            console.error_quantity_less_than_one(quantity)
-            raise ValueError
-        if pouch_item.RAW in self:
-            self[pouch_item.RAW].qty += quantity
-            if self[pouch_item.RAW].qty > self.MAX:
-                console.container_is_full(self.NAM)  # todo, hij geeft alleen nu nog maar mee, hij doet er nog niets aan
-        else:
-            # als hij nog niet in de inv dict zit, voeg hem toe.
-            self[pouch_item.RAW] = pouch_item
-            # equipment_item bestaat uit zichzelf al uit quantity = 1,
-            # dus daarom, wanneer hij voor het eerst wordt toegevoegd: + qty - 1
-            self[pouch_item.RAW].qty += (quantity - 1)
-            if self[pouch_item.RAW].qty > self.MAX:
-                console.container_is_full(self.NAM)  # todo, hij geeft alleen nu nog maar mee, hij doet er nog niets aan
-        if verbose:
-            console.add_item_in_container(quantity, pouch_item.NAM, self.NAM)
+        Inventory.add(self, pouch_item, quantity, verbose)
 
     def remove(self, pouch_item, cost, verbose=True):
         """

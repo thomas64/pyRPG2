@@ -114,6 +114,8 @@ class Display(object):
         self.buy_click = False
         self.sell_click = False
         self.selected_item = None
+        self.tot_quantity = 0
+        self.sel_quantity = []
         self.value = 0
         self.confirm_box = None
 
@@ -203,7 +205,7 @@ class Display(object):
     def on_enter(self):
         """
         Wanneer deze state op de stack komt, voer dit uit.
-        Handel af als er een sell of buy confirmbox is geweest.
+        Handel af als er een sell confirmbox is geweest.
         """
         if self.sell_click or self.buy_click:
             if self.buy_click:
@@ -211,27 +213,25 @@ class Display(object):
                 choice, yes, nothing = self.confirm_box.on_exit()
                 if choice == yes:
                     gold = pouchitems.factory_pouch_item('gold')
-                    if self.engine.data.pouch.remove(gold, self.value):           # deze if is eigenlijk overbodig maar
-                        if self.engine.data.inventory.add_i(self.selected_item):  # van origineel zit hij erin. maar hij
-                            self.engine.audio.play_sound(sfx.COINS)               # filtert nu al bij het klikken.
-                            self._init_sellbox()
-                        # als de inventory vol zit
-                        else:
-                            pass  # todo, inventory vol moet eigenlijk al in de inventory geregeld worden, denk ik nu?
-                            # todo, er zijn meer add_i() die ge-if-t moeten worden
-                            # todo, quantity vervangen van items, usage oid toevoegen ipv
+                    if self.engine.data.pouch.remove(gold, self.value):     # deze if is eigenlijk overbodig maar
+                        self.engine.data.inventory.add(self.selected_item)  # van origineel zit hij erin. maar hij
+                        self.engine.audio.play_sound(sfx.COINS)             # filtert nu al bij het klikken.
+                        self._init_sellbox()
                 else:
                     self.engine.audio.play_sound(sfx.MENUSELECT)
 
             elif self.sell_click:
                 # hij gebruikt nothing hier niet
-                choice, yes, nothing = self.confirm_box.on_exit()
+                selected_quantity, nothing, nothing = self.confirm_box.on_exit()
                 # dit gaat helemaal uit van dat de tekst van de shop maar 1 regel heeft en dan 1 regel niets.
-                # omdat selected_quantity None kan zijn vanwege ESC toets.
-                if choice == yes:
-                    self.engine.data.inventory.remove_i(self.selected_item)
+                quantity = None
+                if selected_quantity:   # omdat selected_quantity None kan zijn vanwege ESC toets.
+                    quantity = self.sel_quantity[selected_quantity]
+
+                if quantity:
+                    self.engine.data.inventory.remove(self.selected_item, quantity)
                     gold = pouchitems.factory_pouch_item('gold')
-                    self.engine.data.pouch.add(gold, self.value)
+                    self.engine.data.pouch.add(gold, self.value * quantity)
                     self.engine.audio.play_sound(sfx.COINS)
                     self._init_sellbox()
                 else:
@@ -240,6 +240,8 @@ class Display(object):
             self.buy_click = False
             self.sell_click = False
             self.selected_item = None
+            self.tot_quantity = 0
+            self.sel_quantity = []
             self.value = 0
             self.confirm_box = None
 
@@ -376,13 +378,10 @@ class Display(object):
         return False
 
     def _handle_sell_box_click(self, event):
-        self.sell_click, self.selected_item, self.value = self.sellbox.mouse_click(event)
+        self.sell_click, self.selected_item, self.tot_quantity, self.value = self.sellbox.mouse_click(event)
         if self.sell_click and self.selected_item:
             self.engine.audio.play_sound(sfx.MENUSELECT)
-            text = ["I'll give you {} gold for that {}.".format(self.value, self.selected_item.NAM),
-                    "",
-                    "Sure!",
-                    "Oops, don't sell it."]
+            text = self._fill_confirm_box_with_sell_text()
             self.confirm_box = ConfirmBox(self.engine.gamestate, self.engine.audio, text)
             self.engine.gamestate.push(self.confirm_box)
             return True
@@ -401,6 +400,53 @@ class Display(object):
 
     def _set_y(self, posy):
         return self.screen.get_height() * posy
+
+    def _fill_confirm_box_with_sell_text(self):
+        text = ["I'll give you " + str(self.value) + " gold for 1 " + self.selected_item.NAM + ".",
+                "",
+                "Oops, don't sell any."]
+
+        # dit begin moet omdat er ook eerst tekst is voor 1 regel en 1 regel met niets.
+        self.sel_quantity = ["",
+                             "",
+                             0]
+
+        if self.tot_quantity > 0:
+            if self.tot_quantity == 1:
+                text.append("Sell 1 for " + str(int(self.value * 1)) + " gold.")
+                self.sel_quantity.append(1)
+            else:
+                text.append("Sell 1 of them for " + str(int(self.value * 1)) + " gold.")
+                self.sel_quantity.append(1)
+            if self.tot_quantity > 1:
+                text.append("Sell 2 of them for " + str(int(self.value * 2)) + " gold.")
+                self.sel_quantity.append(2)
+                if self.tot_quantity == 3:
+                    text.append("Sell 3 of them for " + str(int(self.value * 3)) + " gold.")
+                    self.sel_quantity.append(3)
+                elif self.tot_quantity == 4:
+                    text.append("Sell 3 of them for " + str(int(self.value * 3)) + " gold.")
+                    text.append("Sell 4 of them for " + str(int(self.value * 4)) + " gold.")
+                    self.sel_quantity.append(3)
+                    self.sel_quantity.append(4)
+                elif self.tot_quantity == 5:
+                    text.append("Sell 3 of them for " + str(int(self.value * 3)) + " gold.")
+                    text.append("Sell 4 of them for " + str(int(self.value * 4)) + " gold.")
+                    text.append("Sell 5 of them for " + str(int(self.value * 5)) + " gold.")
+                    self.sel_quantity.append(3)
+                    self.sel_quantity.append(4)
+                    self.sel_quantity.append(5)
+                elif self.tot_quantity > 5:
+                    text.append("Sell " + str(int(self.tot_quantity / 2)) +
+                                " of them for " + str(int(self.value * (self.tot_quantity / 2))) + " gold.")
+                    self.sel_quantity.append(int(self.tot_quantity / 2))
+                    text.append("Sell " + str(self.tot_quantity - 1) +
+                                " of them for " + str(int(self.value * (self.tot_quantity - 1))) + " gold.")
+                    self.sel_quantity.append(self.tot_quantity - 1)
+                    text.append("Sell " + str(self.tot_quantity) +
+                                " of them for " + str(int(self.value * self.tot_quantity)) + " gold.")
+                    self.sel_quantity.append(self.tot_quantity)
+        return text
 
     def _previous(self):
         for index, shoptype in enumerate(self.shoptype_list):

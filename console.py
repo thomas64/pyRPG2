@@ -165,6 +165,8 @@ def remove_item_from_container(item_quantity, item_name, container_name):
 
 def error_quantity_less_than_one(quantity):
     """
+    Inventory.add()
+    Inventory.remove()
     Pouch.add()
     Pouch.remove()
     :param quantity: integer

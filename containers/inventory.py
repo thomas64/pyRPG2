@@ -7,14 +7,14 @@ import console
 from database import WeaponType
 
 
-class Inventory(list):
+class Inventory(dict):
     """
     Inventory container.
     """
     def __init__(self, **kwargs):
         super().__init__(**kwargs)
         self.NAM = "Inventory"
-        self.MAX = 5
+        self.MAX = 99
 
     def get_all_equipment_items_of_type(self, equipment_type):
         """
@@ -24,7 +24,7 @@ class Inventory(list):
         """
         temp_list = []
 
-        for equipment_item in sorted(self, key=lambda xx: xx.SRT):
+        for equipment_item in sorted(self.values(), key=lambda xx: xx.SRT):
             # uitzondering gemaakt voor sellbox in shop. geef dan alleen maar een bepaald type weapon terug
             if isinstance(equipment_type, WeaponType):
                 if equipment_item.get_value_of('SKL'):
@@ -36,30 +36,59 @@ class Inventory(list):
 
         return temp_list
 
-    def add_i(self, equipment_item, verbose=True):
+    def contains(self, equipment_item):
+        """
+        Bekijkt of het item in de inventory zit.
+        :param equipment_item: EquipmentItem Object
+        """
+        if equipment_item.RAW in self:
+            return True
+        return False
+
+    def add(self, equipment_item, quantity=1, verbose=True):
         """
         Voeg equipment item toe aan de inventory.
         :param equipment_item: EquipmentItem Object
+        :param quantity: integer
         :param verbose: als False meegegeven wordt, print dan niets in de console
         """
-        if len(self)-1 < self.MAX:
-            self.append(equipment_item)
-            if verbose:
-                console.add_item_in_container(1, equipment_item.NAM, self.NAM)
-            return True
+        if quantity < 1:
+            console.error_quantity_less_than_one(quantity)
+            raise ValueError
+        if equipment_item.RAW in self:
+            self[equipment_item.RAW].qty += quantity
+            if self[equipment_item.RAW].qty > self.MAX:
+                console.container_is_full(self.NAM)  # todo, hij geeft alleen nu nog maar mee, hij doet er nog niets aan
         else:
-            console.container_is_full(self.NAM)
-            return False
+            # als hij nog niet in de inv dict zit, voeg hem toe.
+            self[equipment_item.RAW] = equipment_item
+            # equipment_item bestaat uit zichzelf al uit quantity = 1,
+            # dus daarom, wanneer hij voor het eerst wordt toegevoegd: + qty - 1
+            self[equipment_item.RAW].qty += (quantity - 1)
+            if self[equipment_item.RAW].qty > self.MAX:
+                console.container_is_full(self.NAM)  # todo, hij geeft alleen nu nog maar mee, hij doet er nog niets aan
+        if verbose:
+            console.add_item_in_container(quantity, equipment_item.NAM, self.NAM)
 
-    def remove_i(self, equipment_item, verbose=True):
+    def remove(self, equipment_item, quantity=1, verbose=True):
         """
         Verwijder equipment item uit de inventory.
         :param equipment_item: EquipmentItem Object
+        :param quantity: integer
         :param verbose: als False meegegeven wordt, print dan niets in de console
         """
-        if equipment_item not in self:
+        if equipment_item.RAW not in self:
             console.error_no_equipment_item()
             raise AttributeError
-        self.remove(equipment_item)
+        if quantity < 1:
+            console.error_quantity_less_than_one(quantity)
+            raise ValueError
+        if self[equipment_item.RAW].qty > quantity:
+            self[equipment_item.RAW].qty -= quantity
+        elif self[equipment_item.RAW].qty == quantity:
+            del self[equipment_item.RAW]
+        else:
+            console.error_quantity_not_enough()
+            raise ValueError
         if verbose:
-            console.remove_item_from_container(1, equipment_item.NAM, self.NAM)
+            console.remove_item_from_container(quantity, equipment_item.NAM, self.NAM)

@@ -451,7 +451,7 @@ class Window(object):
                 mec_v, mec_h = 0, ""
                 thf_v, thf_h = 0, ""
                 if chest_data.get('condition') and chest_data['content']:
-                    for key, value in list(chest_data['condition'].items()):
+                    for key, value in chest_data['condition'].items():
                         if key == "mec":
                             mec_v, mec_h = self.engine.data.party.get_highest_value_of_skill(key)
                             if mec_v < value:
@@ -459,8 +459,6 @@ class Window(object):
                                 push_object = MessageBox(self.engine.gamestate, text)
                                 self.engine.gamestate.push(push_object)
                                 return
-                            # haal die condition van de chest af.
-                            del chest_data['condition'][key]
                         elif key == "thf":
                             thf_v, thf_h = self.engine.data.party.get_highest_value_of_skill(key)
                             if thf_v < value:
@@ -468,39 +466,28 @@ class Window(object):
                                 push_object = MessageBox(self.engine.gamestate, text)
                                 self.engine.gamestate.push(push_object)
                                 return
-                            del chest_data['condition'][key]
 
                 if chest_data['content']:
-                    # open de chest tijdelijk
-                    open_chest = 1
+                    chest_data['opened'] = 1
                     text = self.engine.data.treasure_chests.open_chest(chest_data.get('condition'),
                                                                        mec_v, mec_h, thf_v, thf_h)
                     image = []
-                    for key, value in list(chest_data['content'].items()):
+                    for key, value in chest_data['content'].items():
                         if key.startswith('eqp'):
                             equipment_item = equipment.factory_equipment_item(value['nam'])
                             equipment_item_spr = pygame.image.load(equipment_item.SPR).subsurface(
                                 equipment_item.COL, equipment_item.ROW, ICONSIZE, ICONSIZE).convert_alpha()
-                            # als er ruimte is in de inventory
-                            if self.engine.data.inventory.add_i(equipment_item):
-                                text.append(equipment_item.NAM)
-                                image.append(equipment_item_spr)
-                                del chest_data['content'][key]
-                            # laat het anders in de kist zitten
-                            else:
-                                text.append("{} ({} is full)".format(equipment_item.NAM,
-                                                                     self.engine.data.inventory.NAM))
-                                image.append(equipment_item_spr)
-                                open_chest = 0
+                            self.engine.data.inventory.add(equipment_item, quantity=value['qty'])
+                            text.append("{} {}".format(str(value['qty']), str(equipment_item.NAM)))
+                            image.append(equipment_item_spr)
                         elif key.startswith('itm'):
                             pouch_item = pouchitems.factory_pouch_item(value['nam'])
                             pouch_item_spr = pygame.image.load(pouch_item.SPR).convert_alpha()
                             self.engine.data.pouch.add(pouch_item, quantity=value['qty'])
-                            text.append("{} {}".format(value['qty'], pouch_item.NAM))
+                            text.append("{} {}".format(str(value['qty']), str(pouch_item.NAM)))
                             image.append(pouch_item_spr)
-                            del chest_data['content'][key]
                     self.engine.audio.play_sound(sfx.CHEST)
-                    chest_data['opened'] = open_chest
+                    chest_data['content'] = dict()
                     push_object = MessageBox(self.engine.gamestate, text, spr_image=image)
                     self.engine.gamestate.push(push_object)
 
@@ -517,30 +504,25 @@ class Window(object):
 
             # hieronder is bijna een exacte kopie van check_chests() kan dat anders?
             if sparkly_data['content']:
-                taken_sparkly = 1
+                sparkly_data['taken'] = 1
                 text = ["Found:"]
                 image = []
-                for key, value in list(sparkly_data['content'].items()):
+                for key, value in sparkly_data['content'].items():
                     if key.startswith('eqp'):
                         equipment_item = equipment.factory_equipment_item(value['nam'])
                         equipment_item_spr = pygame.image.load(equipment_item.SPR).subsurface(
                             equipment_item.COL, equipment_item.ROW, ICONSIZE, ICONSIZE).convert_alpha()
-                        if self.engine.data.inventory.add_i(equipment_item):
-                            text.append(equipment_item.NAM)
-                            image.append(equipment_item_spr)
-                            del sparkly_data['content'][key]
-                        else:
-                            text.append("{} ({} is full)".format(equipment_item.NAM, self.engine.data.inventory.NAM))
-                            image.append(equipment_item_spr)
-                            taken_sparkly = 0
+                        self.engine.data.inventory.add(equipment_item, quantity=value['qty'])
+                        text.append("{} {}".format(str(value['qty']), str(equipment_item.NAM)))
+                        image.append(equipment_item_spr)
                     elif key.startswith('itm'):
                         pouch_item = pouchitems.factory_pouch_item(value['nam'])
                         pouch_item_spr = pygame.image.load(pouch_item.SPR).convert_alpha()
                         self.engine.data.pouch.add(pouch_item, quantity=value['qty'])
-                        text.append("{} {}".format(value['qty'], pouch_item.NAM))
+                        text.append("{} {}".format(str(value['qty']), str(pouch_item.NAM)))
                         image.append(pouch_item_spr)
-                        del sparkly_data['content'][key]
                 self.engine.audio.play_sound(sfx.SPARKLY)
-                sparkly_data['taken'] = taken_sparkly
+                sparkly_data['content'] = dict()
+                sparkly_sprite.image = None
                 push_object = MessageBox(self.engine.gamestate, text, spr_image=image)
                 self.engine.gamestate.push(push_object)
