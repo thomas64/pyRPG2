@@ -100,7 +100,7 @@ def corrupt_gamedata():
 def container_is_full(container_name):
     """
     Party.add()
-    Inventory.add()
+    Inventory.add_i()
     Pouch.add()
     :param container_name: string
     """
@@ -143,7 +143,7 @@ def error_leader_not_leave_party():
 
 def add_item_in_container(item_quantity, item_name, container_name):
     """
-    Inventory.add()
+    Inventory.add_i()
     Pouch.add()
     :param item_quantity: integer
     :param item_name: string
@@ -154,7 +154,7 @@ def add_item_in_container(item_quantity, item_name, container_name):
 
 def remove_item_from_container(item_quantity, item_name, container_name):
     """
-    Inventory.remove()
+    Inventory.remove_i()
     Pouch.remove()
     :param item_quantity: integer
     :param item_name: string
@@ -165,8 +165,8 @@ def remove_item_from_container(item_quantity, item_name, container_name):
 
 def error_quantity_less_than_one(quantity):
     """
-    Inventory.add()
-    Inventory.remove()
+    Inventory.add_i()
+    Inventory.remove_i()
     Pouch.add()
     Pouch.remove()
     :param quantity: integer
@@ -176,14 +176,14 @@ def error_quantity_less_than_one(quantity):
 
 def error_no_equipment_item():
     """
-    Inventory.remove()
+    Inventory.remove_i()
     """
     print("Equipment item not in container.")
 
 
 def error_quantity_not_enough():
     """
-    Inventory.remove()
+    Inventory.remove_i()
     """
     print("Item quantity not in container.")
 

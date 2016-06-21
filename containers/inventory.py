@@ -45,7 +45,7 @@ class Inventory(dict):
             return True
         return False
 
-    def add(self, equipment_item, quantity=1, verbose=True):
+    def add_i(self, equipment_item, quantity=1, verbose=True):
         """
         Voeg equipment item toe aan de inventory.
         :param equipment_item: EquipmentItem Object
@@ -70,7 +70,7 @@ class Inventory(dict):
         if verbose:
             console.add_item_in_container(quantity, equipment_item.NAM, self.NAM)
 
-    def remove(self, equipment_item, quantity=1, verbose=True):
+    def remove_i(self, equipment_item, quantity=1, verbose=True):
         """
         Verwijder equipment item uit de inventory.
         :param equipment_item: EquipmentItem Object

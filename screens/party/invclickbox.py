@@ -202,11 +202,11 @@ class InvClickBox(object):
                                 # als het aankleden gelukt is
                                 if hero.set_equipment_item(gamestate, selected_item):
                                     # verwijder hem dan uit de inventory
-                                    self.inventory.remove(selected_item)
+                                    self.inventory.remove_i(selected_item)
                                     # als degene die je aan had niet een lege is
                                     if equipped_item.is_not_empty():
                                         # voeg die dan toe aan de inventory
-                                        self.inventory.add(equipped_item)
+                                        self.inventory.add_i(equipped_item)
                                     return True
                     # of niet al van een hero is
                     else:
@@ -222,7 +222,7 @@ class InvClickBox(object):
                         # trek dan de lege aan
                         hero.set_equipment_item(gamestate, selected_item)
                         # en voeg degene die je aan had toe aan de inventory
-                        self.inventory.add(equipped_item)
+                        self.inventory.add_i(equipped_item)
                         return True
         return False
 

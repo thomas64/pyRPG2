@@ -190,9 +190,9 @@ class SellBox(object):
                 if row[7] != "X":       # verschil tussen heroes en equipment
                     return True, selected_item, quantity, value
                 else:
-                    return True, None, None, None
+                    return True, None,          None,     None
 
-        return False, None, None, None
+        return False,            None,          None,     None
 
     def render(self, screen):
         """

@@ -27,7 +27,7 @@ class Pouch(dict):
         """
         Hetzelfde als add van Inventory.
         """
-        Inventory.add(self, pouch_item, quantity, verbose)
+        Inventory.add_i(self, pouch_item, quantity, verbose)
 
     def remove(self, pouch_item, cost, verbose=True):
         """

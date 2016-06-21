@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<map version="1.0" orientation="orthogonal" renderorder="right-down" width="46" height="38" tilewidth="16" tileheight="16" nextobjectid="24075">
+<map version="1.0" orientation="orthogonal" renderorder="right-down" width="46" height="38" tilewidth="16" tileheight="16" nextobjectid="24076">
  <properties>
   <property name="title" value="Ersin Cave"/>
  </properties>
@@ -605,4 +605,7 @@
 21,21,21,21,21,21,21,21,21,21,21,21,21,21,21,21,21,21,21,21,21,21,21,21,21,21,21,21,21,21,21,21,21,21,21,21,21,21,21,21,21,21,21,21,21,21
 </data>
  </layer>
+ <objectgroup name="sparkly">
+  <object id="24075" name="sparkly2" x="240" y="208" width="32" height="32"/>
+ </objectgroup>
 </map>

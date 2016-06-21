@@ -205,7 +205,7 @@ class Display(object):
     def on_enter(self):
         """
         Wanneer deze state op de stack komt, voer dit uit.
-        Handel af als er een sell confirmbox is geweest.
+        Handel af als er een sell of buy confirmbox is geweest.
         """
         if self.sell_click or self.buy_click:
             if self.buy_click:
@@ -214,7 +214,7 @@ class Display(object):
                 if choice == yes:
                     gold = pouchitems.factory_pouch_item('gold')
                     if self.engine.data.pouch.remove(gold, self.value):     # deze if is eigenlijk overbodig maar
-                        self.engine.data.inventory.add(self.selected_item)  # van origineel zit hij erin. maar hij
+                        self.engine.data.inventory.add_i(self.selected_item)  # van origineel zit hij erin. maar hij
                         self.engine.audio.play_sound(sfx.COINS)             # filtert nu al bij het klikken.
                         self._init_sellbox()
                 else:
@@ -229,7 +229,7 @@ class Display(object):
                     quantity = self.sel_quantity[selected_quantity]
 
                 if quantity:
-                    self.engine.data.inventory.remove(self.selected_item, quantity)
+                    self.engine.data.inventory.remove_i(self.selected_item, quantity)
                     gold = pouchitems.factory_pouch_item('gold')
                     self.engine.data.pouch.add(gold, self.value * quantity)
                     self.engine.audio.play_sound(sfx.COINS)
