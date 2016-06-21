@@ -7,6 +7,7 @@ from database import SchoolType
 
 
 SPRITEPATH = 'resources/sprites/icons/spells/spells.png'
+SPRITEPATH2 = 'resources/sprites/icons/spells/spells2.png'
 
 
 class Spell(object):
@@ -118,8 +119,8 @@ class Mirror(Spell):
         self.qty = quantity
         self.COL = 352
         self.ROW = 96
-        self.DESC = self.set_desc(
-            "Creates a shield that provides total resistance against the next incoming attack spells.")
+        self.DESC = self.set_desc("Creates a shield that provides total resistance against the next "
+                                  "incoming attack spells.")
         # Gemstone
 
 
@@ -205,8 +206,8 @@ class AirShield(Spell):
         self.qty = quantity
         self.COL = 352
         self.ROW = 128
-        self.DESC = self.set_desc(
-            "All friendly entities within the range of the spell add 1 per Rank to their Protection value.")
+        self.DESC = self.set_desc("All friendly entities within the range of the spell add 1 per Rank to "
+                                  "their Protection value.")
         # "Requires: Gemstone"
 
 
@@ -239,8 +240,8 @@ class DragonFlames(Spell):
         self.qty = quantity
         self.COL = 32
         self.ROW = 0
-        self.DESC = self.set_desc(
-            "The target(s) of this spell are attacked by wicked dragon flames emanating from the caster.")
+        self.DESC = self.set_desc("The target(s) of this spell are attacked by wicked dragon flames "
+                                  "emanating from the caster.")
         # Gemstone
 
 
@@ -257,9 +258,8 @@ class Fireball(Spell):
         self.qty = quantity
         self.COL = 64
         self.ROW = 0
-        self.DESC = self.set_desc(
-            "Fireballs are fired from the fingertips of the caster, striking each target in the area of "
-            "effect - friend and foe alike.")
+        self.DESC = self.set_desc("Fireballs are fired from the fingertips of the caster, striking each target in "
+                                  "the area of effect - friend and foe alike.")
         # Spice
 
 
@@ -276,9 +276,8 @@ class Immolation(Spell):
         self.qty = quantity
         self.COL = 0
         self.ROW = 0
-        self.DESC = self.set_desc(
-            "Fires a burst of flame at the target, who catches fire and takes 1-6 "
-            "points of damage per round thereafter until the spell expires.")
+        self.DESC = self.set_desc("Fires a burst of flame at the target, who catches fire and takes 1-6 "
+                                  "points of damage per round thereafter until the spell expires.")
         # Spice
 
 
@@ -311,8 +310,8 @@ class Strength(Spell):
         self.qty = quantity
         self.COL = 0
         self.ROW = 192
-        self.DESC = self.set_desc(
-            "Target gains 2 Strength for each Rank of the spell. May only be cast once on each target.")
+        self.DESC = self.set_desc("Target gains 2 Strength for each Rank of the spell. "
+                                  "May only be cast once on each target.")
         # "Requires: Herb"
 
 
@@ -329,9 +328,8 @@ class Wind(Spell):
         self.qty = quantity
         self.COL = 352
         self.ROW = 32
-        self.DESC = self.set_desc(
-            "The caster creates a vicious blast of wind which will attack one target, and dispels any "
-            "fog that may be present on the battlefield.")
+        self.DESC = self.set_desc("The caster creates a vicious blast of wind which will attack one target, and "
+                                  "dispels any fog that may be present on the battlefield.")
         # Herb
 
 
@@ -349,7 +347,8 @@ class Banishing(Spell):
         self.qty = quantity
         self.COL = 64
         self.ROW = 32
-        self.DESC = self.set_desc("Text")
+        self.DESC = self.set_desc("Any single elemental within range is banished from this plane of existence.")
+        # Gemstone
 
 
 class Endurance(Spell):
@@ -365,8 +364,8 @@ class Endurance(Spell):
         self.qty = quantity
         self.COL = 160
         self.ROW = 192
-        self.DESC = self.set_desc(
-            "Target gains 2 Endurance for each Rank of the spell. May only be cast once on each target.")
+        self.DESC = self.set_desc("Target gains 2 Endurance for each Rank of the spell. May only be cast "
+                                  "once on each target.")
         # "Requires: Spice"
 
 
@@ -383,9 +382,8 @@ class SenseAura(Spell):
         self.qty = quantity
         self.COL = 0
         self.ROW = 32
-        self.DESC = self.set_desc(
-            "Reveals a variety of information about the target: the higher the caster's rank in Sense Aura, "
-            "the more information is revealed. May only be cast once on each target.")
+        self.DESC = self.set_desc("Reveals a variety of information about the target: the higher the caster's rank in "
+                                  "Sense Aura, the more information is revealed. May only be cast once on each target.")
         # "Requires: Herb"
 
 
@@ -419,8 +417,8 @@ class Weakness(Spell):
         self.qty = quantity
         self.COL = 32
         self.ROW = 32
-        self.DESC = self.set_desc(
-            "Target loses 2 Endurance for each Rank of the spell. May only be cast once on each target.")
+        self.DESC = self.set_desc("Target loses 2 Endurance for each Rank of the spell. May only be cast once "
+                                  "on each target.")
         # "Requires: Herb"
 
 
@@ -509,3 +507,83 @@ class Whitefire(Spell):
         self.ROW = 96
         self.DESC = self.set_desc("Any single target within range is flash-fried by white fire.")
         # Spice
+
+
+# Necromancy ###########################################################################################################
+class ControlZombies(Spell):
+    """..."""
+    ICON = SPRITEPATH2
+
+    def __init__(self, quantity):
+        super().__init__()
+        self.NAM = "Control Zombies"
+        self.RAW = 'ctr_zom'
+        self.SRT = 410
+        self.SCL = SchoolType.ncy
+        self.MIN = 3
+        self.UPG = 400
+        self.qty = quantity
+        self.COL = 160
+        self.ROW = 32
+        self.DESC = self.set_desc("All targets within range of this spell have their movement rate increased by 2 per "
+                                  "Rank. May only be cast once on each target.")
+        # Herb
+
+
+class Haste(Spell):
+    """..."""
+    ICON = SPRITEPATH2
+
+    def __init__(self, quantity):
+        super().__init__()
+        self.NAM = "Haste"
+        self.RAW = 'hst'
+        self.SRT = 420
+        self.SCL = SchoolType.ncy
+        self.MIN = 4
+        self.UPG = 520
+        self.qty = quantity
+        self.COL = 96
+        self.ROW = 192
+        self.DESC = self.set_desc("All targets within range of this spell have their movement rate increased by 2 per "
+                                  "Rank. May only be cast once on each target.")
+        # Spice
+
+
+class WallOfBones(Spell):
+    """..."""
+    ICON = SPRITEPATH2
+
+    def __init__(self, quantity):
+        super().__init__()
+        self.NAM = "Wall of Bones"
+        self.RAW = 'wob'
+        self.SRT = 430
+        self.SCL = SchoolType.ncy
+        self.MIN = 5
+        self.UPG = 520
+        self.qty = quantity
+        self.COL = 224
+        self.ROW = 0
+        self.DESC = self.set_desc("Target is completely immobilized by a wall of bones.")
+        # Herb
+
+
+class SpiritShield(Spell):
+    """..."""
+    ICON = SPRITEPATH2
+
+    def __init__(self, quantity):
+        super().__init__()
+        self.NAM = "Spirit Shield"
+        self.RAW = 'spr_sld'
+        self.SRT = 440
+        self.SCL = SchoolType.ncy
+        self.MIN = 3
+        self.UPG = 400
+        self.qty = quantity
+        self.COL = 352
+        self.ROW = 128
+        self.DESC = self.set_desc("All friendly entities within the range of the spell add 1 per Rank to their "
+                                  "Protection value.")
+        # Gemstone
