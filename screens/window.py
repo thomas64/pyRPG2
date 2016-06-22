@@ -303,7 +303,7 @@ class Window(object):
 
         # todo, testopzet voor walking people
         for obj in self.engine.current_map.wpeople:
-            obj.move(dt)
+            obj.move(self.engine.playtime, dt)
 
     def render(self):
         """

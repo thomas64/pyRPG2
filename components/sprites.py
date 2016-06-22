@@ -341,15 +341,46 @@ class Walking(Person):
 
         self.true_position = list(self.rect.topleft)  # true_pos is een float, dat is nodig voor timebased movement
         self.old_position = list(self.rect.topleft)
-        self.last_direction = Direction.East  # direction todo
+        self.last_direction = direction
         self.move_direction = None
 
-    def move(self, dt):
+        self.current_time = 0.0
+        self.move_time = 0.0
+
+    def move(self, ct, dt):
         """
         Verzet de positie in de opgegeven richting.
         """
-        self.move_direction = self.last_direction
+        self.current_time = ct
+
+        if self.move_time < self.current_time - 1:
+
+            from random import randrange
+            rnd = randrange(1, 5)
+            if rnd == 1:
+                self.move_direction = Direction.North
+            elif rnd == 2:
+                self.move_direction = Direction.South
+            elif rnd == 3:
+                self.move_direction = Direction.West
+            else:
+                self.move_direction = Direction.East
+
+            self.move_time = self.current_time
+            return
+
+        # self.move_direction = self.last_direction
         self.old_position = list(self.rect.topleft)
+
+        if self.move_direction == Direction.North:
+            self.full_sprite.set_clip(self.north_states[0])
+        elif self.move_direction == Direction.West:
+            self.full_sprite.set_clip(self.west_states[0])
+        elif self.move_direction == Direction.East:
+            self.full_sprite.set_clip(self.east_states[0])
+        else:
+            self.full_sprite.set_clip(self.south_states[0])
+        self.image = self.full_sprite.subsurface(self.full_sprite.get_clip())
 
         if self.move_direction == Direction.North:
             self.true_position[1] -= 60 * dt    # todo, 60 naar een movespeed
