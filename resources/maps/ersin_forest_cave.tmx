@@ -575,8 +575,13 @@
 0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0
 </data>
  </layer>
- <objectgroup name="signs">
-  <object id="2422" name="sign2" type="2" x="928" y="208" width="32" height="32"/>
+ <objectgroup name="portals">
+  <object id="41" name="ersin_forest_center" x="192" y="960" width="96" height="16"/>
+  <object id="2419" name="ersin_cave_room1" x="896" y="176" width="32" height="16"/>
+ </objectgroup>
+ <objectgroup name="start_pos">
+  <object id="44" name="ersin_forest_center" x="224" y="928" width="16" height="16"/>
+  <object id="2421" name="ersin_cave_room1" x="896" y="192" width="16" height="16"/>
  </objectgroup>
  <objectgroup name="sounds" visible="0">
   <object id="167" name="step_wood" x="192" y="512" width="32" height="32"/>
@@ -585,7 +590,7 @@
   <object id="177" name="step_grass" x="192" y="0" width="32" height="512"/>
   <object id="178" name="step_grass" x="192" y="544" width="32" height="416"/>
  </objectgroup>
- <objectgroup name="low_blocker">
+ <objectgroup name="low_blocker" visible="0">
   <object id="157" x="832" y="672" width="32" height="112"/>
   <object id="158" x="864" y="640" width="32" height="64"/>
   <object id="159" x="896" y="640" width="64" height="32"/>
@@ -596,7 +601,7 @@
   <object id="165" x="256" y="608" width="64" height="16"/>
   <object id="166" x="160" y="448" width="32" height="16"/>
  </objectgroup>
- <objectgroup name="high_blocker">
+ <objectgroup name="high_blocker" visible="0">
   <object id="87" x="864" y="160" width="32" height="48"/>
   <object id="88" x="960" y="176" width="32" height="64"/>
   <object id="89" x="992" y="208" width="64" height="64"/>
@@ -667,12 +672,7 @@
   <object id="156" x="544" y="640" width="64" height="16"/>
   <object id="2420" x="928" y="160" width="32" height="48"/>
  </objectgroup>
- <objectgroup name="portals">
-  <object id="41" name="ersin_forest_center" x="192" y="960" width="96" height="16"/>
-  <object id="2419" name="ersin_cave_room1" x="896" y="176" width="32" height="16"/>
- </objectgroup>
- <objectgroup name="start_pos">
-  <object id="44" name="ersin_forest_center" x="224" y="928" width="16" height="16"/>
-  <object id="2421" name="ersin_cave_room1" x="896" y="192" width="16" height="16"/>
+ <objectgroup name="objects">
+  <object id="2422" name="sign2" type="2" x="928" y="208" width="32" height="32"/>
  </objectgroup>
 </map>

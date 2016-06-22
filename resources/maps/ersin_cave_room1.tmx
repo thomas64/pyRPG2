@@ -284,9 +284,6 @@
 0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0
 </data>
  </layer>
- <objectgroup name="chests">
-  <object id="23632" name="chest5" x="96" y="256" width="32" height="32"/>
- </objectgroup>
  <objectgroup name="portals">
   <object id="23634" name="ersin_forest_cave" x="272" y="496" width="32" height="16"/>
   <object id="23641" name="ersin_cave_room2" x="272" y="32" width="64" height="16"/>
@@ -319,6 +316,9 @@
   <object id="23638" x="32" y="352" width="176" height="32"/>
   <object id="23639" x="32" y="320" width="112" height="32"/>
   <object id="23640" x="32" y="256" width="48" height="64"/>
+ </objectgroup>
+ <objectgroup name="objects">
+  <object id="23632" name="chest5" x="96" y="256" width="32" height="32"/>
  </objectgroup>
  <layer name="set" width="28" height="34" visible="0">
   <data encoding="csv">

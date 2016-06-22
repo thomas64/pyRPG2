@@ -214,6 +214,9 @@
 0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0
 </data>
  </layer>
+ <objectgroup name="portals">
+  <object id="23634" name="ersin_cave_room2" x="144" y="336" width="32" height="16"/>
+ </objectgroup>
  <objectgroup name="start_pos">
   <object id="23633" name="ersin_cave_room2" x="144" y="304" width="16" height="16"/>
  </objectgroup>
@@ -223,13 +226,6 @@
     <property name="title" value="Ersin Cave"/>
    </properties>
   </object>
- </objectgroup>
- <objectgroup name="portals">
-  <object id="23634" name="ersin_cave_room2" x="144" y="336" width="32" height="16"/>
- </objectgroup>
- <objectgroup name="chests" visible="0">
-  <object id="24167" name="chest6" x="112" y="128" width="32" height="32"/>
-  <object id="24168" name="chest7" x="176" y="128" width="32" height="32"/>
  </objectgroup>
  <objectgroup name="low_blocker" visible="0"/>
  <objectgroup name="high_blocker" visible="0">
@@ -242,6 +238,10 @@
   <object id="24164" x="208" y="224" width="64" height="112"/>
   <object id="24165" x="240" y="160" width="32" height="64"/>
   <object id="24166" x="48" y="160" width="32" height="64"/>
+ </objectgroup>
+ <objectgroup name="objects">
+  <object id="24167" name="chest6" x="112" y="128" width="32" height="32"/>
+  <object id="24168" name="chest7" x="176" y="128" width="32" height="32"/>
  </objectgroup>
  <layer name="set" width="20" height="24" visible="0">
   <data encoding="csv">

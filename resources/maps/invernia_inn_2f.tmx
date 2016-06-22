@@ -354,10 +354,10 @@
 0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0
 </data>
  </layer>
- <objectgroup name="portals" visible="0">
+ <objectgroup name="portals">
   <object id="1" name="invernia_inn_1f" x="80" y="128" width="32" height="16"/>
  </objectgroup>
- <objectgroup name="start_pos" visible="0">
+ <objectgroup name="start_pos">
   <object id="2" name="invernia_inn_1f" x="80" y="160" width="16" height="16">
    <properties>
     <property name="direction" value="South"/>
@@ -396,4 +396,5 @@
   <object id="31" x="656" y="288" width="64" height="64"/>
   <object id="36" x="496" y="128" width="32" height="32"/>
  </objectgroup>
+ <objectgroup name="objects"/>
 </map>

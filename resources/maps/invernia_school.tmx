@@ -300,13 +300,10 @@
 0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0
 </data>
  </layer>
- <objectgroup name="schools" visible="0">
-  <object id="29" name="school1" x="208" y="304" width="32" height="48"/>
- </objectgroup>
- <objectgroup name="portals" visible="0">
+ <objectgroup name="portals">
   <object id="28" name="invernia_town" x="208" y="560" width="32" height="16"/>
  </objectgroup>
- <objectgroup name="start_pos" visible="0">
+ <objectgroup name="start_pos">
   <object id="27" name="invernia_town" x="208" y="528" width="16" height="16"/>
  </objectgroup>
  <objectgroup name="sounds" visible="0">
@@ -331,5 +328,8 @@
   <object id="45" x="304" y="352" width="64" height="32"/>
   <object id="46" x="80" y="352" width="64" height="32"/>
   <object id="47" x="176" y="128" width="256" height="32"/>
+ </objectgroup>
+ <objectgroup name="objects">
+  <object id="29" name="school1" x="208" y="304" width="32" height="48"/>
  </objectgroup>
 </map>

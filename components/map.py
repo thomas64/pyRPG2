@@ -11,24 +11,19 @@ import components
 from database import Direction
 import database.inn
 import database.hero
+import database.people
 import database.school
 import database.shop
 
 MAPPATH = 'resources/maps/'
 
 # de zes object layers in een tmx map
+OBJECTS = "objects"
 HIGHBLOCKER = "high_blocker"
 LOWBLOCKER = "low_blocker"
 SOUNDS = "sounds"
 STARTPOS = "start_pos"
 PORTALS = "portals"
-HEROES = "heroes"
-SHOPS = "shops"
-SCHOOLS = "schools"
-INNS = "inns"
-SIGNS = "signs"
-CHESTS = "chests"
-SPARKLY = "sparkly"
 
 WINDOWWIDTH = 900
 WINDOWHEIGHT = 718
@@ -67,6 +62,8 @@ class Map(object):
         self.shops = []
         self.schools = []
         self.inns = []
+        self.speople = []       # standing people
+        self.wpeople = []       # walking people
         self.signs = []
         self.chests = []
         self.sparkly = []
@@ -81,64 +78,53 @@ class Map(object):
             self.start_pos.append(obj)
         for obj in tmx_data.get_layer_by_name(PORTALS):
             self.portals.append(components.Portal(name, self._pg_rect(obj), obj.name, obj.type))
-
-        try:
-            for obj in tmx_data.get_layer_by_name(HEROES):
-                hero_object = components.Hero(obj.name, database.hero.HeroDatabase[obj.name].value['spr'],
-                                              self._pg_rect(obj), OBJECTLAYER, self._has_dir(obj, 'direction'))
-                self.heroes.append(hero_object)
-        except ValueError:
-            pass
-
-        try:
-            for obj in tmx_data.get_layer_by_name(SHOPS):
-                shop_object = components.Shop(obj.name, database.shop.ShopDatabase[obj.name].value['sprite'],
-                                              self._pg_rect(obj), OBJECTLAYER, self._has_dir(obj, 'direction'))
+        for obj in tmx_data.get_layer_by_name(OBJECTS):
+            if obj.name.startswith('shop'):
+                shop_object = components.Person(obj.name, database.shop.ShopDatabase[obj.name].value['sprite'],
+                                                self._pg_rect(obj), OBJECTLAYER, self._has_dir(obj, 'direction'))
                 self.high_blocker_rects.append(shop_object.get_blocker())
                 self.shops.append(shop_object)
-        except ValueError:
-            pass
-
-        try:
-            for obj in tmx_data.get_layer_by_name(SCHOOLS):
-                school_object = components.School(obj.name, database.school.SchoolDatabase[obj.name].value['sprite'],
+            elif obj.name.startswith('school'):
+                school_object = components.Person(obj.name, database.school.SchoolDatabase[obj.name].value['sprite'],
                                                   self._pg_rect(obj), OBJECTLAYER, self._has_dir(obj, 'direction'))
                 self.high_blocker_rects.append(school_object.get_blocker())
                 self.schools.append(school_object)
-        except ValueError:
-            pass
-
-        try:
-            for obj in tmx_data.get_layer_by_name(INNS):
+            elif obj.name.startswith('inn'):
                 inn_object = components.Inn(obj.name, database.inn.InnDatabase[obj.name].value['sprite'],
                                             self._pg_rect(obj), OBJECTLAYER, self._has_dir(obj, 'direction'), obj.type)
                 # als er in obj.type iets staat, dan is het een lege sprite en dus geen blocker.
                 if not obj.type:
                     self.high_blocker_rects.append(inn_object.get_blocker())
                 self.inns.append(inn_object)
-        except ValueError:
-            pass
-
-        try:
-            for obj in tmx_data.get_layer_by_name(SIGNS):
+            elif obj.name.startswith('person'):
+                if database.people.PeopleDatabase[obj.name].value['walking']:
+                    person_object = components.Walking(obj.name,
+                                                       database.people.PeopleDatabase[obj.name].value['sprite'],
+                                                       self._pg_rect(obj), OBJECTLAYER, self._has_dir(obj, 'direction'))
+                    self.wpeople.append(person_object)
+                else:
+                    person_object = components.Person(obj.name,
+                                                      database.people.PeopleDatabase[obj.name].value['sprite'],
+                                                      self._pg_rect(obj), OBJECTLAYER, self._has_dir(obj, 'direction'))
+                    self.high_blocker_rects.append(person_object.get_blocker())
+                    self.speople.append(person_object)
+            elif obj.name.startswith('sign'):
                 sign_object = components.Sign(obj.name, self._pg_rect(obj), OBJECTLAYER, obj.type)
                 self.high_blocker_rects.append(sign_object.get_blocker())
                 self.signs.append(sign_object)
-        except ValueError:
-            pass
-        try:
-            for obj in tmx_data.get_layer_by_name(CHESTS):
+            elif obj.name.startswith('chest'):
                 chest_object = components.TreasureChest(obj.name, self._pg_rect(obj), OBJECTLAYER)
                 self.low_blocker_rects.append(chest_object.get_blocker())
                 self.chests.append(chest_object)
-        except ValueError:
-            pass
-        try:
-            for obj in tmx_data.get_layer_by_name(SPARKLY):
+            elif obj.name.startswith('sparkly'):
                 sparkly_object = components.Sparkly(obj.name, self._pg_rect(obj), OBJECTLAYER)
                 self.sparkly.append(sparkly_object)
-        except ValueError:
-            pass
+            else:  # 'heroes'
+                hero_object = components.Person(obj.name, database.hero.HeroDatabase[obj.name].value['spr'],
+                                                self._pg_rect(obj), OBJECTLAYER, self._has_dir(obj, 'direction'))
+                # geen high_blocker zoals bij bijv shops, omdat hero's er soms niet op de map kunnen staat,
+                # het laden van high_blockers gebeurt in window.
+                self.heroes.append(hero_object)
 
     @staticmethod
     def _pg_rect(rect):

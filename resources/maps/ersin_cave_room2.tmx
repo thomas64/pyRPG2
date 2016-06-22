@@ -486,6 +486,10 @@
 0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0
 </data>
  </layer>
+ <objectgroup name="portals">
+  <object id="23634" name="ersin_cave_room1" x="208" y="560" width="64" height="16"/>
+  <object id="24073" name="ersin_cave_room3" x="592" y="320" width="32" height="16"/>
+ </objectgroup>
  <objectgroup name="start_pos">
   <object id="23633" name="ersin_cave_room1" x="224" y="528" width="16" height="16"/>
   <object id="24074" name="ersin_cave_room3" x="592" y="336" width="16" height="16"/>
@@ -496,10 +500,6 @@
     <property name="title" value="Ersin Cave"/>
    </properties>
   </object>
- </objectgroup>
- <objectgroup name="portals">
-  <object id="23634" name="ersin_cave_room1" x="208" y="560" width="64" height="16"/>
-  <object id="24073" name="ersin_cave_room3" x="592" y="320" width="32" height="16"/>
  </objectgroup>
  <objectgroup name="low_blocker" visible="0">
   <object id="24067" x="208" y="368" width="32" height="16"/>
@@ -520,6 +520,9 @@
   <object id="24065" x="656" y="288" width="64" height="128"/>
   <object id="24069" x="400" y="336" width="32" height="16"/>
   <object id="24072" x="624" y="288" width="32" height="64"/>
+ </objectgroup>
+ <objectgroup name="objects">
+  <object id="24075" name="sparkly2" x="240" y="208" width="32" height="32"/>
  </objectgroup>
  <layer name="set" width="46" height="38" visible="0">
   <data encoding="csv">
@@ -605,7 +608,4 @@
 21,21,21,21,21,21,21,21,21,21,21,21,21,21,21,21,21,21,21,21,21,21,21,21,21,21,21,21,21,21,21,21,21,21,21,21,21,21,21,21,21,21,21,21,21,21
 </data>
  </layer>
- <objectgroup name="sparkly">
-  <object id="24075" name="sparkly2" x="240" y="208" width="32" height="32"/>
- </objectgroup>
 </map>

@@ -13,6 +13,9 @@ WINDOWH = 718  # de vraag is hoe kan hij de positie vanuit window meegeven terwi
 WINDOWX = 10
 WINDOWY = 40
 
+INCREASE = 150
+TOTAL = 75
+
 
 # noinspection PyMissingOrEmptyDocstring
 class Transition(object):
@@ -30,8 +33,8 @@ class Transition(object):
         self.color = (0, 0, 0, self.increase)
 
     def update(self, dt):
-        self.increase += dt * 200
-        if self.increase > 100:
+        self.increase += dt * INCREASE
+        if self.increase > TOTAL:
             self.gamestate.pop()
             return
         self.color = (0, 0, 0, self.increase)

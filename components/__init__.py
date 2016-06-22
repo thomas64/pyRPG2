@@ -15,10 +15,9 @@ from .sprites import Button
 from .sprites import ColorBox
 from .sprites import Grid
 
-from .sprites import Hero
+from .sprites import Person
+from .sprites import Walking
 from .sprites import Inn
-from .sprites import School
-from .sprites import Shop
 from .sprites import Sign
 from .sprites import Sparkly
 from .sprites import TreasureChest

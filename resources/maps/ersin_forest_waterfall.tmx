@@ -1052,16 +1052,18 @@
 0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0
 </data>
  </layer>
+ <objectgroup name="portals">
+  <object id="357" name="ersin_forest_center" x="-16" y="1328" width="16" height="128"/>
+ </objectgroup>
+ <objectgroup name="start_pos">
+  <object id="358" name="ersin_forest_center" x="0" y="1376" width="16" height="16"/>
+ </objectgroup>
  <objectgroup name="sounds" visible="0">
   <object id="185" name="step_grass" x="0" y="112" width="480" height="1456"/>
   <object id="186" name="step_grass" x="704" y="112" width="576" height="1456"/>
   <object id="187" name="step_grass" x="480" y="832" width="224" height="736"/>
   <object id="188" name="step_wood" x="480" y="176" width="224" height="64"/>
  </objectgroup>
- <objectgroup name="signs">
-  <object id="359" name="sign3" type="2" x="448" y="560" width="32" height="32"/>
- </objectgroup>
- <objectgroup name="chests" visible="0"/>
  <objectgroup name="low_blocker" visible="0">
   <object id="189" x="480" y="208" width="224" height="672"/>
   <object id="190" x="480" y="144" width="224" height="32"/>
@@ -1202,10 +1204,7 @@
   <object id="355" x="1072" y="1200" width="16" height="64"/>
   <object id="356" x="1088" y="1136" width="32" height="96"/>
  </objectgroup>
- <objectgroup name="portals">
-  <object id="357" name="ersin_forest_center" x="-16" y="1328" width="16" height="128"/>
- </objectgroup>
- <objectgroup name="start_pos">
-  <object id="358" name="ersin_forest_center" x="0" y="1376" width="16" height="16"/>
+ <objectgroup name="objects">
+  <object id="359" name="sign3" type="2" x="448" y="560" width="32" height="32"/>
  </objectgroup>
 </map>

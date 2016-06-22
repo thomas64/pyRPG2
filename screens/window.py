@@ -118,6 +118,8 @@ class Window(object):
         self.group.add(self.engine.current_map.shops)
         self.group.add(self.engine.current_map.schools)
         self.group.add(self.engine.current_map.inns)
+        self.group.add(self.engine.current_map.speople)
+        self.group.add(self.engine.current_map.wpeople)
         self.group.add(self.engine.current_map.signs)
         self.group.add(self.engine.current_map.chests)
         self.group.add(self.engine.current_map.sparkly)
@@ -200,7 +202,7 @@ class Window(object):
                 self.check_inns(self.party_sprites[0].get_check_rect())
                 self.check_signs()
                 self.check_chests()
-                self.check_sparklies(self.party_sprites[0].get_check_rect())
+                self.check_sparklies()
 
             elif event.key == keys.GRID:
                 if self.grid_sprite is None:
@@ -224,7 +226,11 @@ class Window(object):
                                       self.engine.current_map.shops,
                                       self.engine.current_map.schools,
                                       self.engine.current_map.inns,
-                                      self.engine.current_map.signs):
+                                      self.engine.current_map.speople,
+                                      self.engine.current_map.wpeople,
+                                      self.engine.current_map.signs,
+                                      self.engine.current_map.chests,
+                                      self.engine.current_map.sparkly):
                         for obj in obj_group:
                             self.cbox_sprites.append(ColorBox(obj.rect, SHOPCOLOR, CBOXLAYER))
                     self.group.add(self.cbox_sprites)
@@ -294,6 +300,10 @@ class Window(object):
         for obj in self.engine.current_map.sparkly:
             sparkly_data = self.engine.data.sparklies[obj.sparkly_id]
             obj.update(sparkly_data['taken'], dt)
+
+        # todo, testopzet voor walking people
+        for obj in self.engine.current_map.wpeople:
+            obj.move(dt)
 
     def render(self):
         """
@@ -498,14 +508,12 @@ class Window(object):
                     push_object = MessageBox(self.engine.gamestate, text, spr_image=image)
                     self.engine.gamestate.push(push_object)
 
-    def check_sparklies(self, check_rect):
+    def check_sparklies(self):
         """
         Bekijk of collide met een sparkly.
-        :param check_rect: een iets verplaatste rect van de player sprite zodat hij kan colliden met een obj dat anders
-        niet collidebaar is. self.party_sprites[0].rect
         """
-        if len(check_rect.collidelistall(self.engine.current_map.sparkly)) == 1:
-            object_nr = check_rect.collidelist(self.engine.current_map.sparkly)
+        if len(self.party_sprites[0].rect.collidelistall(self.engine.current_map.sparkly)) == 1:
+            object_nr = self.party_sprites[0].rect.collidelist(self.engine.current_map.sparkly)
             sparkly_sprite = self.engine.current_map.sparkly[object_nr]
             sparkly_data = self.engine.data.sparklies[sparkly_sprite.sparkly_id]
 

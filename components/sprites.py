@@ -6,8 +6,9 @@ class: Grid
 class: Sign
 class: TreasureChest
 class: Sparkly
-class: Shop
+class: Person
 class: Inn
+class: Walking
 """
 
 import pygame
@@ -257,11 +258,11 @@ class Sparkly(pygame.sprite.Sprite):
             self.image = self.image_list[self.index]
 
 
-class Shop(pygame.sprite.Sprite):
+class Person(pygame.sprite.Sprite):
     """
-    Winkelverkoper
+    Baseclass voor een pc unit in de overworld.
     """
-    def __init__(self, shop_id, sprite, rect, objectlayer, direction):
+    def __init__(self, person_id, sprite, rect, objectlayer, direction):
         super().__init__()
 
         self.west_states = {0:  (32, 32, 32, 32), 1: (0, 32, 32, 32), 2: (32, 32, 32, 32), 3: (64, 32, 32, 32)}
@@ -269,7 +270,7 @@ class Shop(pygame.sprite.Sprite):
         self.north_states = {0: (32, 96, 32, 32), 1: (0, 96, 32, 32), 2: (32, 96, 32, 32), 3: (64, 96, 32, 32)}
         self.south_states = {0: (32,  0, 32, 32), 1: (0,  0, 32, 32), 2: (32,  0, 32, 32), 3: (64,  0, 32, 32)}
 
-        self.sprite_id = shop_id
+        self.sprite_id = person_id
         self.rect = rect
         self._layer = objectlayer
         self.full_sprite = pygame.image.load(sprite).convert_alpha()
@@ -317,7 +318,7 @@ class Shop(pygame.sprite.Sprite):
         return pygame.Rect(self.rect.x, self.rect.y, HALFBLOCKERWIDTH, HALFBLOCKERHEIGHT)
 
 
-class Inn(Shop):
+class Inn(Person):
     """
     Innkeepster
     """
@@ -331,17 +332,33 @@ class Inn(Shop):
             self.image = pygame.image.load(TRANSP).convert_alpha()
 
 
-class Hero(Shop):
+class Walking(Person):
     """
-    Een hero voor in je party.
+    Struinend Persoon
     """
-    def __init__(self, hero_name, sprite, rect, objectlayer, direction):
-        super().__init__(hero_name, sprite, rect, objectlayer, direction)
+    def __init__(self, person_id, sprite, rect, objectlayer, direction):
+        super().__init__(person_id, sprite, rect, objectlayer, direction)
 
+        self.true_position = list(self.rect.topleft)  # true_pos is een float, dat is nodig voor timebased movement
+        self.old_position = list(self.rect.topleft)
+        self.last_direction = Direction.East  # direction todo
+        self.move_direction = None
 
-class School(Shop):
-    """
-    Leer magie hier.
-    """
-    def __init__(self, school_id, sprite, rect, objectlayer, direction):
-        super().__init__(school_id, sprite, rect, objectlayer, direction)
+    def move(self, dt):
+        """
+        Verzet de positie in de opgegeven richting.
+        """
+        self.move_direction = self.last_direction
+        self.old_position = list(self.rect.topleft)
+
+        if self.move_direction == Direction.North:
+            self.true_position[1] -= 60 * dt    # todo, 60 naar een movespeed
+        elif self.move_direction == Direction.South:
+            self.true_position[1] += 60 * dt
+        elif self.move_direction == Direction.West:
+            self.true_position[0] -= 60 * dt
+        elif self.move_direction == Direction.East:
+            self.true_position[0] += 60 * dt
+
+        self.rect.x = round(self.true_position[0])
+        self.rect.y = round(self.true_position[1])
