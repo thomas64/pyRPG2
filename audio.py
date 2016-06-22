@@ -149,7 +149,8 @@ class Audio(object):
         if currentstate == statemachine.States.OptionsMenu or \
            self.engine.gamestate.prev_state == statemachine.States.OptionsMenu or \
            self.engine.gamestate.prev_state == statemachine.States.MessageBox or \
-           self.engine.gamestate.prev_state == statemachine.States.Shop:
+           self.engine.gamestate.prev_state == statemachine.States.Shop or \
+           self.engine.gamestate.prev_state == statemachine.States.FadeBlack:
             return
 
         if currentstate == statemachine.States.Overworld:
@@ -185,7 +186,8 @@ class Audio(object):
         if currentstate == statemachine.States.OptionsMenu or \
            self.engine.gamestate.prev_state == statemachine.States.OptionsMenu or \
            self.engine.gamestate.prev_state == statemachine.States.MessageBox or \
-           self.engine.gamestate.prev_state == statemachine.States.Shop:
+           self.engine.gamestate.prev_state == statemachine.States.Shop or \
+           self.engine.gamestate.prev_state == statemachine.States.FadeBlack:
             return
 
         if currentstate == statemachine.States.Overworld:

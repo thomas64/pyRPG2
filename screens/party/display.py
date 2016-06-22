@@ -131,7 +131,7 @@ class Display(object):
         Wanneer de party is aangepast herlaadt dan de map voor visuele update.
         """
         if self.party_changed:
-            self.engine.timer = NEWMAPTIMEOUT
+            self.engine.key_timer = NEWMAPTIMEOUT
             self.engine.current_map = Map(self.engine.data.map_name)
             self.engine.gamestate.deep_peek().window.load_map()
 

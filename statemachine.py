@@ -25,6 +25,7 @@ class States(enum.Enum):
     PartyScreen = 9
     MessageBox = 10
     Shop = 11
+    FadeBlack = 12
 
 
 class StateMachine(object):
@@ -36,6 +37,7 @@ class StateMachine(object):
     def __init__(self):
         self.statestack = collections.deque()
         self.prev_state = None
+        self.new_state = False
 
     def peek(self):
         """
@@ -65,12 +67,14 @@ class StateMachine(object):
         try:
             self.prev_state = self.peek().name
             self.peek().on_exit()
-            # bij messagebox geen console output
-            if self.peek().name != States.MessageBox:
+            # bij messagebox en fade geen console output
+            if self.peek().name != States.MessageBox and \
+               self.peek().name != States.FadeBlack:
                 console.state_pop(self.peek().name)
             del self.statestack[-1]
             self.peek().on_enter()
             self.prev_state = None
+            self.new_state = True
             return len(self.statestack) > 0
         except IndexError:
             return None                     # empty stack
@@ -85,12 +89,14 @@ class StateMachine(object):
             self.peek().on_exit()
         except AttributeError:
             pass                            # doe niet on_exit() bij lege stack
-        # bij messagebox geen console output
-        if state.name != States.MessageBox:
+        # bij messagebox fade geen console output
+        if state.name != States.MessageBox and \
+           state.name != States.FadeBlack:
             console.state_push(state.name)
         self.statestack.append(state)
         self.peek().on_enter()
         self.prev_state = None
+        self.new_state = True
         return state
 
     def _clear(self):

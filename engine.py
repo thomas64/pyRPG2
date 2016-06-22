@@ -18,7 +18,7 @@ import video
 
 # todo, er gaat nog wat mis met sidestep als fps te hoog is, oorzaak onduidelijk.
 # minimaal 15, anders kan hij door bomen lopen. maximaal 110, anders sidestep raar.
-FPS = 6000
+FPS = 60
 
 DEBUGFONT = 'courier'
 DEBUGFONTSIZE = 11
@@ -45,7 +45,8 @@ class GameEngine(object):
         self.clock = pygame.time.Clock()
         self.playtime = 0.0
         self.dt = 0.0
-        self.timer = 0.0
+        self.key_timer = 0.0
+        self.state_timer = 0.0
 
         self.debugfont = pygame.font.SysFont(DEBUGFONT, DEBUGFONTSIZE)
         self.key_input = None
@@ -103,7 +104,7 @@ class GameEngine(object):
         Handelt de ingedrukt-houden muis en keyboard input af.
         Wordt op dit moment alleen maar gebruikt voor visuele oplichten van de buttons en character movement.
         """
-        if self.timer == 0.0:
+        if self.key_timer == 0.0:
 
             self.key_input = pygame.key.get_pressed()
             self.mouse_input = None
@@ -117,10 +118,16 @@ class GameEngine(object):
         Handelt de timer af.
         Update de waarden van de bovenste state.
         """
-        if self.timer > 0.0:
-            self.timer -= self.dt
-        if self.timer < 0.0:
-            self.timer = 0.0
+        if self.key_timer > 0.0:
+            self.key_timer -= self.dt
+        if self.key_timer < 0.0:
+            self.key_timer = 0.0
+
+        if self.state_timer > 0.0:
+            self.state_timer -= self.dt
+        if self.state_timer < 0.0:
+            self.state_timer = 0.0
+            self.gamestate.pop()
 
         self.gamestate.peek().update(self.dt)
 
@@ -129,6 +136,10 @@ class GameEngine(object):
         Laat de weergave van de bovenste states zien.
         En de debugscherm.
         """
+        if self.gamestate.new_state:    # als hij zn cycle afmaakt, maar er is een nieuwe staat dan kan het fout gaan
+            self.gamestate.new_state = False    # dit maakt dat hij uit de cycle springt.
+            return
+
         self.gamestate.peek().render()
         self._show_debug()
 
@@ -144,7 +155,8 @@ class GameEngine(object):
                 "FPS:               {:.2f}".format(self.clock.get_fps()),
                 "dt:                {:.3f}".format(self.dt),
                 "playtime:          {:.2f}".format(self.playtime),
-                "timer:             {}".format(self.timer),
+                "key_timer:         {}".format(self.key_timer),
+                "state_timer:       {}".format(self.state_timer),
                 "",
                 "mouse_input:       {}".format(self.mouse_input),
                 ""

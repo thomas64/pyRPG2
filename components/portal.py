@@ -3,10 +3,10 @@
 class: Portal
 """
 
-import pytmx
+# import pytmx
 
-MAPSPATH = 'resources/maps/'
-STARTPOS = "start_pos"
+# MAPSPATH = 'resources/maps/'
+# STARTPOS = "start_pos"
 
 
 class Portal(object):
@@ -19,16 +19,18 @@ class Portal(object):
         self.from_name = from_name
         self.rect = from_rect
         self.to_name = to_name
-        self.to_nr = to_nr
-        self.to_pos = self._load_position()
+        # self.to_nr = to_nr
+        # self.to_pos = self._load_position()
 
-    def _load_position(self):
-        """
-        to_nr kan gebruikt worden als er 2 locaties aan elkaar verbonden zijn met meerdere verbindingen.
-        Dan kan de .Type in een .tmx file met dezelfde cijfers in portal en start_pos aan elkaar verbonden worden.
-        """
-        temp_tmx_data = pytmx.load_pygame(MAPSPATH+self.to_name+".tmx")
-        for obj in temp_tmx_data.get_layer_by_name(STARTPOS):
-            if obj.name == self.from_name:
-                if obj.type == self.to_nr:
-                    return obj.x, obj.y
+    # todo, dat met to_nr is nog wel op te lossen, maar dat wordt nu niet gebruikt. prev_map_name moet prev_map obj
+        # worden met .name als attribute.
+    # def _load_position(self):
+    #     """
+    #     to_nr kan gebruikt worden als er 2 locaties aan elkaar verbonden zijn met meerdere verbindingen.
+    #     Dan kan de .Type in een .tmx file met dezelfde cijfers in portal en start_pos aan elkaar verbonden worden.
+    #     """
+    #     temp_tmx_data = pytmx.load_pygame(MAPSPATH+self.to_name+".tmx")
+    #     for obj in temp_tmx_data.get_layer_by_name(STARTPOS):
+    #         if obj.name == self.from_name:
+    #             if obj.type == self.to_nr:
+    #                 return obj.x, obj.y

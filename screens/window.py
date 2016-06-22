@@ -23,6 +23,7 @@ import equipment
 import keys
 import pouchitems
 import screens.shop.display
+import screens.transition
 import screens.unit
 
 BACKGROUNDCOLOR = pygame.Color("gray12")
@@ -82,13 +83,13 @@ class Window(object):
         self.grid_sprite = None
         self.cbox_sprites = []
 
-        start_pos = self.engine.data.map_pos               # normaliter is start_pos een point, behalve bij het start
-        start_dir = self.engine.data.map_dir               # van het spel, dan is het een string.
-        if type(start_pos) is str:                         # maw, als start_pos = 'start_game'
-            for pos in self.engine.current_map.start_pos:  # kijk in de start_pos list van de map
-                if pos.name == start_pos:                  # van alle start_possen, welke komt overeen met 'start_game'
-                    start_pos = pos.x, pos.y               # zet dan de x,y waarde op dié start_pos
-                    break
+        start_pos = self.engine.data.map_pos           # normaliter is map_pos een point, behalve bij het laden van een
+        start_dir = self.engine.data.map_dir           # map, dan is het een string. bv start_game of ersin_forest_centr
+
+        for pos in self.engine.current_map.start_pos:  # kijk in de start_pos list van de map
+            if pos.name == start_pos:                  # van alle start_possen, welke komt overeen met 'start_game'
+                start_pos = pos.x, pos.y               # zet dan de x,y waarde op dié start_pos, maak van de string
+                break                                  # dus weer een point.
 
         for pos in self.engine.current_map.start_pos:                            # in een .tmx map kun je bij start_pos
             if getattr(pos, 'direction', None) and (pos.x, pos.y) == start_pos:  # een 'direction' property meegeven.
@@ -124,7 +125,8 @@ class Window(object):
         self.engine.audio.set_bg_music(self.engine.gamestate.peek().name)
         self.engine.audio.set_bg_sounds(self.engine.gamestate.peek().name)
 
-        # want deze is alleen nodig voor de audio, dus nadien weghalen
+        # want deze is alleen nodig voor de audio, dus nadien weghalen.
+        # hij wordt vanaf nu (22-06-2016) ook voor beginpositie bepaling gebruikt, maar hij mag nog steeds weg nadien.
         self.prev_map_name = None
 
     def align(self):
@@ -146,7 +148,7 @@ class Window(object):
             choice, yes, scr_capt = self.hero_box.on_exit()
             if choice == yes:
                 if self.engine.data.party.add(self.hero_data):
-                    self.engine.timer = NEWMAPTIMEOUT
+                    self.engine.key_timer = NEWMAPTIMEOUT
                     self.engine.current_map = Map(self.engine.data.map_name)
                     self.load_map()
                 else:
@@ -351,13 +353,14 @@ class Window(object):
         Hij gebruikt de van naam voor de startpositie in de nieuwe map.
         """
         if len(self.party_sprites[0].rect.collidelistall(self.engine.current_map.portals)) == 1:
-            self.engine.timer = NEWMAPTIMEOUT
+            self.engine.key_timer = NEWMAPTIMEOUT
             portal_nr = self.party_sprites[0].rect.collidelist(self.engine.current_map.portals)
             self.prev_map_name = self.engine.current_map.portals[portal_nr].from_name
             self.engine.data.map_name = self.engine.current_map.portals[portal_nr].to_name
-            self.engine.data.map_pos = self.engine.current_map.portals[portal_nr].to_pos
+            self.engine.data.map_pos = self.prev_map_name       # zet de point om naar een string naam.
             self.engine.current_map = Map(self.engine.data.map_name)
             self.load_map()
+            self.engine.gamestate.push(screens.transition.Transition(self.engine.gamestate, full_screen=False))
 
     def check_heroes(self, check_rect):
         """
@@ -394,6 +397,7 @@ class Window(object):
                                                        shop_data.get('material'),  # material is geen garantie
                                                        shop_data['face'],)
             self.engine.gamestate.push(push_object)
+            self.engine.gamestate.push(screens.transition.Transition(self.engine.gamestate))
 
     def check_schools(self, check_rect):
         """
