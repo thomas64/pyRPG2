@@ -11,6 +11,8 @@ class: Inn
 class: Walking
 """
 
+import random
+
 import pygame
 
 from database import Direction
@@ -339,6 +341,8 @@ class Walking(Person):
     def __init__(self, person_id, sprite, rect, objectlayer, direction):
         super().__init__(person_id, sprite, rect, objectlayer, direction)
 
+        self.directions = {1: Direction.North, 2: Direction.South, 3: Direction.West, 4: Direction.East}
+
         self.true_position = list(self.rect.topleft)  # true_pos is een float, dat is nodig voor timebased movement
         self.old_position = list(self.rect.topleft)
         self.last_direction = direction
@@ -352,20 +356,10 @@ class Walking(Person):
         Verzet de positie in de opgegeven richting.
         """
         self.current_time = ct
-
-        if self.move_time < self.current_time - 1:
-
-            from random import randrange
-            rnd = randrange(1, 5)
-            if rnd == 1:
-                self.move_direction = Direction.North
-            elif rnd == 2:
-                self.move_direction = Direction.South
-            elif rnd == 3:
-                self.move_direction = Direction.West
-            else:
-                self.move_direction = Direction.East
-
+        interval = random.random() + 1  # tussen 1 en 2
+        if self.move_time < self.current_time - interval:
+            rnd = random.randint(1, 4)
+            self.move_direction = self.directions[rnd]
             self.move_time = self.current_time
             return
 

@@ -66,7 +66,7 @@ class SellBox(object):
         black_spr = pygame.image.load(TRANSP).convert_alpha()
 
         # de rijen van equipment van hero's
-        for hero in list(party.values()):
+        for hero in party.values():
             # haal de equipment item op uit het type
             equipment_item = hero.get_equipped_item_of_type(equipment_type)
             # "if equipment_item" is voor sellbox, bijv bij sword dan geeft iemand met een pole None terug en
