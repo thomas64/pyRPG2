@@ -348,6 +348,10 @@ class Walking(Person):
         self.last_direction = direction
         self.move_direction = None
 
+        self.wander_box = pygame.Rect(self.rect.x-32, self.rect.y-32, 96, 96)
+        self.step_count = 0
+        self.step_animation = 0
+
         self.current_time = 0.0
         self.move_time = 0.0
 
@@ -356,7 +360,7 @@ class Walking(Person):
         Verzet de positie in de opgegeven richting.
         """
         self.current_time = ct
-        interval = random.random() + 1  # tussen 1 en 2
+        interval = random.random() + .5
         if self.move_time < self.current_time - interval:
             rnd = random.randint(1, 4)
             self.move_direction = self.directions[rnd]
@@ -387,3 +391,73 @@ class Walking(Person):
 
         self.rect.x = round(self.true_position[0])
         self.rect.y = round(self.true_position[1])
+
+        self.animate(dt)
+
+        if not self.wander_box.contains(self.rect):
+            self._move_back(dt)
+
+    def _move_back(self, dt):
+        """
+        Verzet de positie in de tegenovergestelde richting.
+        """
+        if self.move_direction == Direction.North:
+            self.true_position[1] += 60 * dt
+        elif self.move_direction == Direction.South:
+            self.true_position[1] -= 60 * dt
+        elif self.move_direction == Direction.West:
+            self.true_position[0] += 60 * dt
+        elif self.move_direction == Direction.East:
+            self.true_position[0] -= 60 * dt
+
+        self.rect.x = round(self.true_position[0])
+        self.rect.y = round(self.true_position[1])
+
+    def animate(self, dt, make_sound=False):
+        """
+        Kijkt of de unit beweegt. Geef dan de hele dir_states dict door ipv alleen waarde 0.
+        :param dt: self.clock.tick(FPS)/1000.0
+        :param make_sound: boolean, moeten de stappen geluid maken?
+        """
+        if self.move_direction is None:
+            if self.last_direction == Direction.North:
+                self._clip(self.north_states[0], dt, make_sound)
+            if self.last_direction == Direction.South:
+                self._clip(self.south_states[0], dt, make_sound)
+            if self.last_direction == Direction.West:
+                self._clip(self.west_states[0], dt, make_sound)
+            if self.last_direction == Direction.East:
+                self._clip(self.east_states[0], dt, make_sound)
+        else:
+            if self.move_direction == Direction.North:
+                self._clip(self.north_states, dt, make_sound)
+            if self.move_direction == Direction.South:
+                self._clip(self.south_states, dt, make_sound)
+            if self.move_direction == Direction.West:
+                self._clip(self.west_states, dt, make_sound)
+            if self.move_direction == Direction.East:
+                self._clip(self.east_states, dt, make_sound)
+
+        # Update the image for each pass
+        self.image = self.full_sprite.subsurface(self.full_sprite.get_clip())
+
+    def _clip(self, clipped_rect, dt, make_sound):
+        if type(clipped_rect) is dict:
+            self.full_sprite.set_clip(pygame.Rect(self._get_frame(clipped_rect, dt, make_sound)))
+        else:
+            self.step_count = 30         # zodat hij direct een stap animeert uit stilstand
+            self.step_animation = 0
+            self.full_sprite.set_clip(pygame.Rect(clipped_rect))
+        # return clipped_rect
+
+    def _get_frame(self, frame_set, dt, make_sound):
+        self.step_count += 120 * dt
+        if self.step_count > 30:
+            self.step_count = 0
+            if self.step_animation in (0, 2) and make_sound:
+                pass
+                # self.audio.play_step_sound()
+            self.step_animation += 1
+            if self.step_animation > 3:
+                self.step_animation = 0
+        return frame_set[self.step_animation]

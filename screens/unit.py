@@ -185,11 +185,12 @@ class Unit(pygame.sprite.Sprite):
         self.rect.topleft = (round(self.rect.x / grid_size) * grid_size, round(self.rect.y / grid_size) * grid_size)
         self.feet.midbottom = self.rect.midbottom
 
-    def check_blocker(self, high_blockers, low_blockers, moverange, map_width, map_height, dt):
+    def check_blocker(self, high_blockers, low_blockers, sprite_blockers, moverange, map_width, map_height, dt):
         """
         Bekijk of de unit tegen een andere sprite aan loopt.
         :param high_blockers: lijst van rects van map1.high_blocker_rects
         :param low_blockers: lijst van rects van map1.low_blocker_rects
+        :param sprite_blockers:
         :param moverange: jouw moverange sprite
         :param map_width: breedte van de map
         :param map_height: hoogte van de map
@@ -216,7 +217,8 @@ class Unit(pygame.sprite.Sprite):
 
             # loop recht tegen een high_ of low_blocker aan
             while self.rect.collidelist(high_blockers) > -1 or \
-                    self.rect.collidelist(low_blockers) > -1:
+                    self.rect.collidelist(low_blockers) > -1 or \
+                    self.rect.collidelist(sprite_blockers) > -1:
                 self._move_back()
                 t = True
 

@@ -222,12 +222,13 @@ class Window(object):
                         self.cbox_sprites.append(ColorBox(rect, HIGHBLOCKERCOLOR, CBOXLAYER))
                     for rect in self.engine.current_map.low_blocker_rects:
                         self.cbox_sprites.append(ColorBox(rect, LOWBLOCKERCOLOR, CBOXLAYER))
+                    for obj in self.engine.current_map.wpeople:
+                        self.cbox_sprites.append(ColorBox(obj.wander_box, SHOPCOLOR, CBOXLAYER))
                     for obj_group in (self.engine.current_map.heroes,
                                       self.engine.current_map.shops,
                                       self.engine.current_map.schools,
                                       self.engine.current_map.inns,
                                       self.engine.current_map.speople,
-                                      self.engine.current_map.wpeople,
                                       self.engine.current_map.signs,
                                       self.engine.current_map.chests,
                                       self.engine.current_map.sparkly):
@@ -262,6 +263,7 @@ class Window(object):
         # todo, moet dit niet naar de unit class?
         self.party_sprites[0].check_blocker(self.engine.current_map.high_blocker_rects,
                                             self.engine.current_map.low_blocker_rects,
+                                            self.engine.current_map.wpeople,
                                             None,
                                             self.engine.current_map.width,
                                             self.engine.current_map.height,
