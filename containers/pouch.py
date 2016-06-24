@@ -4,7 +4,7 @@ class: Pouch
 """
 
 import console
-from . import Inventory
+from .inventory import Inventory
 
 
 class Pouch(dict):

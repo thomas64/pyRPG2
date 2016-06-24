@@ -5,9 +5,9 @@ Weapon
 
 import collections
 
-from . import EquipmentType
-from . import WeaponType
-from . import ItemMaterial
+from constants import EquipmentType
+from constants import WeaponType
+from constants import ItemMaterial
 
 
 SPRITEPATH = 'resources/sprites/icons/equipment/weapon1.png'

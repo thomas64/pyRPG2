@@ -7,8 +7,9 @@ import characters.stats
 import characters.skills
 import characters.spells
 from components import MessageBox
+from constants import EquipmentType
+from constants import WeaponType
 import containers
-import database
 import equipment
 
 
@@ -55,18 +56,18 @@ class Hero(object):
         self.skills_tuple = (self.alc, self.dip, self.hlr, self.lor, self.mec, self.mer, self.ran, self.stl, self.thf,
                              self.trb, self.war, self.wiz, self.haf, self.mis, self.pol, self.shd, self.swd, self.thr)
 
-        self.wpn = equipment.factory_empty_equipment_item(database.EquipmentType.wpn)
-        self.sld = equipment.factory_empty_equipment_item(database.EquipmentType.sld)
-        self.hlm = equipment.factory_empty_equipment_item(database.EquipmentType.hlm)
-        self.amu = equipment.factory_empty_equipment_item(database.EquipmentType.amu)
-        self.arm = equipment.factory_empty_equipment_item(database.EquipmentType.arm)
-        self.clk = equipment.factory_empty_equipment_item(database.EquipmentType.clk)
-        self.brc = equipment.factory_empty_equipment_item(database.EquipmentType.brc)
-        self.glv = equipment.factory_empty_equipment_item(database.EquipmentType.glv)
-        self.rng = equipment.factory_empty_equipment_item(database.EquipmentType.rng)
-        self.blt = equipment.factory_empty_equipment_item(database.EquipmentType.blt)
-        self.bts = equipment.factory_empty_equipment_item(database.EquipmentType.bts)
-        self.acy = equipment.factory_empty_equipment_item(database.EquipmentType.acy)
+        self.wpn = equipment.factory_empty_equipment_item(EquipmentType.wpn)
+        self.sld = equipment.factory_empty_equipment_item(EquipmentType.sld)
+        self.hlm = equipment.factory_empty_equipment_item(EquipmentType.hlm)
+        self.amu = equipment.factory_empty_equipment_item(EquipmentType.amu)
+        self.arm = equipment.factory_empty_equipment_item(EquipmentType.arm)
+        self.clk = equipment.factory_empty_equipment_item(EquipmentType.clk)
+        self.brc = equipment.factory_empty_equipment_item(EquipmentType.brc)
+        self.glv = equipment.factory_empty_equipment_item(EquipmentType.glv)
+        self.rng = equipment.factory_empty_equipment_item(EquipmentType.rng)
+        self.blt = equipment.factory_empty_equipment_item(EquipmentType.blt)
+        self.bts = equipment.factory_empty_equipment_item(EquipmentType.bts)
+        self.acy = equipment.factory_empty_equipment_item(EquipmentType.acy)
 
         # hier kan zeker None ingevuld worden omdat gamestate hierbij zeker weten niet zal pushen een messagebox.
         if kwargs['wpn']:
@@ -217,7 +218,7 @@ class Hero(object):
         :return: ook als het een 'empty' is, geef dan het item
         """
         # uitzondering gemaakt voor sellbox in shop. geef dan alleen maar een bepaald type weapon terug
-        if isinstance(equipment_type, database.WeaponType):
+        if isinstance(equipment_type, WeaponType):
             if self.wpn.get_value_of('SKL') == equipment_type:
                 return self.wpn
         else:
@@ -273,14 +274,14 @@ class Hero(object):
             gamestate.push(push_object)
             return False
 
-        if (new_equipment_item.get_value_of('SKL') == database.WeaponType.mis and
+        if (new_equipment_item.get_value_of('SKL') == WeaponType.mis and
                 self.sld.is_not_empty()):
             text = ['{} can not use a bow when a shield is equipped.'.format(self.NAM)]
             push_object = MessageBox(gamestate, text)
             gamestate.push(push_object)
             return False
-        elif (new_equipment_item.get_value_of('SKL') == database.WeaponType.shd and
-                self.wpn.get_value_of('SKL') == database.WeaponType.mis):
+        elif (new_equipment_item.get_value_of('SKL') == WeaponType.shd and
+                self.wpn.get_value_of('SKL') == WeaponType.mis):
             text = ['{} can not use a shield when a bow is equipped.'.format(self.NAM)]
             push_object = MessageBox(gamestate, text)
             gamestate.push(push_object)
@@ -298,7 +299,7 @@ class Hero(object):
         wpn_skl = new_equipment_item.get_value_of('SKL')    # wpn_skl is een Enum van WeaponType
         if wpn_skl == 0:
             return True
-        for wpn_typ in database.WeaponType:    # = Enum WeaponType
+        for wpn_typ in WeaponType:    # = Enum WeaponType
             if wpn_skl == wpn_typ:
                 attr = getattr(self, wpn_typ.name)
                 if attr.qty > 0:

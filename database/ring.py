@@ -5,7 +5,7 @@ Ring
 
 import collections
 
-from . import EquipmentType
+from constants import EquipmentType
 
 
 # todo, alle ringen afmaken

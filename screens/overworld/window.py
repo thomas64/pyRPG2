@@ -8,6 +8,7 @@ import collections
 import pygame
 
 import audio as sfx
+
 from components import ColorBox
 from components import ConfirmBox
 from components import Grid
@@ -15,12 +16,15 @@ from components import Map
 from components import MessageBox
 from components import Player
 from components import Transition
-from database import Direction
-import database.inn
-import database.hero
-import database.school
-import database.shop
-import database.sign
+
+from constants import Direction
+
+from database import InnDatabase
+from database import HeroDatabase
+from database import SchoolDatabase
+from database import ShopDatabase
+from database import SignDatabase
+
 import equipment
 import keys
 import pouchitems
@@ -391,7 +395,7 @@ class Window(object):
                 hero_sprite.turn(self.party_sprites[0].rect)
 
                 self.hero_box = ConfirmBox(self.engine.gamestate, self.engine.audio,
-                                           database.hero.HeroDatabase.opening(self.hero_data.RAW),
+                                           HeroDatabase.opening(self.hero_data.RAW),
                                            face_image=self.hero_data.FAC)
                 self.engine.gamestate.push(self.hero_box)
 
@@ -404,7 +408,7 @@ class Window(object):
         if len(check_rect.collidelistall(self.engine.current_map.shops)) == 1:
             object_nr = check_rect.collidelist(self.engine.current_map.shops)
             shop_sprite = self.engine.current_map.shops[object_nr]
-            shop_data = database.shop.ShopDatabase[shop_sprite.sprite_id].value
+            shop_data = ShopDatabase[shop_sprite.sprite_id].value
 
             shop_sprite.turn(self.party_sprites[0].rect)
 
@@ -421,7 +425,7 @@ class Window(object):
         if len(check_rect.collidelistall(self.engine.current_map.schools)) == 1:
             object_nr = check_rect.collidelist(self.engine.current_map.schools)
             school_sprite = self.engine.current_map.schools[object_nr]
-            school_data = database.school.SchoolDatabase[school_sprite.sprite_id].value
+            school_data = SchoolDatabase[school_sprite.sprite_id].value
 
             school_sprite.turn(self.party_sprites[0].rect)
 
@@ -433,7 +437,7 @@ class Window(object):
         if len(check_rect.collidelistall(self.engine.current_map.inns)) == 1:
             object_nr = check_rect.collidelist(self.engine.current_map.inns)
             inn_sprite = self.engine.current_map.inns[object_nr]
-            self.inn_data = database.inn.InnDatabase[inn_sprite.sprite_id].value
+            self.inn_data = InnDatabase[inn_sprite.sprite_id].value
 
             for inn_sprite in self.engine.current_map.inns:
                 if inn_sprite.show_sprite:
@@ -451,7 +455,7 @@ class Window(object):
             if len(self.party_sprites[0].rect.collidelistall(self.engine.current_map.signs)) == 1:
                 object_nr = self.party_sprites[0].rect.collidelist(self.engine.current_map.signs)
                 sign_sprite = self.engine.current_map.signs[object_nr]
-                sign_data = database.sign.SignDatabase[sign_sprite.sign_id].value
+                sign_data = SignDatabase[sign_sprite.sign_id].value
 
                 push_object = MessageBox(self.engine.gamestate, sign_data)
                 self.engine.gamestate.push(push_object)

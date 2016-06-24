@@ -5,7 +5,7 @@ Cloak
 
 import collections
 
-from . import EquipmentType
+from constants import EquipmentType
 
 
 SPRITEPATH = 'resources/sprites/icons/equipment/cloak1.png'

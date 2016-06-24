@@ -5,7 +5,7 @@ class: SchoolDatabase
 
 import enum
 
-from database import SchoolType
+from constants import SchoolType
 
 PATH = 'resources/sprites/npcs/School_'
 FACE = 'f.png'

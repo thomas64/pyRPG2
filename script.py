@@ -4,10 +4,10 @@ class: Script
 """
 
 import characters
-from database import Direction
-import database.hero
-import database.treasurechest
-import database.sparkly
+from constants import Direction
+from database import HeroDatabase
+from database import SparklyDatabase
+from database import TreasureChestDatabase
 import equipment
 import pouchitems
 
@@ -24,10 +24,10 @@ class Script(object):
         Wat te doen bij het starten van een nieuw spel.
         """
         # Vul de heroes database met alle hero objecten die in factory zijn gemaakt.
-        self.engine.data.heroes = characters.factory_all_heroes(database.hero.HeroDatabase)
+        self.engine.data.heroes = characters.factory_all_heroes(HeroDatabase)
         # Treasure chest en Sparklies worden geen losse objecten, maar blijven 1 object met meerdere dicts.
-        self.engine.data.treasure_chests = database.treasurechest.TreasureChestDatabase()
-        self.engine.data.sparklies = database.sparkly.SparklyDatabase()
+        self.engine.data.treasure_chests = TreasureChestDatabase()
+        self.engine.data.sparklies = SparklyDatabase()
 
         # Vul de party aan met de eerste hero
         self.engine.data.party.add(self.engine.data.heroes['alagos'], verbose=False)

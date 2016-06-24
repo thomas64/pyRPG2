@@ -7,13 +7,23 @@ import pygame
 import pytmx
 import pyscroll
 
-import components
-from database import Direction
-import database.inn
-import database.hero
-import database.people
-import database.school
-import database.shop
+from .namedrect import NamedRect
+from .portal import Portal
+from .sprites import Inn
+from .sprites import Person
+from .sprites import Sign
+from .sprites import Sparkly
+from .sprites import TreasureChest
+from .sprites import Walking
+
+from constants import Direction
+
+from database import InnDatabase
+from database import HeroDatabase
+from database import PeopleDatabase
+from database import SchoolDatabase
+from database import ShopDatabase
+
 
 MAPPATH = 'resources/maps/'
 
@@ -73,55 +83,53 @@ class Map(object):
         for rect in tmx_data.get_layer_by_name(LOWBLOCKER):
             self.low_blocker_rects.append(self._pg_rect(rect))
         for nrect in tmx_data.get_layer_by_name(SOUNDS):
-            self.sounds.append(components.NamedRect(nrect.name, self._pg_rect(nrect)))
+            self.sounds.append(NamedRect(nrect.name, self._pg_rect(nrect)))
         for obj in tmx_data.get_layer_by_name(STARTPOS):
             self.start_pos.append(obj)
         for obj in tmx_data.get_layer_by_name(PORTALS):
-            self.portals.append(components.Portal(name, self._pg_rect(obj), obj.name, obj.type))
+            self.portals.append(Portal(name, self._pg_rect(obj), obj.name, obj.type))
         for obj in tmx_data.get_layer_by_name(OBJECTS):
             if obj.name.startswith('shop'):
-                shop_object = components.Person(obj.name, database.shop.ShopDatabase[obj.name].value['sprite'],
-                                                self._pg_rect(obj), OBJECTLAYER, self._has_dir(obj, 'direction'))
+                shop_object = Person(obj.name, ShopDatabase[obj.name].value['sprite'],
+                                     self._pg_rect(obj), OBJECTLAYER, self._has_dir(obj, 'direction'))
                 self.high_blocker_rects.append(shop_object.get_blocker())
                 self.shops.append(shop_object)
             elif obj.name.startswith('school'):
-                school_object = components.Person(obj.name, database.school.SchoolDatabase[obj.name].value['sprite'],
-                                                  self._pg_rect(obj), OBJECTLAYER, self._has_dir(obj, 'direction'))
+                school_object = Person(obj.name, SchoolDatabase[obj.name].value['sprite'],
+                                       self._pg_rect(obj), OBJECTLAYER, self._has_dir(obj, 'direction'))
                 self.high_blocker_rects.append(school_object.get_blocker())
                 self.schools.append(school_object)
             elif obj.name.startswith('inn'):
-                inn_object = components.Inn(obj.name, database.inn.InnDatabase[obj.name].value['sprite'],
-                                            self._pg_rect(obj), OBJECTLAYER, self._has_dir(obj, 'direction'), obj.type)
+                inn_object = Inn(obj.name, InnDatabase[obj.name].value['sprite'],
+                                 self._pg_rect(obj), OBJECTLAYER, self._has_dir(obj, 'direction'), obj.type)
                 # als er in obj.type iets staat, dan is het een lege sprite en dus geen blocker.
                 if not obj.type:
                     self.high_blocker_rects.append(inn_object.get_blocker())
                 self.inns.append(inn_object)
             elif obj.name.startswith('person'):
-                if database.people.PeopleDatabase[obj.name].value['walking']:
-                    person_object = components.Walking(obj.name,
-                                                       database.people.PeopleDatabase[obj.name].value['sprite'],
-                                                       self._pg_rect(obj), OBJECTLAYER, self._has_dir(obj, 'direction'))
+                if PeopleDatabase[obj.name].value['walking']:
+                    person_object = Walking(obj.name, PeopleDatabase[obj.name].value['sprite'],
+                                            self._pg_rect(obj), OBJECTLAYER, self._has_dir(obj, 'direction'))
                     self.wpeople.append(person_object)
                 else:
-                    person_object = components.Person(obj.name,
-                                                      database.people.PeopleDatabase[obj.name].value['sprite'],
-                                                      self._pg_rect(obj), OBJECTLAYER, self._has_dir(obj, 'direction'))
+                    person_object = Person(obj.name, PeopleDatabase[obj.name].value['sprite'],
+                                           self._pg_rect(obj), OBJECTLAYER, self._has_dir(obj, 'direction'))
                     self.high_blocker_rects.append(person_object.get_blocker())
                     self.speople.append(person_object)
             elif obj.name.startswith('sign'):
-                sign_object = components.Sign(obj.name, self._pg_rect(obj), OBJECTLAYER, obj.type)
+                sign_object = Sign(obj.name, self._pg_rect(obj), OBJECTLAYER, obj.type)
                 self.high_blocker_rects.append(sign_object.get_blocker())
                 self.signs.append(sign_object)
             elif obj.name.startswith('chest'):
-                chest_object = components.TreasureChest(obj.name, self._pg_rect(obj), OBJECTLAYER)
+                chest_object = TreasureChest(obj.name, self._pg_rect(obj), OBJECTLAYER)
                 self.low_blocker_rects.append(chest_object.get_blocker())
                 self.chests.append(chest_object)
             elif obj.name.startswith('sparkly'):
-                sparkly_object = components.Sparkly(obj.name, self._pg_rect(obj), OBJECTLAYER)
+                sparkly_object = Sparkly(obj.name, self._pg_rect(obj), OBJECTLAYER)
                 self.sparkly.append(sparkly_object)
             else:  # 'heroes'
-                hero_object = components.Person(obj.name, database.hero.HeroDatabase[obj.name].value['spr'],
-                                                self._pg_rect(obj), OBJECTLAYER, self._has_dir(obj, 'direction'))
+                hero_object = Person(obj.name, HeroDatabase[obj.name].value['spr'],
+                                     self._pg_rect(obj), OBJECTLAYER, self._has_dir(obj, 'direction'))
                 # geen high_blocker zoals bij bijv shops, omdat hero's er soms niet op de map kunnen staat,
                 # het laden van high_blockers gebeurt in window.
                 self.heroes.append(hero_object)

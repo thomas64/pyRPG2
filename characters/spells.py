@@ -3,7 +3,7 @@
 class: Spell
 """
 
-from database import SchoolType
+from constants import SchoolType
 
 
 SPRITEPATH = 'resources/sprites/icons/spells/spells.png'

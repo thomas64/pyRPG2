@@ -5,8 +5,8 @@ class: Player
 
 import pygame
 
-from . import Person
-from database import Direction
+from .sprites import Person
+from constants import Direction
 import keys
 
 FEETWIDTH = 2       # hele kleine voetjes

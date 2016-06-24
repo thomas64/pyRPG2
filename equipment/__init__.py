@@ -6,18 +6,18 @@ def: factory_equipment_item
 
 import console
 import equipment.item
-import database.weapon
-import database.shield
-import database.helmet
-import database.amulet
-import database.armor
-import database.cloak
-import database.bracelet
-import database.gloves
-import database.ring
-import database.belt
-import database.boots
-import database.accessory
+from database import wpn
+from database import sld
+from database import hlm
+from database import amu
+from database import arm
+from database import clk
+from database import brc
+from database import glv
+from database import rng
+from database import blt
+from database import bts
+from database import acy
 
 # todo, uit colornote app:
 # - min int gebruiken voor items?
@@ -38,30 +38,30 @@ def factory_equipment_item(equipment_item_key):
     Geeft een EquipmentItem object terug op verzoek van een key.
     :param equipment_item_key: een sleutel uit de eqp items databases bijv "bronzeshortsword"
     """
-    if equipment_item_key in database.weapon.wpn:
-        return equipment.item.EquipmentItem(**database.weapon.wpn[equipment_item_key])
-    elif equipment_item_key in database.shield.sld:
-        return equipment.item.EquipmentItem(**database.shield.sld[equipment_item_key])
-    elif equipment_item_key in database.helmet.hlm:
-        return equipment.item.EquipmentItem(**database.helmet.hlm[equipment_item_key])
-    elif equipment_item_key in database.amulet.amu:
-        return equipment.item.EquipmentItem(**database.amulet.amu[equipment_item_key])
-    elif equipment_item_key in database.armor.arm:
-        return equipment.item.EquipmentItem(**database.armor.arm[equipment_item_key])
-    elif equipment_item_key in database.cloak.clk:
-        return equipment.item.EquipmentItem(**database.cloak.clk[equipment_item_key])
-    elif equipment_item_key in database.bracelet.brc:
-        return equipment.item.EquipmentItem(**database.bracelet.brc[equipment_item_key])
-    elif equipment_item_key in database.gloves.glv:
-        return equipment.item.EquipmentItem(**database.gloves.glv[equipment_item_key])
-    elif equipment_item_key in database.ring.rng:
-        return equipment.item.EquipmentItem(**database.ring.rng[equipment_item_key])
-    elif equipment_item_key in database.belt.blt:
-        return equipment.item.EquipmentItem(**database.belt.blt[equipment_item_key])
-    elif equipment_item_key in database.boots.bts:
-        return equipment.item.EquipmentItem(**database.boots.bts[equipment_item_key])
-    elif equipment_item_key in database.accessory.acy:
-        return equipment.item.EquipmentItem(**database.accessory.acy[equipment_item_key])
+    if equipment_item_key in wpn:
+        return equipment.item.EquipmentItem(**wpn[equipment_item_key])
+    elif equipment_item_key in sld:
+        return equipment.item.EquipmentItem(**sld[equipment_item_key])
+    elif equipment_item_key in hlm:
+        return equipment.item.EquipmentItem(**hlm[equipment_item_key])
+    elif equipment_item_key in amu:
+        return equipment.item.EquipmentItem(**amu[equipment_item_key])
+    elif equipment_item_key in arm:
+        return equipment.item.EquipmentItem(**arm[equipment_item_key])
+    elif equipment_item_key in clk:
+        return equipment.item.EquipmentItem(**clk[equipment_item_key])
+    elif equipment_item_key in brc:
+        return equipment.item.EquipmentItem(**brc[equipment_item_key])
+    elif equipment_item_key in glv:
+        return equipment.item.EquipmentItem(**glv[equipment_item_key])
+    elif equipment_item_key in rng:
+        return equipment.item.EquipmentItem(**rng[equipment_item_key])
+    elif equipment_item_key in blt:
+        return equipment.item.EquipmentItem(**blt[equipment_item_key])
+    elif equipment_item_key in bts:
+        return equipment.item.EquipmentItem(**bts[equipment_item_key])
+    elif equipment_item_key in acy:
+        return equipment.item.EquipmentItem(**acy[equipment_item_key])
     else:
         console.error_item_name_not_in_database(equipment_item_key)
         raise KeyError

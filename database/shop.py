@@ -5,9 +5,9 @@ class: ShopDatabase
 
 import enum
 
-from database import EquipmentType
-from database import WeaponType
-from database import ItemMaterial
+from constants import EquipmentType
+from constants import WeaponType
+from constants import ItemMaterial
 
 
 PATH = 'resources/sprites/npcs/Shop_'

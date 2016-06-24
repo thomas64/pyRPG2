@@ -15,7 +15,7 @@ import random
 
 import pygame
 
-from database import Direction
+from constants import Direction
 
 
 FILLCOLOR = pygame.Color("gray60")  # gekke kleur vanwege sparkly color bug. hiermee opgelost.

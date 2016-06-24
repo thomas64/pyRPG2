@@ -3,8 +3,6 @@
 def: factory_all_heroes
 """
 
-import characters.hero
-
 
 def factory_all_heroes(heroes_enum):
     """
@@ -12,7 +10,9 @@ def factory_all_heroes(heroes_enum):
     :param heroes_enum: de enum class met alle hero data
     :return: de dict met Hero objecten
     """
+    from .hero import Hero
+
     heroes_dict = dict()
     for hero_enum in heroes_enum:
-        heroes_dict[hero_enum.name] = characters.hero.Hero(**hero_enum.value)
+        heroes_dict[hero_enum.name] = Hero(**hero_enum.value)
     return heroes_dict

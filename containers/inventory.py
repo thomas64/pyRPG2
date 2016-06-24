@@ -4,7 +4,7 @@ class: Inventory
 """
 
 import console
-from database import WeaponType
+from constants import WeaponType
 
 
 class Inventory(dict):

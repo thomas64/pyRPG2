@@ -3,7 +3,7 @@
 class: School
 """
 
-from database import SchoolType
+from constants import SchoolType
 
 
 class School(dict):

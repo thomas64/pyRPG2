@@ -5,8 +5,8 @@ Helmet
 
 import collections
 
-from . import EquipmentType
-from . import ItemMaterial
+from constants import EquipmentType
+from constants import ItemMaterial
 
 
 SPRITEPATH = 'resources/sprites/icons/equipment/helmet1.png'

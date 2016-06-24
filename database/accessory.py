@@ -5,7 +5,7 @@ Accessory
 
 import collections
 
-from . import EquipmentType
+from constants import EquipmentType
 
 # todo, alle accessoires afmaken
 # todo, alle sprites van alle equipment items

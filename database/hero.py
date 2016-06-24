@@ -5,7 +5,7 @@ class: HeroDatabase
 
 import enum
 
-from . import SchoolType
+from constants import SchoolType
 
 PATH = 'resources/sprites/heroes/'
 

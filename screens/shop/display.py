@@ -12,7 +12,7 @@ import audio as sfx
 from components import Button
 from components import ConfirmBox
 from components import MessageBox
-from database import WeaponType
+from constants import WeaponType
 import keys
 import pouchitems
 import screens.shop.buybox
@@ -123,7 +123,7 @@ class Display(object):
         self.selectors = pygame.sprite.Group()
         for index, shoptype in enumerate(self.shoptype_list):
             if isinstance(shoptype, WeaponType):
-                from database.weapon import wpn
+                from database import wpn
                 self.databases[shoptype.name] = collections.OrderedDict()
                 # omdat alle wapens in wpn zitten moet de database opnieuw opgebouwd worden met alleen de juiste wapens
                 for key, weapon in wpn.items():
