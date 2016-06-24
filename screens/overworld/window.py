@@ -205,7 +205,7 @@ class Window(object):
                 self.check_inns(self.party_sprites[0].get_check_rect())
                 self.check_signs()
                 self.check_chests()
-                self.check_sparklies()
+                self.check_sparklies(self.party_sprites[0].get_check_rect())  # sparklys moeten ook van boven kunnen
 
             elif event.key == keys.GRID:
                 if self.grid_sprite is None:
@@ -513,12 +513,12 @@ class Window(object):
                     push_object = MessageBox(self.engine.gamestate, text, spr_image=image)
                     self.engine.gamestate.push(push_object)
 
-    def check_sparklies(self):
+    def check_sparklies(self, check_rect):
         """
         Bekijk of collide met een sparkly.
         """
-        if len(self.party_sprites[0].rect.collidelistall(self.engine.current_map.sparkly)) == 1:
-            object_nr = self.party_sprites[0].rect.collidelist(self.engine.current_map.sparkly)
+        if len(check_rect.collidelistall(self.engine.current_map.sparkly)) == 1:
+            object_nr = check_rect.collidelist(self.engine.current_map.sparkly)
             sparkly_sprite = self.engine.current_map.sparkly[object_nr]
             sparkly_data = self.engine.data.sparklies[sparkly_sprite.sparkly_id]
 
