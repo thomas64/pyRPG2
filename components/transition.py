@@ -6,7 +6,7 @@ class Transition
 import pygame
 import pygame.gfxdraw
 
-from statemachine import States
+from statemachine import GameState
 
 WINDOWW = 900  # todo, dit kan eigenlijk niet. deze waarden zijn gekopieerd uit overworld. dit moet anders.
 WINDOWH = 718  # de vraag is hoe kan hij de positie vanuit window meegeven terwijl de positie in overworld bekend is.
@@ -28,7 +28,7 @@ class Transition(object):
         self.surface = self.screen.get_rect()
         if not full_screen:
             self.surface = pygame.Rect(WINDOWX, WINDOWY, WINDOWW, WINDOWH)
-        self.name = States.FadeBlack
+        self.name = GameState.FadeBlack
         self.increase = 0
         self.color = (0, 0, 0, self.increase)
 

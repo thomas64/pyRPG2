@@ -59,7 +59,7 @@ class GameEngine(object):
         Voordat de loop van start gaat.
         """
         self.running = True
-        push_object = screens.menu.manager.create_menu(statemachine.States.MainMenu, self)
+        push_object = screens.menu.manager.create_menu(statemachine.GameState.MainMenu, self)
         self.gamestate.push(push_object)
 
     def main_loop(self):

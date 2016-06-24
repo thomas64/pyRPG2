@@ -12,7 +12,7 @@ import random
 import pygame
 
 import console
-from statemachine import States
+from statemachine import GameState
 
 
 OPTIONSPATH = 'options'
@@ -146,14 +146,14 @@ class Audio(object):
         """
         # bij options menu moet er niets veranderen, en ook niet als hij van options komt.
         # ook niet als hij van messagebox komt. todo, dit begint wat lelijk te worden.
-        if currentstate == States.OptionsMenu or \
-           self.engine.gamestate.prev_state == States.OptionsMenu or \
-           self.engine.gamestate.prev_state == States.MessageBox or \
-           self.engine.gamestate.prev_state == States.Shop or \
-           self.engine.gamestate.prev_state == States.FadeBlack:
+        if currentstate == GameState.OptionsMenu or \
+           self.engine.gamestate.prev_state == GameState.OptionsMenu or \
+           self.engine.gamestate.prev_state == GameState.MessageBox or \
+           self.engine.gamestate.prev_state == GameState.Shop or \
+           self.engine.gamestate.prev_state == GameState.FadeBlack:
             return
 
-        if currentstate == States.Overworld:
+        if currentstate == GameState.Overworld:
             for _enum in MapMusic:
                 # als de naam in de MapMusic overeenkomt met de naam van de huidige map
                 if _enum.value[0] == self.engine.data.map_name:
@@ -169,7 +169,7 @@ class Audio(object):
         self.fade_bg_music()
         self.bg_music_channel.set_volume(1)
 
-        if currentstate == States.MainMenu:
+        if currentstate == GameState.MainMenu:
             # de fade en setvolume staan nu in de if, want bij muziek moet het niet altijd
             self.play_bg_music(TITLESCREEN)
 
@@ -183,14 +183,14 @@ class Audio(object):
         Zet de achtergrond geluiden aan of uit afhankelijk van een state.
         :param currentstate: self.statemachine.peek()
         """
-        if currentstate == States.OptionsMenu or \
-           self.engine.gamestate.prev_state == States.OptionsMenu or \
-           self.engine.gamestate.prev_state == States.MessageBox or \
-           self.engine.gamestate.prev_state == States.Shop or \
-           self.engine.gamestate.prev_state == States.FadeBlack:
+        if currentstate == GameState.OptionsMenu or \
+           self.engine.gamestate.prev_state == GameState.OptionsMenu or \
+           self.engine.gamestate.prev_state == GameState.MessageBox or \
+           self.engine.gamestate.prev_state == GameState.Shop or \
+           self.engine.gamestate.prev_state == GameState.FadeBlack:
             return
 
-        if currentstate == States.Overworld:
+        if currentstate == GameState.Overworld:
             for _enum in MapMusic:
                 if _enum.value[0] == self.engine.data.map_name:
                     if _enum.value[2] != self._get_prev_bg_audio(2):
@@ -204,7 +204,7 @@ class Audio(object):
         self.bg_sound_channel1.set_volume(1)
         self.bg_sound_channel2.set_volume(1)
 
-        if currentstate == States.MainMenu:
+        if currentstate == GameState.MainMenu:
             pass
             # self.play_sound(RIVER, loop=-1, channel=self.bg_sound_channel1)
             # self.play_sound(WIND, loop=-1, channel=self.bg_sound_channel2)

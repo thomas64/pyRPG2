@@ -8,7 +8,7 @@ import pygame
 import audio as sfx
 from .screencapture import ScreenCapture
 import keys
-from statemachine import States
+from statemachine import GameState
 
 BACKGROUNDCOLOR = pygame.Color("black")
 
@@ -32,7 +32,7 @@ class ConfirmBox(object):
         self.gamestate = gamestate
         self.audio = audio
         self.screen = pygame.display.get_surface()
-        self.name = States.MessageBox
+        self.name = GameState.MessageBox
         self.scr_capt = ScreenCapture()
 
         self.font = pygame.font.SysFont(FONT, FONTSIZE)

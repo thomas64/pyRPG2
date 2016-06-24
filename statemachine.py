@@ -9,7 +9,7 @@ import enum
 import console
 
 
-class States(enum.Enum):
+class GameState(enum.Enum):
     """
     Alle states uit het spel.
     """
@@ -68,8 +68,8 @@ class StateMachine(object):
             self.prev_state = self.peek().name
             self.peek().on_exit()
             # bij messagebox en fade geen console output
-            if self.peek().name != States.MessageBox and \
-               self.peek().name != States.FadeBlack:
+            if self.peek().name != GameState.MessageBox and \
+               self.peek().name != GameState.FadeBlack:
                 console.state_pop(self.peek().name)
             del self.statestack[-1]
             self.peek().on_enter()
@@ -90,8 +90,8 @@ class StateMachine(object):
         except AttributeError:
             pass                            # doe niet on_exit() bij lege stack
         # bij messagebox fade geen console output
-        if state.name != States.MessageBox and \
-           state.name != States.FadeBlack:
+        if state.name != GameState.MessageBox and \
+           state.name != GameState.FadeBlack:
             console.state_push(state.name)
         self.statestack.append(state)
         self.peek().on_enter()
@@ -120,7 +120,7 @@ class StateMachine(object):
         """
         Als de laatste 2 op de stack een messagebox zijn, draai ze dan om.
         """
-        if self.statestack[-1].name == States.MessageBox and self.statestack[-2].name == States.MessageBox:
+        if self.statestack[-1].name == GameState.MessageBox and self.statestack[-2].name == GameState.MessageBox:
             self.statestack[-1], self.statestack[-2] = self.statestack[-2], self.statestack[-1]
 
         """

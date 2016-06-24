@@ -1,13 +1,32 @@
 
 """
+class: Direction
+class: PersonState
 class: EquipmentType
 class: WeaponType
 class: ItemMaterial
-class: Direction
 class: SchoolType
 """
 
 import enum
+
+
+class Direction(enum.Enum):
+    """
+    De vier richtingen waarheen een unit kan lopen.
+    """
+    North = 1
+    South = 2
+    West = 3
+    East = 4
+
+
+class PersonState(enum.Enum):
+    """
+    Wat kan een NPC doen?
+    """
+    Resting = 1
+    Moving = 2
 
 
 class EquipmentType(enum.Enum):
@@ -51,16 +70,6 @@ class ItemMaterial(enum.Enum):
     stl = "Steel"
     slv = "Silver"
     tnm = "Titanium"
-
-
-class Direction(enum.Enum):
-    """
-    De vier richtingen waarheen een unit kan lopen.
-    """
-    North = 1
-    South = 2
-    West = 3
-    East = 4
 
 
 class SchoolType(enum.Enum):

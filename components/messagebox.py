@@ -7,7 +7,7 @@ import pygame
 
 from .screencapture import ScreenCapture
 import keys
-from statemachine import States
+from statemachine import GameState
 
 BACKGROUNDCOLOR = pygame.Color("black")
 
@@ -34,7 +34,7 @@ class MessageBox(object):
         """
         self.gamestate = gamestate
         self.screen = pygame.display.get_surface()
-        self.name = States.MessageBox
+        self.name = GameState.MessageBox
 
         if scr_capt is None:
             self.scr_capt = ScreenCapture()
