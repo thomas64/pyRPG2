@@ -6,7 +6,7 @@ class: SaveMenu
 from components import InputBox
 import loadsave
 import screens.menu.loadmenu
-import statemachine
+from statemachine import States
 
 
 class SaveMenu(screens.menu.loadmenu.LoadMenu):
@@ -44,6 +44,5 @@ class SaveMenu(screens.menu.loadmenu.LoadMenu):
         Dit kan alleen bij savemenu omdat savemenu dieper in de stack zit dan loadmenu bij het mainmenu.
         """
         self.engine.gamestate.pop()
-        push_object = screens.menu.manager.create_menu(statemachine.States.SaveMenu, self.engine,
-                                                       scr_capt=scr_capt, select=index)
+        push_object = screens.menu.manager.create_menu(States.SaveMenu, self.engine, scr_capt=scr_capt, select=index)
         self.engine.gamestate.push(push_object)

@@ -17,7 +17,7 @@ import screens.party.pouchbox
 import screens.party.skillsbox
 import screens.party.spellsbox
 import screens.party.statsbox
-import statemachine
+from statemachine import States
 
 
 BACKGROUNDCOLOR = pygame.Color("black")
@@ -62,7 +62,7 @@ class Display(object):
         self.background.fill(BACKGROUNDCOLOR)
         self.background = self.background.convert()
 
-        self.name = statemachine.States.PartyScreen
+        self.name = States.PartyScreen
 
         self.key_input = None           # dit is voor de mousepress op een button.
 

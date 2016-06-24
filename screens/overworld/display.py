@@ -11,7 +11,7 @@ import keys
 import screens.menu.manager
 import screens.party.display
 import screens.overworld.window
-import statemachine
+from statemachine import States
 
 
 WINDOWPOS = 10, 40
@@ -56,7 +56,7 @@ class Display(object):
 
         self.map_title_font = pygame.font.SysFont(MAPTITLEFONT, MAPTITLEFONTSIZE)
         self.map_title_label = ""
-        self.name = statemachine.States.Overworld
+        self.name = States.Overworld
 
         self.buttons = None
         self._init_buttons()
@@ -166,7 +166,7 @@ class Display(object):
     def _show_pause_menu(self):
         self.engine.audio.play_sound(sfx.MENUSELECT)
 
-        push_object = screens.menu.manager.create_menu(statemachine.States.PauseMenu, self.engine)
+        push_object = screens.menu.manager.create_menu(States.PauseMenu, self.engine)
         self.engine.gamestate.push(push_object)
 
     def _show_party_screen(self):

@@ -9,7 +9,7 @@ import audio as sfx
 import keys
 import screens.menu.manager
 import screens.menu.text
-import statemachine
+from statemachine import States
 
 BACKGROUNDCOLOR1 = pygame.Color("black")
 BACKGROUNDCOLOR2 = pygame.Color("white")
@@ -87,7 +87,7 @@ class Display(object):
         """
         pass
         # voorbeeld van gebruik on_exit:
-        # if self.name == statemachine.States.MainMenu:
+        # if self.name == States.MainMenu:
         #     print(str(self.name) + " on_exit")
 
     def single_input(self, event):

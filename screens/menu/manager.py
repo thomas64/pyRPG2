@@ -12,7 +12,7 @@ import screens.menu.savemenu
 import screens.menu.optionsmenu
 import screens.menu.pausemenu
 import screens.menu.title
-import statemachine
+from statemachine import States
 
 
 def create_menu(state_name, engine, title=None, animation=None, scr_capt=None, select=None):
@@ -27,7 +27,7 @@ def create_menu(state_name, engine, title=None, animation=None, scr_capt=None, s
     """
     content = None
 
-    if state_name == statemachine.States.MainMenu:
+    if state_name == States.MainMenu:
         content = screens.menu.mainmenu.MainMenu(engine)
         title = screens.menu.title.Title()
         animation = screens.menu.animation.Animation()
@@ -35,25 +35,25 @@ def create_menu(state_name, engine, title=None, animation=None, scr_capt=None, s
         if select is None:
             select = 0
 
-    elif state_name == statemachine.States.LoadMenu:
+    elif state_name == States.LoadMenu:
         content = screens.menu.loadmenu.LoadMenu(engine)
-        title = screens.menu.title.Title(title=None, sub=statemachine.States.LoadMenu.value)
+        title = screens.menu.title.Title(title=None, sub=States.LoadMenu.value)
         animation = None
         if scr_capt is None:
             scr_capt = None
         if select is None:
             select = -1
 
-    elif state_name == statemachine.States.SaveMenu:
+    elif state_name == States.SaveMenu:
         content = screens.menu.savemenu.SaveMenu(engine)
-        title = screens.menu.title.Title(title=None, sub=statemachine.States.SaveMenu.value)
+        title = screens.menu.title.Title(title=None, sub=States.SaveMenu.value)
         animation = None
         if scr_capt is None:
             scr_capt = None
         if select is None:
             select = -1
 
-    elif state_name == statemachine.States.OptionsMenu:
+    elif state_name == States.OptionsMenu:
         content = screens.menu.optionsmenu.OptionsMenu(engine)
         if title is None:
             title = None
@@ -63,12 +63,11 @@ def create_menu(state_name, engine, title=None, animation=None, scr_capt=None, s
             scr_capt = None
         select = -1
 
-    elif state_name == statemachine.States.PauseMenu:
+    elif state_name == States.PauseMenu:
         content = screens.menu.pausemenu.PauseMenu(engine)
         title = None
         animation = None
         scr_capt = ScreenCapture()
         select = 0
 
-    return screens.menu.display.Display(engine.audio, state_name,
-                                        content, title, animation, scr_capt, select)
+    return screens.menu.display.Display(engine.audio, state_name, content, title, animation, scr_capt, select)

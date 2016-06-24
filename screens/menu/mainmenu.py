@@ -9,7 +9,7 @@ import data
 import screens.menu.basemenu
 import screens.menu.manager
 import screens.overworld.display
-import statemachine
+from statemachine import States
 
 
 class MainMenu(screens.menu.basemenu.BaseMenu):
@@ -42,12 +42,12 @@ class MainMenu(screens.menu.basemenu.BaseMenu):
             self.engine.gamestate.push(Transition(self.engine.gamestate))
 
         elif menu_item.func == self.LoadGame:
-            push_object = screens.menu.manager.create_menu(statemachine.States.LoadMenu, self.engine)
+            push_object = screens.menu.manager.create_menu(States.LoadMenu, self.engine)
             self.engine.gamestate.push(push_object)
             self.engine.gamestate.push(Transition(self.engine.gamestate))
 
         elif menu_item.func == self.Options:
-            push_object = screens.menu.manager.create_menu(statemachine.States.OptionsMenu, self.engine,
+            push_object = screens.menu.manager.create_menu(States.OptionsMenu, self.engine,
                                                            title=title, animation=animation)
             self.engine.gamestate.push(push_object)
 

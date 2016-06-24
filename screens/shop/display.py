@@ -19,7 +19,7 @@ import screens.shop.buybox
 import screens.shop.infobox
 import screens.shop.selector
 import screens.shop.sellbox
-import statemachine
+from statemachine import States
 
 BACKGROUNDCOLOR = pygame.Color("black")
 BACKGROUNDSPRITE = 'resources/sprites/parchment.png'
@@ -88,7 +88,7 @@ class Display(object):
         self.databases = {}
 
         self.screen = pygame.display.get_surface()
-        self.name = statemachine.States.Shop
+        self.name = States.Shop
         self.background = pygame.image.load(BACKGROUNDSPRITE).convert_alpha()
         self.background = pygame.transform.scale(self.background, self.screen.get_size())
 

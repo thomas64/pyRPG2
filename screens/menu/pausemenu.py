@@ -5,7 +5,7 @@ class: PauseMenu
 
 from components import Transition
 import screens.menu.basemenu
-import statemachine
+from statemachine import States
 
 
 class PauseMenu(screens.menu.basemenu.BaseMenu):
@@ -34,22 +34,18 @@ class PauseMenu(screens.menu.basemenu.BaseMenu):
             self.on_exit()
 
         elif menu_item.func == self.LoadGame:
-            push_object = screens.menu.manager.create_menu(statemachine.States.LoadMenu, self.engine,
-                                                           scr_capt=scr_capt)
+            push_object = screens.menu.manager.create_menu(States.LoadMenu, self.engine, scr_capt=scr_capt)
             self.engine.gamestate.push(push_object)
 
         elif menu_item.func == self.SaveGame:
-            push_object = screens.menu.manager.create_menu(statemachine.States.SaveMenu, self.engine,
-                                                           scr_capt=scr_capt)
+            push_object = screens.menu.manager.create_menu(States.SaveMenu, self.engine, scr_capt=scr_capt)
             self.engine.gamestate.push(push_object)
 
         elif menu_item.func == self.Options:
-            push_object = screens.menu.manager.create_menu(statemachine.States.OptionsMenu, self.engine,
-                                                           scr_capt=scr_capt)
+            push_object = screens.menu.manager.create_menu(States.OptionsMenu, self.engine, scr_capt=scr_capt)
             self.engine.gamestate.push(push_object)
 
         elif menu_item.func == self.MainMenu:
-            push_object = screens.menu.manager.create_menu(statemachine.States.MainMenu, self.engine,
-                                                           select=-1)
+            push_object = screens.menu.manager.create_menu(States.MainMenu, self.engine, select=-1)
             self.engine.gamestate.change(push_object)
             self.engine.gamestate.push(Transition(self.engine.gamestate))
