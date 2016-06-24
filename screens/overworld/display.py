@@ -1,6 +1,6 @@
 
 """
-class: Overworld
+class: Display
 """
 
 import pygame
@@ -10,7 +10,7 @@ from components import Button
 import keys
 import screens.menu.manager
 import screens.party.display
-import screens.window
+import screens.overworld.window
 import statemachine
 
 
@@ -42,7 +42,7 @@ LEFTX, LEFTY = -200, -250
 RIGHTX, RIGHTY = -100, -250
 
 
-class Overworld(object):
+class Display(object):
     """
     Overworld layout.
     """
@@ -52,7 +52,7 @@ class Overworld(object):
         self.background = pygame.Surface(self.screen.get_size())
         self.background.fill(BACKGROUNDCOLOR)
         self.background = self.background.convert()
-        self.window = screens.window.Window(self.engine)
+        self.window = screens.overworld.window.Window(self.engine)
 
         self.map_title_font = pygame.font.SysFont(MAPTITLEFONT, MAPTITLEFONTSIZE)
         self.map_title_label = ""

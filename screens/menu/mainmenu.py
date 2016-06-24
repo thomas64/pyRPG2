@@ -8,7 +8,7 @@ from components import Transition
 import data
 import screens.menu.basemenu
 import screens.menu.manager
-import screens.overworld
+import screens.overworld.display
 import statemachine
 
 
@@ -37,7 +37,7 @@ class MainMenu(screens.menu.basemenu.BaseMenu):
             self.engine.data = data.Data()
             self.engine.script.new_game()
             self.engine.current_map = Map(self.engine.data.map_name)
-            push_object = screens.overworld.Overworld(self.engine)
+            push_object = screens.overworld.display.Display(self.engine)
             self.engine.gamestate.change(push_object)
             self.engine.gamestate.push(Transition(self.engine.gamestate))
 

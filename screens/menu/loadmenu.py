@@ -12,7 +12,7 @@ from components import Transition
 import data
 import loadsave
 import screens.menu.basemenu
-import screens.overworld
+import screens.overworld.display
 
 SAVEPATH = 'savegame'
 MAXSLOTS = 5
@@ -74,7 +74,7 @@ class LoadMenu(screens.menu.basemenu.BaseMenu):
             filename = self._convert_to_filename(menu_item.text, index)
             loadsave.Dialog(self.engine).load(filename)
             self.engine.current_map = Map(self.engine.data.map_name)
-            push_object = screens.overworld.Overworld(self.engine)
+            push_object = screens.overworld.display.Display(self.engine)
             self.engine.gamestate.change(push_object)
             self.engine.gamestate.push(Transition(self.engine.gamestate))
 
