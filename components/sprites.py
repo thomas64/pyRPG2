@@ -272,10 +272,9 @@ class Person(pygame.sprite.Sprite):
         self.north_states = {0: (32, 96, 32, 32), 1: (0, 96, 32, 32), 2: (32, 96, 32, 32), 3: (64, 96, 32, 32)}
         self.south_states = {0: (32,  0, 32, 32), 1: (0,  0, 32, 32), 2: (32,  0, 32, 32), 3: (64,  0, 32, 32)}
 
-        self.sprite_id = person_id
-        self.rect = rect
-        self._layer = objectlayer
+        # Assign the spritesheet to self.full_sprite
         self.full_sprite = pygame.image.load(sprite).convert_alpha()
+        # 'Clip' the sheet so that only one frame is displayed (the first frame of _south_states)
         if direction == Direction.North:
             self.full_sprite.set_clip(self.north_states[0])
         elif direction == Direction.West:
@@ -284,7 +283,12 @@ class Person(pygame.sprite.Sprite):
             self.full_sprite.set_clip(self.east_states[0])
         else:
             self.full_sprite.set_clip(self.south_states[0])
+        # Create a rect to animate around the screen
         self.image = self.full_sprite.subsurface(self.full_sprite.get_clip())
+        self.rect = rect
+
+        self.sprite_id = person_id
+        self._layer = objectlayer
 
     def turn(self, player_rect):
         """

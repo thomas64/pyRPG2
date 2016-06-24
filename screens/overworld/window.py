@@ -13,6 +13,7 @@ from components import ConfirmBox
 from components import Grid
 from components import Map
 from components import MessageBox
+from components import Player
 from components import Transition
 from database import Direction
 import database.inn
@@ -24,7 +25,7 @@ import equipment
 import keys
 import pouchitems
 import screens.shop.display
-import screens.unit
+
 
 BACKGROUNDCOLOR = pygame.Color("gray12")
 GRIDCOLOR = pygame.Color("gray36")
@@ -32,6 +33,8 @@ HEROCOLOR = pygame.Color("blue")
 HIGHBLOCKERCOLOR = pygame.Color("yellow")
 LOWBLOCKERCOLOR = pygame.Color("purple")
 SHOPCOLOR = pygame.Color("black")
+
+PLAYERLAYER = 5
 
 ZOOMSPEED = .1
 MAXZOOM = 3.1
@@ -99,7 +102,7 @@ class Window(object):
         self.party_sprites = []
         self.party = list(self.engine.data.party.values())
         for hero in self.party:
-            self.party_sprites.append(screens.unit.Unit(hero.SPR, start_pos, start_dir, self.engine.audio))
+            self.party_sprites.append(Player(hero.SPR, start_pos, PLAYERLAYER, start_dir, self.engine.audio))
         self.party_sprites.reverse()               # voeg de party_sprites in juiste volgorde toe
         self.group.add(self.party_sprites)         # maar als sprites moeten ze precies andersom staan
         self.party_sprites.reverse()               # want daar wil je party_sprites[0] bovenop weergegeven hebben

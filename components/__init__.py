@@ -23,3 +23,5 @@ from .sprites import Inn
 from .sprites import Sign
 from .sprites import Sparkly
 from .sprites import TreasureChest
+
+from .player import Player

@@ -1,10 +1,11 @@
 
 """
-class: Unit
+class: Player
 """
 
 import pygame
 
+from . import Person
 from database import Direction
 import keys
 
@@ -22,32 +23,13 @@ VIEWSPEED = 8       # todo, deze moet nog aangepast worden
 GRIDSIZE = 32
 
 
-class Unit(pygame.sprite.Sprite):
+class Player(Person):
     """
-    Unit extends the pygame.sprite.Sprite class
+    Person extends the pygame.sprite.Sprite class
     """
-    def __init__(self, spritesheet, position, direction, audio):
-        super().__init__()
+    def __init__(self, spritesheet, position, playerlayer, direction, audio):
+        super().__init__(None, spritesheet, None, playerlayer, direction)
 
-        self.west_states = {0:  (32, 32, 32, 32), 1: (0, 32, 32, 32), 2: (32, 32, 32, 32), 3: (64, 32, 32, 32)}
-        self.east_states = {0:  (32, 64, 32, 32), 1: (0, 64, 32, 32), 2: (32, 64, 32, 32), 3: (64, 64, 32, 32)}
-        self.north_states = {0: (32, 96, 32, 32), 1: (0, 96, 32, 32), 2: (32, 96, 32, 32), 3: (64, 96, 32, 32)}
-        self.south_states = {0: (32,  0, 32, 32), 1: (0,  0, 32, 32), 2: (32,  0, 32, 32), 3: (64,  0, 32, 32)}
-
-        # Assign the spritesheet to self.full_sprite
-        self.full_sprite = pygame.image.load(spritesheet).convert_alpha()
-        # 'Clip' the sheet so that only one frame is displayed (the first frame of _south_states)
-        if direction == Direction.North:
-            self.full_sprite.set_clip(self.north_states[0])
-        elif direction == Direction.West:
-            self.full_sprite.set_clip(self.west_states[0])
-        elif direction == Direction.East:
-            self.full_sprite.set_clip(self.east_states[0])
-        else:
-            self.full_sprite.set_clip(self.south_states[0])
-
-        # Create a rect to animate around the screen
-        self.image = self.full_sprite.subsurface(self.full_sprite.get_clip())
         self.rect = self.image.get_rect()
         self.feet = pygame.Rect(0, 0, FEETWIDTH, FEETHEIGHT)
         self.mask = pygame.mask.from_surface(self.image)
