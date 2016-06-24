@@ -197,6 +197,11 @@ class Player(Person):
                 self._move_side(low_blockers[obj_nr], dt)
                 t = True
 
+            if len(self.rect.collidelistall(sprite_blockers)) == 1:
+                obj_nr = self.rect.collidelist(sprite_blockers)
+                self._move_side(sprite_blockers[obj_nr], dt)
+                t = True
+
             # loop recht tegen een high_ of low_blocker aan
             while self.rect.collidelist(high_blockers) > -1 or \
                     self.rect.collidelist(low_blockers) > -1 or \

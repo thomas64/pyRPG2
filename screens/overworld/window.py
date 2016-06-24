@@ -270,7 +270,7 @@ class Window(object):
         # todo, moet dit niet naar de unit class?
         self.party_sprites[0].check_blocker(self.engine.current_map.high_blocker_rects,
                                             self.engine.current_map.low_blocker_rects,
-                                            self.engine.current_map.wpeople,
+                                            [sprite.get_blocker() for sprite in self.engine.current_map.wpeople],
                                             None,
                                             self.engine.current_map.width,
                                             self.engine.current_map.height,
@@ -310,9 +310,12 @@ class Window(object):
             sparkly_data = self.engine.data.sparklies[obj.sparkly_id]
             obj.update(sparkly_data['taken'], dt)
 
-        # todo, testopzet voor walking people
+        # beweeg wandering people
         for obj in self.engine.current_map.wpeople:
-            obj.move(self.engine.playtime, dt)
+            obj.update(self.party_sprites,
+                       self.engine.current_map.high_blocker_rects,
+                       self.engine.current_map.low_blocker_rects,
+                       dt)
 
     def render(self):
         """
