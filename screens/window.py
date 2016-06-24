@@ -13,6 +13,7 @@ from components import ConfirmBox
 from components import Grid
 from components import Map
 from components import MessageBox
+from components import Transition
 from database import Direction
 import database.inn
 import database.hero
@@ -23,7 +24,6 @@ import equipment
 import keys
 import pouchitems
 import screens.shop.display
-import screens.transition
 import screens.unit
 
 BACKGROUNDCOLOR = pygame.Color("gray12")
@@ -372,7 +372,7 @@ class Window(object):
             self.engine.data.map_pos = self.prev_map_name       # zet de point om naar een string naam.
             self.engine.current_map = Map(self.engine.data.map_name)
             self.load_map()
-            self.engine.gamestate.push(screens.transition.Transition(self.engine.gamestate, full_screen=False))
+            self.engine.gamestate.push(Transition(self.engine.gamestate, full_screen=False))
 
     def check_heroes(self, check_rect):
         """
@@ -409,7 +409,7 @@ class Window(object):
                                                        shop_data.get('material'),  # material is geen garantie
                                                        shop_data['face'],)
             self.engine.gamestate.push(push_object)
-            self.engine.gamestate.push(screens.transition.Transition(self.engine.gamestate))
+            self.engine.gamestate.push(Transition(self.engine.gamestate))
 
     def check_schools(self, check_rect):
         """

@@ -11,6 +11,8 @@ from .messagebox import MessageBox
 from .namedrect import NamedRect
 from .portal import Portal
 from .screencapture import ScreenCapture
+from .transition import Transition
+
 from .sprites import Button
 from .sprites import ColorBox
 from .sprites import Grid

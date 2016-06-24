@@ -8,11 +8,11 @@ import os
 
 import audio as sfx
 from components import Map
+from components import Transition
 import data
 import loadsave
 import screens.menu.basemenu
 import screens.overworld
-import screens.transition
 
 SAVEPATH = 'savegame'
 MAXSLOTS = 5
@@ -76,7 +76,7 @@ class LoadMenu(screens.menu.basemenu.BaseMenu):
             self.engine.current_map = Map(self.engine.data.map_name)
             push_object = screens.overworld.Overworld(self.engine)
             self.engine.gamestate.change(push_object)
-            self.engine.gamestate.push(screens.transition.Transition(self.engine.gamestate))
+            self.engine.gamestate.push(Transition(self.engine.gamestate))
 
     def on_delete(self, menu_item, scr_capt, index):
         """

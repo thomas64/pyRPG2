@@ -3,8 +3,8 @@
 class: PauseMenu
 """
 
+from components import Transition
 import screens.menu.basemenu
-import screens.transition
 import statemachine
 
 
@@ -52,4 +52,4 @@ class PauseMenu(screens.menu.basemenu.BaseMenu):
             push_object = screens.menu.manager.create_menu(statemachine.States.MainMenu, self.engine,
                                                            select=-1)
             self.engine.gamestate.change(push_object)
-            self.engine.gamestate.push(screens.transition.Transition(self.engine.gamestate))
+            self.engine.gamestate.push(Transition(self.engine.gamestate))
