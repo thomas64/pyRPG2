@@ -12,6 +12,7 @@ import audio as sfx
 from components import Button
 from components import ConfirmBox
 from components import MessageBox
+from components import Transition
 from constants import WeaponType
 import keys
 import pouchitems
@@ -278,7 +279,7 @@ class Display(object):
             if event.button == keys.LEFTCLICK:
 
                 if self.close_button.single_click(event) == keys.EXIT:
-                    self.engine.gamestate.pop()
+                    self._close()
 
                 for selector in self.selectors:
                     shoptype = selector.mouse_click(event)
@@ -301,7 +302,7 @@ class Display(object):
 
         elif event.type == pygame.KEYDOWN:
             if event.key == keys.EXIT:
-                self.engine.gamestate.pop()
+                self._close()
             elif event.key == keys.PREV:
                 self._previous()
             elif event.key == keys.NEXT:
@@ -467,3 +468,7 @@ class Display(object):
                 self.shoptype = self.shoptype_list[i]
                 self._init_boxes()
                 break
+
+    def _close(self):
+        self.engine.gamestate.pop()
+        self.engine.gamestate.push(Transition(self.engine.gamestate))
