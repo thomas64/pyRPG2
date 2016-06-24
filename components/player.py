@@ -185,19 +185,27 @@ class Player(Person):
 
             # loop tegen de rand van een high_blocker aan
             # er mag maar 1 high_blocker in deze lijst zijn
-            if len(self.rect.collidelistall(high_blockers)) == 1:
+            if len(self.rect.collidelistall(high_blockers)) == 1 and \
+                    len(self.rect.collidelistall(low_blockers)) == 0 and \
+                    len(self.rect.collidelistall(sprite_blockers)) == 0:
                 # obj_nr is het nummer van de betreffende high_blocker
                 obj_nr = self.rect.collidelist(high_blockers)
                 self._move_side(high_blockers[obj_nr], dt)
                 t = True
 
             # loop tegen de rand van een low_blocker aan, bijv water
-            if len(self.rect.collidelistall(low_blockers)) == 1:
+            if len(self.rect.collidelistall(high_blockers)) == 0 and \
+                    len(self.rect.collidelistall(low_blockers)) == 1 and \
+                    len(self.rect.collidelistall(sprite_blockers)) == 0:
                 obj_nr = self.rect.collidelist(low_blockers)
                 self._move_side(low_blockers[obj_nr], dt)
                 t = True
 
-            if len(self.rect.collidelistall(sprite_blockers)) == 1:
+            # dit kan er nog wel voor zorgen dat de player bij uitwijken in een boom gedrukt kan worden.
+            # todo, oplossen?
+            if len(self.rect.collidelistall(high_blockers)) == 0 and \
+                    len(self.rect.collidelistall(low_blockers)) == 0 and \
+                    len(self.rect.collidelistall(sprite_blockers)) == 1:
                 obj_nr = self.rect.collidelist(sprite_blockers)
                 self._move_side(sprite_blockers[obj_nr], dt)
                 t = True
