@@ -21,6 +21,7 @@ from constants import Direction
 
 from database import InnDatabase
 from database import HeroDatabase
+from database import PeopleDatabase
 from database import SchoolDatabase
 from database import ShopDatabase
 from database import SignDatabase
@@ -125,8 +126,7 @@ class Window(object):
         self.group.add(self.engine.current_map.shops)
         self.group.add(self.engine.current_map.schools)
         self.group.add(self.engine.current_map.inns)
-        self.group.add(self.engine.current_map.speople)
-        self.group.add(self.engine.current_map.wpeople)
+        self.group.add(self.engine.current_map.people)
         self.group.add(self.engine.current_map.signs)
         self.group.add(self.engine.current_map.chests)
         self.group.add(self.engine.current_map.sparkly)
@@ -175,16 +175,17 @@ class Window(object):
                 gold = pouchitems.factory_pouch_item('gold')
                 if self.engine.data.pouch.remove(gold, self.inn_data['price']):
                     self.engine.audio.play_sound(sfx.COINS)
-                    push_object = MessageBox(self.engine.gamestate, self.inn_data['paid'],
+                    self.engine.gamestate.push(Transition(self.engine.gamestate))
+                    push_object = MessageBox(self.engine.gamestate, InnDatabase.paid_text(),
                                              face_image=self.inn_data['face'], scr_capt=scr_capt)
                     self.engine.gamestate.push(push_object)
-                    # todo, health afhandelen. en iets van een fade out animatie?
+                    # todo, health afhandelen.
                 else:
-                    push_object = MessageBox(self.engine.gamestate, self.inn_data['fail'],
+                    push_object = MessageBox(self.engine.gamestate, InnDatabase.fail_text(),
                                              face_image=self.inn_data['face'], scr_capt=scr_capt)
                     self.engine.gamestate.push(push_object)
             else:
-                push_object = MessageBox(self.engine.gamestate, self.inn_data['deny'],
+                push_object = MessageBox(self.engine.gamestate, InnDatabase.deny_text(),
                                          face_image=self.inn_data['face'], scr_capt=scr_capt)
                 self.engine.gamestate.push(push_object)
 
@@ -207,6 +208,7 @@ class Window(object):
                 self.check_shops(self.party_sprites[0].get_check_rect())
                 self.check_schools(self.party_sprites[0].get_check_rect())
                 self.check_inns(self.party_sprites[0].get_check_rect())
+                self.check_people(self.party_sprites[0].get_check_rect())
                 self.check_signs()
                 self.check_chests()
                 self.check_sparklies(self.party_sprites[0].get_check_rect())  # sparklys moeten ook van boven kunnen
@@ -229,13 +231,14 @@ class Window(object):
                         self.cbox_sprites.append(ColorBox(rect, HIGHBLOCKERCOLOR, CBOXLAYER))
                     for rect in self.engine.current_map.low_blocker_rects:
                         self.cbox_sprites.append(ColorBox(rect, LOWBLOCKERCOLOR, CBOXLAYER))
-                    for obj in self.engine.current_map.wpeople:
-                        self.cbox_sprites.append(ColorBox(obj.wander_box, SHOPCOLOR, CBOXLAYER))
+                    for obj in self.engine.current_map.people:
+                        if getattr(obj, 'wander_box', None):
+                            self.cbox_sprites.append(ColorBox(obj.wander_box, SHOPCOLOR, CBOXLAYER))
                     for obj_group in (self.engine.current_map.heroes,
                                       self.engine.current_map.shops,
                                       self.engine.current_map.schools,
                                       self.engine.current_map.inns,
-                                      self.engine.current_map.speople,
+                                      self.engine.current_map.people,
                                       self.engine.current_map.signs,
                                       self.engine.current_map.chests,
                                       self.engine.current_map.sparkly):
@@ -270,7 +273,7 @@ class Window(object):
         # todo, moet dit niet naar de unit class?
         self.party_sprites[0].check_blocker(self.engine.current_map.high_blocker_rects,
                                             self.engine.current_map.low_blocker_rects,
-                                            [sprite.get_blocker() for sprite in self.engine.current_map.wpeople],
+                                            [sprite.get_blocker() for sprite in self.engine.current_map.people],
                                             None,
                                             self.engine.current_map.width,
                                             self.engine.current_map.height,
@@ -310,8 +313,9 @@ class Window(object):
             sparkly_data = self.engine.data.sparklies[obj.sparkly_id]
             obj.update(sparkly_data['taken'], dt)
 
-        # beweeg wandering people
-        for obj in self.engine.current_map.wpeople:
+        # beweeg wandering people.
+        # niet alleen maar wandering staan in c_m.people, maar update wordt ge-pass-t bij standing people
+        for obj in self.engine.current_map.people:
             obj.update(self.party_sprites,
                        self.engine.current_map.high_blocker_rects,
                        self.engine.current_map.low_blocker_rects,
@@ -447,8 +451,23 @@ class Window(object):
                     inn_sprite.turn(self.party_sprites[0].rect)
 
             self.inn_box = ConfirmBox(self.engine.gamestate, self.engine.audio,
-                                      self.inn_data['welcome'], self.inn_data['face'])
+                                      InnDatabase.welcome_text(self.inn_data['price']), self.inn_data['face'])
             self.engine.gamestate.push(self.inn_box)
+
+    def check_people(self, check_rect):
+        """
+        Bekijk of hij collide met een standing of wandering person.
+        """
+        if len(check_rect.collidelistall(self.engine.current_map.people)) == 1:
+            object_nr = check_rect.collidelist(self.engine.current_map.people)
+            person_sprite = self.engine.current_map.people[object_nr]
+            person_key = PeopleDatabase[person_sprite.sprite_id].name
+            person_data = PeopleDatabase[person_sprite.sprite_id].value
+
+            person_sprite.turn(self.party_sprites[0].rect)
+
+            push_object = MessageBox(self.engine.gamestate, PeopleDatabase.opening(person_key), person_data['face'])
+            self.engine.gamestate.push(push_object)
 
     def check_signs(self):
         """

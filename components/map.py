@@ -72,8 +72,7 @@ class Map(object):
         self.shops = []
         self.schools = []
         self.inns = []
-        self.speople = []       # standing people
-        self.wpeople = []       # walking people
+        self.people = []
         self.signs = []
         self.chests = []
         self.sparkly = []
@@ -110,12 +109,10 @@ class Map(object):
                 if PeopleDatabase[obj.name].value['walking']:
                     person_object = Walking(obj.name, PeopleDatabase[obj.name].value['sprite'],
                                             self._pg_rect(obj), OBJECTLAYER, self._has_dir(obj, 'direction'))
-                    self.wpeople.append(person_object)
                 else:
                     person_object = Person(obj.name, PeopleDatabase[obj.name].value['sprite'],
                                            self._pg_rect(obj), OBJECTLAYER, self._has_dir(obj, 'direction'))
-                    self.high_blocker_rects.append(person_object.get_blocker())
-                    self.speople.append(person_object)
+                self.people.append(person_object)
             elif obj.name.startswith('sign'):
                 sign_object = Sign(obj.name, self._pg_rect(obj), OBJECTLAYER, obj.type)
                 self.high_blocker_rects.append(sign_object.get_blocker())
