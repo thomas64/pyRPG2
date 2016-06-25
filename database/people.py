@@ -17,7 +17,7 @@ class PeopleDatabase(enum.Enum):
     """
 
     person1 = dict(face=PATH+NAME+'01'+FEXT, sprite=PATH+NAME+'01'+SEXT, walking=True)
-    person2 = dict(face=PATH+NAME+'01'+FEXT, sprite=PATH+NAME+'01'+SEXT, walking=False)
+    person2 = dict(face=PATH+NAME+'01'+FEXT, sprite=PATH+NAME+'01'+SEXT, walking=False, quest='quest1')
 
     @classmethod
     def opening(cls, people_key):

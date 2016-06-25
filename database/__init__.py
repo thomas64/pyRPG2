@@ -16,6 +16,7 @@ from .weapon import wpn
 from .hero import HeroDatabase
 from .inn import InnDatabase
 from .people import PeopleDatabase
+from .quest import QuestDatabase
 from .school import SchoolDatabase
 from .shop import ShopDatabase
 from .sign import SignDatabase
