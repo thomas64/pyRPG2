@@ -126,21 +126,19 @@ class HeroDatabase(enum.Enum):
 
         elif hero_raw == cls.grindan.name:  # p(1).xpt >= 21000 - ((21000 / 100) * sale)
             return ["Come here squire!",
-                    "You are always in for mischief, and I have to",
-                    "get you out of trouble for more than I like.",
-                    "And this time AGAIN I probably cannot let you",
-                    "go on some adventure all by yourself and get",
-                    "yourself killed.",
-                    "So I will join you now!",
+                    "You are always in for mischief, and I have to get you out of",
+                    "trouble for more than I like. And this time AGAIN I probably",
+                    "cannot let you go on some adventure all by yourself and get",
+                    "yourself killed. So I will join you now!",
                     "",
                     "Sir, yes sir!",
-                    "I need to go to the bathroom right now."]
+                    "Well, what do you know, look at the time! I need to be somewhere."]
 
         elif hero_raw == cls.rydalin.name:  # p(1).xpt >= 15000 - ((15000 / 100) * sale)
             return ["Greetings Alagos, please let me go with you.",
                     "I am looking for a cure for a friend of mine and",
                     "if you go to Gertior maybe I can find that cure",
-                    "over there. They are know for their healingcraft.",
+                    "over there. They are known for their healingcraft.",
                     "But I still need to prep myself a little bit.",
                     "May I join you in your travels?",
                     "",
@@ -151,7 +149,7 @@ class HeroDatabase(enum.Enum):
             return ["Uhmm...",
                     "What's your name again? I think I have met you before.",
                     "I'm sorry, I am so often a little confused.",
-                    "Uhm... What was I saying? You look like you are of to",
+                    "Uhm... What was I saying? You look like you are off to",
                     "somewhere interesting. Maybe if I join you I can help",
                     "you... or help me? I don't know. Uuhhm, yes?",
                     "",
@@ -173,12 +171,12 @@ class HeroDatabase(enum.Enum):
 
         elif hero_raw == cls.raiko.name:  # p(1).xpt >= 300000 - ((300000 / 100) * sale)
             return ["Hello, I want to be knight.",
-                    "Can I join you?",
+                    "May I join you?",
                     "I very strong!",
-                    "I join you, then you are also stronger.",
+                    "I join you, then you also stronger.",
                     "",
                     "Yes, your strength does come in handy.",
-                    "No thanks, I looking for intelligence on this journey."]
+                    "No thanks, I am looking for intelligence on this journey."]
 
         elif hero_raw == cls.kiara.name:  # gold >= 10000 - ((10000 / 100) * sale)
             return ["Hey there sugar.",
@@ -189,7 +187,7 @@ class HeroDatabase(enum.Enum):
                     "Isn't that a pleasant thought? Your strong arms are",
                     "in dire need of some sensitivity.",
                     "",
-                    "Uhmm, yes please.",
+                    "Uhmm, sure.",
                     "I'm married."]
 
         elif hero_raw == cls.luthais.name:  # p(1).xpt >= 1200000 - ((1200000 / 100) * sale)

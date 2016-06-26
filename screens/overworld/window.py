@@ -496,7 +496,7 @@ class Window(object):
                 mec_v, mec_h = 0, ""
                 thf_v, thf_h = 0, ""
                 if chest_data.get('condition') and chest_data['content']:
-                    for key, value in list(chest_data['condition'].items()):
+                    for key, value in chest_data['condition'].items():
                         if key == "mec":
                             mec_v, mec_h = self.engine.data.party.get_highest_value_of_skill(key)
                             if mec_v < value:
@@ -504,8 +504,6 @@ class Window(object):
                                 push_object = MessageBox(self.engine.gamestate, text)
                                 self.engine.gamestate.push(push_object)
                                 return
-                            # haal die condition van de chest af.
-                            del chest_data['condition'][key]
                         elif key == "thf":
                             thf_v, thf_h = self.engine.data.party.get_highest_value_of_skill(key)
                             if thf_v < value:
@@ -513,7 +511,8 @@ class Window(object):
                                 push_object = MessageBox(self.engine.gamestate, text)
                                 self.engine.gamestate.push(push_object)
                                 return
-                            del chest_data['condition'][key]
+
+                # voortijdig weghalen condition weer verwijderd. anders kan open_chest() de condition niet meer lezen
 
                 if chest_data['content']:
                     chest_data['opened'] = 1
