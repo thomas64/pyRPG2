@@ -466,8 +466,22 @@ class Window(object):
 
             person_sprite.turn(self.party_sprites[0].rect)
 
-            push_object = MessageBox(self.engine.gamestate, PeopleDatabase.opening(person_key), person_data['face'])
-            self.engine.gamestate.push(push_object)
+            if person_data.get('quest'):
+                quest_data = self.engine.data.quests[person_data['quest']]
+                if quest_data['is_complete'](person_data['quest'], self.engine.data):
+                    push_object = ConfirmBox(self.engine.gamestate, self.engine.audio,
+                                             quest_data['text'](person_data['quest']),
+                                             self.engine.data.heroes['alagos'].FAC)
+                    self.engine.gamestate.push(push_object)
+                push_object = MessageBox(self.engine.gamestate, quest_data['text'](person_data['quest']),
+                                         person_data['face'])
+                self.engine.gamestate.push(push_object)
+                if not quest_data['started']:
+                    quest_data['started'] = True
+
+            else:
+                push_object = MessageBox(self.engine.gamestate, PeopleDatabase.opening(person_key), person_data['face'])
+                self.engine.gamestate.push(push_object)
 
     def check_signs(self):
         """
