@@ -4,6 +4,7 @@ class: Spell
 """
 
 from constants import SchoolType
+from constants import SpellType
 
 
 SPRITEPATH = 'resources/sprites/icons/spells/spells.png'
@@ -61,8 +62,8 @@ class DispelNaming(Spell):
     """..."""
     def __init__(self, quantity):
         super().__init__()
-        self.NAM = "Dispel Naming"
-        self.RAW = 'dis_nmg'
+        self.NAM = SpellType.dis_nmg.value
+        self.RAW = SpellType.dis_nmg.name
         self.SRT = 10
         self.SCL = SchoolType.ntl
         self.MIN = 2
@@ -77,8 +78,8 @@ class DispelNecro(Spell):
     """..."""
     def __init__(self, quantity):
         super().__init__()
-        self.NAM = "Dispel Necro"
-        self.RAW = 'dis_ncy'
+        self.NAM = SpellType.dis_ncy.value
+        self.RAW = SpellType.dis_ncy.name
         self.SRT = 20
         self.SCL = SchoolType.ntl
         self.MIN = 2
@@ -94,8 +95,8 @@ class DispelStar(Spell):
     """..."""
     def __init__(self, quantity):
         super().__init__()
-        self.NAM = "Dispel Star"
-        self.RAW = 'dis_str'
+        self.NAM = SpellType.dis_str.value
+        self.RAW = SpellType.dis_str.name
         self.SRT = 30
         self.SCL = SchoolType.ntl
         self.MIN = 2
@@ -110,8 +111,8 @@ class Mirror(Spell):
     """..."""
     def __init__(self, quantity):
         super().__init__()
-        self.NAM = "Mirror"
-        self.RAW = 'mir'
+        self.NAM = SpellType.mir.value
+        self.RAW = SpellType.mir.name
         self.SRT = 40
         self.SCL = SchoolType.ntl
         self.MIN = 6
@@ -128,8 +129,8 @@ class VsElemental(Spell):
     """..."""
     def __init__(self, quantity):
         super().__init__()
-        self.NAM = "vs. Elemental"
-        self.RAW = 'vs_elm'
+        self.NAM = SpellType.vs_elm.value
+        self.RAW = SpellType.vs_elm.name
         self.SRT = 50
         self.SCL = SchoolType.ntl
         self.MIN = 1
@@ -145,8 +146,8 @@ class VsNaming(Spell):
     """..."""
     def __init__(self, quantity):
         super().__init__()
-        self.NAM = "vs. Naming"
-        self.RAW = 'vs_nmg'
+        self.NAM = SpellType.vs_nmg.value
+        self.RAW = SpellType.vs_nmg.name
         self.SRT = 60
         self.SCL = SchoolType.ntl
         self.MIN = 1
@@ -162,8 +163,8 @@ class VsNecromancy(Spell):
     """..."""
     def __init__(self, quantity):
         super().__init__()
-        self.NAM = "vs. Necromancy"
-        self.RAW = 'vs_ncy'
+        self.NAM = SpellType.vs_ncy.value
+        self.RAW = SpellType.vs_ncy.name
         self.SRT = 70
         self.SCL = SchoolType.ntl
         self.MIN = 1
@@ -179,8 +180,8 @@ class VsStar(Spell):
     """..."""
     def __init__(self, quantity):
         super().__init__()
-        self.NAM = "vs. Star"
-        self.RAW = 'vs_str'
+        self.NAM = SpellType.vs_str.value
+        self.RAW = SpellType.vs_str.name
         self.SRT = 80
         self.SCL = SchoolType.ntl
         self.MIN = 1
@@ -197,8 +198,8 @@ class AirShield(Spell):
     """..."""
     def __init__(self, quantity):
         super().__init__()
-        self.NAM = "Air Shield"
-        self.RAW = 'air_sld'
+        self.NAM = SpellType.air_sld.value
+        self.RAW = SpellType.air_sld.name
         self.SRT = 110
         self.SCL = SchoolType.elm
         self.MIN = 1
@@ -215,8 +216,8 @@ class Debilitation(Spell):
     """..."""
     def __init__(self, quantity):
         super().__init__()
-        self.NAM = "Debilitation"
-        self.RAW = 'deb'
+        self.NAM = SpellType.deb.value
+        self.RAW = SpellType.deb.name
         self.SRT = 120
         self.SCL = SchoolType.elm
         self.MIN = 2
@@ -231,8 +232,8 @@ class DragonFlames(Spell):
     """..."""
     def __init__(self, quantity):
         super().__init__()
-        self.NAM = "Dragon Flames"
-        self.RAW = 'drg_flm'
+        self.NAM = SpellType.drg_flm.value
+        self.RAW = SpellType.drg_flm.name
         self.SRT = 130
         self.SCL = SchoolType.elm
         self.MIN = 2
@@ -249,8 +250,8 @@ class Fireball(Spell):
     """..."""
     def __init__(self, quantity):
         super().__init__()
-        self.NAM = "Fireball"
-        self.RAW = 'frb'
+        self.NAM = SpellType.frb.value
+        self.RAW = SpellType.frb.name
         self.SRT = 140
         self.SCL = SchoolType.elm
         self.MIN = 5
@@ -267,8 +268,8 @@ class Immolation(Spell):
     """..."""
     def __init__(self, quantity):
         super().__init__()
-        self.NAM = "Immolation"
-        self.RAW = 'imo'
+        self.NAM = SpellType.imo.value
+        self.RAW = SpellType.imo.name
         self.SRT = 150
         self.SCL = SchoolType.elm
         self.MIN = 4
@@ -285,8 +286,8 @@ class RemovePoison(Spell):
     """..."""
     def __init__(self, quantity):
         super().__init__()
-        self.NAM = "Remove Poison"
-        self.RAW = 'rem_psn'
+        self.NAM = SpellType.rem_psn.value
+        self.RAW = SpellType.rem_psn.name
         self.SRT = 160
         self.SCL = SchoolType.elm
         self.MIN = 2
@@ -301,8 +302,8 @@ class Strength(Spell):
     """..."""
     def __init__(self, quantity):
         super().__init__()
-        self.NAM = "Strength"
-        self.RAW = 'str'
+        self.NAM = SpellType.str.value
+        self.RAW = SpellType.str.name
         self.SRT = 170
         self.SCL = SchoolType.elm
         self.MIN = 1
@@ -319,8 +320,8 @@ class Wind(Spell):
     """..."""
     def __init__(self, quantity):
         super().__init__()
-        self.NAM = "Wind"
-        self.RAW = 'wnd'
+        self.NAM = SpellType.wnd.value
+        self.RAW = SpellType.wnd.name
         self.SRT = 180
         self.SCL = SchoolType.elm
         self.MIN = 2
@@ -338,8 +339,8 @@ class Banishing(Spell):
     """..."""
     def __init__(self, quantity):
         super().__init__()
-        self.NAM = "Banishing"
-        self.RAW = 'ban'
+        self.NAM = SpellType.ban.value
+        self.RAW = SpellType.ban.name
         self.SRT = 210
         self.SCL = SchoolType.nmg
         self.MIN = 4
@@ -355,8 +356,8 @@ class Endurance(Spell):
     """..."""
     def __init__(self, quantity):
         super().__init__()
-        self.NAM = "Endurance"
-        self.RAW = 'edu'
+        self.NAM = SpellType.edu.value
+        self.RAW = SpellType.edu.name
         self.SRT = 220
         self.SCL = SchoolType.nmg
         self.MIN = 2
@@ -373,8 +374,8 @@ class SenseAura(Spell):
     """..."""
     def __init__(self, quantity):
         super().__init__()
-        self.NAM = "Sense Aura"
-        self.RAW = 'sen_aur'
+        self.NAM = SpellType.sen_aur.value
+        self.RAW = SpellType.sen_aur.name
         self.SRT = 230
         self.SCL = SchoolType.nmg
         self.MIN = 3
@@ -391,8 +392,8 @@ class Teleportation(Spell):
     """..."""
     def __init__(self, quantity):
         super().__init__()
-        self.NAM = "Teleportation"
-        self.RAW = 'tlp'
+        self.NAM = SpellType.tlp.value
+        self.RAW = SpellType.tlp.name
         self.SRT = 240
         self.SCL = SchoolType.nmg
         self.MIN = 8
@@ -408,8 +409,8 @@ class Weakness(Spell):
     """..."""
     def __init__(self, quantity):
         super().__init__()
-        self.NAM = "Weakness"
-        self.RAW = 'wks'
+        self.NAM = SpellType.wks.value
+        self.RAW = SpellType.wks.name
         self.SRT = 250
         self.SCL = SchoolType.nmg
         self.MIN = 2
@@ -427,8 +428,8 @@ class FrozenDoom(Spell):
     """..."""
     def __init__(self, quantity):
         super().__init__()
-        self.NAM = "Frozen Doom"
-        self.RAW = 'frz_dom'
+        self.NAM = SpellType.frz_dom.value
+        self.RAW = SpellType.frz_dom.name
         self.SRT = 310
         self.SCL = SchoolType.str
         self.MIN = 6
@@ -445,8 +446,8 @@ class SolarWrath(Spell):
     """..."""
     def __init__(self, quantity):
         super().__init__()
-        self.NAM = "Solar Wrath"
-        self.RAW = 'sol_wrt'
+        self.NAM = SpellType.sol_wrt.value
+        self.RAW = SpellType.sol_wrt.name
         self.SRT = 320
         self.SCL = SchoolType.str
         self.MIN = 4
@@ -461,8 +462,8 @@ class StellarGravity(Spell):
     """..."""
     def __init__(self, quantity):
         super().__init__()
-        self.NAM = "Stellar Gravity"
-        self.RAW = 'stl_gty'
+        self.NAM = SpellType.stl_gty.value
+        self.RAW = SpellType.stl_gty.name
         self.SRT = 330
         self.SCL = SchoolType.str
         self.MIN = 2
@@ -477,8 +478,8 @@ class WebOfStarlight(Spell):
     """..."""
     def __init__(self, quantity):
         super().__init__()
-        self.NAM = "Web of Starlight"
-        self.RAW = 'wos'
+        self.NAM = SpellType.wos.value
+        self.RAW = SpellType.wos.name
         self.SRT = 340
         self.SCL = SchoolType.str
         self.MIN = 3
@@ -496,8 +497,8 @@ class Whitefire(Spell):
     """..."""
     def __init__(self, quantity):
         super().__init__()
-        self.NAM = "Whitefire"
-        self.RAW = 'wfi'
+        self.NAM = SpellType.wfi.value
+        self.RAW = SpellType.wfi.name
         self.SRT = 350
         self.SCL = SchoolType.str
         self.MIN = 6
@@ -516,8 +517,8 @@ class ControlZombies(Spell):
 
     def __init__(self, quantity):
         super().__init__()
-        self.NAM = "Control Zombies"
-        self.RAW = 'ctr_zom'
+        self.NAM = SpellType.ctr_zom.value
+        self.RAW = SpellType.ctr_zom.name
         self.SRT = 410
         self.SCL = SchoolType.ncy
         self.MIN = 3
@@ -536,8 +537,8 @@ class Haste(Spell):
 
     def __init__(self, quantity):
         super().__init__()
-        self.NAM = "Haste"
-        self.RAW = 'hst'
+        self.NAM = SpellType.hst.value
+        self.RAW = SpellType.hst.name
         self.SRT = 420
         self.SCL = SchoolType.ncy
         self.MIN = 4
@@ -556,8 +557,8 @@ class WallOfBones(Spell):
 
     def __init__(self, quantity):
         super().__init__()
-        self.NAM = "Wall of Bones"
-        self.RAW = 'wob'
+        self.NAM = SpellType.wob.value
+        self.RAW = SpellType.wob.name
         self.SRT = 430
         self.SCL = SchoolType.ncy
         self.MIN = 5
@@ -575,8 +576,8 @@ class SpiritShield(Spell):
 
     def __init__(self, quantity):
         super().__init__()
-        self.NAM = "Spirit Shield"
-        self.RAW = 'spr_sld'
+        self.NAM = SpellType.spr_sld.value
+        self.RAW = SpellType.spr_sld.name
         self.SRT = 440
         self.SCL = SchoolType.ncy
         self.MIN = 3

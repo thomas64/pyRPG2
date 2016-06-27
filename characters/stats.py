@@ -12,6 +12,8 @@ class: Strength
 class: Stamina
 """
 
+from constants import StatType
+
 # todo, descriptions van stats, en docstrings
 
 
@@ -75,7 +77,7 @@ class Intelligence(Stat):
     ...
     """
     def __init__(self, quantity):
-        super().__init__("Intelligence", "int", 30, 12, quantity)
+        super().__init__(StatType.int.value, StatType.int.name, 30, 12, quantity)
         self.DESC = ("Dit is een ",
                      "test.",
                      "intelligence")
@@ -86,7 +88,7 @@ class Willpower(Stat):
     ...
     """
     def __init__(self, quantity):
-        super().__init__("Willpower", "wil", 30, 12, quantity)
+        super().__init__(StatType.wil.value, StatType.wil.name, 30, 12, quantity)
         self.DESC = ("Dit is een ",
                      "test.",
                      "willpower")
@@ -97,7 +99,7 @@ class Dexterity(Stat):
     ...
     """
     def __init__(self, quantity):
-        super().__init__("Dexterity", "dex", 30, 24, quantity)
+        super().__init__(StatType.dex.value, StatType.dex.name, 30, 24, quantity)
         self.DESC = ("Dit is een ",
                      "test.",
                      "Dexterity")
@@ -108,7 +110,7 @@ class Agility(Stat):
     ...
     """
     def __init__(self, quantity):
-        super().__init__("Agility", "agi", 30, 24, quantity)
+        super().__init__(StatType.agi.value, StatType.agi.name, 30, 24, quantity)
         self.DESC = ("Dit is een ",
                      "test.",
                      "Agility")
@@ -119,7 +121,7 @@ class Endurance(Stat):
     ...
     """
     def __init__(self, quantity):
-        super().__init__("Endurance", "edu", 40, 12, quantity)
+        super().__init__(StatType.edu.value, StatType.edu.name, 40, 12, quantity)
         self.cur = quantity             # current: gaat af wanneer er bijv schade is (sta, edu, lev)
         self.DESC = ("Dit is een ",
                      "test.",
@@ -131,7 +133,7 @@ class Strength(Stat):
     ...
     """
     def __init__(self, quantity):
-        super().__init__("Strength", "str", 30, 12, quantity)
+        super().__init__(StatType.str.value, StatType.str.name, 30, 12, quantity)
         self.DESC = ("Dit is een ",
                      "test.",
                      "Strength")
@@ -142,7 +144,7 @@ class Stamina(Stat):
     ...
     """
     def __init__(self, quantity):
-        super().__init__("Stamina", "sta", 90, 4, quantity)
+        super().__init__(StatType.sta.value, StatType.sta.name, 90, 4, quantity)
         self.cur = quantity             # current: gaat af wanneer er bijv schade is (sta, edu, lev)
         self.DESC = ("Dit is een ",
                      "test.",

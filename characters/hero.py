@@ -8,6 +8,8 @@ import characters.skills
 import characters.spells
 from components import MessageBox
 from constants import EquipmentType
+from constants import SkillType
+from constants import StatType
 from constants import WeaponType
 import containers
 import equipment
@@ -26,33 +28,33 @@ class Hero(object):
         self.lev = characters.stats.Level(kwargs['lev'])
         self.exp = characters.stats.Experience(kwargs['lev'])   # initiele experience berekening
 
-        self.int = characters.stats.Intelligence(kwargs['int'])
-        self.wil = characters.stats.Willpower(kwargs['wil'])
-        self.dex = characters.stats.Dexterity(kwargs['dex'])
-        self.agi = characters.stats.Agility(kwargs['agi'])
-        self.edu = characters.stats.Endurance(kwargs['edu'])
-        self.str = characters.stats.Strength(kwargs['str'])
-        self.sta = characters.stats.Stamina(kwargs['sta'])
+        self.int = characters.stats.Intelligence(kwargs[StatType.int.name])
+        self.wil = characters.stats.Willpower(kwargs[StatType.wil.name])
+        self.dex = characters.stats.Dexterity(kwargs[StatType.dex.name])
+        self.agi = characters.stats.Agility(kwargs[StatType.agi.name])
+        self.edu = characters.stats.Endurance(kwargs[StatType.edu.name])
+        self.str = characters.stats.Strength(kwargs[StatType.str.name])
+        self.sta = characters.stats.Stamina(kwargs[StatType.sta.name])
         self.stats_tuple = (self.int, self.wil, self.dex, self.agi, self.edu, self.str, self.sta)
 
-        self.alc = characters.skills.Alchemist(kwargs['alc'])
-        self.dip = characters.skills.Diplomat(kwargs['dip'])
-        self.hlr = characters.skills.Healer(kwargs['hlr'])
-        self.lor = characters.skills.Loremaster(kwargs['lor'])
-        self.mec = characters.skills.Mechanic(kwargs['mec'])
-        self.mer = characters.skills.Merchant(kwargs['mer'])
-        self.ran = characters.skills.Ranger(kwargs['ran'])
-        self.stl = characters.skills.Stealth(kwargs['stl'])
-        self.thf = characters.skills.Thief(kwargs['thf'])
-        self.trb = characters.skills.Troubadour(kwargs['trb'])
-        self.war = characters.skills.Warrior(kwargs['war'])
-        self.wiz = characters.skills.Wizard(kwargs['wiz'])
-        self.haf = characters.skills.Hafted(kwargs['haf'])
-        self.mis = characters.skills.Missile(kwargs['mis'])
-        self.pol = characters.skills.Pole(kwargs['pol'])
-        self.shd = characters.skills.Shield(kwargs['shd'])
-        self.swd = characters.skills.Sword(kwargs['swd'])
-        self.thr = characters.skills.Thrown(kwargs['thr'])
+        self.alc = characters.skills.Alchemist(kwargs[SkillType.alc.name])
+        self.dip = characters.skills.Diplomat(kwargs[SkillType.dip.name])
+        self.hlr = characters.skills.Healer(kwargs[SkillType.hlr.name])
+        self.lor = characters.skills.Loremaster(kwargs[SkillType.lor.name])
+        self.mec = characters.skills.Mechanic(kwargs[SkillType.mec.name])
+        self.mer = characters.skills.Merchant(kwargs[SkillType.mer.name])
+        self.ran = characters.skills.Ranger(kwargs[SkillType.ran.name])
+        self.stl = characters.skills.Stealth(kwargs[SkillType.stl.name])
+        self.thf = characters.skills.Thief(kwargs[SkillType.thf.name])
+        self.trb = characters.skills.Troubadour(kwargs[SkillType.trb.name])
+        self.war = characters.skills.Warrior(kwargs[SkillType.war.name])
+        self.wiz = characters.skills.Wizard(kwargs[SkillType.wiz.name])
+        self.haf = characters.skills.Hafted(kwargs[SkillType.haf.name])
+        self.mis = characters.skills.Missile(kwargs[SkillType.mis.name])
+        self.pol = characters.skills.Pole(kwargs[SkillType.pol.name])
+        self.shd = characters.skills.Shield(kwargs[SkillType.shd.name])
+        self.swd = characters.skills.Sword(kwargs[SkillType.swd.name])
+        self.thr = characters.skills.Thrown(kwargs[SkillType.thr.name])
         self.skills_tuple = (self.alc, self.dip, self.hlr, self.lor, self.mec, self.mer, self.ran, self.stl, self.thf,
                              self.trb, self.war, self.wiz, self.haf, self.mis, self.pol, self.shd, self.swd, self.thr)
 
@@ -70,14 +72,14 @@ class Hero(object):
         self.acy = equipment.factory_empty_equipment_item(EquipmentType.acy)
 
         # hier kan zeker None ingevuld worden omdat gamestate hierbij zeker weten niet zal pushen een messagebox.
-        if kwargs['wpn']:
-            self.set_equipment_item(None, equipment.factory_equipment_item(kwargs['wpn']))
+        if kwargs[EquipmentType.wpn.name]:
+            self.set_equipment_item(None, equipment.factory_equipment_item(kwargs[EquipmentType.wpn.name]))
         # kwargs['sld'] moet bestaan om de if te mogen doen.
         # maar de uitkomst moet niet None zijn om aan de voorwaarde te voldoen.
-        if kwargs['sld']:
-            self.set_equipment_item(None, equipment.factory_equipment_item(kwargs['sld']))
-        if kwargs['arm']:
-            self.set_equipment_item(None, equipment.factory_equipment_item(kwargs['arm']))
+        if kwargs[EquipmentType.sld.name]:
+            self.set_equipment_item(None, equipment.factory_equipment_item(kwargs[EquipmentType.sld.name]))
+        if kwargs[EquipmentType.arm.name]:
+            self.set_equipment_item(None, equipment.factory_equipment_item(kwargs[EquipmentType.arm.name]))
 
         self.scl = containers.School(kwargs['scl'])
         if kwargs.get('spl'):
@@ -119,7 +121,7 @@ class Hero(object):
         """
         total = 0
         for equipment_item in self.equipment_tuple:
-            total += equipment_item.get_value_of('WHT')
+            total += equipment_item.get_value_of(StatType.wht.name)
         return total
 
     @property
@@ -156,7 +158,7 @@ class Hero(object):
         """
         total = 0
         for equipment_item in self.equipment_tuple:
-            total += equipment_item.get_value_of('PRT')
+            total += equipment_item.get_value_of(StatType.prt.name)
         total -= self.sld_prt
         return total
 
@@ -165,7 +167,7 @@ class Hero(object):
         """
         Alleen shield protection.
         """
-        return self.sld.get_value_of('PRT')
+        return self.sld.get_value_of(StatType.prt.name)
 
     @property
     def tot_prt(self):
@@ -175,7 +177,7 @@ class Hero(object):
         """
         total = 0
         for equipment_item in self.equipment_tuple:
-            total += equipment_item.get_value_of('PRT')
+            total += equipment_item.get_value_of(StatType.prt.name)
         return total
 
     @property
@@ -187,7 +189,7 @@ class Hero(object):
         # for equipment_item in self.equipment_tuple:
         #     total += equipment_item.get_value_of('DES')
         # return total
-        return self.sld.get_value_of('DES')
+        return self.sld.get_value_of(StatType.des.name)
 
     @property
     def wpn_hit(self):
@@ -198,7 +200,21 @@ class Hero(object):
         # for equipment_item in self.equipment_tuple:
         #     total += equipment_item.get_value_of('HIT')
         # return total
-        return self.wpn.get_value_of('HIT')
+        return self.wpn.get_value_of(StatType.hit.name)
+
+    @property
+    def war_hit(self):
+        """
+        Warrior bonus op wpn hit.
+        """
+        return self.war.bonus(self.wpn)
+
+    @property
+    def tot_hit(self):
+        """
+        Totale chance to hit: weapon hit + warrior bonus
+        """
+        return self.wpn_hit + self.war_hit
 
     @property
     def tot_dam(self):
@@ -208,7 +224,7 @@ class Hero(object):
         """
         total = 0
         for equipment_item in self.equipment_tuple:
-            total += equipment_item.get_value_of('DAM')
+            total += equipment_item.get_value_of(StatType.dam.name)
         return total
 
     def get_equipped_item_of_type(self, equipment_type):

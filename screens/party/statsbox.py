@@ -7,6 +7,7 @@ class: StatsBox
 
 import pygame
 
+from constants import StatType as StTy
 from screens.party.basebox import BaseBox
 
 
@@ -21,11 +22,6 @@ COLUMNSY = 60
 ROWHEIGHT = 22
 
 TITLE = "Stats"
-
-WHT_DESC = 'wht'
-MVP_DESC = 'mvp'
-PRT_DESC = 'prt'
-HIT_DESC = 'hit'
 
 
 class StatsBox(BaseBox):
@@ -53,35 +49,33 @@ class StatsBox(BaseBox):
             hero_lev_next = str(hero.lev.next(hero.exp.tot))
 
         # de preview waarden, voor is row[5]
-        wht = self._get_difference(hero, hovered_equipment_item, 'WHT')
-        mvp = self._get_difference(hero, hovered_equipment_item, 'MVP')
-        prt = self._get_difference(hero, hovered_equipment_item, 'PRT')
-        des = self._get_difference(hero, hovered_equipment_item, 'DES')
-        hit = self._get_difference(hero, hovered_equipment_item, 'HIT')
-        dam = self._get_difference(hero, hovered_equipment_item, 'DAM')
+        wht = self._get_difference(hero, hovered_equipment_item, StTy.wht.name)
+        mvp = self._get_difference(hero, hovered_equipment_item, StTy.mvp.name)
+        prt = self._get_difference(hero, hovered_equipment_item, StTy.prt.name)
+        des = self._get_difference(hero, hovered_equipment_item, StTy.des.name)
+        hit = self._get_difference(hero, hovered_equipment_item, StTy.hit.name)
+        dam = self._get_difference(hero, hovered_equipment_item, StTy.dam.name)
 
         # zet dan alles in deze tabel met zes kolommen. de vierde kolom is leeg voor de rects van de eerste kolom
         self.table_data = [
-            # row[0],               row[1],                    row[2],           row[3],        row[4],         row[5]
-            ["XP Remaining :", str(hero.exp.rem),       "",                        None,    "",                   ""],
-            ["Total XP :",     str(hero_exp_tot),       "",                        None,    "",                   ""],
-            ["Next Level :",   str(hero_lev_next),      "",                        None,    "",                   ""],
-            ["",               "",                      "",                        None,    "",                   ""],
-            ["Weight :",       str(hero.tot_wht),       "",                        None,    self._desc(WHT_DESC), wht],
-            ["Movepoints :",   str(hero.sta_mvp),       hero.dif_mvp,              None,    self._desc(MVP_DESC), mvp],
-            ["Protection :",   str(hero.prt),           hero.sld_prt,              None,    self._desc(PRT_DESC), prt],
-            ["Defense :",      str(hero.sld_des),       "",                        None,    "",                   des],
-            ["Base Hit :",     str(hero.wpn_hit)+" %",  hero.war.bonus(hero.wpn),  None,    self._desc(HIT_DESC), hit],
-            ["Damage :",       str(hero.tot_dam),       "",                        None,    "",                   dam],
-            ["",               "",                      "",                        None,    "",                   ""]
+            # row[0],             row[1],                 row[2],      row[3],       row[4],                     row[5]
+            ["",                  "",                     "",           None, "",                                  ""],
+            ["XP Remaining :",    str(hero.exp.rem),      "",           None, "",                                  ""],
+            ["Total XP :",        hero_exp_tot,           "",           None, "",                                  ""],
+            ["Next Level :",      hero_lev_next,          "",           None, "",                                  ""],
+            ["",                  "",                     "",           None, "",                                  ""],
+            [StTy.wht.value+" :", str(hero.tot_wht),      "",           None, self._desc(StTy.wht),               wht],
+            [StTy.mvp.value+" :", str(hero.sta_mvp),      hero.dif_mvp, None, self._desc(StTy.mvp),               mvp],
+            [StTy.prt.value+" :", str(hero.tot_prt),      "",           None, self._desc(StTy.prt, hero.sld_prt), prt],
+            [StTy.des.value+" :", str(hero.sld_des),      "",           None, "",                                 des],
+            [StTy.hit.value+" :", str(hero.tot_hit)+" %", "",           None, self._desc(StTy.hit, hero.war_hit), hit],
+            [StTy.dam.value+" :", str(hero.tot_dam),      "",           None, "",                                 dam]
         ]
         # voeg ook de 7 stats aan de table_data toe
-        for stat in hero.stats_tuple:
+        for i, stat in enumerate(hero.stats_tuple):
             preview_value = self._get_difference(hero, hovered_equipment_item, stat.RAW)
-            self.table_data.append(
-                # row[0],           row[1],       row[2], row[3], row[4],       row[5]
-                [stat.NAM + " :", str(stat.qty), stat.ext, None, stat.DESC, preview_value]
-            )
+            #                           row[0],          row[1],       row[2], row[3], row[4],       row[5]
+            self.table_data.insert(i, [stat.NAM+" :", str(stat.qty), stat.ext, None, stat.DESC, preview_value])
 
         # vul de vierde lege kolom. hierin staan de rects van de eerste kolom. rect is voor muisklik.
         for index, row in enumerate(self.table_data):
@@ -115,14 +109,14 @@ class StatsBox(BaseBox):
         screen.blit(self.surface, self.rect.topleft)
 
     @staticmethod
-    def _desc(stat):
-        if stat == WHT_DESC:
+    def _desc(stat, ext_stat=None):
+        if stat == StTy.wht:
             # Weight
             return (
                 "Defines how heavy your character is equipped with equipment. "
                 "Weight has negative impact on movepoints and agility.")
 
-        elif stat == MVP_DESC:
+        elif stat == StTy.mvp:
             # Movepoints
             return (
                 "Defines how many steps your character is able to take in one turn. The more stamina your character "
@@ -130,17 +124,18 @@ class StatsBox(BaseBox):
                 "shows the number of movepoints calculated from your stamina. The second (red) column shows the "
                 "calculated weight subtracted.")
 
-        elif stat == PRT_DESC:
+        elif stat == StTy.prt:
             # Protection
             return (
                 "Protection decreases the amount of health your character loses when hit in combat. There is no "
-                "Shield Protection when attacked from behind. The first column shows all the protection points from "
-                "your equipment combined, minus the shield. The second (green) column shows the protection points "
-                "from your shield.")
-
-        elif stat == HIT_DESC:
-            # Base Hit
+                "Shield Protection when attacked from behind. The number shows all the protection points from "
+                "your equipment combined.",
+                " ",
+                "{}pt from Shield Protection.".format(ext_stat))
+        elif stat == StTy.hit:
+            # Chance to Hit
             return (
                 "Defines how much chance the weapon of your character has in striking the enemy successfully. "
-                "The higher the percentage, the higher the chance to hit. The first column shows the percentage "
-                "of the weapon. The second (green) column shows the amount your Warrior Skill adds to your Base Hit.")
+                "The higher the percentage, the higher the chance to hit.",
+                " ",
+                "{}% from Warrior Skill.".format(ext_stat))

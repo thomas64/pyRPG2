@@ -5,6 +5,9 @@ class: EquipmentItem
 
 import enum
 
+from constants import SkillType
+from constants import StatType
+
 
 class EquipmentItem(object):
     """
@@ -38,22 +41,22 @@ class EquipmentItem(object):
                       ('Skill',             'skl'),
                       ('Min. Intelligence', 'min_int'),
                       ('Min. Strength',     'min_str'),
-                      ('Weight',            'wht'),
-                      ('Movepoints',        'mvp'),
-                      ('Protection',        'prt'),
-                      ('Defense',           'des'),
-                      ('Base Hit',          'hit'),
-                      ('Damage',            'dam'),
-                      ('Intelligence',      'int'),
-                      ('Willpower',         'wil'),
-                      ('Dexterity',         'dex'),
-                      ('Diplomat',          'dip'),
-                      ('Loremaster',        'lor'),
-                      ('Ranger',            'ran'),
-                      ('Stealth',           'stl'),
-                      ('Thief',             'thf'),
-                      ('Warrior',           'war'),
-                      ('Wizard',            'wiz'))
+                      (StatType.wht.value,  StatType.wht.name),
+                      (StatType.mvp.value,  StatType.mvp.name),
+                      (StatType.prt.value,  StatType.prt.name),
+                      (StatType.des.value,  StatType.des.name),
+                      (StatType.hit.value,  StatType.hit.name),
+                      (StatType.dam.value,  StatType.dam.name),
+                      (StatType.int.value,  StatType.int.name),
+                      (StatType.wil.value,  StatType.wil.name),
+                      (StatType.dex.value,  StatType.dex.name),
+                      (SkillType.dip.value, SkillType.dip.name),
+                      (SkillType.lor.value, SkillType.lor.name),
+                      (SkillType.ran.value, SkillType.ran.name),
+                      (SkillType.stl.value, SkillType.stl.name),
+                      (SkillType.thf.value, SkillType.thf.name),
+                      (SkillType.war.value, SkillType.war.name),
+                      (SkillType.wiz.value, SkillType.wiz.name))
 
         attr_list = []
 
