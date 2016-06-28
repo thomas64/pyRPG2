@@ -124,17 +124,20 @@ class Display(object):
         self.selectors = pygame.sprite.Group()
         for index, shoptype in enumerate(self.shoptype_list):
             if isinstance(shoptype, WeaponType):
-                from database import wpn
+                from database import WeaponDatabase
                 self.databases[shoptype.name] = collections.OrderedDict()
                 # omdat alle wapens in wpn zitten moet de database opnieuw opgebouwd worden met alleen de juiste wapens
-                for key, weapon in wpn.items():
+                for key, weapon in WeaponDatabase.items():
                     if weapon['skl'] == shoptype:
                         self.databases[shoptype.name][key] = weapon
             else:
                 # importeer de juiste db's voor de shop
                 lib = importlib.import_module("database." + shoptype.value.lower())
-                # zet de dicts in die db's in een dict
-                self.databases[shoptype.name] = getattr(lib, shoptype.name)
+                # zet de dicts in die db's in een dict.
+                # (geef opnieuw aan dat het een ODict moet zijn, dan maakt hij een kopie van de originele db, als je
+                # dat niet doet, dat gebruikt hij de originele database waar hij later hieronder uit gaat verwijderen.
+                # en dan werkt niet spel niet goed meer. vooral merkbaar bij een nieuwe game.)
+                self.databases[shoptype.name] = collections.OrderedDict(getattr(lib, shoptype.name))
 
             # voeg selector objecten toe
             self.selectors.add(screens.shop.selector.Selector(self._set_x(SELECTORPOSX) + index * SELECTORWIDTH,
