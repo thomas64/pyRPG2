@@ -362,6 +362,14 @@ class Walking(Person):
         self.state = PersonState.Resting
         self.state_time = random.random() + .5
 
+    def turn(self, player_rect):
+        """
+        Gebruikt turn van Person. Maar zet die sprite ook 5 seconden stil daarna.
+        """
+        super().turn(player_rect)
+        self.state = PersonState.Resting
+        self.state_time = 5
+
     def update(self, pb, hb, lb, dt):
         """
         Update de status van een Walking Person.
