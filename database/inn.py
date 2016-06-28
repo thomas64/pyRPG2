@@ -13,7 +13,6 @@ SPRITE = 's.png'
 
 class InnDatabase(enum.Enum):
     """..."""
-    # het getal dat je meegeeft aan welcome() moet uiteraard hetzelfde zijn als die je meegeeft aan price=
     inn1 = dict(price=5, face=PATH+'01'+FACE, sprite=PATH+'01'+SPRITE)
 
     @classmethod

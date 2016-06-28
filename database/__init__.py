@@ -1,17 +1,21 @@
 
-from .accessory import acy
-from .amulet import amu
-from .armor import arm
-from .belt import blt
-from .boots import bts
-from .bracelet import brc
-from .cloak import clk
-from .gloves import glv
-from .helmet import hlm
-from .pouchitem import pch_itm
-from .ring import rng
-from .shield import sld
-from .weapon import wpn
+"""
+Databases Package
+"""
+
+from .accessory import acy as AccessoryDatabase
+from .amulet import amu as AmuletDatabase
+from .armor import arm as ArmorDatabase
+from .belt import blt as BeltDatabase
+from .boots import bts as BootsDatabase
+from .bracelet import brc as BraceletDatabase
+from .cloak import clk as CloakDatabase
+from .gloves import glv as GlovesDatabase
+from .helmet import hlm as HelmetDatabase
+from .pouchitem import pch_itm as PouchItemDatabase
+from .ring import rng as RingDatabase
+from .shield import sld as ShieldDatabase
+from .weapon import wpn as WeaponDatabase
 
 from .hero import HeroDatabase
 from .inn import InnDatabase
