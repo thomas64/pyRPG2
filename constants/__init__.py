@@ -6,6 +6,10 @@ class: EquipmentType
 class: WeaponType
 class: ItemMaterial
 class: SchoolType
+class: StatType
+class: SkillType
+class: SpellType
+class: QuestType
 """
 
 import enum
@@ -161,3 +165,10 @@ class SpellType(enum.Enum):
     hst = "Haste"
     wob = "Wall of Bones"
     spr_sld = "Spirit Shield"
+
+
+class QuestType(enum.Enum):
+    """..."""
+    ItemQuest = 1
+    PersonQuest = 2
+    EnemyQuest = 3

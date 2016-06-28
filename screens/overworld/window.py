@@ -29,6 +29,7 @@ from database import SignDatabase
 import equipment
 import keys
 import pouchitems
+import quests
 import screens.shop.display
 
 
@@ -461,26 +462,28 @@ class Window(object):
         if len(check_rect.collidelistall(self.engine.current_map.people)) == 1:
             object_nr = check_rect.collidelist(self.engine.current_map.people)
             person_sprite = self.engine.current_map.people[object_nr]
-            person_key = PeopleDatabase[person_sprite.sprite_id].name
             person_data = PeopleDatabase[person_sprite.sprite_id].value
 
             person_sprite.turn(self.party_sprites[0].rect)
 
             if person_data.get('quest'):
-                quest_data = self.engine.data.quests[person_data['quest']]
-                if quest_data['is_complete'](person_data['quest'], self.engine.data):
-                    push_object = ConfirmBox(self.engine.gamestate, self.engine.audio,
-                                             quest_data['text'](person_data['quest']),
-                                             self.engine.data.heroes['alagos'].FAC)
-                    self.engine.gamestate.push(push_object)
-                push_object = MessageBox(self.engine.gamestate, quest_data['text'](person_data['quest']),
-                                         person_data['face'])
-                self.engine.gamestate.push(push_object)
-                if not quest_data['started']:
-                    quest_data['started'] = True
+                quests.factory_quest(self.engine.data.quests, person_data['quest'])
+                quest = self.engine.data.quests[person_data['quest']]
+
+                # quest_data = self.engine.data.quests[person_data['quest']]
+                # if quest_data['is_complete'](person_data['quest'], self.engine.data):
+                #     push_object = ConfirmBox(self.engine.gamestate, self.engine.audio,
+                #                              quest_data['text'](person_data['quest']),
+                #                              self.engine.data.heroes['alagos'].FAC)
+                #     self.engine.gamestate.push(push_object)
+                # push_object = MessageBox(self.engine.gamestate, quest_data['text'](person_data['quest']),
+                #                          person_data['face'])
+                # self.engine.gamestate.push(push_object)
+                # if not quest_data['started']:
+                #     quest_data['started'] = True
 
             else:
-                push_object = MessageBox(self.engine.gamestate, PeopleDatabase.opening(person_key), person_data['face'])
+                push_object = MessageBox(self.engine.gamestate, person_data['text'], person_data['face'])
                 self.engine.gamestate.push(push_object)
 
     def check_signs(self):

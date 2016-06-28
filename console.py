@@ -200,6 +200,7 @@ def error_item_name_not_in_database(item_name):
     """
     equipment.factory()
     pouchitems.factory()
+    quest.factory()
     :param item_name: string
     """
     print("Cannot find {} in database.".format(item_name))

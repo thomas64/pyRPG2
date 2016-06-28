@@ -6,7 +6,6 @@ class: Script
 import characters
 from constants import Direction
 from database import HeroDatabase
-from database import QuestDatabase
 from database import SparklyDatabase
 from database import TreasureChestDatabase
 import equipment
@@ -29,7 +28,6 @@ class Script(object):
         # Treasure chest en Sparklies worden geen losse objecten, maar blijven 1 object met meerdere dicts.
         self.engine.data.treasure_chests = TreasureChestDatabase()
         self.engine.data.sparklies = SparklyDatabase()
-        self.engine.data.quests = QuestDatabase()
 
         # Vul de party aan met de eerste hero
         self.engine.data.party.add(self.engine.data.heroes['alagos'], verbose=False)

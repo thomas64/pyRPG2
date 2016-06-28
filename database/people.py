@@ -12,17 +12,8 @@ NAME = 'child_'
 
 
 class PeopleDatabase(enum.Enum):
-    """
-    ...
-    """
+    """..."""
 
-    person1 = dict(face=PATH+NAME+'01'+FEXT, sprite=PATH+NAME+'01'+SEXT, walking=True)
+    person1 = dict(face=PATH+NAME+'01'+FEXT, sprite=PATH+NAME+'01'+SEXT, walking=True,
+                   text=["Hi mister!"])
     person2 = dict(face=PATH+NAME+'01'+FEXT, sprite=PATH+NAME+'01'+SEXT, walking=False, quest='quest1')
-
-    @classmethod
-    def opening(cls, people_key):
-        """..."""
-        if people_key == cls.person1.name:
-            return ["Hi mister!"]
-        elif people_key == cls.person2.name:
-            return ["Hi mister!"]
