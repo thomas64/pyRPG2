@@ -15,11 +15,11 @@ class Data(object):
         self.heroes = dict()
         self.treasure_chests = dict()
         self.sparklies = dict()
-        self.quests = dict()
 
         self.party = containers.Party()
         self.inventory = containers.Inventory()
         self.pouch = containers.Pouch()
+        self.logbook = containers.Logbook()
 
         self.map_name = None
         self.map_pos = None

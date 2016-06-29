@@ -29,7 +29,7 @@ from database import SignDatabase
 import equipment
 import keys
 import pouchitems
-import quests
+import questitems
 import screens.shop.display
 
 
@@ -467,8 +467,8 @@ class Window(object):
             person_sprite.turn(self.party_sprites[0].rect)
 
             if person_data.get('quest'):
-                quests.factory_quest(self.engine.data.quests, person_data['quest'])
-                quest = self.engine.data.quests[person_data['quest']]
+                # stop hem in data.logbook en haal de juiste questx er weer uit.
+                questx = questitems.factory_quest(self.engine.data.logbook, person_data['quest'])
 
                 # quest_data = self.engine.data.quests[person_data['quest']]
                 # if quest_data['is_complete'](person_data['quest'], self.engine.data):
