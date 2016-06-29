@@ -65,6 +65,8 @@ class EquipmentItem(object):
             if value_of_attr:
                 if isinstance(value_of_attr, enum.Enum):    # uitzondering alleen voor 'skl'
                     value_of_attr = value_of_attr.value
+                elif attr[0] == StatType.hit.value:         # uitzondering alleen voor 'hit'
+                    value_of_attr = str(value_of_attr)+"%"
                 attr_list.append((attr[0], str(value_of_attr)))
 
         return attr_list
