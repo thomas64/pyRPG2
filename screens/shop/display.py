@@ -123,21 +123,24 @@ class Display(object):
     def _init_selectors(self):
         self.selectors = pygame.sprite.Group()
         for index, shoptype in enumerate(self.shoptype_list):
+            self.databases[shoptype.name] = collections.OrderedDict()
             if isinstance(shoptype, WeaponType):
                 from database import WeaponDatabase
-                self.databases[shoptype.name] = collections.OrderedDict()
                 # omdat alle wapens in wpn zitten moet de database opnieuw opgebouwd worden met alleen de juiste wapens
-                for key, weapon in WeaponDatabase.items():
-                    if weapon['skl'] == shoptype:
-                        self.databases[shoptype.name][key] = weapon
+                for weapon_itm in WeaponDatabase:
+                    if weapon_itm.value['skl'] == shoptype:
+                        self.databases[shoptype.name][weapon_itm.name] = weapon_itm.value
             else:
+                db_select = dict(acy='AccessoryDatabase', amu='AmuletDatabase', arm='ArmorDatabase', blt='BeltDatabase',
+                                 bts='BootsDatabase', brc='BraceletDatabase', clk='CloakDatabase', glv='GlovesDatabase',
+                                 hlm='HelmetDatabase', rng='RingDatabase', sld='ShieldDatabase')
                 # importeer de juiste db's voor de shop
                 lib = importlib.import_module("database." + shoptype.value.lower())
-                # zet de dicts in die db's in een dict.
-                # (geef opnieuw aan dat het een ODict moet zijn, dan maakt hij een kopie van de originele db, als je
-                # dat niet doet, dat gebruikt hij de originele database waar hij later hieronder uit gaat verwijderen.
-                # en dan werkt niet spel niet goed meer. vooral merkbaar bij een nieuwe game.)
-                self.databases[shoptype.name] = collections.OrderedDict(getattr(lib, shoptype.name))
+                # zet de enum_db vanuit die import in een dict.
+                enum_db = getattr(lib, db_select[shoptype.name])  # enum_db is bijv HelmetDatabase
+                for equipment_itm in enum_db:
+                    if equipment_itm.value['typ'] == shoptype:
+                        self.databases[shoptype.name][equipment_itm.name] = equipment_itm.value
 
             # voeg selector objecten toe
             self.selectors.add(screens.shop.selector.Selector(self._set_x(SELECTORPOSX) + index * SELECTORWIDTH,
@@ -189,12 +192,13 @@ class Display(object):
         height = self.screen.get_height() * BUYBOXHEIGHT + EXTRAHEIGHT
 
         buy_database = self.databases[self.shoptype.name]
-        # extra stukje voor als er een bepaalde materiaal lijst is, delete dan de rest uit die database.
+        # extra stukje voor als er een bepaalde materiaal lijst is, voeg alleen die met de juiste materiaal toe.
         if self.material_list:
-            for itm_key, itm_value in list(buy_database.items()):
-                if itm_value.get('mtr') not in self.material_list:
-                    # hij loopt door een list() want anders kun je niet deleten uit een dict, blijkbaar.
-                    del buy_database[itm_key]
+            # maak eerst buy_db weer leeg
+            buy_database = collections.OrderedDict()
+            for itm_key, itm_value in self.databases[self.shoptype.name].items():
+                if itm_value.get('mtr') in self.material_list:
+                    buy_database[itm_key] = itm_value
         self.buybox = screens.shop.buybox.BuyBox(self._set_x(BUYBOXPOSX), self._set_y(BUYBOXPOSY),
                                                  int(width), int(height),
                                                  buy_database,

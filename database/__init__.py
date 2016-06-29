@@ -4,17 +4,17 @@ Databases Package
 """
 
 from .accessory import AccessoryDatabase
-from .amulet import amu as AmuletDatabase
+from .amulet import AmuletDatabase
 from .armor import ArmorDatabase
-from .belt import blt as BeltDatabase
-from .boots import bts as BootsDatabase
-from .bracelet import brc as BraceletDatabase
-from .cloak import clk as CloakDatabase
-from .gloves import glv as GlovesDatabase
-from .helmet import hlm as HelmetDatabase
-from .ring import rng as RingDatabase
-from .shield import sld as ShieldDatabase
-from .weapon import wpn as WeaponDatabase
+from .belt import BeltDatabase
+from .boots import BootsDatabase
+from .bracelet import BraceletDatabase
+from .cloak import CloakDatabase
+from .gloves import GlovesDatabase
+from .helmet import HelmetDatabase
+from .ring import RingDatabase
+from .shield import ShieldDatabase
+from .weapon import WeaponDatabase
 
 from .pouchitem import PouchItemDatabase
 from .hero import HeroDatabase

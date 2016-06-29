@@ -1,9 +1,10 @@
 
 """
-Shield
+class: ShieldDatabase
 """
 
-import collections
+import enum
+import aenum
 
 from constants import EquipmentType
 from constants import WeaponType
@@ -12,7 +13,12 @@ from constants import ItemMaterial
 
 SPRITEPATH = 'resources/sprites/icons/equipment/shield4.png'
 
-sld = collections.OrderedDict()
+
+class ShieldDatabase(enum.Enum):
+    """
+    Een lege Enum.
+    """
+
 
 # Vul de OrderedDict self met de gecombineerde data.
 
@@ -43,6 +49,8 @@ shield_upgraded = {
 }
 # de hoogste protection/defense mogelijk is 15/30: Large Silver/Titanium Scutum /+/++
 
+temp_shield_dict = {}
+
 for material_key, material_value in shield_material.items():
     for type_key, type_value in shield_type.items():
         for upgraded_key, upgraded_value in shield_upgraded.items():
@@ -50,7 +58,7 @@ for material_key, material_value in shield_material.items():
             raw_key_name = (material_key + type_key + upgraded_key).strip().lower().replace(" ", "")
             price = (material_value[0] + type_value[0])**1.6 - 10
 
-            sld[raw_key_name] = dict(
+            temp_shield_dict[raw_key_name] = dict(
                 nam=(material_key + " " + type_key + " " + upgraded_key).strip(),
 
                 # puur voor sortering in de database, omdat geen enum is
@@ -83,7 +91,7 @@ for material_key, material_value in shield_material.items():
 
 # type, skill en sprite toepassen.
 # Shop uitzetten voor sommige equipment items.
-for eqp_key, eqp_value in sld.items():
+for eqp_key, eqp_value in temp_shield_dict.items():
     eqp_value['typ'] = EquipmentType.sld
     eqp_value['skl'] = WeaponType.shd
     eqp_value['spr'] = SPRITEPATH
@@ -92,12 +100,8 @@ for eqp_key, eqp_value in sld.items():
 # de laatste van shop is misschien niet nodig. dit kan ook in de shop zelf gecheckt worden. scheelt een variable
 
 # Herschik de volgorde van de gecreerde dataset.
-temp_dict = collections.OrderedDict()
 # sorteer en zet in nieuwe database
-for eqp_key, eqp_value in sorted(sld.items(), key=lambda xx: xx[1]['srt']):
-    temp_dict[eqp_key] = eqp_value
+for eqp_key, eqp_value in sorted(temp_shield_dict.items(), key=lambda xx: xx[1]['srt']):
+    aenum.extend_enum(ShieldDatabase, eqp_key, eqp_value)
 # maak eigen database leeg
-sld.clear()
-# zet de gesorteerde neer
-for eqp_key, eqp_value in temp_dict.items():
-    sld[eqp_key] = eqp_value
+temp_shield_dict.clear()

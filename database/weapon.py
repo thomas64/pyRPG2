@@ -1,9 +1,10 @@
 
 """
-Weapon
+class: WeaponDatabase
 """
 
-import collections
+import enum
+import aenum
 
 from constants import EquipmentType
 from constants import WeaponType
@@ -12,7 +13,12 @@ from constants import ItemMaterial
 
 SPRITEPATH = 'resources/sprites/icons/equipment/weapon1.png'
 
-wpn = collections.OrderedDict()
+
+class WeaponDatabase(enum.Enum):
+    """
+    Een lege Enum.
+    """
+
 
 # Vul de OrderedDict self met de gecombineerde data.
 
@@ -61,6 +67,8 @@ weapon_upgraded = {
 }
 # hoogste damage mogelijk is 30: Silver/Titanium Maul ++
 
+temp_weapon_dict = {}
+
 for material_key, material_value in weapon_material.items():
     for type_key, type_value in weapon_type.items():
         for upgraded_key, upgraded_value in weapon_upgraded.items():
@@ -68,7 +76,7 @@ for material_key, material_value in weapon_material.items():
             raw_key_name = (material_key + type_key + upgraded_key).strip().lower().replace(" ", "")
             price = (material_value[0] + type_value[0])**2.3
 
-            wpn[raw_key_name] = dict(
+            temp_weapon_dict[raw_key_name] = dict(
                 nam=(material_key + " " + type_key + " " + upgraded_key).strip(),
 
                 # puur voor sortering in de winkels
@@ -97,13 +105,13 @@ for material_key, material_value in weapon_material.items():
 
 # min_int op 0 zetten voor close weapons
 # min_str op 0 zetten voor range weapons
-for weapon_key, weapon_value in wpn.items():
+for weapon_key, weapon_value in temp_weapon_dict.items():
     if weapon_value['skl'] == WeaponType.mis:
         weapon_value['min_str'] = 0
     else:
         weapon_value['min_int'] = 0
 # Shop uitzetten voor sommige equipment items.
-for eqp_key, eqp_value in wpn.items():
+for eqp_key, eqp_value in temp_weapon_dict.items():
     eqp_value['typ'] = EquipmentType.wpn
     eqp_value['spr'] = SPRITEPATH
     if "+" in eqp_key or "titanium" in eqp_key:
@@ -111,12 +119,8 @@ for eqp_key, eqp_value in wpn.items():
 # de laatste van shop is misschien niet nodig. dit kan ook in de shop zelf gecheckt worden. scheelt een variable
 
 # Herschik de volgorde van de gecreerde dataset.
-temp_dict = collections.OrderedDict()
 # sorteer en zet in nieuwe database
-for eqp_key, eqp_value in sorted(wpn.items(), key=lambda xx: xx[1]['srt']):
-    temp_dict[eqp_key] = eqp_value
+for eqp_key, eqp_value in sorted(temp_weapon_dict.items(), key=lambda xx: xx[1]['srt']):
+    aenum.extend_enum(WeaponDatabase, eqp_key, eqp_value)
 # maak eigen database leeg
-wpn.clear()
-# zet de gesorteerde neer
-for eqp_key, eqp_value in temp_dict.items():
-    wpn[eqp_key] = eqp_value
+temp_weapon_dict.clear()

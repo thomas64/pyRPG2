@@ -1,9 +1,9 @@
 
 """
-Amulet
+class: AmuletDatabase
 """
 
-import collections
+import enum
 
 from constants import EquipmentType
 
@@ -12,11 +12,13 @@ from constants import EquipmentType
 
 SPRITEPATH = 'resources/sprites/icons/equipment/amulet1.png'
 
-amu = collections.OrderedDict()
 
-amu['testamulet'] = dict(nam="Test Amulet",    srt=1, val=100, shp=True, wht=1, prt=1, col=0, row=0)
-amu['testamulet2'] = dict(nam="Test Amulet 2", srt=2, val=200, shp=True, wht=2, prt=2, col=0, row=0)
+class AmuletDatabase(enum.Enum):
+    """..."""
+    testamulet = dict(nam="Test Amulet",    srt=1, val=100, shp=True, wht=1, prt=1, col=0, row=0)
+    testamulet2 = dict(nam="Test Amulet 2", srt=2, val=200, shp=True, wht=2, prt=2, col=0, row=0)
 
-for value in amu.values():
-    value['typ'] = EquipmentType.amu
-    value['spr'] = SPRITEPATH
+
+for amu in AmuletDatabase:
+    amu.value['typ'] = EquipmentType.amu
+    amu.value['spr'] = SPRITEPATH

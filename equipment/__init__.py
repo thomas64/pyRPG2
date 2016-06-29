@@ -39,28 +39,28 @@ def factory_equipment_item(equipment_item_key):
     from database import AccessoryDatabase
     from .item import EquipmentItem
 
-    if equipment_item_key in WeaponDatabase:
-        return EquipmentItem(**WeaponDatabase[equipment_item_key])
-    elif equipment_item_key in ShieldDatabase:
-        return EquipmentItem(**ShieldDatabase[equipment_item_key])
-    elif equipment_item_key in HelmetDatabase:
-        return EquipmentItem(**HelmetDatabase[equipment_item_key])
-    elif equipment_item_key in AmuletDatabase:
-        return EquipmentItem(**AmuletDatabase[equipment_item_key])
+    if equipment_item_key in WeaponDatabase.__members__:
+        return EquipmentItem(**WeaponDatabase[equipment_item_key].value)
+    elif equipment_item_key in ShieldDatabase.__members__:
+        return EquipmentItem(**ShieldDatabase[equipment_item_key].value)
+    elif equipment_item_key in HelmetDatabase.__members__:
+        return EquipmentItem(**HelmetDatabase[equipment_item_key].value)
+    elif equipment_item_key in AmuletDatabase.__members__:
+        return EquipmentItem(**AmuletDatabase[equipment_item_key].value)
     elif equipment_item_key in ArmorDatabase.__members__:
         return EquipmentItem(**ArmorDatabase[equipment_item_key].value)
-    elif equipment_item_key in CloakDatabase:
-        return EquipmentItem(**CloakDatabase[equipment_item_key])
-    elif equipment_item_key in BraceletDatabase:
-        return EquipmentItem(**BraceletDatabase[equipment_item_key])
-    elif equipment_item_key in GlovesDatabase:
-        return EquipmentItem(**GlovesDatabase[equipment_item_key])
-    elif equipment_item_key in RingDatabase:
-        return EquipmentItem(**RingDatabase[equipment_item_key])
-    elif equipment_item_key in BeltDatabase:
-        return EquipmentItem(**BeltDatabase[equipment_item_key])
-    elif equipment_item_key in BootsDatabase:
-        return EquipmentItem(**BootsDatabase[equipment_item_key])
+    elif equipment_item_key in CloakDatabase.__members__:
+        return EquipmentItem(**CloakDatabase[equipment_item_key].value)
+    elif equipment_item_key in BraceletDatabase.__members__:
+        return EquipmentItem(**BraceletDatabase[equipment_item_key].value)
+    elif equipment_item_key in GlovesDatabase.__members__:
+        return EquipmentItem(**GlovesDatabase[equipment_item_key].value)
+    elif equipment_item_key in RingDatabase.__members__:
+        return EquipmentItem(**RingDatabase[equipment_item_key].value)
+    elif equipment_item_key in BeltDatabase.__members__:
+        return EquipmentItem(**BeltDatabase[equipment_item_key].value)
+    elif equipment_item_key in BootsDatabase.__members__:
+        return EquipmentItem(**BootsDatabase[equipment_item_key].value)
     elif equipment_item_key in AccessoryDatabase.__members__:
         return EquipmentItem(**AccessoryDatabase[equipment_item_key].value)
     else:

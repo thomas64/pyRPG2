@@ -3,10 +3,7 @@
 class: ArmorDatabase
 """
 
-# import collections
-
 import enum
-
 import aenum
 
 from constants import EquipmentType
@@ -49,6 +46,8 @@ armor_upgraded = {
 }
 # hoogste protection mogelijk is 15: Heavy Silver/Titanium Armor /+/++
 
+temp_armor_dict = {}
+
 for material_key, material_value in armor_material.items():
     for type_key, type_value in armor_type.items():
         for upgraded_key, upgraded_value in armor_upgraded.items():
@@ -56,8 +55,7 @@ for material_key, material_value in armor_material.items():
             raw_key_name = (type_key + material_key + upgraded_key).strip().lower().replace(" ", "")
             price = (material_value[0] + type_value[0])**2 + 10
 
-            aenum.extend_enum(ArmorDatabase, raw_key_name, dict(
-
+            temp_armor_dict[raw_key_name] = dict(
                 nam=(type_key + " " + material_key + " " + upgraded_key).strip(),
 
                 # puur voor sortering in de database, omdat geen enum is
@@ -80,24 +78,20 @@ for material_key, material_value in armor_material.items():
 
                 col=type_value[5],
                 row=material_value[5]
-            ))
+            )
 
 # type en sprite toepassen.
 # shop uitzetten voor sommige equipment items.
-for eqp in ArmorDatabase:
-    eqp.value['typ'] = EquipmentType.arm
-    eqp.value['spr'] = SPRITEPATH
-    if "+" in eqp.name or "titanium" in eqp.name:
-        eqp.value['shp'] = False
+for eqp_key, eqp_value in temp_armor_dict.items():
+    eqp_value['typ'] = EquipmentType.arm
+    eqp_value['spr'] = SPRITEPATH
+    if "+" in eqp_key or "titanium" in eqp_key:
+        eqp_value['shp'] = False
 # de laatste van shop is misschien niet nodig. dit kan ook in de shop zelf gecheckt worden. scheelt een variable
 
-# # Herschik de volgorde van de gecreerde dataset.
-# temp_dict = collections.OrderedDict()
-# # sorteer en zet in nieuwe database
-# for eqp_key, eqp_value in sorted(arm.items(), key=lambda xx: xx[1]['srt']):
-#     temp_dict[eqp_key] = eqp_value
-# # maak eigen database leeg
-# arm.clear()
-# # zet de gesorteerde neer
-# for eqp_key, eqp_value in temp_dict.items():
-#     arm[eqp_key] = eqp_value
+# Herschik de volgorde van de gecreerde dataset.
+# sorteer en zet in nieuwe database
+for eqp_key, eqp_value in sorted(temp_armor_dict.items(), key=lambda xx: xx[1]['srt']):
+    aenum.extend_enum(ArmorDatabase, eqp_key, eqp_value)
+# maak eigen database leeg
+temp_armor_dict.clear()
