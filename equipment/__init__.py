@@ -47,8 +47,8 @@ def factory_equipment_item(equipment_item_key):
         return EquipmentItem(**HelmetDatabase[equipment_item_key])
     elif equipment_item_key in AmuletDatabase:
         return EquipmentItem(**AmuletDatabase[equipment_item_key])
-    elif equipment_item_key in ArmorDatabase:
-        return EquipmentItem(**ArmorDatabase[equipment_item_key])
+    elif equipment_item_key in ArmorDatabase.__members__:
+        return EquipmentItem(**ArmorDatabase[equipment_item_key].value)
     elif equipment_item_key in CloakDatabase:
         return EquipmentItem(**CloakDatabase[equipment_item_key])
     elif equipment_item_key in BraceletDatabase:
@@ -61,8 +61,8 @@ def factory_equipment_item(equipment_item_key):
         return EquipmentItem(**BeltDatabase[equipment_item_key])
     elif equipment_item_key in BootsDatabase:
         return EquipmentItem(**BootsDatabase[equipment_item_key])
-    elif equipment_item_key in AccessoryDatabase:
-        return EquipmentItem(**AccessoryDatabase[equipment_item_key])
+    elif equipment_item_key in AccessoryDatabase.__members__:
+        return EquipmentItem(**AccessoryDatabase[equipment_item_key].value)
     else:
         console.error_item_name_not_in_database(equipment_item_key)
         raise KeyError

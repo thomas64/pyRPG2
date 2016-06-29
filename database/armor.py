@@ -1,9 +1,13 @@
 
 """
-Armor
+class: ArmorDatabase
 """
 
-import collections
+# import collections
+
+import enum
+
+import aenum
 
 from constants import EquipmentType
 from constants import ItemMaterial
@@ -11,9 +15,14 @@ from constants import ItemMaterial
 
 SPRITEPATH = 'resources/sprites/icons/equipment/armor1.png'
 
-arm = collections.OrderedDict()
 
-# Vul de OrderedDict self met de gecombineerde data.
+class ArmorDatabase(enum.Enum):
+    """
+    Een lege Enum.
+    """
+
+
+# Vul de Enum met de gecombineerde data.
 
 # todo, upgradable, min_mech, metals zijn nog niet verwerkt.
 
@@ -47,7 +56,8 @@ for material_key, material_value in armor_material.items():
             raw_key_name = (type_key + material_key + upgraded_key).strip().lower().replace(" ", "")
             price = (material_value[0] + type_value[0])**2 + 10
 
-            arm[raw_key_name] = dict(
+            aenum.extend_enum(ArmorDatabase, raw_key_name, dict(
+
                 nam=(type_key + " " + material_key + " " + upgraded_key).strip(),
 
                 # puur voor sortering in de database, omdat geen enum is
@@ -70,24 +80,24 @@ for material_key, material_value in armor_material.items():
 
                 col=type_value[5],
                 row=material_value[5]
-            )
+            ))
 
 # type en sprite toepassen.
 # shop uitzetten voor sommige equipment items.
-for eqp_key, eqp_value in arm.items():
-    eqp_value['typ'] = EquipmentType.arm
-    eqp_value['spr'] = SPRITEPATH
-    if "+" in eqp_key or "titanium" in eqp_key:
-        eqp_value['shp'] = False
+for eqp in ArmorDatabase:
+    eqp.value['typ'] = EquipmentType.arm
+    eqp.value['spr'] = SPRITEPATH
+    if "+" in eqp.name or "titanium" in eqp.name:
+        eqp.value['shp'] = False
 # de laatste van shop is misschien niet nodig. dit kan ook in de shop zelf gecheckt worden. scheelt een variable
 
-# Herschik de volgorde van de gecreerde dataset.
-temp_dict = collections.OrderedDict()
-# sorteer en zet in nieuwe database
-for eqp_key, eqp_value in sorted(arm.items(), key=lambda xx: xx[1]['srt']):
-    temp_dict[eqp_key] = eqp_value
-# maak eigen database leeg
-arm.clear()
-# zet de gesorteerde neer
-for eqp_key, eqp_value in temp_dict.items():
-    arm[eqp_key] = eqp_value
+# # Herschik de volgorde van de gecreerde dataset.
+# temp_dict = collections.OrderedDict()
+# # sorteer en zet in nieuwe database
+# for eqp_key, eqp_value in sorted(arm.items(), key=lambda xx: xx[1]['srt']):
+#     temp_dict[eqp_key] = eqp_value
+# # maak eigen database leeg
+# arm.clear()
+# # zet de gesorteerde neer
+# for eqp_key, eqp_value in temp_dict.items():
+#     arm[eqp_key] = eqp_value

@@ -1,9 +1,9 @@
 
 """
-Accessory
+class: AccessoryDatabase
 """
 
-import collections
+import enum
 
 from constants import EquipmentType
 
@@ -12,11 +12,13 @@ from constants import EquipmentType
 
 SPRITEPATH = 'resources/sprites/icons/equipment/accessory1.png'
 
-acy = collections.OrderedDict()
 
-acy['testaccessory'] = dict(nam="Test Accessory",    srt=1, val=100, shp=True, wht=1, prt=1, col=0, row=0)
-acy['testaccessory2'] = dict(nam="Test Accessory 2", srt=2, val=200, shp=True, wht=2, prt=2, col=0, row=0)
+class AccessoryDatabase(enum.Enum):
+    """..."""
+    testaccessory = dict(nam="Test Accessory",    srt=1, val=100, shp=True, wht=1, prt=1, col=0, row=0)
+    testaccessory2 = dict(nam="Test Accessory 2", srt=2, val=200, shp=True, wht=2, prt=2, col=0, row=0)
 
-for value in acy.values():
-    value['typ'] = EquipmentType.acy
-    value['spr'] = SPRITEPATH
+
+for acy in AccessoryDatabase:
+    acy.value['typ'] = EquipmentType.acy
+    acy.value['spr'] = SPRITEPATH

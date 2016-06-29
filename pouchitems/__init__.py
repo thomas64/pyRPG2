@@ -13,8 +13,8 @@ def factory_pouch_item(pouch_item_key):
     from database import PouchItemDatabase
     from .item import PouchItem
 
-    if pouch_item_key in PouchItemDatabase:
-        return PouchItem(**PouchItemDatabase[pouch_item_key])
+    if pouch_item_key in PouchItemDatabase.__members__:
+        return PouchItem(**PouchItemDatabase[pouch_item_key].value)
     else:
         console.error_item_name_not_in_database(pouch_item_key)
         raise KeyError
