@@ -67,7 +67,20 @@ class BaseBox(object):
         if hovered_equipment_item:
             eqp_skl = hero.get_equipped_item_of_type(hovered_equipment_item.TYP).get_value_of(skill_raw)
             new_skl = hovered_equipment_item.get_value_of(skill_raw)
-            return new_skl - eqp_skl
+
+            # bekijk of de oude penalty kleiner is dan het nieuwe verschil.
+            old_pen = 999
+            for skl in hero.skills_tuple:
+                if skl.RAW == skill_raw:
+                    old_pen = skl.ext
+                    break
+
+            diff = new_skl - eqp_skl
+            # als dat zo is, geef die dan weer
+            if diff > abs(old_pen):
+                return abs(old_pen)
+            else:
+                return diff
         return ""
 
     def _create_rect_with_offset(self, index, text, columnxx, columnsy, rowheight):
