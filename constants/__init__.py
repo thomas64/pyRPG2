@@ -172,3 +172,13 @@ class QuestType(enum.Enum):
     ItemQuest = 1
     PersonQuest = 2
     EnemyQuest = 3
+
+
+class QuestState(enum.Enum):
+    """
+    De volgorde en de 1, 2, 3, 4 worden in het spel gebruikt. Kan dus niet zomaar aangepast worden.
+    """
+    Unknown = 1
+    Running = 2
+    Finished = 3
+    Rewarded = 4

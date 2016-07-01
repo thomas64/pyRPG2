@@ -118,10 +118,11 @@ class StateMachine(object):
 
     def swap(self):
         """
-        Als de laatste 2 op de stack een messagebox zijn, draai ze dan om.
+        X (Als de laatste 2 op de stack een messagebox zijn, draai ze dan om.) X
+        Nee, draai ze gewoon om, ongeacht de voorwaarde.
         """
-        if self.statestack[-1].name == GameState.MessageBox and self.statestack[-2].name == GameState.MessageBox:
-            self.statestack[-1], self.statestack[-2] = self.statestack[-2], self.statestack[-1]
+        # if self.statestack[-1].name == GameState.MessageBox and self.statestack[-2].name == GameState.MessageBox:
+        self.statestack[-1], self.statestack[-2] = self.statestack[-2], self.statestack[-1]
 
         """
         Interessant om later misschien eens (ongeveer) te gebruiken. Deze draait een gedeelte van de list om.

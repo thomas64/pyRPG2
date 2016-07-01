@@ -22,6 +22,17 @@ class Pouch(dict):
         """
         return sorted(self.values(), key=lambda xx: xx.SRT)
 
+    def contains(self, pouch_item_raw, quantity):
+        """
+        Bekijkt of het item en de quantity in de pouch zitten.
+        :param pouch_item_raw: string, bijv 'herbs'
+        :param quantity: integer
+        """
+        if pouch_item_raw in self:
+            if self[pouch_item_raw].qty >= quantity:
+                return True
+        return False
+
     # noinspection PyTypeChecker,PyCallByClass
     def add(self, pouch_item, quantity=1, verbose=True):
         """

@@ -36,13 +36,16 @@ class Inventory(dict):
 
         return temp_list
 
-    def contains(self, equipment_item):
+    def contains(self, equipment_item_raw, quantity=1):
         """
         Bekijkt of het item in de inventory zit.
-        :param equipment_item: EquipmentItem Object
+        :param equipment_item_raw: string, bijv 'bronzeshortsword'
+        :param quantity: integer, standaard staat deze op 1, en dan gaat de check gewoon goed.
+                         maar als hij anders dan '1' meegegeven wordt dan heeft de check zin.
         """
-        if equipment_item.RAW in self:
-            return True
+        if equipment_item_raw in self:
+            if self[equipment_item_raw].qty >= quantity:
+                return True
         return False
 
     def add_i(self, equipment_item, quantity=1, verbose=True):

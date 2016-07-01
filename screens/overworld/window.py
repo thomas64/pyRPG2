@@ -83,6 +83,9 @@ class Window(object):
         self.inn_data = None
         self.hero_box = None    # confirmbox
         self.hero_data = None
+        self.quest_box = None   # questbox
+        self.quest_data = None
+        self.person_face = None
 
     def load_map(self):
         """
@@ -153,6 +156,7 @@ class Window(object):
         """
         Als een hero confirmbox in beeld is geweest.
         Als de inn confirmbox in beeld is geweest.
+        Als de quest confirmbox in beeld is geweest.
         """
         if self.hero_box:
             choice, yes, scr_capt = self.hero_box.on_exit()
@@ -192,6 +196,26 @@ class Window(object):
 
             self.inn_box = None
             self.inn_data = None
+
+        elif self.quest_box:
+            choice, yes, scr_capt = self.quest_box.on_exit()
+            if choice == yes:
+                # hij kan voldoen, komt daarom met text en plaatjes terug, om dat weer te kunnen geven.
+                text, image = self.quest_data.fulfill(self.engine.data)
+                push_object = MessageBox(self.engine.gamestate, text, spr_image=image, scr_capt=scr_capt)
+                self.engine.gamestate.push(push_object)
+
+                # nog een bedank berichtje van de quest owner.
+                push_object = MessageBox(self.engine.gamestate, self.quest_data.get_text(),
+                                         face_image=self.person_face, scr_capt=scr_capt)
+                self.engine.gamestate.push(push_object)
+
+                # zet de state op Rewarded.
+                self.quest_data.confirm_contact(self.engine.data)
+
+            self.quest_box = None
+            self.quest_data = None
+            self.person_face = None
 
     def single_input(self, event):
         """
@@ -464,24 +488,28 @@ class Window(object):
             person_sprite = self.engine.current_map.people[object_nr]
             person_data = PeopleDatabase[person_sprite.sprite_id].value
 
+            # doe gewoon eerst het draaien zoals normaal
             person_sprite.turn(self.party_sprites[0].rect)
 
+            # maar dan, als de persoon een quest heeft
             if person_data.get('quest'):
-                # stop hem in data.logbook en haal de juiste questx er weer uit.
-                questx = questitems.factory_quest(self.engine.data.logbook, person_data['quest'])
+                # stop hem in data.logbook en haal de juiste self.quest_data er weer uit.
+                self.quest_data = questitems.factory_quest(self.engine.data.logbook, person_data['quest'])
+                # het gezicht is in on_enter() weer nodig, vandaar deze declaratie.
+                self.person_face = person_data['face']
 
-                # quest_data = self.engine.data.quests[person_data['quest']]
-                # if quest_data['is_complete'](person_data['quest'], self.engine.data):
-                #     push_object = ConfirmBox(self.engine.gamestate, self.engine.audio,
-                #                              quest_data['text'](person_data['quest']),
-                #                              self.engine.data.heroes['alagos'].FAC)
-                #     self.engine.gamestate.push(push_object)
-                # push_object = MessageBox(self.engine.gamestate, quest_data['text'](person_data['quest']),
-                #                          person_data['face'])
-                # self.engine.gamestate.push(push_object)
-                # if not quest_data['started']:
-                #     quest_data['started'] = True
+                push_object = MessageBox(self.engine.gamestate, self.quest_data.get_text(), self.person_face)
+                self.engine.gamestate.push(push_object)
+                # als hij voldoet aan de voorwaarden
+                if self.quest_data.confirm_contact(self.engine.data):
+                    # kom dan met een confirmbox
+                    self.quest_box = ConfirmBox(self.engine.gamestate, self.engine.audio, self.quest_data.get_text(0))
+                    self.engine.gamestate.push(self.quest_box)
+                    # draai de messagebox en confirmbox om in de stack.
+                    self.engine.gamestate.swap()
+                # als hij niet voldoet aan de voorwaarden, dan heeft hij nog wel confirm_contact uitgevoerd.
 
+            # of als hij dat niet heeft
             else:
                 push_object = MessageBox(self.engine.gamestate, person_data['text'], person_data['face'])
                 self.engine.gamestate.push(push_object)
