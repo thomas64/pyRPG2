@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<map version="1.0" orientation="orthogonal" renderorder="right-down" width="40" height="40" tilewidth="16" tileheight="16" nextobjectid="26306">
+<map version="1.0" orientation="orthogonal" renderorder="right-down" width="40" height="40" tilewidth="16" tileheight="16" nextobjectid="26309">
  <properties>
   <property name="title" value="Ersin Forest"/>
  </properties>
@@ -791,6 +791,7 @@
  </objectgroup>
  <objectgroup name="objects">
   <object id="26305" name="sign1" type="1" x="160" y="144" width="32" height="32"/>
+  <object id="26308" name="person2" x="352" y="272" width="32" height="32"/>
  </objectgroup>
  <layer name="set" width="40" height="40" visible="0">
   <data encoding="csv">

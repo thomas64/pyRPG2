@@ -298,9 +298,10 @@ class Window(object):
         # todo, moet dit niet naar de unit class?
         self.party_sprites[0].check_blocker(self.engine.current_map.high_blocker_rects,
                                             self.engine.current_map.low_blocker_rects,
-                                            [sprite.get_blocker() for sprite in self.engine.current_map.people],
-                                            None,
-                                            self.engine.current_map.width,
+                                            [sprite.get_blocker() for sprite in self.engine.current_map.people if
+                                             getattr(sprite, 'wander_box', None)],  # alleen maar lopende sprites,
+                                            None,                                   # standing sprites hebben al een
+                                            self.engine.current_map.width,          # blocker
                                             self.engine.current_map.height,
                                             dt)
 
@@ -344,6 +345,8 @@ class Window(object):
             obj.update(self.party_sprites,
                        self.engine.current_map.high_blocker_rects,
                        self.engine.current_map.low_blocker_rects,
+                       [sprite for sprite in self.engine.current_map.people if  # alleen maar lopende sprites,
+                        getattr(sprite, 'wander_box', None)],                   # standing sprites hebben al een blocker
                        dt)
 
     def render(self):

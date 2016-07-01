@@ -370,19 +370,20 @@ class Walking(Person):
         self.state = PersonState.Resting
         self.state_time = 5
 
-    def update(self, pb, hb, lb, dt):
+    def update(self, pb, hb, lb, sb, dt):
         """
         Update de status van een Walking Person.
         :param pb: player blocker
         :param hb: high blocker
         :param lb: low blocker
+        :param sb: sprite blocker
         :param dt: self.clock.tick(FPS)/1000.0
         """
         self.state_time -= dt
 
         if self.state == PersonState.Moving:
             self._move(dt)
-            self._check_blocker(pb, hb, lb, dt)
+            self._check_blocker(pb, hb, lb, sb, dt)
             self._animate(dt)
 
         if self.state_time > 0:
@@ -436,14 +437,18 @@ class Walking(Person):
         self.rect.x = round(self.true_position[0])
         self.rect.y = round(self.true_position[1])
 
-    def _check_blocker(self, pb, hb, lb, dt):
+    def _check_blocker(self, pb, hb, lb, sb, dt):
         """
         Bekijk of de unit tegen een andere sprite aan loopt.
         """
+        csb = sb.copy()         # kopie van zichzelf
+        csb.remove(self.rect)   # verwijder eigen sprite uit de kopie, want anders stopt hij op zichzelf
+
         if not self.wander_box.contains(self.rect) or \
                 self.rect.collidelist(pb) > -1 or \
                 self.rect.collidelist(hb) > -1 or \
-                self.rect.collidelist(lb) > -1:
+                self.rect.collidelist(lb) > -1 or \
+                self.rect.collidelist(csb) > -1:         # check ook op andere (kopie van) people sprites.
             self._move_back(dt)
             self.state = PersonState.Resting
             self._stand()

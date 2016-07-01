@@ -109,9 +109,11 @@ class Map(object):
                 if PeopleDatabase[obj.name].value['walking']:
                     person_object = Walking(obj.name, PeopleDatabase[obj.name].value['sprite'],
                                             self._pg_rect(obj), OBJECTLAYER, self._has_dir(obj, 'direction'))
+                    # geen blocker voor walking people, die worden actueel in window geladen bij check_blocker.
                 else:
                     person_object = Person(obj.name, PeopleDatabase[obj.name].value['sprite'],
                                            self._pg_rect(obj), OBJECTLAYER, self._has_dir(obj, 'direction'))
+                    self.high_blocker_rects.append(person_object.get_blocker())
                 self.people.append(person_object)
             elif obj.name.startswith('sign'):
                 sign_object = Sign(obj.name, self._pg_rect(obj), OBJECTLAYER, obj.type)
