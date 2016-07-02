@@ -218,6 +218,8 @@ class Player(Person):
                self.rect.collidelist(wb) > -1:
                 self.rect.topleft = list(self.old_position)
                 self.feet.midbottom = self.rect.midbottom
+                self.true_position = list(self.rect.topleft)
+                return
 
             # loop recht tegen een high_ of low_blocker aan
             while self.rect.collidelist(high_blockers) > -1 or \
