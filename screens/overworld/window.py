@@ -200,6 +200,7 @@ class Window(object):
         elif self.quest_box:
             choice, yes, scr_capt = self.quest_box.on_exit()
             if choice == yes:
+                self.engine.gamestate.push(Transition(self.engine.gamestate))
                 # hij kan voldoen, komt daarom met text en plaatjes terug, om dat weer te kunnen geven.
                 text, image = self.quest_data.fulfill(self.engine.data)
                 push_object = MessageBox(self.engine.gamestate, text, spr_image=image, scr_capt=scr_capt)
@@ -257,8 +258,8 @@ class Window(object):
                     for rect in self.engine.current_map.low_blocker_rects:
                         self.cbox_sprites.append(ColorBox(rect, LOWBLOCKERCOLOR, CBOXLAYER))
                     for obj in self.engine.current_map.people:
-                        if getattr(obj, 'wander_box', None):
-                            self.cbox_sprites.append(ColorBox(obj.wander_box, SHOPCOLOR, CBOXLAYER))
+                        if getattr(obj, 'wander_area', None):
+                            self.cbox_sprites.append(ColorBox(obj.wander_area, SHOPCOLOR, CBOXLAYER))
                     for obj_group in (self.engine.current_map.heroes,
                                       self.engine.current_map.shops,
                                       self.engine.current_map.schools,
@@ -299,9 +300,9 @@ class Window(object):
         self.party_sprites[0].check_blocker(self.engine.current_map.high_blocker_rects,
                                             self.engine.current_map.low_blocker_rects,
                                             [sprite.get_blocker() for sprite in self.engine.current_map.people if
-                                             getattr(sprite, 'wander_box', None)],  # alleen maar lopende sprites,
-                                            None,                                   # standing sprites hebben al een
-                                            self.engine.current_map.width,          # blocker
+                                             getattr(sprite, 'wander_area', None)],  # alleen maar lopende sprites,
+                                            None,                                    # standing sprites hebben al een
+                                            self.engine.current_map.width,           # blocker
                                             self.engine.current_map.height,
                                             dt)
 
@@ -346,7 +347,7 @@ class Window(object):
                        self.engine.current_map.high_blocker_rects,
                        self.engine.current_map.low_blocker_rects,
                        [sprite for sprite in self.engine.current_map.people if  # alleen maar lopende sprites,
-                        getattr(sprite, 'wander_box', None)],                   # standing sprites hebben al een blocker
+                        getattr(sprite, 'wander_area', None)],                  # standing sprites hebben al een blocker
                        dt)
 
     def render(self):

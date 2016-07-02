@@ -183,32 +183,41 @@ class Player(Person):
         # als je snel rent, gewoon door muren heen gaan.
         if self.movespeed != MOVESPEED4:
 
+            # maak kopieen van de lijsten, zodat er eventueel wat uit verwijderd kan worden
+            hb = high_blockers.copy()
+            lb = low_blockers.copy()
+            wb = walking_blockers.copy()
+
             # loop tegen de rand van een high_blocker aan
             # er mag maar 1 high_blocker in deze lijst zijn
-            if len(self.rect.collidelistall(high_blockers)) == 1:
+            if len(self.rect.collidelistall(hb)) == 1:
                 # obj_nr is het nummer van de betreffende high_blocker
-                obj_nr = self.rect.collidelist(high_blockers)
-                self._move_side(high_blockers[obj_nr], dt)
+                obj_nr = self.rect.collidelist(hb)
+                self._move_side(hb[obj_nr], dt)
                 t = True
-
-            # als er verschillende blockers over elkaar heen staan werkt het niet.
-            # daarom heb ik dit weggehaald:
-            # if len(self.rect.collidelistall(high_blockers)) == 0 and \
-            #    len(self.rect.collidelistall(low_blockers)) == 1 and \
-            #    len(self.rect.collidelistall(sprite_blockers)) == 0:
+                # haal diegene uit de lijst
+                hb.pop(obj_nr)
 
             # loop tegen de rand van een low_blocker aan, bijv water
-            elif len(self.rect.collidelistall(low_blockers)) == 1:
-                obj_nr = self.rect.collidelist(low_blockers)
-                self._move_side(low_blockers[obj_nr], dt)
+            elif len(self.rect.collidelistall(lb)) == 1:
+                obj_nr = self.rect.collidelist(lb)
+                self._move_side(lb[obj_nr], dt)
                 t = True
+                lb.pop(obj_nr)
 
-            # dit kan er nog wel voor zorgen dat de player bij uitwijken in een boom gedrukt kan worden.
-            # todo, oplossen?
-            elif len(self.rect.collidelistall(walking_blockers)) == 1:
-                obj_nr = self.rect.collidelist(walking_blockers)
-                self._move_side(walking_blockers[obj_nr], dt)
+            elif len(self.rect.collidelistall(wb)) == 1:
+                obj_nr = self.rect.collidelist(wb)
+                self._move_side(wb[obj_nr], dt)
                 t = True
+                wb.pop(obj_nr)
+
+            # doorzoek de gekopieerde lijsten waar er 1 uit gehaald is en als na het movesiden in een andere lijst
+            # terecht komt, dan ben je in een ander object gedrukt door moveside, reset dan maar weer alles terug.
+            if self.rect.collidelist(hb) > -1 or \
+               self.rect.collidelist(lb) > -1 or \
+               self.rect.collidelist(wb) > -1:
+                self.rect.topleft = list(self.old_position)
+                self.feet.midbottom = self.rect.midbottom
 
             # loop recht tegen een high_ of low_blocker aan
             while self.rect.collidelist(high_blockers) > -1 or \
@@ -220,6 +229,7 @@ class Player(Person):
         # loop tegen de rand van de map aan
         # if self.rect.top < 0:
         #     self.rect.top = 0
+        #     feet ook, altijd na rect
         #     t = True
         # if self.rect.left < 0:
         #     self.rect.left = 0

@@ -353,7 +353,7 @@ class Walking(Person):
         self.last_direction = direction
         self.move_direction = None
 
-        self.wander_box = pygame.Rect(self.rect.x-32, self.rect.y-32, 96, 96)
+        self.wander_area = pygame.Rect(self.rect.x-32, self.rect.y-32, 96, 96)
         self.WANDER_SPEED = 60
         self.STEP_SPEED = 15
         self.step_count = 0
@@ -444,7 +444,7 @@ class Walking(Person):
         csb = sb.copy()         # kopie van zichzelf
         csb.remove(self.rect)   # verwijder eigen sprite uit de kopie, want anders stopt hij op zichzelf
 
-        if not self.wander_box.contains(self.rect) or \
+        if not self.wander_area.contains(self.rect) or \
                 self.rect.collidelist(pb) > -1 or \
                 self.rect.collidelist(hb) > -1 or \
                 self.rect.collidelist(lb) > -1 or \
