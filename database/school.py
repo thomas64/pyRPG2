@@ -7,9 +7,10 @@ import enum
 
 from constants import SchoolType
 
-PATH = 'resources/sprites/npcs/School_'
-FACE = 'f.png'
-SPRITE = 's.png'
+PATH = 'resources/sprites/npcs/'
+FEXT = 'f.png'
+SEXT = 's.png'
+SCHOOL1 = PATH+'School_01'
 
 
 class SchoolDatabase(enum.Enum):
@@ -18,4 +19,4 @@ class SchoolDatabase(enum.Enum):
     """
 
     school1 = dict(content=[SchoolType.elm, SchoolType.nmg],
-                   face=PATH+'01'+FACE, sprite=PATH+'01'+SPRITE)
+                   face=SCHOOL1+FEXT, sprite=SCHOOL1+SEXT)

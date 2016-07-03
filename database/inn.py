@@ -6,14 +6,15 @@ class: InnDatabase
 import enum
 
 
-PATH = 'resources/sprites/npcs/Inn_'
-FACE = 'f.png'
-SPRITE = 's.png'
+PATH = 'resources/sprites/npcs/'
+FEXT = 'f.png'
+SEXT = 's.png'
+INN1 = PATH+'Inn_01'
 
 
 class InnDatabase(enum.Enum):
     """..."""
-    inn1 = dict(price=5, face=PATH+'01'+FACE, sprite=PATH+'01'+SPRITE)
+    inn1 = dict(price=5, face=INN1+FEXT, sprite=INN1+SEXT)
 
     @classmethod
     def welcome_text(cls, price):

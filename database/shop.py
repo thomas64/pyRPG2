@@ -10,9 +10,11 @@ from constants import WeaponType
 from constants import ItemMaterial
 
 
-PATH = 'resources/sprites/npcs/Shop_'
-FACE = 'f.png'
-SPRITE = 's.png'
+PATH = 'resources/sprites/npcs/'
+FEXT = 'f.png'
+SEXT = 's.png'
+SHOP1 = PATH+'Shop_01'
+SHOP2 = PATH+'Shop_02'
 
 
 class ShopDatabase(enum.Enum):
@@ -22,9 +24,7 @@ class ShopDatabase(enum.Enum):
 
     shop1 = dict(content=[WeaponType.swd, WeaponType.haf, WeaponType.pol, WeaponType.mis, WeaponType.thr],
                  material=[ItemMaterial.brz],
-                 face=PATH+'01'+FACE,
-                 sprite=PATH+'01'+SPRITE)
+                 face=SHOP1+FEXT, sprite=SHOP1+SEXT)
     shop2 = dict(content=[EquipmentType.arm, EquipmentType.sld, EquipmentType.hlm],
                  material=[ItemMaterial.wdn, ItemMaterial.ltr],
-                 face=PATH+'02'+FACE,
-                 sprite=PATH+'02'+SPRITE)
+                 face=SHOP2+FEXT, sprite=SHOP2+SEXT)

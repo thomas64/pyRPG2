@@ -83,7 +83,7 @@ class Window(object):
         self.inn_data = None
         self.hero_box = None    # confirmbox
         self.hero_data = None
-        self.quest_box = None   # questbox
+        self.quest_box = None   # confirmbox
         self.quest_data = None
         self.person_face = None
 

@@ -686,9 +686,9 @@
  </objectgroup>
  <objectgroup name="objects">
   <object id="119" name="sign4" type="2" x="1344" y="528" width="32" height="32"/>
-  <object id="173" name="person002" type="w" x="1088" y="416" width="32" height="32"/>
-  <object id="175" name="person003" x="1312" y="432" width="32" height="32"/>
-  <object id="177" name="person004" x="1056" y="208" width="32" height="32"/>
-  <object id="178" name="person005" x="1312" y="176" width="32" height="32"/>
+  <object id="173" name="person2" type="w" x="1088" y="416" width="32" height="32"/>
+  <object id="175" name="person3" x="1312" y="432" width="32" height="32"/>
+  <object id="177" name="person4" x="1040" y="224" width="32" height="32"/>
+  <object id="178" name="person5" x="1328" y="192" width="32" height="32"/>
  </objectgroup>
 </map>

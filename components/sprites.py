@@ -353,7 +353,7 @@ class Walking(Person):
         self.last_direction = direction
         self.move_direction = None
 
-        self.wander_area = pygame.Rect(self.rect.x-32, self.rect.y-32, 96, 96)
+        self.wander_area = pygame.Rect(self.rect.x-64, self.rect.y-64, 160, 160)
         self.WANDER_SPEED = 60
         self.STEP_SPEED = 15
         self.step_count = 0
