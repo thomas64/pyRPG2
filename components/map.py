@@ -106,7 +106,8 @@ class Map(object):
                     self.high_blocker_rects.append(inn_object.get_blocker())
                 self.inns.append(inn_object)
             elif obj.name.startswith('person'):
-                if PeopleDatabase[obj.name].value['walking']:
+                # als er in obj.type iets staat, dan is het een walking person
+                if obj.type:
                     person_object = Walking(obj.name, PeopleDatabase[obj.name].value['sprite'],
                                             self._pg_rect(obj), OBJECTLAYER, self._has_dir(obj, 'direction'))
                     # geen blocker voor walking people, die worden actueel in window geladen bij check_blocker.
