@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<map version="1.0" orientation="orthogonal" renderorder="right-down" width="50" height="36" tilewidth="16" tileheight="16" nextobjectid="44">
+<map version="1.0" orientation="orthogonal" renderorder="right-down" width="50" height="36" tilewidth="16" tileheight="16" nextobjectid="48">
  <properties>
   <property name="title" value="Invernia Town"/>
  </properties>
@@ -370,7 +370,11 @@
   </object>
  </objectgroup>
  <objectgroup name="sounds" visible="0">
-  <object id="3" name="step_stone" x="48" y="48" width="704" height="480"/>
+  <object id="3" name="step_stone" x="48" y="48" width="704" height="256"/>
+  <object id="44" name="step_stone" x="48" y="304" width="96" height="224"/>
+  <object id="45" name="step_stone" x="240" y="304" width="512" height="224"/>
+  <object id="46" name="step_stone" x="144" y="336" width="96" height="192"/>
+  <object id="47" name="step_carpet" x="144" y="304" width="96" height="32"/>
  </objectgroup>
  <objectgroup name="low_blocker" visible="0">
   <object id="4" x="144" y="144" width="32" height="144"/>
