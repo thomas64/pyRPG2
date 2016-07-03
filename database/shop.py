@@ -13,8 +13,8 @@ from constants import ItemMaterial
 PATH = 'resources/sprites/npcs/'
 FEXT = 'f.png'
 SEXT = 's.png'
-SHOP1 = PATH+'Shop_01'
-SHOP2 = PATH+'Shop_02'
+SHOP1 = PATH+'Man_01'
+SHOP2 = PATH+'Man_02'
 
 
 class ShopDatabase(enum.Enum):
