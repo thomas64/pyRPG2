@@ -265,7 +265,7 @@ class Person(pygame.sprite.Sprite):
     """
     Baseclass voor een pc unit in de overworld.
     """
-    def __init__(self, person_id, sprite, rect, objectlayer, direction):
+    def __init__(self, person_id, sprite, rect, objectlayer, direction, dont_show_sprite):
         super().__init__()
 
         self.west_states = {0:  (32, 32, 32, 32), 1: (0, 32, 32, 32), 2: (32, 32, 32, 32), 3: (64, 32, 32, 32)}
@@ -290,6 +290,12 @@ class Person(pygame.sprite.Sprite):
 
         self.sprite_id = person_id
         self._layer = objectlayer
+
+        # als er in dont_show_sprite iets staat, dan is het een transparante sprite.
+        self.show_sprite = True
+        if dont_show_sprite:
+            self.show_sprite = False
+            self.image = pygame.image.load(TRANSP).convert_alpha()
 
     def turn(self, player_rect):
         """
@@ -325,26 +331,12 @@ class Person(pygame.sprite.Sprite):
         return pygame.Rect(self.rect.x, self.rect.y, HALFBLOCKERWIDTH, HALFBLOCKERHEIGHT)
 
 
-class Inn(Person):
-    """
-    Innkeepster
-    """
-    def __init__(self, inn_id, sprite, rect, objectlayer, direction, dont_show_sprite):
-        super().__init__(inn_id, sprite, rect, objectlayer, direction)
-
-        # als er in dont_show_sprite iets staat, dan is het een transparante sprite.
-        self.show_sprite = True
-        if dont_show_sprite:
-            self.show_sprite = False
-            self.image = pygame.image.load(TRANSP).convert_alpha()
-
-
 class Walking(Person):
     """
     Struinend Persoon
     """
     def __init__(self, person_id, sprite, rect, objectlayer, direction):
-        super().__init__(person_id, sprite, rect, objectlayer, direction)
+        super().__init__(person_id, sprite, rect, objectlayer, direction, None)
 
         self.directions = {1: Direction.North, 2: Direction.South, 3: Direction.West, 4: Direction.East}
 

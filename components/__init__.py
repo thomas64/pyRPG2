@@ -19,7 +19,6 @@ from .sprites import Grid
 
 from .sprites import Person
 from .sprites import Walking
-from .sprites import Inn
 from .sprites import Sign
 from .sprites import Sparkly
 from .sprites import TreasureChest

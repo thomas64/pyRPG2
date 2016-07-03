@@ -28,7 +28,7 @@ class Player(Person):
     Person extends the pygame.sprite.Sprite class
     """
     def __init__(self, spritesheet, position, playerlayer, direction, audio):
-        super().__init__(None, spritesheet, None, playerlayer, direction)
+        super().__init__(None, spritesheet, None, playerlayer, direction, None)
 
         self.rect = self.image.get_rect()
         self.feet = pygame.Rect(0, 0, FEETWIDTH, FEETHEIGHT)

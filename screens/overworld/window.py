@@ -446,7 +446,11 @@ class Window(object):
             shop_sprite = self.engine.current_map.shops[object_nr]
             shop_data = ShopDatabase[shop_sprite.sprite_id].value
 
-            shop_sprite.turn(self.party_sprites[0].rect)
+            # check alle shops, zijn ze zichtbaar, hebben ze dezelfde id, turn die dan allemaal.
+            for spr in self.engine.current_map.shops:
+                if spr.show_sprite:
+                    if spr.sprite_id == shop_sprite.sprite_id:
+                        spr.turn(self.party_sprites[0].rect)
 
             push_object = screens.shop.display.Display(self.engine, shop_data['content'],
                                                        shop_data.get('material'),  # material is geen garantie
@@ -468,16 +472,17 @@ class Window(object):
     def check_inns(self, check_rect):
         """
         Er kunnen ook inns zijn zonder sprite, die moeten dan geupdate worden. Maar alle anderen met sprite wel omdat
-        de lege een verlengde is van de gevulde. Er is altijd maar 1 innkeeper per scherm, dus dan komt dat goed.
+        de lege een verlengde is van de gevulde. Hij vergelijkt sprite_id, dus hij turnt alleen met dezelfde id.
         """
         if len(check_rect.collidelistall(self.engine.current_map.inns)) == 1:
             object_nr = check_rect.collidelist(self.engine.current_map.inns)
             inn_sprite = self.engine.current_map.inns[object_nr]
             self.inn_data = InnDatabase[inn_sprite.sprite_id].value
 
-            for inn_sprite in self.engine.current_map.inns:
-                if inn_sprite.show_sprite:
-                    inn_sprite.turn(self.party_sprites[0].rect)
+            for spr in self.engine.current_map.inns:
+                if spr.show_sprite:
+                    if spr.sprite_id == inn_sprite.sprite_id:
+                        spr.turn(self.party_sprites[0].rect)
 
             self.inn_box = ConfirmBox(self.engine.gamestate, self.engine.audio,
                                       InnDatabase.welcome_text(self.inn_data['price']), self.inn_data['face'])

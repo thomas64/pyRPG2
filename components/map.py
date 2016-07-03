@@ -9,7 +9,6 @@ import pyscroll
 
 from .namedrect import NamedRect
 from .portal import Portal
-from .sprites import Inn
 from .sprites import Person
 from .sprites import Sign
 from .sprites import Sparkly
@@ -90,18 +89,20 @@ class Map(object):
         for obj in tmx_data.get_layer_by_name(OBJECTS):
             if obj.name.startswith('shop'):
                 shop_object = Person(obj.name, ShopDatabase[obj.name].value['sprite'],
-                                     self._pg_rect(obj), OBJECTLAYER, self._has_dir(obj, 'direction'))
-                self.high_blocker_rects.append(shop_object.get_blocker())
+                                     self._pg_rect(obj), OBJECTLAYER, self._has_dir(obj, 'direction'), obj.type)
+                # als er in obj.type iets staat, dan is het een lege sprite en dus geen blocker.
+                if not obj.type:
+                    self.high_blocker_rects.append(shop_object.get_blocker())
                 self.shops.append(shop_object)
             elif obj.name.startswith('school'):
                 school_object = Person(obj.name, SchoolDatabase[obj.name].value['sprite'],
-                                       self._pg_rect(obj), OBJECTLAYER, self._has_dir(obj, 'direction'))
-                self.high_blocker_rects.append(school_object.get_blocker())
+                                       self._pg_rect(obj), OBJECTLAYER, self._has_dir(obj, 'direction'), obj.type)
+                if not obj.type:
+                    self.high_blocker_rects.append(school_object.get_blocker())
                 self.schools.append(school_object)
             elif obj.name.startswith('inn'):
-                inn_object = Inn(obj.name, InnDatabase[obj.name].value['sprite'],
-                                 self._pg_rect(obj), OBJECTLAYER, self._has_dir(obj, 'direction'), obj.type)
-                # als er in obj.type iets staat, dan is het een lege sprite en dus geen blocker.
+                inn_object = Person(obj.name, InnDatabase[obj.name].value['sprite'],
+                                    self._pg_rect(obj), OBJECTLAYER, self._has_dir(obj, 'direction'), obj.type)
                 if not obj.type:
                     self.high_blocker_rects.append(inn_object.get_blocker())
                 self.inns.append(inn_object)
@@ -113,7 +114,7 @@ class Map(object):
                     # geen blocker voor walking people, die worden actueel in window geladen bij check_blocker.
                 else:
                     person_object = Person(obj.name, PeopleDatabase[obj.name].value['sprite'],
-                                           self._pg_rect(obj), OBJECTLAYER, self._has_dir(obj, 'direction'))
+                                           self._pg_rect(obj), OBJECTLAYER, self._has_dir(obj, 'direction'), None)
                     self.high_blocker_rects.append(person_object.get_blocker())
                 self.people.append(person_object)
             elif obj.name.startswith('sign'):
@@ -129,7 +130,7 @@ class Map(object):
                 self.sparkly.append(sparkly_object)
             else:  # 'heroes'
                 hero_object = Person(obj.name, HeroDatabase[obj.name].value['spr'],
-                                     self._pg_rect(obj), OBJECTLAYER, self._has_dir(obj, 'direction'))
+                                     self._pg_rect(obj), OBJECTLAYER, self._has_dir(obj, 'direction'), None)
                 # geen high_blocker zoals bij bijv shops, omdat hero's er soms niet op de map kunnen staat,
                 # het laden van high_blockers gebeurt in window.
                 self.heroes.append(hero_object)

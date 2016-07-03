@@ -15,6 +15,7 @@ FEXT = 'f.png'
 SEXT = 's.png'
 SHOP1 = PATH+'Man_01'
 SHOP2 = PATH+'Man_02'
+SHOP3 = PATH+'Man_04'
 
 
 class ShopDatabase(enum.Enum):
@@ -28,3 +29,6 @@ class ShopDatabase(enum.Enum):
     shop2 = dict(content=[EquipmentType.arm, EquipmentType.sld, EquipmentType.hlm],
                  material=[ItemMaterial.wdn, ItemMaterial.ltr],
                  face=SHOP2+FEXT, sprite=SHOP2+SEXT)
+    shop3 = dict(content=[EquipmentType.clk, EquipmentType.blt, EquipmentType.bts, EquipmentType.glv],
+                 material=[ItemMaterial.ltr],
+                 face=SHOP3+FEXT, sprite=SHOP3+SEXT)
