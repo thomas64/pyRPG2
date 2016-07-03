@@ -14,7 +14,7 @@ SPRITEPATH = 'resources/sprites/icons/equipment/helmet1.png'
 
 class HelmetDatabase(enum.Enum):
     """..."""
-    #                                                       val = prt*2 + 6
+    #                                                       val=prt**2+6
     leathercap = dict(nam="Leather Cap",            srt=1,  val=7,  shp=True,  wht=1, prt=1,        col=0,   row=0, mtr=ItemMaterial.ltr)
     leathercap2 = dict(nam="Leather Cap +",         srt=2,  val=8,  shp=False, wht=0, prt=1,        col=0,   row=0, mtr=ItemMaterial.ltr)
     bronzehelmet = dict(nam="Bronze Helmet",        srt=3,  val=10, shp=True,  wht=2, prt=2,        col=32,  row=0, mtr=ItemMaterial.brz)

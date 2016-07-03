@@ -6,30 +6,32 @@ class: BootsDatabase
 import enum
 
 from constants import EquipmentType
+from constants import ItemMaterial
 
-
-# todo, prijzen nog bepalen
 
 SPRITEPATH = 'resources/sprites/icons/equipment/boots1.png'
 
 
 class BootsDatabase(enum.Enum):
     """..."""
-    leatherboots = dict(nam="Leather Boots",         srt=1,  val=100,  shp=True,  wht=1, prt=1, col=0, row=0)
-    bronzeboots = dict(nam="Bronze Boots",           srt=2,  val=200,  shp=True,  wht=2, prt=2, col=0, row=0)
-    ironboots = dict(nam="Iron Boots",               srt=3,  val=400,  shp=True,  wht=3, prt=3, col=0, row=0)
-    steelboots = dict(nam="Steel Boots",             srt=4,  val=800,  shp=True,  wht=4, prt=4, col=0, row=0)
-    silverboots = dict(nam="Silver Boots",           srt=5,  val=1600, shp=True,  wht=5, prt=5, col=0, row=0)
-    titaniumboots = dict(nam="Titanium Boots",       srt=6,  val=3200, shp=False, wht=1, prt=5, col=0, row=0)
+    #                                                        val=prt**2+8
+    leatherboots = dict(nam="Leather Boots",      srt=1,  val=9,  shp=True,  wht=1, prt=1,        col=0,   row=0, mtr=ItemMaterial.ltr)
+    leatherboots2 = dict(nam="Leather Boots +",   srt=2,  val=10, shp=False, wht=0, prt=1,        col=0,   row=0, mtr=ItemMaterial.ltr)
+    bronzeboots = dict(nam="Bronze Boots",        srt=3,  val=12, shp=True,  wht=2, prt=2,        col=32,  row=0, mtr=ItemMaterial.brz)
+    bronzeboots2 = dict(nam="Bronze Boots +",     srt=4,  val=13, shp=False, wht=1, prt=2,        col=32,  row=0, mtr=ItemMaterial.brz)
+    ironboots = dict(nam="Iron Boots",            srt=5,  val=17, shp=True,  wht=3, prt=3,        col=64,  row=0, mtr=ItemMaterial.irn)
+    ironboots2 = dict(nam="Iron Boots +",         srt=6,  val=18, shp=False, wht=2, prt=3,        col=64,  row=0, mtr=ItemMaterial.irn)
+    steelboots = dict(nam="Steel Boots",          srt=7,  val=24, shp=True,  wht=4, prt=4,        col=96,  row=0, mtr=ItemMaterial.stl)
+    steelboots2 = dict(nam="Steel Boots +",       srt=8,  val=25, shp=False, wht=3, prt=4,        col=96,  row=0, mtr=ItemMaterial.stl)
+    silverboots = dict(nam="Silver Boots",        srt=9,  val=33, shp=True,  wht=5, prt=5,        col=128, row=0, mtr=ItemMaterial.slv)
+    silverboots2 = dict(nam="Silver Boots +",     srt=10, val=34, shp=False, wht=4, prt=5,        col=128, row=0, mtr=ItemMaterial.slv)
+    titaniumboots = dict(nam="Titanium Boots",    srt=11, val=44, shp=False, wht=1, prt=5,        col=160, row=0, mtr=ItemMaterial.tnm)
+    titaniumboots2 = dict(nam="Titanium Boots +", srt=12, val=45, shp=False, wht=0, prt=5,        col=160, row=0, mtr=ItemMaterial.tnm)
 
-    bootsofmotion = dict(nam="Boots of Motion",      srt=7,  val=1000, shp=True,  wht=2, prt=1, mvp=1, col=0, row=0)
-    bootsofmotion2 = dict(nam="Boots of Motion +",   srt=8,  val=1100, shp=False, wht=3, prt=2, mvp=1, col=0, row=0)
-    bootsofspeed = dict(nam="Boots of Speed",        srt=9,  val=2000, shp=True,  wht=2, prt=1, mvp=2, col=0, row=0)
-    bootsofspeed2 = dict(nam="Boots of Speed +",     srt=10, val=2200, shp=False, wht=3, prt=2, mvp=2, col=0, row=0)
-    woodsmansboots = dict(nam="Woodsman's Boots",    srt=11, val=1000, shp=True,  wht=2, prt=1, ran=1, col=0, row=0)
-    woodsmansboots2 = dict(nam="Woodsman's Boots +", srt=12, val=1100, shp=False, wht=3, prt=2, ran=1, col=0, row=0)
-    silenceboots = dict(nam="Silence Boots",         srt=13, val=1000, shp=True,  wht=2, prt=1, stl=1, col=0, row=0)
-    silenceboots2 = dict(nam="Silence Boots +",      srt=14, val=1100, shp=False, wht=3, prt=2, stl=1, col=0, row=0)
+    bootsofmotion = dict(nam="Boots of Motion",   srt=13, val=9,  shp=False, wht=2, prt=1, mvp=1, col=0,  row=32)
+    bootsofspeed = dict(nam="Boots of Speed",     srt=14, val=9,  shp=False, wht=2, prt=1, mvp=2, col=32, row=32)
+    woodsmansboots = dict(nam="Woodsman's Boots", srt=15, val=9,  shp=False, wht=2, prt=1, ran=1, col=64, row=32)
+    silenceboots = dict(nam="Silence Boots",      srt=16, val=9,  shp=False, wht=2, prt=1, stl=1, col=96, row=32)
 
 
 for bts in BootsDatabase:
