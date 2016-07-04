@@ -37,34 +37,27 @@ class EquipmentItem(object):
         :return: een lijst van de geselecteerde attributen
         """
         #               attr[0]             attr[1]
-        attr_tuple = ((self.TYP.value,      'nam'),
-                      ('Skill',             'skl'),
-                      ('Min. Intelligence', 'min_int'),
-                      ('Min. Strength',     'min_str'),
-                      (StatType.wht.value,  StatType.wht.name),
-                      (StatType.mvp.value,  StatType.mvp.name),
-                      (StatType.prt.value,  StatType.prt.name),
-                      (StatType.des.value,  StatType.des.name),
-                      (StatType.hit.value,  StatType.hit.name),
-                      (StatType.dam.value,  StatType.dam.name),
-                      (StatType.int.value,  StatType.int.name),
-                      (StatType.wil.value,  StatType.wil.name),
-                      (StatType.dex.value,  StatType.dex.name),
-                      (StatType.agi.value,  StatType.agi.name),
-                      (StatType.str.value,  StatType.str.name),
-                      (SkillType.dip.value, SkillType.dip.name),
-                      (SkillType.lor.value, SkillType.lor.name),
-                      (SkillType.ran.value, SkillType.ran.name),
-                      (SkillType.stl.value, SkillType.stl.name),
-                      (SkillType.thf.value, SkillType.thf.name),
-                      (SkillType.war.value, SkillType.war.name),
-                      (SkillType.wiz.value, SkillType.wiz.name))
+        attrs = [(self.TYP.value,      'nam'),
+                 ('Skill',             'skl'),
+                 ('Min. Intelligence', 'min_int'),
+                 ('Min. Strength',     'min_str')]
+        # voeg ook alle stats en skills in deze lijst toe.
+        for stat in StatType:
+            attrs.append((stat.value,  stat.name))
+        for skill in SkillType:
+            attrs.append((skill.value, skill.name))
 
+        # nu alle mogelijkheden geladen zijn, ga dan aan de slag met diegene die van toepassing zijn
         attr_list = []
 
-        for attr in attr_tuple:
+        for attr in attrs:
             value_of_attr = self.get_value_of(attr[1])
-            if value_of_attr:
+            # uitzondering, 'wht' altijd gewoon weergeven
+            if attr[0] == StatType.wht.value:
+                # deze uitzondering geldt niet voor weapons en shields.
+                if not isinstance(self.get_value_of('skl'), enum.Enum):  # niet wanneer 'skl' een waarde heeft
+                    attr_list.append((attr[0], str(value_of_attr)))
+            elif value_of_attr:
                 if isinstance(value_of_attr, enum.Enum):    # uitzondering alleen voor 'skl'
                     value_of_attr = value_of_attr.value
                 elif attr[0] == StatType.hit.value:         # uitzondering alleen voor 'hit'

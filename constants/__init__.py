@@ -92,6 +92,13 @@ class SchoolType(enum.Enum):
 
 class StatType(enum.Enum):
     """..."""
+    wht = "Weight"
+    mvp = "Movepoints"
+    prt = "Protection"
+    des = "Defense"
+    hit = "Hit Chance"
+    dam = "Damage"
+
     int = "Intelligence"
     wil = "Willpower"
     dex = "Dexterity"
@@ -99,13 +106,6 @@ class StatType(enum.Enum):
     edu = "Endurance"
     str = "Strength"
     sta = "Stamina"
-
-    wht = "Weight"
-    mvp = "Movepoints"
-    prt = "Protection"
-    des = "Defense"
-    hit = "Hit Chance"
-    dam = "Damage"
 
 
 class SkillType(enum.Enum):

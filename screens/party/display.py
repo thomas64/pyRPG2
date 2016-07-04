@@ -144,6 +144,7 @@ class Display(object):
         if event.type == pygame.MOUSEMOTION:
 
             self.hovered_equipment_item = None
+            self.info_label = ""
 
             if self.stats_box.rect.collidepoint(event.pos):
                 self.info_label = self.stats_box.mouse_hover(event)

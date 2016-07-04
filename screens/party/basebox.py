@@ -76,8 +76,8 @@ class BaseBox(object):
                     break
 
             diff = new_skl - eqp_skl
-            # als dat zo is, geef die dan weer
-            if diff > abs(old_pen):
+            # als dat zo is, geef die dan weer, maar niet als de oude penalty gewoon 0 is zoals standaard.
+            if diff > abs(old_pen) and not old_pen == 0:
                 return abs(old_pen)
             else:
                 return diff
