@@ -20,8 +20,8 @@ class BeltDatabase(enum.Enum):
     leatherbelt = dict(nam="Leather Belt",      srt=3, val=7, shp=True,  wht=2, prt=2,         col=32,  row=0, mtr=ItemMaterial.ltr)
     leatherbelt2 = dict(nam="Leather Belt +",   srt=4, val=8, shp=False, wht=1, prt=2,         col=32,  row=0, mtr=ItemMaterial.ltr)
 
-    comfortbelt = dict(nam="Comfort Belt",      srt=6, val=4, shp=False, wht=0,        agi=1,  col=64,  row=0)
-    # deze maakt dat het wisselen van een item tijdens battle geen end_of_turn wordt
+    comfortbelt = dict(nam="Comfort Belt",      srt=6, val=4, shp=False, wht=0,        agi=2,  col=64,  row=0)
+    # todo, deze maakt dat het wisselen van een item tijdens battle geen end_of_turn wordt
     utilitybelt = dict(nam="Utility Belt",      srt=7, val=4, shp=False, wht=1,        dex=-1, col=96,  row=0)
     woodsmansbelt = dict(nam="Woodsman's Belt", srt=8, val=4, shp=False, wht=1, prt=1, ran=1,  col=128, row=0)
 
