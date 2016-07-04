@@ -28,10 +28,10 @@ class BootsDatabase(enum.Enum):
     titaniumboots = dict(nam="Titanium Boots",    srt=11, val=44, shp=False, wht=1, prt=5,        col=160, row=0, mtr=ItemMaterial.tnm)
     titaniumboots2 = dict(nam="Titanium Boots +", srt=12, val=45, shp=False, wht=0, prt=5,        col=160, row=0, mtr=ItemMaterial.tnm)
 
-    bootsofmotion = dict(nam="Boots of Motion",   srt=13, val=9,  shp=False, wht=2, prt=1, mvp=1, col=0,  row=32)
-    bootsofspeed = dict(nam="Boots of Speed",     srt=14, val=9,  shp=False, wht=2, prt=1, mvp=2, col=32, row=32)
+    bootsofmotion = dict(nam="Boots of Motion",   srt=13, val=9,  shp=False, wht=0,        mvp=1, col=0,  row=32)
+    bootsofspeed = dict(nam="Boots of Speed",     srt=14, val=18, shp=False, wht=0,        mvp=2, col=32, row=32)
     woodsmansboots = dict(nam="Woodsman's Boots", srt=15, val=9,  shp=False, wht=2, prt=1, ran=1, col=64, row=32)
-    silenceboots = dict(nam="Silence Boots",      srt=16, val=9,  shp=False, wht=2, prt=1, stl=1, col=96, row=32)
+    silenceboots = dict(nam="Silence Boots",      srt=16, val=9,  shp=False, wht=0,        stl=1, col=96, row=32)
 
 
 for bts in BootsDatabase:

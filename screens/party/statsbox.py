@@ -64,12 +64,12 @@ class StatsBox(BaseBox):
             ["Total XP :",        hero_exp_tot,           "",           None, "",                                  ""],
             ["Next Level :",      hero_lev_next,          "",           None, "",                                  ""],
             ["",                  "",                     "",           None, "",                                  ""],
-            [StTy.wht.value+" :", str(hero.tot_wht),      "",           None, self._desc(StTy.wht),               wht],
+            [StTy.wht.value+" :", str(hero.eqp_wht),      "",           None, self._desc(StTy.wht),               wht],
             [StTy.mvp.value+" :", str(hero.sta_mvp),      hero.dif_mvp, None, self._desc(StTy.mvp),               mvp],
             [StTy.prt.value+" :", str(hero.tot_prt),      "",           None, self._desc(StTy.prt, hero.sld_prt), prt],
             [StTy.des.value+" :", str(hero.sld_des),      "",           None, "",                                 des],
             [StTy.hit.value+" :", str(hero.tot_hit)+" %", "",           None, self._desc(StTy.hit, hero.war_hit), hit],
-            [StTy.dam.value+" :", str(hero.tot_dam),      "",           None, "",                                 dam]
+            [StTy.dam.value+" :", str(hero.wpn_dam),      "",           None, "",                                 dam]
         ]
         # voeg ook de 7 stats aan de table_data toe
         for i, stat in enumerate(hero.stats_tuple):
@@ -122,7 +122,8 @@ class StatsBox(BaseBox):
                 "Defines how many steps your character is able to take in one turn. The more stamina your character "
                 "has, the more movepoints. The more weight your character has, the less movepoints. The first column "
                 "shows the number of movepoints calculated from your stamina. The second (red) column shows the "
-                "calculated weight subtracted.")
+                "calculated weight subtracted. If that column is green, it means that you have special movepoints "
+                "enhancers in your equipment.")
 
         elif stat == StTy.prt:
             # Protection

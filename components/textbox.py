@@ -13,8 +13,8 @@ COL1, COL2 = 0, 150
 
 FONTCOLOR = pygame.Color("white")
 FONT = 'verdana'
-FONTSIZE = 12
-LINEHEIGHT = 15
+FONTSIZE = 11
+LINEHEIGHT = 13
 
 
 class TextBox(object):

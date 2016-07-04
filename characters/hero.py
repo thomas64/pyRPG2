@@ -113,7 +113,7 @@ class Hero(object):
         return self.lev.qty + self.sta.qty + self.edu.qty
 
     @property
-    def tot_wht(self):
+    def eqp_wht(self):
         """
         Total Weight
         Loop door alle attributen van de hero heen en return een WHT waarde als hij die kan vinden, anders +0.
@@ -122,6 +122,17 @@ class Hero(object):
         total = 0
         for equipment_item in self.equipment_tuple:
             total += equipment_item.get_value_of(StatType.wht.name)
+        return total
+
+    @property
+    def eqp_mvp(self):
+        """
+        Movepoints die van speciale items komen die speciaal movepoints geven.
+        :return: Tel die op en return de total mvp
+        """
+        total = 0
+        for equipment_item in self.equipment_tuple:
+            total += equipment_item.get_value_of(StatType.mvp.name)
         return total
 
     @property
@@ -136,9 +147,9 @@ class Hero(object):
     def tot_mvp(self):
         """
         Totale movepoints.
-        :return: movepoints die je krijgt door je stamina min het gewicht dat je draagt.
+        :return: movepoints die je krijgt door je stamina min het gewicht dat je draagt, plus speciale items met mvp.
         """
-        total = self.sta_mvp - round(self.tot_wht / 2)
+        total = self.sta_mvp - round(self.eqp_wht / 2) + self.eqp_mvp
         if total < 1:
             return 1
         return total
@@ -151,10 +162,10 @@ class Hero(object):
         return self.tot_mvp - self.sta_mvp
 
     @property
-    def prt(self):
+    def eqp_prt(self):
         """
         Totale protection min shield protection
-        :return: zie: def tot_wht()
+        :return: zie: def eqp_wht()
         """
         total = 0
         for equipment_item in self.equipment_tuple:
@@ -173,12 +184,9 @@ class Hero(object):
     def tot_prt(self):
         """
         Totale protection, ook met shield.
-        :return: zie: def tot_wht()
+        :return: zie: def eqp_wht()
         """
-        total = 0
-        for equipment_item in self.equipment_tuple:
-            total += equipment_item.get_value_of(StatType.prt.name)
-        return total
+        return self.eqp_prt + self.sld_prt
 
     @property
     def sld_des(self):
@@ -217,15 +225,16 @@ class Hero(object):
         return self.wpn_hit + self.war_hit
 
     @property
-    def tot_dam(self):
+    def wpn_dam(self):
         """
-        Totale Damage
-        :return: zie: def tot_wht()
+        Wapen Damage
+        :return: zie: def eqp_wht()
         """
-        total = 0
-        for equipment_item in self.equipment_tuple:
-            total += equipment_item.get_value_of(StatType.dam.name)
-        return total
+        # total = 0
+        # for equipment_item in self.equipment_tuple:
+        #     total += equipment_item.get_value_of(StatType.dam.name)
+        # return total
+        return self.wpn.get_value_of(StatType.dam.name)
 
     def get_equipped_item_of_type(self, equipment_type):
         """
@@ -335,7 +344,7 @@ class Hero(object):
             for equipment_item in self.equipment_tuple:
                 stat.ext += equipment_item.get_value_of(stat.RAW)
 
-        self.agi.ext = -round(self.tot_wht / 3)
+        self.agi.ext = -round(self.eqp_wht / 3)
 
     def calc_skills(self):
         """
