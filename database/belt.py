@@ -9,17 +9,21 @@ from constants import EquipmentType
 from constants import ItemMaterial
 
 
-# todo, alle gordels afmaken
-
 SPRITEPATH = 'resources/sprites/icons/equipment/belt1.png'
 
 
 class BeltDatabase(enum.Enum):
     """..."""
-    #                                             val=prt**2+3
-    leatherbelt = dict(nam="Leather Belt", srt=1, val=4, shp=True, wht=1, prt=1, col=0, row=0, mtr=ItemMaterial.ltr)
-    testbelt2 = dict(nam="Test Belt 2",    srt=2, val=7, shp=True, wht=2, prt=2, col=0, row=0, mtr=ItemMaterial.ltr)
+    #                                                  val=prt**2+3
+    cottonbelt = dict(nam="Cotton Belt",        srt=1, val=4, shp=True,  wht=1, prt=1,         col=0,   row=0, mtr=ItemMaterial.ctn)
+    cottonbelt2 = dict(nam="Cotton Belt +",     srt=2, val=5, shp=False, wht=0, prt=1,         col=0,   row=0, mtr=ItemMaterial.ctn)
+    leatherbelt = dict(nam="Leather Belt",      srt=3, val=7, shp=True,  wht=2, prt=2,         col=32,  row=0, mtr=ItemMaterial.ltr)
+    leatherbelt2 = dict(nam="Leather Belt +",   srt=4, val=8, shp=False, wht=1, prt=2,         col=32,  row=0, mtr=ItemMaterial.ltr)
 
+    comfortbelt = dict(nam="Comfort Belt",      srt=6, val=4, shp=False, wht=0,        agi=1,  col=64,  row=0)
+    # deze maakt dat het wisselen van een item tijdens battle geen end_of_turn wordt
+    utilitybelt = dict(nam="Utility Belt",      srt=7, val=4, shp=False, wht=1,        dex=-1, col=96,  row=0)
+    woodsmansbelt = dict(nam="Woodsman's Belt", srt=8, val=4, shp=False, wht=1, prt=1, ran=1,  col=128, row=0)
 
 for blt in BeltDatabase:
     blt.value['typ'] = EquipmentType.blt

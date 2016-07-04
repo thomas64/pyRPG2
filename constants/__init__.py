@@ -67,6 +67,7 @@ class ItemMaterial(enum.Enum):
     """
     Alle materialen op een rij.
     """
+    ctn = "Cotton"
     ltr = "Leather"
     wdn = "Wooden"
     brz = "Bronze"

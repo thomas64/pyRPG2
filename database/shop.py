@@ -30,5 +30,5 @@ class ShopDatabase(enum.Enum):
                  material=[ItemMaterial.wdn, ItemMaterial.ltr],
                  face=SHOP2+FEXT, sprite=SHOP2+SEXT)
     shop3 = dict(content=[EquipmentType.clk, EquipmentType.blt, EquipmentType.bts, EquipmentType.glv],
-                 material=[ItemMaterial.ltr],
+                 material=[ItemMaterial.ctn, ItemMaterial.ltr],
                  face=SHOP3+FEXT, sprite=SHOP3+SEXT)

@@ -50,6 +50,7 @@ class EquipmentItem(object):
                       (StatType.int.value,  StatType.int.name),
                       (StatType.wil.value,  StatType.wil.name),
                       (StatType.dex.value,  StatType.dex.name),
+                      (StatType.agi.value,  StatType.agi.name),
                       (SkillType.dip.value, SkillType.dip.name),
                       (SkillType.lor.value, SkillType.lor.name),
                       (SkillType.ran.value, SkillType.ran.name),

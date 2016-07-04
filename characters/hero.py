@@ -336,15 +336,14 @@ class Hero(object):
         Hier worden voor de 7 hero stats in alle equipment items gekeken en toegevoegd aan extra.
         Dit moet uitgevoerd worden aan het begin van het spel en wanneer een equipment item van
         een hero wordt verwisseld.
-        Agility extra wordt op een andere manier gevuld voor een tweede keer, met weight. De eerste keer is
-        soort van nutteloos.
+        Agility extra wordt op een andere manier gevuld voor een tweede keer, met weight.
         """
         for stat in self.stats_tuple:
             stat.ext = 0
             for equipment_item in self.equipment_tuple:
                 stat.ext += equipment_item.get_value_of(stat.RAW)
 
-        self.agi.ext = -round(self.eqp_wht / 3)
+        self.agi.ext += -round(self.eqp_wht / 3)
 
     def calc_skills(self):
         """
