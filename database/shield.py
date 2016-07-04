@@ -31,7 +31,7 @@ shield_material = {
     "Iron":            (9,       9,   6,   3,  -3,  -3,  300,  64, ItemMaterial.irn),
     "Steel":          (12,      12,   8,   4,  -4,  -4,  400,  96, ItemMaterial.stl),
     "Silver":         (15,      15,  10,   5,  -5,  -5,  500, 128, ItemMaterial.slv),
-    "Titanium":       (18,       3,  10,   5,  -1,  -1,  600, 160, ItemMaterial.tnm)
+    "Titanium":       (18,       6,  10,   5,  -1,  -1,  600, 160, ItemMaterial.tnm)
 }
 #                     val, min str, prt, des, dex, stl,  srt, row
 shield_type = {

@@ -25,8 +25,8 @@ class HelmetDatabase(enum.Enum):
     steelhelmet2 = dict(nam="Steel Helmet +",       srt=8,  val=23, shp=False, wht=3, prt=4,        col=96,  row=0, mtr=ItemMaterial.stl)
     silverhelmet = dict(nam="Silver Helmet",        srt=9,  val=31, shp=True,  wht=5, prt=5,        col=128, row=0, mtr=ItemMaterial.slv)
     silverhelmet2 = dict(nam="Silver Helmet +",     srt=10, val=32, shp=False, wht=4, prt=5,        col=128, row=0, mtr=ItemMaterial.slv)
-    titaniumhelmet = dict(nam="Titanium Helmet",    srt=11, val=42, shp=False, wht=1, prt=5,        col=160, row=0, mtr=ItemMaterial.tnm)
-    titaniumhelmet2 = dict(nam="Titanium Helmet +", srt=12, val=43, shp=False, wht=0, prt=5,        col=160, row=0, mtr=ItemMaterial.tnm)
+    titaniumhelmet = dict(nam="Titanium Helmet",    srt=11, val=42, shp=False, wht=2, prt=5,        col=160, row=0, mtr=ItemMaterial.tnm)
+    titaniumhelmet2 = dict(nam="Titanium Helmet +", srt=12, val=43, shp=False, wht=1, prt=5,        col=160, row=0, mtr=ItemMaterial.tnm)
 
     helmofknowledge = dict(nam="Helm of Knowledge", srt=13, val=7,  shp=False, wht=2, prt=1, int=2, col=0,   row=32)
     helmofwisdom = dict(nam="Helm of Wisdom",       srt=14, val=7,  shp=False, wht=2, prt=1, wil=2, col=32,  row=32)

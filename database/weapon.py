@@ -30,7 +30,7 @@ weapon_material = {
     "Iron":            (2,       1,       1,   6, 200,  32, ItemMaterial.irn),
     "Steel":           (3,       2,       2,   9, 300,  64, ItemMaterial.stl),
     "Silver":          (4,       3,       3,  12, 400,  96, ItemMaterial.slv),
-    "Titanium":        (5,       0,       0,  12, 500, 128, ItemMaterial.tnm)
+    "Titanium":        (5,       1,       1,  12, 500, 128, ItemMaterial.tnm)
 }
 #                     val, min int, min str, hit, dam,            skl, typ,   srt, row
 weapon_type = {

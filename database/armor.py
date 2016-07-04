@@ -30,7 +30,7 @@ armor_material = {
     "Iron Armor":      (6,   6,   6,  -6, 3000,  64, ItemMaterial.irn),
     "Steel Armor":     (9,   9,   9,  -9, 4000,  96, ItemMaterial.stl),
     "Silver Armor":   (12,  12,  12, -12, 5000, 128, ItemMaterial.slv),
-    "Titanium Armor": (15,   0,  12,   0, 6000, 160, ItemMaterial.tnm)
+    "Titanium Armor": (15,   3,  12,   0, 6000, 160, ItemMaterial.tnm)
 }
 #                     val, wht, prt, stl,  srt, col
 armor_type = {

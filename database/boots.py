@@ -25,8 +25,8 @@ class BootsDatabase(enum.Enum):
     steelboots2 = dict(nam="Steel Boots +",       srt=8,  val=25, shp=False, wht=3, prt=4,        col=96,  row=0, mtr=ItemMaterial.stl)
     silverboots = dict(nam="Silver Boots",        srt=9,  val=33, shp=True,  wht=5, prt=5,        col=128, row=0, mtr=ItemMaterial.slv)
     silverboots2 = dict(nam="Silver Boots +",     srt=10, val=34, shp=False, wht=4, prt=5,        col=128, row=0, mtr=ItemMaterial.slv)
-    titaniumboots = dict(nam="Titanium Boots",    srt=11, val=44, shp=False, wht=1, prt=5,        col=160, row=0, mtr=ItemMaterial.tnm)
-    titaniumboots2 = dict(nam="Titanium Boots +", srt=12, val=45, shp=False, wht=0, prt=5,        col=160, row=0, mtr=ItemMaterial.tnm)
+    titaniumboots = dict(nam="Titanium Boots",    srt=11, val=44, shp=False, wht=2, prt=5,        col=160, row=0, mtr=ItemMaterial.tnm)
+    titaniumboots2 = dict(nam="Titanium Boots +", srt=12, val=45, shp=False, wht=1, prt=5,        col=160, row=0, mtr=ItemMaterial.tnm)
 
     bootsofmotion = dict(nam="Boots of Motion",   srt=13, val=9,  shp=False, wht=0,        mvp=1, col=0,  row=32)
     bootsofspeed = dict(nam="Boots of Speed",     srt=14, val=18, shp=False, wht=0,        mvp=2, col=32, row=32)
