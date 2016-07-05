@@ -16,7 +16,7 @@ class GlovesDatabase(enum.Enum):
     """..."""
     #                                                             val=prt**2+5
     leathergloves = dict(nam="Leather Gloves",            srt=1,  val=6,  shp=True,  wht=1, prt=1,        col=0,   row=0, mtr=ItemMaterial.ltr)
-    leathergloves2 = dict(nam="Leather Gloves +",         srt=2,  val=7,  shp=False, wht=0, prt=1,        col=0,   row=0, mtr=ItemMaterial.ltr)
+
     bronzegauntlets = dict(nam="Bronze Gauntlets",        srt=3,  val=9,  shp=True,  wht=2, prt=2,        col=32,  row=0, mtr=ItemMaterial.brz)
     bronzegauntlets2 = dict(nam="Bronze Gauntlets +",     srt=4,  val=10, shp=False, wht=1, prt=2,        col=32,  row=0, mtr=ItemMaterial.brz)
     irongauntlets = dict(nam="Iron Gauntlets",            srt=5,  val=14, shp=True,  wht=3, prt=3,        col=64,  row=0, mtr=ItemMaterial.irn)

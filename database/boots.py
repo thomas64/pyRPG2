@@ -16,7 +16,7 @@ class BootsDatabase(enum.Enum):
     """..."""
     #                                                        val=prt**2+8
     leatherboots = dict(nam="Leather Boots",      srt=1,  val=9,  shp=True,  wht=1, prt=1,        col=0,   row=0, mtr=ItemMaterial.ltr)
-    leatherboots2 = dict(nam="Leather Boots +",   srt=2,  val=10, shp=False, wht=0, prt=1,        col=0,   row=0, mtr=ItemMaterial.ltr)
+
     bronzeboots = dict(nam="Bronze Boots",        srt=3,  val=12, shp=True,  wht=2, prt=2,        col=32,  row=0, mtr=ItemMaterial.brz)
     bronzeboots2 = dict(nam="Bronze Boots +",     srt=4,  val=13, shp=False, wht=1, prt=2,        col=32,  row=0, mtr=ItemMaterial.brz)
     ironboots = dict(nam="Iron Boots",            srt=5,  val=17, shp=True,  wht=3, prt=3,        col=64,  row=0, mtr=ItemMaterial.irn)
