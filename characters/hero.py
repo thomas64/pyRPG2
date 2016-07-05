@@ -287,14 +287,20 @@ class Hero(object):
             gamestate.push(push_object)
             return False
         if new_equipment_item.get_value_of('MIN_INT') > self.int.qty:
-            text = ["{} needs {} intelligence to equip that {}.".format(
-                                                        self.NAM, new_equipment_item.MIN_INT, new_equipment_item.NAM)]
+            text = ["{} needs {} {} to equip that {}.".format(self.NAM, new_equipment_item.MIN_INT,
+                                                              StatType.int.value, new_equipment_item.NAM)]
+            push_object = MessageBox(gamestate, text)
+            gamestate.push(push_object)
+            return False
+        if new_equipment_item.get_value_of('MIN_DEX') > self.dex.qty:
+            text = ["{} needs {} {} to equip that {}.".format(self.NAM, new_equipment_item.MIN_DEX,
+                                                              StatType.dex.value, new_equipment_item.NAM)]
             push_object = MessageBox(gamestate, text)
             gamestate.push(push_object)
             return False
         if new_equipment_item.get_value_of('MIN_STR') > self.str.qty:
-            text = ["{} needs {} strength to equip that {}.".format(
-                                                        self.NAM, new_equipment_item.MIN_STR, new_equipment_item.NAM)]
+            text = ["{} needs {} {} to equip that {}.".format(self.NAM, new_equipment_item.MIN_STR,
+                                                              StatType.str.value, new_equipment_item.NAM)]
             push_object = MessageBox(gamestate, text)
             gamestate.push(push_object)
             return False
