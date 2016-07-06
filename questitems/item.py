@@ -7,8 +7,8 @@ import pygame
 
 from constants import QuestState
 from constants import QuestType
-import equipment
-import pouchitems
+from equipment import EquipmentItem
+from pouchitems import PouchItem
 
 ICONSIZE = 32
 
@@ -65,9 +65,11 @@ class QuestItem(object):
 
             for key, value in self.condition.items():
                 if key.startswith('eqp'):
-                    completed.append(data.inventory.contains(value['nam'], value['qty']))
+                    eqp_obj = EquipmentItem(**value['nam'].value)
+                    completed.append(data.inventory.contains(eqp_obj, value['qty']))
                 elif key.startswith('itm'):
-                    completed.append(data.pouch.contains(value['nam'], value['qty']))
+                    itm_obj = PouchItem(**value['nam'].value)
+                    completed.append(data.pouch.contains(itm_obj, value['qty']))
 
             return all(completed)
 
@@ -82,10 +84,10 @@ class QuestItem(object):
 
             for key, value in self.condition.items():
                 if key.startswith('eqp'):
-                    eqp_obj = equipment.factory_equipment_item(value['nam'])
+                    eqp_obj = EquipmentItem(**value['nam'].value)
                     data.inventory.remove_i(eqp_obj, value['qty'])
                 elif key.startswith('itm'):
-                    itm_obj = pouchitems.factory_pouch_item(value['nam'])
+                    itm_obj = PouchItem(**value['nam'].value)
                     data.pouch.remove(itm_obj, value['qty'])
 
             # wat hieronder staat, lijkt erg op sparkly en chest in window. niet DRY!
@@ -94,7 +96,7 @@ class QuestItem(object):
 
             for key, value in self.reward.items():
                 if key.startswith('eqp'):
-                    eqp_obj = equipment.factory_equipment_item(value['nam'])
+                    eqp_obj = EquipmentItem(**value['nam'].value)
                     eqp_obj_spr = pygame.image.load(eqp_obj.SPR).subsurface(
                                                         eqp_obj.COL, eqp_obj.ROW, ICONSIZE, ICONSIZE).convert_alpha()
                     data.inventory.add_i(eqp_obj, value['qty'])
@@ -102,7 +104,7 @@ class QuestItem(object):
                     image.append(eqp_obj_spr)
 
                 elif key.startswith('itm'):
-                    itm_obj = pouchitems.factory_pouch_item(value['nam'])
+                    itm_obj = PouchItem(**value['nam'].value)
                     itm_obj_spr = pygame.image.load(itm_obj.SPR).convert_alpha()
                     data.pouch.add(itm_obj, value['qty'])
                     text.append("{} {}".format(value['qty'], itm_obj.NAM))

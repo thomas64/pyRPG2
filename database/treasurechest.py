@@ -3,6 +3,10 @@
 class: TreasureChestDatabase
 """
 
+from .weapon import WeaponDatabase
+from .helmet import HelmetDatabase
+from .pouchitem import PouchItemDatabase
+
 
 # is een class en geen losse dict, want anders wordt de dict niet ververst bij een nieuwe game.
 class TreasureChestDatabase(dict):
@@ -13,22 +17,22 @@ class TreasureChestDatabase(dict):
         super().__init__(**kwargs)
 
         # ersin_forest_start
-        self['chest1'] = dict(content=dict(itm1=dict(nam='gold',             qty=2),
-                                           itm2=dict(nam='herbs',            qty=3),
-                                           eqp1=dict(nam='bronzeshortsword', qty=1),
-                                           eqp2=dict(nam='leathercap',       qty=1)))
+        self['chest1'] = dict(content=dict(itm1=dict(nam=PouchItemDatabase.gold,          qty=2),
+                                           itm2=dict(nam=PouchItemDatabase.herbs,         qty=3),
+                                           eqp1=dict(nam=WeaponDatabase.bronzeshortsword, qty=1),
+                                           eqp2=dict(nam=HelmetDatabase.leathercap,       qty=1)))
         self['chest2'] = dict(condition=dict(thf=3),
-                              content=dict(itm1=dict(nam='gold',             qty=3)))
+                              content=dict(itm1=dict(nam=PouchItemDatabase.gold,          qty=3)))
         self['chest3'] = dict(condition=dict(mec=2),
-                              content=dict(itm1=dict(nam='gold',             qty=4)))
+                              content=dict(itm1=dict(nam=PouchItemDatabase.gold,          qty=4)))
         self['chest4'] = dict(condition=dict(mec=1, thf=1),
-                              content=dict(itm1=dict(nam='gold',             qty=5)))
+                              content=dict(itm1=dict(nam=PouchItemDatabase.gold,          qty=5)))
 
         # ersin_cave_room1
-        self['chest5'] = dict(content=dict(itm1=dict(nam='gold',             qty=2)))
+        self['chest5'] = dict(content=dict(itm1=dict(nam=PouchItemDatabase.gold,          qty=2)))
         # ersin_cave_room3
-        self['chest6'] = dict(content=dict(itm1=dict(nam='gold',             qty=2)))
-        self['chest7'] = dict(content=dict(itm1=dict(nam='gold',             qty=2)))
+        self['chest6'] = dict(content=dict(itm1=dict(nam=PouchItemDatabase.gold,          qty=2)))
+        self['chest7'] = dict(content=dict(itm1=dict(nam=PouchItemDatabase.gold,          qty=2)))
 
         for value in self.values():
             value['opened'] = 0

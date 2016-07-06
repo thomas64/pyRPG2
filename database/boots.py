@@ -14,7 +14,7 @@ SPRITEPATH = 'resources/sprites/icons/equipment/boots1.png'
 
 class BootsDatabase(enum.Enum):
     """..."""
-    #                                                        val=prt**2+8
+    #                                                     val=prt**2+8
     leatherboots = dict(nam="Leather Boots",      srt=1,  val=9,  shp=True,  wht=1, prt=1,        col=0,   row=0, mtr=ItemMaterial.ltr)
 
     bronzeboots = dict(nam="Bronze Boots",        srt=3,  val=12, shp=True,  wht=2, prt=2,        col=32,  row=0, mtr=ItemMaterial.brz)

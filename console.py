@@ -194,13 +194,3 @@ def quantity_not_enough(item_name, item_price, item_quantity):
     """
     print("Not enough {}.".format(item_name))
     print("You need {} more {}.".format(item_price - item_quantity, item_name))
-
-
-def error_item_name_not_in_database(item_name):
-    """
-    equipment.factory()
-    pouchitems.factory()
-    quest.factory()
-    :param item_name: string
-    """
-    print("Cannot find {} in database.".format(item_name))

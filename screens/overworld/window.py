@@ -26,10 +26,12 @@ from database import SchoolDatabase
 from database import ShopDatabase
 from database import SignDatabase
 
-import equipment
+from database import PouchItemDatabase
+
+from equipment import EquipmentItem
 import keys
-import pouchitems
-import questitems
+from pouchitems import PouchItem
+from questitems import QuestItem
 import screens.shop.display
 
 
@@ -177,7 +179,7 @@ class Window(object):
         elif self.inn_box:
             choice, yes, scr_capt = self.inn_box.on_exit()
             if choice == yes:
-                gold = pouchitems.factory_pouch_item('gold')
+                gold = PouchItem(**PouchItemDatabase.gold.value)
                 if self.engine.data.pouch.remove(gold, self.inn_data['price']):
                     self.engine.audio.play_sound(sfx.COINS)
                     self.engine.gamestate.push(Transition(self.engine.gamestate))
@@ -503,7 +505,12 @@ class Window(object):
             # maar dan, als de persoon een quest heeft
             if person_data.get('quest'):
                 # stop hem in data.logbook en haal de juiste self.quest_data er weer uit.
-                self.quest_data = questitems.factory_quest(self.engine.data.logbook, person_data['quest'])
+                quest_key = person_data['quest'].name
+                quest_value = person_data['quest'].value
+                if not self.engine.data.logbook.get(quest_key):
+                    self.engine.data.logbook[quest_key] = QuestItem(**quest_value)
+                self.quest_data = self.engine.data.logbook[quest_key]
+
                 # het gezicht is in on_enter() weer nodig, vandaar deze declaratie.
                 self.person_face = person_data['face']
 
@@ -536,6 +543,7 @@ class Window(object):
                 push_object = MessageBox(self.engine.gamestate, sign_data)
                 self.engine.gamestate.push(push_object)
 
+    # noinspection PyUnresolvedReferences
     def check_chests(self):
         """
         Bekijk of collide met een chest.
@@ -575,14 +583,14 @@ class Window(object):
                     image = []
                     for key, value in chest_data['content'].items():
                         if key.startswith('eqp'):
-                            equipment_item = equipment.factory_equipment_item(value['nam'])
+                            equipment_item = EquipmentItem(**value['nam'].value)
                             equipment_item_spr = pygame.image.load(equipment_item.SPR).subsurface(
                                 equipment_item.COL, equipment_item.ROW, ICONSIZE, ICONSIZE).convert_alpha()
                             self.engine.data.inventory.add_i(equipment_item, quantity=value['qty'])
                             text.append("{} {}".format(value['qty'], equipment_item.NAM))
                             image.append(equipment_item_spr)
                         elif key.startswith('itm'):
-                            pouch_item = pouchitems.factory_pouch_item(value['nam'])
+                            pouch_item = PouchItem(**value['nam'].value)
                             pouch_item_spr = pygame.image.load(pouch_item.SPR).convert_alpha()
                             self.engine.data.pouch.add(pouch_item, quantity=value['qty'])
                             text.append("{} {}".format(value['qty'], pouch_item.NAM))
@@ -592,6 +600,7 @@ class Window(object):
                     push_object = MessageBox(self.engine.gamestate, text, spr_image=image)
                     self.engine.gamestate.push(push_object)
 
+    # noinspection PyUnresolvedReferences
     def check_sparklies(self, check_rect):
         """
         Bekijk of collide met een sparkly.
@@ -608,14 +617,14 @@ class Window(object):
                 image = []
                 for key, value in sparkly_data['content'].items():
                     if key.startswith('eqp'):
-                        equipment_item = equipment.factory_equipment_item(value['nam'])
+                        equipment_item = EquipmentItem(**value['nam'].value)
                         equipment_item_spr = pygame.image.load(equipment_item.SPR).subsurface(
                             equipment_item.COL, equipment_item.ROW, ICONSIZE, ICONSIZE).convert_alpha()
                         self.engine.data.inventory.add_i(equipment_item, quantity=value['qty'])
                         text.append("{} {}".format(value['qty'], equipment_item.NAM))
                         image.append(equipment_item_spr)
                     elif key.startswith('itm'):
-                        pouch_item = pouchitems.factory_pouch_item(value['nam'])
+                        pouch_item = PouchItem(**value['nam'].value)
                         pouch_item_spr = pygame.image.load(pouch_item.SPR).convert_alpha()
                         self.engine.data.pouch.add(pouch_item, quantity=value['qty'])
                         text.append("{} {}".format(value['qty'], pouch_item.NAM))

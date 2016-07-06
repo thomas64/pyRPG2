@@ -6,15 +6,17 @@ class: QuestDatabase
 import enum
 
 from constants import QuestType
+from .weapon import WeaponDatabase
+from .pouchitem import PouchItemDatabase
 
 
 class QuestDatabase(enum.Enum):
     """..."""
 
     quest1 = dict(qtype=QuestType.ItemQuest,
-                  condition=dict(itm1=dict(nam='herbs',   qty=5)),
-                  reward=dict(itm1=dict(nam='gold',       qty=2),
-                              eqp1=dict(nam='bronzedart', qty=1)),
+                  condition=dict(itm1=dict(nam=PouchItemDatabase.herbs, qty=5)),
+                  reward=dict(itm1=dict(nam=PouchItemDatabase.gold,     qty=2),
+                              eqp1=dict(nam=WeaponDatabase.bronzedart,  qty=1)),
                   # de nulste moet de confirmbox zijn.
                   # de anderen zijn in QuestState volgorde.
                   text=(["Help the boy out and give him 5 herbs?", "", "Yes, ofcourse!", "No, these are my herbs."],

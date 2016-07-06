@@ -5,6 +5,8 @@ class: PeopleDatabase
 
 import enum
 
+from .quest import QuestDatabase
+
 
 PATH = 'resources/sprites/npcs/'
 FEXT = 'f.png'
@@ -19,7 +21,7 @@ class PeopleDatabase(enum.Enum):
     """..."""
 
     person1 = dict(face=CHILD1+FEXT, sprite=CHILD1+SEXT,
-                   quest='quest1')
+                   quest=QuestDatabase.quest1)
     person2 = dict(face=CHILD1+FEXT, sprite=CHILD1+SEXT,
                    text=["Hi mister!", "We're playing hide and seek.", "I'm seeking, where are they?"])
     person3 = dict(face=CHILD2+FEXT, sprite=CHILD2+SEXT,

@@ -198,7 +198,7 @@ class InvClickBox(object):
                         # als de geselecteerde niet dezelfde is als die je al aan hebt
                         if selected_item.get_value_of('RAW') != equipped_item.get_value_of('RAW'):
                             # als hij in de inventory zit
-                            if self.inventory.contains(selected_item.RAW):
+                            if self.inventory.contains(selected_item):
                                 # als het aankleden gelukt is
                                 if hero.set_equipment_item(gamestate, selected_item):
                                     # verwijder hem dan uit de inventory

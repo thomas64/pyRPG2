@@ -22,14 +22,14 @@ class Pouch(dict):
         """
         return sorted(self.values(), key=lambda xx: xx.SRT)
 
-    def contains(self, pouch_item_raw, quantity):
+    def contains(self, pouch_item, quantity):
         """
         Bekijkt of het item en de quantity in de pouch zitten.
-        :param pouch_item_raw: string, bijv 'herbs'
+        :param pouch_item: object
         :param quantity: integer
         """
-        if pouch_item_raw in self:
-            if self[pouch_item_raw].qty >= quantity:
+        if pouch_item.RAW in self:
+            if self[pouch_item.RAW].qty >= quantity:
                 return True
         return False
 

@@ -14,8 +14,9 @@ from components import ConfirmBox
 from components import MessageBox
 from components import Transition
 from constants import WeaponType
+from database import PouchItemDatabase
 import keys
-import pouchitems
+from pouchitems import PouchItem
 import screens.shop.buybox
 import screens.shop.infobox
 import screens.shop.selector
@@ -220,7 +221,7 @@ class Display(object):
                 # hij gebruikt nothing=scr_capt hier niet
                 choice, yes, nothing = self.confirm_box.on_exit()
                 if choice == yes:
-                    gold = pouchitems.factory_pouch_item('gold')
+                    gold = PouchItem(**PouchItemDatabase.gold.value)
                     if self.engine.data.pouch.remove(gold, self.value):     # deze if is eigenlijk overbodig maar
                         self.engine.data.inventory.add_i(self.selected_item)  # van origineel zit hij erin. maar hij
                         self.engine.audio.play_sound(sfx.COINS)             # filtert nu al bij het klikken.
@@ -238,7 +239,7 @@ class Display(object):
 
                 if quantity:
                     self.engine.data.inventory.remove_i(self.selected_item, quantity)
-                    gold = pouchitems.factory_pouch_item('gold')
+                    gold = PouchItem(**PouchItemDatabase.gold.value)
                     self.engine.data.pouch.add(gold, self.value * quantity)
                     self.engine.audio.play_sound(sfx.COINS)
                     self._init_sellbox()
@@ -253,6 +254,7 @@ class Display(object):
             self.value = 0
             self.confirm_box = None
 
+    # noinspection PyMethodMayBeStatic
     def on_exit(self):
         """
         Wanneer deze state onder een andere state van de stack komt, voer dit uit.
@@ -324,10 +326,10 @@ class Display(object):
         # cheat voor geld erbij ctrl+
         if key_input[pygame.K_LCTRL] or key_input[pygame.K_RCTRL]:
             if key_input[pygame.K_KP_PLUS]:
-                gold = pouchitems.factory_pouch_item('gold')
+                gold = PouchItem(**PouchItemDatabase.gold.value)
                 self.engine.data.pouch.add(gold, 1, False)
             elif key_input[pygame.K_KP_MINUS]:
-                gold = pouchitems.factory_pouch_item('gold')
+                gold = PouchItem(**PouchItemDatabase.gold.value)
                 self.engine.data.pouch.remove(gold, 1, False)
 
     def update(self, dt):

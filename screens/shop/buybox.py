@@ -5,7 +5,7 @@ class: BuyBox
 
 import pygame
 
-import equipment
+from equipment import EquipmentItem
 import keys
 
 COLORKEY = pygame.Color("white")
@@ -34,6 +34,7 @@ class BuyBox(object):
     """
     De box waar alle items uit de database te zien zijn, mits ze de 'shop' eigenschap hebben.
     """
+    # noinspection PyUnresolvedReferences
     def __init__(self, x, y, width, height, equipment_database, sum_merchant):
         self.box_width = width
         self.box_height = height
@@ -49,9 +50,9 @@ class BuyBox(object):
         normalfont = pygame.font.SysFont(FONT, FONTSIZE)
 
         self.table_data = list()
-        for equipment_item_raw, equipment_item in equipment_database.items():
+        for equipment_item in equipment_database.values():
             if equipment_item['shp']:
-                equipment_item_obj = equipment.factory_equipment_item(equipment_item_raw)
+                equipment_item_obj = EquipmentItem(**equipment_item)
                 equipment_item_spr = pygame.image.load(equipment_item_obj.SPR).subsurface(
                     equipment_item_obj.COL, equipment_item_obj.ROW, SUBSURW, SUBSURH).convert_alpha()
                 equipment_item_nam = equipment_item_obj.NAM
