@@ -10,8 +10,8 @@ from database import SparklyDatabase
 from database import TreasureChestDatabase
 from database import WeaponDatabase
 from database import PouchItemDatabase
-from equipment import EquipmentItem
-from pouchitems import PouchItem
+from inventoryitems import EquipmentItem
+from inventoryitems import PouchItem
 
 
 class Script(object):

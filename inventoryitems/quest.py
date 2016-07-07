@@ -7,8 +7,8 @@ import pygame
 
 from constants import QuestState
 from constants import QuestType
-from equipment import EquipmentItem
-from pouchitems import PouchItem
+from .equipment import EquipmentItem
+from .pouch import PouchItem
 
 ICONSIZE = 32
 

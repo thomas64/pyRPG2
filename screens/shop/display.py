@@ -15,8 +15,8 @@ from components import MessageBox
 from components import Transition
 from constants import WeaponType
 from database import PouchItemDatabase
+from inventoryitems import PouchItem
 import keys
-from pouchitems import PouchItem
 import screens.shop.buybox
 import screens.shop.infobox
 import screens.shop.selector

@@ -12,7 +12,7 @@ from constants import SkillType
 from constants import StatType
 from constants import WeaponType
 import containers
-import equipment
+import inventoryitems
 
 
 class Hero(object):
@@ -58,28 +58,28 @@ class Hero(object):
         self.skills_tuple = (self.alc, self.dip, self.hlr, self.lor, self.mec, self.mer, self.ran, self.stl, self.thf,
                              self.trb, self.war, self.wiz, self.haf, self.mis, self.pol, self.shd, self.swd, self.thr)
 
-        self.wpn = equipment.factory_empty_equipment_item(EquipmentType.wpn)
-        self.sld = equipment.factory_empty_equipment_item(EquipmentType.sld)
-        self.hlm = equipment.factory_empty_equipment_item(EquipmentType.hlm)
-        self.amu = equipment.factory_empty_equipment_item(EquipmentType.amu)
-        self.arm = equipment.factory_empty_equipment_item(EquipmentType.arm)
-        self.clk = equipment.factory_empty_equipment_item(EquipmentType.clk)
-        self.brc = equipment.factory_empty_equipment_item(EquipmentType.brc)
-        self.glv = equipment.factory_empty_equipment_item(EquipmentType.glv)
-        self.rng = equipment.factory_empty_equipment_item(EquipmentType.rng)
-        self.blt = equipment.factory_empty_equipment_item(EquipmentType.blt)
-        self.bts = equipment.factory_empty_equipment_item(EquipmentType.bts)
-        self.acy = equipment.factory_empty_equipment_item(EquipmentType.acy)
+        self.wpn = inventoryitems.factory_empty_equipment_item(EquipmentType.wpn)
+        self.sld = inventoryitems.factory_empty_equipment_item(EquipmentType.sld)
+        self.hlm = inventoryitems.factory_empty_equipment_item(EquipmentType.hlm)
+        self.amu = inventoryitems.factory_empty_equipment_item(EquipmentType.amu)
+        self.arm = inventoryitems.factory_empty_equipment_item(EquipmentType.arm)
+        self.clk = inventoryitems.factory_empty_equipment_item(EquipmentType.clk)
+        self.brc = inventoryitems.factory_empty_equipment_item(EquipmentType.brc)
+        self.glv = inventoryitems.factory_empty_equipment_item(EquipmentType.glv)
+        self.rng = inventoryitems.factory_empty_equipment_item(EquipmentType.rng)
+        self.blt = inventoryitems.factory_empty_equipment_item(EquipmentType.blt)
+        self.bts = inventoryitems.factory_empty_equipment_item(EquipmentType.bts)
+        self.acy = inventoryitems.factory_empty_equipment_item(EquipmentType.acy)
 
         # hier kan zeker None ingevuld worden omdat gamestate hierbij zeker weten niet zal pushen een messagebox.
         if kwargs[EquipmentType.wpn.name]:
-            self.set_equipment_item(None, equipment.EquipmentItem(**kwargs[EquipmentType.wpn.name].value))
+            self.set_equipment_item(None, inventoryitems.EquipmentItem(**kwargs[EquipmentType.wpn.name].value))
         # kwargs['sld'] moet bestaan om de if te mogen doen.
         # maar de uitkomst moet niet None zijn om aan de voorwaarde te voldoen.
         if kwargs[EquipmentType.sld.name]:
-            self.set_equipment_item(None, equipment.EquipmentItem(**kwargs[EquipmentType.sld.name].value))
+            self.set_equipment_item(None, inventoryitems.EquipmentItem(**kwargs[EquipmentType.sld.name].value))
         if kwargs[EquipmentType.arm.name]:
-            self.set_equipment_item(None, equipment.EquipmentItem(**kwargs[EquipmentType.arm.name].value))
+            self.set_equipment_item(None, inventoryitems.EquipmentItem(**kwargs[EquipmentType.arm.name].value))
 
         self.scl = containers.School(kwargs['scl'])
         if kwargs.get('spl'):

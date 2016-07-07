@@ -7,7 +7,9 @@ def: factory_empty_equipment_item
 # - min int gebruiken voor items?
 # - mvp aan items
 
-from .item import EquipmentItem
+from .equipment import EquipmentItem
+from .pouch import PouchItem
+from .quest import QuestItem
 
 
 def factory_empty_equipment_item(equipment_type):

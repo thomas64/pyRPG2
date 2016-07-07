@@ -1,6 +1,0 @@
-
-"""
-...
-"""
-
-from .item import QuestItem

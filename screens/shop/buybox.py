@@ -5,7 +5,7 @@ class: BuyBox
 
 import pygame
 
-from equipment import EquipmentItem
+from inventoryitems import EquipmentItem
 import keys
 
 COLORKEY = pygame.Color("white")

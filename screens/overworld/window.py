@@ -28,10 +28,10 @@ from database import SignDatabase
 
 from database import PouchItemDatabase
 
-from equipment import EquipmentItem
+from inventoryitems import EquipmentItem
+from inventoryitems import PouchItem
+from inventoryitems import QuestItem
 import keys
-from pouchitems import PouchItem
-from questitems import QuestItem
 import screens.shop.display
 
 
