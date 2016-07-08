@@ -68,7 +68,7 @@ class StatsBox(BaseBox):
             [StTy.mvp.value+" :", str(hero.sta_mvp),      hero.dif_mvp, None, self._desc(StTy.mvp),               mvp],
             [StTy.prt.value+" :", str(hero.tot_prt),      "",           None, self._desc(StTy.prt, hero.sld_prt), prt],
             [StTy.des.value+" :", str(hero.sld_des),      "",           None, "",                                 des],
-            [StTy.hit.value+" :", str(hero.tot_hit)+" %", "",           None, self._desc(StTy.hit, hero.war_hit), hit],
+            [StTy.hit.value+" :", str(hero.sub_hit)+" %", hero.eqp_hit, None, self._desc(StTy.hit, hero.war_hit), hit],
             [StTy.dam.value+" :", str(hero.wpn_dam),      "",           None, "",                                 dam]
         ]
         # voeg ook de 7 stats aan de table_data toe
@@ -121,22 +121,24 @@ class StatsBox(BaseBox):
             return (
                 "Defines how many steps your character is able to take in one turn. The more stamina your character "
                 "has, the more movepoints. The more weight your character has, the less movepoints. The first column "
-                "shows the number of movepoints calculated from your stamina. The second (red) column shows the "
-                "calculated weight subtracted. If that column is green, it means that you have special movepoints "
-                "enhancers in your equipment.")
+                "shows the number of movepoints calculated from your character's stamina. The second (red) column "
+                "shows the calculated weight subtracted. If that column is green, it means that your character has "
+                "special movepoints enhancers in his/her equipment.")
 
         elif stat == StTy.prt:
             # Protection
             return (
                 "Protection decreases the amount of health your character loses when hit in combat. There is no "
                 "Shield Protection when attacked from behind. The number shows all the protection points from "
-                "your equipment combined.",
+                "your character's equipment combined.",
                 " ",
                 "{}pt from Shield Protection.".format(ext_stat))
         elif stat == StTy.hit:
             # Chance to Hit
             return (
                 "Defines how much chance the weapon of your character has in striking the enemy successfully. "
-                "The higher the percentage, the higher the chance to hit.",
+                "The higher the percentage, the higher the chance to hit. The first column shows the hit chance from "
+                "your character's weapon plus a possible calculated warrior skill. The second (green) column shows "
+                "the special hit chance enhancers in your character's equipment.",
                 " ",
                 "{}% from Warrior Skill.".format(ext_stat))

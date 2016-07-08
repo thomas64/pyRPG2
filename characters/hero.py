@@ -200,14 +200,22 @@ class Hero(object):
         return self.sld.get_value_of(StatType.des.name)
 
     @property
+    def eqp_hit(self):
+        """
+        Totale hit min weapon hit
+        :return: zie: def eqp_wht()
+        """
+        total = 0
+        for equipment_item in self.equipment_tuple:
+            total += equipment_item.get_value_of(StatType.hit.name)
+        total -= self.wpn_hit
+        return total
+
+    @property
     def wpn_hit(self):
         """
-        Wat nu gecomment is, is aangepast. Geen total hit maar wpn hit. Er hoeft helemaal geen total hit te zijn?
+        Alleen weapon hit.
         """
-        # total = 0
-        # for equipment_item in self.equipment_tuple:
-        #     total += equipment_item.get_value_of('HIT')
-        # return total
         return self.wpn.get_value_of(StatType.hit.name)
 
     @property
@@ -220,7 +228,14 @@ class Hero(object):
     @property
     def tot_hit(self):
         """
-        Totale chance to hit: weapon hit + warrior bonus
+        Totale chance to hit: weapon hit + warrior bonus + ander equipment (bracelets)
+        """
+        return self.wpn_hit + self.war_hit + self.eqp_hit
+
+    @property
+    def sub_hit(self):
+        """
+        Waarschijnlijk alleen voor visuele partyscreen weergave.
         """
         return self.wpn_hit + self.war_hit
 
