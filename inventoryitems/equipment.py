@@ -40,6 +40,7 @@ class EquipmentItem(object):
         attrs = [(self.TYP.value,      'nam'),
                  ('Skill',             'skl'),
                  ('Min. Intelligence', 'min_int'),
+                 ('Min. Willpower',    'min_wil'),
                  ('Min. Dexterity',    'min_dex'),
                  ('Min. Strength',     'min_str')]
         # voeg ook alle stats en skills in deze lijst toe.

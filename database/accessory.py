@@ -18,8 +18,8 @@ class AccessoryDatabase(enum.Enum):
     chemset = dict(nam="Chemset",               srt=3, val=60, shp=True,  wht=1, min_int=22, alc=2, col=128, row=0)
     medkit = dict(nam="Medkit",                 srt=4, val=50, shp=True,  wht=1, min_int=20, hlr=2, col=96,  row=0)
     hornofkynon = dict(nam="Horn of Kynon",     srt=5, val=40, shp=False, wht=1, min_int=20, trb=3, col=32,  row=0)
-    harpofigone = dict(nam="Harp of Igone",     srt=6, val=80, shp=False, wht=1, min_int=25, trb=6, col=64,  row=0)
-
+    harpofigone = dict(nam="Harp of Igone",     srt=6, val=80, shp=False, wht=1, min_int=24, trb=6, col=64,  row=0)
+    spellbook = dict(nam="Spellbook",           srt=7, val=80, shp=True,  wht=1, min_int=26, wiz=2, col=32,  row=32)
 
 for acy in AccessoryDatabase:
     acy.value['typ'] = EquipmentType.acy

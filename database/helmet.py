@@ -34,7 +34,7 @@ class HelmetDatabase(enum.Enum):
     helmofinsight = dict(nam="Helm of Insight",     srt=16, val=7,  shp=False, wht=2, prt=1, lor=2, col=96,  row=32)
     helmoftempests = dict(nam="Helm of Tempests",   srt=17, val=7,  shp=False, wht=2, prt=1, war=2, col=128, row=32)
 
-    # todo, spell battery ook nog toevoegen
+    # todo, spell battery +15 ook nog toevoegen
     wizardhat = dict(nam="Wizard Hat",              srt=18, val=6,  shp=False, wht=0,        wiz=1, col=160, row=32)
 
 

@@ -101,16 +101,17 @@ class Hero(object):
     @property
     def cur_hp(self):
         """
-        Current HP bestaat uit deze drie waarden.
+        Current HP bestaat uit deze drie waarden. Nieuw: vier waarden: edu kan ook in ext zitten.
         """
-        return self.lev.cur + self.sta.cur + self.edu.cur
+        # todo, bij deze cur_hp en ook bij max_hp testen of edu.ext wel goed gaat wanneer er damage en healing is bijv.
+        return self.lev.cur + self.sta.cur + self.edu.cur + self.edu.ext
 
     @property
     def max_hp(self):
         """
-        Maximum HP bestaat uit deze drie waarden.
+        Maximum HP bestaat uit deze drie waarden. Nieuw: vier waarden:
         """
-        return self.lev.qty + self.sta.qty + self.edu.qty
+        return self.lev.qty + self.sta.qty + self.edu.qty + self.edu.ext
 
     @property
     def eqp_wht(self):
@@ -304,6 +305,12 @@ class Hero(object):
         if new_equipment_item.get_value_of('MIN_INT') > self.int.qty:
             text = ["{} needs {} {} to equip that {}.".format(self.NAM, new_equipment_item.MIN_INT,
                                                               StatType.int.value, new_equipment_item.NAM)]
+            push_object = MessageBox(gamestate, text)
+            gamestate.push(push_object)
+            return False
+        if new_equipment_item.get_value_of('MIN_WIL') > self.int.qty:
+            text = ["{} needs {} {} to equip that {}.".format(self.NAM, new_equipment_item.MIN_WIL,
+                                                              StatType.wil.value, new_equipment_item.NAM)]
             push_object = MessageBox(gamestate, text)
             gamestate.push(push_object)
             return False
