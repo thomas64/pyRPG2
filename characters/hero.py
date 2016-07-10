@@ -308,7 +308,7 @@ class Hero(object):
             push_object = MessageBox(gamestate, text)
             gamestate.push(push_object)
             return False
-        if new_equipment_item.get_value_of('MIN_WIL') > self.int.qty:
+        if new_equipment_item.get_value_of('MIN_WIL') > self.wil.qty:
             text = ["{} needs {} {} to equip that {}.".format(self.NAM, new_equipment_item.MIN_WIL,
                                                               StatType.wil.value, new_equipment_item.NAM)]
             push_object = MessageBox(gamestate, text)
@@ -323,6 +323,13 @@ class Hero(object):
         if new_equipment_item.get_value_of('MIN_STR') > self.str.qty:
             text = ["{} needs {} {} to equip that {}.".format(self.NAM, new_equipment_item.MIN_STR,
                                                               StatType.str.value, new_equipment_item.NAM)]
+            push_object = MessageBox(gamestate, text)
+            gamestate.push(push_object)
+            return False
+        if new_equipment_item.get_value_of('MIN_WIZ') > abs(self.wiz.qty):
+            # die abs() is een hack, -1 wordt 1, en er zijn toch geen items met een min_wiz van 1.
+            text = ["{} needs {} {} to equip that {}.".format(self.NAM, new_equipment_item.MIN_WIZ,
+                                                              SkillType.wiz.value, new_equipment_item.NAM)]
             push_object = MessageBox(gamestate, text)
             gamestate.push(push_object)
             return False

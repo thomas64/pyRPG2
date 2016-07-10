@@ -42,7 +42,8 @@ class EquipmentItem(object):
                  ('Min. Intelligence', 'min_int'),
                  ('Min. Willpower',    'min_wil'),
                  ('Min. Dexterity',    'min_dex'),
-                 ('Min. Strength',     'min_str')]
+                 ('Min. Strength',     'min_str'),
+                 ('Min. Wizard',       'min_wiz')]
         # voeg ook alle stats en skills in deze lijst toe.
         for stat in StatType:
             attrs.append((stat.value,  stat.name))

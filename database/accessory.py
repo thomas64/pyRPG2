@@ -20,6 +20,8 @@ class AccessoryDatabase(enum.Enum):
     hornofkynon = dict(nam="Horn of Kynon",     srt=5, val=40, shp=False, wht=1, min_int=20, trb=3, col=32,  row=0)
     harpofigone = dict(nam="Harp of Igone",     srt=6, val=80, shp=False, wht=1, min_int=24, trb=6, col=64,  row=0)
     spellbook = dict(nam="Spellbook",           srt=7, val=80, shp=True,  wht=1, min_int=26, wiz=2, col=32,  row=32)
+    # todo, alle spells +1 oid?
+    wizardswand = dict(nam="Wizard's Wand",     srt=8, val=80, shp=True,  wht=1, min_wiz=9,         col=64,  row=32)
 
 for acy in AccessoryDatabase:
     acy.value['typ'] = EquipmentType.acy
