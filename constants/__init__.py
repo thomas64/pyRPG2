@@ -90,6 +90,18 @@ class SchoolType(enum.Enum):
     str = "Star"
 
 
+class Minimals(enum.Enum):
+    """
+    Substring wordt gebruikt om de eerste 4 chars van de .name te halen.
+    Substring wordt gebruikt om de eerste 5 chars van de .value te halen.
+    """
+    min_int = "Min. Intelligence"
+    min_wil = "Min. Willpower"
+    min_dex = "Min. Dexterity"
+    min_str = "Min. Strength"
+    min_wiz = "Min. Wizard"
+
+
 class StatType(enum.Enum):
     """..."""
     wht = "Weight"

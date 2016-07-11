@@ -8,6 +8,7 @@ import characters.skills
 import characters.spells
 from components import MessageBox
 from constants import EquipmentType
+from constants import Minimals
 from constants import SkillType
 from constants import StatType
 from constants import WeaponType
@@ -302,37 +303,21 @@ class Hero(object):
             push_object = MessageBox(gamestate, text)
             gamestate.push(push_object)
             return False
-        if new_equipment_item.get_value_of('MIN_INT') > self.int.qty:
-            text = ["{} needs {} {} to equip that {}.".format(self.NAM, new_equipment_item.MIN_INT,
-                                                              StatType.int.value, new_equipment_item.NAM)]
-            push_object = MessageBox(gamestate, text)
-            gamestate.push(push_object)
-            return False
-        if new_equipment_item.get_value_of('MIN_WIL') > self.wil.qty:
-            text = ["{} needs {} {} to equip that {}.".format(self.NAM, new_equipment_item.MIN_WIL,
-                                                              StatType.wil.value, new_equipment_item.NAM)]
-            push_object = MessageBox(gamestate, text)
-            gamestate.push(push_object)
-            return False
-        if new_equipment_item.get_value_of('MIN_DEX') > self.dex.qty:
-            text = ["{} needs {} {} to equip that {}.".format(self.NAM, new_equipment_item.MIN_DEX,
-                                                              StatType.dex.value, new_equipment_item.NAM)]
-            push_object = MessageBox(gamestate, text)
-            gamestate.push(push_object)
-            return False
-        if new_equipment_item.get_value_of('MIN_STR') > self.str.qty:
-            text = ["{} needs {} {} to equip that {}.".format(self.NAM, new_equipment_item.MIN_STR,
-                                                              StatType.str.value, new_equipment_item.NAM)]
-            push_object = MessageBox(gamestate, text)
-            gamestate.push(push_object)
-            return False
-        if new_equipment_item.get_value_of('MIN_WIZ') > abs(self.wiz.qty):
+
+        # loop alle minimals door, bijv:
+        # als MIN_INT van het nieuwe item > abs(intelligentie van hero):
+        # geef dan de tekst: hero naam, 5, Intelligence, boog.
+        for stat in Minimals:
+            stat1 = getattr(self, stat.name[4:])    # self.int
+            stat2 = getattr(stat1, 'qty')           # self.int.qty
             # die abs() is een hack, -1 wordt 1, en er zijn toch geen items met een min_wiz van 1.
-            text = ["{} needs {} {} to equip that {}.".format(self.NAM, new_equipment_item.MIN_WIZ,
-                                                              SkillType.wiz.value, new_equipment_item.NAM)]
-            push_object = MessageBox(gamestate, text)
-            gamestate.push(push_object)
-            return False
+            stat3 = abs(stat2)
+            if new_equipment_item.get_value_of(stat.name) > stat3:
+                text = ["{} needs {} {} to equip that {}.".format(self.NAM, new_equipment_item.get_value_of(stat.name),
+                                                                  stat.value[5:], new_equipment_item.NAM)]
+                push_object = MessageBox(gamestate, text)
+                gamestate.push(push_object)
+                return False
 
         if (new_equipment_item.get_value_of('SKL') == WeaponType.mis and
                 self.sld.is_not_empty()):

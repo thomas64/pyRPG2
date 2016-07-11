@@ -5,6 +5,7 @@ class: EquipmentItem
 
 import enum
 
+from constants import Minimals
 from constants import SkillType
 from constants import StatType
 
@@ -38,13 +39,10 @@ class EquipmentItem(object):
         """
         #               attr[0]             attr[1]
         attrs = [(self.TYP.value,      'nam'),
-                 ('Skill',             'skl'),
-                 ('Min. Intelligence', 'min_int'),
-                 ('Min. Willpower',    'min_wil'),
-                 ('Min. Dexterity',    'min_dex'),
-                 ('Min. Strength',     'min_str'),
-                 ('Min. Wizard',       'min_wiz')]
+                 ('Skill',             'skl')]
         # voeg ook alle stats en skills in deze lijst toe.
+        for stat in Minimals:
+            attrs.append((stat.value, stat.name))
         for stat in StatType:
             attrs.append((stat.value,  stat.name))
         for skill in SkillType:
