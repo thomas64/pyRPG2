@@ -30,6 +30,15 @@ class EquipmentItem(object):
             del self.SHP                                        # deze is niet nodig wanneer het een object geworden is.
         except AttributeError:
             pass
+        try:
+            # noinspection PyUnresolvedReferences
+            self.CUR_BAT = kwargs['max_bat']
+            # eigenlijk moet self.CUR_BAT self.cur_bat zijn, want variabel. maar anders vanwege gedoe met
+            # get_value_of() waar upper() in staat, de makkelijke weg gekozen door gewoon caps te gebruiken.
+            # todo, misschien moet cur_bat nog een @property worden, maar dat zie ik tzt wel.
+            # idee is refill van cur_bat per battle.
+        except KeyError:
+            pass
 
     # noinspection PyUnresolvedReferences
     def display(self):
@@ -37,12 +46,13 @@ class EquipmentItem(object):
         Deze is voor weergave. Voeg de gevonden attributen op volgorde samen.
         :return: een lijst van de geselecteerde attributen
         """
-        #               attr[0]             attr[1]
+        #          attr[0]              attr[1]
         attrs = [(self.TYP.value,      'nam'),
                  ('Skill',             'skl')]
         # voeg ook alle stats en skills in deze lijst toe.
         for stat in Minimals:
             attrs.append((stat.value, stat.name))
+        attrs.append(('Spell Battery', 'cur_bat'))
         for stat in StatType:
             attrs.append((stat.value,  stat.name))
         for skill in SkillType:
