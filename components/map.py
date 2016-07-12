@@ -72,6 +72,7 @@ class Map(object):
         self.schools = []
         self.inns = []
         self.people = []
+        self.notes = []
         self.signs = []
         self.chests = []
         self.sparkly = []
@@ -117,6 +118,8 @@ class Map(object):
                                            self._pg_rect(obj), OBJECTLAYER, self._has_dir(obj, 'direction'), None)
                     self.high_blocker_rects.append(person_object.get_blocker())
                 self.people.append(person_object)
+            elif obj.name.startswith('note'):
+                self.notes.append(NamedRect(obj.name, self._pg_rect(obj)))
             elif obj.name.startswith('sign'):
                 sign_object = Sign(obj.name, self._pg_rect(obj), OBJECTLAYER, obj.type)
                 self.high_blocker_rects.append(sign_object.get_blocker())

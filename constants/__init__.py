@@ -190,6 +190,7 @@ class QuestType(enum.Enum):
 class QuestState(enum.Enum):
     """
     De volgorde en de 1, 2, 3, 4 worden in het spel gebruikt. Kan dus niet zomaar aangepast worden.
+    Dit heeft met de tekst in QuestDatabase te maken en get_text() in QuestItem.
     """
     Unknown = 1
     Running = 2

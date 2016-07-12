@@ -24,6 +24,7 @@ from database import HeroDatabase
 from database import PeopleDatabase
 from database import SchoolDatabase
 from database import ShopDatabase
+from database import NoteDatabase
 from database import SignDatabase
 
 from database import PouchItemDatabase
@@ -237,6 +238,7 @@ class Window(object):
                 self.check_schools(self.party_sprites[0].get_check_rect())
                 self.check_inns(self.party_sprites[0].get_check_rect())
                 self.check_people(self.party_sprites[0].get_check_rect())
+                self.check_notes(self.party_sprites[0].get_check_rect())
                 self.check_signs()
                 self.check_chests()
                 self.check_sparklies(self.party_sprites[0].get_check_rect())  # sparklys moeten ook van boven kunnen
@@ -529,6 +531,19 @@ class Window(object):
             else:
                 push_object = MessageBox(self.engine.gamestate, person_data['text'], person_data['face'])
                 self.engine.gamestate.push(push_object)
+
+    def check_notes(self, check_rect):
+        """
+        Bekijk met welke note objectnummer hij in de list collide.
+        Dat is een NamedRect, dus bekijk zijn .name adhv het objectnummer.
+        Haal dan de tekst uit de database
+        """
+        if len(check_rect.collidelistall(self.engine.current_map.notes)) == 1:
+            object_nr = check_rect.collidelist(self.engine.current_map.notes)
+            note_id = self.engine.current_map.notes[object_nr].name
+            note_text = NoteDatabase[note_id].value
+            push_object = MessageBox(self.engine.gamestate, note_text)
+            self.engine.gamestate.push(push_object)
 
     def check_signs(self):
         """
