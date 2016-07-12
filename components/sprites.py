@@ -288,7 +288,7 @@ class Person(pygame.sprite.Sprite):
         self.image = self.full_sprite.subsurface(self.full_sprite.get_clip())
         self.rect = rect
 
-        self.sprite_id = person_id
+        self.person_id = person_id
         self._layer = objectlayer
 
         # als er in dont_show_sprite iets staat, dan is het een transparante sprite.

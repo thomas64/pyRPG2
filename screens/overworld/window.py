@@ -125,7 +125,7 @@ class Window(object):
 
         # voeg alle objecten toe van uit de map
         for hero in self.engine.current_map.heroes:
-            if not self.engine.data.party.contains(hero.sprite_id):
+            if not self.engine.data.party.contains(hero.person_id):
                 self.group.add(hero)
                 # voeg alleen nu een blocker toe als de hero er daadwerkelijk is.
                 # dit zit niet in de map class vanwege imports. maar nu moet hij in window al 2x checken op dit.
@@ -429,8 +429,8 @@ class Window(object):
             object_name = check_rect.collidelist(self.engine.current_map.heroes)
             hero_sprite = self.engine.current_map.heroes[object_name]
             # ook hier moet een hero in party niet gecheckt worden
-            if not self.engine.data.party.contains(hero_sprite.sprite_id):
-                self.hero_data = self.engine.data.heroes[hero_sprite.sprite_id]
+            if not self.engine.data.party.contains(hero_sprite.person_id):
+                self.hero_data = self.engine.data.heroes[hero_sprite.person_id]
 
                 hero_sprite.turn(self.party_sprites[0].rect)
 
@@ -447,13 +447,13 @@ class Window(object):
         """
         if len(check_rect.collidelistall(self.engine.current_map.shops)) == 1:
             object_nr = check_rect.collidelist(self.engine.current_map.shops)
-            shop_sprite = self.engine.current_map.shops[object_nr]
-            shop_data = ShopDatabase[shop_sprite.sprite_id].value
+            shop_id = self.engine.current_map.shops[object_nr].person_id
+            shop_data = ShopDatabase[shop_id].value
 
             # check alle shops, zijn ze zichtbaar, hebben ze dezelfde id, turn die dan allemaal.
             for spr in self.engine.current_map.shops:
                 if spr.show_sprite:
-                    if spr.sprite_id == shop_sprite.sprite_id:
+                    if spr.person_id == shop_id:
                         spr.turn(self.party_sprites[0].rect)
 
             push_object = screens.shop.display.Display(self.engine, shop_data['content'],
@@ -469,23 +469,23 @@ class Window(object):
         if len(check_rect.collidelistall(self.engine.current_map.schools)) == 1:
             object_nr = check_rect.collidelist(self.engine.current_map.schools)
             school_sprite = self.engine.current_map.schools[object_nr]
-            school_data = SchoolDatabase[school_sprite.sprite_id].value
+            school_data = SchoolDatabase[school_sprite.person_id].value
 
             school_sprite.turn(self.party_sprites[0].rect)
 
     def check_inns(self, check_rect):
         """
         Er kunnen ook inns zijn zonder sprite, die moeten dan geupdate worden. Maar alle anderen met sprite wel omdat
-        de lege een verlengde is van de gevulde. Hij vergelijkt sprite_id, dus hij turnt alleen met dezelfde id.
+        de lege een verlengde is van de gevulde. Hij vergelijkt person_id, dus hij turnt alleen met dezelfde id.
         """
         if len(check_rect.collidelistall(self.engine.current_map.inns)) == 1:
             object_nr = check_rect.collidelist(self.engine.current_map.inns)
-            inn_sprite = self.engine.current_map.inns[object_nr]
-            self.inn_data = InnDatabase[inn_sprite.sprite_id].value
+            inn_id = self.engine.current_map.inns[object_nr].person_id
+            self.inn_data = InnDatabase[inn_id].value
 
             for spr in self.engine.current_map.inns:
                 if spr.show_sprite:
-                    if spr.sprite_id == inn_sprite.sprite_id:
+                    if spr.person_id == inn_id:
                         spr.turn(self.party_sprites[0].rect)
 
             self.inn_box = ConfirmBox(self.engine.gamestate, self.engine.audio,
@@ -499,7 +499,7 @@ class Window(object):
         if len(check_rect.collidelistall(self.engine.current_map.people)) == 1:
             object_nr = check_rect.collidelist(self.engine.current_map.people)
             person_sprite = self.engine.current_map.people[object_nr]
-            person_data = PeopleDatabase[person_sprite.sprite_id].value
+            person_data = PeopleDatabase[person_sprite.person_id].value
 
             # doe gewoon eerst het draaien zoals normaal
             person_sprite.turn(self.party_sprites[0].rect)
@@ -552,8 +552,8 @@ class Window(object):
         if self.party_sprites[0].last_direction == Direction.North:
             if len(self.party_sprites[0].rect.collidelistall(self.engine.current_map.signs)) == 1:
                 object_nr = self.party_sprites[0].rect.collidelist(self.engine.current_map.signs)
-                sign_sprite = self.engine.current_map.signs[object_nr]
-                sign_data = SignDatabase[sign_sprite.sign_id].value
+                sign_id = self.engine.current_map.signs[object_nr].sign_id
+                sign_data = SignDatabase[sign_id].value
 
                 push_object = MessageBox(self.engine.gamestate, sign_data)
                 self.engine.gamestate.push(push_object)
@@ -566,8 +566,8 @@ class Window(object):
         if self.party_sprites[0].last_direction == Direction.North:
             if len(self.party_sprites[0].rect.collidelistall(self.engine.current_map.chests)) == 1:
                 object_nr = self.party_sprites[0].rect.collidelist(self.engine.current_map.chests)
-                chest_sprite = self.engine.current_map.chests[object_nr]
-                chest_data = self.engine.data.treasure_chests[chest_sprite.chest_id]
+                chest_id = self.engine.current_map.chests[object_nr].chest_id
+                chest_data = self.engine.data.treasure_chests[chest_id]
 
                 # v = skill value, h = hero naam
                 mec_v, mec_h = 0, ""
@@ -622,8 +622,8 @@ class Window(object):
         """
         if len(check_rect.collidelistall(self.engine.current_map.sparkly)) == 1:
             object_nr = check_rect.collidelist(self.engine.current_map.sparkly)
-            sparkly_sprite = self.engine.current_map.sparkly[object_nr]
-            sparkly_data = self.engine.data.sparklies[sparkly_sprite.sparkly_id]
+            sparkly_id = self.engine.current_map.sparkly[object_nr].sparkly_id
+            sparkly_data = self.engine.data.sparklies[sparkly_id]
 
             # hieronder is bijna een exacte kopie van check_chests() kan dat anders?
             if sparkly_data['content']:
