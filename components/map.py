@@ -8,12 +8,12 @@ import pytmx
 import pyscroll
 
 from .namedrect import NamedRect
+from .person import Person
+from .person import Walking
 from .portal import Portal
-from .sprites import Person
 from .sprites import Sign
 from .sprites import Sparkly
 from .sprites import TreasureChest
-from .sprites import Walking
 
 from constants import Direction
 

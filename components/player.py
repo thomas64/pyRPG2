@@ -5,7 +5,7 @@ class: Player
 
 import pygame
 
-from .sprites import Person
+from .person import Person
 from constants import Direction
 import keys
 

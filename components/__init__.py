@@ -17,10 +17,10 @@ from .sprites import Button
 from .sprites import ColorBox
 from .sprites import Grid
 
-from .sprites import Person
-from .sprites import Walking
 from .sprites import Sign
 from .sprites import Sparkly
 from .sprites import TreasureChest
 
+from .person import Person
+from .person import Walking
 from .player import Player
