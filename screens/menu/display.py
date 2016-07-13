@@ -55,7 +55,7 @@ class Display(object):
         self.menu_content = menu_content                        # het object OrderedDict genaamd inside
         self.menu_texts = []                                    # een list van MenuText objecten
         for index, item in enumerate(self.menu_content):
-            menu_text = screens.menu.text.Text(item, index, self.color1)
+            menu_text = screens.menu.text.Text(item[0], item[1], index, self.color1)
             t_h = len(self.menu_content) * menu_text.height     # t_h: total height of text block
             pos_x = (bg_width - menu_text.width) / 2
             pos_y = ((bg_height - t_h) / 2) + (menu_text.height * index * MENUH)

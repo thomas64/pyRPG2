@@ -43,8 +43,8 @@ class Audio(object):
     """
     def __init__(self, engine):
         self.engine = engine
-        self.music = 0
-        self.sound = 0
+        self.music = False
+        self.sound = False
         self._load_cfg()
 
         self.bg_music_channel = pygame.mixer.Channel(7)
@@ -81,7 +81,7 @@ class Audio(object):
             console.load_options()
         except (pickle.UnpicklingError, FileNotFoundError, EOFError):
             console.corrupt_options()
-            self.music, self.sound = 1, 1
+            self.music, self.sound = True, True
             self.write_cfg()
 
     def write_cfg(self):
@@ -96,12 +96,12 @@ class Audio(object):
         """
         Zet geluid aan als het uit staat en vice versa.
         """
-        if self.sound == 1:
+        if self.sound:
             self.stop_sound(MENUSELECT)         # vanwege de enter knop in menu's speelt hij dit geluid af,
-            self.sound = 0                      # stop hem daarom alsnog.
+            self.sound = False                  # stop hem daarom alsnog.
             self.stop_bg_sounds()
-        elif self.sound == 0:
-            self.sound = 1
+        else:
+            self.sound = True
             self.play_sound(MENUSELECT)         # en speel weer een geluid af omdat er geluid is.
             # kijkt 1 laag dieper om te zien of hij in mainmenu of pausemenu zit
             self.set_bg_sounds(self.engine.gamestate.deep_peek().name)
@@ -110,11 +110,11 @@ class Audio(object):
         """
         Zet muziek aan als het uit staat en vice versa.
         """
-        if self.music == 1:
-            self.music = 0
+        if self.music:
+            self.music = False
             self.stop_bg_music()
-        elif self.music == 0:
-            self.music = 1
+        else:
+            self.music = True
             self.set_bg_music(self.engine.gamestate.deep_peek().name)
 
     # todo, muziek van mainmenu later in laten komen?
@@ -198,7 +198,7 @@ class Audio(object):
         :param loop: -1 is oneindig loopen
         :param channel: het kanaal waar de geluiden op afgespeeld moeten worden, is alleen voor bg_sounds
         """
-        if self.sound == 1:
+        if self.sound:
             # als het aangestuurde geluid None is, niets doen natuurlijk.
             if sound:
                 if channel:
@@ -211,7 +211,7 @@ class Audio(object):
         Als mag, speel dan muziek.
         :param music: de naam van het geluidsfragment
         """
-        if self.music == 1:
+        if self.music:
             self.bg_music_channel.play(self.mfx[music], loops=-1)
 
     def stop_sound(self, sound):

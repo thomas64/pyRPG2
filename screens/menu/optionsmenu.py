@@ -17,11 +17,11 @@ class OptionsMenu(screens.menu.basemenu.BaseMenu):
             self.inside['FullScreen'] = 'Full screen: On'
         else:
             self.inside['FullScreen'] = 'Full screen: Off'
-        if engine.audio.music == 1:
+        if engine.audio.music:
             self.inside['Music'] = 'Music: On'
         else:
             self.inside['Music'] = 'Music: Off'
-        if engine.audio.sound == 1:
+        if engine.audio.sound:
             self.inside['Sound'] = 'Sound: On'
         else:
             self.inside['Sound'] = 'Sound: Off'

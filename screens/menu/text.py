@@ -13,10 +13,10 @@ class Text(object):
     """
     Een mainmenu item.
     """
-    def __init__(self, item, index, color):
-        self.func = item[0]     # de eerste van de double tuple, bijv NewGame. dit is de key uit content
-        self.text = item[1]     # de tweede van de double tuple, bijv New Game. dit is de value uit content
-        self.index = index      # index is voor mousemotion in display.
+    def __init__(self, menu_key, menu_string, index, color):
+        self.func = menu_key     # bijv NewGame. dit is de key uit content
+        self.text = menu_string  # bijv New Game. dit is de value uit content
+        self.index = index       # index is voor mousemotion in display.
         self.font = pygame.font.SysFont(MENUFONT, MENUFONTSIZE)
         self.font_color = color
         self.label = self.font.render(self.text, True, self.font_color).convert_alpha()
