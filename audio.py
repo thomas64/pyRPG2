@@ -1,10 +1,8 @@
 
 """
-class: MapMusic
 class: Audio
 """
 
-import enum
 import os
 import pickle
 import random
@@ -12,6 +10,7 @@ import random
 import pygame
 
 import console
+from constants import MapMusic
 from statemachine import GameState
 
 
@@ -36,31 +35,6 @@ SPARKLY = 'sparkly'
 
 # Alle niet overworld kaart muziek.
 TITLESCREEN = 'titlescreen'
-
-
-class MapMusic(enum.Enum):
-    """
-    Alle tmx kaarten op een rij, met de muziek erachter en ambient sound.
-    """
-    ErsinForestStart = 'ersin_forest_start',            'ersin_forest',  'birds'
-    ErsinForestWaterfall = 'ersin_forest_waterfall',    'ersin_forest',  'river'
-    ErsinForestCenter = 'ersin_forest_center',          'ersin_forest',  'birds'
-    ErsinForestCave = 'ersin_forest_cave',              'ersin_forest',  'birds'
-    ErsinCaveRoom1 = 'ersin_cave_room1',                'ersin_cave',    None
-    ErsinCaveRoom2 = 'ersin_cave_room2',                'ersin_cave',    None
-    ErsinCaveRoom3 = 'ersin_cave_room3',                'ersin_cave',    None
-    InverniaTown = 'invernia_town',                     'invernia_town', 'town'
-    InverniaArmorShop = 'invernia_armor_shop',          'invernia_town', None
-    InverniaWeaponShop = 'invernia_weapon_shop',        'invernia_town', None
-    InverniaItemShop = 'invernia_item_shop',            'invernia_town', None
-    InverniaInn1F = 'invernia_inn_1f',                  'invernia_town', None
-    InverniaInn2F = 'invernia_inn_2f',                  'invernia_town', None
-    InverniaGuild = 'invernia_guild',                   'invernia_town', 'fire'
-    InverniaSchool = 'invernia_school',                 'invernia_town', None
-    InverniaHouseBig1F = 'invernia_house_big_1f',       'invernia_town', None
-    InverniaHouseBig2F = 'invernia_house_big_2f',       'invernia_town', None
-    InverniaHouseLeft = 'invernia_house_left',          'invernia_town', None
-    InverniaHouseRight = 'invernia_house_right',        'invernia_town', None
 
 
 class Audio(object):
@@ -159,16 +133,21 @@ class Audio(object):
             return
 
         if currentstate == GameState.Overworld:
-            for _enum in MapMusic:
-                # als de naam in de MapMusic overeenkomt met de naam van de huidige map
-                if _enum.value[0] == self.engine.data.map_name:
-                    # als de muziek in de MapMusic NIET overeenkomt met de muziek van de vorige map
-                    if _enum.value[1] != self._get_prev_bg_audio(1):
-                        # speel dan de nieuwe muziek
-                        self.fade_bg_music()
-                        self.bg_music_channel.set_volume(1)
-                        self.play_bg_music(_enum.value[1])
-                        break
+            # eerst 2 korte vars ipv lange functies
+            prev_map = self.engine.gamestate.peek().window.prev_map_name
+            new_map = self.engine.data.map_name
+            # zet eerst prev_music op None
+            prev_music = None
+            # vind de nieuwe muziek door de nieuwe map naam als key te gebruiken in de MapMusic Enum.
+            new_music = MapMusic[new_map].value[0]
+            # uit prev_map kan None uitkomen, als hier geen None uit komt, gebruik dan die waarde als Enum key.
+            if prev_map:
+                prev_music = MapMusic[prev_map].value[0]
+            # als de oude en nieuwe niet gelijk zijn, speel dan de nieuwe muziek.
+            if new_music != prev_music:
+                self.fade_bg_music()
+                self.bg_music_channel.set_volume(1)
+                self.play_bg_music(MapMusic[new_map].value[0])
             return
 
         self.fade_bg_music()
@@ -177,11 +156,6 @@ class Audio(object):
         if currentstate == GameState.MainMenu:
             # de fade en setvolume staan nu in de if, want bij muziek moet het niet altijd
             self.play_bg_music(TITLESCREEN)
-
-    def _get_prev_bg_audio(self, index):
-        for _enum in MapMusic:
-            if _enum.value[0] == self.engine.gamestate.peek().window.prev_map_name:
-                return _enum.value[index]
 
     def set_bg_sounds(self, currentstate):
         """
@@ -196,13 +170,16 @@ class Audio(object):
             return
 
         if currentstate == GameState.Overworld:
-            for _enum in MapMusic:
-                if _enum.value[0] == self.engine.data.map_name:
-                    if _enum.value[2] != self._get_prev_bg_audio(2):
-                        self.fade_bg_sounds()
-                        self.bg_sound_channel1.set_volume(1)
-                        self.play_sound(_enum.value[2], loop=-1, channel=self.bg_sound_channel1)
-                        break
+            prev_map = self.engine.gamestate.peek().window.prev_map_name
+            new_map = self.engine.data.map_name
+            prev_bgs = None
+            new_bgs = MapMusic[new_map].value[1]
+            if prev_map:
+                prev_bgs = MapMusic[prev_map].value[1]
+            if new_bgs != prev_bgs:
+                self.fade_bg_sounds()
+                self.bg_sound_channel1.set_volume(1)
+                self.play_sound(MapMusic[new_map].value[1], loop=-1, channel=self.bg_sound_channel1)
             return
 
         self.fade_bg_sounds()

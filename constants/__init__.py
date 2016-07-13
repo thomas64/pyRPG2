@@ -6,10 +6,13 @@ class: EquipmentType
 class: WeaponType
 class: ItemMaterial
 class: SchoolType
+class: Minimals
 class: StatType
 class: SkillType
 class: SpellType
 class: QuestType
+class: QuestState
+class: MapMusic
 """
 
 import enum
@@ -196,3 +199,29 @@ class QuestState(enum.Enum):
     Running = 2
     Finished = 3
     Rewarded = 4
+
+
+class MapMusic(enum.Enum):
+    """
+    Alle tmx kaarten op een rij, met de muziek erachter en ambient sound.
+    De key's komen precies overeen met de .tmx namen. De values[0] en [1] komen overeen met de .ogg namen.
+    """
+    ersin_forest_start =        'ersin_forest',  'birds'
+    ersin_forest_waterfall =    'ersin_forest',  'river'
+    ersin_forest_center =       'ersin_forest',  'birds'
+    ersin_forest_cave =         'ersin_forest',  'birds'
+    ersin_cave_room1 =          'ersin_cave',    None
+    ersin_cave_room2 =          'ersin_cave',    None
+    ersin_cave_room3 =          'ersin_cave',    None
+    invernia_town =             'invernia_town', 'town'
+    invernia_armor_shop =       'invernia_town', None
+    invernia_weapon_shop =      'invernia_town', None
+    invernia_item_shop =        'invernia_town', None
+    invernia_inn_1f =           'invernia_town', None
+    invernia_inn_2f =           'invernia_town', None
+    invernia_guild =            'invernia_town', 'fire'
+    invernia_school =           'invernia_town', None
+    invernia_house_big_1f =     'invernia_town', None
+    invernia_house_big_2f =     'invernia_town', None
+    invernia_house_left =       'invernia_town', None
+    invernia_house_right =      'invernia_town', None
