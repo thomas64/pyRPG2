@@ -8,7 +8,7 @@ import pickle
 
 import pygame
 
-import console
+from console import Console
 
 OPTIONSPATH = 'options'
 OPTIONSFILE = os.path.join(OPTIONSPATH, 'video.cfg')
@@ -39,9 +39,9 @@ class Video(object):
         try:
             with open(OPTIONSFILE, 'rb') as f:
                 self.fullscreen = pickle.load(f)
-            console.load_options()
+            Console.load_options()
         except (pickle.UnpicklingError, FileNotFoundError, EOFError):
-            console.corrupt_options()
+            Console.corrupt_options()
             self.fullscreen = False
             self.write_cfg()
 
@@ -51,7 +51,7 @@ class Video(object):
         """
         with open(OPTIONSFILE, 'wb') as f:
             pickle.dump(self.fullscreen, f)
-        console.write_options()
+        Console.write_options()
 
     def flip_fullscreen(self):
         """

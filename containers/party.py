@@ -5,7 +5,7 @@ class: Party
 
 import collections
 
-import console
+from console import Console
 
 
 class Party(collections.OrderedDict):
@@ -33,12 +33,12 @@ class Party(collections.OrderedDict):
         :param verbose: als False meegegeven wordt, print dan niets in de console
         """
         if hero.RAW in self:
-            console.error_hero_double_join(hero.NAM, self.NAM)
+            Console.error_hero_double_join(hero.NAM, self.NAM)
             raise ValueError
         elif len(self) < self.MAX:
             self[hero.RAW] = hero
             if verbose:
-                console.hero_join_party(hero.NAM, self.NAM)
+                Console.hero_join_party(hero.NAM, self.NAM)
             return True
         else:
             return False
@@ -49,12 +49,12 @@ class Party(collections.OrderedDict):
         :param hero: Hero Object
         """
         if hero.RAW == 'alagos':
-            console.error_leader_not_leave_party()
+            Console.error_leader_not_leave_party()
             raise AttributeError
         elif hero.RAW in self:
             del self[hero.RAW]
         else:
-            console.error_hero_not_in_party(hero.NAM, self.NAM)
+            Console.error_hero_not_in_party(hero.NAM, self.NAM)
             raise AttributeError
 
     def get_highest_value_of_skill(self, attr):

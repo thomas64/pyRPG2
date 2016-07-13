@@ -9,9 +9,9 @@ import random
 
 import pygame
 
-import console
+from console import Console
+from constants import GameState
 from constants import MapMusic
-from statemachine import GameState
 
 
 OPTIONSPATH = 'options'
@@ -78,9 +78,9 @@ class Audio(object):
         try:
             with open(OPTIONSFILE, 'rb') as f:
                 self.music, self.sound = pickle.load(f)
-            console.load_options()
+            Console.load_options()
         except (pickle.UnpicklingError, FileNotFoundError, EOFError):
-            console.corrupt_options()
+            Console.corrupt_options()
             self.music, self.sound = True, True
             self.write_cfg()
 
@@ -90,7 +90,7 @@ class Audio(object):
         """
         with open(OPTIONSFILE, 'wb') as f:
             pickle.dump([self.music, self.sound], f)
-        console.write_options()
+        Console.write_options()
 
     def flip_sound(self):
         """

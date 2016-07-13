@@ -6,7 +6,7 @@ class: Dialog
 import os
 import pickle
 
-import console
+from console import Console
 
 SAVEPATH = 'savegame'
 
@@ -28,18 +28,18 @@ class Dialog(object):
         """
         filename = os.path.join(SAVEPATH, filename)
         try:
-            console.load_gamedata()
+            Console.load_gamedata()
             with open(filename, 'rb') as f:
                 self.engine.data = pickle.load(f)
         except (pickle.UnpicklingError, EOFError):
-            console.corrupt_gamedata()
+            Console.corrupt_gamedata()
 
     def save(self, filename):
         """
         Save de voortgang naar een bestand.
         :param filename: het gekozen bestandsnaam uit de lijst of ingetypt.
         """
-        console.save_gamedata()
+        Console.save_gamedata()
         filename = os.path.join(SAVEPATH, filename)
         with open(filename, 'wb') as f:
             pickle.dump(self.engine.data, f)
@@ -50,6 +50,6 @@ class Dialog(object):
         Delete een opgeslagen spelbestand.
         :param filename: het gekozen bestandsnaam uit de lijst
         """
-        console.delete_gamedata()
+        Console.delete_gamedata()
         filename = os.path.join(SAVEPATH, filename)
         os.remove(filename)

@@ -3,7 +3,7 @@
 class: Inventory
 """
 
-import console
+from console import Console
 from constants import WeaponType
 
 
@@ -56,12 +56,12 @@ class Inventory(dict):
         :param verbose: als False meegegeven wordt, print dan niets in de console
         """
         if quantity < 1:
-            console.error_quantity_less_than_one(quantity)
+            Console.error_quantity_less_than_one(quantity)
             raise ValueError
         if equipment_item.RAW in self:
             self[equipment_item.RAW].qty += quantity
             if self[equipment_item.RAW].qty > self.MAX:
-                console.container_is_full(self.NAM)  # todo, hij geeft alleen nu nog maar mee, hij doet er nog niets aan
+                Console.container_is_full(self.NAM)  # todo, hij geeft alleen nu nog maar mee, hij doet er nog niets aan
         else:
             # als hij nog niet in de inv dict zit, voeg hem toe.
             self[equipment_item.RAW] = equipment_item
@@ -69,9 +69,9 @@ class Inventory(dict):
             # dus daarom, wanneer hij voor het eerst wordt toegevoegd: + qty - 1
             self[equipment_item.RAW].qty += (quantity - 1)
             if self[equipment_item.RAW].qty > self.MAX:
-                console.container_is_full(self.NAM)  # todo, hij geeft alleen nu nog maar mee, hij doet er nog niets aan
+                Console.container_is_full(self.NAM)  # todo, hij geeft alleen nu nog maar mee, hij doet er nog niets aan
         if verbose:
-            console.add_item_in_container(quantity, equipment_item.NAM, self.NAM)
+            Console.add_item_in_container(quantity, equipment_item.NAM, self.NAM)
 
     def remove_i(self, equipment_item, quantity=1, verbose=True):
         """
@@ -81,17 +81,17 @@ class Inventory(dict):
         :param verbose: als False meegegeven wordt, print dan niets in de console
         """
         if equipment_item.RAW not in self:
-            console.error_no_equipment_item()
+            Console.error_no_equipment_item()
             raise AttributeError
         if quantity < 1:
-            console.error_quantity_less_than_one(quantity)
+            Console.error_quantity_less_than_one(quantity)
             raise ValueError
         if self[equipment_item.RAW].qty > quantity:
             self[equipment_item.RAW].qty -= quantity
         elif self[equipment_item.RAW].qty == quantity:
             del self[equipment_item.RAW]
         else:
-            console.error_quantity_not_enough()
+            Console.error_quantity_not_enough()
             raise ValueError
         if verbose:
-            console.remove_item_from_container(quantity, equipment_item.NAM, self.NAM)
+            Console.remove_item_from_container(quantity, equipment_item.NAM, self.NAM)

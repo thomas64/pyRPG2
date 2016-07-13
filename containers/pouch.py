@@ -3,7 +3,8 @@
 class: Pouch
 """
 
-import console
+from console import Console
+
 from .inventory import Inventory
 
 
@@ -45,14 +46,14 @@ class Pouch(dict):
         Verwijdert quantity uit de pouch. Als je iets koopt bijv.
         """
         if cost < 1:
-            console.error_quantity_less_than_one(cost)
+            Console.error_quantity_less_than_one(cost)
             raise ValueError
 
         if pouch_item.RAW not in self:
-            console.quantity_not_enough(pouch_item.NAM, cost, 0)
+            Console.quantity_not_enough(pouch_item.NAM, cost, 0)
             return False
         elif self[pouch_item.RAW].qty < cost:
-            console.quantity_not_enough(pouch_item.NAM, cost, self[pouch_item.RAW].qty)
+            Console.quantity_not_enough(pouch_item.NAM, cost, self[pouch_item.RAW].qty)
             return False
         elif self[pouch_item.RAW].qty == cost and pouch_item.RAW != 'gold':   # goud is de enige uitzondering,
             del self[pouch_item.RAW]                                # die moet in de pouch blijven, ook met 0.
@@ -60,5 +61,5 @@ class Pouch(dict):
         else:
             self[pouch_item.RAW].qty -= cost
             if verbose:
-                console.remove_item_from_container(cost, pouch_item.NAM, self.NAM)
+                Console.remove_item_from_container(cost, pouch_item.NAM, self.NAM)
             return True

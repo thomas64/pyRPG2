@@ -5,7 +5,7 @@ class: StateMachine
 
 import collections
 
-import console
+from console import Console
 from constants import GameState
 
 
@@ -51,7 +51,7 @@ class StateMachine(object):
             # bij messagebox en fade geen console output
             if self.peek().name != GameState.MessageBox and \
                self.peek().name != GameState.FadeBlack:
-                console.state_pop(self.peek().name)
+                Console.state_pop(self.peek().name)
             del self.statestack[-1]
             self.peek().on_enter()
             self.prev_state = None
@@ -73,7 +73,7 @@ class StateMachine(object):
         # bij messagebox fade geen console output
         if state.name != GameState.MessageBox and \
            state.name != GameState.FadeBlack:
-            console.state_push(state.name)
+            Console.state_push(state.name)
         self.statestack.append(state)
         self.peek().on_enter()
         self.prev_state = None
@@ -85,7 +85,7 @@ class StateMachine(object):
         Clear the whole stack.
         """
         self.peek().on_exit()
-        console.state_clear()
+        Console.state_clear()
         self.statestack = []
         self.prev_state = None
 
