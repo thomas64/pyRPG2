@@ -30,9 +30,9 @@ class LoadMenu(BaseMenu):
 
         number_of_slots = []
 
-        # maak het aantal dict entries aan. en een tijdelijke lijst met alle '#_' prefixes.
+        # maak het aantal list entries aan. en een tijdelijke lijst met alle '#_' prefixes.
         for index in range(0, MAXSLOTS):
-            self.content[index+1] = "Slot {}:  ...".format(index+1)
+            self.content.append("Slot {}:  ...".format(index+1))
             number_of_slots.append(str(index+1)+"_")
 
         # loop door de savegame dir heen en sla alle bestanden op in 'files'.
@@ -51,10 +51,10 @@ class LoadMenu(BaseMenu):
                     visual = file.replace(start, "Slot "+str(index+1)+":  ").replace(".dat", "")
                     timestamp = os.path.getmtime(os.path.join(SAVEPATH, file))
                     timestamp = datetime.datetime.fromtimestamp(timestamp).strftime('%Y-%m-%d %H:%M:%S')
-                    # voeg ook de timestamp toe en zet het in de dict bij de juiste slot
-                    self.content[index+1] = "{} [{}]".format(visual, timestamp)
+                    # voeg ook de timestamp toe en zet het in de list overheen bij de juiste slot
+                    self.content[index] = "{} [{}]".format(visual, timestamp)
 
-        self.content['Back'] = 'Back'
+        self.content.append('Back')
 
     def on_select(self, menu_item, title, animation, scr_capt, index):
         """
@@ -66,7 +66,7 @@ class LoadMenu(BaseMenu):
         :param scr_capt: zie BaseMenu
         :param index: zie BaseMenu
         """
-        if menu_item.func == self.Back:
+        if menu_item.text == "Back":
             self.on_exit()
         elif "..." in menu_item.text:
             self.engine.audio.stop_sound(sfx.MENUSELECT)
@@ -87,7 +87,7 @@ class LoadMenu(BaseMenu):
         :param scr_capt: zie BaseMenu
         :param index: zie BaseMenu
         """
-        if menu_item.func == self.Back:
+        if menu_item.text == "Back":
             self.engine.audio.stop_sound(sfx.MENUSELECT)
             self.engine.audio.play_sound(sfx.MENUERROR)
         elif "..." in menu_item.text:

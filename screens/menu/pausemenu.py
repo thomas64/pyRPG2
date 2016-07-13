@@ -17,11 +17,11 @@ class PauseMenu(BaseMenu):
     def __init__(self, engine):
         super().__init__(engine)
 
-        self.content['ContinueGame'] = 'Continue'
-        self.content['LoadGame'] = 'Load Game'
-        self.content['SaveGame'] = 'Save Game'
-        self.content['Options'] = 'Options'
-        self.content['MainMenu'] = 'Main Menu'
+        self.content = ['Continue',
+                        'Load Game',
+                        'Save Game',
+                        'Options',
+                        'Main Menu']
 
     def on_select(self, menu_item, title, animation, scr_capt, index):
         """
@@ -32,22 +32,22 @@ class PauseMenu(BaseMenu):
         :param scr_capt: zie BaseMenu
         :param index: zie BaseMenu
         """
-        if menu_item.func == self.ContinueGame:
+        if menu_item.text == "Continue":
             self.on_exit()
 
-        elif menu_item.func == self.LoadGame:
+        elif menu_item.text == "Load Game":
             push_object = screens.menu.create_menu(GameState.LoadMenu, self.engine, scr_capt=scr_capt)
             self.engine.gamestate.push(push_object)
 
-        elif menu_item.func == self.SaveGame:
+        elif menu_item.text == "Save Game":
             push_object = screens.menu.create_menu(GameState.SaveMenu, self.engine, scr_capt=scr_capt)
             self.engine.gamestate.push(push_object)
 
-        elif menu_item.func == self.Options:
+        elif menu_item.text == "Options":
             push_object = screens.menu.create_menu(GameState.OptionsMenu, self.engine, scr_capt=scr_capt)
             self.engine.gamestate.push(push_object)
 
-        elif menu_item.func == self.MainMenu:
+        elif menu_item.text == "Main Menu":
             push_object = screens.menu.create_menu(GameState.MainMenu, self.engine, select=-1)
             self.engine.gamestate.change(push_object)
             self.engine.gamestate.push(Transition(self.engine.gamestate))

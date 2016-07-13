@@ -3,6 +3,7 @@
 class: SaveMenu
 """
 
+import audio as sfx
 from components import InputBox
 from constants import GameState
 import loadsave
@@ -27,7 +28,7 @@ class SaveMenu(LoadMenu):
         :param scr_capt: zie BaseMenu
         :param index: zie BaseMenu
         """
-        if menu_item.func == self.Back:
+        if menu_item.text == "Back":
             self.on_exit()
         elif "..." in menu_item.text:
             new_name = InputBox().input_loop()
@@ -35,6 +36,7 @@ class SaveMenu(LoadMenu):
                 filename = str(index+1) + "_" + new_name + ".dat"
                 loadsave.Dialog(self.engine).save(filename)
                 self._reload(scr_capt, index)
+                self.engine.audio.play_sound(sfx.MENUSELECT)
         else:
             filename = self._convert_to_filename(menu_item.text, index)
             loadsave.Dialog(self.engine).save(filename)

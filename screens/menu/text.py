@@ -13,9 +13,8 @@ class Text(object):
     """
     Een mainmenu item.
     """
-    def __init__(self, menu_key, menu_string, index, color):
-        self.func = menu_key     # bijv NewGame. dit is de key uit content
-        self.text = menu_string  # bijv New Game. dit is de value uit content
+    def __init__(self, menu_string, index, color):
+        self.text = menu_string  # bijv 'New Game'.
         self.index = index       # index is voor mousemotion in display.
         self.font = pygame.font.SysFont(MENUFONT, MENUFONTSIZE)
         self.font_color = color

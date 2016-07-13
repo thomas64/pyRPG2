@@ -28,7 +28,7 @@ class Display(object):
     """
     Een menuscherm.
     """
-    def __init__(self, audio, state_name, menu_content, title, animation, scr_capt, cur_item=0):
+    def __init__(self, audio, state_name, menu_object, title, animation, scr_capt, cur_item=0):
         self.screen = pygame.display.get_surface()
         self.background = pygame.Surface(self.screen.get_size())
         if animation:
@@ -52,22 +52,22 @@ class Display(object):
         if self.animation:
             self.animation.set_position(bg_width, bg_height)
 
-        self.menu_content = menu_content                        # het object OrderedDict genaamd content
-        self.menu_texts = []                                    # een list van MenuText objecten
-        for index, item in enumerate(self.menu_content.content.items()):
-            menu_text = screens.menu.text.Text(item[0], item[1], index, self.color1)
-            t_h = len(self.menu_content.content) * menu_text.height     # t_h: total height of text block
-            pos_x = (bg_width - menu_text.width) / 2
-            pos_y = ((bg_height - t_h) / 2) + (menu_text.height * index * MENUH)
+        self.menu_content_object = menu_object                          # het menu object met list() genaamd content
+        self.list_text_objects = []                                     # een list van MenuText objecten
+        for index, item in enumerate(self.menu_content_object.content):
+            menu_text_object = screens.menu.text.Text(item, index, self.color1)
+            t_h = len(self.menu_content_object.content) * menu_text_object.height   # t_h: total height of text block
+            pos_x = (bg_width - menu_text_object.width) / 2
+            pos_y = ((bg_height - t_h) / 2) + (menu_text_object.height * index * MENUH)
             if self.animation:
                 pos_x += MENUX
                 pos_y += MENUY
 
-            menu_text.set_position(pos_x, pos_y)
-            self.menu_texts.append(menu_text)
+            menu_text_object.set_position(pos_x, pos_y)
+            self.list_text_objects.append(menu_text_object)
 
         if cur_item == -1:                          # als -1 wordt meegegeven als argument, selecteer dan de laatste
-            self.cur_item = len(self.menu_texts)-1
+            self.cur_item = len(self.list_text_objects)-1
         else:
             self.cur_item = cur_item
 
@@ -97,7 +97,7 @@ class Display(object):
         :return: de key, bijv. 'LoadGame'
         """
         if event.type == pygame.MOUSEMOTION:
-            for item in self.menu_texts:
+            for item in self.list_text_objects:
                 if item.rect.collidepoint(event.pos):
                     if self.cur_item != item.index:
                         self.cur_item = item.index
@@ -106,11 +106,11 @@ class Display(object):
 
         elif event.type == pygame.MOUSEBUTTONDOWN:
             if event.button == keys.LEFTCLICK:
-                for item in self.menu_texts:
+                for item in self.list_text_objects:
                     if item.rect.collidepoint(event.pos):
                         self.audio.play_sound(sfx.MENUSELECT)
-                        self.menu_content.on_select(item,
-                                                    self.title, self.animation, self.scr_capt, self.cur_item)
+                        self.menu_content_object.on_select(item,
+                                                           self.title, self.animation, self.scr_capt, self.cur_item)
                         break
 
         elif event.type == pygame.KEYDOWN:
@@ -120,24 +120,24 @@ class Display(object):
             elif event.key == keys.UP and self.cur_item == 0:
                 self.audio.play_sound(sfx.MENUERROR)
                 self.cur_item = 0
-            elif event.key == keys.DOWN and self.cur_item < len(self.menu_texts) - 1:
+            elif event.key == keys.DOWN and self.cur_item < len(self.list_text_objects) - 1:
                 self.audio.play_sound(sfx.MENUSWITCH)
                 self.cur_item += 1
-            elif event.key == keys.DOWN and self.cur_item == len(self.menu_texts) - 1:
+            elif event.key == keys.DOWN and self.cur_item == len(self.list_text_objects) - 1:
                 self.audio.play_sound(sfx.MENUERROR)
-                self.cur_item = len(self.menu_texts) - 1
+                self.cur_item = len(self.list_text_objects) - 1
 
             if event.key in keys.SELECT:
                 self.audio.play_sound(sfx.MENUSELECT)
-                self.menu_content.on_select(self.menu_texts[self.cur_item],
-                                            self.title, self.animation, self.scr_capt, self.cur_item)
+                self.menu_content_object.on_select(self.list_text_objects[self.cur_item],
+                                                   self.title, self.animation, self.scr_capt, self.cur_item)
             elif event.key == keys.DELETE:
                 self.audio.play_sound(sfx.MENUSELECT)
-                self.menu_content.on_delete(self.menu_texts[self.cur_item],
-                                            self.scr_capt, self.cur_item)
+                self.menu_content_object.on_delete(self.list_text_objects[self.cur_item],
+                                                   self.scr_capt, self.cur_item)
             elif event.key == keys.EXIT:
                 self.audio.play_sound(sfx.MENUSELECT)
-                self.menu_content.on_exit()
+                self.menu_content_object.on_exit()
 
     # noinspection PyMethodMayBeStatic
     def multi_input(self, key_input, mouse_pos, dt):
@@ -163,9 +163,9 @@ class Display(object):
         Zet dan de geselecteerde op een andere kleur.
         Teken de (overworld screencapture) -> achtergrond -> (titel) -> menuitems.
         """
-        for item in self.menu_texts:
+        for item in self.list_text_objects:
             item.set_font_color(self.color1)
-        self.menu_texts[self.cur_item].set_font_color(self.color2)
+        self.list_text_objects[self.cur_item].set_font_color(self.color2)
 
         self.screen.blit(self.background, (0, 0))
 
@@ -178,5 +178,5 @@ class Display(object):
         if self.title:
             self.title.render(self.screen)
 
-        for item in self.menu_texts:
+        for item in self.list_text_objects:
             self.screen.blit(item.label, item.position)

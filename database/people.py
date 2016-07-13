@@ -39,4 +39,4 @@ class PeopleDatabase(enum.Enum):
                    text=["Ouch! This tea is still to hot to drink."])
     person7 = dict(face=MAN5+FEXT, sprite=MAN5+SEXT,
                    text=["The rooms are pretty cheap in this town.",
-                         "I've heard people tell of other places where they ask a lot more for a room."])
+                         "I've heard people tell of other places", "where they ask a lot more for a room."])

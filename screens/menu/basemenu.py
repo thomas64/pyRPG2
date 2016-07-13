@@ -3,31 +3,21 @@
 class: BaseMenu
 """
 
-import collections
+import audio as sfx
 
 
 class BaseMenu(object):
     """
     Base class voor de verschillende menu's.
-    Je kan er dan de lengte van bepalen, er doorheen loopen, en de attr van opvragen.
-    Enums zijn niet aan te passen.
-    Gewone attribute strings staan niet op volgorde
-    Vandaar gekozen voor een ordereddict.
     """
     def __init__(self, engine):
-        self.content = collections.OrderedDict()
+        self.content = list()
         self.engine = engine
-
-    def __getattr__(self, key):
-        """
-        Om te controleren op een key zoals 'NewGame' of die gekozen wordt.
-        """
-        return key
 
     def on_select(self, menu_item, title, animation, scr_capt, index):
         """
         Als er in een menu iets geselecteerd wordt.
-        :param menu_item: self.menu_texts[self.cur_item] uit Display. Dat is een key voor self.inside
+        :param menu_item: self.menu_texts[self.cur_item] uit Display. Dat is een Text() object
         :param title: de titel kan meegegeven worden
         :param animation: de animatie kan meegegeven worden
         :param scr_capt: een screencapture kan meegegeven worden
@@ -42,7 +32,6 @@ class BaseMenu(object):
         """
         self.engine.gamestate.pop()
 
-    # noinspection PyMethodMayBeStatic
     def on_delete(self, menu_item, scr_capt, index):
         """
         Als er een delete commando gegeven wordt. Dit komt eigenlijk alleen voor bij LoadMenu.
@@ -50,4 +39,4 @@ class BaseMenu(object):
         :param scr_capt: een screencapture
         :param index: integer, welke menu item is geselecteerd
         """
-        pass
+        self.engine.audio.stop_sound(sfx.MENUSELECT)
