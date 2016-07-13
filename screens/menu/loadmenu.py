@@ -11,14 +11,16 @@ from components import Map
 from components import Transition
 import data
 import loadsave
-import screens.menu.basemenu
 import screens.overworld.display
+
+from .basemenu import BaseMenu
+
 
 SAVEPATH = 'savegame'
 MAXSLOTS = 5
 
 
-class LoadMenu(screens.menu.basemenu.BaseMenu):
+class LoadMenu(BaseMenu):
     """
     Hier worden alle bestanden van de savegame dir in een list gezet
     en weergegeven in de inside dict.
@@ -30,7 +32,7 @@ class LoadMenu(screens.menu.basemenu.BaseMenu):
 
         # maak het aantal dict entries aan. en een tijdelijke lijst met alle '#_' prefixes.
         for index in range(0, MAXSLOTS):
-            self.inside[index+1] = "Slot {}:  ...".format(index+1)
+            self.content[index+1] = "Slot {}:  ...".format(index+1)
             number_of_slots.append(str(index+1)+"_")
 
         # loop door de savegame dir heen en sla alle bestanden op in 'files'.
@@ -50,9 +52,9 @@ class LoadMenu(screens.menu.basemenu.BaseMenu):
                     timestamp = os.path.getmtime(os.path.join(SAVEPATH, file))
                     timestamp = datetime.datetime.fromtimestamp(timestamp).strftime('%Y-%m-%d %H:%M:%S')
                     # voeg ook de timestamp toe en zet het in de dict bij de juiste slot
-                    self.inside[index+1] = "{} [{}]".format(visual, timestamp)
+                    self.content[index+1] = "{} [{}]".format(visual, timestamp)
 
-        self.inside['Back'] = 'Back'
+        self.content['Back'] = 'Back'
 
     def on_select(self, menu_item, title, animation, scr_capt, index):
         """

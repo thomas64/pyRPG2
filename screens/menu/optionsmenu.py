@@ -3,10 +3,10 @@
 class: OptionsMenu
 """
 
-import screens.menu.basemenu
+from .basemenu import BaseMenu
 
 
-class OptionsMenu(screens.menu.basemenu.BaseMenu):
+class OptionsMenu(BaseMenu):
     """
     De options items. Deze worden geladen uit een bestand en op aangepast.
     """
@@ -14,19 +14,19 @@ class OptionsMenu(screens.menu.basemenu.BaseMenu):
         super().__init__(engine)
 
         if engine.video.fullscreen:
-            self.inside['FullScreen'] = 'Full screen: On'
+            self.content['FullScreen'] = 'Full screen: On'
         else:
-            self.inside['FullScreen'] = 'Full screen: Off'
+            self.content['FullScreen'] = 'Full screen: Off'
         if engine.audio.music:
-            self.inside['Music'] = 'Music: On'
+            self.content['Music'] = 'Music: On'
         else:
-            self.inside['Music'] = 'Music: Off'
+            self.content['Music'] = 'Music: Off'
         if engine.audio.sound:
-            self.inside['Sound'] = 'Sound: On'
+            self.content['Sound'] = 'Sound: On'
         else:
-            self.inside['Sound'] = 'Sound: Off'
+            self.content['Sound'] = 'Sound: Off'
 
-        self.inside['Back'] = 'Back'
+        self.content['Back'] = 'Back'
 
     def on_select(self, menu_item, title, animation, scr_capt, index):
         """

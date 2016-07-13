@@ -7,9 +7,9 @@ import pygame
 import pygame.gfxdraw
 
 import audio
-import console
+from console import Console
 import keys
-import screens.menu.manager
+import screens.menu
 import script
 import statemachine
 import video
@@ -59,7 +59,7 @@ class GameEngine(object):
         Voordat de loop van start gaat.
         """
         self.running = True
-        push_object = screens.menu.manager.create_menu(statemachine.GameState.MainMenu, self)
+        push_object = screens.menu.create_menu(statemachine.GameState.MainMenu, self)
         self.gamestate.push(push_object)
 
     def main_loop(self):
@@ -86,9 +86,9 @@ class GameEngine(object):
         :param event: pygame.event.get()
         """
         # if event.type == pygame.MOUSEBUTTONDOWN:          # todo, tijdelijk staan ze uit
-        #     console.mouse_down(event.pos, event.button)
+        #     Console.mouse_down(event.pos, event.button)
         if event.type == pygame.KEYDOWN:
-            # console.keyboard_down(event.key, event.unicode)
+            # Console.keyboard_down(event.key, event.unicode)
 
             if event.key == keys.DEBUG:
                 # simple boolean swith

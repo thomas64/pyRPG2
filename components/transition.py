@@ -6,7 +6,7 @@ class Transition
 import pygame
 import pygame.gfxdraw
 
-from statemachine import GameState
+from constants import GameState
 
 WINDOWW = 900  # todo, dit kan eigenlijk niet. deze waarden zijn gekopieerd uit overworld. dit moet anders.
 WINDOWH = 718  # de vraag is hoe kan hij de positie vanuit window meegeven terwijl de positie in overworld bekend is.

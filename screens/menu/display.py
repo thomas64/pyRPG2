@@ -6,10 +6,10 @@ class: Display
 import pygame
 
 import audio as sfx
+from constants import GameState
 import keys
-import screens.menu.manager
 import screens.menu.text
-from statemachine import GameState
+
 
 BACKGROUNDCOLOR1 = pygame.Color("black")
 BACKGROUNDCOLOR2 = pygame.Color("white")
@@ -52,11 +52,11 @@ class Display(object):
         if self.animation:
             self.animation.set_position(bg_width, bg_height)
 
-        self.menu_content = menu_content                        # het object OrderedDict genaamd inside
+        self.menu_content = menu_content                        # het object OrderedDict genaamd content
         self.menu_texts = []                                    # een list van MenuText objecten
-        for index, item in enumerate(self.menu_content):
+        for index, item in enumerate(self.menu_content.content.items()):
             menu_text = screens.menu.text.Text(item[0], item[1], index, self.color1)
-            t_h = len(self.menu_content) * menu_text.height     # t_h: total height of text block
+            t_h = len(self.menu_content.content) * menu_text.height     # t_h: total height of text block
             pos_x = (bg_width - menu_text.width) / 2
             pos_y = ((bg_height - t_h) / 2) + (menu_text.height * index * MENUH)
             if self.animation:

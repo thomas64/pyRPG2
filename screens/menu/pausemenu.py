@@ -4,22 +4,24 @@ class: PauseMenu
 """
 
 from components import Transition
-import screens.menu.basemenu
-from statemachine import GameState
+from constants import GameState
+
+from .basemenu import BaseMenu
+import screens.menu
 
 
-class PauseMenu(screens.menu.basemenu.BaseMenu):
+class PauseMenu(BaseMenu):
     """
     De pausemenu items.
     """
     def __init__(self, engine):
         super().__init__(engine)
 
-        self.inside['ContinueGame'] = 'Continue'
-        self.inside['LoadGame'] = 'Load Game'
-        self.inside['SaveGame'] = 'Save Game'
-        self.inside['Options'] = 'Options'
-        self.inside['MainMenu'] = 'Main Menu'
+        self.content['ContinueGame'] = 'Continue'
+        self.content['LoadGame'] = 'Load Game'
+        self.content['SaveGame'] = 'Save Game'
+        self.content['Options'] = 'Options'
+        self.content['MainMenu'] = 'Main Menu'
 
     def on_select(self, menu_item, title, animation, scr_capt, index):
         """
@@ -34,18 +36,18 @@ class PauseMenu(screens.menu.basemenu.BaseMenu):
             self.on_exit()
 
         elif menu_item.func == self.LoadGame:
-            push_object = screens.menu.manager.create_menu(GameState.LoadMenu, self.engine, scr_capt=scr_capt)
+            push_object = screens.menu.create_menu(GameState.LoadMenu, self.engine, scr_capt=scr_capt)
             self.engine.gamestate.push(push_object)
 
         elif menu_item.func == self.SaveGame:
-            push_object = screens.menu.manager.create_menu(GameState.SaveMenu, self.engine, scr_capt=scr_capt)
+            push_object = screens.menu.create_menu(GameState.SaveMenu, self.engine, scr_capt=scr_capt)
             self.engine.gamestate.push(push_object)
 
         elif menu_item.func == self.Options:
-            push_object = screens.menu.manager.create_menu(GameState.OptionsMenu, self.engine, scr_capt=scr_capt)
+            push_object = screens.menu.create_menu(GameState.OptionsMenu, self.engine, scr_capt=scr_capt)
             self.engine.gamestate.push(push_object)
 
         elif menu_item.func == self.MainMenu:
-            push_object = screens.menu.manager.create_menu(GameState.MainMenu, self.engine, select=-1)
+            push_object = screens.menu.create_menu(GameState.MainMenu, self.engine, select=-1)
             self.engine.gamestate.change(push_object)
             self.engine.gamestate.push(Transition(self.engine.gamestate))

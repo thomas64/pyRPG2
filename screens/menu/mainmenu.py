@@ -5,24 +5,25 @@ class: MainMenu
 
 from components import Map
 from components import Transition
+from constants import GameState
 import data
-import screens.menu.basemenu
-import screens.menu.manager
 import screens.overworld.display
-from statemachine import GameState
+
+from .basemenu import BaseMenu
+import screens.menu
 
 
-class MainMenu(screens.menu.basemenu.BaseMenu):
+class MainMenu(BaseMenu):
     """
     De mainmenu items.
     """
     def __init__(self, engine):
         super().__init__(engine)
 
-        self.inside['NewGame'] = 'New Game'
-        self.inside['LoadGame'] = 'Load Game'
-        self.inside['Options'] = 'Options'
-        self.inside['ExitGame'] = 'Exit'
+        self.content['NewGame'] = 'New Game'
+        self.content['LoadGame'] = 'Load Game'
+        self.content['Options'] = 'Options'
+        self.content['ExitGame'] = 'Exit'
 
     def on_select(self, menu_item, title, animation, scr_capt, index):
         """
@@ -42,13 +43,13 @@ class MainMenu(screens.menu.basemenu.BaseMenu):
             self.engine.gamestate.push(Transition(self.engine.gamestate))
 
         elif menu_item.func == self.LoadGame:
-            push_object = screens.menu.manager.create_menu(GameState.LoadMenu, self.engine)
+            push_object = screens.menu.create_menu(GameState.LoadMenu, self.engine)
             self.engine.gamestate.push(push_object)
             self.engine.gamestate.push(Transition(self.engine.gamestate))
 
         elif menu_item.func == self.Options:
-            push_object = screens.menu.manager.create_menu(GameState.OptionsMenu, self.engine,
-                                                           title=title, animation=animation)
+            push_object = screens.menu.create_menu(GameState.OptionsMenu, self.engine,
+                                                   title1=title, animation1=animation)
             self.engine.gamestate.push(push_object)
 
         elif menu_item.func == self.ExitGame:

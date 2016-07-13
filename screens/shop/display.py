@@ -13,6 +13,7 @@ from components import Button
 from components import ConfirmBox
 from components import MessageBox
 from components import Transition
+from constants import GameState
 from constants import WeaponType
 from database import PouchItemDatabase
 from inventoryitems import PouchItem
@@ -21,7 +22,7 @@ import screens.shop.buybox
 import screens.shop.infobox
 import screens.shop.selector
 import screens.shop.sellbox
-from statemachine import GameState
+
 
 BACKGROUNDCOLOR = pygame.Color("black")
 BACKGROUNDSPRITE = 'resources/sprites/parchment.png'

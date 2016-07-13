@@ -5,9 +5,11 @@ class: MessageBox
 
 import pygame
 
-from .screencapture import ScreenCapture
+from constants import GameState
 import keys
-from statemachine import GameState
+
+from .screencapture import ScreenCapture
+
 
 BACKGROUNDCOLOR = pygame.Color("black")
 

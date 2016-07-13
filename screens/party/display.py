@@ -8,6 +8,7 @@ import pygame
 from components import Button
 from components import ConfirmBox
 from components import Map
+from constants import GameState
 import keys
 import screens.party.herobox
 import screens.party.infobox
@@ -17,7 +18,6 @@ import screens.party.pouchbox
 import screens.party.skillsbox
 import screens.party.spellsbox
 import screens.party.statsbox
-from statemachine import GameState
 
 
 BACKGROUNDCOLOR = pygame.Color("black")

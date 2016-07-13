@@ -7,11 +7,11 @@ import pygame
 
 import audio as sfx
 from components import Button
+from constants import GameState
 import keys
-import screens.menu.manager
+import screens.menu
 import screens.party.display
 import screens.overworld.window
-from statemachine import GameState
 
 
 WINDOWPOS = 10, 40
@@ -166,7 +166,7 @@ class Display(object):
     def _show_pause_menu(self):
         self.engine.audio.play_sound(sfx.MENUSELECT)
 
-        push_object = screens.menu.manager.create_menu(GameState.PauseMenu, self.engine)
+        push_object = screens.menu.create_menu(GameState.PauseMenu, self.engine)
         self.engine.gamestate.push(push_object)
 
     def _show_party_screen(self):

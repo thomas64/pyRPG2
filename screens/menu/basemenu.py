@@ -15,20 +15,8 @@ class BaseMenu(object):
     Vandaar gekozen voor een ordereddict.
     """
     def __init__(self, engine):
-        self.inside = collections.OrderedDict()
+        self.content = collections.OrderedDict()
         self.engine = engine
-
-    def __len__(self):
-        """
-        Om de totale hoogte van alle items te kunnen berekenen, om het blok verticaal te kunnen centreren.
-        """
-        return len(self.inside)
-
-    def __iter__(self):
-        """
-        Zodat de GameMenu class door alle enum items kan heen lopen om ze te kunnen projecteren.
-        """
-        return iter(self.inside.items())
 
     def __getattr__(self, key):
         """
