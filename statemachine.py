@@ -4,28 +4,9 @@ class: StateMachine
 """
 
 import collections
-import enum
 
 import console
-
-
-class GameState(enum.Enum):
-    """
-    Alle states uit het spel.
-    """
-    MainMenu = 1
-    LoadMenu = "Load Game"
-    SaveMenu = "Save Game"
-    OptionsMenu = 4
-    PauseMenu = 5
-
-    Overworld = 6
-    Battle = 7
-    Conversation = 8
-    PartyScreen = 9
-    MessageBox = 10
-    Shop = 11
-    FadeBlack = 12
+from constants import GameState
 
 
 class StateMachine(object):
