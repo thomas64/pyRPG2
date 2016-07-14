@@ -536,14 +536,16 @@ class Window(object):
         """
         Bekijk met welke note objectnummer hij in de list collide.
         Dat is een NamedRect, dus bekijk zijn .name adhv het objectnummer.
-        Haal dan de tekst uit de database
+        Haal dan de tekst uit de database, die zit in een lijst van lijsten.
+        In tegenovergestelde volgorde moet hij op de stack komen.
         """
         if len(check_rect.collidelistall(self.engine.current_map.notes)) == 1:
             object_nr = check_rect.collidelist(self.engine.current_map.notes)
             note_id = self.engine.current_map.notes[object_nr].name
             note_text = NoteDatabase[note_id].value
-            push_object = MessageBox(self.engine.gamestate, note_text)
-            self.engine.gamestate.push(push_object)
+            for text_part in reversed(note_text):
+                push_object = MessageBox(self.engine.gamestate, text_part)
+                self.engine.gamestate.push(push_object)
 
     def check_signs(self):
         """

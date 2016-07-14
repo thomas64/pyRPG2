@@ -105,7 +105,6 @@ class Console:
     @staticmethod
     def container_is_full(container_name):
         """
-        Party.add()
         Inventory.add_i()
         Pouch.add()
         :param container_name: string
