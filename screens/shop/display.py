@@ -8,16 +8,16 @@ import importlib
 
 import pygame
 
-import audio as sfx
 from components import Button
 from components import ConfirmBox
 from components import MessageBox
 from components import Transition
 from constants import GameState
+from constants import Keys
+from constants import SFX
 from constants import WeaponType
 from database import PouchItemDatabase
 from inventoryitems import PouchItem
-import keys
 import screens.shop.buybox
 import screens.shop.infobox
 import screens.shop.selector
@@ -109,7 +109,7 @@ class Display(object):
         self._init_boxes()
 
         self.close_button = Button(
-            BTNWIDTH, BTNHEIGHT, (self.background.get_width() + CLOSEX, CLOSEY), CLOSELBL, keys.EXIT,
+            BTNWIDTH, BTNHEIGHT, (self.background.get_width() + CLOSEX, CLOSEY), CLOSELBL, Keys.Exit.value,
             COLORKEY, FONTCOLOR)
 
         self.info_label = ""
@@ -225,10 +225,10 @@ class Display(object):
                     gold = PouchItem(**PouchItemDatabase.gold.value)
                     if self.engine.data.pouch.remove(gold, self.value):     # deze if is eigenlijk overbodig maar
                         self.engine.data.inventory.add_i(self.selected_item)  # van origineel zit hij erin. maar hij
-                        self.engine.audio.play_sound(sfx.COINS)             # filtert nu al bij het klikken.
+                        self.engine.audio.play_sound(SFX.coins)             # filtert nu al bij het klikken.
                         self._init_sellbox()
                 else:
-                    self.engine.audio.play_sound(sfx.MENUSELECT)
+                    self.engine.audio.play_sound(SFX.menu_select)
 
             elif self.sell_click:
                 # hij gebruikt nothing hier niet
@@ -242,10 +242,10 @@ class Display(object):
                     self.engine.data.inventory.remove_i(self.selected_item, quantity)
                     gold = PouchItem(**PouchItemDatabase.gold.value)
                     self.engine.data.pouch.add(gold, self.value * quantity)
-                    self.engine.audio.play_sound(sfx.COINS)
+                    self.engine.audio.play_sound(SFX.coins)
                     self._init_sellbox()
                 else:
-                    self.engine.audio.play_sound(sfx.MENUSELECT)
+                    self.engine.audio.play_sound(SFX.menu_select)
 
             self.buy_click = False
             self.sell_click = False
@@ -286,9 +286,9 @@ class Display(object):
 
         elif event.type == pygame.MOUSEBUTTONDOWN:
 
-            if event.button == keys.LEFTCLICK:
+            if event.button == Keys.Leftclick.value:
 
-                if self.close_button.single_click(event) == keys.EXIT:
+                if self.close_button.single_click(event) == Keys.Exit.value:
                     self._close()
 
                 for selector in self.selectors:
@@ -304,18 +304,18 @@ class Display(object):
                 if self._handle_sell_box_click(event):
                     return
 
-            elif event.button in (keys.SCROLLUP, keys.SCROLLDOWN):
+            elif event.button in (Keys.Scrollup.value, Keys.Scrolldown.value):
                 if self.buybox.rect.collidepoint(event.pos):
                     self.buybox.mouse_scroll(event)
                 if self.sellbox.rect.collidepoint(event.pos):
                     self.sellbox.mouse_scroll(event)
 
         elif event.type == pygame.KEYDOWN:
-            if event.key == keys.EXIT:
+            if event.key == Keys.Exit.value:
                 self._close()
-            elif event.key == keys.PREV:
+            elif event.key == Keys.Prev.value:
                 self._previous()
-            elif event.key == keys.NEXT:
+            elif event.key == Keys.Next.value:
                 self._next()
 
     def multi_input(self, key_input, mouse_pos, dt):
@@ -368,7 +368,7 @@ class Display(object):
     def _handle_buy_box_click(self, event):
         self.buy_click, self.selected_item, self.value = self.buybox.mouse_click(event)
         if self.buy_click and self.value <= self.gold_amount:
-            self.engine.audio.play_sound(sfx.MENUSELECT)
+            self.engine.audio.play_sound(SFX.menu_select)
             text = ["You may buy 1 {} for {} gold.".format(self.selected_item.NAM, self.value),
                     "",
                     "Yes please.",
@@ -377,7 +377,7 @@ class Display(object):
             self.engine.gamestate.push(self.confirm_box)
             return True
         elif self.buy_click and self.value > self.gold_amount:
-            self.engine.audio.play_sound(sfx.MENUERROR)
+            self.engine.audio.play_sound(SFX.menu_error)
             text = ["You need {} more gold to".format(self.value - self.gold_amount),
                     "buy that {}.".format(self.selected_item.NAM)]
             push_object = MessageBox(self.engine.gamestate, text)
@@ -391,13 +391,13 @@ class Display(object):
     def _handle_sell_box_click(self, event):
         self.sell_click, self.selected_item, self.tot_quantity, self.value = self.sellbox.mouse_click(event)
         if self.sell_click and self.selected_item:
-            self.engine.audio.play_sound(sfx.MENUSELECT)
+            self.engine.audio.play_sound(SFX.menu_select)
             text = self._fill_confirm_box_with_sell_text()
             self.confirm_box = ConfirmBox(self.engine.gamestate, self.engine.audio, text)
             self.engine.gamestate.push(self.confirm_box)
             return True
         elif self.sell_click and not self.selected_item:
-            self.engine.audio.play_sound(sfx.MENUERROR)
+            self.engine.audio.play_sound(SFX.menu_error)
             text = ["You can not sell it to me",
                     "if you won't unequip it first."]
             push_object = MessageBox(self.engine.gamestate, text)

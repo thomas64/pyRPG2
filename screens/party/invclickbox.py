@@ -6,8 +6,9 @@ class: InvClickBox
 import pygame
 
 from components import MessageBox
+from constants import Keys
 import inventoryitems
-import keys
+
 
 BACKGROUNDCOLOR = pygame.Color("black")
 LINECOLOR = pygame.Color("white")
@@ -153,10 +154,10 @@ class InvClickBox(object):
         Registreert of scrolwiel gebruikt wordt. Verplaatst de layer dan omhoog of omlaag.
         :param event: pygame.MOUSEBUTTONDOWN uit partyscreen
         """
-        if event.button == keys.SCROLLUP:
+        if event.button == Keys.Scrollup.value:
             if self.lay_rect.y - self.rect.y < 0:
                 self.lay_rect.y += SCROLLSPEED
-        elif event.button == keys.SCROLLDOWN:
+        elif event.button == Keys.Scrolldown.value:
             if self.lay_rect.y - self.rect.y > self.rect.height - self.layer_height:
                 self.lay_rect.y -= SCROLLSPEED
 

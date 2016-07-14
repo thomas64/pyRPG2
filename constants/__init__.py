@@ -14,9 +14,13 @@ class: SpellType
 class: QuestType
 class: QuestState
 class: MapMusic
+class: SFX
+class: Keys
 """
 
 import enum
+
+import pygame
 
 
 class GameState(enum.Enum):
@@ -246,3 +250,59 @@ class MapMusic(enum.Enum):
     invernia_house_big_2f =     "invernia_town", None
     invernia_house_left =       "invernia_town", None
     invernia_house_right =      "invernia_town", None
+
+
+class SFX(enum.Enum):
+    """
+    Alle geluiden. De .name moet gelijk aan het audio bestand .ogg zijn.
+    """
+    menu_switch = 1
+    menu_select = 2
+    menu_error = 3
+    step_grass = 4
+    step_stone = 5
+    step_wood = 6
+    step_carpet = 7
+    coins = 8
+    chest = 9
+    sparkly = 10
+
+
+class Keys(enum.Enum):
+    """
+    Alle keys uit het spel.
+    """
+    Kill = pygame.K_BACKSLASH
+    Grid = pygame.K_F10
+    Cbox = pygame.K_F11
+    Debug = pygame.K_F12
+
+    Select = pygame.K_RETURN, pygame.K_KP_ENTER  # 2 mogelijkheden voor dezelfde constante
+    Delete = pygame.K_DELETE
+    Exit = pygame.K_ESCAPE
+    Remove = pygame.K_BACKSPACE
+
+    Up = pygame.K_UP
+    Down = pygame.K_DOWN
+    Left = pygame.K_LEFT
+    Right = pygame.K_RIGHT
+
+    Align = pygame.K_SPACE
+
+    Mvspeed1_1 = pygame.K_LCTRL
+    Mvspeed1_2 = pygame.K_RCTRL
+    Mvspeed3_1 = pygame.K_LSHIFT
+    Mvspeed3_2 = pygame.K_RSHIFT
+
+    Zoomplus = pygame.K_KP_PLUS, pygame.K_PERIOD
+    Zoommin = pygame.K_KP_MINUS, pygame.K_COMMA
+    Zoomreset = pygame.K_KP_DIVIDE, pygame.K_SLASH
+
+    Action = pygame.K_a
+    Inv = pygame.K_i
+    Prev = pygame.K_q
+    Next = pygame.K_w
+
+    Leftclick = 1
+    Scrollup = 4
+    Scrolldown = 5

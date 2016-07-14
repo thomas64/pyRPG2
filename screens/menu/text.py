@@ -9,7 +9,7 @@ MENUFONT = None             # todo, nog een ander font kiezen?
 MENUFONTSIZE = 50
 
 
-class Text(object):
+class MenuText(object):
     """
     Een mainmenu item.
     """

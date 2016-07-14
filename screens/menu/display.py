@@ -5,10 +5,11 @@ class: Display
 
 import pygame
 
-import audio as sfx
 from constants import GameState
-import keys
-import screens.menu.text
+from constants import Keys
+from constants import SFX
+
+from .text import MenuText
 
 
 BACKGROUNDCOLOR1 = pygame.Color("black")
@@ -55,7 +56,7 @@ class Display(object):
         self.menu_content_object = menu_object                          # het menu object met list() genaamd content
         self.list_text_objects = []                                     # een list van MenuText objecten
         for index, item in enumerate(self.menu_content_object.content):
-            menu_text_object = screens.menu.text.Text(item, index, self.color1)
+            menu_text_object = MenuText(item, index, self.color1)
             t_h = len(self.menu_content_object.content) * menu_text_object.height   # t_h: total height of text block
             pos_x = (bg_width - menu_text_object.width) / 2
             pos_y = ((bg_height - t_h) / 2) + (menu_text_object.height * index * MENUH)
@@ -101,42 +102,42 @@ class Display(object):
                 if item.rect.collidepoint(event.pos):
                     if self.cur_item != item.index:
                         self.cur_item = item.index
-                        self.audio.play_sound(sfx.MENUSWITCH)
+                        self.audio.play_sound(SFX.menu_switch)
                     break
 
         elif event.type == pygame.MOUSEBUTTONDOWN:
-            if event.button == keys.LEFTCLICK:
+            if event.button == Keys.Leftclick.value:
                 for item in self.list_text_objects:
                     if item.rect.collidepoint(event.pos):
-                        self.audio.play_sound(sfx.MENUSELECT)
+                        self.audio.play_sound(SFX.menu_select)
                         self.menu_content_object.on_select(item,
                                                            self.title, self.animation, self.scr_capt, self.cur_item)
                         break
 
         elif event.type == pygame.KEYDOWN:
-            if event.key == keys.UP and self.cur_item > 0:
-                self.audio.play_sound(sfx.MENUSWITCH)
+            if event.key == Keys.Up.value and self.cur_item > 0:
+                self.audio.play_sound(SFX.menu_switch)
                 self.cur_item -= 1
-            elif event.key == keys.UP and self.cur_item == 0:
-                self.audio.play_sound(sfx.MENUERROR)
+            elif event.key == Keys.Up.value and self.cur_item == 0:
+                self.audio.play_sound(SFX.menu_error)
                 self.cur_item = 0
-            elif event.key == keys.DOWN and self.cur_item < len(self.list_text_objects) - 1:
-                self.audio.play_sound(sfx.MENUSWITCH)
+            elif event.key == Keys.Down.value and self.cur_item < len(self.list_text_objects) - 1:
+                self.audio.play_sound(SFX.menu_switch)
                 self.cur_item += 1
-            elif event.key == keys.DOWN and self.cur_item == len(self.list_text_objects) - 1:
-                self.audio.play_sound(sfx.MENUERROR)
+            elif event.key == Keys.Down.value and self.cur_item == len(self.list_text_objects) - 1:
+                self.audio.play_sound(SFX.menu_error)
                 self.cur_item = len(self.list_text_objects) - 1
 
-            if event.key in keys.SELECT:
-                self.audio.play_sound(sfx.MENUSELECT)
+            if event.key in Keys.Select.value:
+                self.audio.play_sound(SFX.menu_select)
                 self.menu_content_object.on_select(self.list_text_objects[self.cur_item],
                                                    self.title, self.animation, self.scr_capt, self.cur_item)
-            elif event.key == keys.DELETE:
-                self.audio.play_sound(sfx.MENUSELECT)
+            elif event.key == Keys.Delete.value:
+                self.audio.play_sound(SFX.menu_select)
                 self.menu_content_object.on_delete(self.list_text_objects[self.cur_item],
                                                    self.scr_capt, self.cur_item)
-            elif event.key == keys.EXIT:
-                self.audio.play_sound(sfx.MENUSELECT)
+            elif event.key == Keys.Exit.value:
+                self.audio.play_sound(SFX.menu_select)
                 self.menu_content_object.on_exit()
 
     # noinspection PyMethodMayBeStatic

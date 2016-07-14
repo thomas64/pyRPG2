@@ -5,7 +5,7 @@ class: SellBox
 
 import pygame
 
-import keys
+from constants import Keys
 
 COLORKEY = pygame.Color("white")
 LINECOLOR = pygame.Color("black")
@@ -152,10 +152,10 @@ class SellBox(object):
         Registreert of scrolwiel gebruikt wordt. Verplaatst de layer dan omhoog of omlaag.
         :param event: pygame.MOUSEBUTTONDOWN uit shopscreen
         """
-        if event.button == keys.SCROLLUP:
+        if event.button == Keys.Scrollup.value:
             if self.lay_rect.y - self.rect.y < 0:
                 self.lay_rect.y += SCROLLSPEED
-        elif event.button == keys.SCROLLDOWN:
+        elif event.button == Keys.Scrolldown.value:
             if self.lay_rect.y - self.rect.y > self.rect.height - self.layer_height + 2:  # +2 is nodig tegen scroll-
                 self.lay_rect.y -= SCROLLSPEED                                            # ghosting bij hoogte 1/4
 

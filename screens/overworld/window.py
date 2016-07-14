@@ -7,8 +7,6 @@ import collections
 
 import pygame
 
-import audio as sfx
-
 from components import ColorBox
 from components import ConfirmBox
 from components import Grid
@@ -18,6 +16,8 @@ from components import Player
 from components import Transition
 
 from constants import Direction
+from constants import Keys
+from constants import SFX
 
 from database import InnDatabase
 from database import HeroDatabase
@@ -32,7 +32,7 @@ from database import PouchItemDatabase
 from inventoryitems import EquipmentItem
 from inventoryitems import PouchItem
 from inventoryitems import QuestItem
-import keys
+
 import screens.shop.display
 
 
@@ -182,7 +182,7 @@ class Window(object):
             if choice == yes:
                 gold = PouchItem(**PouchItemDatabase.gold.value)
                 if self.engine.data.pouch.remove(gold, self.inn_data['price']):
-                    self.engine.audio.play_sound(sfx.COINS)
+                    self.engine.audio.play_sound(SFX.coins)
                     self.engine.gamestate.push(Transition(self.engine.gamestate))
                     push_object = MessageBox(self.engine.gamestate, InnDatabase.paid_text(),
                                              face_image=self.inn_data['face'], scr_capt=scr_capt)
@@ -228,11 +228,11 @@ class Window(object):
         """
         if event.type == pygame.KEYDOWN:
 
-            if event.key == keys.ALIGN:
+            if event.key == Keys.Align.value:
                 self.party_sprites[0].align_to_grid(GRIDSIZE)
                 self.align()
 
-            elif event.key == keys.ACTION:
+            elif event.key == Keys.Action.value:
                 self.check_heroes(self.party_sprites[0].get_check_rect())
                 self.check_shops(self.party_sprites[0].get_check_rect())
                 self.check_schools(self.party_sprites[0].get_check_rect())
@@ -243,7 +243,7 @@ class Window(object):
                 self.check_chests()
                 self.check_sparklies(self.party_sprites[0].get_check_rect())  # sparklys moeten ook van boven kunnen
 
-            elif event.key == keys.GRID:
+            elif event.key == Keys.Grid.value:
                 if self.grid_sprite is None:
                     self.grid_sprite = Grid(self.engine.current_map.width,
                                             self.engine.current_map.height,
@@ -253,7 +253,7 @@ class Window(object):
                     self.group.remove(self.grid_sprite)
                     self.grid_sprite = None
 
-            elif event.key == keys.CBOX:
+            elif event.key == Keys.Cbox.value:
                 if len(self.cbox_sprites) == 0:                             # als de lijst leeg is.
                     for unit in self.party_sprites:
                         self.cbox_sprites.append(ColorBox(unit.rect, HEROCOLOR, CBOXLAYER))
@@ -287,15 +287,15 @@ class Window(object):
         :param mouse_pos: pygame.mouse.get_pos()
         :param dt: self.clock.tick(FPS)/1000.0
         """
-        if key_input[keys.ZOOMPLUS[0]] or key_input[keys.ZOOMPLUS[1]]:
+        if key_input[Keys.Zoomplus.value[0]] or key_input[Keys.Zoomplus.value[1]]:
             value = self.engine.current_map.map_layer.zoom + ZOOMSPEED
             if value < MAXZOOM:
                 self.engine.current_map.map_layer.zoom = value
-        elif key_input[keys.ZOOMMIN[0]] or key_input[keys.ZOOMMIN[1]]:
+        elif key_input[Keys.Zoommin.value[0]] or key_input[Keys.Zoommin.value[1]]:
             value = self.engine.current_map.map_layer.zoom - ZOOMSPEED
             if value > MINZOOM:
                 self.engine.current_map.map_layer.zoom = value
-        elif key_input[keys.ZOOMRESET[0]] or key_input[keys.ZOOMRESET[1]]:
+        elif key_input[Keys.Zoomreset.value[0]] or key_input[Keys.Zoomreset.value[1]]:
             self.engine.current_map.map_layer.zoom = DEFZOOM
 
         self.party_sprites[0].speed(key_input)
@@ -610,7 +610,7 @@ class Window(object):
                             self.engine.data.pouch.add(pouch_item, quantity=value['qty'])
                             text.append("{} {}".format(value['qty'], pouch_item.NAM))
                             image.append(pouch_item_spr)
-                    self.engine.audio.play_sound(sfx.CHEST)
+                    self.engine.audio.play_sound(SFX.chest)
                     chest_data['content'] = dict()
                     push_object = MessageBox(self.engine.gamestate, text, spr_image=image)
                     self.engine.gamestate.push(push_object)
@@ -644,7 +644,7 @@ class Window(object):
                         self.engine.data.pouch.add(pouch_item, quantity=value['qty'])
                         text.append("{} {}".format(value['qty'], pouch_item.NAM))
                         image.append(pouch_item_spr)
-                self.engine.audio.play_sound(sfx.SPARKLY)
+                self.engine.audio.play_sound(SFX.sparkly)
                 sparkly_data['content'] = dict()
                 push_object = MessageBox(self.engine.gamestate, text, spr_image=image)
                 self.engine.gamestate.push(push_object)

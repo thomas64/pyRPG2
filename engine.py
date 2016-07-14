@@ -6,13 +6,14 @@ class: GameEngine
 import pygame
 import pygame.gfxdraw
 
-import audio
+from audio import Audio
 from console import Console
-import keys
+from constants import GameState
+from constants import Keys
 import screens.menu
-import script
-import statemachine
-import video
+from statemachine import StateMachine
+from script import Script
+from video import Video
 
 # todo, magic numbers overal opruimen
 
@@ -33,11 +34,11 @@ class GameEngine(object):
     """
     def __init__(self):
         self.screen = pygame.display.get_surface()
-        self.gamestate = statemachine.StateMachine()
+        self.gamestate = StateMachine()
         self.data = None
-        self.script = script.Script(self)
-        self.video = video.Video()
-        self.audio = audio.Audio(self)
+        self.script = Script(self)
+        self.video = Video()
+        self.audio = Audio(self)
         self.current_map = None
 
         self.running = False
@@ -59,7 +60,7 @@ class GameEngine(object):
         Voordat de loop van start gaat.
         """
         self.running = True
-        push_object = screens.menu.create_menu(statemachine.GameState.MainMenu, self)
+        push_object = screens.menu.create_menu(GameState.MainMenu, self)
         self.gamestate.push(push_object)
 
     def main_loop(self):
@@ -90,10 +91,10 @@ class GameEngine(object):
         if event.type == pygame.KEYDOWN:
             # Console.keyboard_down(event.key, event.unicode)
 
-            if event.key == keys.DEBUG:
+            if event.key == Keys.Debug.value:
                 # simple boolean swith
                 self.show_debug ^= True
-            if event.key == keys.KILL:
+            if event.key == Keys.Kill.value:
                 # todo, deze, de key en de methode moeten uiteindelijk weg.
                 self._kill_game()
 

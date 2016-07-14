@@ -7,7 +7,7 @@ import pygame
 
 from .person import Person
 from constants import Direction
-import keys
+from constants import Keys
 
 FEETWIDTH = 2       # hele kleine voetjes
 FEETHEIGHT = 2
@@ -60,12 +60,12 @@ class Player(Person):
         :param key_input: list van integers
         """
         self.movespeed = MOVESPEED2
-        if (key_input[keys.MVSPEED1_1] or key_input[keys.MVSPEED1_2]) and \
-           (key_input[keys.MVSPEED3_1] or key_input[keys.MVSPEED3_2]):
+        if (key_input[Keys.Mvspeed1_1.value] or key_input[Keys.Mvspeed1_2.value]) and \
+           (key_input[Keys.Mvspeed3_1.value] or key_input[Keys.Mvspeed3_2.value]):
             self.movespeed = MOVESPEED4
-        elif key_input[keys.MVSPEED3_1] or key_input[keys.MVSPEED3_2]:
+        elif key_input[Keys.Mvspeed3_1.value] or key_input[Keys.Mvspeed3_2.value]:
             self.movespeed = MOVESPEED3
-        elif key_input[keys.MVSPEED1_1] or key_input[keys.MVSPEED1_2]:
+        elif key_input[Keys.Mvspeed1_1.value] or key_input[Keys.Mvspeed1_2.value]:
             self.movespeed = MOVESPEED1
 
     def direction(self, key_input, dt):
@@ -74,19 +74,19 @@ class Player(Person):
         :param key_input: list van integers
         :param dt: self.clock.tick(FPS)/1000.0
         """
-        if key_input[keys.UP]:
+        if key_input[Keys.Up.value]:
             self.time_up += 1
         else:
             self.time_up = 0
-        if key_input[keys.DOWN]:
+        if key_input[Keys.Down.value]:
             self.time_down += 1
         else:
             self.time_down = 0
-        if key_input[keys.LEFT]:
+        if key_input[Keys.Left.value]:
             self.time_left += 1
         else:
             self.time_left = 0
-        if key_input[keys.RIGHT]:
+        if key_input[Keys.Right.value]:
             self.time_right += 1
         else:
             self.time_right = 0

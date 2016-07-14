@@ -6,7 +6,7 @@ class: MessageBox
 import pygame
 
 from constants import GameState
-import keys
+from constants import Keys
 
 from .screencapture import ScreenCapture
 
@@ -82,12 +82,12 @@ class MessageBox(object):
         :param event: pygame.event.get()
         """
         if event.type == pygame.KEYDOWN:
-            if event.key == keys.EXIT:
+            if event.key == Keys.Exit.value:
                 self.gamestate.pop()
-            elif event.key in keys.SELECT:
+            elif event.key in Keys.Select.value:
                 self.gamestate.pop()
         elif event.type == pygame.MOUSEBUTTONDOWN:
-            if event.button == keys.LEFTCLICK:
+            if event.button == Keys.Leftclick.value:
                 self.gamestate.pop()
 
     def render(self):

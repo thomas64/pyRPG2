@@ -3,9 +3,9 @@
 class: SaveMenu
 """
 
-import audio as sfx
 from components import InputBox
 from constants import GameState
+from constants import SFX
 import loadsave
 
 from .loadmenu import LoadMenu
@@ -36,7 +36,7 @@ class SaveMenu(LoadMenu):
                 filename = str(index+1) + "_" + new_name + ".dat"
                 loadsave.Dialog(self.engine).save(filename)
                 self._reload(scr_capt, index)
-                self.engine.audio.play_sound(sfx.MENUSELECT)
+                self.engine.audio.play_sound(SFX.menu_select)
         else:
             filename = self._convert_to_filename(menu_item.text, index)
             loadsave.Dialog(self.engine).save(filename)

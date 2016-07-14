@@ -5,8 +5,8 @@ class: BuyBox
 
 import pygame
 
+from constants import Keys
 from inventoryitems import EquipmentItem
-import keys
 
 COLORKEY = pygame.Color("white")
 LINECOLOR = pygame.Color("black")
@@ -101,10 +101,10 @@ class BuyBox(object):
         Registreert of scrolwiel gebruikt wordt. Verplaatst de layer dan omhoog of omlaag.
         :param event: pygame.MOUSEBUTTONDOWN uit shopscreen
         """
-        if event.button == keys.SCROLLUP:
+        if event.button == Keys.Scrollup.value:
             if self.lay_rect.y - self.rect.y < 0:
                 self.lay_rect.y += SCROLLSPEED
-        elif event.button == keys.SCROLLDOWN:
+        elif event.button == Keys.Scrolldown.value:
             if self.lay_rect.y - self.rect.y > self.rect.height - self.layer_height + 2:  # zie sellbox voor de +2
                 self.lay_rect.y -= SCROLLSPEED
 

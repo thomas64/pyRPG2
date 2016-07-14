@@ -3,7 +3,7 @@
 class: BaseMenu
 """
 
-import audio as sfx
+from constants import SFX
 
 
 class BaseMenu(object):
@@ -39,4 +39,4 @@ class BaseMenu(object):
         :param scr_capt: een screencapture
         :param index: integer, welke menu item is geselecteerd
         """
-        self.engine.audio.stop_sound(sfx.MENUSELECT)
+        self.engine.audio.stop_sound(SFX.menu_select)

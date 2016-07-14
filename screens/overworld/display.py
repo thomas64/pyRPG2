@@ -5,10 +5,10 @@ class: Display
 
 import pygame
 
-import audio as sfx
 from components import Button
 from constants import GameState
-import keys
+from constants import Keys
+from constants import SFX
 import screens.menu
 import screens.party.display
 import screens.overworld.window
@@ -72,12 +72,12 @@ class Display(object):
 
         # todo, afhankelijk van situatie, buttons niet weergeven
         # button_view = sprites.Button((bg_width-200,   bg_height-300), "V",     pygame.K_v)
-        button_act = Button(BTN_W,   BTN_H, (bg_width + ACTX,   bg_height + ACTY),   ACTLBL,   keys.ACTION)
-        button_inv = Button(BTN_W,   BTN_H, (bg_width + INVX,   bg_height + INVY),   INVLBL,   keys.INV)
-        button_up = Button(BTN_W,    BTN_H, (bg_width + UPX,    bg_height + UPY),    UPLBL,    keys.UP)
-        button_down = Button(BTN_W,  BTN_H, (bg_width + DOWNX,  bg_height + DOWNY),  DOWNLBL,  keys.DOWN)
-        button_left = Button(BTN_W,  BTN_H, (bg_width + LEFTX,  bg_height + LEFTY),  LEFTLBL,  keys.LEFT)
-        button_right = Button(BTN_W, BTN_H, (bg_width + RIGHTX, bg_height + RIGHTY), RIGHTLBL, keys.RIGHT)
+        button_act = Button(BTN_W,   BTN_H, (bg_width + ACTX,   bg_height + ACTY),   ACTLBL,   Keys.Action.value)
+        button_inv = Button(BTN_W,   BTN_H, (bg_width + INVX,   bg_height + INVY),   INVLBL,   Keys.Inv.value)
+        button_up = Button(BTN_W,    BTN_H, (bg_width + UPX,    bg_height + UPY),    UPLBL,    Keys.Up.value)
+        button_down = Button(BTN_W,  BTN_H, (bg_width + DOWNX,  bg_height + DOWNY),  DOWNLBL,  Keys.Down.value)
+        button_left = Button(BTN_W,  BTN_H, (bg_width + LEFTX,  bg_height + LEFTY),  LEFTLBL,  Keys.Left.value)
+        button_right = Button(BTN_W, BTN_H, (bg_width + RIGHTX, bg_height + RIGHTY), RIGHTLBL, Keys.Right.value)
         # button_cancel = sprites.Button((bg_width-100, bg_height-200), "C",     pygame.K_c)
 
         # self.buttons = [button_view, button_up, button_down, button_left, button_right, button_cancel]
@@ -107,17 +107,17 @@ class Display(object):
         :param event: pygame.event.get()
         """
         if event.type == pygame.MOUSEBUTTONDOWN:
-            if event.button == keys.LEFTCLICK:
+            if event.button == Keys.Leftclick.value:
                 for button in self.buttons:
                     button_press = button.single_click(event)
-                    if button_press == keys.INV:
+                    if button_press == Keys.Inv.value:
                         self._show_party_screen()
                         break
 
         elif event.type == pygame.KEYDOWN:
-            if event.key == keys.INV:
+            if event.key == Keys.Inv.value:
                 self._show_party_screen()
-            elif event.key == keys.EXIT:
+            elif event.key == Keys.Exit.value:
                 self._show_pause_menu()
             self.window.single_input(event)
 
@@ -164,7 +164,7 @@ class Display(object):
             button.render(self.screen)
 
     def _show_pause_menu(self):
-        self.engine.audio.play_sound(sfx.MENUSELECT)
+        self.engine.audio.play_sound(SFX.menu_select)
 
         push_object = screens.menu.create_menu(GameState.PauseMenu, self.engine)
         self.engine.gamestate.push(push_object)

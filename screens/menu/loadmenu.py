@@ -6,9 +6,9 @@ class: LoadMenu
 import datetime
 import os
 
-import audio as sfx
 from components import Map
 from components import Transition
+from constants import SFX
 import data
 import loadsave
 import screens.overworld.display
@@ -69,8 +69,8 @@ class LoadMenu(BaseMenu):
         if menu_item.text == "Back":
             self.on_exit()
         elif "..." in menu_item.text:
-            self.engine.audio.stop_sound(sfx.MENUSELECT)
-            self.engine.audio.play_sound(sfx.MENUERROR)
+            self.engine.audio.stop_sound(SFX.menu_select)
+            self.engine.audio.play_sound(SFX.menu_error)
         else:
             self.engine.data = data.Data()
             filename = self._convert_to_filename(menu_item.text, index)
@@ -88,11 +88,11 @@ class LoadMenu(BaseMenu):
         :param index: zie BaseMenu
         """
         if menu_item.text == "Back":
-            self.engine.audio.stop_sound(sfx.MENUSELECT)
-            self.engine.audio.play_sound(sfx.MENUERROR)
+            self.engine.audio.stop_sound(SFX.menu_select)
+            self.engine.audio.play_sound(SFX.menu_error)
         elif "..." in menu_item.text:
-            self.engine.audio.stop_sound(sfx.MENUSELECT)
-            self.engine.audio.play_sound(sfx.MENUERROR)
+            self.engine.audio.stop_sound(SFX.menu_select)
+            self.engine.audio.play_sound(SFX.menu_error)
         else:
             filename = self._convert_to_filename(menu_item.text, index)
             loadsave.Dialog(self.engine).delete(filename)

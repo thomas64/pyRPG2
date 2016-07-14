@@ -5,7 +5,7 @@ class: InputBox
 
 import pygame
 
-import keys
+from constants import Keys
 
 BOXWIDTH = 360
 BOXHEIGHT = 53
@@ -71,14 +71,14 @@ class InputBox(object):
             if len(self.textbox) <= INPUTLENGTH:
                 if event.unicode in valid_characters:
                     self.textbox.insert(-1, event.unicode)
-            if event.key == keys.REMOVE:
+            if event.key == Keys.Remove.value:
                 if len(self.textbox) > 1:
                     del self.textbox[-2]
                 elif len(self.textbox) == 0:
                     self.textbox = ["_"]
-            elif event.key == keys.EXIT:
+            elif event.key == Keys.Exit.value:
                 self.running = False
-            elif event.key in keys.SELECT:
+            elif event.key in Keys.Select.value:
                 self.confirm = True
                 self.running = False
 

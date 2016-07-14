@@ -9,7 +9,7 @@ from components import Button
 from components import ConfirmBox
 from components import Map
 from constants import GameState
-import keys
+from constants import Keys
 import screens.party.herobox
 import screens.party.infobox
 import screens.party.invclickbox
@@ -86,9 +86,9 @@ class Display(object):
 
     def _init_buttons(self):
         bg_width = self.background.get_width()
-        button_c = Button(BTNWIDTH, BTNHEIGHT, (bg_width + CLOSEX, CLOSEY), CLOSELBL, keys.EXIT)
-        button_q = Button(BTNWIDTH, BTNHEIGHT, (bg_width + PREVX,  PREVY),  PREVLBL,  keys.PREV)
-        button_w = Button(BTNWIDTH, BTNHEIGHT, (bg_width + NEXTX,  NEXTY),  NEXTLBL,  keys.NEXT)
+        button_c = Button(BTNWIDTH, BTNHEIGHT, (bg_width + CLOSEX, CLOSEY), CLOSELBL, Keys.Exit.value)
+        button_q = Button(BTNWIDTH, BTNHEIGHT, (bg_width + PREVX,  PREVY),  PREVLBL,  Keys.Prev.value)
+        button_w = Button(BTNWIDTH, BTNHEIGHT, (bg_width + NEXTX,  NEXTY),  NEXTLBL,  Keys.Next.value)
         self.buttons = (button_c, button_q, button_w)
 
     def _init_boxes(self):
@@ -159,7 +159,7 @@ class Display(object):
 
         elif event.type == pygame.MOUSEBUTTONDOWN:
 
-            if event.button == keys.LEFTCLICK:
+            if event.button == Keys.Leftclick.value:
 
                 # als de clickbox er is en er wordt buiten geklikt, laat hem dan verdwijnen.
                 if self.invclick_box and not self.invclick_box.rect.collidepoint(event.pos):
@@ -191,14 +191,14 @@ class Display(object):
 
                 for button in self.buttons:
                     button_press = button.single_click(event)
-                    if button_press == keys.EXIT:
+                    if button_press == Keys.Exit.value:
                         self.engine.gamestate.pop()
-                    elif button_press == keys.PREV:
+                    elif button_press == Keys.Prev.value:
                         self._previous()
-                    elif button_press == keys.NEXT:
+                    elif button_press == Keys.Next.value:
                         self._next()
 
-            elif event.button in (keys.SCROLLUP, keys.SCROLLDOWN):
+            elif event.button in (Keys.Scrollup.value, Keys.Scrolldown.value):
                 if self.invclick_box and self.invclick_box.rect.collidepoint(event.pos):
                     self.invclick_box.mouse_scroll(event)
 
@@ -209,11 +209,11 @@ class Display(object):
                 self.invclick_box = None
             self.info_label = ""
 
-            if event.key in (keys.EXIT, keys.INV):
+            if event.key in (Keys.Exit.value, Keys.Inv.value):
                 self.engine.gamestate.pop()
-            elif event.key == keys.PREV:
+            elif event.key == Keys.Prev.value:
                 self._previous()
-            elif event.key == keys.NEXT:
+            elif event.key == Keys.Next.value:
                 self._next()
             # elif event.key == pygame.K_m:
             #     self.party[0].lev.qty += 1

@@ -12,6 +12,7 @@ import pygame
 from console import Console
 from constants import GameState
 from constants import MapMusic
+from constants import SFX
 
 
 OPTIONSPATH = 'options'
@@ -20,18 +21,6 @@ MUSICPATH = 'resources/music'
 SOUNDSPATH = 'resources/sounds'
 
 FADEOUTTIME = 500
-
-# Alle geluiden.
-MENUSWITCH = 'menu_switch'
-MENUSELECT = 'menu_select'
-MENUERROR = 'menu_error'
-STEPGRASS = 'step_grass'
-STEPSTONE = 'step_stone'
-STEPWOOD = 'step_wood'
-STEPCARPET = 'step_carpet'
-COINS = 'coins'
-CHEST = 'chest'
-SPARKLY = 'sparkly'
 
 # Alle niet overworld kaart muziek.
 TITLESCREEN = 'titlescreen'
@@ -97,12 +86,12 @@ class Audio(object):
         Zet geluid aan als het uit staat en vice versa.
         """
         if self.sound:
-            self.stop_sound(MENUSELECT)         # vanwege de enter knop in menu's speelt hij dit geluid af,
-            self.sound = False                  # stop hem daarom alsnog.
+            self.stop_sound(SFX.menu_select)         # vanwege de enter knop in menu's speelt hij dit geluid af,
+            self.sound = False                       # stop hem daarom alsnog.
             self.stop_bg_sounds()
         else:
             self.sound = True
-            self.play_sound(MENUSELECT)         # en speel weer een geluid af omdat er geluid is.
+            self.play_sound(SFX.menu_select)         # en speel weer een geluid af omdat er geluid is.
             # kijkt 1 laag dieper om te zien of hij in mainmenu of pausemenu zit
             self.set_bg_sounds(self.engine.gamestate.deep_peek().name)
 
@@ -194,13 +183,18 @@ class Audio(object):
     def play_sound(self, sound, loop=0, channel=None):
         """
         Als mag, speel dan geluid.
-        :param sound: de naam van het geluidsfragment
+        :param sound: de naam van het geluidsfragment. is een Enum SFX, maar niet als het een bgsound is.
         :param loop: -1 is oneindig loopen
         :param channel: het kanaal waar de geluiden op afgespeeld moeten worden, is alleen voor bg_sounds
         """
         if self.sound:
             # als het aangestuurde geluid None is, niets doen natuurlijk.
             if sound:
+                # het kan ook niet altijd een enum zijn, maar een string, voornamelijk bij bgsound en voetstappen.
+                import enum
+                if isinstance(sound, enum.Enum):
+                    sound = sound.name
+
                 if channel:
                     channel.play(self.sfx[sound], loops=loop)
                 else:
@@ -217,9 +211,9 @@ class Audio(object):
     def stop_sound(self, sound):
         """
         Stop het huidige geluid onmiddelijk.
-        :param sound: een geluidsfragment uit de init.
+        :param sound: een geluidsfragment uit de init. is een Enum SFX
         """
-        self.sfx[sound].stop()
+        self.sfx[sound.name].stop()
 
     def stop_bg_music(self):
         """

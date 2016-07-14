@@ -3,8 +3,6 @@
 class: EquipmentItem
 """
 
-import enum
-
 from constants import Minimals
 from constants import SkillType
 from constants import StatType
@@ -61,6 +59,7 @@ class EquipmentItem(object):
         # nu alle mogelijkheden geladen zijn, ga dan aan de slag met diegene die van toepassing zijn
         attr_list = []
 
+        import enum
         for attr in attrs:
             value_of_attr = self.get_value_of(attr[1])
             # uitzondering, 'wht' altijd gewoon weergeven

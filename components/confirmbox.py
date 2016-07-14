@@ -5,9 +5,9 @@ class: ConfirmBox
 
 import pygame
 
-import audio as sfx
 from constants import GameState
-import keys
+from constants import Keys
+from constants import SFX
 
 from .screencapture import ScreenCapture
 
@@ -111,28 +111,28 @@ class ConfirmBox(object):
                     break
 
         elif event.type == pygame.MOUSEBUTTONDOWN:
-            if event.button == keys.LEFTCLICK:
+            if event.button == Keys.Leftclick.value:
                 for index, item in enumerate(self.text_rects):
                     if item.collidepoint(event.pos) and index >= self.TOPINDEX:
                         self.gamestate.pop()
 
         elif event.type == pygame.KEYDOWN:
-            if event.key == keys.EXIT:
+            if event.key == Keys.Exit.value:
                 self.cur_item = None
                 self.gamestate.pop()
 
-            elif event.key in keys.SELECT:
+            elif event.key in Keys.Select.value:
                 self.gamestate.pop()
 
-            if event.key == keys.UP and self.cur_item > self.TOPINDEX:
+            if event.key == Keys.Up.value and self.cur_item > self.TOPINDEX:
                 self.cur_item -= 1
-            elif event.key == keys.UP and self.cur_item == self.TOPINDEX:
-                self.audio.play_sound(sfx.MENUERROR)
+            elif event.key == Keys.Up.value and self.cur_item == self.TOPINDEX:
+                self.audio.play_sound(SFX.menu_error)
                 self.cur_item = self.TOPINDEX
-            elif event.key == keys.DOWN and self.cur_item < len(self.raw_text) - 1:
+            elif event.key == Keys.Down.value and self.cur_item < len(self.raw_text) - 1:
                 self.cur_item += 1
-            elif event.key == keys.DOWN and self.cur_item == len(self.raw_text) - 1:
-                self.audio.play_sound(sfx.MENUERROR)
+            elif event.key == Keys.Down.value and self.cur_item == len(self.raw_text) - 1:
+                self.audio.play_sound(SFX.menu_error)
                 self.cur_item = len(self.raw_text) - 1
 
     # noinspection PyMissingOrEmptyDocstring
