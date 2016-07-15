@@ -6,7 +6,7 @@ class: InventoryBox
 import pygame
 import pygame.gfxdraw
 
-from screens.party.basebox import BaseBox
+from .basebox import BaseBox
 
 
 LINECOLOR = pygame.Color("white")

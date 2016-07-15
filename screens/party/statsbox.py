@@ -8,7 +8,7 @@ class: StatsBox
 import pygame
 
 from constants import StatType as StTy
-from screens.party.basebox import BaseBox
+from .basebox import BaseBox
 
 
 LINECOLOR = pygame.Color("white")

@@ -5,7 +5,7 @@ class: SpellsBox
 
 import pygame
 
-from screens.party.basebox import BaseBox
+from .basebox import BaseBox
 
 
 LINECOLOR = pygame.Color("white")

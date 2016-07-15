@@ -10,7 +10,7 @@ from constants import GameState
 from constants import Keys
 from constants import SFX
 import screens.menu
-import screens.party.display
+import screens.party
 import screens.overworld.window
 
 
@@ -170,5 +170,5 @@ class Display(object):
         self.engine.gamestate.push(push_object)
 
     def _show_party_screen(self):
-        push_object = screens.party.display.Display(self.engine)
+        push_object = screens.party.Display(self.engine)
         self.engine.gamestate.push(push_object)

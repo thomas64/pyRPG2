@@ -3,18 +3,6 @@
 def: create_menu
 """
 
-from components import ScreenCapture
-from constants import GameState
-
-from .animation import Animation
-from .title import Title
-from .display import Display
-from .mainmenu import MainMenu
-from .loadmenu import LoadMenu
-from .savemenu import SaveMenu
-from .optionsmenu import OptionsMenu
-from .pausemenu import PauseMenu
-
 
 def create_menu(state_name, engine, title1=None, animation1=None, scr_capt=None, select=None):
     """
@@ -26,6 +14,19 @@ def create_menu(state_name, engine, title1=None, animation1=None, scr_capt=None,
     :param scr_capt: een afbeelding
     :param select: de voorgeslecteerde item
     """
+
+    from components import ScreenCapture
+    from constants import GameState
+
+    from .animation import Animation
+    from .title import Title
+    from .display import Display
+    from .mainmenu import MainMenu
+    from .loadmenu import LoadMenu
+    from .savemenu import SaveMenu
+    from .optionsmenu import OptionsMenu
+    from .pausemenu import PauseMenu
+
     content = None
 
     if state_name == GameState.MainMenu:

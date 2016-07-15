@@ -1,6 +1,6 @@
 
 """
-class: Screen
+class: Display
 """
 
 import pygame
@@ -10,14 +10,15 @@ from components import ConfirmBox
 from components import Map
 from constants import GameState
 from constants import Keys
-import screens.party.herobox
-import screens.party.infobox
-import screens.party.invclickbox
-import screens.party.inventorybox
-import screens.party.pouchbox
-import screens.party.skillsbox
-import screens.party.spellsbox
-import screens.party.statsbox
+
+from .herobox import HeroBox
+from .infobox import InfoBox
+from .invclickbox import InvClickBox
+from .inventorybox import InventoryBox
+from .pouchbox import PouchBox
+from .skillsbox import SkillsBox
+from .spellsbox import SpellsBox
+from .statsbox import StatsBox
 
 
 BACKGROUNDCOLOR = pygame.Color("black")
@@ -94,15 +95,14 @@ class Display(object):
     def _init_boxes(self):
         self.hero_boxes = []
         for index, hero in enumerate(self.party):
-            self.hero_boxes.append(screens.party.herobox.HeroBox(
-                                                                (HEROBOXX + index * HEROBOXVAR, HEROBOXY), index, hero))
+            self.hero_boxes.append(HeroBox((HEROBOXX + index * HEROBOXVAR, HEROBOXY), index, hero))
 
-        self.stats_box = screens.party.statsbox.StatsBox((STATBOXX,             STATBOXY), STATBOXW, STATBOXH)
-        self.info_box = screens.party.infobox.InfoBox((INFOBOXX,                INFOBOXY), INFOBOXW, INFOBOXH)
-        self.skills_box = screens.party.skillsbox.SkillsBox((SKILBOXX,          SKILBOXY), SKILBOXW, SKILBOXH)
-        self.inventory_box = screens.party.inventorybox.InventoryBox((INVBOXX,  INVBOXY),  INVBOXW,  INVBOXH)
-        self.pouch_box = screens.party.pouchbox.PouchBox((PCHBOXX,              PCHBOXY),  PCHBOXW,  PCHBOXH)
-        self.spells_box = screens.party.spellsbox.SpellsBox((SPELBOXX,          SPELBOXY), SPELBOXW, SPELBOXH)
+        self.stats_box = StatsBox((STATBOXX,        STATBOXY), STATBOXW, STATBOXH)
+        self.info_box = InfoBox((INFOBOXX,          INFOBOXY), INFOBOXW, INFOBOXH)
+        self.skills_box = SkillsBox((SKILBOXX,      SKILBOXY), SKILBOXW, SKILBOXH)
+        self.inventory_box = InventoryBox((INVBOXX, INVBOXY),  INVBOXW,  INVBOXH)
+        self.pouch_box = PouchBox((PCHBOXX,         PCHBOXY),  PCHBOXW,  PCHBOXH)
+        self.spells_box = SpellsBox((SPELBOXX,      SPELBOXY), SPELBOXW, SPELBOXH)
 
     def on_enter(self):
         """
@@ -186,8 +186,7 @@ class Display(object):
                     boxpos, equipment_type = self.inventory_box.mouse_click(event)
                     # als er geen clickbox is en wel een equipment_type, geef dan een clickbox weer
                     if not self.invclick_box and equipment_type:
-                        self.invclick_box = screens.party.invclickbox.InvClickBox(
-                                                            boxpos, equipment_type, self.party, self.inventory)
+                        self.invclick_box = InvClickBox(boxpos, equipment_type, self.party, self.inventory)
 
                 for button in self.buttons:
                     button_press = button.single_click(event)
