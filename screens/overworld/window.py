@@ -33,7 +33,7 @@ from inventoryitems import EquipmentItem
 from inventoryitems import PouchItem
 from inventoryitems import QuestItem
 
-import screens.shop.display
+import screens.shop
 
 
 BACKGROUNDCOLOR = pygame.Color("gray12")
@@ -245,8 +245,7 @@ class Window(object):
 
             elif event.key == Keys.Grid.value:
                 if self.grid_sprite is None:
-                    self.grid_sprite = Grid(self.engine.current_map.width,
-                                            self.engine.current_map.height,
+                    self.grid_sprite = Grid(self.engine.current_map.width, self.engine.current_map.height,
                                             GRIDCOLOR, GRIDSIZE, GRIDLAYER)
                     self.group.add(self.grid_sprite)
                 else:
@@ -456,9 +455,9 @@ class Window(object):
                     if spr.person_id == shop_id:
                         spr.turn(self.party_sprites[0].rect)
 
-            push_object = screens.shop.display.Display(self.engine, shop_data['content'],
-                                                       shop_data.get('material'),  # material is geen garantie
-                                                       shop_data['face'],)
+            push_object = screens.shop.Display(self.engine, shop_data['content'],
+                                               shop_data.get('material'),  # material is geen garantie
+                                               shop_data['face'])
             self.engine.gamestate.push(push_object)
             self.engine.gamestate.push(Transition(self.engine.gamestate))
 

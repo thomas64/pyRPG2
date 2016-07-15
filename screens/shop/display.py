@@ -18,10 +18,11 @@ from constants import SFX
 from constants import WeaponType
 from database import PouchItemDatabase
 from inventoryitems import PouchItem
-import screens.shop.buybox
-import screens.shop.infobox
-import screens.shop.selector
-import screens.shop.sellbox
+
+from .buybox import BuyBox
+from .infobox import InfoBox
+from .selector import Selector
+from .sellbox import SellBox
 
 
 BACKGROUNDCOLOR = pygame.Color("black")
@@ -145,8 +146,8 @@ class Display(object):
                         self.databases[shoptype.name][equipment_itm.name] = equipment_itm.value
 
             # voeg selector objecten toe
-            self.selectors.add(screens.shop.selector.Selector(self._set_x(SELECTORPOSX) + index * SELECTORWIDTH,
-                                                              self._set_y(SELECTORPOSY), shoptype))
+            self.selectors.add(Selector(self._set_x(SELECTORPOSX) + index * SELECTORWIDTH,
+                                        self._set_y(SELECTORPOSY), shoptype))
         self.selectors.draw(self.background)
 
     def _init_face(self, face):
@@ -183,11 +184,8 @@ class Display(object):
     def _init_sellbox(self):
         width = self.screen.get_width() * SELLBOXWIDTH
         height = self.screen.get_height() * SELLBOXHEIGHT + EXTRAHEIGHT
-        self.sellbox = screens.shop.sellbox.SellBox(self._set_x(SELLBOXPOSX), self._set_y(SELLBOXPOSY),
-                                                    int(width), int(height),
-                                                    self.shoptype,
-                                                    self.engine.data.party, self.engine.data.inventory,
-                                                    self.sum_merchant)
+        self.sellbox = SellBox(self._set_x(SELLBOXPOSX), self._set_y(SELLBOXPOSY), int(width), int(height),
+                               self.shoptype, self.engine.data.party, self.engine.data.inventory, self.sum_merchant)
 
     def _init_buybox(self):
         width = self.screen.get_width() * BUYBOXWIDTH
@@ -201,16 +199,13 @@ class Display(object):
             for itm_key, itm_value in self.databases[self.shoptype.name].items():
                 if itm_value.get('mtr') in self.material_list:
                     buy_database[itm_key] = itm_value
-        self.buybox = screens.shop.buybox.BuyBox(self._set_x(BUYBOXPOSX), self._set_y(BUYBOXPOSY),
-                                                 int(width), int(height),
-                                                 buy_database,
-                                                 self.sum_merchant)
+        self.buybox = BuyBox(self._set_x(BUYBOXPOSX), self._set_y(BUYBOXPOSY), int(width), int(height),
+                             buy_database, self.sum_merchant)
 
     def _init_infobox(self):
         width = self.screen.get_width() * INFOBOXWIDTH
         height = self.screen.get_height() * INFOBOXHEIGHT
-        self.infobox = screens.shop.infobox.InfoBox(self._set_x(INFOBOXPOSX), self._set_y(INFOBOXPOSY),
-                                                    int(width), int(height))
+        self.infobox = InfoBox(self._set_x(INFOBOXPOSX), self._set_y(INFOBOXPOSY), int(width), int(height))
 
     def on_enter(self):
         """
