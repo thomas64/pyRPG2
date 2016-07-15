@@ -17,6 +17,7 @@ from constants import Keys
 from constants import SFX
 from constants import WeaponType
 from database import PouchItemDatabase
+from database import ShopDatabase
 from inventoryitems import PouchItem
 
 from .buybox import BuyBox
@@ -154,18 +155,7 @@ class Display(object):
         face_image = pygame.image.load(face).convert_alpha()
         self.background.blit(face_image, (self._set_x(FACEPOSX), self._set_y(FACEPOSY)))
 
-        line01 = "Good day sir, and welcome to my shop."
-        line02 = "In the 'Buy' box you can find all what"
-        line03 = "my shop has to offer.  And in the 'Sell'"
-        line04 = "box your own inventory is shown."
-        line05 = "Click once on a selected item to buy or to sell."
-        line06 = "You can scroll through the lists with your mouse-"
-        line07 = "wheel if the list is longer than what you can see."
-        line08 = "Below here, you see one or multiple icons."
-        line09 = "They represent different sections of my shop."
-        line10 = "Click on it to enter one of those sections."
-        lines = (line01, line02, line03, line04, line05, line06, line07, line08, line09, line10)
-        for index, line in enumerate(lines):
+        for index, line in enumerate(ShopDatabase.welcome_text()):
             rline = self.smallfont.render(line, True, FONTCOLOR).convert_alpha()
             if index < LINESNEXTTOFACE:
                 self.background.blit(rline,

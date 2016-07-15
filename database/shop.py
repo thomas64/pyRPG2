@@ -35,3 +35,17 @@ class ShopDatabase(enum.Enum):
                  face=SHOP3+FEXT, sprite=SHOP3+SEXT)
     shop4 = dict(content=[EquipmentType.amu, EquipmentType.rng, EquipmentType.brc, EquipmentType.acy],
                  face=SHOP4+FEXT, sprite=SHOP4+SEXT)
+
+    @staticmethod
+    def welcome_text():
+        """..."""
+        return ("Good day sir, and welcome to my shop.",
+                "In the 'Buy' box you can find all what",
+                "my shop has to offer.  And in the 'Sell'",
+                "box your own inventory is shown.",
+                "Click once on a selected item to buy or to sell.",
+                "You can scroll through the lists with your mouse-",
+                "wheel if the list is longer than what you can see.",
+                "Below here, you see one or multiple icons.",
+                "They represent different sections of my shop.",
+                "Click on it to enter one of those sections.")

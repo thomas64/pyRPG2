@@ -7,7 +7,7 @@ import pygame
 import pygame.gfxdraw
 
 from audio import Audio
-from console import Console
+# from console import Console
 from constants import GameState
 from constants import Keys
 import screens.menu

@@ -5,7 +5,7 @@ class: Display
 
 import pygame
 
-from constants import GameState
+# from constants import GameState
 from constants import Keys
 from constants import SFX
 

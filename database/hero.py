@@ -145,7 +145,7 @@ class HeroDatabase(enum.Enum):
         'sale' is totaal van diplomat van hele party.
         """
         if hero_raw == cls.luana.name:  # p(1).xpt >= 3000 - ((3000 / 100) * sale)
-            return ["Hi Alagos!",
+            return ("Hi Alagos!",
                     "We've been friends since childhood and I always",
                     "wanted to go where you went to protect you...",
                     "But this time you're out of your league and now",
@@ -153,20 +153,20 @@ class HeroDatabase(enum.Enum):
                     "So, whatcha say?",
                     "",
                     "I will endure your presence Luana, thanks.",
-                    "But this time I don't WANT your protection."]
+                    "But this time I don't WANT your protection.")
 
         elif hero_raw == cls.grindan.name:  # p(1).xpt >= 21000 - ((21000 / 100) * sale)
-            return ["Come here squire!",
+            return ("Come here squire!",
                     "You are always in for mischief, and I have to get you out of",
                     "trouble for more than I like. And this time AGAIN I probably",
                     "cannot let you go on some adventure all by yourself and get",
                     "yourself killed. So I will join you now!",
                     "",
                     "Sir, yes sir!",
-                    "Well, what do you know, look at the time! I need to be somewhere."]
+                    "Well, what do you know, look at the time! I need to be somewhere.")
 
         elif hero_raw == cls.rydalin.name:  # p(1).xpt >= 15000 - ((15000 / 100) * sale)
-            return ["Greetings Alagos, please let me go with you.",
+            return ("Greetings Alagos, please let me go with you.",
                     "I am looking for a cure for a friend of mine and",
                     "if you go to Gertior maybe I can find that cure",
                     "over there. They are known for their healingcraft.",
@@ -174,10 +174,10 @@ class HeroDatabase(enum.Enum):
                     "May I join you in your travels?",
                     "",
                     "Ofcourse Rydalin, I would like your company.",
-                    "I'm sorry, already so many people joined me."]
+                    "I'm sorry, already so many people joined me.")
 
         elif hero_raw == cls.codrif.name:  # p(1).xpt >= 9000 - ((9000 / 100) * sale)
-            return ["Uhmm...",
+            return ("Uhmm...",
                     "What's your name again? I think I have met you before.",
                     "I'm sorry, I am so often a little confused.",
                     "Uhm... What was I saying? You look like you are off to",
@@ -185,10 +185,10 @@ class HeroDatabase(enum.Enum):
                     "you... or help me? I don't know. Uuhhm, yes?",
                     "",
                     "Hahaha, ofcourse we can help each other.",
-                    "Uuuuuhmmm... No."]
+                    "Uuuuuhmmm... No.")
 
         elif hero_raw == cls.galen.name:
-            return ["Good day young man.",
+            return ("Good day young man.",
                     "It has been a while since I've seen battle,",
                     "but in my younger days my reputation was",
                     "fearsome. I even saved the King's life once...",
@@ -198,19 +198,19 @@ class HeroDatabase(enum.Enum):
                     "My axe will be of service to you.",
                     "",
                     "I would definitely need your axe and reputation.",
-                    "I don't need to go to Dalenok Town, I'm sorry."]
+                    "I don't need to go to Dalenok Town, I'm sorry.")
 
         elif hero_raw == cls.raiko.name:  # p(1).xpt >= 300000 - ((300000 / 100) * sale)
-            return ["Hello, I want to be knight.",
+            return ("Hello, I want to be knight.",
                     "May I join you?",
                     "I very strong!",
                     "I join you, then you also stronger.",
                     "",
                     "Yes, your strength does come in handy.",
-                    "No thanks, I am looking for intelligence on this journey."]
+                    "No thanks, I am looking for intelligence on this journey.")
 
         elif hero_raw == cls.kiara.name:  # gold >= 10000 - ((10000 / 100) * sale)
-            return ["Hey there sugar.",
+            return ("Hey there sugar.",
                     "You are looking handsome today. Your party sure",
                     "could use me. I am skilled in all sorts of ways if",
                     "you know what I mean. If I may join you, my whole",
@@ -219,20 +219,20 @@ class HeroDatabase(enum.Enum):
                     "in dire need of some sensitivity.",
                     "",
                     "Uhmm, sure.",
-                    "I'm married."]
+                    "I'm married.")
 
         elif hero_raw == cls.luthais.name:  # p(1).xpt >= 1200000 - ((1200000 / 100) * sale)
-            return ["How do you do?",
+            return ("How do you do?",
                     "If you are in need of some teaching on your quest,",
                     "I will accompany you. I am old and not that strong",
                     "anymore, but strength doesn't always rely on",
                     "muscles. If you need me, I'll gladly join you.",
                     "",
                     "Thank you sir, welcome, please join us.",
-                    "I don't want to be rude to decline your offer."]
+                    "I don't want to be rude to decline your offer.")
 
         elif hero_raw == cls.elias.name:  # gold >= 40000 - ((40000 / 100) * sale)
-            return ["Hellooo there!",
+            return ("Hellooo there!",
                     "You need me. Everybody needs me.",
                     "And that's obvious if you'd know me.",
                     "But ofcourse that is possible now!",
@@ -240,10 +240,10 @@ class HeroDatabase(enum.Enum):
                     "you cannot refuse such an offer.",
                     "",
                     "You seem confident... Welcome I think?",
-                    "Yes, I can."]
+                    "Yes, I can.")
 
         elif hero_raw == cls.onarr.name:  # p(1).xpt >= 1500000 - ((1500000 / 100) * sale)
-            return ["Good afternoon lad, what a lovely day.",
+            return ("Good afternoon lad, what a lovely day.",
                     "It makes me want to sing about it.",
                     "Willst thou join me? La-la-la-la-la!",
                     "Perhaps I canst accompany thou on",
@@ -251,16 +251,16 @@ class HeroDatabase(enum.Enum):
                     "May I join ye in thy group?",
                     "",
                     "Troubadours are always welcome.",
-                    "I'm more of a heavy metal type."]
+                    "I'm more of a heavy metal type.")
 
         elif hero_raw == cls.duilio.name:  # gold >= 90000 - ((90000 / 100) * sale)
-            return ["Hmpf... Let me join.",
+            return ("Hmpf... Let me join.",
                     "",
                     "Okaaay.",
-                    "..."]
+                    "...")
 
         elif hero_raw == cls.iellwen.name:  # special item?
-            return ["Hail, traveler.",
+            return ("Hail, traveler.",
                     "You humans are remarkable in your resilience and",
                     "in the speed with which you rise to power. Some of",
                     "you even rival our most powerful lords. And I wish",
@@ -268,10 +268,10 @@ class HeroDatabase(enum.Enum):
                     "appeal to me. And I will join you if I may.",
                     "",
                     "We are honored.",
-                    "Let's continue on our way."]
+                    "Let's continue on our way.")
 
         elif hero_raw == cls.faeron.name:  # geen idee
-            return ["I can not and will not tell you anything.",
+            return ("I can not and will not tell you anything.",
                     "",
                     "Yes.",
-                    "No."]
+                    "No.")
