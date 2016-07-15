@@ -234,17 +234,6 @@ class Window(object):
                 self.party_sprites[0].align_to_grid(GRIDSIZE)
                 self.align()
 
-            elif event.key == Keys.Action.value:
-                self.check_heroes(self.party_sprites[0].get_check_rect())
-                self.check_shops(self.party_sprites[0].get_check_rect())
-                self.check_schools(self.party_sprites[0].get_check_rect())
-                self.check_inns(self.party_sprites[0].get_check_rect())
-                self.check_people(self.party_sprites[0].get_check_rect())
-                self.check_notes(self.party_sprites[0].get_check_rect())
-                self.check_signs()
-                self.check_chests()
-                self.check_sparklies(self.party_sprites[0].get_check_rect())  # sparklys moeten ook van boven kunnen
-
             elif event.key == Keys.Grid.value:
                 if self.grid_sprite is None:
                     self.grid_sprite = Grid(self.current_map.width, self.current_map.height,
@@ -420,6 +409,20 @@ class Window(object):
             self.engine.data.map_pos = self.prev_map_name       # zet de point om naar een string naam.
             self.load_map()
             self.engine.gamestate.push(Transition(self.engine.gamestate, full_screen=False))
+
+    def action_button(self):
+        """
+        Check al deze methods bij het klikken van de action key.
+        """
+        self.check_heroes(self.party_sprites[0].get_check_rect())
+        self.check_shops(self.party_sprites[0].get_check_rect())
+        self.check_schools(self.party_sprites[0].get_check_rect())
+        self.check_inns(self.party_sprites[0].get_check_rect())
+        self.check_people(self.party_sprites[0].get_check_rect())
+        self.check_notes(self.party_sprites[0].get_check_rect())
+        self.check_signs()
+        self.check_chests()
+        self.check_sparklies(self.party_sprites[0].get_check_rect())  # sparklys moeten ook van boven kunnen
 
     def check_heroes(self, check_rect):
         """

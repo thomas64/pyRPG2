@@ -113,14 +113,18 @@ class Display(object):
                     button_press = button.single_click(event)
                     if button_press == Keys.Inv.value:
                         self._show_party_screen()
-                        break
+                    elif button_press == Keys.Action.value:
+                        self.window.action_button()
 
         elif event.type == pygame.KEYDOWN:
             if event.key == Keys.Inv.value:
                 self._show_party_screen()
+            elif event.key == Keys.Action.value:
+                self.window.action_button()
             elif event.key == Keys.Exit.value:
                 self._show_pause_menu()
-            self.window.single_input(event)
+            else:
+                self.window.single_input(event)
 
     def multi_input(self, key_input, mouse_pos, dt):
         """
