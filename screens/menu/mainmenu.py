@@ -3,11 +3,10 @@
 class: MainMenu
 """
 
-from components import Map
 from components import Transition
 from constants import GameState
 from data import Data
-import screens.overworld.display
+import screens.overworld
 from script import Script
 
 from .basemenu import BaseMenu
@@ -38,8 +37,7 @@ class MainMenu(BaseMenu):
         if menu_item.text == "New Game":
             self.engine.data = Data()
             Script.new_game(self.engine.data)
-            self.engine.current_map = Map(self.engine.data.map_name)
-            push_object = screens.overworld.display.Display(self.engine)
+            push_object = screens.overworld.Display(self.engine)
             self.engine.gamestate.change(push_object)
             self.engine.gamestate.push(Transition(self.engine.gamestate))
 

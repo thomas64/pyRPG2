@@ -16,8 +16,8 @@ class InnDatabase(enum.Enum):
     """..."""
     inn1 = dict(price=5, face=INN1+FEXT, sprite=INN1+SEXT)
 
-    @classmethod
-    def welcome_text(cls, price):
+    @staticmethod
+    def welcome_text(price):
         """..."""
         return ["Good day sir, and welcome to my inn.",
                 "For {} gold, you may rest here now".format(price),
@@ -26,18 +26,18 @@ class InnDatabase(enum.Enum):
                 "Yes please.",
                 "No thanks."]
 
-    @classmethod
-    def paid_text(cls):
+    @staticmethod
+    def paid_text():
         """..."""
         return ["Thank you. Enjoy your stay."]
 
-    @classmethod
-    def fail_text(cls):
+    @staticmethod
+    def fail_text():
         """..."""
         return ["I'm terribly sorry, but it seems you don't have enough gold.",
                 "I can't give you a room, please come back another time."]
 
-    @classmethod
-    def deny_text(cls):
+    @staticmethod
+    def deny_text():
         """..."""
         return ["I hope you'll visit us next time."]

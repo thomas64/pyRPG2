@@ -37,7 +37,6 @@ class GameEngine(object):
         self.data = None
         self.video = Video()
         self.audio = Audio(self)
-        self.current_map = None
 
         self.running = False
 
@@ -174,7 +173,7 @@ class GameEngine(object):
                 hero = self.gamestate.peek().window.party_sprites[0]
                 text2 = (
                     "map:               {}".format(self.data.map_name),
-                    "zoom:              {:.1f}".format(self.current_map.map_layer.zoom),
+                    "zoom:              {:.1f}".format(self.gamestate.peek().window.current_map.map_layer.zoom),
                     "time_up:           {}".format(hero.time_up),
                     "time_down:         {}".format(hero.time_down),
                     "time_left:         {}".format(hero.time_left),

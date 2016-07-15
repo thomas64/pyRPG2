@@ -6,11 +6,10 @@ class: LoadMenu
 import datetime
 import os
 
-from components import Map
 from components import Transition
 from constants import SFX
 from loadsave import Dialog as LoadDialog
-import screens.overworld.display
+import screens.overworld
 
 from .basemenu import BaseMenu
 
@@ -76,8 +75,7 @@ class LoadMenu(BaseMenu):
             # als de data niet corrupt is.
             if data:
                 self.engine.data = data
-                self.engine.current_map = Map(self.engine.data.map_name)
-                push_object = screens.overworld.display.Display(self.engine)
+                push_object = screens.overworld.Display(self.engine)
                 self.engine.gamestate.change(push_object)
                 self.engine.gamestate.push(Transition(self.engine.gamestate))
             else:

@@ -11,7 +11,8 @@ from constants import Keys
 from constants import SFX
 import screens.menu
 import screens.party
-import screens.overworld.window
+
+from .window import Window
 
 
 WINDOWPOS = 10, 40
@@ -52,7 +53,7 @@ class Display(object):
         self.background = pygame.Surface(self.screen.get_size())
         self.background.fill(BACKGROUNDCOLOR)
         self.background = self.background.convert()
-        self.window = screens.overworld.window.Window(self.engine)
+        self.window = Window(self.engine)
 
         self.map_title_font = pygame.font.SysFont(MAPTITLEFONT, MAPTITLEFONTSIZE)
         self.map_title_label = ""
@@ -142,7 +143,7 @@ class Display(object):
         """
         self.window.update(dt)
 
-        self.map_title_label = self.map_title_font.render(self.engine.current_map.title,
+        self.map_title_label = self.map_title_font.render(self.window.current_map.title,
                                                           True, MAPTITLEFONTCOLOR).convert_alpha()
         for button in self.buttons:
             button.update(self.key_input)

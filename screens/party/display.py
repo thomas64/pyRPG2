@@ -7,7 +7,6 @@ import pygame
 
 from components import Button
 from components import ConfirmBox
-from components import Map
 from constants import GameState
 from constants import Keys
 
@@ -132,7 +131,6 @@ class Display(object):
         """
         if self.party_changed:
             self.engine.key_timer = NEWMAPTIMEOUT
-            self.engine.current_map = Map(self.engine.data.map_name)
             self.engine.gamestate.deep_peek().window.load_map()
 
     def single_input(self, event):

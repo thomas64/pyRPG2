@@ -74,10 +74,11 @@ class Window(object):
         self.maxlen = None
         self.leader_history = None
 
+        self.current_map = None
         self.load_map()
 
-        self.width = self.engine.current_map.window_width
-        self.height = self.engine.current_map.window_height
+        self.width = self.current_map.window_width
+        self.height = self.current_map.window_height
         self.surface = pygame.Surface((self.width, self.height))
         self.surface.fill(BACKGROUNDCOLOR)
         self.surface = self.surface.convert()
@@ -94,19 +95,20 @@ class Window(object):
         """
         Maak een nieuwe map aan met de hero's in het veld.
         """
-        self.group = self.engine.current_map.view
+        self.current_map = Map(self.engine.data.map_name)
+        self.group = self.current_map.view
         self.grid_sprite = None
         self.cbox_sprites = []
 
         start_pos = self.engine.data.map_pos           # normaliter is map_pos een point, behalve bij het laden van een
         start_dir = self.engine.data.map_dir           # map, dan is het een string. bv start_game of ersin_forest_centr
 
-        for pos in self.engine.current_map.start_pos:  # kijk in de start_pos list van de map
+        for pos in self.current_map.start_pos:         # kijk in de start_pos list van de map
             if pos.name == start_pos:                  # van alle start_possen, welke komt overeen met 'start_game'
                 start_pos = pos.x, pos.y               # zet dan de x,y waarde op dié start_pos, maak van de string
                 break                                  # dus weer een point.
 
-        for pos in self.engine.current_map.start_pos:                            # in een .tmx map kun je bij start_pos
+        for pos in self.current_map.start_pos:                                   # in een .tmx map kun je bij start_pos
             if getattr(pos, 'direction', None) and (pos.x, pos.y) == start_pos:  # een 'direction' property meegeven.
                 start_dir = Direction[pos.direction]                             # als dat een Direction Enum is dan
                 break                                   # dan start de unit in de nieuw geladen map in die kijkrichting.
@@ -124,20 +126,21 @@ class Window(object):
         self.align()
 
         # voeg alle objecten toe van uit de map
-        for hero in self.engine.current_map.heroes:
+        for hero in self.current_map.heroes:
             if not self.engine.data.party.contains(hero.person_id):
                 self.group.add(hero)
                 # voeg alleen nu een blocker toe als de hero er daadwerkelijk is.
                 # dit zit niet in de map class vanwege imports. maar nu moet hij in window al 2x checken op dit.
-                self.engine.current_map.high_blocker_rects.append(hero.get_blocker())
-        self.group.add(self.engine.current_map.shops)
-        self.group.add(self.engine.current_map.schools)
-        self.group.add(self.engine.current_map.inns)
-        self.group.add(self.engine.current_map.people)
-        self.group.add(self.engine.current_map.signs)
-        self.group.add(self.engine.current_map.chests)
-        self.group.add(self.engine.current_map.sparkly)
+                self.current_map.high_blocker_rects.append(hero.get_blocker())
+        self.group.add(self.current_map.shops)
+        self.group.add(self.current_map.schools)
+        self.group.add(self.current_map.inns)
+        self.group.add(self.current_map.people)
+        self.group.add(self.current_map.signs)
+        self.group.add(self.current_map.chests)
+        self.group.add(self.current_map.sparkly)
 
+        # de eerste keer dat deze 2 draaien is Overworld nog niet op de gamestack gepushed. daarom herstart begintune.
         self.engine.audio.set_bg_music(self.engine.gamestate.peek().name)
         self.engine.audio.set_bg_sounds(self.engine.gamestate.peek().name)
 
@@ -166,7 +169,6 @@ class Window(object):
             if choice == yes:
                 if self.engine.data.party.add(self.hero_data):
                     self.engine.key_timer = NEWMAPTIMEOUT
-                    self.engine.current_map = Map(self.engine.data.map_name)
                     self.load_map()
                 else:
                     text = ["It seems your party is full already."]
@@ -245,7 +247,7 @@ class Window(object):
 
             elif event.key == Keys.Grid.value:
                 if self.grid_sprite is None:
-                    self.grid_sprite = Grid(self.engine.current_map.width, self.engine.current_map.height,
+                    self.grid_sprite = Grid(self.current_map.width, self.current_map.height,
                                             GRIDCOLOR, GRIDSIZE, GRIDLAYER)
                     self.group.add(self.grid_sprite)
                 else:
@@ -256,21 +258,22 @@ class Window(object):
                 if len(self.cbox_sprites) == 0:                             # als de lijst leeg is.
                     for unit in self.party_sprites:
                         self.cbox_sprites.append(ColorBox(unit.rect, HEROCOLOR, CBOXLAYER))
-                    for rect in self.engine.current_map.high_blocker_rects:
+                    for rect in self.current_map.high_blocker_rects:
                         self.cbox_sprites.append(ColorBox(rect, HIGHBLOCKERCOLOR, CBOXLAYER))
-                    for rect in self.engine.current_map.low_blocker_rects:
+                    for rect in self.current_map.low_blocker_rects:
                         self.cbox_sprites.append(ColorBox(rect, LOWBLOCKERCOLOR, CBOXLAYER))
-                    for obj in self.engine.current_map.people:
+                    for obj in self.current_map.people:
                         if getattr(obj, 'wander_area', None):
                             self.cbox_sprites.append(ColorBox(obj.wander_area, SHOPCOLOR, CBOXLAYER))
-                    for obj_group in (self.engine.current_map.heroes,
-                                      self.engine.current_map.shops,
-                                      self.engine.current_map.schools,
-                                      self.engine.current_map.inns,
-                                      self.engine.current_map.people,
-                                      self.engine.current_map.signs,
-                                      self.engine.current_map.chests,
-                                      self.engine.current_map.sparkly):
+                    for obj_group in (self.current_map.heroes,
+                                      self.current_map.shops,
+                                      self.current_map.schools,
+                                      self.current_map.inns,
+                                      self.current_map.people,
+                                      self.current_map.notes,
+                                      self.current_map.signs,
+                                      self.current_map.chests,
+                                      self.current_map.sparkly):
                         for obj in obj_group:
                             self.cbox_sprites.append(ColorBox(obj.rect, SHOPCOLOR, CBOXLAYER))
                     self.group.add(self.cbox_sprites)
@@ -287,26 +290,25 @@ class Window(object):
         :param dt: self.clock.tick(FPS)/1000.0
         """
         if key_input[Keys.Zoomplus.value[0]] or key_input[Keys.Zoomplus.value[1]]:
-            value = self.engine.current_map.map_layer.zoom + ZOOMSPEED
+            value = self.current_map.map_layer.zoom + ZOOMSPEED
             if value < MAXZOOM:
-                self.engine.current_map.map_layer.zoom = value
+                self.current_map.map_layer.zoom = value
         elif key_input[Keys.Zoommin.value[0]] or key_input[Keys.Zoommin.value[1]]:
-            value = self.engine.current_map.map_layer.zoom - ZOOMSPEED
+            value = self.current_map.map_layer.zoom - ZOOMSPEED
             if value > MINZOOM:
-                self.engine.current_map.map_layer.zoom = value
+                self.current_map.map_layer.zoom = value
         elif key_input[Keys.Zoomreset.value[0]] or key_input[Keys.Zoomreset.value[1]]:
-            self.engine.current_map.map_layer.zoom = DEFZOOM
+            self.current_map.map_layer.zoom = DEFZOOM
 
         self.party_sprites[0].speed(key_input)
         self.party_sprites[0].direction(key_input, dt)
         # todo, moet dit niet naar de unit class?
-        self.party_sprites[0].check_blocker(self.engine.current_map.high_blocker_rects,
-                                            self.engine.current_map.low_blocker_rects,
-                                            [sprite.get_blocker() for sprite in self.engine.current_map.people if
+        self.party_sprites[0].check_blocker(self.current_map.high_blocker_rects, self.current_map.low_blocker_rects,
+                                            [sprite.get_blocker() for sprite in self.current_map.people if
                                              getattr(sprite, 'wander_area', None)],  # alleen maar lopende sprites,
                                             None,                                    # standing sprites hebben al een
-                                            self.engine.current_map.width,           # blocker
-                                            self.engine.current_map.height,
+                                            self.current_map.width,                  # blocker
+                                            self.current_map.height,
                                             dt)
 
         self.leader_trail(dt)
@@ -331,26 +333,26 @@ class Window(object):
                 self.cbox_sprites[index].rect.topleft = unit.rect.topleft  # F11 zijn toegevoegd zijn de unit.rects
 
         # Centreer op de hero als de kaart groter is dan de window.
-        if self.engine.current_map.width >= self.width and \
-           self.engine.current_map.height >= self.height:
+        if self.current_map.width >= self.width and \
+           self.current_map.height >= self.height:
             self.group.center(self.party_sprites[0].rect.center)
 
         # update de plaatjes van de objecten
-        for obj in self.engine.current_map.chests:
+        for obj in self.current_map.chests:
             chest_data = self.engine.data.treasure_chests[obj.chest_id]
             obj.update(chest_data['opened'])
-        for obj in self.engine.current_map.sparkly:
+        for obj in self.current_map.sparkly:
             sparkly_data = self.engine.data.sparklies[obj.sparkly_id]
             obj.update(sparkly_data['taken'], dt)
 
         # beweeg wandering people.
-        # niet alleen maar wandering staan in c_m.people, maar update wordt ge-pass-t bij standing people
-        for obj in self.engine.current_map.people:
+        # er staan niet alleen maar wandering in c_m.people, ook standing people, maar update wordt daarbij ge-pass-t
+        for obj in self.current_map.people:
             obj.update(self.party_sprites,
-                       self.engine.current_map.high_blocker_rects,
-                       self.engine.current_map.low_blocker_rects,
-                       [sprite for sprite in self.engine.current_map.people if  # alleen maar lopende sprites,
-                        getattr(sprite, 'wander_area', None)],                  # standing sprites hebben al een blocker
+                       self.current_map.high_blocker_rects,
+                       self.current_map.low_blocker_rects,
+                       [sprite for sprite in self.current_map.people if  # alleen maar lopende sprites,
+                        getattr(sprite, 'wander_area', None)],           # standing sprites hebben al een blocker
                        dt)
 
     def render(self):
@@ -399,9 +401,9 @@ class Window(object):
         Bekijk op de kaart met welke sound de voeten colliden.
         Zet die naam van het object van de kaart als audio.footstep.
         """
-        if len(self.party_sprites[0].feet.collidelistall(self.engine.current_map.sounds)) == 1:
-            sound_nr = self.party_sprites[0].feet.collidelist(self.engine.current_map.sounds)
-            name = self.engine.current_map.sounds[sound_nr].name
+        if len(self.party_sprites[0].feet.collidelistall(self.current_map.sounds)) == 1:
+            sound_nr = self.party_sprites[0].feet.collidelist(self.current_map.sounds)
+            name = self.current_map.sounds[sound_nr].name
             self.engine.audio.footstep = name
 
     def check_portals(self):
@@ -410,13 +412,12 @@ class Window(object):
         Zo ja, haal dan de van en naar data uit de portal.
         Hij gebruikt de van naam voor de startpositie in de nieuwe map.
         """
-        if len(self.party_sprites[0].rect.collidelistall(self.engine.current_map.portals)) == 1:
+        if len(self.party_sprites[0].rect.collidelistall(self.current_map.portals)) == 1:
             self.engine.key_timer = NEWMAPTIMEOUT
-            portal_nr = self.party_sprites[0].rect.collidelist(self.engine.current_map.portals)
-            self.prev_map_name = self.engine.current_map.portals[portal_nr].from_name
-            self.engine.data.map_name = self.engine.current_map.portals[portal_nr].to_name
+            portal_nr = self.party_sprites[0].rect.collidelist(self.current_map.portals)
+            self.prev_map_name = self.current_map.portals[portal_nr].from_name
+            self.engine.data.map_name = self.current_map.portals[portal_nr].to_name
             self.engine.data.map_pos = self.prev_map_name       # zet de point om naar een string naam.
-            self.engine.current_map = Map(self.engine.data.map_name)
             self.load_map()
             self.engine.gamestate.push(Transition(self.engine.gamestate, full_screen=False))
 
@@ -424,9 +425,9 @@ class Window(object):
         """
         Bekijk of collide met een hero.
         """
-        if len(check_rect.collidelistall(self.engine.current_map.heroes)) == 1:
-            object_name = check_rect.collidelist(self.engine.current_map.heroes)
-            hero_sprite = self.engine.current_map.heroes[object_name]
+        if len(check_rect.collidelistall(self.current_map.heroes)) == 1:
+            object_name = check_rect.collidelist(self.current_map.heroes)
+            hero_sprite = self.current_map.heroes[object_name]
             # ook hier moet een hero in party niet gecheckt worden
             if not self.engine.data.party.contains(hero_sprite.person_id):
                 self.hero_data = self.engine.data.heroes[hero_sprite.person_id]
@@ -444,13 +445,13 @@ class Window(object):
         :param check_rect: een iets verplaatste rect van de player sprite zodat hij kan colliden met een obj dat anders
         niet collidebaar is. self.party_sprites[0].rect
         """
-        if len(check_rect.collidelistall(self.engine.current_map.shops)) == 1:
-            object_nr = check_rect.collidelist(self.engine.current_map.shops)
-            shop_id = self.engine.current_map.shops[object_nr].person_id
+        if len(check_rect.collidelistall(self.current_map.shops)) == 1:
+            object_nr = check_rect.collidelist(self.current_map.shops)
+            shop_id = self.current_map.shops[object_nr].person_id
             shop_data = ShopDatabase[shop_id].value
 
             # check alle shops, zijn ze zichtbaar, hebben ze dezelfde id, turn die dan allemaal.
-            for spr in self.engine.current_map.shops:
+            for spr in self.current_map.shops:
                 if spr.show_sprite:
                     if spr.person_id == shop_id:
                         spr.turn(self.party_sprites[0].rect)
@@ -465,9 +466,9 @@ class Window(object):
         """
         Bekijk of je collide met een school.
         """
-        if len(check_rect.collidelistall(self.engine.current_map.schools)) == 1:
-            object_nr = check_rect.collidelist(self.engine.current_map.schools)
-            school_sprite = self.engine.current_map.schools[object_nr]
+        if len(check_rect.collidelistall(self.current_map.schools)) == 1:
+            object_nr = check_rect.collidelist(self.current_map.schools)
+            school_sprite = self.current_map.schools[object_nr]
             school_data = SchoolDatabase[school_sprite.person_id].value
 
             school_sprite.turn(self.party_sprites[0].rect)
@@ -477,12 +478,12 @@ class Window(object):
         Er kunnen ook inns zijn zonder sprite, die moeten dan geupdate worden. Maar alle anderen met sprite wel omdat
         de lege een verlengde is van de gevulde. Hij vergelijkt person_id, dus hij turnt alleen met dezelfde id.
         """
-        if len(check_rect.collidelistall(self.engine.current_map.inns)) == 1:
-            object_nr = check_rect.collidelist(self.engine.current_map.inns)
-            inn_id = self.engine.current_map.inns[object_nr].person_id
+        if len(check_rect.collidelistall(self.current_map.inns)) == 1:
+            object_nr = check_rect.collidelist(self.current_map.inns)
+            inn_id = self.current_map.inns[object_nr].person_id
             self.inn_data = InnDatabase[inn_id].value
 
-            for spr in self.engine.current_map.inns:
+            for spr in self.current_map.inns:
                 if spr.show_sprite:
                     if spr.person_id == inn_id:
                         spr.turn(self.party_sprites[0].rect)
@@ -495,9 +496,9 @@ class Window(object):
         """
         Bekijk of hij collide met een standing of wandering person.
         """
-        if len(check_rect.collidelistall(self.engine.current_map.people)) == 1:
-            object_nr = check_rect.collidelist(self.engine.current_map.people)
-            person_sprite = self.engine.current_map.people[object_nr]
+        if len(check_rect.collidelistall(self.current_map.people)) == 1:
+            object_nr = check_rect.collidelist(self.current_map.people)
+            person_sprite = self.current_map.people[object_nr]
             person_data = PeopleDatabase[person_sprite.person_id].value
 
             # doe gewoon eerst het draaien zoals normaal
@@ -538,9 +539,9 @@ class Window(object):
         Haal dan de tekst uit de database, die zit in een lijst van lijsten.
         In tegenovergestelde volgorde moet hij op de stack komen.
         """
-        if len(check_rect.collidelistall(self.engine.current_map.notes)) == 1:
-            object_nr = check_rect.collidelist(self.engine.current_map.notes)
-            note_id = self.engine.current_map.notes[object_nr].name
+        if len(check_rect.collidelistall(self.current_map.notes)) == 1:
+            object_nr = check_rect.collidelist(self.current_map.notes)
+            note_id = self.current_map.notes[object_nr].name
             note_text = NoteDatabase[note_id].value
             for text_part in reversed(note_text):
                 push_object = MessageBox(self.engine.gamestate, text_part)
@@ -551,9 +552,9 @@ class Window(object):
         Bekijk of collide met een sign.
         """
         if self.party_sprites[0].last_direction == Direction.North:
-            if len(self.party_sprites[0].rect.collidelistall(self.engine.current_map.signs)) == 1:
-                object_nr = self.party_sprites[0].rect.collidelist(self.engine.current_map.signs)
-                sign_id = self.engine.current_map.signs[object_nr].sign_id
+            if len(self.party_sprites[0].rect.collidelistall(self.current_map.signs)) == 1:
+                object_nr = self.party_sprites[0].rect.collidelist(self.current_map.signs)
+                sign_id = self.current_map.signs[object_nr].sign_id
                 sign_data = SignDatabase[sign_id].value
 
                 push_object = MessageBox(self.engine.gamestate, sign_data)
@@ -565,9 +566,9 @@ class Window(object):
         Bekijk of collide met een chest.
         """
         if self.party_sprites[0].last_direction == Direction.North:
-            if len(self.party_sprites[0].rect.collidelistall(self.engine.current_map.chests)) == 1:
-                object_nr = self.party_sprites[0].rect.collidelist(self.engine.current_map.chests)
-                chest_id = self.engine.current_map.chests[object_nr].chest_id
+            if len(self.party_sprites[0].rect.collidelistall(self.current_map.chests)) == 1:
+                object_nr = self.party_sprites[0].rect.collidelist(self.current_map.chests)
+                chest_id = self.current_map.chests[object_nr].chest_id
                 chest_data = self.engine.data.treasure_chests[chest_id]
 
                 # v = skill value, h = hero naam
@@ -621,9 +622,9 @@ class Window(object):
         """
         Bekijk of collide met een sparkly.
         """
-        if len(check_rect.collidelistall(self.engine.current_map.sparkly)) == 1:
-            object_nr = check_rect.collidelist(self.engine.current_map.sparkly)
-            sparkly_id = self.engine.current_map.sparkly[object_nr].sparkly_id
+        if len(check_rect.collidelistall(self.current_map.sparkly)) == 1:
+            object_nr = check_rect.collidelist(self.current_map.sparkly)
+            sparkly_id = self.current_map.sparkly[object_nr].sparkly_id
             sparkly_data = self.engine.data.sparklies[sparkly_id]
 
             # hieronder is bijna een exacte kopie van check_chests() kan dat anders?
