@@ -12,7 +12,6 @@ from constants import GameState
 from constants import Keys
 import screens.menu
 from statemachine import StateMachine
-from script import Script
 from video import Video
 
 # todo, magic numbers overal opruimen
@@ -36,7 +35,6 @@ class GameEngine(object):
         self.screen = pygame.display.get_surface()
         self.gamestate = StateMachine()
         self.data = None
-        self.script = Script(self)
         self.video = Video()
         self.audio = Audio(self)
         self.current_map = None
