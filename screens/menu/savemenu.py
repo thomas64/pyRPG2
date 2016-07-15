@@ -5,8 +5,7 @@ class: SaveMenu
 
 from components import InputBox
 from constants import GameState
-from constants import SFX
-import loadsave
+from loadsave import Dialog as SaveDialog
 
 from .loadmenu import LoadMenu
 import screens.menu
@@ -28,18 +27,18 @@ class SaveMenu(LoadMenu):
         :param scr_capt: zie BaseMenu
         :param index: zie BaseMenu
         """
+        filename = None
         if menu_item.text == "Back":
             self.on_exit()
         elif "..." in menu_item.text:
-            new_name = InputBox().input_loop()
+            new_name = InputBox(self.engine.audio).input_loop()
             if new_name:
                 filename = str(index+1) + "_" + new_name + ".dat"
-                loadsave.Dialog(self.engine).save(filename)
-                self._reload(scr_capt, index)
-                self.engine.audio.play_sound(SFX.menu_select)
         else:
             filename = self._convert_to_filename(menu_item.text, index)
-            loadsave.Dialog(self.engine).save(filename)
+
+        if filename:
+            SaveDialog.save(self.engine.data, filename)
             self._reload(scr_capt, index)
 
     def _reload(self, scr_capt, index):

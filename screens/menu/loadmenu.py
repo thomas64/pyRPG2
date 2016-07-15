@@ -9,8 +9,7 @@ import os
 from components import Map
 from components import Transition
 from constants import SFX
-import data
-import loadsave
+from loadsave import Dialog as LoadDialog
 import screens.overworld.display
 
 from .basemenu import BaseMenu
@@ -72,13 +71,18 @@ class LoadMenu(BaseMenu):
             self.engine.audio.stop_sound(SFX.menu_select)
             self.engine.audio.play_sound(SFX.menu_error)
         else:
-            self.engine.data = data.Data()
             filename = self._convert_to_filename(menu_item.text, index)
-            loadsave.Dialog(self.engine).load(filename)
-            self.engine.current_map = Map(self.engine.data.map_name)
-            push_object = screens.overworld.display.Display(self.engine)
-            self.engine.gamestate.change(push_object)
-            self.engine.gamestate.push(Transition(self.engine.gamestate))
+            data = LoadDialog.load(filename)
+            # als de data niet corrupt is.
+            if data:
+                self.engine.data = data
+                self.engine.current_map = Map(self.engine.data.map_name)
+                push_object = screens.overworld.display.Display(self.engine)
+                self.engine.gamestate.change(push_object)
+                self.engine.gamestate.push(Transition(self.engine.gamestate))
+            else:
+                self.engine.audio.stop_sound(SFX.menu_select)
+                self.engine.audio.play_sound(SFX.menu_error)
 
     def on_delete(self, menu_item, scr_capt, index):
         """
@@ -95,7 +99,7 @@ class LoadMenu(BaseMenu):
             self.engine.audio.play_sound(SFX.menu_error)
         else:
             filename = self._convert_to_filename(menu_item.text, index)
-            loadsave.Dialog(self.engine).delete(filename)
+            LoadDialog.delete(filename)
             # er is niet voor _reload() gekozen omdat bij het poppen de muziek van mainmenu omhoog kwam.
             # bij savemenu is dat geen probleem omdat die dieper in het menu ligt.
             menu_item.clear_save_slot(self.engine.screen, index+1)

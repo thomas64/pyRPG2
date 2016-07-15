@@ -6,6 +6,7 @@ class: InputBox
 import pygame
 
 from constants import Keys
+from constants import SFX
 
 BOXWIDTH = 360
 BOXHEIGHT = 53
@@ -27,7 +28,8 @@ class InputBox(object):
     """
     Geeft een input box weer om te kunnen typen.
     """
-    def __init__(self):
+    def __init__(self, audio):
+        self.audio = audio
         self.screen = pygame.display.get_surface()
         self.surface = pygame.Surface((BOXWIDTH, BOXHEIGHT))
         self.surface = self.surface.convert()
@@ -57,7 +59,10 @@ class InputBox(object):
             pygame.display.update()
 
         if self.confirm:
-            return "".join(self.textbox[0:-1])  # return de string maar zonder het laatste character
+            new_name = "".join(self.textbox[0:-1])  # return de string maar zonder het laatste character
+            if new_name:
+                self.audio.play_sound(SFX.menu_select)
+            return new_name
         else:
             return None
 
