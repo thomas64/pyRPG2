@@ -63,6 +63,23 @@ class PeopleDatabase(enum.Enum):
     person62 = dict(name='woman53',      text=["Sometimes these rooms are so dirty.",
                                                "What are people doing? Do they eat in bed?"])
 
+    # invernia_house_left
+    person63 = dict(name='man01',        text=["What are you doing inside our home?"])
+    person64 = dict(name='woman01',      text=["What are you doing inside our home?"])
+    person65 = dict(name='boy01',        text=["Are you here for mommy and daddy?"])
+    person66 = dict(name='girl01',       text=["Are you here for mommy and daddy?"])
+
+    # invernia_house_right
+    person67 = dict(name='man02',        text=["What are you doing inside our home?"])
+    person68 = dict(name='woman02',      text=["What are you doing inside our home?"])
+    person69 = dict(name='boy02',        text=["Are you here for mommy and daddy?"])
+    person70 = dict(name='girl02',       text=["Are you here for mommy and daddy?"])
+
+    # invernia_house_big_1f
+    person71 = dict(name='man53',        text=["It's a busy life, taking care for all these orphans."])
+    person72 = dict(name='woman54',      text=["It's a busy life, taking care for all these orphans."])
+    # invernia_house_big_2f
+    person73 = dict(name='woman53',      text=["These people are so sweet, taking care for all those children."])
 
 for person in PeopleDatabase:
     if not person.value['name'].startswith('animal'):

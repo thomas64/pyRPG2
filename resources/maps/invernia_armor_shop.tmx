@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<map version="1.0" orientation="orthogonal" renderorder="right-down" width="40" height="36" tilewidth="16" tileheight="16" nextobjectid="73">
+<map version="1.0" orientation="orthogonal" renderorder="right-down" width="40" height="36" tilewidth="16" tileheight="16" nextobjectid="76">
  <properties>
   <property name="title" value="Invernia Town"/>
  </properties>
@@ -330,5 +330,16 @@
  </objectgroup>
  <objectgroup name="objects">
   <object id="72" name="shop2" x="368" y="144" width="32" height="48"/>
+  <object id="73" name="person8" x="528" y="240" width="32" height="32">
+   <properties>
+    <property name="direction" value="north"/>
+   </properties>
+  </object>
+  <object id="74" name="person10" type="w" x="112" y="304" width="32" height="32"/>
+  <object id="75" name="person2" x="176" y="224" width="32" height="32">
+   <properties>
+    <property name="direction" value="north"/>
+   </properties>
+  </object>
  </objectgroup>
 </map>
