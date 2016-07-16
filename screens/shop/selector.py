@@ -21,22 +21,21 @@ class Selector(pygame.sprite.Sprite):
         self.shop_type = shop_type
 
         # hij komt binnen met een hoofdletter van de enum, maar de bestandsnaam heeft een kleine letter
-        self.image = self._load_all_images(PATH)[shop_type.value.lower()]
+        self.image = self._load_selected_image(PATH, shop_type.value.lower())
         pygame.draw.rect(self.image, LINECOLOR, self.image.get_rect(), 1)
         self.rect = self.image.get_rect()
         self.rect.topleft = x, y
 
     @staticmethod
-    def _load_all_images(path):
+    def _load_selected_image(path, shop_type):
         """
-        Laadt alle plaatjes uit de map in een dict.
-        :return: de dict
+        Loopt langs alle plaatjes uit de map en controleert of de naam overeenkomt met de opgevraagde type.
+        :return: het gevonden plaatje.
         """
-        images = {}
         for file in os.listdir(path):
             name, ext = os.path.splitext(file)
-            images[name] = pygame.image.load(os.path.join(path, file)).convert_alpha()
-        return images
+            if name == shop_type:
+                return pygame.image.load(os.path.join(path, file)).convert_alpha()
 
     def mouse_click(self, event):
         """

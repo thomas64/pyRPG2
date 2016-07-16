@@ -13,10 +13,10 @@ from constants import ItemMaterial
 PATH = 'resources/sprites/npcs/'
 FEXT = 'f.png'
 SEXT = 's.png'
-SHOP1 = PATH+'Man_01'
-SHOP2 = PATH+'Man_02'
-SHOP3 = PATH+'Man_04'
-SHOP4 = PATH+'Woman_02'
+SHOP1 = PATH+'man01'
+SHOP2 = PATH+'man50'
+SHOP3 = PATH+'man52'
+SHOP4 = PATH+'woman51'
 
 
 class ShopDatabase(enum.Enum):

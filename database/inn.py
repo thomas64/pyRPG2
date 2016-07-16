@@ -9,7 +9,7 @@ import enum
 PATH = 'resources/sprites/npcs/'
 FEXT = 'f.png'
 SEXT = 's.png'
-INN1 = PATH+'Woman_01'
+INN1 = PATH+'woman01'
 
 
 class InnDatabase(enum.Enum):

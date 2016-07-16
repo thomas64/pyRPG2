@@ -10,7 +10,7 @@ from constants import SchoolType
 PATH = 'resources/sprites/npcs/'
 FEXT = 'f.png'
 SEXT = 's.png'
-SCHOOL1 = PATH+'Mystic_01'
+SCHOOL1 = PATH+'woman50'
 
 
 class SchoolDatabase(enum.Enum):
