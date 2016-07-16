@@ -17,7 +17,7 @@ class HeroDatabase(enum.Enum):
     """
     Alle heroes uit het spel als Enum met een dict voor de waarden.
     """
-    alagos = dict(nam="Alagos", spr=PATH+"01s_Alagos.png", fac=PATH+"01f_Alagos.png",
+    alagos = dict(nam="Alagos", spr=PATH+"01s_alagos.png", fac=PATH+"01f_alagos.png",
                   lev=1, scl=SchoolType.spl,
                   int=18, wil=12, dex=15, agi=15, edu=15, str=15, sta=30,
                   alc=0, dip=0, hlr=0, lor=0, mec=0, mer=0, ran=0, stl=1, thf=0, trb=1, war=3, wiz=1,
@@ -25,7 +25,7 @@ class HeroDatabase(enum.Enum):
                   wpn=WeaponDatabase.bronzeshortsword,
                   sld=ShieldDatabase.woodenbuckler,
                   arm=ArmorDatabase.lightleatherarmor)
-    luana = dict(nam="Luana", spr=PATH+"02s_Luana.png", fac=PATH+"02f_Luana.png",
+    luana = dict(nam="Luana", spr=PATH+"02s_luana.png", fac=PATH+"02f_luana.png",
                  lev=1, scl=SchoolType.elm,
                  int=14, wil=10, dex=22, agi=20, edu=10, str=8, sta=20,
                  alc=0, dip=0, hlr=0, lor=0, mec=1, mer=0, ran=0, stl=3, thf=3, trb=0, war=0, wiz=0,
@@ -33,7 +33,7 @@ class HeroDatabase(enum.Enum):
                  wpn=WeaponDatabase.bronzedagger,
                  sld=None, 
                  arm=ArmorDatabase.lightleatherarmor)
-    grindan = dict(nam="Grindan", spr=PATH+"03s_Grindan.png", fac=PATH+"03f_Grindan.png",
+    grindan = dict(nam="Grindan", spr=PATH+"03s_grindan.png", fac=PATH+"03f_grindan.png",
                    lev=8, scl=SchoolType.non,
                    int=10, wil=8, dex=25, agi=10, edu=20, str=20, sta=40,
                    alc=-1, dip=0, hlr=0, lor=0, mec=0, mer=0, ran=0, stl=1, thf=-1, trb=0, war=4, wiz=-1,
@@ -41,7 +41,7 @@ class HeroDatabase(enum.Enum):
                    wpn=WeaponDatabase.bronzelongsword,
                    sld=ShieldDatabase.bronzeheater,
                    arm=ArmorDatabase.heavybronzearmor)
-    rydalin = dict(nam="Rydalin", spr=PATH+"04s_Rydalin.png", fac=PATH+"04f_Rydalin.png",
+    rydalin = dict(nam="Rydalin", spr=PATH+"04s_rydalin.png", fac=PATH+"04f_rydalin.png",
                    lev=3, scl=SchoolType.nmg,
                    int=22, wil=16, dex=20, agi=15, edu=16, str=10, sta=31,
                    alc=0, dip=0, hlr=0, lor=1, mec=0, mer=1, ran=0, stl=0, thf=0, trb=0, war=0, wiz=4,
@@ -50,7 +50,7 @@ class HeroDatabase(enum.Enum):
                    sld=None, 
                    arm=ArmorDatabase.mediumleatherarmor,
                    spl=dict(VsNecromancy=1, Endurance=4, SenseAura=1, Weakness=4))
-    codrif = dict(nam="Codrif", spr=PATH+"05s_Codrif.png", fac=PATH+"05f_Codrif.png",
+    codrif = dict(nam="Codrif", spr=PATH+"05s_codrif.png", fac=PATH+"05f_codrif.png",
                   lev=2, scl=SchoolType.elm,
                   int=22, wil=18, dex=15, agi=12, edu=15, str=10, sta=20,
                   alc=3, dip=0, hlr=0, lor=2, mec=2, mer=0, ran=0, stl=0, thf=0, trb=0, war=0, wiz=2,
@@ -59,7 +59,7 @@ class HeroDatabase(enum.Enum):
                   sld=None,
                   arm=ArmorDatabase.lightleatherarmor,
                   spl=dict(DragonFlames=2))
-    galen = dict(nam="Galen", spr=PATH+"06s_Galen.png", fac=PATH+"06f_Galen.png",
+    galen = dict(nam="Galen", spr=PATH+"06s_galen.png", fac=PATH+"06f_galen.png",
                  lev=4, scl=SchoolType.non,
                  int=15, wil=15, dex=18, agi=10, edu=20, str=25, sta=40,
                  alc=-1, dip=0, hlr=0, lor=0, mec=0, mer=0, ran=4, stl=3, thf=0, trb=0, war=5, wiz=-1,
@@ -67,7 +67,7 @@ class HeroDatabase(enum.Enum):
                  wpn=WeaponDatabase.ironaxe,
                  sld=ShieldDatabase.irontarge,
                  arm=ArmorDatabase.mediumironarmor)
-    raiko = dict(nam="Raiko", spr=PATH+"07s_Raiko.png", fac=PATH+"07f_Raiko.png",
+    raiko = dict(nam="Raiko", spr=PATH+"07s_raiko.png", fac=PATH+"07f_raiko.png",
                  lev=12, scl=SchoolType.non,
                  int=6, wil=11, dex=14, agi=8, edu=30, str=30, sta=60,
                  alc=-1, dip=0, hlr=0, lor=-1, mec=0, mer=0, ran=0, stl=1, thf=-1, trb=-1, war=6, wiz=-1,
@@ -75,7 +75,7 @@ class HeroDatabase(enum.Enum):
                  wpn=WeaponDatabase.ironbroadsword,
                  sld=ShieldDatabase.ironkite,
                  arm=ArmorDatabase.heavyironarmor)
-    kiara = dict(nam="Kiara", spr=PATH+"08s_Kiara.png", fac=PATH+"08f_Kiara.png",
+    kiara = dict(nam="Kiara", spr=PATH+"08s_kiara.png", fac=PATH+"08f_kiara.png",
                  lev=12, scl=SchoolType.elm,
                  int=15, wil=10, dex=30, agi=30, edu=20, str=15, sta=40,
                  alc=0, dip=0, hlr=1, lor=0, mec=0, mer=4, ran=0, stl=5, thf=8, trb=0, war=0, wiz=4,
@@ -84,7 +84,7 @@ class HeroDatabase(enum.Enum):
                  sld=None, 
                  arm=ArmorDatabase.lightbronzearmor,
                  spl=dict(VsElemental=2, RemovePoison=3, Wind=3))
-    luthais = dict(nam="Luthais", spr=PATH+"09s_Luthais.png", fac=PATH+"09f_Luthais.png",
+    luthais = dict(nam="Luthais", spr=PATH+"09s_luthais.png", fac=PATH+"09f_luthais.png",
                    lev=20, scl=SchoolType.elm,
                    int=30, wil=30, dex=20, agi=12, edu=18, str=8, sta=50,
                    alc=7, dip=0, hlr=8, lor=9, mec=6, mer=0, ran=0, stl=5, thf=0, trb=0, war=0, wiz=10,
@@ -93,7 +93,7 @@ class HeroDatabase(enum.Enum):
                    sld=None, 
                    arm=ArmorDatabase.lightironarmor,
                    spl=dict(VsStar=8, VsNecromancy=10, Fireball=8, Mirror=8, DispelNecro=10))
-    elias = dict(nam="Elias", spr=PATH+"10s_Elias.png", fac=PATH+"10f_Elias.png",
+    elias = dict(nam="Elias", spr=PATH+"10s_elias.png", fac=PATH+"10f_elias.png",
                  lev=18, scl=SchoolType.nmg,
                  int=30, wil=30, dex=25, agi=18, edu=30, str=20, sta=60,
                  alc=0, dip=8, hlr=0, lor=0, mec=0, mer=0, ran=0, stl=0, thf=0, trb=0, war=7, wiz=7,
@@ -102,7 +102,7 @@ class HeroDatabase(enum.Enum):
                  sld=None, 
                  arm=ArmorDatabase.mediumsteelarmor,
                  spl=dict(VsStar=7, Banishing=7, SenseAura=7, Teleportation=7))
-    onarr = dict(nam="Onarr", spr=PATH+"11s_Onarr.png", fac=PATH+"11f_Onarr.png",
+    onarr = dict(nam="Onarr", spr=PATH+"11s_onarr.png", fac=PATH+"11f_onarr.png",
                  lev=18, scl=SchoolType.non,
                  int=30, wil=25, dex=23, agi=15, edu=30, str=25, sta=60,
                  alc=-1, dip=0, hlr=4, lor=6, mec=0, mer=0, ran=0, stl=0, thf=0, trb=7, war=9, wiz=-1,
@@ -110,7 +110,7 @@ class HeroDatabase(enum.Enum):
                  wpn=WeaponDatabase.steelpoleaxe,
                  sld=ShieldDatabase.steelkite,
                  arm=ArmorDatabase.heavysteelarmor)
-    duilio = dict(nam="Duilio", spr=PATH+"12s_Duilio.png", fac=PATH+"12f_Duilio.png",
+    duilio = dict(nam="Duilio", spr=PATH+"12s_duilio.png", fac=PATH+"12f_duilio.png",
                   lev=22, scl=SchoolType.elm,
                   int=25, wil=25, dex=30, agi=20, edu=25, str=25, sta=75,
                   alc=5, dip=10, hlr=0, lor=5, mec=0, mer=5, ran=5, stl=5, thf=5, trb=10, war=10, wiz=10,
@@ -119,7 +119,7 @@ class HeroDatabase(enum.Enum):
                   sld=ShieldDatabase.silvertarge,
                   arm=ArmorDatabase.mediumsilverarmor,
                   spl=dict(Fireball=6, AirShield=9, Strength=9, Debilitation=9, Mirror=9))
-    iellwen = dict(nam="Iellwen", spr=PATH+"13s_Iellwen.png", fac=PATH+"13f_Iellwen.png",
+    iellwen = dict(nam="Iellwen", spr=PATH+"13s_iellwen.png", fac=PATH+"13f_iellwen.png",
                    lev=20, scl=SchoolType.str,
                    int=30, wil=25, dex=30, agi=25, edu=30, str=20, sta=60,
                    alc=0, dip=0, hlr=10, lor=0, mec=0, mer=0, ran=6, stl=6, thf=0, trb=0, war=10, wiz=8,
@@ -128,7 +128,7 @@ class HeroDatabase(enum.Enum):
                    sld=None, 
                    arm=ArmorDatabase.lightsilverarmor,
                    spl=dict(WebOfStarlight=8, DispelStar=8, StellarGravity=8, DispelNaming=8, SolarWrath=8))
-    faeron = dict(nam="Faeron", spr=PATH+"14s_Faeron.png", fac=PATH+"14f_Faeron.png",
+    faeron = dict(nam="Faeron", spr=PATH+"14s_faeron.png", fac=PATH+"14f_faeron.png",
                   lev=25, scl=SchoolType.nmg,
                   int=30, wil=30, dex=30, agi=30, edu=25, str=15, sta=80,
                   alc=10, dip=10, hlr=0, lor=10, mec=0, mer=10, ran=10, stl=10, thf=10, trb=10, war=10, wiz=-1,
