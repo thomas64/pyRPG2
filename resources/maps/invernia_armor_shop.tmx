@@ -330,7 +330,7 @@
  </objectgroup>
  <objectgroup name="objects">
   <object id="72" name="shop2" x="368" y="144" width="32" height="48"/>
-  <object id="73" name="person8" x="528" y="240" width="32" height="32">
+  <object id="73" name="person75" x="528" y="240" width="32" height="32">
    <properties>
     <property name="direction" value="north"/>
    </properties>

@@ -333,7 +333,7 @@
  <objectgroup name="objects">
   <object id="29" name="shop1" x="176" y="208" width="32" height="48"/>
   <object id="34" name="person17" type="w" x="496" y="192" width="32" height="32"/>
-  <object id="35" name="person6" type="w" x="208" y="336" width="32" height="32"/>
+  <object id="35" name="person74" type="w" x="208" y="336" width="32" height="32"/>
   <object id="36" name="person14" type="w" x="144" y="336" width="32" height="32"/>
  </objectgroup>
 </map>

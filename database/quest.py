@@ -17,14 +17,30 @@ class QuestDatabase(enum.Enum):
                   condition=dict(itm1=dict(nam=PouchItemDatabase.herbs, qty=5)),
                   reward=dict(itm1=dict(nam=PouchItemDatabase.gold,     qty=2),
                               eqp1=dict(nam=WeaponDatabase.bronzedart,  qty=1)),
-                  # de nulste moet de confirmbox zijn.
-                  # de anderen zijn in QuestState volgorde.
-                  text=(["Help the boy out and give him 5 herbs?", "", "Yes, ofcourse!", "No, these are my herbs."],
-                        ["Hi mister,", "I need 5 herbs for my mommy. She's ill.", "Can you please help me find some?"],
+                  # deze teksten staan in QuestState volgorde.
+                  text=(["Hi mister,", "I need 5 herbs for my mommy. She's ill.", "Can you please help me find some?"],
                         ["If you've got 5 herbs, please give them to me."],
+                        ["Help the boy out and give him 5 herbs?", "", "Yes, ofcourse!", "No, these are my herbs."],
                         ["Thanks a lot for the herbs! Now my mom will be better soon.",
                          "Instead of the herbs I found this here in the forest.",
                          "You can have it, for helping my mommy."],
                         ["Hi mister,", "It seems my mommy is all better now.", "Thanks to you!"])
                   )
-    quest2 = dict()
+    quest2 = dict(qtype=QuestType.PersonQuest,
+                  reward=dict(itm1=dict(nam=PouchItemDatabase.gold,     qty=1)),
+                  text=(["How are you? May I ask you something? I'm a bit shy.",
+                         "There is this girl that I like, but I'm afraid to tell her.",
+                         "Would you tell her for me instead? Please?",
+                         "She is at the armor shop looking for a dress, and I won't",
+                         "dare to come near, so I went to this shop, I'm pathetic."],
+                        ["Please do it for me. She is at the armor shop."],
+                        [""],
+                        ["Thank you for telling her!", "You can have this, for helping me out."],
+                        ["Thanks again, I owe you big time!"]),
+                  subtext=(["How are you?"],
+                           ["How are you?"],
+                           ["Bring the pathetic message over to her?", "",
+                            "Yes, everybody needs a chance.", "No, he has to grow up and be a man."],
+                           ["I... I didn't know that... Thank you for telling me."],
+                           ["How are you?"])
+                  )

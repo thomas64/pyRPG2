@@ -205,19 +205,29 @@ class Window(object):
         elif self.quest_box:
             choice, yes, scr_capt = self.quest_box.on_exit()
             if choice == yes:
-                self.engine.gamestate.push(Transition(self.engine.gamestate))
-                # hij kan voldoen, komt daarom met text en plaatjes terug, om dat weer te kunnen geven.
-                text, image = self.quest_data.fulfill(self.engine.data)
-                push_object = MessageBox(self.engine.gamestate, text, spr_image=image, scr_capt=scr_capt)
-                self.engine.gamestate.push(push_object)
+                # ga naar Finished
+                self.quest_data.update_state(None)
+                # voor een itemquest
+                if self.quest_data.reward_after_confirm():
+                    self.engine.gamestate.push(Transition(self.engine.gamestate))
+                    # hij kan voldoen, komt daarom met text en plaatjes terug, om dat weer te kunnen geven.
+                    text, image = self.quest_data.fulfill(self.engine.data)
+                    push_object = MessageBox(self.engine.gamestate, text, spr_image=image, scr_capt=scr_capt)
+                    self.engine.gamestate.push(push_object)
+                    # nog een bedank berichtje van de quest owner.
+                    push_object = MessageBox(self.engine.gamestate, self.quest_data.get_text(),
+                                             face_image=self.person_face, scr_capt=scr_capt)
+                    self.engine.gamestate.push(push_object)
+                    # ga naar Rewarded
+                    self.quest_data.update_state(None, got_reward=True)
+                # voor een personquest
+                else:
+                    push_object = MessageBox(self.engine.gamestate, self.quest_data.get_subtext(),
+                                             face_image=self.person_face, scr_capt=scr_capt)
+                    self.engine.gamestate.push(push_object)
 
-                # nog een bedank berichtje van de quest owner.
-                push_object = MessageBox(self.engine.gamestate, self.quest_data.get_text(),
-                                         face_image=self.person_face, scr_capt=scr_capt)
-                self.engine.gamestate.push(push_object)
-
-                # zet de state op Rewarded.
-                self.quest_data.confirm_contact(self.engine.data)
+            else:
+                self.quest_data.downdate_state()
 
             self.quest_box = None
             self.quest_data = None
@@ -515,20 +525,42 @@ class Window(object):
                 if not self.engine.data.logbook.get(quest_key):
                     self.engine.data.logbook[quest_key] = QuestItem(**quest_value)
                 self.quest_data = self.engine.data.logbook[quest_key]
-
                 # het gezicht is in on_enter() weer nodig, vandaar deze declaratie.
                 self.person_face = person_data['face']
-
                 push_object = MessageBox(self.engine.gamestate, self.quest_data.get_text(), self.person_face)
                 self.engine.gamestate.push(push_object)
-                # als hij voldoet aan de voorwaarden
-                if self.quest_data.confirm_contact(self.engine.data):
+                self.quest_data.update_state(self.engine.data)
+                if self.quest_data.is_ready_to_finish():
                     # kom dan met een confirmbox
-                    self.quest_box = ConfirmBox(self.engine.gamestate, self.engine.audio, self.quest_data.get_text(0))
+                    self.quest_box = ConfirmBox(self.engine.gamestate, self.engine.audio, self.quest_data.get_text())
                     self.engine.gamestate.push(self.quest_box)
                     # draai de messagebox en confirmbox om in de stack.
                     self.engine.gamestate.swap()
-                # als hij niet voldoet aan de voorwaarden, dan heeft hij nog wel confirm_contact uitgevoerd.
+                elif self.quest_data.reward_after_message():
+                    text, image = self.quest_data.fulfill(self.engine.data)
+                    push_object = MessageBox(self.engine.gamestate, text, spr_image=image)
+                    self.engine.gamestate.push(push_object)
+                    self.quest_data.update_state(None, got_reward=True)
+                    self.engine.gamestate.swap()
+
+            # of als het een onderdeel is van een subquest
+            elif person_data.get('subquest'):
+                quest_key = person_data['subquest'].name
+                quest_value = person_data['subquest'].value
+                if not self.engine.data.logbook.get(quest_key):
+                    self.engine.data.logbook[quest_key] = QuestItem(**quest_value)
+                self.quest_data = self.engine.data.logbook[quest_key]
+                self.person_face = person_data['face']
+                # hierboven hetzelfde als quest, maar hieronder staat get_subtext(), dat is dus anders.
+                push_object = MessageBox(self.engine.gamestate, self.quest_data.get_subtext(), self.person_face)
+                self.engine.gamestate.push(push_object)
+                self.quest_data.update_state(None, talk_to_sub=True)
+                # als de quest al bezig is, dan komt er een confirmbox bij de subquester
+                if self.quest_data.is_ready_to_finish():
+                    self.quest_box = ConfirmBox(self.engine.gamestate, self.engine.audio,
+                                                self.quest_data.get_subtext())
+                    self.engine.gamestate.push(self.quest_box)
+                    self.engine.gamestate.swap()
 
             # of als hij dat niet heeft
             else:
