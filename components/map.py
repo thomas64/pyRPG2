@@ -16,6 +16,7 @@ from .sprites import Sparkly
 from .sprites import TreasureChest
 
 from constants import Direction
+from constants import MapTitle
 
 from database import InnDatabase
 from database import HeroDatabase
@@ -60,10 +61,11 @@ class Map(object):
         self.window_width = WINDOWWIDTH
         self.window_height = WINDOWHEIGHT
 
-        self.title = tmx_data.properties['title']
+        self.title = MapTitle[name].value
 
         self.high_blocker_rects = []
         self.low_blocker_rects = []
+        self.temp_blocker_rects = []
         self.sounds = []
         self.start_pos = []
         self.portals = []
@@ -88,7 +90,10 @@ class Map(object):
         for obj in tmx_data.get_layer_by_name(PORTALS):
             self.portals.append(Portal(name, self._pg_rect(obj), obj.name, obj.type))
         for obj in tmx_data.get_layer_by_name(OBJECTS):
-            if obj.name.startswith('shop'):
+            if obj.name == 'blocker':
+                # in obj.type staat de bijbehorende quest key.
+                self.temp_blocker_rects.append(NamedRect(obj.type, self._pg_rect(obj)))
+            elif obj.name.startswith('shop'):
                 shop_object = Person(obj.name, ShopDatabase[obj.name].value['sprite'],
                                      self._pg_rect(obj), OBJECTLAYER, self._has_dir(obj, 'direction'), obj.type)
                 # als er in obj.type iets staat, dan is het een lege sprite en dus geen blocker.

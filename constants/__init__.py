@@ -14,6 +14,7 @@ class: SpellType
 class: QuestType
 class: QuestState
 class: MapMusic
+class: MapTitle
 class: SFX
 class: Keys
 """
@@ -251,6 +252,32 @@ class MapMusic(enum.Enum):
     invernia_house_big_2f =     "invernia_town", None
     invernia_house_left =       "invernia_town", None
     invernia_house_right =      "invernia_town", None
+
+
+class MapTitle(enum.Enum):
+    """
+    Alle tmx kaarten op een rij, met de Titel hoe die in beeld komt erachter.
+    De key's komen precies overeen met de .tmx namen.
+    """
+    ersin_forest_start =        "Ersin Forest"
+    ersin_forest_waterfall =    "Ersin Forest"
+    ersin_forest_center =       "Ersin Forest"
+    ersin_forest_cave =         "Ersin Forest"
+    ersin_cave_room1 =          "Ersin Cave"
+    ersin_cave_room2 =          "Ersin Cave"
+    ersin_cave_room3 =          "Ersin Cave"
+    invernia_town =             "Invernia Town"
+    invernia_armor_shop =       "Invernia Town"
+    invernia_weapon_shop =      "Invernia Town"
+    invernia_item_shop =        "Invernia Town"
+    invernia_inn_1f =           "Invernia Town"
+    invernia_inn_2f =           "Invernia Town"
+    invernia_guild =            "Invernia Town"
+    invernia_school =           "Invernia Town"
+    invernia_house_big_1f =     "Invernia Town"
+    invernia_house_big_2f =     "Invernia Town"
+    invernia_house_left =       "Invernia Town"
+    invernia_house_right =      "Invernia Town"
 
 
 class SFX(enum.Enum):

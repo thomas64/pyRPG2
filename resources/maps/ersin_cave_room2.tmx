@@ -1,8 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <map version="1.0" orientation="orthogonal" renderorder="right-down" width="46" height="38" tilewidth="16" tileheight="16" nextobjectid="24076">
- <properties>
-  <property name="title" value="Ersin Cave"/>
- </properties>
  <tileset firstgid="1" name="ruleset" tilewidth="16" tileheight="16" tilecount="60" columns="10">
   <image source="tilesets/ruleset.png" width="160" height="96"/>
  </tileset>

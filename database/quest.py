@@ -44,3 +44,24 @@ class QuestDatabase(enum.Enum):
                            ["I... I didn't know that... Thank you for telling me."],
                            ["How are you?"])
                   )
+    quest3 = dict(qtype=QuestType.PersonQuest,
+                  text=(["It's so beautiful, I can watch this scenery for hours.",
+                         ". . .",
+                         "By the way, have you been bothered by that half ass",
+                         "soldier at our town? He has taken it up on himself to",
+                         "block the passage for no clear reason. He only lets",
+                         "people with the proper password pass by. Ofcourse I",
+                         "will tell the password, his actions are useless anyway."],
+                        ["It's so beautiful, I can watch this scenery for hours.",
+                         ". . .",
+                         "Have you told him the password already?"],
+                        [""],
+                        ["It's so beautiful, I can watch this scenery for hours."],
+                        ["It's so beautiful, I can watch this scenery for hours."]),
+                  subtext=(["Halt! You may not enter Invernia Town!"],
+                           ["Halt! You may not enter Invernia Town!"],
+                           ["Say the password to the soldier?", "",
+                            "Yes, I want to enter the town.", "No, he's an ass hat."],
+                           ["Continue."],
+                           ["Continue."])
+                  )

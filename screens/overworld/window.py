@@ -140,6 +140,8 @@ class Window(object):
         self.group.add(self.current_map.chests)
         self.group.add(self.current_map.sparkly)
 
+        self.remove_temp_blockers()
+
         # de eerste keer dat deze 2 draaien is Overworld nog niet op de gamestack gepushed. daarom herstart begintune.
         self.engine.audio.set_bg_music(self.engine.gamestate.peek().name)
         self.engine.audio.set_bg_sounds(self.engine.gamestate.peek().name)
@@ -147,6 +149,19 @@ class Window(object):
         # want deze is alleen nodig voor de audio, dus nadien weghalen.
         # hij wordt vanaf nu (22-06-2016) ook voor beginpositie bepaling gebruikt, maar hij mag nog steeds weg nadien.
         self.prev_map_name = None
+
+    def remove_temp_blockers(self):
+        """
+        verwijder eventueel temp blockers weer
+        """
+        # als er iets in de lijst van temp blockers staat:
+        if len(self.current_map.temp_blocker_rects) > 0:
+            # de naam van de tempblocker is de key van de quest. als de eerste uit de lijst explicitiet deze is:
+            if self.engine.data.logbook.get(self.current_map.temp_blocker_rects[0].name):
+                # bekijk dan of hij al rewarded is:
+                if self.engine.data.logbook[self.current_map.temp_blocker_rects[0].name].reward_after_message():
+                    # haal dan de temp blocker weg
+                    self.current_map.temp_blocker_rects = []
 
     def align(self):
         """
@@ -226,6 +241,8 @@ class Window(object):
                                              face_image=self.person_face, scr_capt=scr_capt)
                     self.engine.gamestate.push(push_object)
 
+                self.remove_temp_blockers()
+
             else:
                 self.quest_data.downdate_state()
 
@@ -302,7 +319,9 @@ class Window(object):
         self.party_sprites[0].speed(key_input)
         self.party_sprites[0].direction(key_input, dt)
         # todo, moet dit niet naar de unit class?
-        self.party_sprites[0].check_blocker(self.current_map.high_blocker_rects, self.current_map.low_blocker_rects,
+        self.party_sprites[0].check_blocker(self.current_map.high_blocker_rects,
+                                            self.current_map.low_blocker_rects,
+                                            self.current_map.temp_blocker_rects,
                                             [sprite.get_blocker() for sprite in self.current_map.people if
                                              getattr(sprite, 'wander_area', None)],  # alleen maar lopende sprites,
                                             None,                                    # standing sprites hebben al een

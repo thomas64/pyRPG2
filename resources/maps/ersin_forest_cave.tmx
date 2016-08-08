@@ -1,8 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<map version="1.0" orientation="orthogonal" renderorder="right-down" width="74" height="60" tilewidth="16" tileheight="16" nextobjectid="2423">
- <properties>
-  <property name="title" value="Ersin Forest"/>
- </properties>
+<map version="1.0" orientation="orthogonal" renderorder="right-down" width="74" height="60" tilewidth="16" tileheight="16" nextobjectid="2424">
  <tileset firstgid="1" name="outside_a1" tilewidth="16" tileheight="16" tilecount="768" columns="32">
   <image source="tilesets/outside_a1.png" width="512" height="384"/>
   <tile id="2">
@@ -674,5 +671,6 @@
  </objectgroup>
  <objectgroup name="objects">
   <object id="2422" name="sign2" type="2" x="928" y="208" width="32" height="32"/>
+  <object id="2423" name="person50" type="w" x="352" y="752" width="32" height="32"/>
  </objectgroup>
 </map>
