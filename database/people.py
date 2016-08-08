@@ -38,11 +38,11 @@ class PeopleDatabase(enum.Enum):
     person19 = dict(name='animal03',     face=False, text=["Cluck cluck"])
 
     # invernia_forest_center
-    person76 = dict(name='soldier01',    subquest=QuestDatabase.quest3)
+    person76 = dict(name='soldier01',    quest=QuestDatabase.quest3)
     # invernia_forest_cave
     person50 = dict(name='boy01',        quest=QuestDatabase.quest1)
     # invernia_forest_waterfall
-    person51 = dict(name='man54',        quest=QuestDatabase.quest3)
+    person51 = dict(name='man54',        quest=QuestDatabase.quest4)
 
     # invernia_town
     person52 = dict(name='boy01',        text=["Hi mister!", "We're playing hide and seek.",

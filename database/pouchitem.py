@@ -4,14 +4,19 @@ class: PouchItemDatabase
 """
 
 import enum
+import os
 
-GOLDPATH = "resources/sprites/icons/pouch/gold.png"
-HERBSPATH = "resources/sprites/icons/pouch/herbs.png"
-SPICESPATH = "resources/sprites/icons/pouch/spices.png"
+POUCHPATH = "resources/sprites/icons/pouch"
+
+GOLDIMG = os.path.join(POUCHPATH, "gold.png")
+HERBIMG = os.path.join(POUCHPATH, "herbs.png")
+SPICEIMG = os.path.join(POUCHPATH, "spices.png")
+NOTEPIMG = os.path.join(POUCHPATH, "note.png")
 
 
 class PouchItemDatabase(enum.Enum):
     """..."""
-    gold = dict(nam="Gold",     srt=1, spr=GOLDPATH)
-    herbs = dict(nam="Herbs",   srt=2, spr=HERBSPATH)
-    spices = dict(nam="Spices", srt=3, spr=SPICESPATH)
+    gold = dict(nam="Gold",                 srt=1, spr=GOLDIMG)
+    herbs = dict(nam="Herbs",               srt=2, spr=HERBIMG)
+    spices = dict(nam="Spices",             srt=3, spr=SPICEIMG)
+    proofnote = dict(nam="Proofnote",       srt=4, spr=NOTEPIMG)

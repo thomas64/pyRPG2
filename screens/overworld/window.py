@@ -586,6 +586,12 @@ class Window(object):
                 push_object = MessageBox(self.engine.gamestate, person_data['text'], person_data['face'])
                 self.engine.gamestate.push(push_object)
 
+    def add_quest_to_logbook(self):
+        """
+        ...
+        """
+        pass
+
     def check_notes(self, check_rect):
         """
         Bekijk met welke note objectnummer hij in de list collide.

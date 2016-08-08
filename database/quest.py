@@ -44,24 +44,42 @@ class QuestDatabase(enum.Enum):
                            ["I... I didn't know that... Thank you for telling me."],
                            ["How are you?"])
                   )
-    quest3 = dict(qtype=QuestType.PersonQuest,
+
+    quest3 = dict(qtype=QuestType.ItemQuest,
+                  condition=dict(itm1=dict(nam=PouchItemDatabase.proofnote, qty=1)),
+                  reward=dict(),
+                  text=(["Halt! You may not enter Invernia Town!",
+                         "Only if you can prove that you are not a monster."],
+                        ["Halt! You may not enter Invernia Town!",
+                         "Only if you can prove that you are not a monster."],
+                        ["Show him the 'Proof of not being a monster'?", "",
+                         "Yes, I want to enter the town.", "No, he's stupid!"],
+                        ["Continue."],
+                        ["Continue."])
+                  )
+
+    quest4 = dict(qtype=QuestType.ItemQuest,
+                  condition=dict(),
+                  reward=dict(itm1=dict(nam=PouchItemDatabase.proofnote, qty=1)),
                   text=(["It's so beautiful, I can watch this scenery for hours.",
+                         " ",
                          ". . .",
+                         " ",
                          "By the way, have you been bothered by that half ass",
                          "soldier at our town? He has taken it up on himself to",
-                         "block the passage for no clear reason. He only lets",
-                         "people with the proper password pass by. Ofcourse I",
-                         "will tell the password, his actions are useless anyway."],
+                         "prevent monsters for entering the town!",
+                         "That may be noble, but he is not able to see the",
+                         "difference between a normal person and an evil monster.",
+                         "So he asks for proof?!?",
+                         "I'll give you an 'Proof of not being a monster', because",
+                         "you seem a normal person to me. *sigh*"],
+
                         ["It's so beautiful, I can watch this scenery for hours.",
+                         " ",
                          ". . .",
-                         "Have you told him the password already?"],
+                         " ",
+                         "Did you 'prove' that you are not a monster?"],
                         [""],
                         ["It's so beautiful, I can watch this scenery for hours."],
                         ["It's so beautiful, I can watch this scenery for hours."]),
-                  subtext=(["Halt! You may not enter Invernia Town!"],
-                           ["Halt! You may not enter Invernia Town!"],
-                           ["Say the password to the soldier?", "",
-                            "Yes, I want to enter the town.", "No, he's an ass hat."],
-                           ["Continue."],
-                           ["Continue."])
                   )
