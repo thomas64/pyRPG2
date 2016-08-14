@@ -113,7 +113,8 @@ class Display(object):
 
         # Als de leave party confirmbox in beeld is geweest.
         if self.leave_box:
-            choice, yes, nothing = self.leave_box.on_exit()
+            choice = self.leave_box.cur_item
+            yes = self.leave_box.TOPINDEX
             if choice == yes:
                 self.engine.data.party.remove(self.cur_hero)
                 # update daarna het party scherm

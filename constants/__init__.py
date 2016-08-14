@@ -211,8 +211,8 @@ class SpellType(enum.Enum):
 
 class QuestType(enum.Enum):
     """..."""
-    ItemQuest = 1
-    PersonQuest = 2
+    FetchItemQuest = 1
+    PersonMessageQuest = 2
     EnemyQuest = 3
 
 

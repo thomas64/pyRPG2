@@ -30,12 +30,14 @@ class ConfirmBox(object):
     """
     Geeft een selectie weer op het scherm.
     """
-    def __init__(self, gamestate, audio, raw_text, face_image=None):
+    def __init__(self, gamestate, audio, raw_text, face_image=None, callback=None):
         self.gamestate = gamestate
         self.audio = audio
         self.screen = pygame.display.get_surface()
         self.name = GameState.MessageBox
         self.scr_capt = ScreenCapture()
+
+        self.callback = callback    # mogelijkheid tot methode meegeven
 
         self.font = pygame.font.SysFont(FONT, FONTSIZE)
         self.raw_text = raw_text    # de onopgemaakte tekst
@@ -90,13 +92,9 @@ class ConfirmBox(object):
     def on_enter(self):
         pass
 
+    # noinspection PyMissingOrEmptyDocstring
     def on_exit(self):
-        """
-        Bij het sluiten van het venster.
-        :return: geef het geselecteerde item en de topindex terug, topindex is ter verificatie
-        Geef ook voor als het nodig is de schermachtergrond voor een eventuele volgende messagebox.
-        """
-        return self.cur_item, self.TOPINDEX, self.scr_capt
+        pass
 
     def single_input(self, event):
         """

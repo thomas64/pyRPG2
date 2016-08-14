@@ -81,7 +81,7 @@ class PeopleDatabase(enum.Enum):
     # invernia_weapon_shop
     person74 = dict(name='youngman02',   quest=QuestDatabase.quest2)
     # invernia_armor_shop
-    person75 = dict(name='youngwoman02', subquest=QuestDatabase.quest2)
+    person75 = dict(name='youngwoman02', quest=QuestDatabase.quest2)
 
 for person in PeopleDatabase:
     if not person.value['name'].startswith('animal'):

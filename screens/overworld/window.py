@@ -31,7 +31,6 @@ from database import PouchItemDatabase
 
 from inventoryitems import EquipmentItem
 from inventoryitems import PouchItem
-from inventoryitems import QuestItem
 
 import screens.shop
 
@@ -88,8 +87,8 @@ class Window(object):
         self.hero_box = None    # confirmbox
         self.hero_data = None
         self.quest_box = None   # confirmbox
-        self.quest_data = None
         self.person_face = None
+        self.person_id = None
 
     def load_map(self):
         """
@@ -157,11 +156,11 @@ class Window(object):
         # als er iets in de lijst van temp blockers staat:
         if len(self.current_map.temp_blocker_rects) > 0:
             # de naam van de tempblocker is de key van de quest. als de eerste uit de lijst explicitiet deze is:
-            if self.engine.data.logbook.get(self.current_map.temp_blocker_rects[0].name):
-                # bekijk dan of hij al rewarded is:
-                if self.engine.data.logbook[self.current_map.temp_blocker_rects[0].name].reward_after_message():
-                    # haal dan de temp blocker weg
-                    self.current_map.temp_blocker_rects = []
+            quest_key = self.engine.data.logbook.get(self.current_map.temp_blocker_rects[0].name)
+            # bekijk dan of hij al rewarded is:
+            if self.engine.data.logbook.is_quest_rewarded(quest_key):
+                # haal dan de temp blocker weg
+                self.current_map.temp_blocker_rects = []
 
     def align(self):
         """
@@ -180,7 +179,9 @@ class Window(object):
         Als de quest confirmbox in beeld is geweest.
         """
         if self.hero_box:
-            choice, yes, scr_capt = self.hero_box.on_exit()
+            choice = self.hero_box.cur_item
+            yes = self.hero_box.TOPINDEX
+            scr_capt = self.hero_box.scr_capt
             if choice == yes:
                 if self.engine.data.party.add(self.hero_data):
                     self.engine.key_timer = NEWMAPTIMEOUT
@@ -195,7 +196,9 @@ class Window(object):
             self.hero_data = None
 
         elif self.inn_box:
-            choice, yes, scr_capt = self.inn_box.on_exit()
+            choice = self.inn_box.cur_item
+            yes = self.inn_box.TOPINDEX
+            scr_capt = self.inn_box.scr_capt
             if choice == yes:
                 gold = PouchItem(**PouchItemDatabase.gold.value)
                 if self.engine.data.pouch.remove(gold, self.inn_data['price']):
@@ -218,37 +221,17 @@ class Window(object):
             self.inn_data = None
 
         elif self.quest_box:
-            choice, yes, scr_capt = self.quest_box.on_exit()
-            if choice == yes:
-                # ga naar Finished
-                self.quest_data.update_state(None)
-                # voor een itemquest
-                if self.quest_data.reward_after_confirm():
-                    self.engine.gamestate.push(Transition(self.engine.gamestate))
-                    # hij kan voldoen, komt daarom met text en plaatjes terug, om dat weer te kunnen geven.
-                    text, image = self.quest_data.fulfill(self.engine.data)
-                    push_object = MessageBox(self.engine.gamestate, text, spr_image=image, scr_capt=scr_capt)
-                    self.engine.gamestate.push(push_object)
-                    # nog een bedank berichtje van de quest owner.
-                    push_object = MessageBox(self.engine.gamestate, self.quest_data.get_text(),
-                                             face_image=self.person_face, scr_capt=scr_capt)
-                    self.engine.gamestate.push(push_object)
-                    # ga naar Rewarded
-                    self.quest_data.update_state(None, got_reward=True)
-                # voor een personquest
-                else:
-                    push_object = MessageBox(self.engine.gamestate, self.quest_data.get_subtext(),
-                                             face_image=self.person_face, scr_capt=scr_capt)
-                    self.engine.gamestate.push(push_object)
+            # roept de callback aan die is meegegeven aan confirmbox bij de logbook quest
+            # de callback hier is decided() uit inventoryitems\quest.py
+            self.quest_box.callback(self.engine.gamestate, self.engine.data, self.person_face,
+                                    self.quest_box.cur_item, self.quest_box.TOPINDEX, self.quest_box.scr_capt,
+                                    self.person_id, self.display_loot)
 
-                self.remove_temp_blockers()
-
-            else:
-                self.quest_data.downdate_state()
+            self.remove_temp_blockers()
 
             self.quest_box = None
-            self.quest_data = None
             self.person_face = None
+            self.person_id = None
 
     def single_input(self, event):
         """
@@ -541,56 +524,20 @@ class Window(object):
                 # stop hem in data.logbook en haal de juiste self.quest_data er weer uit.
                 quest_key = person_data['quest'].name
                 quest_value = person_data['quest'].value
-                if not self.engine.data.logbook.get(quest_key):
-                    self.engine.data.logbook[quest_key] = QuestItem(**quest_value)
-                self.quest_data = self.engine.data.logbook[quest_key]
+                the_quest = self.engine.data.logbook.add_quest(quest_key, quest_value)
                 # het gezicht is in on_enter() weer nodig, vandaar deze declaratie.
                 self.person_face = person_data['face']
-                push_object = MessageBox(self.engine.gamestate, self.quest_data.get_text(), self.person_face)
-                self.engine.gamestate.push(push_object)
-                self.quest_data.update_state(self.engine.data)
-                if self.quest_data.is_ready_to_finish():
-                    # kom dan met een confirmbox
-                    self.quest_box = ConfirmBox(self.engine.gamestate, self.engine.audio, self.quest_data.get_text())
-                    self.engine.gamestate.push(self.quest_box)
-                    # draai de messagebox en confirmbox om in de stack.
-                    self.engine.gamestate.swap()
-                elif self.quest_data.reward_after_message():
-                    text, image = self.quest_data.fulfill(self.engine.data)
-                    push_object = MessageBox(self.engine.gamestate, text, spr_image=image)
-                    self.engine.gamestate.push(push_object)
-                    self.quest_data.update_state(None, got_reward=True)
-                    self.engine.gamestate.swap()
+                # idem voor person_id
+                self.person_id = person_sprite.person_id
 
-            # of als het een onderdeel is van een subquest
-            elif person_data.get('subquest'):
-                quest_key = person_data['subquest'].name
-                quest_value = person_data['subquest'].value
-                if not self.engine.data.logbook.get(quest_key):
-                    self.engine.data.logbook[quest_key] = QuestItem(**quest_value)
-                self.quest_data = self.engine.data.logbook[quest_key]
-                self.person_face = person_data['face']
-                # hierboven hetzelfde als quest, maar hieronder staat get_subtext(), dat is dus anders.
-                push_object = MessageBox(self.engine.gamestate, self.quest_data.get_subtext(), self.person_face)
-                self.engine.gamestate.push(push_object)
-                self.quest_data.update_state(None, talk_to_sub=True)
-                # als de quest al bezig is, dan komt er een confirmbox bij de subquester
-                if self.quest_data.is_ready_to_finish():
-                    self.quest_box = ConfirmBox(self.engine.gamestate, self.engine.audio,
-                                                self.quest_data.get_subtext())
-                    self.engine.gamestate.push(self.quest_box)
-                    self.engine.gamestate.swap()
+                self.quest_box = the_quest.show_message(self.engine.gamestate, self.engine.data,
+                                                        self.engine.audio, self.person_face,
+                                                        self.person_id, self.display_loot)
 
             # of als hij dat niet heeft
             else:
                 push_object = MessageBox(self.engine.gamestate, person_data['text'], person_data['face'])
                 self.engine.gamestate.push(push_object)
-
-    def add_quest_to_logbook(self):
-        """
-        ...
-        """
-        pass
 
     def check_notes(self, check_rect):
         """
@@ -620,7 +567,6 @@ class Window(object):
                 push_object = MessageBox(self.engine.gamestate, sign_data)
                 self.engine.gamestate.push(push_object)
 
-    # noinspection PyUnresolvedReferences
     def check_chests(self):
         """
         Bekijk of collide met een chest.
@@ -658,26 +604,12 @@ class Window(object):
                     text = self.engine.data.treasure_chests.open_chest(chest_data.get('condition'),
                                                                        mec_v, mec_h, thf_v, thf_h)
                     image = []
-                    for key, value in chest_data['content'].items():
-                        if key.startswith('eqp'):
-                            equipment_item = EquipmentItem(**value['nam'].value)
-                            equipment_item_spr = pygame.image.load(equipment_item.SPR).subsurface(
-                                equipment_item.COL, equipment_item.ROW, ICONSIZE, ICONSIZE).convert_alpha()
-                            self.engine.data.inventory.add_i(equipment_item, quantity=value['qty'])
-                            text.append("{} {}".format(value['qty'], equipment_item.NAM))
-                            image.append(equipment_item_spr)
-                        elif key.startswith('itm'):
-                            pouch_item = PouchItem(**value['nam'].value)
-                            pouch_item_spr = pygame.image.load(pouch_item.SPR).convert_alpha()
-                            self.engine.data.pouch.add(pouch_item, quantity=value['qty'])
-                            text.append("{} {}".format(value['qty'], pouch_item.NAM))
-                            image.append(pouch_item_spr)
+                    text, image = self.display_loot(chest_data['content'], text, image)
                     self.engine.audio.play_sound(SFX.chest)
                     chest_data['content'] = dict()
                     push_object = MessageBox(self.engine.gamestate, text, spr_image=image)
                     self.engine.gamestate.push(push_object)
 
-    # noinspection PyUnresolvedReferences
     def check_sparklies(self, check_rect):
         """
         Bekijk of collide met een sparkly.
@@ -687,26 +619,34 @@ class Window(object):
             sparkly_id = self.current_map.sparkly[object_nr].sparkly_id
             sparkly_data = self.engine.data.sparklies[sparkly_id]
 
-            # hieronder is bijna een exacte kopie van check_chests() kan dat anders?
             if sparkly_data['content']:
                 sparkly_data['taken'] = 1
                 text = ["Found:"]
                 image = []
-                for key, value in sparkly_data['content'].items():
-                    if key.startswith('eqp'):
-                        equipment_item = EquipmentItem(**value['nam'].value)
-                        equipment_item_spr = pygame.image.load(equipment_item.SPR).subsurface(
-                            equipment_item.COL, equipment_item.ROW, ICONSIZE, ICONSIZE).convert_alpha()
-                        self.engine.data.inventory.add_i(equipment_item, quantity=value['qty'])
-                        text.append("{} {}".format(value['qty'], equipment_item.NAM))
-                        image.append(equipment_item_spr)
-                    elif key.startswith('itm'):
-                        pouch_item = PouchItem(**value['nam'].value)
-                        pouch_item_spr = pygame.image.load(pouch_item.SPR).convert_alpha()
-                        self.engine.data.pouch.add(pouch_item, quantity=value['qty'])
-                        text.append("{} {}".format(value['qty'], pouch_item.NAM))
-                        image.append(pouch_item_spr)
+                text, image = self.display_loot(sparkly_data['content'], text, image)
                 self.engine.audio.play_sound(SFX.sparkly)
                 sparkly_data['content'] = dict()
                 push_object = MessageBox(self.engine.gamestate, text, spr_image=image)
                 self.engine.gamestate.push(push_object)
+
+    def display_loot(self, content_data, text, image):
+        """
+        Soort van static method. geeft alleen de gevraagde dingen terug.
+        :return: geeft de tekst en de plaatjes terug voor een messagebox
+        """
+        for key, value in content_data.items():
+            if key.startswith('eqp'):
+                equipment_item = EquipmentItem(**value['nam'].value)
+                equipment_item_spr = pygame.image.load(equipment_item.SPR).subsurface(
+                    equipment_item.COL, equipment_item.ROW, ICONSIZE, ICONSIZE).convert_alpha()
+                self.engine.data.inventory.add_i(equipment_item, quantity=value['qty'])
+                text.append("{} {}".format(value['qty'], equipment_item.NAM))
+                image.append(equipment_item_spr)
+            elif key.startswith('itm'):
+                pouch_item = PouchItem(**value['nam'].value)
+                pouch_item_spr = pygame.image.load(pouch_item.SPR).convert_alpha()
+                self.engine.data.pouch.add(pouch_item, quantity=value['qty'])
+                text.append("{} {}".format(value['qty'], pouch_item.NAM))
+                image.append(pouch_item_spr)
+
+        return text, image

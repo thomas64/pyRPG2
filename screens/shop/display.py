@@ -204,8 +204,8 @@ class Display(object):
         """
         if self.sell_click or self.buy_click:
             if self.buy_click:
-                # hij gebruikt nothing=scr_capt hier niet
-                choice, yes, nothing = self.confirm_box.on_exit()
+                choice = self.confirm_box.cur_item
+                yes = self.confirm_box.TOPINDEX
                 if choice == yes:
                     gold = PouchItem(**PouchItemDatabase.gold.value)
                     if self.engine.data.pouch.remove(gold, self.value):     # deze if is eigenlijk overbodig maar
@@ -216,8 +216,7 @@ class Display(object):
                     self.engine.audio.play_sound(SFX.menu_select)
 
             elif self.sell_click:
-                # hij gebruikt nothing hier niet
-                selected_quantity, nothing, nothing = self.confirm_box.on_exit()
+                selected_quantity = self.confirm_box.cur_item
                 # dit gaat helemaal uit van dat de tekst van de shop maar 1 regel heeft en dan 1 regel niets.
                 quantity = None
                 if selected_quantity:   # omdat selected_quantity None kan zijn vanwege ESC toets.
