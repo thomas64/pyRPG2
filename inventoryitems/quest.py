@@ -1,5 +1,6 @@
 
 """
+class: BaseQuestItem
 class: FetchItemQuestItem
 class: PersonMessageQuestItem
 """
@@ -14,16 +15,34 @@ from .equipment import EquipmentItem
 from .pouch import PouchItem
 
 
-class FetchItemQuestItem(object):
+class BaseQuestItem(object):
+    """
+    Abstracte base class voor quests.
+    """
+    def __init__(self, qtype, reward, text):
+        self.state = QuestState.Unknown
+        self.qtype = qtype
+        self.reward = reward
+        self.text = text
+
+    def is_rewarded(self):
+        """
+        Geeft terug of de state rewarded is.
+        :return: true of false
+        """
+        if self.state == QuestState.Rewarded:
+            return True
+        else:
+            return False
+
+
+class FetchItemQuestItem(BaseQuestItem):
     """
     Een persoon vraagt je om een of meerdere items. En bij het overdragen krijg je een beloning.
     """
     def __init__(self, qtype, condition, reward, text):
-        self.state = QuestState.Unknown
-        self.qtype = qtype
+        super().__init__(qtype, reward, text)
         self.condition = condition
-        self.reward = reward
-        self.text = text
 
     def show_message(self, gamestate, data, audio, face_image, person_id, display_loot):
         """
@@ -149,16 +168,13 @@ class FetchItemQuestItem(object):
                 data.pouch.remove(itm_obj, value['qty'])
 
 
-class PersonMessageQuestItem(object):
+class PersonMessageQuestItem(BaseQuestItem):
     """
     Een persoon vraagt je om wat te zeggen tegen een ander. Na te voldoen krijg je van de eerste weer een beloning.
     """
     def __init__(self, qtype, people, reward, text):
-        self.state = QuestState.Unknown
-        self.qtype = qtype
+        super().__init__(qtype, reward, text)
         self.people = people
-        self.reward = reward
-        self.text = text
 
     def show_message(self, gamestate, data, audio, face_image, person_id, display_loot):
         """

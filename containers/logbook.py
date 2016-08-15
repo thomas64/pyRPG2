@@ -3,7 +3,6 @@
 class: Logbook
 """
 
-from constants import QuestState
 from constants import QuestType
 from inventoryitems import FetchItemQuestItem
 from inventoryitems import PersonMessageQuestItem
@@ -35,16 +34,3 @@ class Logbook(dict):
                                                          quest_value['reward'],
                                                          quest_value['text'])
         return self[quest_key]
-
-    def is_quest_rewarded(self, quest_key):
-        """
-        Bekijkt of een quest rewarded is
-        :param quest_key: dict key, 'quest3' bijv
-        :return: true of false
-        """
-        if quest_key is None:
-            return False
-        elif self[quest_key].state == QuestState.Rewarded:
-            return True
-        else:
-            return False

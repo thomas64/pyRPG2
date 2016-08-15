@@ -16,6 +16,9 @@ from video import Video
 
 # todo, magic numbers overal opruimen
 
+# todo, bekijk alle classes (object) (dict). compositie dict is beter dan inherit dict
+# todo, uitzonderingen geen if, maar nieuwe classes
+
 # todo, er gaat nog wat mis met sidestep als fps te hoog is, oorzaak onduidelijk.
 # minimaal 15, anders kan hij door bomen lopen. maximaal 110, anders sidestep raar.
 FPS = 60
