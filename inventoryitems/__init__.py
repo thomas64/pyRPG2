@@ -11,6 +11,7 @@ from .equipment import EquipmentItem
 from .pouch import PouchItem
 from .quest import FetchItemQuestItem
 from .quest import PersonMessageQuestItem
+from .quest import ReceiveItemQuestItem
 
 
 def factory_empty_equipment_item(equipment_type):

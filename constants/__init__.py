@@ -213,7 +213,8 @@ class QuestType(enum.Enum):
     """..."""
     FetchItemQuest = 1
     PersonMessageQuest = 2
-    EnemyQuest = 3
+    ReceiveItemQuest = 3
+    EnemyQuest = 9
 
 
 class QuestState(enum.Enum):

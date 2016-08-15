@@ -7,7 +7,6 @@ class: PersonMessageQuestItem
 
 from components import ConfirmBox
 from components import MessageBox
-from components import Transition
 
 from constants import QuestState
 
@@ -83,7 +82,6 @@ class FetchItemQuestItem(BaseQuestItem):
         if choice == yes:
             # ga naar Finished
             self._update_state(is_fulfilled=True)
-            gamestate.push(Transition(gamestate))
             # hij kan voldoen, komt daarom met text en plaatjes terug, om dat weer te kunnen geven.
             self._fulfill(data)
             text = ["Received:"]
@@ -178,7 +176,7 @@ class PersonMessageQuestItem(BaseQuestItem):
 
     def show_message(self, gamestate, data, audio, face_image, person_id, display_loot):
         """
-        Geef een bericht en waneer mogelijk ook een confirmbox erachteraan.
+        Geeft een bericht en waneer mogelijk ook een confirmbox erachteraan.
         :param gamestate: self.engine.gamestate
         :param data: self.engine.data
         :param audio: self.engine.audio
@@ -265,3 +263,52 @@ class PersonMessageQuestItem(BaseQuestItem):
 
         elif self.state == QuestState.Rewarded:
             pass
+
+
+class ReceiveItemQuestItem(BaseQuestItem):
+    """
+    Je praat met een persoon, en die geeft je gelijk wat.
+    """
+    def __init__(self, qtype, reward, text):
+        super().__init__(qtype, reward, text)
+
+    def show_message(self, gamestate, data, audio, face_image, person_id, display_loot):
+        """
+        Geeft een bericht net zoals notes verdeeld over meerdere schermen, met een inverse loop.
+        :param gamestate: self.engine.gamestate
+        :param data: self.engine.data
+        :param audio: self.engine.audio
+        :param face_image: PeopleDatabase[person_sprite.person_id].value['face']
+        :param person_id: Voor deze niet nodig, maar wel voor PersonMessageQuestItem.
+        :param display_loot: methode uit window waar het overzicht gegeven wordt van wat je ontvangen hebt.
+        :return: deze is voor deze quest altijd None.
+        """
+
+        # let op dat de volgorde volledig omgedraaid is.
+        if self.state != QuestState.Rewarded:
+            text = ["Received:"]
+            image = []
+            text, image = display_loot(self.reward, text, image)
+            push_object = MessageBox(gamestate, text, spr_image=image)
+            gamestate.push(push_object)
+
+        for text_part in reversed(self._get_text()):
+            push_object = MessageBox(gamestate, text_part, face_image)
+            gamestate.push(push_object)
+
+        self._update_state()
+
+        return None
+
+    def _get_text(self):
+        """
+        Geeft de juiste tekst terug op basis van de state van de quest.
+        :return: de tekst die past bij de index van QuestState
+        """
+        return self.text[self.state.value]
+
+    def _update_state(self):
+        """
+        Zet de state gelijk naar rewarded, vanaf welke state dan ook.
+        """
+        self.state = QuestState.Rewarded

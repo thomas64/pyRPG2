@@ -158,7 +158,7 @@ class Window(object):
             # de naam van de tempblocker is de key van de quest. als de eerste uit de lijst explicitiet deze is:
             the_quest = self.engine.data.logbook.get(self.current_map.temp_blocker_rects[0].name)
             # bekijk dan of hij al rewarded is:
-            if the_quest.is_rewarded():
+            if the_quest is not None and the_quest.is_rewarded():
                 # haal dan de temp blocker weg
                 self.current_map.temp_blocker_rects = []
 

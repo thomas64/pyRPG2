@@ -6,6 +6,7 @@ class: Logbook
 from constants import QuestType
 from inventoryitems import FetchItemQuestItem
 from inventoryitems import PersonMessageQuestItem
+from inventoryitems import ReceiveItemQuestItem
 
 
 class Logbook(dict):
@@ -33,4 +34,9 @@ class Logbook(dict):
                                                          quest_value['people'],
                                                          quest_value['reward'],
                                                          quest_value['text'])
+            elif quest_value['qtype'] == QuestType.ReceiveItemQuest:
+                self[quest_key] = ReceiveItemQuestItem(quest_value['qtype'],
+                                                       quest_value['reward'],
+                                                       quest_value['text'])
+
         return self[quest_key]
