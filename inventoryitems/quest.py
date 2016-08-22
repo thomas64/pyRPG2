@@ -24,6 +24,13 @@ class BaseQuestItem(object):
         self.reward = reward
         self.text = text
 
+    def _get_text(self, *args):
+        """
+        Geeft de juiste tekst terug op basis van de state van de quest.
+        :return: de tekst die past bij de index van QuestState
+        """
+        return self.text[self.state.value]
+
     def is_rewarded(self):
         """
         Geeft terug of de state rewarded is.
@@ -98,13 +105,6 @@ class FetchItemQuestItem(BaseQuestItem):
             # bij 'nee' dan wordt je state weer een stapje omlaag gezet.
             if self.state == QuestState.Ready:
                 self.state = QuestState.Running
-
-    def _get_text(self):
-        """
-        Geeft de juiste tekst terug op basis van de state van de quest.
-        :return: de tekst die past bij de index van QuestState
-        """
-        return self.text[self.state.value]
 
     def _update_state(self, is_ready_to_fulfill=False, is_fulfilled=False, got_rewarded=False):
         """
@@ -299,13 +299,6 @@ class ReceiveItemQuestItem(BaseQuestItem):
         self._update_state()
 
         return None
-
-    def _get_text(self):
-        """
-        Geeft de juiste tekst terug op basis van de state van de quest.
-        :return: de tekst die past bij de index van QuestState
-        """
-        return self.text[self.state.value]
 
     def _update_state(self):
         """
