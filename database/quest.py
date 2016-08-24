@@ -50,6 +50,7 @@ class QuestDatabase(enum.Enum):
 
     quest3 = dict(qtype=QuestType.FetchItemQuest,
                   condition=dict(itm1=dict(nam=PouchItemDatabase.proofnote, qty=1)),
+                  # geen reward, maar wel remove_temp_blockers() (standaard)
                   reward=dict(),
                   text=(["Halt! You may not enter Invernia Town!",
                          "Only if you can prove that you are not a monster."],
@@ -57,7 +58,7 @@ class QuestDatabase(enum.Enum):
                          "Only if you can prove that you are not a monster."],
                         ["Show him the 'Proof of not being a monster'?", "",
                          "Yes, I want to enter the town.", "No, he's stupid!"],
-                        ["Continue."],
+                        ["It seems you are not a monster. Continue."],
                         ["Continue."])
                   )
 
@@ -65,7 +66,7 @@ class QuestDatabase(enum.Enum):
                   reward=dict(itm1=dict(nam=PouchItemDatabase.proofnote, qty=1)),
                   # meerdere textscheremen zoals bij notes.
                   text=([["It's so beautiful, I can watch this scenery for hours."],
-                         [".   .   .   .   .   .   .   .   .   .   .   .   .   ."],
+                         ["    .   .   .   .   .   .   .   .   .   .   .   .   ."],
                          ["By the way, have you been bothered by that half ass",
                           "soldier at our town? He has taken it up on himself to",
                           "prevent monsters for entering the town!",
@@ -78,6 +79,6 @@ class QuestDatabase(enum.Enum):
                         [[" "]],
                         [[" "]],
                         [["It's so beautiful, I can watch this scenery for hours."],
-                         [".   .   .   .   .   .   .   .   .   .   .   .   .   ."],
+                         ["    .   .   .   .   .   .   .   .   .   .   .   .   ."],
                          ["Did you 'prove' that you are not a monster?"]])
                   )

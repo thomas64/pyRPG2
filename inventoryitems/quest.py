@@ -91,11 +91,12 @@ class FetchItemQuestItem(BaseQuestItem):
             self._update_state(is_fulfilled=True)
             # hij kan voldoen, komt daarom met text en plaatjes terug, om dat weer te kunnen geven.
             self._fulfill(data)
-            text = ["Received:"]
-            image = []
-            text, image = display_loot(self.reward, text, image)
-            push_object = MessageBox(gamestate, text, spr_image=image, scr_capt=scr_capt)
-            gamestate.push(push_object)
+            if self.reward:
+                text = ["Received:"]
+                image = []
+                text, image = display_loot(self.reward, text, image)
+                push_object = MessageBox(gamestate, text, spr_image=image, scr_capt=scr_capt)
+                gamestate.push(push_object)
             # nog een bedank berichtje van de quest owner.
             push_object = MessageBox(gamestate, self._get_text(), face_image=face_image, scr_capt=scr_capt)
             gamestate.push(push_object)
