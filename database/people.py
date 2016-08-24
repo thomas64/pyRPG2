@@ -33,9 +33,9 @@ class PeopleDatabase(enum.Enum):
     person14 = dict(name='oldman02',     text=["How do you do?"])
     person15 = dict(name='oldwoman01',   text=["How do you do?"])
     person16 = dict(name='oldwoman02',   text=["How do you do?"])
-    person17 = dict(name='animal01',     face=False, text=["Meow"])
-    person18 = dict(name='animal02',     face=False, text=["Bow wow"])
-    person19 = dict(name='animal03',     face=False, text=["Cluck cluck"])
+    person17 = dict(name='animal01',     text=["Meow"])
+    person18 = dict(name='animal02',     text=["Woof"])
+    person19 = dict(name='animal03',     text=["Cluck"])
 
     # invernia_forest_center
     person76 = dict(name='soldier01',    quest=QuestDatabase.quest3)
@@ -84,6 +84,5 @@ class PeopleDatabase(enum.Enum):
     person75 = dict(name='youngwoman02', quest=QuestDatabase.quest2)
 
 for person in PeopleDatabase:
-    if not person.value['name'].startswith('animal'):
-        person.value['face'] = PATH+person.value['name']+FEXT
+    person.value['face'] = PATH+person.value['name']+FEXT
     person.value['sprite'] = PATH+person.value['name']+SEXT
