@@ -17,6 +17,11 @@ HALFBLOCKERHEIGHT = 16
 
 TRANSP = 'resources/sprites/transp.png'
 
+WANDERSPEED = 60
+STEPSPEED = 15
+WANDERRECTPOS = -64
+WANDERRECTSIZE = 160
+
 
 class Person(pygame.sprite.Sprite):
     """
@@ -102,9 +107,8 @@ class Walking(Person):
         self.last_direction = direction
         self.move_direction = None
 
-        self.wander_area = pygame.Rect(self.rect.x-64, self.rect.y-64, 160, 160)
-        self.WANDER_SPEED = 60
-        self.STEP_SPEED = 15
+        self.wander_area = pygame.Rect(self.rect.x + WANDERRECTPOS, self.rect.y + WANDERRECTPOS,
+                                       WANDERRECTSIZE, WANDERRECTSIZE)
         self.step_count = 0
         self.step_animation = 0
 
@@ -141,7 +145,7 @@ class Walking(Person):
 
         if self.state == PersonState.Resting:
             self.state = PersonState.Moving
-            rnd = random.randint(1, 4)
+            rnd = random.randint(1, len(self.directions))  # 1 - 4 directions
             self.move_direction = self.directions[rnd]
 
         elif self.state == PersonState.Moving:
@@ -175,13 +179,13 @@ class Walking(Person):
         self.image = self.full_sprite.subsurface(self.full_sprite.get_clip())
 
         if self.move_direction == Direction.North:
-            self.true_position[1] -= self.WANDER_SPEED * dt
+            self.true_position[1] -= WANDERSPEED * dt
         elif self.move_direction == Direction.South:
-            self.true_position[1] += self.WANDER_SPEED * dt
+            self.true_position[1] += WANDERSPEED * dt
         elif self.move_direction == Direction.West:
-            self.true_position[0] -= self.WANDER_SPEED * dt
+            self.true_position[0] -= WANDERSPEED * dt
         elif self.move_direction == Direction.East:
-            self.true_position[0] += self.WANDER_SPEED * dt
+            self.true_position[0] += WANDERSPEED * dt
 
         self.rect.x = round(self.true_position[0])
         self.rect.y = round(self.true_position[1])
@@ -207,13 +211,13 @@ class Walking(Person):
         Verzet de positie in de tegenovergestelde richting.
         """
         if self.move_direction == Direction.North:
-            self.true_position[1] += self.WANDER_SPEED * dt
+            self.true_position[1] += WANDERSPEED * dt
         elif self.move_direction == Direction.South:
-            self.true_position[1] -= self.WANDER_SPEED * dt
+            self.true_position[1] -= WANDERSPEED * dt
         elif self.move_direction == Direction.West:
-            self.true_position[0] += self.WANDER_SPEED * dt
+            self.true_position[0] += WANDERSPEED * dt
         elif self.move_direction == Direction.East:
-            self.true_position[0] -= self.WANDER_SPEED * dt
+            self.true_position[0] -= WANDERSPEED * dt
 
         self.rect.x = round(self.true_position[0])
         self.rect.y = round(self.true_position[1])
@@ -250,18 +254,18 @@ class Walking(Person):
         if type(clipped_rect) is dict:
             self.full_sprite.set_clip(pygame.Rect(self._get_frame(clipped_rect, dt, make_sound)))
         else:
-            self.step_count = self.STEP_SPEED         # zodat hij direct een stap animeert uit stilstand
+            self.step_count = STEPSPEED         # zodat hij direct een stap animeert uit stilstand
             self.step_animation = 0
             self.full_sprite.set_clip(pygame.Rect(clipped_rect))
         # return clipped_rect
 
     def _get_frame(self, frame_set, dt, make_sound):
-        self.step_count += self.WANDER_SPEED * dt
-        if self.step_count > self.STEP_SPEED:
+        self.step_count += WANDERSPEED * dt
+        if self.step_count > STEPSPEED:
             self.step_count = 0
             # if self.step_animation in (0, 2) and make_sound:
             #     self.audio.play_step_sound()
             self.step_animation += 1
-            if self.step_animation > 3:
+            if self.step_animation >= len(frame_set):  # lengte van bijv west_states - 1 is 3
                 self.step_animation = 0
         return frame_set[self.step_animation]
