@@ -20,3 +20,9 @@ class SchoolDatabase(enum.Enum):
 
     school1 = dict(content=[SchoolType.elm, SchoolType.nmg],
                    face=SCHOOL1+FEXT, sprite=SCHOOL1+SEXT)
+
+    @staticmethod
+    def welcome_text():
+        """..."""
+        return ("Hoi",
+                "Hoi2.")

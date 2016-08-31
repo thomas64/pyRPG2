@@ -32,6 +32,7 @@ from database import PouchItemDatabase
 from inventoryitems import EquipmentItem
 from inventoryitems import PouchItem
 
+import screens.school
 import screens.shop
 
 
@@ -487,6 +488,10 @@ class Window(object):
             school_data = SchoolDatabase[school_sprite.person_id].value
 
             school_sprite.turn(self.party_sprites[0].rect)
+
+            push_object = screens.school.Display(self.engine, school_data['face'])
+            self.engine.gamestate.push(push_object)
+            self.engine.gamestate.push(Transition(self.engine.gamestate))
 
     def check_inns(self, check_rect):
         """
