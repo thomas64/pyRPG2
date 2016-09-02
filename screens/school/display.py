@@ -11,6 +11,9 @@ from constants import GameState
 from constants import Keys
 from database import SchoolDatabase
 
+from screens.shop.infobox import InfoBox
+from .selector import Selector
+
 
 BACKGROUNDCOLOR = pygame.Color("black")
 BACKGROUNDSPRITE = 'resources/sprites/parchment.png'
@@ -28,6 +31,15 @@ SMALLFONTSIZE = 20
 SMALLLINEHEIGHT = 30
 EXTRAFACESIZE = 20
 LINESNEXTTOFACE = 3
+
+INFOBOXWIDTH = 1/4
+INFOBOXHEIGHT = 1/6
+INFOBOXPOSX = 1/16
+INFOBOXPOSY = 6/8
+
+SELECTORPOSX = 1/16
+SELECTORPOSY = 10/16
+SELECTORWIDTH = 31
 
 BTNWIDTH = 70
 BTNHEIGHT = 40
@@ -51,11 +63,25 @@ class Display:
         self.normalfont = pygame.font.SysFont(FONT, NORMALFONTSIZE)
         self.smallfont = pygame.font.SysFont(FONT, SMALLFONTSIZE)
 
+        self._init_selectors()
         self._init_face(face)
+        self._init_boxes()
 
         self.close_button = Button(
             BTNWIDTH, BTNHEIGHT, (self.background.get_width() + CLOSEX, CLOSEY), CLOSELBL, Keys.Exit.value,
             COLORKEY, FONTCOLOR)
+
+        self.info_label = ""
+
+    def _init_selectors(self):
+
+        self.selectors = pygame.sprite.Group()
+
+        for index, hero in enumerate(self.engine.data.party):
+            self.selectors.add(Selector(self._set_x(SELECTORPOSX) + index * SELECTORWIDTH,
+                                        self._set_y(SELECTORPOSY), hero))
+
+        self.selectors.draw(self.background)
 
     def _init_face(self, face):
         face_image = pygame.image.load(face).convert_alpha()
@@ -71,6 +97,14 @@ class Display:
                 self.background.blit(rline,
                                      (self._set_x(FACEPOSX),
                                       self._set_y(FACEPOSY) + EXTRAFACESIZE + index * SMALLLINEHEIGHT))
+
+    def _init_boxes(self):
+        self._init_infobox()
+
+    def _init_infobox(self):
+        width = self.screen.get_width() * INFOBOXWIDTH
+        height = self.screen.get_height() * INFOBOXHEIGHT
+        self.infobox = InfoBox(self._set_x(INFOBOXPOSX), self._set_y(INFOBOXPOSY), int(width), int(height))
 
     def on_enter(self):
         """
@@ -92,7 +126,8 @@ class Display:
         """
 
         if event.type == pygame.MOUSEMOTION:
-            pass
+
+            self.info_label = ""
 
         elif event.type == pygame.MOUSEBUTTONDOWN:
 
@@ -128,6 +163,8 @@ class Display:
         """
         self.screen.fill(BACKGROUNDCOLOR)
         self.screen.blit(self.background, (0, 0))
+
+        self.infobox.render(self.screen, self.info_label)
         self.close_button.render(self.screen, FONTCOLOR, True)
 
     def _set_x(self, posx):
