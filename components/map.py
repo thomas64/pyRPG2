@@ -15,6 +15,8 @@ from .sprites import Sign
 from .sprites import Sparkly
 from .sprites import TreasureChest
 
+from console import Console
+
 from constants import Direction
 from constants import MapTitle
 
@@ -136,12 +138,15 @@ class Map(object):
             elif obj.name.startswith('sparkly'):
                 sparkly_object = Sparkly(obj.name, self._pg_rect(obj), OBJECTLAYER)
                 self.sparkly.append(sparkly_object)
-            else:  # 'heroes'
-                hero_object = Person(obj.name, HeroDatabase[obj.name].value['spr'],
+            elif obj.name == 'hero':
+                hero_object = Person(obj.type, HeroDatabase[obj.type].value['spr'],
                                      self._pg_rect(obj), OBJECTLAYER, self._has_dir(obj, 'direction'), None)
-                # geen high_blocker zoals bij bijv shops, omdat hero's er soms niet op de map kunnen staat,
+                # geen high_blocker zoals bij bijv shops, omdat hero's er soms niet op de map kunnen staan,
                 # het laden van high_blockers gebeurt in window.
                 self.heroes.append(hero_object)
+            else:
+                Console.error_unknown_map_object()
+                raise NameError
 
     @staticmethod
     def _pg_rect(rect):

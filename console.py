@@ -103,6 +103,13 @@ class Console:
         print("Corrupt gamedata.")
 
     @staticmethod
+    def error_unknown_map_object():
+        """
+        Map()
+        """
+        print("Unknown Map Object.")
+
+    @staticmethod
     def container_is_full(container_name):
         """
         Inventory.add_i()

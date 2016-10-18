@@ -521,50 +521,50 @@
   <object id="40" x="288" y="192" width="32" height="16"/>
  </objectgroup>
  <objectgroup name="objects">
-  <object id="4" name="luana" x="512" y="592" width="32" height="32"/>
-  <object id="5" name="grindan" x="544" y="624" width="32" height="32">
+  <object id="4" name="hero" type="luana" x="512" y="592" width="32" height="32"/>
+  <object id="5" name="hero" type="grindan" x="544" y="624" width="32" height="32">
    <properties>
     <property name="direction" value="west"/>
    </properties>
   </object>
-  <object id="6" name="rydalin" x="512" y="656" width="32" height="32">
+  <object id="6" name="hero" type="rydalin" x="512" y="656" width="32" height="32">
    <properties>
     <property name="direction" value="north"/>
    </properties>
   </object>
-  <object id="7" name="codrif" x="480" y="624" width="32" height="32">
+  <object id="7" name="hero" type="codrif" x="480" y="624" width="32" height="32">
    <properties>
     <property name="direction" value="east"/>
    </properties>
   </object>
-  <object id="8" name="galen" x="704" y="592" width="32" height="32"/>
-  <object id="9" name="raiko" x="736" y="624" width="32" height="32">
+  <object id="8" name="hero" type="galen" x="704" y="592" width="32" height="32"/>
+  <object id="9" name="hero" type="raiko" x="736" y="624" width="32" height="32">
    <properties>
     <property name="direction" value="west"/>
    </properties>
   </object>
-  <object id="10" name="kiara" x="704" y="656" width="32" height="32">
+  <object id="10" name="hero" type="kiara" x="704" y="656" width="32" height="32">
    <properties>
     <property name="direction" value="north"/>
    </properties>
   </object>
-  <object id="11" name="luthais" x="672" y="624" width="32" height="32">
+  <object id="11" name="hero" type="luthais" x="672" y="624" width="32" height="32">
    <properties>
     <property name="direction" value="east"/>
    </properties>
   </object>
-  <object id="12" name="elias" x="192" y="592" width="32" height="32"/>
-  <object id="13" name="onarr" x="224" y="592" width="32" height="32"/>
-  <object id="14" name="duilio" x="256" y="624" width="32" height="32">
+  <object id="12" name="hero" type="elias" x="192" y="592" width="32" height="32"/>
+  <object id="13" name="hero" type="onarr" x="224" y="592" width="32" height="32"/>
+  <object id="14" name="hero" type="duilio" x="256" y="624" width="32" height="32">
    <properties>
     <property name="direction" value="west"/>
    </properties>
   </object>
-  <object id="15" name="iellwen" x="256" y="656" width="32" height="32">
+  <object id="15" name="hero" type="iellwen" x="256" y="656" width="32" height="32">
    <properties>
     <property name="direction" value="west"/>
    </properties>
   </object>
-  <object id="16" name="faeron" x="288" y="208" width="32" height="48"/>
+  <object id="16" name="hero" type="faeron" x="288" y="208" width="32" height="48"/>
  </objectgroup>
 </map>
