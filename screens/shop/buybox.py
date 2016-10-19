@@ -34,7 +34,6 @@ class BuyBox(object):
     """
     De box waar alle items uit de database te zien zijn, mits ze de 'shop' eigenschap hebben.
     """
-    # noinspection PyUnresolvedReferences
     def __init__(self, x, y, width, height, equipment_database, sum_merchant):
         self.box_width = width
         self.box_height = height
@@ -47,9 +46,22 @@ class BuyBox(object):
 
         self.sale = sum_merchant
 
-        normalfont = pygame.font.SysFont(FONT, FONTSIZE)
+        self.table_data = []
+        self._fill_table_data(equipment_database)
+        self.table_view = []
+        self._setup_table_view()
 
-        self.table_data = list()
+        self.background = pygame.Surface((width, self.layer_height))
+        self.background.fill(COLORKEY)
+        self.background = self.background.convert()
+
+        self.cur_item = None
+
+        self._update_rects_in_layer_rect_with_offset()
+
+    # noinspection PyUnresolvedReferences
+    def _fill_table_data(self, equipment_database):
+
         for equipment_item in equipment_database.values():
             if equipment_item['shp']:
                 equipment_item_obj = EquipmentItem(**equipment_item)
@@ -62,7 +74,12 @@ class BuyBox(object):
                     [equipment_item_spr, equipment_item_nam, equipment_item_val, None, equipment_item_obj]
                 )
 
-        self.table_view = []
+    def _setup_table_view(self):
+        """
+        Zet table_data om in een visuele weergave.
+        """
+        normalfont = pygame.font.SysFont(FONT, FONTSIZE)
+
         for index, row in enumerate(self.table_data):
             self.table_view.append(list())
             self.table_view[index].append(row[0])
@@ -70,20 +87,12 @@ class BuyBox(object):
             self.table_view[index].append(normalfont.render(row[2], True, FONTCOLOR).convert_alpha())
 
         self.layer_height = COLUMNSY + len(self.table_view) * ROWHEIGHT
-        if self.layer_height < height:
-            self.layer_height = height
-        self.layer = pygame.Surface((width, self.layer_height))
+        if self.layer_height < self.box_height:
+            self.layer_height = self.box_height
+        self.layer = pygame.Surface((self.box_width, self.layer_height))
         self.layer = self.layer.convert()
         self.lay_rect = self.layer.get_rect()
-        self.lay_rect.topleft = x, y
-
-        self.background = pygame.Surface((width, self.layer_height))
-        self.background.fill(COLORKEY)
-        self.background = self.background.convert()
-
-        self.cur_item = None
-
-        self._update_rects_in_layer_rect_with_offset()
+        self.lay_rect.topleft = self.rect.topleft
 
     def _update_rects_in_layer_rect_with_offset(self):
         """
@@ -120,10 +129,7 @@ class BuyBox(object):
         for index, row in enumerate(self.table_data):
             if row[3].collidepoint(event.pos):
                 self.cur_item = index
-                equipment_item = row[4]
-                if equipment_item.is_not_empty():
-                    return equipment_item.display()
-                return ""
+                return row[4].display()
 
     def mouse_click(self, event):
         """

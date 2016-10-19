@@ -171,10 +171,7 @@ class SellBox(object):
         for index, row in enumerate(self.table_data):
             if row[6].collidepoint(event.pos):
                 self.cur_item = index
-                equipment_item = row[5]
-                if equipment_item.is_not_empty():
-                    return equipment_item.display()
-                return ""
+                return row[5].display()
 
     def mouse_click(self, event):
         """

@@ -34,19 +34,19 @@ EXTRAFACESIZE = 20
 LINESNEXTTOFACE = 3
 
 OWNBOXWIDTH = 1/4      # van het scherm
-OWNBOXHEIGHT = 3/4
-OWNBOXPOSX = 2/5       # x op 1/3 van het scherm
-OWNBOXPOSY = 1/6
+OWNBOXHEIGHT = 24/32
+OWNBOXPOSX = 2/5       # x op 2/5 van het scherm
+OWNBOXPOSY = 6/32
 
 EXTRAHEIGHT = 0         # zodat de laatste item er voor helft op komt
 
-INFOBOXWIDTH = 1/4
-INFOBOXHEIGHT = 1/6
-INFOBOXPOSX = 1/16
-INFOBOXPOSY = 6/8
+INFOBOXWIDTH = 8/32
+INFOBOXHEIGHT = 7/32
+INFOBOXPOSX = 2/32
+INFOBOXPOSY = 23/32
 
-SELECTORPOSX = 1/16
-SELECTORPOSY = 10/16
+SELECTORPOSX = 2/32
+SELECTORPOSY = 20/32
 SELECTORWIDTH = 31
 
 BTNWIDTH = 70
@@ -145,6 +145,10 @@ class Display:
         if event.type == pygame.MOUSEMOTION:
 
             self.info_label = ""
+            self.ownbox.cur_item = None
+
+            if self.ownbox.rect.collidepoint(event.pos):
+                self.info_label = self.ownbox.mouse_hover(event)
 
         elif event.type == pygame.MOUSEBUTTONDOWN:
 

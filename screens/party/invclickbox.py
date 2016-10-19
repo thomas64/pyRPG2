@@ -43,12 +43,23 @@ class InvClickBox(object):
     """
     def __init__(self, position, equipment_type, party, inventory):
 
-        normalfont = pygame.font.SysFont(FONT, NORMALFONTSIZE)
-
         self.equipment_type = equipment_type
         self.inventory = inventory
 
-        self.table_data = list()
+        self.table_data = []
+        self._fill_table_data(party)
+        self.table_view = []
+        self._setup_table_view(position)
+
+        self.background = pygame.Surface((self.box_width, self.layer_height))
+        self.background.fill(BACKGROUNDCOLOR)
+        self.background = self.background.convert()
+
+        self.cur_item = None
+
+        self._update_rects_in_layer_rect_with_offset()
+
+    def _fill_table_data(self, party):
 
         black_spr = pygame.image.load(TRANSP).convert_alpha()
 
@@ -99,7 +110,12 @@ class InvClickBox(object):
                 [black_spr, equipment_item_spr, str(equipment_item.qty), equipment_item_nam, equipment_item, None, "Y"]
             )
 
-        self.table_view = []
+    def _setup_table_view(self, position):
+        """
+        Zet table_data om in een visuele weergave.
+        """
+        normalfont = pygame.font.SysFont(FONT, NORMALFONTSIZE)
+
         for index, row in enumerate(self.table_data):
             self.table_view.append(list())
             self.table_view[index].append(row[0])
@@ -129,14 +145,6 @@ class InvClickBox(object):
         self.layer = self.layer.convert()
         self.lay_rect = self.layer.get_rect()
         self.lay_rect.topleft = position
-
-        self.background = pygame.Surface((self.box_width, self.layer_height))
-        self.background.fill(BACKGROUNDCOLOR)
-        self.background = self.background.convert()
-
-        self.cur_item = None
-
-        self._update_rects_in_layer_rect_with_offset()
 
     def _update_rects_in_layer_rect_with_offset(self):
         """
