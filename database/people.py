@@ -3,6 +3,7 @@
 class: PeopleDatabase
 """
 
+import datetime
 import enum
 
 from .quest import QuestDatabase
@@ -14,7 +15,7 @@ SEXT = 's.png'
 
 
 class PeopleDatabase(enum.Enum):
-    """..."""
+    """Mogelijkheid om time1 en time2 op te nemen als een person op een specifiek tijdstip aanwezig moet zijn."""
 
     # standard characters
     person1 = dict(name='boy01',         text=["Hi mister."])
@@ -33,7 +34,10 @@ class PeopleDatabase(enum.Enum):
     person14 = dict(name='oldman02',     text=["How do you do?"])
     person15 = dict(name='oldwoman01',   text=["How do you do?"])
     person16 = dict(name='oldwoman02',   text=["How do you do?"])
-    person17 = dict(name='animal01',     text=["Meow"])
+    person17 = dict(name='animal01',     text=["Meow"],
+                    # voorbeeld van time1 en time2
+                    time1=datetime.datetime(2016, 10, 19, 2, 00),
+                    time2=datetime.datetime(2099, 10, 19, 2, 15))
     person18 = dict(name='animal02',     text=["Woof"])
     person19 = dict(name='animal03',     text=["Cluck"])
 

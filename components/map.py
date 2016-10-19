@@ -3,6 +3,8 @@
 class: Map
 """
 
+import datetime
+
 import pygame
 import pytmx
 import pyscroll
@@ -124,7 +126,17 @@ class Map(object):
                     person_object = Person(obj.name, PeopleDatabase[obj.name].value['sprite'],
                                            self._pg_rect(obj), OBJECTLAYER, self._has_dir(obj, 'direction'), None)
                     self.high_blocker_rects.append(person_object.get_blocker())
-                self.people.append(person_object)
+                # als er een tijdspanne aan de personage zit
+                if PeopleDatabase[obj.name].value.get('time1'):
+                    time1 = PeopleDatabase[obj.name].value['time1']
+                    time2 = PeopleDatabase[obj.name].value['time2']
+                    timestamp = datetime.datetime.now()
+                    # print(timestamp)
+                    if time1 < timestamp < time2:
+                        self.people.append(person_object)
+                else:
+                    self.people.append(person_object)
+
             elif obj.name.startswith('note'):
                 self.notes.append(NamedRect(obj.name, self._pg_rect(obj)))
             elif obj.name.startswith('sign'):
