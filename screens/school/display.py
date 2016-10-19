@@ -12,6 +12,7 @@ from constants import Keys
 from database import SchoolDatabase
 
 from screens.shop.infobox import InfoBox
+from .ownbox import OwnBox
 from .selector import Selector
 
 
@@ -31,6 +32,13 @@ SMALLFONTSIZE = 20
 SMALLLINEHEIGHT = 30
 EXTRAFACESIZE = 20
 LINESNEXTTOFACE = 3
+
+OWNBOXWIDTH = 1/4      # van het scherm
+OWNBOXHEIGHT = 3/4
+OWNBOXPOSX = 2/5       # x op 1/3 van het scherm
+OWNBOXPOSY = 1/6
+
+EXTRAHEIGHT = 0         # zodat de laatste item er voor helft op komt
 
 INFOBOXWIDTH = 1/4
 INFOBOXHEIGHT = 1/6
@@ -99,7 +107,14 @@ class Display:
                                       self._set_y(FACEPOSY) + EXTRAFACESIZE + index * SMALLLINEHEIGHT))
 
     def _init_boxes(self):
+        self._init_ownbox()
         self._init_infobox()
+
+    def _init_ownbox(self):
+        width = self.screen.get_width() * OWNBOXWIDTH
+        height = self.screen.get_height() * OWNBOXHEIGHT + EXTRAHEIGHT
+        self.ownbox = OwnBox(self._set_x(OWNBOXPOSX), self._set_y(OWNBOXPOSY), int(width), int(height))
+                               # self.shoptype, self.engine.data.party, self.engine.data.inventory, self.sum_merchant)
 
     def _init_infobox(self):
         width = self.screen.get_width() * INFOBOXWIDTH
@@ -165,6 +180,7 @@ class Display:
         self.screen.blit(self.background, (0, 0))
 
         self.infobox.render(self.screen, self.info_label)
+        self.ownbox.render(self.screen)
         self.close_button.render(self.screen, FONTCOLOR, True)
 
     def _set_x(self, posx):
