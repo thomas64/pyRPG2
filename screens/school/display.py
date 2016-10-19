@@ -62,6 +62,8 @@ class Display:
     def __init__(self, engine, face):
         self.engine = engine
 
+        self.selected_hero = self.engine.data.party['alagos']  # todo, alagos moet eigenlijk niet hard coded zijn
+
         self.screen = pygame.display.get_surface()
         self.name = GameState.Shop
         self.background = pygame.image.load(BACKGROUNDSPRITE).convert_alpha()
@@ -85,7 +87,7 @@ class Display:
 
         self.selectors = pygame.sprite.Group()
 
-        for index, hero in enumerate(self.engine.data.party):
+        for index, hero in enumerate(self.engine.data.party.values()):
             self.selectors.add(Selector(self._set_x(SELECTORPOSX) + index * SELECTORWIDTH,
                                         self._set_y(SELECTORPOSY), hero))
 
@@ -113,8 +115,8 @@ class Display:
     def _init_ownbox(self):
         width = self.screen.get_width() * OWNBOXWIDTH
         height = self.screen.get_height() * OWNBOXHEIGHT + EXTRAHEIGHT
-        self.ownbox = OwnBox(self._set_x(OWNBOXPOSX), self._set_y(OWNBOXPOSY), int(width), int(height))
-                               # self.shoptype, self.engine.data.party, self.engine.data.inventory, self.sum_merchant)
+        self.ownbox = OwnBox(self._set_x(OWNBOXPOSX), self._set_y(OWNBOXPOSY), int(width), int(height),
+                             self.selected_hero)
 
     def _init_infobox(self):
         width = self.screen.get_width() * INFOBOXWIDTH
@@ -147,8 +149,16 @@ class Display:
         elif event.type == pygame.MOUSEBUTTONDOWN:
 
             if event.button == Keys.Leftclick.value:
+
                 if self.close_button.single_click(event) == Keys.Exit.value:
                     self._close()
+
+                for selector in self.selectors:
+                    hero = selector.mouse_click(event)
+                    if hero:
+                        self.selected_hero = hero
+                        self._init_boxes()
+                        break
 
             elif event.button in (Keys.Scrollup.value, Keys.Scrolldown.value):
                 pass
