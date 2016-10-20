@@ -165,7 +165,8 @@ class Display:
                         break
 
             elif event.button in (Keys.Scrollup.value, Keys.Scrolldown.value):
-                pass
+                if self.ownbox.rect.collidepoint(event.pos):
+                    self.ownbox.mouse_scroll(event)
 
         elif event.type == pygame.KEYDOWN:
             if event.key == Keys.Exit.value:

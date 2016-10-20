@@ -206,3 +206,10 @@ class Console:
         """
         print("Not enough {}.".format(item_name))
         print("You need {} more {}.".format(item_price - item_quantity, item_name))
+
+    @staticmethod
+    def error_unknown_column_key():
+        """
+        ListBox.render()
+        """
+        print("Not 'icon' or 'text'.")
