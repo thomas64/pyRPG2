@@ -131,7 +131,7 @@ class Display:
         width = self.screen.get_width() * TEACHBOXWIDTH
         height = self.screen.get_height() * TEACHBOXHEIGHT + EXTRAHEIGHT
         self.teachbox = TeachBox(self._set_x(TEACHBOXPOSX), self._set_y(TEACHBOXPOSY), int(width), int(height),
-                                 self.schooltype_list)
+                                 self.schooltype_list, self.selected_hero)
 
     def _init_infobox(self):
         width = self.screen.get_width() * INFOBOXWIDTH

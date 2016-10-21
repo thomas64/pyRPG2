@@ -20,6 +20,17 @@ class School(dict):
         """
         return sorted(self.values(), key=lambda xx: xx.SRT)
 
+    def get_qty_of_spell(self, spell_raw):
+        """
+        ...
+        :param spell_raw:
+        :return:
+        """
+        if spell_raw in self:
+            return self[spell_raw].qty
+        else:
+            return 0
+
     def add(self, spell_object, wiz_qty, quantity=1, force=False):
         """
         ...

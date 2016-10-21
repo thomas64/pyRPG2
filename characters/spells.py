@@ -32,6 +32,18 @@ class Spell(object):
         self.qty = None
         self.DESC = None
 
+    def xp_cost(self):
+        """
+        ...
+        :return:
+        """
+        # todo, lagere xp kosten zoals bij level.
+        return int(self.UPG * ((self.qty + 1)**2))
+        # todo, loremaster skill gebruiken voor 'korting'
+        # oude uit vb:
+        # return self.UPG * (self.qty ^ 2 + 2 * self.qty + 1)
+        # - (((self.UPG * (self.qty ^ 2 + 2 * self.qty + 1)) / 100) * p(hc).lor3)
+
     def upgrade(self, quantity):
         """
         ...
