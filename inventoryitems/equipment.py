@@ -19,17 +19,14 @@ class EquipmentItem(object):
             setattr(self, eqp_value_key.upper(), eqp_value_value)       # zet de dict van kwargs om in attributen
 
         try:
-            # noinspection PyUnresolvedReferences
             self.RAW = self.NAM.strip().lower().replace(" ", "")        # als er een NAM is, geef hem een RAW
         except AttributeError:
             pass
         try:
-            # noinspection PyUnresolvedReferences
             del self.SHP                                        # deze is niet nodig wanneer het een object geworden is.
         except AttributeError:
             pass
         try:
-            # noinspection PyUnresolvedReferences
             self.CUR_BAT = kwargs['max_bat']
             # eigenlijk moet self.CUR_BAT self.cur_bat zijn, want variabel. maar anders vanwege gedoe met
             # get_value_of() waar upper() in staat, de makkelijke weg gekozen door gewoon caps te gebruiken.
@@ -38,7 +35,6 @@ class EquipmentItem(object):
         except KeyError:
             pass
 
-    # noinspection PyUnresolvedReferences
     def display(self):
         """
         Deze is voor weergave. Voeg de gevonden attributen op volgorde samen.

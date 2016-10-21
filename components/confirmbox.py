@@ -26,6 +26,7 @@ FACEPOSX, FACEPOSY = 30, 42
 MESSAGESPRITE = 'resources/sprites/parchment.png'
 
 
+# noinspection PyMissingOrEmptyDocstring
 class ConfirmBox(object):
     """
     Geeft een selectie weer op het scherm.
@@ -88,11 +89,9 @@ class ConfirmBox(object):
                              self.rect.top + FONTPOSY + index * LINEHEIGHT)
         return text_rect
 
-    # noinspection PyMissingOrEmptyDocstring
     def on_enter(self):
         pass
 
-    # noinspection PyMissingOrEmptyDocstring
     def on_exit(self):
         pass
 
@@ -133,7 +132,6 @@ class ConfirmBox(object):
                 self.audio.play_sound(SFX.menu_error)
                 self.cur_item = len(self.raw_text) - 1
 
-    # noinspection PyMissingOrEmptyDocstring
     def multi_input(self, key_input, mouse_pos, dt):
         pass
 

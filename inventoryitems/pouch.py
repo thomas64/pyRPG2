@@ -14,5 +14,4 @@ class PouchItem(object):
         for eqp_value_key, eqp_value_value in kwargs.items():
             setattr(self, eqp_value_key.upper(), eqp_value_value)  # zet de dict van kwargs om in attributen
 
-        # noinspection PyUnresolvedReferences
         self.RAW = self.NAM.strip().lower().replace(" ", "")  # als er een NAM is, geef hem een RAW
