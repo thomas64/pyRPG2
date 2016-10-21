@@ -43,14 +43,14 @@ SMALLLINEHEIGHT = 30
 EXTRAFACESIZE = 20
 LINESNEXTTOFACE = 3
 
-BUYBOXWIDTH = 1/4
+BUYBOXWIDTH = 3/16
 BUYBOXHEIGHT = 3/4
 BUYBOXPOSX = 2/5
 BUYBOXPOSY = 1/6
 
-SELLBOXWIDTH = 1/4      # van het scherm
+SELLBOXWIDTH = 5/16     # van het scherm
 SELLBOXHEIGHT = 3/4
-SELLBOXPOSX = 2/3       # x op 2/3 van het scherm
+SELLBOXPOSX = 15/24     # x op 15/24 van het scherm
 SELLBOXPOSY = 1/6
 
 EXTRAHEIGHT = 0         # zodat de laatste item er voor helft op komt

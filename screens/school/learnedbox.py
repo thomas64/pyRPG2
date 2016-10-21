@@ -9,7 +9,7 @@ from components import ListBox
 
 COLUMN1X = 0
 COLUMN2X = 34
-COLUMN3X = 194
+COLUMN3X = 234
 
 TOTALCOLUMNS = (('icon', COLUMN1X), ('text', COLUMN2X), ('text', COLUMN3X))
 
