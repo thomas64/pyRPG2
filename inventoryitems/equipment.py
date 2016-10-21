@@ -35,7 +35,7 @@ class EquipmentItem(object):
         except KeyError:
             pass
 
-    def display(self):
+    def show_info(self):
         """
         Deze is voor weergave. Voeg de gevonden attributen op volgorde samen.
         :return: een lijst van de geselecteerde attributen

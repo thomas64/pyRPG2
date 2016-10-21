@@ -58,13 +58,13 @@ class InventoryBox(BaseBox):
         Registreert of de muis over een boxje beweegt. Gebruik hiervoor de self.offset_boxes.
         Haal dan uit de equipment_items lijst het item. Die was er bij update() in gestopt.
         :param event: pygame.MOUSEMOTION uit partyscreen
-        :return: visuele weergave uit equipment_item.display(), of niets.
+        :return: visuele weergave uit equipment_item.show_info(), of niets.
         """
         for index, box in enumerate(self.offset_boxes):
             if box.collidepoint(event.pos):
                 equipment_item = self.equipment_items[index]
                 if equipment_item.is_not_empty():
-                    return equipment_item.display()
+                    return equipment_item.show_info()
                 return None
 
     def mouse_click(self, event):

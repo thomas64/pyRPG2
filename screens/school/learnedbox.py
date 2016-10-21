@@ -36,8 +36,9 @@ class LearnedBox(ListBox):
 
         self.total_columns = TOTALCOLUMNS
         self.column1x = COLUMN1X    # deze is voor de baseclass
-        self.row_nr = 7             # row[7]
-        self._update_rects_in_layer_rect_with_offset(self.row_nr)
+        self.row_nr_with_rect = 7   # row[7]
+        self.row_nr_with_obj = 6    # row[6]
+        self._update_rects_in_layer_rect_with_offset(self.row_nr_with_rect)
 
     def _fill_table_data(self, hero):
 
@@ -58,15 +59,3 @@ class LearnedBox(ListBox):
             self.table_view[index].append(pygame.image.load(row[0]).subsurface(row[4], row[5], 32, 32).convert_alpha())
             self.table_view[index].append(normalfont.render(row[1], True, self.fontcolor).convert_alpha())
             self.table_view[index].append(normalfont.render(row[2], True, self.fontcolor).convert_alpha())
-
-    def mouse_hover(self, event):
-        """
-        Als de muis over een item uit row[7] van table_data gaat. Dat zijn de rects.
-        Zet cur_item op de index van degene waar de muis over gaat.
-        :param event: pygame.MOUSEMOTION uit shopscreen
-        :return: row[6] is de kolom met het Object Spell.
-        """
-        for index, row in enumerate(self.table_data):
-            if row[7].collidepoint(event.pos):
-                self.cur_item = index
-                return row[6].DESC

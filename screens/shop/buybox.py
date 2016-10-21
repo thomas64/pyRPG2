@@ -38,8 +38,9 @@ class BuyBox(ListBox):
 
         self.total_columns = TOTALCOLUMNS
         self.column1x = COLUMN1X    # deze is voor de baseclass
-        self.row_nr = 3             # row[3]
-        self._update_rects_in_layer_rect_with_offset(self.row_nr)
+        self.row_nr_with_rect = 3   # row[3]
+        self.row_nr_with_obj = 4    # row[4]
+        self._update_rects_in_layer_rect_with_offset(self.row_nr_with_rect)
 
     def _fill_table_data(self, equipment_database):
 
@@ -66,18 +67,6 @@ class BuyBox(ListBox):
             self.table_view[index].append(row[0])
             self.table_view[index].append(normalfont.render(row[1], True, self.fontcolor).convert_alpha())
             self.table_view[index].append(normalfont.render(row[2], True, self.fontcolor).convert_alpha())
-
-    def mouse_hover(self, event):
-        """
-        Als de muis over een item uit row[3] van table_data gaat. Dat zijn de rects.
-        Zet cur_item op de index van degene waar de muis over gaat.
-        :param event: pygame.MOUSEMOTION uit shopscreen
-        :return: row[4] is de kolom met het Object EquipmentItem.
-        """
-        for index, row in enumerate(self.table_data):
-            if row[3].collidepoint(event.pos):
-                self.cur_item = index
-                return row[4].display()
 
     def mouse_click(self, event):
         """

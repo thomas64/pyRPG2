@@ -29,7 +29,9 @@ TRANSP = 'resources/sprites/transp.png'
 
 
 class ListBox(object):
-
+    """
+    Base class voor lijsten in shops bijv.
+    """
     def __init__(self, x, y, width, height):
         self.box_width = width
         self.box_height = height
@@ -64,7 +66,8 @@ class ListBox(object):
         self.layer = None
         self.lay_rect = None
         self.layer_height = None
-        self.row_nr = None
+        self.row_nr_with_rect = None
+        self.row_nr_with_obj = None
 
     def _setup_scroll_layer(self):
         # stel de scroll layer in
@@ -99,7 +102,19 @@ class ListBox(object):
             if self.lay_rect.y - self.rect.y > self.rect.height - self.layer_height + 2:  # +2 is nodig tegen scroll-
                 self.lay_rect.y -= SCROLLSPEED                                            # ghosting bij hoogte 1/4
 
-        self._update_rects_in_layer_rect_with_offset(self.row_nr)
+        self._update_rects_in_layer_rect_with_offset(self.row_nr_with_rect)
+
+    def mouse_hover(self, event):
+        """
+        Als de muis over een item uit row[row_with_rect] van table_data gaat. Dat zijn de rects.
+        Zet cur_item op de index van degene waar de muis over gaat.
+        :param event: pygame.MOUSEMOTION uit shopscreen
+        :return: row[row_with_obj] is de kolom met het Object EquipmentItem/Spell/etc.
+        """
+        for index, row in enumerate(self.table_data):
+            if row[self.row_nr_with_rect].collidepoint(event.pos):
+                self.cur_item = index
+                return row[self.row_nr_with_obj].show_info()
 
     def render(self, screen):
         """

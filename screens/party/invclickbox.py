@@ -183,7 +183,7 @@ class InvClickBox(object):
                 self.cur_item = index
                 equipment_item = row[4]
                 if equipment_item.is_not_empty():
-                    return equipment_item.display(), equipment_item
+                    return equipment_item.show_info(), equipment_item
                 return None, equipment_item
 
     def mouse_click(self, event, gamestate, hero):

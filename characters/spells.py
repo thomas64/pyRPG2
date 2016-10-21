@@ -30,6 +30,7 @@ class Spell(object):
         self.REQ = None        # todo
         self.COST = None       # todo
         self.qty = None
+        self.DESC = None
 
     def upgrade(self, quantity):
         """
@@ -55,6 +56,13 @@ class Spell(object):
                 "Min. Wizard Rank: {}".format(self.MIN),
                 "Requires: {}".format(self.REQ),
                 "Stamina Cost: {}".format(self.COST))
+
+    def show_info(self):
+        """
+        ...
+        :return:
+        """
+        return self.DESC
 
 
 # Neutral ##############################################################################################################
