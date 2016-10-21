@@ -24,5 +24,12 @@ class SchoolDatabase(enum.Enum):
     @staticmethod
     def welcome_text():
         """..."""
-        return ("Hoi",
-                "Hoi2.")
+        return ("Good day sir, and welcome to my school.",
+                "In the 'Known' box are all the spells you",
+                "already have learned.  And in the",
+                "'Learn' box are all the spells that I can teach.",
+                "Click once on a selected item to learn a spell.",
+                "You can scroll through the lists with your mouse-",
+                "wheel if the list is longer than what you can see.",
+                "Below here, all your party members are shown.",
+                "Click on it to select someone else to be taught.")

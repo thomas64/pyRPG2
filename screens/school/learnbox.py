@@ -1,6 +1,6 @@
 
 """
-class: TeachBox
+class: LearnBox
 """
 
 import inspect
@@ -19,7 +19,7 @@ COLUMN5X = 334
 TOTALCOLUMNS = (('icon', COLUMN1X), ('text', COLUMN2X), ('text', COLUMN3X), ('text', COLUMN4X), ('text', COLUMN5X))
 
 
-class TeachBox(ListBox):
+class LearnBox(ListBox):
     """
     ...
     """

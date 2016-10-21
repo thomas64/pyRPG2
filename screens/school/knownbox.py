@@ -1,6 +1,6 @@
 
 """
-class: LearnedBox
+class: KnownBox
 """
 
 import pygame
@@ -14,7 +14,7 @@ COLUMN3X = 234
 TOTALCOLUMNS = (('icon', COLUMN1X), ('text', COLUMN2X), ('text', COLUMN3X))
 
 
-class LearnedBox(ListBox):
+class KnownBox(ListBox):
     """
     De box waarin de spells per persoon te zien zijn.
     Deze class bevat heel veel van sellbox uit shop.

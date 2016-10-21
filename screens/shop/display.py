@@ -264,7 +264,6 @@ class Display(object):
 
             if self.buybox.rect.collidepoint(event.pos):
                 self.info_label = self.buybox.mouse_hover(event)
-
             if self.sellbox.rect.collidepoint(event.pos):
                 self.info_label = self.sellbox.mouse_hover(event)
 
