@@ -24,7 +24,7 @@ class School(dict):
         """
         ...
         :param spell_object:
-        :param wiz_qty:
+        :param wiz_qty: hoe hoog de wizard skill is van een hero.
         :param quantity: is alleen maar voor het upgraden, de quantity zit in de spell_object zelf.
         :param force: forceer bij opstarten van game sommige spells op characters wat eigenlijk niet kan.
          bijvoorbeeld elias, teleportation, level 7 -> 8.

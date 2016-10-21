@@ -13,6 +13,7 @@ from database import SchoolDatabase
 
 from screens.shop.infobox import InfoBox
 from .learnedbox import LearnedBox
+from .teachbox import TeachBox
 from .selector import Selector
 
 
@@ -33,10 +34,15 @@ SMALLLINEHEIGHT = 30
 EXTRAFACESIZE = 20
 LINESNEXTTOFACE = 3
 
-LEARNEDBOXWIDTH = 1/4      # van het scherm
+LEARNEDBOXWIDTH = 1/6      # van het scherm
 LEARNEDBOXHEIGHT = 24/32
 LEARNEDBOXPOSX = 2/5       # x op 2/5 van het scherm
 LEARNEDBOXPOSY = 6/32
+
+TEACHBOXWIDTH = 1/3
+TEACHBOXHEIGHT = 24/32
+TEACHBOXPOSX = 5/8
+TEACHBOXPOSY = 6/32
 
 EXTRAHEIGHT = 0         # zodat de laatste item er voor helft op komt
 
@@ -59,8 +65,10 @@ class Display:
     """
     ...
     """
-    def __init__(self, engine, face):
+    def __init__(self, engine, schooltype_list, face):
         self.engine = engine
+
+        self.schooltype_list = schooltype_list
 
         self.selected_hero = self.engine.data.party['alagos']  # todo, alagos moet eigenlijk niet hard coded zijn
 
@@ -110,6 +118,7 @@ class Display:
 
     def _init_boxes(self):
         self._init_learnedbox()
+        self._init_teachbox()
         self._init_infobox()
 
     def _init_learnedbox(self):
@@ -117,6 +126,12 @@ class Display:
         height = self.screen.get_height() * LEARNEDBOXHEIGHT + EXTRAHEIGHT
         self.learnedbox = LearnedBox(self._set_x(LEARNEDBOXPOSX), self._set_y(LEARNEDBOXPOSY), int(width), int(height),
                                      self.selected_hero)
+
+    def _init_teachbox(self):
+        width = self.screen.get_width() * TEACHBOXWIDTH
+        height = self.screen.get_height() * TEACHBOXHEIGHT + EXTRAHEIGHT
+        self.teachbox = TeachBox(self._set_x(TEACHBOXPOSX), self._set_y(TEACHBOXPOSY), int(width), int(height),
+                                 self.schooltype_list)
 
     def _init_infobox(self):
         width = self.screen.get_width() * INFOBOXWIDTH
@@ -149,6 +164,8 @@ class Display:
 
             if self.learnedbox.rect.collidepoint(event.pos):
                 self.info_label = self.learnedbox.mouse_hover(event)
+            if self.teachbox.rect.collidepoint(event.pos):
+                self.info_label = self.teachbox.mouse_hover(event)
 
         elif event.type == pygame.MOUSEBUTTONDOWN:
 
@@ -167,6 +184,8 @@ class Display:
             elif event.button in (Keys.Scrollup.value, Keys.Scrolldown.value):
                 if self.learnedbox.rect.collidepoint(event.pos):
                     self.learnedbox.mouse_scroll(event)
+                if self.teachbox.rect.collidepoint(event.pos):
+                    self.teachbox.mouse_scroll(event)
 
         elif event.type == pygame.KEYDOWN:
             if event.key == Keys.Exit.value:
@@ -196,6 +215,7 @@ class Display:
 
         self.infobox.render(self.screen, self.info_label)
         self.learnedbox.render(self.screen)
+        self.teachbox.render(self.screen)
         self.close_button.render(self.screen, FONTCOLOR, True)
 
     def _set_x(self, posx):

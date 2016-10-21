@@ -489,7 +489,9 @@ class Window(object):
 
             school_sprite.turn(self.party_sprites[0].rect)
 
-            push_object = screens.school.Display(self.engine, school_data['face'])
+            push_object = screens.school.Display(self.engine,
+                                                 school_data['content'],
+                                                 school_data['face'])
             self.engine.gamestate.push(push_object)
             self.engine.gamestate.push(Transition(self.engine.gamestate))
 
