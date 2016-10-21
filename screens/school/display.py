@@ -12,7 +12,7 @@ from constants import Keys
 from database import SchoolDatabase
 
 from screens.shop.infobox import InfoBox
-from .ownbox import OwnBox
+from .learnedbox import LearnedBox
 from .selector import Selector
 
 
@@ -33,10 +33,10 @@ SMALLLINEHEIGHT = 30
 EXTRAFACESIZE = 20
 LINESNEXTTOFACE = 3
 
-OWNBOXWIDTH = 1/4      # van het scherm
-OWNBOXHEIGHT = 24/32
-OWNBOXPOSX = 2/5       # x op 2/5 van het scherm
-OWNBOXPOSY = 6/32
+LEARNEDBOXWIDTH = 1/4      # van het scherm
+LEARNEDBOXHEIGHT = 24/32
+LEARNEDBOXPOSX = 2/5       # x op 2/5 van het scherm
+LEARNEDBOXPOSY = 6/32
 
 EXTRAHEIGHT = 0         # zodat de laatste item er voor helft op komt
 
@@ -109,14 +109,14 @@ class Display:
                                       self._set_y(FACEPOSY) + EXTRAFACESIZE + index * SMALLLINEHEIGHT))
 
     def _init_boxes(self):
-        self._init_ownbox()
+        self._init_learnedbox()
         self._init_infobox()
 
-    def _init_ownbox(self):
-        width = self.screen.get_width() * OWNBOXWIDTH
-        height = self.screen.get_height() * OWNBOXHEIGHT + EXTRAHEIGHT
-        self.ownbox = OwnBox(self._set_x(OWNBOXPOSX), self._set_y(OWNBOXPOSY), int(width), int(height),
-                             self.selected_hero)
+    def _init_learnedbox(self):
+        width = self.screen.get_width() * LEARNEDBOXWIDTH
+        height = self.screen.get_height() * LEARNEDBOXHEIGHT + EXTRAHEIGHT
+        self.learnedbox = LearnedBox(self._set_x(LEARNEDBOXPOSX), self._set_y(LEARNEDBOXPOSY), int(width), int(height),
+                                     self.selected_hero)
 
     def _init_infobox(self):
         width = self.screen.get_width() * INFOBOXWIDTH
@@ -145,10 +145,10 @@ class Display:
         if event.type == pygame.MOUSEMOTION:
 
             self.info_label = ""
-            self.ownbox.cur_item = None
+            self.learnedbox.cur_item = None
 
-            if self.ownbox.rect.collidepoint(event.pos):
-                self.info_label = self.ownbox.mouse_hover(event)
+            if self.learnedbox.rect.collidepoint(event.pos):
+                self.info_label = self.learnedbox.mouse_hover(event)
 
         elif event.type == pygame.MOUSEBUTTONDOWN:
 
@@ -165,8 +165,8 @@ class Display:
                         break
 
             elif event.button in (Keys.Scrollup.value, Keys.Scrolldown.value):
-                if self.ownbox.rect.collidepoint(event.pos):
-                    self.ownbox.mouse_scroll(event)
+                if self.learnedbox.rect.collidepoint(event.pos):
+                    self.learnedbox.mouse_scroll(event)
 
         elif event.type == pygame.KEYDOWN:
             if event.key == Keys.Exit.value:
@@ -195,7 +195,7 @@ class Display:
         self.screen.blit(self.background, (0, 0))
 
         self.infobox.render(self.screen, self.info_label)
-        self.ownbox.render(self.screen)
+        self.learnedbox.render(self.screen)
         self.close_button.render(self.screen, FONTCOLOR, True)
 
     def _set_x(self, posx):

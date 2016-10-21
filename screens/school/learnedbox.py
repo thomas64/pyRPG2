@@ -1,6 +1,6 @@
 
 """
-class: OwnBox
+class: LearnedBox
 """
 
 import pygame
@@ -8,13 +8,13 @@ import pygame
 from components import ListBox
 
 COLUMN1X = 0
-COLUMN2X = 35
-COLUMN3X = 285
+COLUMN2X = 34
+COLUMN3X = 306
 
 TOTALCOLUMNS = (('icon', COLUMN1X), ('text', COLUMN2X), ('text', COLUMN3X))
 
 
-class OwnBox(ListBox):
+class LearnedBox(ListBox):
     """
     De box waarin de spells per persoon te zien zijn.
     Deze class bevat heel veel van sellbox uit shop.
@@ -43,8 +43,8 @@ class OwnBox(ListBox):
 
         for spell in hero.scl.get_all_spells():
             self.table_data.append(
-                # row[0],       row[1],           row[2],        row[3],     row[4],    row[5], row[6], row[7]
-                [spell.ICON, spell.NAM + " :", str(spell.qty), spell.DESC, spell.COL, spell.ROW, spell, None]
+                # row[0],       row[1],    row[2],        row[3],     row[4],    row[5], row[6], row[7]
+                [spell.ICON, spell.NAM, str(spell.qty), spell.DESC, spell.COL, spell.ROW, spell, None]
             )
 
     def _setup_table_view(self):
