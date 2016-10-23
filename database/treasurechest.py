@@ -3,6 +3,8 @@
 class: TreasureChestDatabase
 """
 
+import datetime
+
 from .weapon import WeaponDatabase
 from .helmet import HelmetDatabase
 from .pouchitem import PouchItemDatabase
@@ -22,7 +24,9 @@ class TreasureChestDatabase(dict):
                                            eqp1=dict(nam=WeaponDatabase.bronzeshortsword, qty=1),
                                            eqp2=dict(nam=HelmetDatabase.leathercap,       qty=1)))
         self['chest2'] = dict(condition=dict(thf=3),
-                              content=dict(itm1=dict(nam=PouchItemDatabase.gold,          qty=3)))
+                              content=dict(itm1=dict(nam=PouchItemDatabase.gold,          qty=3)),
+                              time1=datetime.datetime(2016, 10, 19, 2, 00),
+                              time2=datetime.datetime(2099, 10, 19, 2, 15))
         self['chest3'] = dict(condition=dict(mec=2),
                               content=dict(itm1=dict(nam=PouchItemDatabase.gold,          qty=4)))
         self['chest4'] = dict(condition=dict(mec=1, thf=1),

@@ -50,7 +50,7 @@ class Map(object):
     """
     Bevat allemaal lijsten van rects.
     """
-    def __init__(self, name):
+    def __init__(self, name, treasure_chests_database):
         map_tmx = MAPPATH + name + '.tmx'
 
         tmx_data = pytmx.load_pygame(map_tmx)
@@ -121,11 +121,9 @@ class Map(object):
                 if obj.type:
                     person_object = Walking(obj.name, PeopleDatabase[obj.name].value['sprite'],
                                             self._pg_rect(obj), OBJECTLAYER, self._has_dir(obj, 'direction'))
-                    # geen blocker voor walking people, die worden actueel in window geladen bij check_blocker.
                 else:
                     person_object = Person(obj.name, PeopleDatabase[obj.name].value['sprite'],
                                            self._pg_rect(obj), OBJECTLAYER, self._has_dir(obj, 'direction'), None)
-                    self.high_blocker_rects.append(person_object.get_blocker())
                 # als er een tijdspanne aan de personage zit
                 if PeopleDatabase[obj.name].value.get('time1'):
                     time1 = PeopleDatabase[obj.name].value['time1']
@@ -134,8 +132,14 @@ class Map(object):
                     # print(timestamp)
                     if time1 < timestamp < time2:
                         self.people.append(person_object)
+                        # geen blocker voor walking people, die worden actueel in window geladen bij check_blocker.
+                        if not obj.type:
+                            self.high_blocker_rects.append(person_object.get_blocker())
                 else:
                     self.people.append(person_object)
+                    # geen blocker voor walking people, die worden actueel in window geladen bij check_blocker.
+                    if not obj.type:
+                        self.high_blocker_rects.append(person_object.get_blocker())
 
             elif obj.name.startswith('note'):
                 self.notes.append(NamedRect(obj.name, self._pg_rect(obj)))
@@ -144,9 +148,18 @@ class Map(object):
                 self.high_blocker_rects.append(sign_object.get_blocker())
                 self.signs.append(sign_object)
             elif obj.name.startswith('chest'):
-                chest_object = TreasureChest(obj.name, self._pg_rect(obj), OBJECTLAYER)
-                self.low_blocker_rects.append(chest_object.get_blocker())
-                self.chests.append(chest_object)
+                if treasure_chests_database[obj.name].get('time1'):
+                    time1 = treasure_chests_database[obj.name]['time1']
+                    time2 = treasure_chests_database[obj.name]['time2']
+                    timestamp = datetime.datetime.now()
+                    if time1 < timestamp < time2:
+                        chest_object = TreasureChest(obj.name, self._pg_rect(obj), OBJECTLAYER)
+                        self.low_blocker_rects.append(chest_object.get_blocker())
+                        self.chests.append(chest_object)
+                else:
+                    chest_object = TreasureChest(obj.name, self._pg_rect(obj), OBJECTLAYER)
+                    self.low_blocker_rects.append(chest_object.get_blocker())
+                    self.chests.append(chest_object)
             elif obj.name.startswith('sparkly'):
                 sparkly_object = Sparkly(obj.name, self._pg_rect(obj), OBJECTLAYER)
                 self.sparkly.append(sparkly_object)

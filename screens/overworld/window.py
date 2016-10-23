@@ -95,7 +95,8 @@ class Window(object):
         """
         Maak een nieuwe map aan met de hero's in het veld.
         """
-        self.current_map = Map(self.engine.data.map_name)
+        # treasurechest database moet meegegeven worden, want is object en geen enum. is voor tijdelijke kistjes.
+        self.current_map = Map(self.engine.data.map_name, self.engine.data.treasure_chests)
         self.group = self.current_map.view
         self.grid_sprite = None
         self.cbox_sprites = []
