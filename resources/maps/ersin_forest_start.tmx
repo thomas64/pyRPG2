@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<map version="1.0" orientation="orthogonal" renderorder="right-down" width="70" height="50" tilewidth="16" tileheight="16" nextobjectid="18651">
+<map version="1.0" orientation="orthogonal" renderorder="right-down" width="70" height="50" tilewidth="16" tileheight="16" nextobjectid="18652">
  <tileset firstgid="1" name="outside_a1" tilewidth="16" tileheight="16" tilecount="768" columns="32">
   <image source="tilesets/outside_a1.png" width="512" height="384"/>
   <tile id="2">
@@ -888,5 +888,6 @@
   <object id="18624" name="chest4" x="432" y="176" width="32" height="32"/>
   <object id="18626" name="sparkly1" x="176" y="272" width="32" height="32"/>
   <object id="18622" name="chest2" x="336" y="176" width="32" height="32"/>
+  <object id="18651" name="sparkly3" type="geen sprite" x="144" y="192" width="32" height="32"/>
  </objectgroup>
 </map>

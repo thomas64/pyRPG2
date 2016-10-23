@@ -15,9 +15,10 @@ class SparklyDatabase(dict):
         super().__init__(**kwargs)
 
         # ersin_forest_start
-        self['sparkly1'] = dict(content=dict(itm1=dict(nam=PouchItemDatabase.gold,  qty=1)))
+        self['sparkly1'] = dict(content=dict(itm1=dict(nam=PouchItemDatabase.gold,   qty=1)))
+        self['sparkly3'] = dict(content=dict(itm1=dict(nam=PouchItemDatabase.spices, qty=9)))
         # ersin_cave_room2
-        self['sparkly2'] = dict(content=dict(itm1=dict(nam=PouchItemDatabase.herbs, qty=4)))
+        self['sparkly2'] = dict(content=dict(itm1=dict(nam=PouchItemDatabase.herbs,  qty=4)))
 
         for value in self.values():
             value['taken'] = 0

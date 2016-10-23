@@ -161,7 +161,8 @@ class Map(object):
                     self.low_blocker_rects.append(chest_object.get_blocker())
                     self.chests.append(chest_object)
             elif obj.name.startswith('sparkly'):
-                sparkly_object = Sparkly(obj.name, self._pg_rect(obj), OBJECTLAYER)
+                # als er in obj.type iets staat, dan is het een lege sprite.
+                sparkly_object = Sparkly(obj.name, self._pg_rect(obj), OBJECTLAYER, obj.type)
                 self.sparkly.append(sparkly_object)
             elif obj.name == 'hero':
                 hero_object = Person(obj.type, HeroDatabase[obj.type].value['spr'],

@@ -216,7 +216,7 @@ class Sparkly(pygame.sprite.Sprite):
     """
     De animerende Sparkly Sprite.
     """
-    def __init__(self, sparkly_id, rect, objectlayer):
+    def __init__(self, sparkly_id, rect, objectlayer, dont_show_sprite):
         super().__init__()
 
         self.sparkly_id = sparkly_id
@@ -234,20 +234,28 @@ class Sparkly(pygame.sprite.Sprite):
 
         self.image = self.image_list[self.index]
 
+        # als er in dont_show_sprite iets staat, dan is het een transparante sprite.
+        self.show_sprite = True
+        if dont_show_sprite:
+            self.show_sprite = False
+            self.image = self.image_list[0]
+
     def update(self, taken, dt):
         """
         Verandert elke zoveel milliseconde het sub plaatje.
         :param taken: integer 0 of 1, uit de SparklyDatabase
         :param dt: self.clock.tick(FPS)/1000.0
         """
-        if taken == 1:
-            self.image = self.image_list[0]
-            return
+        if self.show_sprite:
 
-        self.speed += dt
-        if self.speed > SPARKLYSPEED:
-            self.speed = 0
-            self.index += 1
-            if self.index >= len(self.image_list):
-                self.index = 1
-            self.image = self.image_list[self.index]
+            if taken == 1:
+                self.image = self.image_list[0]
+                return
+
+            self.speed += dt
+            if self.speed > SPARKLYSPEED:
+                self.speed = 0
+                self.index += 1
+                if self.index >= len(self.image_list):
+                    self.index = 1
+                self.image = self.image_list[self.index]
