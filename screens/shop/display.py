@@ -263,9 +263,9 @@ class Display(object):
             self.sellbox.cur_item = None
 
             if self.buybox.rect.collidepoint(event.pos):
-                self.info_label = self.buybox.mouse_hover(event)
+                nothing, self.info_label = self.buybox.mouse_hover(event)
             if self.sellbox.rect.collidepoint(event.pos):
-                self.info_label = self.sellbox.mouse_hover(event)
+                nothing, self.info_label = self.sellbox.mouse_hover(event)
 
         elif event.type == pygame.MOUSEBUTTONDOWN:
 

@@ -109,12 +109,23 @@ class ListBox(object):
         Als de muis over een item uit row[row_with_rect] van table_data gaat. Dat zijn de rects.
         Zet cur_item op de index van degene waar de muis over gaat.
         :param event: pygame.MOUSEMOTION uit shopscreen
-        :return: row[row_with_obj] is de kolom met het Object EquipmentItem/Spell/etc.
+        :return: row[row_with_obj] is de kolom met het Object EquipmentItem/Spell/etc. En de info.
         """
         for index, row in enumerate(self.table_data):
             if row[self.row_nr_with_rect].collidepoint(event.pos):
                 self.cur_item = index
-                return row[self.row_nr_with_obj].show_info()
+                return row[self.row_nr_with_obj].NAM, row[self.row_nr_with_obj].show_info()
+        return None, None
+
+    def duplicate_selection(self, selected_object_name):
+        """
+        Deze roept de selectie aan. Hij doet dat op basis van de meegegeven naam uit de andere list.
+        :param selected_object_name: de naam van bijv de spell "Fireball"
+        """
+        for index, row in enumerate(self.table_data):
+            if row[self.row_nr_with_obj].NAM == selected_object_name:
+                self.cur_item = index
+                break
 
     def render(self, screen):
         """

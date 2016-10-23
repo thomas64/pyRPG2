@@ -26,10 +26,12 @@ FACEPOSY = 3/16
 
 FONTCOLOR = pygame.Color("black")
 FONT = 'colonna'
+SUBFONT = 'verdana'
 LARGEFONTSIZE = 100
 NORMALFONTSIZE = 50
 MIDDLEFONTSIZE = 40
 SMALLFONTSIZE = 20
+TINYFONTSIZE = 12
 
 SMALLLINEHEIGHT = 30
 EXTRAFACESIZE = 20
@@ -47,11 +49,26 @@ LEARNBOXPOSY = 6/32
 
 EXTRAHEIGHT = 0         # zodat de laatste item er voor helft op komt
 
+HEROTITLEPOSX = 1/16
 LEARNTITLE = "Learn"
 KNOWNTITLE = "Known"
+TITLEPOSY = 1/32
 GOLDTITLE = "Gold: "
 XPTITLE = "XP Remaining: "
-TITLEPOSY = 1/32
+
+CURRENTLEVEL1 = "Current"
+CURRENTLEVEL2 = "Level:"
+SPELLNAME1 = "Spell"
+SPELLNAME2 = "Name:"
+NEXTLEVEL1 = "Next"
+NEXTLEVEL2 = "Level:"
+GOLDCOST1 = "Gold"
+GOLDCOST2 = "Cost:"
+XPCOST1 = "XP"
+XPCOST2 = "Cost:"
+SUBTITLEPOSX = 5
+SUBTITLEPOSY1 = 15/100
+SUBTITLEPOSY2 = 17/100
 
 INFOBOXWIDTH = 8/32
 INFOBOXHEIGHT = 7/32
@@ -66,8 +83,6 @@ GOLDTITLEPOSX = 1/16
 GOLDTITLEPOSY = 39/64
 XPTITLEPOSX = 1/16
 XPTITLEPOSY = 42/64
-
-HEROTITLEPOSX = 1/16
 
 BTNWIDTH = 70
 BTNHEIGHT = 40
@@ -95,6 +110,7 @@ class Display:
         self.normalfont = pygame.font.SysFont(FONT, NORMALFONTSIZE)
         self.middlefont = pygame.font.SysFont(FONT, MIDDLEFONTSIZE)
         self.smallfont = pygame.font.SysFont(FONT, SMALLFONTSIZE)
+        self.tinyfont = pygame.font.SysFont(SUBFONT, TINYFONTSIZE)
         self.learn_title = self.largefont.render(LEARNTITLE, True, FONTCOLOR).convert_alpha()
         self.known_title = self.largefont.render(KNOWNTITLE, True, FONTCOLOR).convert_alpha()
         self.gold_amount = None
@@ -183,9 +199,11 @@ class Display:
             self.learnbox.cur_item = None
 
             if self.knownbox.rect.collidepoint(event.pos):
-                self.info_label = self.knownbox.mouse_hover(event)
+                selected_name, self.info_label = self.knownbox.mouse_hover(event)
+                self.learnbox.duplicate_selection(selected_name)
             if self.learnbox.rect.collidepoint(event.pos):
-                self.info_label = self.learnbox.mouse_hover(event)
+                selected_name, self.info_label = self.learnbox.mouse_hover(event)
+                self.knownbox.duplicate_selection(selected_name)
 
         elif event.type == pygame.MOUSEBUTTONDOWN:
 
@@ -253,6 +271,37 @@ class Display:
         self.screen.blit(gold_title, (self._set_x(GOLDTITLEPOSX), self._set_y(GOLDTITLEPOSY)))
         xp_title = self.middlefont.render(XPTITLE + str(self.xp_amount), True, FONTCOLOR).convert_alpha()
         self.screen.blit(xp_title, (self._set_x(XPTITLEPOSX), self._set_y(XPTITLEPOSY)))
+
+        spellname1 = self.tinyfont.render(SPELLNAME1, True, FONTCOLOR).convert_alpha()
+        spellname2 = self.tinyfont.render(SPELLNAME2, True, FONTCOLOR).convert_alpha()
+        currentlevel1 = self.tinyfont.render(CURRENTLEVEL1, True, FONTCOLOR).convert_alpha()
+        currentlevel2 = self.tinyfont.render(CURRENTLEVEL2, True, FONTCOLOR).convert_alpha()
+        spellname3 = self.tinyfont.render(SPELLNAME1, True, FONTCOLOR).convert_alpha()
+        spellname4 = self.tinyfont.render(SPELLNAME2, True, FONTCOLOR).convert_alpha()
+        nextlevel1 = self.tinyfont.render(NEXTLEVEL1, True, FONTCOLOR).convert_alpha()
+        nextlevel2 = self.tinyfont.render(NEXTLEVEL2, True, FONTCOLOR).convert_alpha()
+        goldcost1 = self.tinyfont.render(GOLDCOST1, True, FONTCOLOR).convert_alpha()
+        goldcost2 = self.tinyfont.render(GOLDCOST2, True, FONTCOLOR).convert_alpha()
+        xpcost1 = self.tinyfont.render(XPCOST1, True, FONTCOLOR).convert_alpha()
+        xpcost2 = self.tinyfont.render(XPCOST2, True, FONTCOLOR).convert_alpha()
+
+        import screens.school.knownbox as kb
+        xpos = self._set_x(KNOWNBOXPOSX) + SUBTITLEPOSX
+        self.screen.blit(spellname1, (xpos + kb.COLUMN2X, self._set_y(SUBTITLEPOSY1)))
+        self.screen.blit(spellname2, (xpos + kb.COLUMN2X, self._set_y(SUBTITLEPOSY2)))
+        self.screen.blit(currentlevel1, (xpos + kb.COLUMN3X, self._set_y(SUBTITLEPOSY1)))
+        self.screen.blit(currentlevel2, (xpos + kb.COLUMN3X, self._set_y(SUBTITLEPOSY2)))
+
+        import screens.school.learnbox as lb
+        xpos = self._set_x(LEARNBOXPOSX) + SUBTITLEPOSX
+        self.screen.blit(spellname3, (xpos + lb.COLUMN2X, self._set_y(SUBTITLEPOSY1)))
+        self.screen.blit(spellname4, (xpos + lb.COLUMN2X, self._set_y(SUBTITLEPOSY2)))
+        self.screen.blit(nextlevel1, (xpos + lb.COLUMN3X, self._set_y(SUBTITLEPOSY1)))
+        self.screen.blit(nextlevel2, (xpos + lb.COLUMN3X, self._set_y(SUBTITLEPOSY2)))
+        self.screen.blit(goldcost1, (xpos + lb.COLUMN4X, self._set_y(SUBTITLEPOSY1)))
+        self.screen.blit(goldcost2, (xpos + lb.COLUMN4X, self._set_y(SUBTITLEPOSY2)))
+        self.screen.blit(xpcost1, (xpos + lb.COLUMN5X, self._set_y(SUBTITLEPOSY1)))
+        self.screen.blit(xpcost2, (xpos + lb.COLUMN5X, self._set_y(SUBTITLEPOSY2)))
 
         self.infobox.render(self.screen, self.info_label)
         self.knownbox.render(self.screen)
