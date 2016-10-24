@@ -234,7 +234,6 @@ class MapMusic(enum.Enum):
     Alle tmx kaarten op een rij, met de muziek erachter en ambient sound.
     De key's komen precies overeen met de .tmx namen. De values[0] en [1] komen overeen met de .ogg namen.
     """
-    ersin_forest_start =        "ersin_forest",  "birds"
     ersin_forest_waterfall =    "ersin_forest",  "river"
     ersin_forest_center =       "ersin_forest",  "birds"
     ersin_forest_cave =         "ersin_forest",  "birds"
@@ -260,7 +259,6 @@ class MapTitle(enum.Enum):
     Alle tmx kaarten op een rij, met de Titel hoe die in beeld komt erachter.
     De key's komen precies overeen met de .tmx namen.
     """
-    ersin_forest_start =        "Ersin Forest"
     ersin_forest_waterfall =    "Ersin Forest"
     ersin_forest_center =       "Ersin Forest"
     ersin_forest_cave =         "Ersin Forest"

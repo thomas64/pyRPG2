@@ -39,6 +39,6 @@ class Script:
         pouch_item = PouchItem(**PouchItemDatabase.gold.value)
         data.pouch.add(pouch_item, 1, verbose=False)
 
-        data.map_name = 'ersin_forest_start'
+        data.map_name = 'ersin_forest_center'
         data.map_pos = 'start_game'     # dit is de naam van de startpositie object in de tmx map
         data.map_dir = Direction.South

@@ -19,7 +19,7 @@ class Portal(object):
         self.from_name = from_name
         self.rect = from_rect
         self.to_name = to_name
-        # self.to_nr = to_nr
+        self.to_nr = to_nr      # dit is obj.type. is een getal. correspondeert met hetzelfde andere getal.
         # self.to_pos = self._load_position()
 
     # todo, dat met to_nr is nog wel op te lossen, maar dat wordt nu niet gebruikt. prev_map_name moet prev_map obj
