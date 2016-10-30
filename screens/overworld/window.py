@@ -340,9 +340,9 @@ class Window(object):
                 self.cbox_sprites[index].rect.topleft = unit.rect.topleft  # F11 zijn toegevoegd zijn de unit.rects
 
         # Centreer op de hero als de kaart groter is dan de window.
-        if self.current_map.width >= self.width and \
-           self.current_map.height >= self.height:
-            self.group.center(self.party_sprites[0].rect.center)
+        # if self.current_map.width >= self.width and \
+        #    self.current_map.height >= self.height:
+        self.group.center(self.party_sprites[0].rect.center)
 
         # update de plaatjes van de objecten
         for obj in self.current_map.chests:

@@ -56,6 +56,7 @@ class Map(object):
         tmx_data = pytmx.load_pygame(map_tmx)
         map_data = pyscroll.TiledMapData(tmx_data)
         self.map_layer = pyscroll.BufferedRenderer(map_data, (WINDOWWIDTH, WINDOWHEIGHT))
+        self.map_layer.zoom = 2
         self.view = pyscroll.PyscrollGroup(map_layer=self.map_layer, default_layer=PLAYERLAYER)
 
         tilewidth = tmx_data.tilewidth

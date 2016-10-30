@@ -6,6 +6,7 @@ class: Grid
 class: Sign
 class: TreasureChest
 class: Sparkly
+class: VisionRadius
 """
 
 import pygame
@@ -259,3 +260,31 @@ class Sparkly(pygame.sprite.Sprite):
                 if self.index >= len(self.image_list):
                     self.index = 1
                 self.image = self.image_list[self.index]
+
+
+class VisionRadius(pygame.sprite.Sprite):
+    """
+    Zwarte mist rondom de speler
+    """
+    def __init__(self, window_width, window_height, layer):
+        super().__init__()
+
+        self._layer = layer
+        self.image = pygame.Surface((window_width*2, window_height*2))
+        self.image.fill((0, 0, 0, 255))
+        self.image = self.image.convert_alpha()
+
+        # pygame.draw.circle(self.image, (0, 0, 0, 0), (window_width, window_height), size)
+        radius = 255
+        delta = 1
+        while radius > 1:
+            pygame.draw.circle(self.image, (0, 0, 0, radius), (window_width, window_height), radius)
+            radius -= delta
+
+        self.rect = self.image.get_rect()
+
+    def update(self, position):
+        """
+        Verplaats de circel met de hero mee.
+        """
+        self.rect.center = position

@@ -17,6 +17,7 @@ from .transition import Transition
 from .sprites import Button
 from .sprites import ColorBox
 from .sprites import Grid
+from .sprites import VisionRadius
 
 from .sprites import Sign
 from .sprites import Sparkly
