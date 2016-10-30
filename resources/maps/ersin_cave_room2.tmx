@@ -188,6 +188,34 @@
     <frame tileid="461" duration="300"/>
    </animation>
   </tile>
+  <tile id="720">
+   <animation>
+    <frame tileid="720" duration="300"/>
+    <frame tileid="722" duration="300"/>
+    <frame tileid="724" duration="300"/>
+   </animation>
+  </tile>
+  <tile id="721">
+   <animation>
+    <frame tileid="721" duration="300"/>
+    <frame tileid="723" duration="300"/>
+    <frame tileid="725" duration="300"/>
+   </animation>
+  </tile>
+  <tile id="744">
+   <animation>
+    <frame tileid="744" duration="300"/>
+    <frame tileid="746" duration="300"/>
+    <frame tileid="748" duration="300"/>
+   </animation>
+  </tile>
+  <tile id="745">
+   <animation>
+    <frame tileid="745" duration="300"/>
+    <frame tileid="747" duration="300"/>
+    <frame tileid="749" duration="300"/>
+   </animation>
+  </tile>
  </tileset>
  <layer name="under0 background" width="46" height="38">
   <data encoding="csv">

@@ -18,3 +18,4 @@ class SignDatabase(enum.Enum):
     sign2 = ["Ersin Cave"]
     sign3 = ["Ersin Waterfall"]
     sign4 = ["Invernia Town"]
+    sign5 = ["South: Invernia Town"]

@@ -21,3 +21,6 @@ class NoteDatabase(enum.Enum):
     # invernia_guild
     note4 = [["You found a secret book."],
              ["But there are no pages..."]]
+    # ersin_forest
+    note5 = [["I'm out admiring the scenery.",
+             "I'll be back..."]]
