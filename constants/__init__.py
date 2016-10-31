@@ -237,8 +237,9 @@ class MapMusic(enum.Enum):
     ersin_forest_waterfall =    "ersin_forest",  "river"
     ersin_forest_center =       "ersin_forest",  "birds"
     ersin_forest_cave =         "ersin_forest",  "birds"
-    ersin_forest_pond =         "ersin_forest",  "birds"
+    ersin_forest_pond =         "ersin_pond",    "birds"
     ersin_forest_invernia =     "ersin_forest",  "birds"
+    ersin_forest_hole =         "ersin_cave",    None
     ersin_cave_room1 =          "ersin_cave",    None
     ersin_cave_room2 =          "ersin_cave",    None
     ersin_cave_room3 =          "ersin_cave",    None
@@ -266,6 +267,7 @@ class MapTitle(enum.Enum):
     ersin_forest_cave =         "Ersin Forest"
     ersin_forest_pond =         "Ersin Forest"
     ersin_forest_invernia =     "Ersin Forest"
+    ersin_forest_hole =         "Ersin Forest"
     ersin_cave_room1 =          "Ersin Cave"
     ersin_cave_room2 =          "Ersin Cave"
     ersin_cave_room3 =          "Ersin Cave"

@@ -552,8 +552,9 @@ class Window(object):
 
             # of als hij dat niet heeft
             else:
-                push_object = MessageBox(self.engine.gamestate, person_data['text'], person_data['face'])
-                self.engine.gamestate.push(push_object)
+                for text_part in reversed(person_data['text']):
+                    push_object = MessageBox(self.engine.gamestate, text_part, person_data['face'])
+                    self.engine.gamestate.push(push_object)
 
     def check_notes(self, check_rect):
         """

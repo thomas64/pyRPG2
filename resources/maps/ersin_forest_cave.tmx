@@ -641,8 +641,7 @@
   <object id="70" x="576" y="576" width="64" height="16"/>
   <object id="71" x="960" y="96" width="32" height="48"/>
  </objectgroup>
- <objectgroup name="objects" visible="0">
+ <objectgroup name="objects">
   <object id="1" name="sign2" type="2" x="960" y="144" width="32" height="32"/>
-  <object id="2" name="person50" type="w" x="384" y="688" width="32" height="32"/>
  </objectgroup>
 </map>
