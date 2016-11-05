@@ -48,13 +48,14 @@ class LearnBox(ListBox):
         # zoek the classes in module ``spells`` that inherit from ``Spell``
         for name, obj in inspect.getmembers(spells):
             if hasattr(obj, "__bases__") and spells.Spell in obj.__bases__:
-                # maak objecten van alle classen
+                # maak objecten van alle classen, de 1 is de benodigde quantity parameter van Spell.
+                # 1 is just random. de daadwerkelijke juiste quantity wordt later gezet.
                 spell = obj(1)
                 if spell.SCL in schooltype_list:
                     spell.qty = hero.scl.get_qty_of_spell(spell.RAW)
-                    next_level = str(spell.qty + 1)
-                    gold_cost = str(spell.TRAININGSCOSTS[spell.qty])
-                    xp_cost = str(spell.xp_cost())
+                    next_level = str(spell.nxt_lev)
+                    gold_cost = str(spell.gold_cost)
+                    xp_cost = str(spell.xp_cost)
                     self.table_data.append(
                         #  row[0],    row[1],     row[2],    row[3], row[4], row[5], row[6],
                         [spell.ICON, spell.NAM, spell.COL, spell.ROW, spell, None, next_level,
@@ -77,3 +78,16 @@ class LearnBox(ListBox):
             self.table_view[index].append(normalfont.render(row[6], True, self.fontcolor).convert_alpha())
             self.table_view[index].append(normalfont.render(row[7], True, self.fontcolor).convert_alpha())
             self.table_view[index].append(normalfont.render(row[8], True, self.fontcolor).convert_alpha())
+
+    def mouse_click(self, event):
+        """
+        :param event: pygame.MOUSEBUTTONDOWN uit school display.
+        """
+        for index, row in enumerate(self.table_data):
+            if row[5].collidepoint(event.pos):
+                self.cur_item = index
+                selected_spell = row[4]
+
+                return True, selected_spell
+
+        return False, None

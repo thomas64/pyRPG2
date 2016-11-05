@@ -296,9 +296,11 @@ class SFX(enum.Enum):
     step_stone = 5
     step_wood = 6
     step_carpet = 7
-    coins = 8
-    chest = 9
-    sparkly = 10
+    cancel = 8
+    coins = 9
+    scroll = 10
+    chest = 11
+    sparkly = 12
 
 
 class Keys(enum.Enum):

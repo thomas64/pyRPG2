@@ -31,7 +31,7 @@ class School(dict):
         else:
             return 0
 
-    def add(self, spell_object, wiz_qty, quantity=1, force=False):
+    def add_s(self, spell_object, wiz_qty, quantity=1, force=False):
         """
         ...
         :param spell_object:
@@ -42,28 +42,30 @@ class School(dict):
         :return:
         """
         if self.NAM == SchoolType.non:
-            return print("Je bent geen wizard, kan niet.")
+            return False, ["Only wizards can learn spells."]
 
         elif wiz_qty < 1:
-            return print("Je hebt geen wizard skill, kan niet.")
+            return False, ["You need the Wizard Skill to learn spells."]
 
         elif wiz_qty < spell_object.MIN and force is False:
-            return print("Je wizard level is te laag, kan niet.")
+            return False, ["Your Wizard rank is not high",
+                           "enough to learn {}.".format(spell_object.NAM)]
 
         elif spell_object.RAW in self:
-            return spell_object.upgrade(quantity)
+            return self[spell_object.RAW].upgrade(quantity)
 
         elif spell_object.SCL == SchoolType.ntl:
             self[spell_object.RAW] = spell_object
-            return print("Spell geleerd, gelukt.")
+            return True, None
 
         elif self.NAM == SchoolType.spl:
             self[spell_object.RAW] = spell_object
-            return print("Spell geleerd, gelukt.")
+            return True, None
 
         elif spell_object.SCL != self.NAM:
-            return print("Verkeerde school, kan niet.")
+            return False, ["You cannot learn {} as".format(spell_object.NAM),
+                           "you are of the wrong school."]
 
         else:
             self[spell_object.RAW] = spell_object
-            return print("Spell geleerd, gelukt.")
+            return True, None

@@ -32,12 +32,35 @@ class Spell(object):
         self.qty = None
         self.DESC = None
 
+    @property
+    def nxt_lev(self):
+        """
+        ...
+        :return:
+        """
+        quantity = self.qty + 1
+        if quantity == self.MAXIMUM + 1:
+            quantity = "Max"
+        return quantity
+
+    @property
+    def gold_cost(self):
+        """
+        ...
+        :return:
+        """
+        return self.TRAININGSCOSTS[self.qty]
+
+    @property
     def xp_cost(self):
         """
         ...
         :return:
         """
-        return round(self.UPG * ((self.qty + 1)**2))
+        xp_for_next_level = round(self.UPG * ((self.qty + 1)**2))
+        if self.qty == self.MAXIMUM:
+            xp_for_next_level = "Max"
+        return xp_for_next_level
         # todo, loremaster skill gebruiken voor 'korting'
         # oude uit vb:
         # return self.UPG * (self.qty ^ 2 + 2 * self.qty + 1)
@@ -50,10 +73,10 @@ class Spell(object):
         :return:
         """
         if self.qty >= self.MAXIMUM:
-            return print("Spell is al aan de max, kan niet.")
+            return False, ["You cannot learn {} any further.".format(self.NAM)]
         else:
             self.qty += quantity
-            return print("Spell met 1 opgehoogd, gelukt.")
+            return True, None
 
     def set_desc(self, text):
         """
@@ -70,7 +93,7 @@ class Spell(object):
 
     def show_info(self):
         """
-        ...
+        show_info is polymorph met EquipmentItem()
         :return:
         """
         return self.DESC
