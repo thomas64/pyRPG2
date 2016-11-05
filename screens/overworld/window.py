@@ -161,12 +161,14 @@ class Window(object):
         """
         # als er iets in de lijst van temp blockers staat:
         if len(self.current_map.temp_blocker_rects) > 0:
-            # de naam van de tempblocker is de key van de quest. als de eerste uit de lijst explicitiet deze is:
-            the_quest = self.engine.data.logbook.get(self.current_map.temp_blocker_rects[0].name)
-            # bekijk dan of hij al rewarded is:
-            if the_quest is not None and the_quest.is_rewarded():
-                # haal dan de temp blocker weg
-                self.current_map.temp_blocker_rects = []
+            # van 0 tot 3 bijv
+            for i in range(0, len(self.current_map.temp_blocker_rects), 1):
+                # de naam van de tempblocker is de key van de quest. haal die uit het logbook op basis van de naam.
+                the_quest = self.engine.data.logbook.get(self.current_map.temp_blocker_rects[i].name)
+                # bekijk dan of hij al rewarded is:
+                if the_quest is not None and the_quest.is_rewarded():
+                    # haal dan die temp blocker uit de lijst
+                    del self.current_map.temp_blocker_rects[i]
 
     def align(self):
         """

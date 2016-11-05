@@ -115,14 +115,7 @@ class Display(object):
             COLORKEY, FONTCOLOR)
 
         self.info_label = ""
-
-        self.buy_click = False
-        self.sell_click = False
-        self.selected_item = None
-        self.tot_quantity = 0
-        self.sel_quantity = []
-        self.value = 0
-        self.confirm_box = None
+        self._reset_vars()
 
     def _init_selectors(self):
         self.selectors = pygame.sprite.Group()
@@ -197,6 +190,15 @@ class Display(object):
         height = self.screen.get_height() * INFOBOXHEIGHT
         self.infobox = InfoBox(self._set_x(INFOBOXPOSX), self._set_y(INFOBOXPOSY), int(width), int(height))
 
+    def _reset_vars(self):
+        self.buy_click = False
+        self.sell_click = False
+        self.selected_item = None
+        self.tot_quantity = 0
+        self.sel_quantity = []
+        self.value = 0
+        self.confirm_box = None
+
     def on_enter(self):
         """
         Wanneer deze state op de stack komt, voer dit uit.
@@ -231,13 +233,7 @@ class Display(object):
                 else:
                     self.engine.audio.play_sound(SFX.menu_select)
 
-            self.buy_click = False
-            self.sell_click = False
-            self.selected_item = None
-            self.tot_quantity = 0
-            self.sel_quantity = []
-            self.value = 0
-            self.confirm_box = None
+            self._reset_vars()
 
     # noinspection PyMethodMayBeStatic
     def on_exit(self):

@@ -378,3 +378,20 @@ class Hero(object):
             # visueel aanpassen als het negatieve van de item groter is dan de skill van de hero
             if skill.ext < 0 and skill.ext < -skill.qty and skill.positive_quantity():
                 skill.ext = -skill.qty
+
+    def gain_experience(self, amount):
+        """
+        Vermeerdert de hoeveelheid xp, en hoogt indien nodig het level op.
+        Hij geeft nog niets terug, een messagebox bericht bijvoorbeeld met gefeli.
+        :param amount: integer, hoeveelheid xp.
+        :return:
+        """
+        if self.lev.qty < self.lev.MAX:
+            self.exp.rem += amount
+            self.exp.tot += amount
+            # Output.character_gain_xp(self.NAME, xp_input)
+
+        while self.lev.next(self.exp.tot) <= 0:
+            self.lev.qty += 1
+            self.lev.cur += 1
+            # Output.character_gain_level(self.NAME, self.level.quantity)
