@@ -23,6 +23,7 @@ from .people import PeopleDatabase              # Enum data, gebruik de data
 from .quest import QuestDatabase                # Enum data, maak objecten mee
 from .school import SchoolDatabase              # Enum data, gebruik de data
 from .shop import ShopDatabase                  # Enum data, gebruik de data
+from .trainer import TrainerDatabase            # Enum data, gebruik de data
 from .note import NoteDatabase                  # Enum data, gebruik de data
 from .sign import SignDatabase                  # Enum data, gebruik de data
 from .sparkly import SparklyDatabase            # Dict class, maak aan het begin 1 object van

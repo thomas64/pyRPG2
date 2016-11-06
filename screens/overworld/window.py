@@ -24,6 +24,7 @@ from database import HeroDatabase
 from database import PeopleDatabase
 from database import SchoolDatabase
 from database import ShopDatabase
+from database import TrainerDatabase
 from database import NoteDatabase
 from database import SignDatabase
 
@@ -34,6 +35,7 @@ from inventoryitems import PouchItem
 
 import screens.school
 import screens.shop
+import screens.trainer
 
 
 BACKGROUNDCOLOR = pygame.Color("gray12")
@@ -47,7 +49,7 @@ PLAYERLAYER = 5
 
 ZOOMSPEED = .1
 MAXZOOM = 3.1
-DEFZOOM = 1.0
+DEFZOOM = 2.0
 MINZOOM = .5
 
 GRIDLAYER = 8
@@ -139,6 +141,7 @@ class Window(object):
                 self.current_map.high_blocker_rects.append(hero.get_blocker())
         self.group.add(self.current_map.shops)
         self.group.add(self.current_map.schools)
+        self.group.add(self.current_map.trainers)
         self.group.add(self.current_map.inns)
         self.group.add(self.current_map.people)
         self.group.add(self.current_map.signs)
@@ -275,6 +278,7 @@ class Window(object):
                     for obj_group in (self.current_map.heroes,
                                       self.current_map.shops,
                                       self.current_map.schools,
+                                      self.current_map.trainers,
                                       self.current_map.inns,
                                       self.current_map.people,
                                       self.current_map.notes,
@@ -441,6 +445,7 @@ class Window(object):
         self.check_heroes(self.party_sprites[0].get_check_rect())
         self.check_shops(self.party_sprites[0].get_check_rect())
         self.check_schools(self.party_sprites[0].get_check_rect())
+        self.check_trainers(self.party_sprites[0].get_check_rect())
         self.check_inns(self.party_sprites[0].get_check_rect())
         self.check_people(self.party_sprites[0].get_check_rect())
         self.check_notes(self.party_sprites[0].get_check_rect())
@@ -500,9 +505,25 @@ class Window(object):
 
             school_sprite.turn(self.party_sprites[0].rect)
 
-            push_object = screens.school.Display(self.engine,
-                                                 school_data['content'],
-                                                 school_data['face'])
+            push_object = screens.school.Display(self.engine, school_data['content'], school_data['face'])
+            self.engine.gamestate.push(push_object)
+            self.engine.gamestate.push(Transition(self.engine.gamestate))
+
+    def check_trainers(self, check_rect):
+        """
+        Bekijk of je collide met een trainer.
+        """
+        if len(check_rect.collidelistall(self.current_map.trainers)) == 1:
+            object_nr = check_rect.collidelist(self.current_map.trainers)
+            trainer_id = self.current_map.trainers[object_nr].person_id
+            trainer_data = TrainerDatabase[trainer_id].value
+
+            for spr in self.current_map.trainers:
+                if spr.show_sprite:
+                    if spr.person_id == trainer_id:
+                        spr.turn(self.party_sprites[0].rect)
+
+            push_object = screens.trainer.Display(self.engine, trainer_data['content'], trainer_data['face'])
             self.engine.gamestate.push(push_object)
             self.engine.gamestate.push(Transition(self.engine.gamestate))
 

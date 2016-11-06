@@ -27,6 +27,7 @@ from database import HeroDatabase
 from database import PeopleDatabase
 from database import SchoolDatabase
 from database import ShopDatabase
+from database import TrainerDatabase
 
 
 MAPPATH = 'resources/maps/'
@@ -77,6 +78,7 @@ class Map(object):
         self.heroes = []
         self.shops = []
         self.schools = []
+        self.trainers = []
         self.inns = []
         self.people = []
         self.notes = []
@@ -111,6 +113,12 @@ class Map(object):
                 if not obj.type:
                     self.high_blocker_rects.append(school_object.get_blocker())
                 self.schools.append(school_object)
+            elif obj.name.startswith('trainer'):
+                trainer_object = Person(obj.name, TrainerDatabase[obj.name].value['sprite'],
+                                        self._pg_rect(obj), OBJECTLAYER, self._has_dir(obj, 'direction'), obj.type)
+                if not obj.type:
+                    self.high_blocker_rects.append(trainer_object.get_blocker())
+                self.trainers.append(trainer_object)
             elif obj.name.startswith('inn'):
                 inn_object = Person(obj.name, InnDatabase[obj.name].value['sprite'],
                                     self._pg_rect(obj), OBJECTLAYER, self._has_dir(obj, 'direction'), obj.type)
