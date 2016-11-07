@@ -18,7 +18,7 @@ class TrainerDatabase(enum.Enum):
     ...
     """
 
-    trainer1 = dict(content=[SkillType.mec, SkillType.ran, SkillType.war],
+    trainer1 = dict(content=[SkillType.mec.name, SkillType.ran.name, SkillType.war.name, SkillType.wiz.name],
                     face=TRAINER1+FEXT, sprite=TRAINER1+SEXT)
 
     @staticmethod

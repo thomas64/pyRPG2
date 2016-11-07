@@ -61,6 +61,8 @@ TITLEPOSY = 1/32
 GOLDTITLE = "Gold: "
 XPTITLE = "XP Remaining: "
 
+OBJECTTYPE = "spell"
+
 CURRENTLEVEL1 = "Current"
 CURRENTLEVEL2 = "Level:"
 SPELLNAME1 = "Spell"
@@ -131,6 +133,8 @@ class Display:
 
         self.info_label = ""
         self._reset_vars()
+
+        self.object_type = OBJECTTYPE
 
     def _init_selectors(self):
 
@@ -317,11 +321,12 @@ class Display:
         xp_title = self.middlefont.render(XPTITLE + str(self.xp_amount), True, FONTCOLOR).convert_alpha()
         self.screen.blit(xp_title, (self._set_x(XPTITLEPOSX), self._set_y(XPTITLEPOSY)))
 
-        spellname1 = self.tinyfont.render(SPELLNAME1, True, FONTCOLOR).convert_alpha()
+        # afwijkende SPELLNAME1. object_type gebruikt. vanwege polymorph van trainer.
+        spellname1 = self.tinyfont.render(self.object_type.title(), True, FONTCOLOR).convert_alpha()
         spellname2 = self.tinyfont.render(SPELLNAME2, True, FONTCOLOR).convert_alpha()
         currentlevel1 = self.tinyfont.render(CURRENTLEVEL1, True, FONTCOLOR).convert_alpha()
         currentlevel2 = self.tinyfont.render(CURRENTLEVEL2, True, FONTCOLOR).convert_alpha()
-        spellname3 = self.tinyfont.render(SPELLNAME1, True, FONTCOLOR).convert_alpha()
+        spellname3 = self.tinyfont.render(self.object_type.title(), True, FONTCOLOR).convert_alpha()
         spellname4 = self.tinyfont.render(SPELLNAME2, True, FONTCOLOR).convert_alpha()
         nextlevel1 = self.tinyfont.render(NEXTLEVEL1, True, FONTCOLOR).convert_alpha()
         nextlevel2 = self.tinyfont.render(NEXTLEVEL2, True, FONTCOLOR).convert_alpha()
@@ -363,7 +368,7 @@ class Display:
             if type(self.gold_cost) == str and type(self.xp_cost) == str:  # maw, als gold_cost en xp_cost "Max" zijn.
                 self.engine.audio.play_sound(SFX.menu_error)
                 text = ["I cannot teach you further",
-                        "in the spell {}.".format(self.selected_spell.NAM)]
+                        "in the {} {}.".format(self.object_type, self.selected_spell.NAM)]
                 push_object = MessageBox(self.engine.gamestate, text)
                 self.engine.gamestate.push(push_object)
                 self._reset_vars()
