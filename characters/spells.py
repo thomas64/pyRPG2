@@ -66,17 +66,11 @@ class Spell(object):
         # return self.UPG * (self.qty ^ 2 + 2 * self.qty + 1)
         # - (((self.UPG * (self.qty ^ 2 + 2 * self.qty + 1)) / 100) * p(hc).lor3)
 
-    def upgrade(self, quantity):
+    def upgrade(self):
         """
         ...
-        :param quantity:
-        :return:
         """
-        if self.qty >= self.MAXIMUM:
-            return False, ["You cannot learn {} any further.".format(self.NAM)]
-        else:
-            self.qty += quantity
-            return True, None
+        self.qty += 1
 
     def set_desc(self, text):
         """

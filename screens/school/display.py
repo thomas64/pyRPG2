@@ -61,6 +61,7 @@ TITLEPOSY = 1/32
 GOLDTITLE = "Gold: "
 XPTITLE = "XP Remaining: "
 
+OBJECTDATABASE = SchoolDatabase
 OBJECTTYPE = "spell"
 
 CURRENTLEVEL1 = "Current"
@@ -123,6 +124,7 @@ class Display:
         self.gold_amount = None
         self.xp_amount = None
 
+        self._init_database()
         self._init_selectors()
         self._init_face(face)
         self._init_boxes()
@@ -135,6 +137,9 @@ class Display:
         self._reset_vars()
 
         self.object_type = OBJECTTYPE
+
+    def _init_database(self):
+        self.object_database = OBJECTDATABASE
 
     def _init_selectors(self):
 
@@ -150,7 +155,7 @@ class Display:
         face_image = pygame.image.load(face).convert_alpha()
         self.background.blit(face_image, (self._set_x(FACEPOSX), self._set_y(FACEPOSY)))
 
-        for index, line in enumerate(SchoolDatabase.welcome_text()):
+        for index, line in enumerate(self.object_database.welcome_text()):
             rline = self.smallfont.render(line, True, FONTCOLOR).convert_alpha()
             if index < LINESNEXTTOFACE:
                 self.background.blit(rline,
@@ -199,18 +204,13 @@ class Display:
             choice = self.confirm_box.cur_item
             yes = self.confirm_box.TOPINDEX
             if choice == yes:
-                self.selected_spell.qty += 1  # anders staat hij nog gelijk aan die van de hero
-                success, text = self.selected_hero.scl.add_s(self.selected_spell, self.selected_hero.wiz.qty)
-                if success:
-                    self.engine.audio.play_sound(SFX.scroll)
-                    gold = PouchItem(**PouchItemDatabase.gold.value)
-                    self.engine.data.pouch.remove(gold, self.gold_cost)
-                    self.selected_hero.exp.rem -= self.xp_cost
-                    self._init_boxes()
-                else:
-                    self.engine.audio.play_sound(SFX.cancel)
-                    push_object = MessageBox(self.engine.gamestate, text, scr_capt=self.confirm_box.scr_capt)
-                    self.engine.gamestate.push(push_object)
+                # hier staat selected_spell eventueel nog op 0
+                self.selected_hero.scl.add_s(self.selected_spell)
+                self.engine.audio.play_sound(SFX.scroll)
+                gold = PouchItem(**PouchItemDatabase.gold.value)
+                self.engine.data.pouch.remove(gold, self.gold_cost)
+                self.selected_hero.exp.rem -= self.xp_cost
+                self._init_boxes()
             else:
                 self.engine.audio.play_sound(SFX.menu_select)
 
@@ -362,41 +362,32 @@ class Display:
 
     def _handle_learn_box_click(self, event):
         self.learn_click, self.selected_spell = self.learnbox.mouse_click(event)
+        # selected_spell is hier eventueel .qty = 0
         if self.learn_click:
             self.gold_cost = self.selected_spell.gold_cost
             self.xp_cost = self.selected_spell.xp_cost
-            if type(self.gold_cost) == str and type(self.xp_cost) == str:  # maw, als gold_cost en xp_cost "Max" zijn.
-                self.engine.audio.play_sound(SFX.menu_error)
-                text = ["I cannot teach you further",
-                        "in the {} {}.".format(self.object_type, self.selected_spell.NAM)]
-                push_object = MessageBox(self.engine.gamestate, text)
-                self.engine.gamestate.push(push_object)
-                self._reset_vars()
-                return True
-            elif self.gold_cost <= self.gold_amount and self.xp_cost <= self.xp_amount:
+            succes, text = self._handle_learn_box_click2()
+            if succes:
                 self.engine.audio.play_sound(SFX.menu_select)
-                text = ["Are you sure you wish to learn",
-                        "{} for {} XP and {} gold?".format(self.selected_spell.NAM, self.xp_cost, self.gold_cost),
+                text = ["Are you sure you wish to learn the",
+                        "{} {} for {} XP and {} gold?".format(self.object_type, self.selected_spell.NAM,
+                                                              self.xp_cost, self.gold_cost),
                         "",
                         "Yes",
                         "No"]
                 self.confirm_box = ConfirmBox(self.engine.gamestate, self.engine.audio, text)
                 self.engine.gamestate.push(self.confirm_box)
-                return True
-            elif self.xp_cost > self.xp_amount or self.gold_cost > self.gold_amount:
-                self.engine.audio.play_sound(SFX.menu_error)
-                text = ["Error"]
-                if self.xp_cost > self.xp_amount:
-                    text = ["You need {} more XP to".format(self.xp_cost - self.xp_amount),
-                            "learn {}.".format(self.selected_spell.NAM)]
-                elif self.gold_cost > self.gold_amount:
-                    text = ["You need {} more gold to".format(self.gold_cost - self.gold_amount),
-                            "learn {}.".format(self.selected_spell.NAM)]
+            else:
+                self.engine.audio.play_sound(SFX.cancel)
                 push_object = MessageBox(self.engine.gamestate, text)
                 self.engine.gamestate.push(push_object)
                 self._reset_vars()
-                return True
+            return True
         return False
+
+    def _handle_learn_box_click2(self):
+        return self.selected_hero.scl.is_able_to_learn(self.selected_spell, self.selected_hero.wiz.qty,
+                                                       self.xp_amount, self.gold_amount)
 
     def _set_x(self, posx):
         return self.screen.get_width() * posx

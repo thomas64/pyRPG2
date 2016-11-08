@@ -52,10 +52,10 @@ class LearnBox(ListBox):
                 # 1 is just random. de daadwerkelijke juiste quantity wordt later gezet.
                 spell = obj(1)
                 if spell.SCL in schooltype_list:
-                    spell.qty = hero.scl.get_qty_of_spell(spell.RAW)
-                    next_level = str(spell.nxt_lev)
-                    gold_cost = str(spell.gold_cost)
-                    xp_cost = str(spell.xp_cost)
+                    spell.qty = hero.scl.get_qty_of_spell(spell.RAW)    # .qty kan hier dus 0 zijn
+                    next_level = str(spell.nxt_lev)                     # in dat geval, gebruik hier 1
+                    gold_cost = str(spell.gold_cost)                    # gold_cost kijkt wat de prijs is voor 1 vanaf 0
+                    xp_cost = str(spell.xp_cost)                        # idem voor xp_cost
                     self.table_data.append(
                         #  row[0],    row[1],     row[2],    row[3], row[4], row[5], row[6],
                         [spell.ICON, spell.NAM, spell.COL, spell.ROW, spell, None, next_level,
@@ -87,7 +87,7 @@ class LearnBox(ListBox):
             if row[5].collidepoint(event.pos):
                 self.cur_item = index
                 selected_spell = row[4]
-
+                # selected_spell heeft dus eventueel .qty = 0
                 return True, selected_spell
 
         return False, None
