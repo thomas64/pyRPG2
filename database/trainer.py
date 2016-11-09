@@ -18,13 +18,14 @@ class TrainerDatabase(enum.Enum):
     ...
     """
 
-    trainer1 = dict(content=[SkillType.mec.name, SkillType.ran.name, SkillType.war.name, SkillType.wiz.name],
+    trainer1 = dict(content=[SkillType.war.name, SkillType.haf.name, SkillType.swd.name, SkillType.pol.name,
+                             SkillType.shd.name],
                     face=TRAINER1+FEXT, sprite=TRAINER1+SEXT)
 
     @staticmethod
     def welcome_text():
         """..."""
-        return ("Good day sir, and welcome to my XXXXXX.",
+        return ("Good day sir. Welcome to my academy.",
                 "In the 'Known' box are all the skills you",
                 "already have learned.  And in the",
                 "'Learn' box are all the skills that I can teach.",

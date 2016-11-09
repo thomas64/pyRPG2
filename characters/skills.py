@@ -46,7 +46,10 @@ class Skill(object):
         ...
         :return:
         """
-        return self.TRAININGSCOSTS[self.qty]
+        if self.qty == -1:
+            return 0
+        else:
+            return self.TRAININGSCOSTS[self.qty]
 
     @property
     def xp_cost(self):
@@ -60,16 +63,30 @@ class Skill(object):
         return xp_for_next_level
         # todo, loremaster skill gebruiken voor 'korting'
 
+    def is_able_to_learn(self, xp_amount, gold_amount):
+        """
+        ...
+        :return:
+        """
+        if self.qty == -1:
+            return False, ["You cannot learn {}.".format(self.NAM)]
+        elif self.qty >= self.MAXIMUM:
+            return False, ["You cannot learn {} any further.".format(self.NAM)]
+        elif self.xp_cost > xp_amount:
+            return False, ["You need {} more XP to".format(self.xp_cost - xp_amount),
+                           "learn {}.".format(self.NAM)]
+        elif self.gold_cost > gold_amount:
+            return False, ["You need {} more gold to".format(self.gold_cost - gold_amount),
+                           "learn {}.".format(self.NAM)]
+        else:
+            return True, None
+
     def upgrade(self):
         """
         ...
         :return:
         """
-        if self.qty >= self.MAXIMUM:
-            return False, ["You cannot learn {} any further.".format(self.NAM)]
-        else:
-            self.qty += 1
-            return True, None
+        self.qty += 1
 
     @property
     def tot(self):

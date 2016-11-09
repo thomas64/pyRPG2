@@ -205,7 +205,7 @@ class Display:
             yes = self.confirm_box.TOPINDEX
             if choice == yes:
                 # hier staat selected_spell eventueel nog op 0
-                self.selected_hero.scl.add_s(self.selected_spell)
+                self._on_enter2()
                 self.engine.audio.play_sound(SFX.scroll)
                 gold = PouchItem(**PouchItemDatabase.gold.value)
                 self.engine.data.pouch.remove(gold, self.gold_cost)
@@ -215,6 +215,12 @@ class Display:
                 self.engine.audio.play_sound(SFX.menu_select)
 
             self._reset_vars()
+
+    def _on_enter2(self):
+        """
+        polymorph met trainer display
+        """
+        self.selected_hero.scl.add_s(self.selected_spell)
 
     # noinspection PyMethodMayBeStatic
     def on_exit(self):
@@ -386,6 +392,9 @@ class Display:
         return False
 
     def _handle_learn_box_click2(self):
+        """
+        polymorph met trainer display
+        """
         return self.selected_hero.scl.is_able_to_learn(self.selected_spell, self.selected_hero.wiz.qty,
                                                        self.xp_amount, self.gold_amount)
 
