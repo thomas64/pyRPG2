@@ -153,6 +153,8 @@ class Display(object):
                 self.info_label, self.hovered_equipment_item = self.invclick_box.mouse_hover(event)
             elif self.inventory_box.rect.collidepoint(event.pos):
                 self.info_label = self.inventory_box.mouse_hover(event)
+            elif self.pouch_box.rect.collidepoint(event.pos):
+                self.info_label = self.pouch_box.mouse_hover(event)
             elif self.spells_box.rect.collidepoint(event.pos):
                 self.info_label = self.spells_box.mouse_hover(event)
 

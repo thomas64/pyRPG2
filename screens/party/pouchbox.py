@@ -13,7 +13,7 @@ LINECOLOR = pygame.Color("white")
 TITLEX, TITLEY = 7, 1
 COLUMN1X = 50
 COLUMN2X = 90
-COLUMN3X = 190
+COLUMN3X = 210
 COLUMNSY = 60
 ROWHEIGHT = 30
 ICONOFFSET = -6
@@ -38,8 +38,8 @@ class PouchBox(BaseBox):
         self.table_data = []
         for pouch_item in pouch.get_all_pouch_items():
             self.table_data.append(
-                # row[0],           row[1],                 row[2],         row[3]
-                [pouch_item.SPR, pouch_item.NAM + " :", str(pouch_item.qty), None]
+                # row[0],           row[1],                 row[2],         row[3],    row[4
+                [pouch_item.SPR, pouch_item.NAM + " :", str(pouch_item.qty), None, pouch_item.DESC]
             )
 
         for index, row in enumerate(self.table_data):
