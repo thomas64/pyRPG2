@@ -140,9 +140,9 @@ class Display(object):
             choice = self.confirm_box.cur_item
             yes = self.confirm_box.TOPINDEX
             if choice == yes:
-                self.selected_stat.upgrade()
-                self.engine.audio.play_sound(SFX.scroll)
+                self.engine.audio.play_sound(SFX.menu_select)
                 self.cur_hero.exp.rem -= self.xp_cost
+                self.selected_stat.upgrade()
                 self._init_boxes()
             else:
                 self.engine.audio.play_sound(SFX.menu_select)
@@ -325,7 +325,7 @@ class Display(object):
                     self.confirm_box = ConfirmBox(self.engine.gamestate, self.engine.audio, text)
                     self.engine.gamestate.push(self.confirm_box)
                 else:
-                    self.engine.audio.play_sound(SFX.cancel)
+                    self.engine.audio.play_sound(SFX.menu_cancel)
                     push_object = MessageBox(self.engine.gamestate, text)
                     self.engine.gamestate.push(push_object)
                     self._reset_vars()

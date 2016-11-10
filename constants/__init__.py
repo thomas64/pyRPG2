@@ -292,11 +292,11 @@ class SFX(enum.Enum):
     menu_switch = 1
     menu_select = 2
     menu_error = 3
-    step_grass = 4
-    step_stone = 5
-    step_wood = 6
-    step_carpet = 7
-    cancel = 8
+    menu_cancel = 4
+    step_grass = 5
+    step_stone = 6
+    step_wood = 7
+    step_carpet = 8
     coins = 9
     scroll = 10
     chest = 11

@@ -109,7 +109,9 @@ class Intelligence(Stat):
         super().__init__(StatType.int.value, StatType.int.name, 30, 0.12, quantity)
         self.DESC = ("Dit is een ",
                      "test.",
-                     "intelligence")
+                     "intelligence",
+                     " ",
+                     "XP Cost: {}".format(self.xp_cost))
 
 
 class Willpower(Stat):
