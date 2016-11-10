@@ -7,8 +7,10 @@ import pygame
 
 from components import Button
 from components import ConfirmBox
+from components import MessageBox
 from constants import GameState
 from constants import Keys
+from constants import SFX
 
 from .herobox import HeroBox
 from .infobox import InfoBox
@@ -84,6 +86,8 @@ class Display(object):
         self.leave_box = None
         self.party_changed = False
 
+        self._reset_vars()
+
     def _init_buttons(self):
         bg_width = self.background.get_width()
         button_c = Button(BTNWIDTH, BTNHEIGHT, (bg_width + CLOSEX, CLOSEY), CLOSELBL, Keys.Exit.value)
@@ -102,6 +106,12 @@ class Display(object):
         self.inventory_box = InventoryBox((INVBOXX, INVBOXY),  INVBOXW,  INVBOXH)
         self.pouch_box = PouchBox((PCHBOXX,         PCHBOXY),  PCHBOXW,  PCHBOXH)
         self.spells_box = SpellsBox((SPELBOXX,      SPELBOXY), SPELBOXW, SPELBOXH)
+
+    def _reset_vars(self):
+        self.upgrade_click = None
+        self.selected_stat = None
+        self.xp_cost = 0
+        self.confirm_box = None
 
     def on_enter(self):
         """
@@ -124,6 +134,20 @@ class Display(object):
                 self._init_boxes()
                 self.party_changed = True
             self.leave_box = None
+
+        # Als de upgrade stat confirmbox in beeld is geweest.
+        elif self.upgrade_click:
+            choice = self.confirm_box.cur_item
+            yes = self.confirm_box.TOPINDEX
+            if choice == yes:
+                self.selected_stat.upgrade()
+                self.engine.audio.play_sound(SFX.scroll)
+                self.cur_hero.exp.rem -= self.xp_cost
+                self._init_boxes()
+            else:
+                self.engine.audio.play_sound(SFX.menu_select)
+
+            self._reset_vars()
 
     def on_exit(self):
         """
@@ -162,6 +186,10 @@ class Display(object):
 
             if event.button == Keys.Leftclick.value:
 
+                # als er op een statsbox item geklikt wordt
+                if self._handle_stat_box_click(event):
+                    return
+
                 # als de clickbox er is en er wordt buiten geklikt, laat hem dan verdwijnen.
                 if self.invclick_box and not self.invclick_box.rect.collidepoint(event.pos):
                     self.invclick_box = None
@@ -171,6 +199,7 @@ class Display(object):
                         self.invclick_box = None
                     return  # anders vangt hij ook nog andere clicks hieronder in deze methode af
 
+                # als er op een herobox wordt geklikt of het kruisje daarvan.
                 for hero_box in self.hero_boxes:
                     self.hc, leave_party = hero_box.mouse_click(event, self.hc)
                     if leave_party:
@@ -274,6 +303,34 @@ class Display(object):
 
         # name2 = self.largefont.render(cur_hero.NAM, True, FONTCOLOR)   = voorbeeld van hoe een naam buiten een herobox
         # name2_rect = self.screen.blit(name2, (500, 300))
+
+    def _handle_stat_box_click(self, event):
+        """
+        ...
+        :return:
+        """
+        if self.stats_box.rect.collidepoint(event.pos):
+            self.upgrade_click, self.selected_stat = self.stats_box.mouse_click(event)
+            if self.upgrade_click:
+                self.xp_cost = self.selected_stat.xp_cost
+                success, text = self.selected_stat.is_able_to_upgrade(self.cur_hero.exp.rem)
+                if success:
+                    self.engine.audio.play_sound(SFX.menu_select)
+                    text = ["You have {} XP Remaining.".format(self.cur_hero.exp.rem),
+                            "Are you sure you wish to train",
+                            "the stat {} for {} XP?".format(self.selected_stat.NAM, self.xp_cost),
+                            "",
+                            "Yes",
+                            "No"]
+                    self.confirm_box = ConfirmBox(self.engine.gamestate, self.engine.audio, text)
+                    self.engine.gamestate.push(self.confirm_box)
+                else:
+                    self.engine.audio.play_sound(SFX.cancel)
+                    push_object = MessageBox(self.engine.gamestate, text)
+                    self.engine.gamestate.push(push_object)
+                    self._reset_vars()
+            return True
+        return False
 
     def _previous(self):
         self.hc -= 1

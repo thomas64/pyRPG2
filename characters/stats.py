@@ -30,6 +30,35 @@ class Stat(object):
         self.ext = 0                    # extra: wat geeft equipment item voor pos/neg extra
 
     @property
+    def xp_cost(self):
+        """
+        ...
+        :return:
+        """
+        return round(self.UPG * ((self.qty + 1)**2))
+
+    def is_able_to_upgrade(self, xp_amount):
+        """
+        ...
+        :return:
+        """
+        if self.qty >= self.MAX:
+            return False, ["You cannot train {} any further.".format(self.NAM)]
+
+        elif self.xp_cost > xp_amount:
+            return False, ["You need {} more XP to".format(self.xp_cost - xp_amount),
+                           "train {}.".format(self.NAM)]
+        else:
+            return True, None
+
+    def upgrade(self):
+        """
+        ...
+        :return:
+        """
+        self.qty += 1
+
+    @property
     def tot(self):
         """
         self.tot = self.qty + self.ext
@@ -77,7 +106,7 @@ class Intelligence(Stat):
     ...
     """
     def __init__(self, quantity):
-        super().__init__(StatType.int.value, StatType.int.name, 30, 12, quantity)
+        super().__init__(StatType.int.value, StatType.int.name, 30, 0.12, quantity)
         self.DESC = ("Dit is een ",
                      "test.",
                      "intelligence")
@@ -88,7 +117,7 @@ class Willpower(Stat):
     ...
     """
     def __init__(self, quantity):
-        super().__init__(StatType.wil.value, StatType.wil.name, 30, 12, quantity)
+        super().__init__(StatType.wil.value, StatType.wil.name, 30, 0.12, quantity)
         self.DESC = ("Dit is een ",
                      "test.",
                      "willpower")
@@ -99,7 +128,7 @@ class Dexterity(Stat):
     ...
     """
     def __init__(self, quantity):
-        super().__init__(StatType.dex.value, StatType.dex.name, 30, 24, quantity)
+        super().__init__(StatType.dex.value, StatType.dex.name, 30, 0.24, quantity)
         self.DESC = ("Dit is een ",
                      "test.",
                      "Dexterity")
@@ -110,7 +139,7 @@ class Agility(Stat):
     ...
     """
     def __init__(self, quantity):
-        super().__init__(StatType.agi.value, StatType.agi.name, 30, 24, quantity)
+        super().__init__(StatType.agi.value, StatType.agi.name, 30, 0.24, quantity)
         self.DESC = ("Dit is een ",
                      "test.",
                      "Agility")
@@ -121,11 +150,19 @@ class Endurance(Stat):
     ...
     """
     def __init__(self, quantity):
-        super().__init__(StatType.edu.value, StatType.edu.name, 40, 12, quantity)
+        super().__init__(StatType.edu.value, StatType.edu.name, 40, 0.12, quantity)
         self.cur = quantity             # current: gaat af wanneer er bijv schade is (sta, edu, lev)
         self.DESC = ("Dit is een ",
                      "test.",
                      "Endurance")
+
+    def upgrade(self):
+        """
+        ...
+        :return:
+        """
+        self.qty += 1
+        self.cur += 1
 
 
 class Strength(Stat):
@@ -133,7 +170,7 @@ class Strength(Stat):
     ...
     """
     def __init__(self, quantity):
-        super().__init__(StatType.str.value, StatType.str.name, 30, 12, quantity)
+        super().__init__(StatType.str.value, StatType.str.name, 30, 0.12, quantity)
         self.DESC = ("Dit is een ",
                      "test.",
                      "Strength")
@@ -144,8 +181,16 @@ class Stamina(Stat):
     ...
     """
     def __init__(self, quantity):
-        super().__init__(StatType.sta.value, StatType.sta.name, 90, 4, quantity)
+        super().__init__(StatType.sta.value, StatType.sta.name, 90, 0.04, quantity)
         self.cur = quantity             # current: gaat af wanneer er bijv schade is (sta, edu, lev)
         self.DESC = ("Dit is een ",
                      "test.",
                      "Stamina")
+
+    def upgrade(self):
+        """
+        ...
+        :return:
+        """
+        self.qty += 1
+        self.cur += 1

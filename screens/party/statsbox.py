@@ -33,6 +33,18 @@ class StatsBox(BaseBox):
 
         self.title = self.largefont.render(TITLE, True, self.fontcolor1).convert_alpha()
 
+    def mouse_click(self, event):
+        """
+        Als je klikt op een item in de uit row[3] geregistreerde rects.
+        :param event: pygame.MOUSEBUTTONDOWN uit partyscreen
+        :return: row[6] is de kolom met het object. alleen de 7 base stats bevatten een row[6]
+        """
+        for index, row in enumerate(self.table_data):
+            if index in range(7):  # loopt hiermee dus van 0 tot 6
+                if row[3].collidepoint(event.pos):
+                    return True, row[6]
+        return False, None
+
     def update(self, hero, hovered_equipment_item):
         """
         Update eerst alle data.
@@ -74,8 +86,8 @@ class StatsBox(BaseBox):
         # voeg ook de 7 stats aan de table_data toe
         for i, stat in enumerate(hero.stats_tuple):
             preview_value = self._get_difference(hero, hovered_equipment_item, stat.RAW)
-            #                           row[0],          row[1],       row[2], row[3], row[4],       row[5]
-            self.table_data.insert(i, [stat.NAM+" :", str(stat.qty), stat.ext, None, stat.DESC, preview_value])
+            #                           row[0],          row[1],       row[2], row[3], row[4],       row[5],   row[6]
+            self.table_data.insert(i, [stat.NAM+" :", str(stat.qty), stat.ext, None, stat.DESC, preview_value, stat])
 
         # vul de vierde lege kolom. hierin staan de rects van de eerste kolom. rect is voor muisklik.
         for index, row in enumerate(self.table_data):
