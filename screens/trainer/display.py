@@ -3,12 +3,16 @@
 class: Display
 """
 
+import pygame
+
 from database import TrainerDatabase
 
 import screens.school.display as scl
 from .knownbox import KnownBox
 from .learnbox import LearnBox
 
+FONTCOLOR = pygame.Color("black")
+LEARNTITLE = "Train"
 OBJECTDATABASE = TrainerDatabase
 OBJECTTYPE = "skill"
 
@@ -19,6 +23,8 @@ class Display(scl.Display):
     """
     def __init__(self, engine, schooltype_list, face):
         super().__init__(engine, schooltype_list, face)
+
+        self.learn_title = self.largefont.render(LEARNTITLE, True, FONTCOLOR).convert_alpha()
 
         self.object_type = OBJECTTYPE
 
@@ -41,4 +47,4 @@ class Display(scl.Display):
         self.selected_spell.upgrade()
 
     def _handle_learn_box_click2(self):
-        return self.selected_spell.is_able_to_learn(self.xp_amount, self.gold_amount)
+        return self.selected_spell.is_able_to_train(self.xp_amount, self.gold_amount)

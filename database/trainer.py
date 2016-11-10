@@ -27,9 +27,9 @@ class TrainerDatabase(enum.Enum):
         """..."""
         return ("Good day sir. Welcome to my academy.",
                 "In the 'Known' box are all the skills you",
-                "already have learned.  And in the",
-                "'Learn' box are all the skills that I can teach.",
-                "Click once on a selected item to learn a skill.",
+                "already have been trained in.  And in",
+                "the 'Train' box are all the skills that I can train.",
+                "Click once on a selected item to train a skill.",
                 "You can scroll through the lists with your mouse-",
                 "wheel if the list is longer than what you can see.",
                 "Below here, all your party members are shown.",

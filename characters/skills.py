@@ -63,21 +63,21 @@ class Skill(object):
         return xp_for_next_level
         # todo, loremaster skill gebruiken voor 'korting'
 
-    def is_able_to_learn(self, xp_amount, gold_amount):
+    def is_able_to_train(self, xp_amount, gold_amount):
         """
         ...
         :return:
         """
         if self.qty == -1:
-            return False, ["You cannot learn {}.".format(self.NAM)]
+            return False, ["You cannot train {}.".format(self.NAM)]
         elif self.qty >= self.MAXIMUM:
-            return False, ["You cannot learn {} any further.".format(self.NAM)]
+            return False, ["You cannot train {} any further.".format(self.NAM)]
         elif self.xp_cost > xp_amount:
             return False, ["You need {} more XP to".format(self.xp_cost - xp_amount),
-                           "learn {}.".format(self.NAM)]
+                           "train {}.".format(self.NAM)]
         elif self.gold_cost > gold_amount:
             return False, ["You need {} more gold to".format(self.gold_cost - gold_amount),
-                           "learn {}.".format(self.NAM)]
+                           "train {}.".format(self.NAM)]
         else:
             return True, None
 
