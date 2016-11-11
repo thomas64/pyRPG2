@@ -8,6 +8,8 @@ import os
 import pygame
 
 LINECOLOR = pygame.Color("black")
+SELECTCOLOR = pygame.Color("red")
+LINETHICKNESS = 1
 PATH = 'resources/sprites/icons/shop/'
 
 
@@ -22,7 +24,7 @@ class Selector(pygame.sprite.Sprite):
 
         # hij komt binnen met een hoofdletter van de enum, maar de bestandsnaam heeft een kleine letter
         self.image = self._load_selected_image(PATH, shop_type.value.lower())
-        pygame.draw.rect(self.image, LINECOLOR, self.image.get_rect(), 1)
+        pygame.draw.rect(self.image, LINECOLOR, self.image.get_rect(), LINETHICKNESS)
         self.rect = self.image.get_rect()
         self.rect.topleft = x, y
 
@@ -43,3 +45,12 @@ class Selector(pygame.sprite.Sprite):
         """
         if self.rect.collidepoint(event.pos):
             return self.shop_type
+
+    def update(self, shop_type):
+        """
+        ...
+        """
+        if shop_type == self.shop_type:
+            pygame.draw.rect(self.image, SELECTCOLOR, self.image.get_rect(), LINETHICKNESS)
+        else:
+            pygame.draw.rect(self.image, LINECOLOR, self.image.get_rect(), LINETHICKNESS)

@@ -6,7 +6,9 @@ class: BuyBox
 import pygame
 
 from components import ListBox
+from constants import EquipmentType
 from inventoryitems import EquipmentItem
+from inventoryitems import PouchItem
 
 COLUMN1X = 0
 COLUMN2X = 34
@@ -45,16 +47,30 @@ class BuyBox(ListBox):
     def _fill_table_data(self, equipment_database):
 
         for equipment_item in equipment_database.values():
-            if equipment_item['shp']:
-                equipment_item_obj = EquipmentItem(**equipment_item)
-                equipment_item_spr = pygame.image.load(equipment_item_obj.SPR).subsurface(
-                    equipment_item_obj.COL, equipment_item_obj.ROW, self.subsurw, self.subsurh).convert_alpha()
-                equipment_item_nam = equipment_item_obj.NAM
-                equipment_item_val = str(round(equipment_item_obj.VAL - ((equipment_item_obj.VAL / 100) * self.sale)))
+
+            # speciaal alleen voor pouchitems
+            if equipment_item['typ'] == EquipmentType.itm:
+
+                pouch_item_obj = PouchItem(**equipment_item)
+                pouch_item_spr = pygame.image.load(pouch_item_obj.SPR).convert_alpha()
+                pouch_item_nam = pouch_item_obj.NAM
+                pouch_item_val = str(round(pouch_item_obj.VAL - ((pouch_item_obj.VAL / 100) * self.sale)))
                 self.table_data.append(
-                    # row[0],                   row[1],         row[2],         row[3],     row[4]
-                    [equipment_item_spr, equipment_item_nam, equipment_item_val, None, equipment_item_obj]
+                    # row[0],            row[1],         row[2],    row[3],    row[4]
+                    [pouch_item_spr, pouch_item_nam, pouch_item_val, None, pouch_item_obj]
                 )
+
+            else:
+                if equipment_item['shp']:
+                    equipment_item_obj = EquipmentItem(**equipment_item)
+                    equipment_item_spr = pygame.image.load(equipment_item_obj.SPR).subsurface(
+                        equipment_item_obj.COL, equipment_item_obj.ROW, self.subsurw, self.subsurh).convert_alpha()
+                    equipment_item_nam = equipment_item_obj.NAM
+                    equipment_item_val = str(round(equipment_item_obj.VAL - ((equipment_item_obj.VAL / 100) * self.sale)))
+                    self.table_data.append(
+                        # row[0],                   row[1],         row[2],         row[3],     row[4]
+                        [equipment_item_spr, equipment_item_nam, equipment_item_val, None, equipment_item_obj]
+                    )
 
     def _setup_table_view(self):
         """

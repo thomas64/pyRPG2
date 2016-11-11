@@ -6,6 +6,8 @@ class: SellBox
 import pygame
 
 from components import ListBox
+from constants import EquipmentType
+
 
 COLUMN1X = 0
 COLUMN2X = 34
@@ -48,53 +50,72 @@ class SellBox(ListBox):
 
         black_spr = pygame.image.load(self.transp).convert_alpha()
 
-        # de rijen van equipment van hero's
-        for hero in party.values():
-            # haal de equipment item op uit het type
-            equipment_item = hero.get_equipped_item_of_type(equipment_type)
-            # "if equipment_item" is voor sellbox, bijv bij sword dan geeft iemand met een pole None terug en
-            # dan werkt .is_not_empty() niet.
-            if equipment_item and equipment_item.is_not_empty():
-                # laad de hero subsprite
-                hero_spr = pygame.image.load(hero.SPR).subsurface(32, 0, self.subsurw, self.subsurh).convert_alpha()
-                # laad de item subsprite
+        if equipment_type == EquipmentType.itm:
+            # inventory is hier pouch
+            for pouch_item_obj in inventory.values():
+                # party is hier shopdatabase
+                for pouch_item_dict in party.values():
+                    if pouch_item_obj.NAM == pouch_item_dict['nam']:
+                        pouch_item_spr = pygame.image.load(pouch_item_obj.SPR).convert_alpha()
+                        pouch_item_nam = pouch_item_obj.NAM
+                        pouch_item_val = str(round(pouch_item_obj.VAL / 2 + ((pouch_item_obj.VAL / 200) * self.sale)))
+                        self.table_data.append(
+                            # row[0],       row[1],         row[2],             row[3],             row[4]
+                            [black_spr, pouch_item_spr, str(pouch_item_obj.qty), pouch_item_nam, pouch_item_val,
+                             # row[5],      row[6], [7]
+                             pouch_item_obj, None,  ""]
+                        )
+                        break
+
+        else:
+
+            # de rijen van equipment van hero's
+            for hero in party.values():
+                # haal de equipment item op uit het type
+                equipment_item = hero.get_equipped_item_of_type(equipment_type)
+                # "if equipment_item" is voor sellbox, bijv bij sword dan geeft iemand met een pole None terug en
+                # dan werkt .is_not_empty() niet.
+                if equipment_item and equipment_item.is_not_empty():
+                    # laad de hero subsprite
+                    hero_spr = pygame.image.load(hero.SPR).subsurface(32, 0, self.subsurw, self.subsurh).convert_alpha()
+                    # laad de item subsprite
+                    equipment_item_spr = pygame.image.load(equipment_item.SPR).subsurface(
+                        equipment_item.COL, equipment_item.ROW, self.subsurw, self.subsurh).convert_alpha()
+                    # als een equipment item een skill waarde heeft, zoals eigenlijk alleen bij wapens
+                    if equipment_item.get_value_of('SKL'):
+                        # zet dat dan voor de naam
+                        equipment_item_nam = "[" + equipment_item.SKL.value + "] " + equipment_item.NAM
+                        # maar bij een schild niet, want die heeft ook een skill waarde, maar niet om zichtbaar te maken
+                        if "Shield" in equipment_item_nam:
+                            equipment_item_nam = equipment_item.NAM
+                    else:
+                        # en anders gewoon de naam
+                        equipment_item_nam = equipment_item.NAM
+                    equipment_item_val = str(round(equipment_item.VAL / 2 + ((equipment_item.VAL / 200) * self.sale)))
+                    self.table_data.append(
+                        # row[0],       row[1],       row[2],     row[3],             row[4]
+                        [hero_spr, equipment_item_spr, "1", equipment_item_nam, equipment_item_val,
+                            # row[5],   row[6], [7]
+                         equipment_item, None, "X"]
+                    )
+
+            # de rijen van equipment uit inventory.
+            for equipment_item in inventory.get_all_equipment_items_of_type(equipment_type):
                 equipment_item_spr = pygame.image.load(equipment_item.SPR).subsurface(
                     equipment_item.COL, equipment_item.ROW, self.subsurw, self.subsurh).convert_alpha()
-                # als een equipment item een skill waarde heeft, zoals eigenlijk alleen bij wapens
                 if equipment_item.get_value_of('SKL'):
-                    # zet dat dan voor de naam
                     equipment_item_nam = "[" + equipment_item.SKL.value + "] " + equipment_item.NAM
-                    # maar bij een schild niet, want die heeft ook een skill waarde, maar niet om zichtbaar te maken
                     if "Shield" in equipment_item_nam:
                         equipment_item_nam = equipment_item.NAM
                 else:
-                    # en anders gewoon de naam
                     equipment_item_nam = equipment_item.NAM
                 equipment_item_val = str(round(equipment_item.VAL / 2 + ((equipment_item.VAL / 200) * self.sale)))
                 self.table_data.append(
-                    # row[0],       row[1],       row[2],     row[3],             row[4]
-                    [hero_spr, equipment_item_spr, "1", equipment_item_nam, equipment_item_val,
+                    # row[0],        row[1],            row[2],                     row[3],           row[4]
+                    [black_spr, equipment_item_spr, str(equipment_item.qty), equipment_item_nam, equipment_item_val,
                         # row[5],   row[6], [7]
-                     equipment_item, None, "X"]
+                     equipment_item, None, ""]
                 )
-
-        # de rijen van equipment uit inventory.
-        for equipment_item in inventory.get_all_equipment_items_of_type(equipment_type):
-            equipment_item_spr = pygame.image.load(equipment_item.SPR).subsurface(
-                equipment_item.COL, equipment_item.ROW, self.subsurw, self.subsurh).convert_alpha()
-            if equipment_item.get_value_of('SKL'):
-                equipment_item_nam = "[" + equipment_item.SKL.value + "] " + equipment_item.NAM
-                if "Shield" in equipment_item_nam:
-                    equipment_item_nam = equipment_item.NAM
-            else:
-                equipment_item_nam = equipment_item.NAM
-            equipment_item_val = str(round(equipment_item.VAL / 2 + ((equipment_item.VAL / 200) * self.sale)))
-            self.table_data.append(
-                # row[0],        row[1],            row[2],                     row[3],           row[4]
-                [black_spr, equipment_item_spr, str(equipment_item.qty), equipment_item_nam, equipment_item_val,
-                    # row[5],   row[6], [7]
-                 equipment_item, None, ""]
-            )
 
     def _setup_table_view(self):
         """
@@ -121,7 +142,7 @@ class SellBox(ListBox):
                 quantity = int(row[2])
                 value = int(row[4])
 
-                if row[7] != "X":       # verschil tussen heroes en equipment
+                if row[7] != "X":       # verschil tussen heroes en equipment/pouch
                     return True, selected_item, quantity, value
                 else:
                     return True, None,          None,     None

@@ -15,6 +15,7 @@ from components import Transition
 from constants import GameState
 from constants import Keys
 from constants import SFX
+from constants import EquipmentType
 from constants import WeaponType
 from database import PouchItemDatabase
 from database import ShopDatabase
@@ -68,9 +69,9 @@ INFOBOXPOSY = 6/8
 GOLDTITLEPOSX = 1/16
 GOLDTITLEPOSY = 11/16
 
-SELECTORPOSX = 1/16
-SELECTORPOSY = 10/16
-SELECTORWIDTH = 31
+SELECTORPOSX = 2/32
+SELECTORPOSY = 20/32
+SELECTORWIDTH = 36
 
 SHOPTITLEPOSX = 1/16
 
@@ -87,7 +88,8 @@ class Display(object):
     def __init__(self, engine, shoptype_list, shopmaterial_list, face):
         self.engine = engine
         # is een list van bijv: [EquipmentType.arm, WeaponType.swd]
-        self.shoptype_list = shoptype_list
+        self.shoptype_list = list(shoptype_list)  # het moet een kopie van de lijst zijn, niet de lijst zelf,
+        # vanwege de _init_selectors(), waar iets uit de lijst vervangen wordt. door een kopie te maken kan dat.
         self.shoptype = self.shoptype_list[0]
         self.material_list = shopmaterial_list
         self.databases = {}
@@ -120,14 +122,28 @@ class Display(object):
     def _init_selectors(self):
         self.selectors = pygame.sprite.Group()
         for index, shoptype in enumerate(self.shoptype_list):
-            self.databases[shoptype.name] = collections.OrderedDict()
-            if isinstance(shoptype, WeaponType):
+
+            if type(shoptype) == WeaponType:
+                self.databases[shoptype.name] = collections.OrderedDict()
                 from database import WeaponDatabase
                 # omdat alle wapens in wpn zitten moet de database opnieuw opgebouwd worden met alleen de juiste wapens
                 for weapon_itm in WeaponDatabase:
                     if weapon_itm.value['skl'] == shoptype:
                         self.databases[shoptype.name][weapon_itm.name] = weapon_itm.value
+
+            # pouchitems zijn een tuple, zie shopdatabase, equipmentitems zijn enum.
+            elif type(shoptype) == tuple:
+                self.databases[shoptype[0].name] = collections.OrderedDict()
+                for pouch_itm in shoptype[1]:
+                    self.databases[shoptype[0].name][pouch_itm.name] = pouch_itm.value
+
+                # maak van de tuple in de lijst een enum, net zoals de rest uit lijst.
+                self.shoptype_list[index] = shoptype[0]
+                # doe deze ook eventjes voor hieronder in de selectors.add()
+                shoptype = shoptype[0]
+
             else:
+                self.databases[shoptype.name] = collections.OrderedDict()
                 db_select = dict(acy='AccessoryDatabase', amu='AmuletDatabase', arm='ArmorDatabase', blt='BeltDatabase',
                                  bts='BootsDatabase', brc='BraceletDatabase', clk='CloakDatabase', glv='GlovesDatabase',
                                  hlm='HelmetDatabase', rng='RingDatabase', sld='ShieldDatabase')
@@ -167,8 +183,15 @@ class Display(object):
     def _init_sellbox(self):
         width = self.screen.get_width() * SELLBOXWIDTH
         height = self.screen.get_height() * SELLBOXHEIGHT + EXTRAHEIGHT
-        self.sellbox = SellBox(self._set_x(SELLBOXPOSX), self._set_y(SELLBOXPOSY), int(width), int(height),
-                               self.shoptype, self.engine.data.party, self.engine.data.inventory, self.sum_merchant)
+
+        # een speciale sellbox voor pouchitems, geeft de data.pouch en de shoptypedb mee, ipv data.inv en party.
+        if self.shoptype == EquipmentType.itm:
+            self.sellbox = SellBox(self._set_x(SELLBOXPOSX), self._set_y(SELLBOXPOSY), int(width), int(height),
+                                   self.shoptype, self.databases[self.shoptype.name], self.engine.data.pouch,
+                                   self.sum_merchant)
+        else:
+            self.sellbox = SellBox(self._set_x(SELLBOXPOSX), self._set_y(SELLBOXPOSY), int(width), int(height),
+                                   self.shoptype, self.engine.data.party, self.engine.data.inventory, self.sum_merchant)
 
     def _init_buybox(self):
         width = self.screen.get_width() * BUYBOXWIDTH
@@ -211,7 +234,11 @@ class Display(object):
                 if choice == yes:
                     gold = PouchItem(**PouchItemDatabase.gold.value)
                     if self.engine.data.pouch.remove(gold, self.value):     # deze if is eigenlijk overbodig maar
-                        self.engine.data.inventory.add_i(self.selected_item)  # van origineel zit hij erin. maar hij
+                        # als het een pouchitem is moet het in de pouch
+                        if self.selected_item.TYP == EquipmentType.itm:
+                            self.engine.data.pouch.add(self.selected_item)
+                        else:
+                            self.engine.data.inventory.add_i(self.selected_item)  # van origineel zit hij erin. maar hij
                         self.engine.audio.play_sound(SFX.coins)             # filtert nu al bij het klikken.
                         self._init_sellbox()
                 else:
@@ -225,7 +252,11 @@ class Display(object):
                     quantity = self.sel_quantity[selected_quantity]
 
                 if quantity:
-                    self.engine.data.inventory.remove_i(self.selected_item, quantity)
+                    # als het een pouchitem is moet het in de pouch
+                    if self.selected_item.TYP == EquipmentType.itm:
+                        self.engine.data.pouch.remove(self.selected_item, quantity)
+                    else:
+                        self.engine.data.inventory.remove_i(self.selected_item, quantity)
                     gold = PouchItem(**PouchItemDatabase.gold.value)
                     self.engine.data.pouch.add(gold, self.value * quantity)
                     self.engine.audio.play_sound(SFX.coins)
@@ -314,9 +345,12 @@ class Display(object):
 
     def update(self, dt):
         """
+        Update de selector border color.
         Update de gold quantity.
         :param dt: self.clock.tick(FPS)/1000.0
         """
+        for selector in self.selectors:
+            selector.update(self.shoptype)
         self.gold_amount = self.engine.data.pouch['gold'].qty
 
     def render(self):
@@ -339,6 +373,8 @@ class Display(object):
         shoptype_title = self.largefont.render(self.shoptype.value, True, FONTCOLOR).convert_alpha()
         self.screen.blit(shoptype_title, (self._set_x(SHOPTITLEPOSX), self._set_y(TITLEPOSY)))
 
+        self.selectors.draw(self.background)
+
         self.infobox.render(self.screen, self.info_label)
         self.buybox.render(self.screen)
         self.sellbox.render(self.screen)
@@ -356,7 +392,7 @@ class Display(object):
             self.engine.gamestate.push(self.confirm_box)
             return True
         elif self.buy_click and self.value > self.gold_amount:
-            self.engine.audio.play_sound(SFX.menu_error)
+            self.engine.audio.play_sound(SFX.menu_cancel)
             text = ["You need {} more gold to".format(self.value - self.gold_amount),
                     "buy that {}.".format(self.selected_item.NAM)]
             push_object = MessageBox(self.engine.gamestate, text)
@@ -369,16 +405,23 @@ class Display(object):
 
     def _handle_sell_box_click(self, event):
         self.sell_click, self.selected_item, self.tot_quantity, self.value = self.sellbox.mouse_click(event)
-        if self.sell_click and self.selected_item:
+        # als een item maar 0 gc oplevert.
+        if self.sell_click and self.value == 0:
+            self.engine.audio.play_sound(SFX.menu_cancel)
+            text = ["I do not want that item."]
+            push_object = MessageBox(self.engine.gamestate, text)
+            self.engine.gamestate.push(push_object)
+            self.sell_click = False
+            return True
+        elif self.sell_click and self.selected_item:
             self.engine.audio.play_sound(SFX.menu_select)
             text = self._fill_confirm_box_with_sell_text()
             self.confirm_box = ConfirmBox(self.engine.gamestate, self.engine.audio, text)
             self.engine.gamestate.push(self.confirm_box)
             return True
         elif self.sell_click and not self.selected_item:
-            self.engine.audio.play_sound(SFX.menu_error)
-            text = ["You can not sell it to me",
-                    "if you won't unequip it first."]
+            self.engine.audio.play_sound(SFX.menu_cancel)
+            text = ["You must unequip that to sell it."]
             push_object = MessageBox(self.engine.gamestate, text)
             self.engine.gamestate.push(push_object)
             self.sell_click = False

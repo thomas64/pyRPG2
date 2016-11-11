@@ -9,6 +9,8 @@ from constants import EquipmentType
 from constants import WeaponType
 from constants import ItemMaterial
 
+from .pouchitem import PouchItemDatabase as PiDb
+
 
 PATH = 'resources/sprites/npcs/'
 FEXT = 'f.png'
@@ -33,7 +35,8 @@ class ShopDatabase(enum.Enum):
     shop3 = dict(content=[EquipmentType.clk, EquipmentType.blt, EquipmentType.bts, EquipmentType.glv],
                  material=[ItemMaterial.ctn, ItemMaterial.ltr],
                  face=SHOP3+FEXT, sprite=SHOP3+SEXT)
-    shop4 = dict(content=[EquipmentType.amu, EquipmentType.rng, EquipmentType.brc, EquipmentType.acy],
+    shop4 = dict(content=[EquipmentType.amu, EquipmentType.rng, EquipmentType.brc, EquipmentType.acy,
+                          (EquipmentType.itm, [PiDb.herbs, PiDb.healing_potions])],
                  face=SHOP4+FEXT, sprite=SHOP4+SEXT)
 
     @staticmethod

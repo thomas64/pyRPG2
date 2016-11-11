@@ -78,6 +78,8 @@ class EquipmentType(enum.Enum):
     blt = "Belt"
     bts = "Boots"
     acy = "Accessory"
+    # vreemde eend, alleen voor shop
+    itm = "Pouch"
 
 
 class WeaponType(enum.Enum):

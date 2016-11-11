@@ -251,7 +251,7 @@ class Walking(Person):
         self.image = self.full_sprite.subsurface(self.full_sprite.get_clip())
 
     def _clip(self, clipped_rect, dt, make_sound):
-        if type(clipped_rect) is dict:
+        if type(clipped_rect) == dict:
             self.full_sprite.set_clip(pygame.Rect(self._get_frame(clipped_rect, dt, make_sound)))
         else:
             self.step_count = STEPSPEED         # zodat hij direct een stap animeert uit stilstand

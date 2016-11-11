@@ -15,3 +15,10 @@ class PouchItem(object):
             setattr(self, eqp_value_key.upper(), eqp_value_value)  # zet de dict van kwargs om in attributen
 
         self.RAW = self.NAM.strip().lower().replace(" ", "")  # als er een NAM is, geef hem een RAW
+
+    def show_info(self):
+        """
+        show_info is polymorph met EquipmentItem()
+        :return:
+        """
+        return self.DESC
