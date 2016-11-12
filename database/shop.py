@@ -15,10 +15,6 @@ from .pouchitem import PouchItemDatabase as PiDb
 PATH = 'resources/sprites/npcs/'
 FEXT = 'f.png'
 SEXT = 's.png'
-SHOP1 = PATH+'man01'
-SHOP2 = PATH+'man50'
-SHOP3 = PATH+'man52'
-SHOP4 = PATH+'woman51'
 
 
 class ShopDatabase(enum.Enum):
@@ -28,16 +24,17 @@ class ShopDatabase(enum.Enum):
 
     shop1 = dict(content=[WeaponType.swd, WeaponType.haf, WeaponType.pol, WeaponType.mis, WeaponType.thr],
                  material=[ItemMaterial.brz],
-                 face=SHOP1+FEXT, sprite=SHOP1+SEXT)
+                 name='man01')
     shop2 = dict(content=[EquipmentType.arm, EquipmentType.sld, EquipmentType.hlm],
                  material=[ItemMaterial.wdn, ItemMaterial.ltr],
-                 face=SHOP2+FEXT, sprite=SHOP2+SEXT)
+                 name='man50')
     shop3 = dict(content=[EquipmentType.clk, EquipmentType.blt, EquipmentType.bts, EquipmentType.glv],
                  material=[ItemMaterial.ctn, ItemMaterial.ltr],
-                 face=SHOP3+FEXT, sprite=SHOP3+SEXT)
-    shop4 = dict(content=[EquipmentType.amu, EquipmentType.rng, EquipmentType.brc, EquipmentType.acy,
-                          (EquipmentType.itm, [PiDb.herbs, PiDb.healing_potions])],
-                 face=SHOP4+FEXT, sprite=SHOP4+SEXT)
+                 name='man52')
+    shop4 = dict(content=[EquipmentType.amu, EquipmentType.rng, EquipmentType.brc],
+                 name='youngwoman04')
+    shop5 = dict(content=[EquipmentType.acy, (EquipmentType.itm, [PiDb.herbs, PiDb.healing_potions])],
+                 name='youngwoman03')
 
     @staticmethod
     def welcome_text():
@@ -52,3 +49,7 @@ class ShopDatabase(enum.Enum):
                 "Below here, you see one or multiple icons.",
                 "They represent different sections of my shop.",
                 "Click on it to enter one of those sections.")
+
+for shop in ShopDatabase:
+    shop.value['face'] = PATH+shop.value['name']+FEXT
+    shop.value['sprite'] = PATH+shop.value['name']+SEXT

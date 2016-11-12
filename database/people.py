@@ -68,7 +68,7 @@ class PeopleDatabase(enum.Enum):
     person60 = dict(name='woman52',      text=[["I wan't to go out, but my husband is always",
                                                 "so busy with his work. I'm bored."]])
     person61 = dict(name='man50',        text=[["Argh, so much work to do."]])
-    person62 = dict(name='woman53',      text=[["Sometimes these rooms are so dirty.",
+    person62 = dict(name='maid01',       text=[["Sometimes these rooms are so dirty.",
                                                "What are people doing? Do they eat in bed?"]])
     # invernia_house_left
     person63 = dict(name='man01',        text=[["What are you doing inside our home?"]])
@@ -81,14 +81,16 @@ class PeopleDatabase(enum.Enum):
     person69 = dict(name='boy02',        text=[["Are you here for mommy and daddy?"]])
     person70 = dict(name='girl02',       text=[["Are you here for mommy and daddy?"]])
     # invernia_house_big_1f
-    person71 = dict(name='man53',        text=[["It's a busy life, taking care for all these orphans."]])
-    person72 = dict(name='woman54',      text=[["It's a busy life, taking care for all these orphans."]])
+    person71 = dict(name='priest01',     text=[["It's a busy life, taking care for all these orphans."]])
+    person72 = dict(name='nun01',        text=[["It's a busy life, taking care for all these orphans."]])
     # invernia_house_big_2f
-    person73 = dict(name='woman53',      text=[["These people are so sweet, taking care for all those children."]])
+    person73 = dict(name='maid01',       text=[["These people are so sweet, taking care for all those children."]])
     # invernia_weapon_shop
     person74 = dict(name='youngman02',   quest=QuestDatabase.quest2)
     # invernia_armor_shop
     person75 = dict(name='youngwoman02', quest=QuestDatabase.quest2)
+    # invernia_school
+    person78 = dict(name='woman03',      text=[["The magic here is from another world!"]])
 
 for person in PeopleDatabase:
     person.value['face'] = PATH+person.value['name']+FEXT
