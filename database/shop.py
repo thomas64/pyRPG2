@@ -33,7 +33,9 @@ class ShopDatabase(enum.Enum):
                  name='man52')
     shop4 = dict(content=[EquipmentType.amu, EquipmentType.rng, EquipmentType.brc],
                  name='youngwoman04')
-    shop5 = dict(content=[EquipmentType.acy, (EquipmentType.itm, [PiDb.herbs, PiDb.healing_potions])],
+    shop5 = dict(content=[EquipmentType.acy, (EquipmentType.itm,
+                                              [itm for itm in PiDb if itm.value.get('val')])],
+                                              # [PiDb.herbs, PiDb.spices, PiDb.hlg_pot, PiDb.ant_pot, PiDb.fir_flk])],
                  name='youngwoman03')
 
     @staticmethod
