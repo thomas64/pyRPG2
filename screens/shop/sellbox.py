@@ -46,13 +46,12 @@ class SellBox(ListBox):
         self._update_rects_in_layer_rect_with_offset(self.row_nr_with_rect)
 
     def _fill_table_data(self, equipment_type, party, inventory):
-        # hieronder volgt bijna een exacte kopie van invclickbox
 
         black_spr = pygame.image.load(self.transp).convert_alpha()
 
         if equipment_type == EquipmentType.itm:
             # inventory is hier pouch
-            for pouch_item_obj in inventory.values():
+            for pouch_item_obj in inventory.get_all_pouch_items():
                 # party is hier shopdatabase
                 for pouch_item_dict in party.values():
                     if pouch_item_obj.NAM == pouch_item_dict['nam']:
@@ -68,9 +67,10 @@ class SellBox(ListBox):
                         break
 
         else:
+            # hieronder volgt bijna een exacte kopie van invclickbox
 
             # de rijen van equipment van hero's
-            for hero in party.values():
+            for hero in party.values():  # in invclickbox staat er geen values() omdat party dan een list is.
                 # haal de equipment item op uit het type
                 equipment_item = hero.get_equipped_item_of_type(equipment_type)
                 # "if equipment_item" is voor sellbox, bijv bij sword dan geeft iemand met een pole None terug en
