@@ -73,7 +73,7 @@ class QuestDatabase(enum.Enum):
                           "That may be noble, but he is not able to see the",
                           "difference between a normal person and an evil monster.",
                           "So he asks for proof?!?",
-                          "I'll give you an 'Proof of not being a monster', because",
+                          "I'll give you a 'Proof of not being a monster', because",
                           "you seem a normal person to me. *sigh*"]],
                         [[" "]],
                         [[" "]],

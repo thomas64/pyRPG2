@@ -5,8 +5,6 @@ class: StatsBox
 
 # todo, de extra benodigde kolommen bekijken in vb en implementeren. ook de kolommen uit pyRPG1.
 
-import pygame
-
 from constants import StatType as StTy
 from .basebox import BaseBox
 
@@ -19,6 +17,7 @@ COLUMNSY = 50
 ROWHEIGHT = 22
 
 TITLE = "Stats"
+TOTALCOLUMNS = (('text', COLUMN1X), ('text', COLUMN2X), ('text', COLUMN3X), ('text', COLUMN4X))
 
 
 class StatsBox(BaseBox):
@@ -30,6 +29,7 @@ class StatsBox(BaseBox):
 
         self.title = self.largefont.render(TITLE, True, self.fontcolor1).convert_alpha()
         self.rowheight = ROWHEIGHT
+        self.total_columns = TOTALCOLUMNS
         self.column1x = COLUMN1X
         self.columnsy = COLUMNSY
 
@@ -89,10 +89,6 @@ class StatsBox(BaseBox):
             #                           row[0],          row[1],       row[2], row[3], row[4],       row[5],   row[6]
             self.table_data.insert(i, [stat.NAM+" :", str(stat.qty), stat.ext, None, stat.DESC, preview_value, stat])
 
-        # vul de vierde lege kolom. hierin staan de rects van de eerste kolom. rect is voor muisklik.
-        for index, row in enumerate(self.table_data):
-            row[3] = self._create_rect_with_offset(index, row[0], COLUMN1X, COLUMNSY, ROWHEIGHT)
-
         # maak dan een nieuwe tabel aan met de tekst, maar dan gerendered.
         self.table_view = []
         for index, row in enumerate(self.table_data):
@@ -102,23 +98,11 @@ class StatsBox(BaseBox):
             self._set_color(row[2], self.table_view[index], 1)
             self._set_color(row[5], self.table_view[index], 2, row[0])  # dit is om weight te bepalen
 
-    def render(self, screen):
-        """
-        En teken dan al die data op de surface en die op de screen.
-        Let op: self.table_view bevat maar 3 kolommen in tegenstelling tot self.table_data met 5
-        :param screen: self.screen van partyscreen
-        """
-        self.surface.blit(self.background, (0, 0))
-        pygame.draw.rect(self.background, self.linecolor, self.surface.get_rect(), 1)
-
-        self.surface.blit(self.title, (self.title_x, self.title_y))
-        for index, row in enumerate(self.table_view):
-            self.surface.blit(row[0], (COLUMN1X, COLUMNSY + index * ROWHEIGHT))
-            self.surface.blit(row[1], (COLUMN2X, COLUMNSY + index * ROWHEIGHT))
-            self.surface.blit(row[2], (COLUMN3X, COLUMNSY + index * ROWHEIGHT))
-            self.surface.blit(row[3], (COLUMN4X, COLUMNSY + index * ROWHEIGHT))
-
-        screen.blit(self.surface, self.rect.topleft)
+        if self.run_once:
+            self.run_once = False
+            self._setup_scroll_layer()
+        # vul row[3] kolom. hierin staan de rects van row[1]. rect is voor muisklik.
+        self._update_rects_in_layer_rect_with_offset()
 
     @staticmethod
     def _desc(stat, ext_stat=None):

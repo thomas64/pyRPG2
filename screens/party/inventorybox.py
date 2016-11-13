@@ -8,6 +8,7 @@ import pygame.gfxdraw
 
 from .basebox import BaseBox
 
+BACKGROUNDCOLOR = pygame.Color("black")
 
 TITLE = "Inventory"
 STICKMANPATH = "resources/sprites/stickman.png"
@@ -36,6 +37,10 @@ class InventoryBox(BaseBox):
     """
     def __init__(self, position, width, height):
         super().__init__(position, width, height)
+
+        self.background = pygame.Surface(self.surface.get_size())
+        self.background.fill(BACKGROUNDCOLOR)
+        self.background = self.background.convert()
 
         self.title = self.largefont.render(TITLE, True, self.fontcolor1).convert_alpha()
         self.stickman = pygame.image.load(STICKMANPATH).convert()

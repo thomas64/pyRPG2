@@ -230,11 +230,10 @@ class Display(object):
             elif event.button in (Keys.Scrollup.value, Keys.Scrolldown.value):
                 if self.invclick_box and self.invclick_box.rect.collidepoint(event.pos):
                     self.invclick_box.mouse_scroll(event)
+                if self.spells_box.rect.collidepoint(event.pos):
+                    self.spells_box.mouse_scroll(event)
                 if self.pouch_box.rect.collidepoint(event.pos):
                     self.pouch_box.mouse_scroll(event)
-                # todo, scrollen voor spellsbox
-                # todo, render() polymorphen in basebox voor alle partyboxen (behalve inventorybox waarschijnlijk)
-                    # net zoals bij listbox is gedaan.
 
         elif event.type == pygame.KEYDOWN:
 

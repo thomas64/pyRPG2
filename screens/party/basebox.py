@@ -5,8 +5,8 @@ class: BaseBox
 
 import pygame
 
+from console import Console
 from constants import Keys
-
 
 BACKGROUNDCOLOR = pygame.Color("black")
 LINECOLOR = pygame.Color("white")
@@ -24,9 +24,13 @@ NEGCOLOR2 = pygame.Color("orangered")
 
 TITLEX, TITLEY = 7, 1
 SCROLLSPEED = 20
-BOTTOMSPACER = 10  # tegen bottom ghosting. deze maakt de layerheight net iets langer.
+BOTTOMSPACER = 20  # tegen bottom ghosting. deze maakt de layerheight net iets langer.
+ICONOFFSET = -6
 
 ROWFORRECTS = 3  # in alle party boxen zitten de rects in row[3]
+MOUSEHOVERWIDTH = 200
+
+TITLERECT = (1, 1, 327, 35)  # 327 = boxwidth - 2
 
 
 class BaseBox(object):
@@ -41,10 +45,6 @@ class BaseBox(object):
         self.rect = self.surface.get_rect()
         self.rect.topleft = position
 
-        self.background = pygame.Surface(self.surface.get_size())
-        self.background.fill(BACKGROUNDCOLOR)
-        self.background = self.background.convert()
-
         self.largefont = pygame.font.SysFont(FONT, LARGEFONTSIZE)
         self.normalfont = pygame.font.SysFont(FONT, NORMALFONTSIZE)
         self.fontcolor1 = FONTCOLOR1
@@ -54,12 +54,18 @@ class BaseBox(object):
 
         self.linecolor = LINECOLOR
         self.title_x, self.title_y = TITLEX, TITLEY
+        self.iconoffset = ICONOFFSET
+
+        self.title = None
         self.rowheight = None
+        self.total_columns = []
         self.column1x = None
         self.columnsy = None
 
         self.table_data = []
         self.table_view = []
+
+        self.run_once = True    # eenmalig voor de _setup_scroll_layer te doen voor de child classes.
 
     def _setup_scroll_layer(self):
         # stel de scroll layer in
@@ -71,7 +77,6 @@ class BaseBox(object):
         self.lay_rect = self.layer.get_rect()
         self.lay_rect.topleft = self.rect.topleft
 
-        # een tweede keer de background, maar nu alleen voor de scroll boxen.
         self.background = pygame.Surface((self.box_width, self.layer_height))
         self.background.fill(BACKGROUNDCOLOR)
         self.background = self.background.convert()
@@ -86,7 +91,7 @@ class BaseBox(object):
         for index, row in enumerate(self.table_data):
             row[ROWFORRECTS] = pygame.Rect(self.lay_rect.x + self.column1x,
                                            self.lay_rect.y + self.columnsy + index * self.rowheight,
-                                           self.box_width, self.rowheight+1)
+                                           MOUSEHOVERWIDTH, self.rowheight+1)
 
     def mouse_scroll(self, event):
         """
@@ -143,6 +148,7 @@ class BaseBox(object):
 
     def _create_rect_with_offset(self, index, text, columnxx, columnsy, rowheight):
         """
+        OP DIT MOMENT NIET MEER IN GEBRUIK! toen het scrollen van de boxen er was, is deze vervangen door update_rects()
         self.rect is de hele box zelf. Die heeft ook een position op het scherm, vandaar dat de position een soort
         offset moet krijgen hier.
         """
@@ -192,3 +198,32 @@ class BaseBox(object):
         elif value < 0:
             value = "(" + str(value) + ")"
             col.append(self.normalfont.render(value, True, negcolor).convert_alpha())
+
+    def render(self, screen):
+        """
+        Surface tekent layer, de rest gaat op de layer, en screen tekent de surface.
+        :param screen: self.screen van partyscreen
+        """
+        self.surface.blit(self.layer, (0, self.lay_rect.y - self.rect.y))
+        self.layer.blit(self.background, (0, 0))
+        pygame.draw.rect(self.surface, self.linecolor, self.surface.get_rect(), 1)
+
+        # zwarte background achter de titel. is voor scrollen.
+        pygame.draw.rect(self.surface, BACKGROUNDCOLOR, pygame.Rect(TITLERECT))
+        self.surface.blit(self.title, (self.title_x, self.title_y))
+
+        for index, row in enumerate(self.table_view):
+            for row_nr, columnx in enumerate(self.total_columns):
+                if columnx[0] == 'icon':
+                    self.layer.blit(
+                        row[row_nr],
+                        (columnx[1], self.columnsy + self.iconoffset + index * self.rowheight))
+                elif columnx[0] == 'text':
+                    self.layer.blit(
+                        row[row_nr],
+                        (columnx[1], self.columnsy + index * self.rowheight))
+                else:
+                    Console.error_unknown_column_key()
+                    raise KeyError
+
+        screen.blit(self.surface, self.rect.topleft)
