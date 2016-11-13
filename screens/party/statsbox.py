@@ -11,9 +11,6 @@ from constants import StatType as StTy
 from .basebox import BaseBox
 
 
-LINECOLOR = pygame.Color("white")
-
-TITLEX, TITLEY = 7, 1
 COLUMN1X = 50
 COLUMN2X = 160
 COLUMN3X = 200
@@ -32,6 +29,9 @@ class StatsBox(BaseBox):
         super().__init__(position, width, height)
 
         self.title = self.largefont.render(TITLE, True, self.fontcolor1).convert_alpha()
+        self.rowheight = ROWHEIGHT
+        self.column1x = COLUMN1X
+        self.columnsy = COLUMNSY
 
     def mouse_click(self, event):
         """
@@ -109,9 +109,9 @@ class StatsBox(BaseBox):
         :param screen: self.screen van partyscreen
         """
         self.surface.blit(self.background, (0, 0))
-        pygame.draw.rect(self.background, LINECOLOR, self.surface.get_rect(), 1)
+        pygame.draw.rect(self.background, self.linecolor, self.surface.get_rect(), 1)
 
-        self.surface.blit(self.title, (TITLEX, TITLEY))
+        self.surface.blit(self.title, (self.title_x, self.title_y))
         for index, row in enumerate(self.table_view):
             self.surface.blit(row[0], (COLUMN1X, COLUMNSY + index * ROWHEIGHT))
             self.surface.blit(row[1], (COLUMN2X, COLUMNSY + index * ROWHEIGHT))

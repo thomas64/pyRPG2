@@ -9,10 +9,6 @@ import pygame.gfxdraw
 from .basebox import BaseBox
 
 
-LINECOLOR = pygame.Color("white")
-
-TITLEX, TITLEY = 7, 1
-
 TITLE = "Inventory"
 STICKMANPATH = "resources/sprites/stickman.png"
 STICKMANPOS = 35
@@ -105,9 +101,9 @@ class InventoryBox(BaseBox):
         :param screen: self.screen van partyscreen
         """
         self.surface.blit(self.background, (0, 0))
-        pygame.draw.rect(self.background, LINECOLOR, self.surface.get_rect(), 1)
+        pygame.draw.rect(self.background, self.linecolor, self.surface.get_rect(), 1)
 
-        self.surface.blit(self.title, (TITLEX, TITLEY))
+        self.surface.blit(self.title, (self.title_x, self.title_y))
         # positioneer stickman in het midden
         self.surface.blit(self.stickman, ((self.surface.get_width() - self.stickman.get_width()) / 2, STICKMANPOS))
 
@@ -115,7 +111,7 @@ class InventoryBox(BaseBox):
             # teken een doorzichtige box
             pygame.gfxdraw.box(self.surface, BOX, EQUIPMENTITEMBOXCOLOR)
             # teken het lijntje eromheen
-            pygame.draw.rect(self.surface, LINECOLOR, BOX, 1)
+            pygame.draw.rect(self.surface, self.linecolor, BOX, 1)
             # teken de icon
             self.surface.blit(self.equipment_item_sprites[index], BOX)
 
