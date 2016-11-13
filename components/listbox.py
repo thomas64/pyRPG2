@@ -79,6 +79,10 @@ class ListBox(object):
         self.lay_rect = self.layer.get_rect()
         self.lay_rect.topleft = self.rect.topleft
 
+        self.background = pygame.Surface((self.box_width, self.layer_height))
+        self.background.fill(self.colorkey)
+        self.background = self.background.convert()
+
     def _update_rects_in_layer_rect_with_offset(self, row_nr):
         """
         Voeg de rects toe in row[6] van table_data waarmee gecorrespondeert kan worden met de muis bijvoorbeeld.

@@ -32,10 +32,6 @@ class LearnBox(ListBox):
         self._setup_table_view()
         self._setup_scroll_layer()
 
-        self.background = pygame.Surface((width, self.layer_height))
-        self.background.fill(self.colorkey)
-        self.background = self.background.convert()
-
         self.cur_item = None
 
         self.total_columns = TOTALCOLUMNS
