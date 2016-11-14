@@ -123,7 +123,9 @@ class Alchemist(Skill):
     def __init__(self, quantity):
         super().__init__(SkillType.alc.value, SkillType.alc.name, 12, quantity)
         self.DESC = "Allows the character to manufacture various potions out of Herbs, Spices and Gemstones. " \
-                    "A higher Alchemist rank means a higher chance to successfully create a potion."
+                    "A higher Alchemist rank means a wider variety of possible potions and a higher chance to " \
+                    "successfully create a potion. " \
+                    "Click on the Alchemist skill name in the party screen to open the potion manufacturing screen."
 
 
 class Diplomat(Skill):

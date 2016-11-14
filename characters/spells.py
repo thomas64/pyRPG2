@@ -282,6 +282,24 @@ class DragonFlames(Spell):
         # Gemstone
 
 
+class EarthSmite(Spell):
+    """..."""
+    def __init__(self, quantity):
+        super().__init__()
+        self.NAM = SpellType.ert_smt.value
+        self.RAW = SpellType.ert_smt.name
+        self.SRT = 135
+        self.SCL = SchoolType.elm
+        self.MIN = 4
+        self.UPG = 6
+        self.qty = quantity
+        self.COL = 288
+        self.ROW = 0
+        self.DESC = self.set_desc("The target of this spell is struck by a large chuck of earth. Only affects "
+                                  "targets of human size or smaller.")
+        # Gemstone
+
+
 class Fireball(Spell):
     """..."""
     def __init__(self, quantity):
@@ -316,6 +334,24 @@ class Immolation(Spell):
         self.DESC = self.set_desc("Fires a burst of flame at the target, who catches fire and takes 1-6 "
                                   "points of damage per round thereafter until the spell expires.")
         # Spice
+
+
+class Lightning(Spell):
+    """..."""
+    def __init__(self, quantity):
+        super().__init__()
+        self.NAM = SpellType.lng.value
+        self.RAW = SpellType.lng.name
+        self.SRT = 155
+        self.SCL = SchoolType.elm
+        self.MIN = 3
+        self.UPG = 4
+        self.qty = quantity
+        self.COL = 0
+        self.ROW = 96
+        self.DESC = self.set_desc("Targets of the spell are attacked by lightning.")
+
+        # Gemstone
 
 
 class RemovePoison(Spell):
@@ -388,6 +424,24 @@ class Banishing(Spell):
         # Gemstone
 
 
+class Brilliance(Spell):
+    """..."""
+    def __init__(self, quantity):
+        super().__init__()
+        self.NAM = SpellType.brl.value
+        self.RAW = SpellType.brl.name
+        self.SRT = 215
+        self.SCL = SchoolType.nmg
+        self.MIN = 2
+        self.UPG = 1.2
+        self.qty = quantity
+        self.COL = 160
+        self.ROW = 32
+        self.DESC = self.set_desc("Target gains 2 Intelligence per Rank of the spell. May only be cast "
+                                  "once on each target.")
+        # "Requires: Gemstone"
+
+
 class Endurance(Spell):
     """..."""
     def __init__(self, quantity):
@@ -421,6 +475,26 @@ class SenseAura(Spell):
         self.ROW = 32
         self.DESC = self.set_desc("Reveals a variety of information about the target: the higher the caster's rank in "
                                   "Sense Aura, the more information is revealed. May only be cast once on each target.")
+        # "Requires: Herb"
+
+
+class Stupidity(Spell):
+    """..."""
+    ICON = SPRITEPATH2
+
+    def __init__(self, quantity):
+        super().__init__()
+        self.NAM = SpellType.stp.value
+        self.RAW = SpellType.stp.name
+        self.SRT = 235
+        self.SCL = SchoolType.nmg
+        self.MIN = 2
+        self.UPG = 1.2
+        self.qty = quantity
+        self.COL = 32
+        self.ROW = 64
+        self.DESC = self.set_desc("Target loses 2 Intelligence per Rank of the spell. May only be cast once "
+                                  "on each target.")
         # "Requires: Herb"
 
 

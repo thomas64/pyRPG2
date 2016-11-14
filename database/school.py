@@ -18,7 +18,7 @@ class SchoolDatabase(enum.Enum):
     ...
     """
 
-    school1 = dict(content=[SchoolType.elm, SchoolType.nmg],
+    school1 = dict(content=[SchoolType.ntl, SchoolType.elm, SchoolType.nmg, SchoolType.ncy, SchoolType.str],
                    face=SCHOOL1+FEXT, sprite=SCHOOL1+SEXT)
 
     @staticmethod
