@@ -93,7 +93,7 @@ class Map(object):
         for nrect in tmx_data.get_layer_by_name(SOUNDS):
             self.sounds.append(NamedRect(nrect.name, self._pg_rect(nrect)))
         for obj in tmx_data.get_layer_by_name(STARTPOS):
-            self.start_pos.append(obj)
+            self.start_pos.append(Portal(obj.name, self._pg_rect(obj), name, obj.type, self._has_dir(obj, 'direction')))
         for obj in tmx_data.get_layer_by_name(PORTALS):
             self.portals.append(Portal(name, self._pg_rect(obj), obj.name, obj.type))
         for obj in tmx_data.get_layer_by_name(OBJECTS):
@@ -203,3 +203,36 @@ class Map(object):
         if hasattr(obj, attr):
             return Direction[obj.direction.title()]
         return None
+
+    def get_position(self, from_map_name, from_pos_nr):
+        """
+        :param from_map_name: de string naam van de kaart waarvan je vandaan komt
+        :param from_pos_nr: als er een nr in de portal zat waar je vandaan kwam, dan is dit het nr.
+        :return: een x en y punt.
+        """
+        for pos in self.start_pos:                      # kijk in de start_pos list van de map van alle start_possen,
+            if pos.from_name == from_map_name:          # welke komt overeen met 'start_game' of de naam van de vorige
+                if pos.to_nr:                           # map. als er ook een type is '1' of '9' is een to_nr waarde,
+                    if pos.to_nr == from_pos_nr:        # kijk dan of die overeen komt met to_nr van de portal waaruit
+                        return pos.rect.x, pos.rect.y   # je gezonden bent. neem dan die positie aan.
+                    else:                               # komt het nr niet overeen, dan moet ie nog komen,
+                        continue                        # zoek daarom door.
+                else:                                   # als er geen .type is, dan is er maar 1 warp en moet je die
+                    return pos.rect.x, pos.rect.y       # gewoon hebben. zet dan de x,y waarde op dié start_pos,
+        #                                               # maak van de string dus weer een point.
+
+    def get_direction(self, start_pos, last_direction):
+        """
+        Loop alle start_possen door.
+        Als er een start_pos is met een gedefinieerde direction, kijk dan of de huidige plek waar hij nu staat
+        overeen komt met de locatie van deze start_pos.
+        Als dat zo is geef dan die direction terug.
+        Anders de oude onaangepaste originele direction.
+        :param start_pos: de nieuwe x en y positie
+        :param last_direction: welke richting de character heen keek op het laatst op de vorige kaart.
+        :return: een Enum richtings positie.
+        """
+        for pos in self.start_pos:                                       # in een .tmx map kun je bij start_pos
+            if pos.direction and (pos.rect.x, pos.rect.y) == start_pos:  # een 'direction' property meegeven.
+                return pos.direction                                     # als dat een Direction Enum is dan
+        return last_direction                          # start de unit in de nieuw geladen map in die kijkrichting.

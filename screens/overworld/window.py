@@ -68,6 +68,7 @@ class Window(object):
         self.engine = engine
 
         self.prev_map_name = None
+        self.portal_to_nr = None
         self.group = None
         self.grid_sprite = None
         self.cbox_sprites = None
@@ -103,22 +104,10 @@ class Window(object):
         self.grid_sprite = None
         self.cbox_sprites = []
 
-        start_pos = self.engine.data.map_pos           # normaliter is map_pos een point, behalve bij het laden van een
-        start_dir = self.engine.data.map_dir           # map, dan is het een string. bv start_game of ersin_forest_centr
-
-        for pos in self.current_map.start_pos:         # kijk in de start_pos list van de map
-            if pos.name == start_pos:                  # van alle start_possen, welke komt overeen met 'start_game'
-                start_pos = pos.x, pos.y               # zet dan de x,y waarde op dié start_pos, maak van de string
-                break                                  # dus weer een point.
-            # maar het kan ook de '1' of '9' zijn van .to_nr, voor warpen op dezelfde map.
-            if pos.type == start_pos:                   # kijk dan niet naar de .name, maar naar de .type van de tmx.
-                start_pos = pos.x, pos.y
-                break
-
-        for pos in self.current_map.start_pos:                                   # in een .tmx map kun je bij start_pos
-            if getattr(pos, 'direction', None) and (pos.x, pos.y) == start_pos:  # een 'direction' property meegeven.
-                start_dir = Direction[pos.direction]                             # als dat een Direction Enum is dan
-                break                                   # dan start de unit in de nieuw geladen map in die kijkrichting.
+        # normaliter is map_pos een point, behalve bij het laden van een
+        # map, dan is het een string. bv start_game of ersin_forest_centr
+        start_pos = self.current_map.get_position(self.engine.data.map_pos, self.portal_to_nr)
+        start_dir = self.current_map.get_direction(start_pos, self.engine.data.map_dir)
 
         self.party_sprites = []
         self.party = list(self.engine.data.party.values())
@@ -430,11 +419,9 @@ class Window(object):
             portal_nr = self.party_sprites[0].rect.collidelist(self.current_map.portals)
             self.prev_map_name = self.current_map.portals[portal_nr].from_name
             self.engine.data.map_name = self.current_map.portals[portal_nr].to_name
-            # als de kaartnamen hetzelfde zijn, dus als hij op dezelfde map warpt, gebruik dan .to_nr
-            if self.prev_map_name == self.engine.data.map_name:
-                self.engine.data.map_pos = self.current_map.portals[portal_nr].to_nr
-            else:
-                self.engine.data.map_pos = self.prev_map_name       # zet de point om naar een string naam.
+            self.engine.data.map_pos = self.prev_map_name       # zet de point om naar een string naam.
+            # als er een .to_nr is, namelijk het obj.type van een portal, gebruik dan .to_nr voor lokatiebepaling
+            self.portal_to_nr = self.current_map.portals[portal_nr].to_nr
             self.load_map()
             self.engine.gamestate.push(Transition(self.engine.gamestate, full_screen=False))
 
