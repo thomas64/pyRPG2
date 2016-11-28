@@ -220,6 +220,8 @@ class Map(object):
                 else:                                   # als er geen .type is, dan is er maar 1 warp en moet je die
                     return pos.rect.x, pos.rect.y       # gewoon hebben. zet dan de x,y waarde op dié start_pos,
         #                                               # maak van de string dus weer een point.
+        return from_map_name                            # als het gelukt is, dat betekent dat from_map_name geen naam
+        #                                               # is maar al een point was, return dan gewoon deze point.
 
     def get_direction(self, start_pos, last_direction):
         """

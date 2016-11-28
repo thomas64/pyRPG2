@@ -38,24 +38,19 @@ class SpellsBox(BaseBox):
         """
         self.title = self.largefont.render(
                                     "{} {}".format(hero.scl.NAM.value, TITLE), True, self.fontcolor1).convert_alpha()
-
-        self.table_data = []
-        for spell in hero.scl.get_all_spells():
-            self.table_data.append(
-                # row[0],       row[1],           row[2],     row[3],  row[4],     row[5],    row[6]
-                [spell.ICON, spell.NAM + " :", str(spell.qty), None, spell.DESC, spell.COL, spell.ROW]
+        self.view_matrix = []
+        self.data_matrix = []
+        for index, spell in enumerate(hero.scl.get_all_spells()):
+            self.view_matrix.append(
+                [pygame.image.load(spell.ICON).subsurface(spell.COL, spell.ROW, 32, 32).convert(),
+                 self.normalfont.render(spell.NAM + " :", True, self._get_color(index)).convert_alpha(),
+                 self.normalfont.render(str(spell.qty), True, self.fontcolor1).convert_alpha()
+                 ]
             )
-
-        # maak dan een nieuwe tabel aan met de tekst en icons, maar dan gerendered.
-        self.table_view = []
-        for index, row in enumerate(self.table_data):
-            self.table_view.append(list())
-            self.table_view[index].append(pygame.image.load(row[0]).subsurface(row[5], row[6], 32, 32).convert())
-            self.table_view[index].append(self.normalfont.render(row[1], True, self._get_color(index)).convert_alpha())
-            self.table_view[index].append(self.normalfont.render(row[2], True, self.fontcolor1).convert_alpha())
+            self.data_matrix.append([spell, None])
 
         if self.run_once:
             self.run_once = False
             self._setup_scroll_layer()
-        # vul row[3] kolom. hierin staan de rects van row[1]. rect is voor muisklik.
+        # vul datamatrix[X][1]. hierin staan de rects van viewmatrix[X][1].NAM. rect is voor muisklik.
         self._update_rects_in_layer_rect_with_offset()

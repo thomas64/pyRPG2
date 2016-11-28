@@ -190,6 +190,9 @@ class Display(object):
                 if self._handle_stat_box_click(event):
                     return
 
+                if self._handle_skill_box_click(event):
+                    return
+
                 # als de clickbox er is en er wordt buiten geklikt, laat hem dan verdwijnen.
                 if self.invclick_box and not self.invclick_box.rect.collidepoint(event.pos):
                     self.invclick_box = None
@@ -335,6 +338,15 @@ class Display(object):
                     self._reset_vars()
             return True
         return False
+
+    def _handle_skill_box_click(self, event):
+        """
+        ...
+        :param event:
+        :return:
+        """
+        if self.skills_box.rect.collidepoint(event.pos):
+            self.skills_box.mouse_click(event)
 
     def _previous(self):
         self.hc -= 1

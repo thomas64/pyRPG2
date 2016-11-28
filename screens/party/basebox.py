@@ -27,7 +27,7 @@ SCROLLSPEED = 20
 BOTTOMSPACER = 20  # tegen bottom ghosting. deze maakt de layerheight net iets langer.
 ICONOFFSET = -6
 
-ROWFORRECTS = 3  # in alle party boxen zitten de rects in row[3]
+COLFORRECTS = 1  # in alle party boxen zitten de rects in data_list[X][1], behalve statsbox nog(!)
 MOUSEHOVERWIDTH = 200
 
 TITLERECT = (1, 1, 327, 35)  # 327 = boxwidth - 2
@@ -62,14 +62,14 @@ class BaseBox(object):
         self.column1x = None
         self.columnsy = None
 
-        self.table_data = []
-        self.table_view = []
+        self.view_matrix = []
+        self.data_matrix = []
 
         self.run_once = True    # eenmalig voor de _setup_scroll_layer te doen voor de child classes.
 
     def _setup_scroll_layer(self):
         # stel de scroll layer in
-        self.layer_height = BOTTOMSPACER + self.columnsy + len(self.table_view) * self.rowheight
+        self.layer_height = BOTTOMSPACER + self.columnsy + len(self.view_matrix) * self.rowheight
         if self.layer_height < self.box_height:
             self.layer_height = self.box_height
         self.layer = pygame.Surface((self.box_width, self.layer_height))
@@ -83,13 +83,13 @@ class BaseBox(object):
 
     def _update_rects_in_layer_rect_with_offset(self):
         """
-        Voeg de rects toe in row[3] van table_data waarmee gecorrespondeert kan worden met de muis bijvoorbeeld.
+        Voeg de rects toe in row[1] van data_matrix waarmee gecorrespondeert kan worden met de muis bijvoorbeeld.
         Deze rects zijn variabel omdat er gescrollt kan worden, daarom wordt lay_rect voor de offset gebruikt.
         De offset is weer nodig omdat de rects in een box staat die weer een eigen positie op het scherm heeft.
         Na het scrollen wordt deze telkens weer geupdate.
         """
-        for index, row in enumerate(self.table_data):
-            row[ROWFORRECTS] = pygame.Rect(self.lay_rect.x + self.column1x,
+        for index, row in enumerate(self.data_matrix):
+            row[COLFORRECTS] = pygame.Rect(self.lay_rect.x + self.column1x,
                                            self.lay_rect.y + self.columnsy + index * self.rowheight,
                                            MOUSEHOVERWIDTH, self.rowheight+1)
 
@@ -109,21 +109,33 @@ class BaseBox(object):
 
     def mouse_hover(self, event):
         """
-        Als de muis over een item in de uit row[3] geregistreerde rects gaat.
+        Als de muis over een item in de uit row[1] geregistreerde rects gaat.
         Zet cur_item op de index van degene waar de muis over gaat.
         :param event: pygame.MOUSEMOTION uit partyscreen
-        :return: row[4] is de kolom met de info.
+        :return: row[0] is de kolom met het object.
         """
         self.cur_item = None
-        for index, row in enumerate(self.table_data):
-            if row[3].collidepoint(event.pos):
+        for index, row in enumerate(self.data_matrix):
+            if row[COLFORRECTS].collidepoint(event.pos):
                 self.cur_item = index
-                return row[4]
+                return row[0].DESC
+
+    def mouse_click(self, event):
+        """
+        Als je klikt op een item in de uit row[1] geregistreerde rects.
+        :param event: pygame.MOUSEBUTTONDOWN uit partyscreen
+        :return: row[0] is de kolom met het object.
+        """
+        for row in self.data_matrix:
+            if row[1].collidepoint(event.pos):
+                return True, row[0]
+        return False, None
 
     @staticmethod
     def _get_difference(hero, hovered_equipment_item, skill_raw):
         """
-        Berekent het verschil van het equipte item en hoverde item voor in col[6]. Voor de betreffende skill.
+        Berekent het verschil van het equipte item en hoverde item voor in preview_value (row[4] bij skillbox).
+        Voor de betreffende skill.
         :return: hij moet bij niets "" en niet None teruggeven, vanwege de verwachting in _set_color().
         """
         # hovered_equipment_item is None als er niets gehoverd is in party Display
@@ -166,12 +178,12 @@ class BaseBox(object):
         else:
             return self.fontcolor1
 
-    def _set_color(self, value, col, color, weight_check=None):
+    def _set_color(self, value, color, weight_check=None):
         """
         Geef een regel in een kolom een bepaalde format en kleur mee aan de hand van de waarde.
         :param value: dit is een van die waarden
-        :param col: in welke kolom de regel zich bevind
         :param color: integer, welke kleuren moet hij weergeven? color: 1 of color: 2?
+        :return: de juiste tekens met de juiste kleuren
         """
 
         if color == 1:
@@ -191,13 +203,13 @@ class BaseBox(object):
 
         if value == 0:
             value = ""
-            col.append(self.normalfont.render(value, True, self.fontcolor1).convert_alpha())
+            return self.normalfont.render(value, True, self.fontcolor1).convert_alpha()
         elif value > 0:
             value = "(+" + str(value) + ")"
-            col.append(self.normalfont.render(value, True, poscolor).convert_alpha())
+            return self.normalfont.render(value, True, poscolor).convert_alpha()
         elif value < 0:
             value = "(" + str(value) + ")"
-            col.append(self.normalfont.render(value, True, negcolor).convert_alpha())
+            return self.normalfont.render(value, True, negcolor).convert_alpha()
 
     def render(self, screen):
         """
@@ -212,7 +224,7 @@ class BaseBox(object):
         pygame.draw.rect(self.surface, BACKGROUNDCOLOR, pygame.Rect(TITLERECT))
         self.surface.blit(self.title, (self.title_x, self.title_y))
 
-        for index, row in enumerate(self.table_view):
+        for index, row in enumerate(self.view_matrix):
             for row_nr, columnx in enumerate(self.total_columns):
                 if columnx[0] == 'icon':
                     self.layer.blit(

@@ -36,23 +36,19 @@ class PouchBox(BaseBox):
         Update eerst alle data.
         :param pouch:
         """
-        self.table_data = []
-        for pouch_item in pouch.get_all_pouch_items():
-            self.table_data.append(
-                # row[0],           row[1],                 row[2],         row[3],    row[4
-                [pouch_item.SPR, pouch_item.NAM + " :", str(pouch_item.qty), None, pouch_item.DESC]
+        self.view_matrix = []
+        self.data_matrix = []
+        for index, pouch_item in enumerate(pouch.get_all_pouch_items()):
+            self.view_matrix.append(
+                [pygame.image.load(pouch_item.SPR).convert_alpha(),
+                 self.normalfont.render(pouch_item.NAM+" :", True, self._get_color(index)).convert_alpha(),
+                 self.normalfont.render(str(pouch_item.qty), True, self.fontcolor1).convert_alpha()
+                 ]
             )
-
-        # maak dan een nieuwe tabel aan met de tekst en icons, maar dan gerendered.
-        self.table_view = []
-        for index, row in enumerate(self.table_data):
-            self.table_view.append(list())
-            self.table_view[index].append(pygame.image.load(row[0]).convert_alpha())
-            self.table_view[index].append(self.normalfont.render(row[1], True, self._get_color(index)).convert_alpha())
-            self.table_view[index].append(self.normalfont.render(row[2], True, self.fontcolor1).convert_alpha())
+            self.data_matrix.append([pouch_item, None])
 
         if self.run_once:
             self.run_once = False
             self._setup_scroll_layer()
-        # vul row[3] kolom. hierin staan de rects van row[1]. rect is voor muisklik.
+        # vul datamatrix[X][1]. hierin staan de rects van viewmatrix[X][1].NAM. rect is voor muisklik.
         self._update_rects_in_layer_rect_with_offset()

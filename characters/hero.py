@@ -376,8 +376,9 @@ class Hero(object):
                 skill.ext += equipment_item.get_value_of(skill.RAW)
 
             # visueel aanpassen als het negatieve van de item groter is dan de skill van de hero
-            if skill.ext < 0 and skill.ext < -skill.qty and skill.positive_quantity():
-                skill.ext = -skill.qty
+            # uitgezet vanwege de kolommen van nathan. de optelsom van verschillende equipment klopt visueel anders niet
+            # if skill.ext < 0 and skill.ext < -skill.qty and skill.positive_quantity():
+            #     skill.ext = -skill.qty
 
     def gain_experience(self, amount):
         """

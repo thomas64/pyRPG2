@@ -8,16 +8,18 @@ import pygame
 from .basebox import BaseBox
 
 
-COLUMN1X = 50
-COLUMN2X = 90
-COLUMN3X = 190
-COLUMN4X = 220
-COLUMN5X = 260
+COLUMN1X = 40   # icon
+COLUMN2X = 80   # naam
+COLUMN3X = 180  # base stat
+COLUMN4X = 200  # ext value
+COLUMN5X = 240  # tot stat
+COLUMN6X = 270  # preview value
 COLUMNSY = 50
 ROWHEIGHT = 32
 
 TITLE = "Skills"
-TOTALCOLUMNS = (('icon', COLUMN1X), ('text', COLUMN2X), ('text', COLUMN3X), ('text', COLUMN4X), ('text', COLUMN5X))
+TOTALCOLUMNS = (('icon', COLUMN1X), ('text', COLUMN2X), ('text', COLUMN3X), ('text', COLUMN4X), ('text', COLUMN5X),
+                                                                                                ('text', COLUMN6X))
 
 
 class SkillsBox(BaseBox):
@@ -39,27 +41,32 @@ class SkillsBox(BaseBox):
         :param hero: de huidige geselecteerde hero uit partyscreen
         :param hovered_equipment_item: het item waar de muis overheen hovered in invclickbox
         """
-        self.table_data = []
+        self.view_matrix = []
+        self.data_matrix = []
+        index = 0
         for skill in hero.skills_tuple:
             if skill.positive_quantity():
+                self.view_matrix.append(list())  # deze lege lijst moest eerst vanwege de self._set_color() met [index]
                 preview_value = self._get_difference(hero, hovered_equipment_item, skill.RAW)
-                self.table_data.append(
-                    # row[0],       row[1],           row[2],       row[3],  row[4],  row[5],     row[6]
-                    [skill.ICON, skill.NAM + " :", str(skill.qty), None, skill.DESC, skill.ext, preview_value]
-                )
 
-        # maak dan een nieuwe tabel aan met de tekst en icons, maar dan gerendered.
-        self.table_view = []
-        for index, row in enumerate(self.table_data):
-            self.table_view.append(list())
-            self.table_view[index].append(pygame.image.load(row[0]).convert_alpha())
-            self.table_view[index].append(self.normalfont.render(row[1], True, self._get_color(index)).convert_alpha())
-            self.table_view[index].append(self.normalfont.render(row[2], True, self.fontcolor1).convert_alpha())
-            self._set_color(row[5], self.table_view[index], 1)
-            self._set_color(row[6], self.table_view[index], 2)
+                self.view_matrix[index].append(
+                    pygame.image.load(skill.ICON).convert_alpha())
+                self.view_matrix[index].append(
+                    self.normalfont.render(skill.NAM + " :", True, self._get_color(index)).convert_alpha())
+                self.view_matrix[index].append(
+                    self.normalfont.render(str(skill.qty), True, self.fontcolor1).convert_alpha())
+                self.view_matrix[index].append(
+                    self._set_color(skill.ext, 1))
+                self.view_matrix[index].append(
+                    self.normalfont.render("(" + str(skill.tot) + ")", True, self.fontcolor1).convert_alpha())
+                self.view_matrix[index].append(
+                    self._set_color(preview_value, 2))
+
+                self.data_matrix.append([skill, None])
+                index += 1
 
         if self.run_once:
             self.run_once = False
             self._setup_scroll_layer()
-        # vul row[3] kolom. hierin staan de rects van row[1]. rect is voor muisklik.
+        # vul datamatrix[X][1]. hierin staan de rects van viewmatrix[X][1].NAM. rect is voor muisklik.
         self._update_rects_in_layer_rect_with_offset()
