@@ -108,10 +108,15 @@ class Display(object):
         self.spells_box = SpellsBox((SPELBOXX,      SPELBOXY), SPELBOXW, SPELBOXH)
 
     def _reset_vars(self):
+        # variabelen voor klikken van upgrade stat
         self.upgrade_click = None
         self.selected_stat = None
         self.xp_cost = 0
         self.confirm_box = None
+
+        # variabelen voor klikken van een skill voor bijv alchemist screen
+        self.skill_click = None
+        self.selected_skill = None
 
     def on_enter(self):
         """
@@ -346,7 +351,14 @@ class Display(object):
         :return:
         """
         if self.skills_box.rect.collidepoint(event.pos):
-            self.skills_box.mouse_click(event)
+            self.skill_click, self.selected_skill = self.skills_box.mouse_click(event)
+            if self.skill_click:
+                if self.selected_skill == self.cur_hero.alc:
+                    self.engine.audio.play_sound(SFX.menu_select)
+                    push_object = None
+                    self.engine.gamestate.push(push_object)
+            return True
+        return False
 
     def _previous(self):
         self.hc -= 1
