@@ -45,7 +45,7 @@ class PouchBox(BaseBox):
                  self.normalfont.render(str(pouch_item.qty), True, self.fontcolor1).convert_alpha()
                  ]
             )
-            self.data_matrix.append([pouch_item, None])
+            self.data_matrix.append([pouch_item, None, pouch_item.DESC])
 
         if self.run_once:
             self.run_once = False

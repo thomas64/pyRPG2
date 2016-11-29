@@ -43,26 +43,20 @@ class SkillsBox(BaseBox):
         """
         self.view_matrix = []
         self.data_matrix = []
-        index = 0
+        index = 0  # vanwege de if in deze for loop. hij moet dan niet doortellen.
         for skill in hero.skills_tuple:
             if skill.positive_quantity():
-                self.view_matrix.append(list())  # deze lege lijst moest eerst vanwege de self._set_color() met [index]
                 preview_value = self._get_difference(hero, hovered_equipment_item, skill.RAW)
-
-                self.view_matrix[index].append(
-                    pygame.image.load(skill.ICON).convert_alpha())
-                self.view_matrix[index].append(
-                    self.normalfont.render(skill.NAM + " :", True, self._get_color(index)).convert_alpha())
-                self.view_matrix[index].append(
-                    self.normalfont.render(str(skill.qty), True, self.fontcolor1).convert_alpha())
-                self.view_matrix[index].append(
-                    self._set_color(skill.ext, 1))
-                self.view_matrix[index].append(
-                    self.normalfont.render("(" + str(skill.tot) + ")", True, self.fontcolor1).convert_alpha())
-                self.view_matrix[index].append(
-                    self._set_color(preview_value, 2))
-
-                self.data_matrix.append([skill, None])
+                self.view_matrix.append(
+                    [pygame.image.load(skill.ICON).convert_alpha(),
+                     self.normalfont.render(skill.NAM + " :", True, self._get_color(index)).convert_alpha(),
+                     self.normalfont.render(str(skill.qty), True, self.fontcolor1).convert_alpha(),
+                     self._set_color(skill.ext, 1),
+                     self.normalfont.render("(" + str(skill.tot) + ")", True, self.fontcolor1).convert_alpha(),
+                     self._set_color(preview_value, 2)
+                     ]
+                )
+                self.data_matrix.append([skill, None, skill.DESC])
                 index += 1
 
         if self.run_once:

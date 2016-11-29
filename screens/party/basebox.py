@@ -112,13 +112,13 @@ class BaseBox(object):
         Als de muis over een item in de uit row[1] geregistreerde rects gaat.
         Zet cur_item op de index van degene waar de muis over gaat.
         :param event: pygame.MOUSEMOTION uit partyscreen
-        :return: row[0] is de kolom met het object.
+        :return: row[2] is de kolom met de description.
         """
         self.cur_item = None
         for index, row in enumerate(self.data_matrix):
             if row[COLFORRECTS].collidepoint(event.pos):
                 self.cur_item = index
-                return row[0].DESC
+                return row[2]
 
     def mouse_click(self, event):
         """
@@ -128,7 +128,8 @@ class BaseBox(object):
         """
         for row in self.data_matrix:
             if row[1].collidepoint(event.pos):
-                return True, row[0]
+                if row[0] is not None:  # de extra waarden in statsbox zijn geen objecten en hebben hier None staan.
+                    return True, row[0]
         return False, None
 
     @staticmethod

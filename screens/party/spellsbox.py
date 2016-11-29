@@ -47,7 +47,7 @@ class SpellsBox(BaseBox):
                  self.normalfont.render(str(spell.qty), True, self.fontcolor1).convert_alpha()
                  ]
             )
-            self.data_matrix.append([spell, None])
+            self.data_matrix.append([spell, None, spell.DESC])
 
         if self.run_once:
             self.run_once = False
