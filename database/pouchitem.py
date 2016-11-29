@@ -9,7 +9,7 @@ import os
 from constants import EquipmentType
 
 
-POUCHPATH = "resources/sprites/icons/pouch"
+POUCHPATH = 'resources/sprites/icons/pouch'
 
 GOLDIMG = os.path.join(POUCHPATH, "gold.png")
 HERBIMG = os.path.join(POUCHPATH, "herbs.png")

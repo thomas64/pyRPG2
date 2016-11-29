@@ -11,7 +11,7 @@ from .basebox import BaseBox
 BACKGROUNDCOLOR = pygame.Color("black")
 
 TITLE = "Inventory"
-STICKMANPATH = "resources/sprites/stickman.png"
+STICKMANPATH = 'resources/sprites/stickman.png'
 STICKMANPOS = 35
 EQUIPMENTITEMBOXCOLOR = (100, 0, 0, 128)
 WPNBOX = pygame.Rect(77,  140, 33, 33)

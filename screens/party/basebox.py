@@ -31,6 +31,11 @@ COLFORRECTS = 1  # in alle party boxen zitten de rects in data_list[X][1], behal
 MOUSEHOVERWIDTH = 200
 
 TITLERECT = (1, 1, 327, 35)  # 327 = boxwidth - 2
+UPSPRITE = 'resources/sprites/up.png'
+DOWNSPRITE = 'resources/sprites/down.png'
+ARROWRIGHT = -20
+ARROWTOP = 12
+ARROWBOTTOM = -30
 
 
 class BaseBox(object):
@@ -49,6 +54,9 @@ class BaseBox(object):
         self.normalfont = pygame.font.SysFont(FONT, NORMALFONTSIZE)
         self.fontcolor1 = FONTCOLOR1
         self.fontcolor2 = FONTCOLOR2
+
+        self.up_arrow = pygame.image.load(UPSPRITE).convert_alpha()
+        self.down_arrow = pygame.image.load(DOWNSPRITE).convert_alpha()
 
         self.cur_item = None
 
@@ -238,5 +246,10 @@ class BaseBox(object):
                 else:
                     Console.error_unknown_column_key()
                     raise KeyError
+
+        if self.lay_rect.y - self.rect.y < 0:
+            self.surface.blit(self.up_arrow, (self.box_width + ARROWRIGHT, ARROWTOP))
+        if self.lay_rect.y - self.rect.y - BOTTOMSPACER > self.rect.height - self.layer_height:
+            self.surface.blit(self.down_arrow, (self.box_width + ARROWRIGHT, self.box_height + ARROWBOTTOM))
 
         screen.blit(self.surface, self.rect.topleft)

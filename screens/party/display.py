@@ -208,15 +208,15 @@ class Display(object):
                     return  # anders vangt hij ook nog andere clicks hieronder in deze methode af
 
                 # als er op een herobox wordt geklikt of het kruisje daarvan.
+                old_hc = self.hc
                 for hero_box in self.hero_boxes:
                     self.hc, leave_party = hero_box.mouse_click(event, self.hc)
                     if leave_party:
-                        text = ["Do you want me to leave your party?",
-                                "",
-                                "Yes, you may leave.",
-                                "No, I want you to stay."]
-                        self.leave_box = ConfirmBox(self.engine.gamestate, self.engine.audio, text, self.cur_hero.FAC)
-                        self.engine.gamestate.push(self.leave_box)
+                        self._leave_party()
+                        return
+                new_hc = self.hc
+                if new_hc != old_hc:
+                    self._init_boxes()
 
                 # als er in de inventory box wordt geklikt
                 if self.inventory_box.rect.collidepoint(event.pos):
@@ -225,6 +225,7 @@ class Display(object):
                     # als er geen clickbox is en wel een equipment_type, geef dan een clickbox weer
                     if not self.invclick_box and equipment_type:
                         self.invclick_box = InvClickBox(boxpos, equipment_type, self.party, self.inventory)
+                    return
 
                 for button in self.buttons:
                     button_press = button.single_click(event)
@@ -242,6 +243,7 @@ class Display(object):
                     self.spells_box.mouse_scroll(event)
                 if self.pouch_box.rect.collidepoint(event.pos):
                     self.pouch_box.mouse_scroll(event)
+                return
 
         elif event.type == pygame.KEYDOWN:
 
@@ -256,6 +258,8 @@ class Display(object):
                 self._previous()
             elif event.key == Keys.Next.value:
                 self._next()
+            elif event.key == Keys.Delete.value:
+                self._leave_party()
             # elif event.key == pygame.K_m:
             #     self.party[0].lev.qty += 1
 
@@ -360,12 +364,22 @@ class Display(object):
             return True
         return False
 
+    def _leave_party(self):
+        text = ["Do you want me to leave your party?",
+                "",
+                "Yes, you may leave.",
+                "No, I want you to stay."]
+        self.leave_box = ConfirmBox(self.engine.gamestate, self.engine.audio, text, self.cur_hero.FAC)
+        self.engine.gamestate.push(self.leave_box)
+
     def _previous(self):
         self.hc -= 1
         if self.hc < 0:
             self.hc = len(self.party) - 1
+        self._init_boxes()
 
     def _next(self):
         self.hc += 1
         if self.hc > len(self.party) - 1:
             self.hc = 0
+        self._init_boxes()
