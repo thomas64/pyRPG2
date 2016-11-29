@@ -12,6 +12,7 @@ from constants import GameState
 from constants import Keys
 from constants import SFX
 
+from screens.alchemist.display import Display as Alchemist
 from .herobox import HeroBox
 from .infobox import InfoBox
 from .invclickbox import InvClickBox
@@ -359,8 +360,9 @@ class Display(object):
             if self.skill_click:
                 if self.selected_skill == self.cur_hero.alc:
                     self.engine.audio.play_sound(SFX.menu_select)
-                    push_object = None
+                    push_object = Alchemist(self.engine)
                     self.engine.gamestate.push(push_object)
+            self._reset_vars()
             return True
         return False
 
