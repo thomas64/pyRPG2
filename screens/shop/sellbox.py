@@ -39,7 +39,7 @@ class SellBox(ListBox):
         self.column1x = COLUMN1X    # deze is voor de baseclass
         self.row_nr_with_rect = 6   # row[6]
         self.row_nr_with_obj = 5    # row[5]
-        self._update_rects_in_layer_rect_with_offset(self.row_nr_with_rect)
+        self._update_rects_in_layer_rect_with_offset()
 
     def _fill_table_data(self, equipment_type, party, inventory):
 

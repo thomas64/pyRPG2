@@ -58,32 +58,41 @@ class ListBox(object):
 
         self.cur_item = None
 
-        self.background = None
-        self.table_data = []
-        self.table_view = []
         self.total_columns = []
         self.column1x = None
+        self.row_nr_with_rect = None
+        self.row_nr_with_obj = None
+        self.table_data = []
+        self.table_view = []
         self.layer = None
         self.lay_rect = None
         self.layer_height = None
-        self.row_nr_with_rect = None
-        self.row_nr_with_obj = None
+        self.background = None
 
     def _setup_table_view(self):
         """
         Zet table_data om in een visuele weergave.
-        Een standaard voorbeeld voor 3 kolommen: icon, name, quantity.
+        Drie mogelijkheden voor een weergave. icon, subicon en text.
+        subicon is voor een icon die subsurface nodig heeft.
         """
         normalfont = pygame.font.SysFont(self.font, self.fontsize)
 
         for index, row in enumerate(self.table_data):
             self.table_view.append(list())
-            self.table_view[index].append(pygame.image.load(row[0]).convert_alpha())
-            self.table_view[index].append(normalfont.render(row[1], True, self.fontcolor).convert_alpha())
-            self.table_view[index].append(normalfont.render(row[2], True, self.fontcolor).convert_alpha())
+            for row_nr, columnx in enumerate(self.total_columns):
+                if columnx[0] == 'icon':
+                    self.table_view[index].append(pygame.image.load(row[row_nr]).convert_alpha())
+                elif columnx[0] == 'subicon':
+                    self.table_view[index].append(
+                        pygame.image.load(row[row_nr]).subsurface(
+                            row[self.row_nr_with_obj].COL, row[self.row_nr_with_obj].ROW, 32, 32).convert_alpha())
+                elif columnx[0] == 'text':
+                    self.table_view[index].append(normalfont.render(row[row_nr], True, self.fontcolor).convert_alpha())
 
     def _setup_scroll_layer(self):
-        # stel de scroll layer in
+        """
+        Stel de scroll layer in.
+        """
         self.layer_height = self.columnsy + len(self.table_view) * self.rowheight
         if self.layer_height < self.box_height:
             self.layer_height = self.box_height
@@ -96,7 +105,7 @@ class ListBox(object):
         self.background.fill(self.colorkey)
         self.background = self.background.convert()
 
-    def _update_rects_in_layer_rect_with_offset(self, row_nr):
+    def _update_rects_in_layer_rect_with_offset(self):
         """
         Voeg de rects toe in row[6] van table_data waarmee gecorrespondeert kan worden met de muis bijvoorbeeld.
         Deze rects zijn variabel omdat er gescrollt kan worden, daarom wordt lay_rect voor de offset gebruikt.
@@ -104,8 +113,9 @@ class ListBox(object):
         Na het scrollen wordt deze telkens weer geupdate.
         """
         for index, row in enumerate(self.table_data):
-            row[row_nr] = pygame.Rect(self.lay_rect.x + self.column1x, self.lay_rect.y + COLUMNSY + index * ROWHEIGHT,
-                                      self.box_width, ROWHEIGHT+1)
+            row[self.row_nr_with_rect] = pygame.Rect(
+                                        self.lay_rect.x + self.column1x, self.lay_rect.y + COLUMNSY + index * ROWHEIGHT,
+                                        self.box_width, ROWHEIGHT+1)
 
     def mouse_scroll(self, event):
         """
@@ -119,7 +129,7 @@ class ListBox(object):
             if self.lay_rect.y - self.rect.y > self.rect.height - self.layer_height + 2:  # +2 is nodig tegen scroll-
                 self.lay_rect.y -= SCROLLSPEED                                            # ghosting bij hoogte 1/4
 
-        self._update_rects_in_layer_rect_with_offset(self.row_nr_with_rect)
+        self._update_rects_in_layer_rect_with_offset()
 
     def mouse_hover(self, event):
         """
@@ -133,6 +143,18 @@ class ListBox(object):
                 self.cur_item = index
                 return row[self.row_nr_with_obj].NAM, row[self.row_nr_with_obj].show_info()
         return None, None
+
+    def mouse_click(self, event):
+        """
+        :param event: pygame.MOUSEBUTTONDOWN uit school display.
+        """
+        for index, row in enumerate(self.table_data):
+            if row[self.row_nr_with_rect].collidepoint(event.pos):
+                self.cur_item = index
+                selected_object = row[self.row_nr_with_obj]
+                # selected_spell (=selected_object) heeft dus eventueel .qty = 0
+                return True, selected_object
+        return False, None
 
     def duplicate_selection(self, selected_object_name):
         """
@@ -170,7 +192,7 @@ class ListBox(object):
 
         for index, row in enumerate(self.table_view):
             for row_nr, columnx in enumerate(self.total_columns):
-                if columnx[0] == 'icon':
+                if columnx[0] in ('icon', 'subicon'):
                     self.layer.blit(
                         row[row_nr],
                         (columnx[1] + self.iconoffset, self.columnsy + self.iconoffset + index * self.rowheight))

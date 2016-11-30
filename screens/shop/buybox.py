@@ -38,7 +38,7 @@ class BuyBox(ListBox):
         self.column1x = COLUMN1X    # deze is voor de baseclass
         self.row_nr_with_rect = 3   # row[3]
         self.row_nr_with_obj = 4    # row[4]
-        self._update_rects_in_layer_rect_with_offset(self.row_nr_with_rect)
+        self._update_rects_in_layer_rect_with_offset()
 
     def _fill_table_data(self, equipment_database):
 
