@@ -69,6 +69,19 @@ class ListBox(object):
         self.row_nr_with_rect = None
         self.row_nr_with_obj = None
 
+    def _setup_table_view(self):
+        """
+        Zet table_data om in een visuele weergave.
+        Een standaard voorbeeld voor 3 kolommen: icon, name, quantity.
+        """
+        normalfont = pygame.font.SysFont(self.font, self.fontsize)
+
+        for index, row in enumerate(self.table_data):
+            self.table_view.append(list())
+            self.table_view[index].append(pygame.image.load(row[0]).convert_alpha())
+            self.table_view[index].append(normalfont.render(row[1], True, self.fontcolor).convert_alpha())
+            self.table_view[index].append(normalfont.render(row[2], True, self.fontcolor).convert_alpha())
+
     def _setup_scroll_layer(self):
         # stel de scroll layer in
         self.layer_height = self.columnsy + len(self.table_view) * self.rowheight

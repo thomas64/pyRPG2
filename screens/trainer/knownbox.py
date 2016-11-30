@@ -3,8 +3,6 @@
 class: KnownBox
 """
 
-import pygame
-
 from components import ListBox
 
 COLUMN1X = 0
@@ -44,15 +42,3 @@ class KnownBox(ListBox):
                     # row[0],       row[1],    row[2],        row[3],  row[4], row[5]
                     [skill.ICON, skill.NAM, str(skill.qty), skill.DESC, skill, None]
                 )
-
-    def _setup_table_view(self):
-        """
-        Zet table_data om in een visuele weergave.
-        """
-        normalfont = pygame.font.SysFont(self.font, self.fontsize)
-
-        for index, row in enumerate(self.table_data):
-            self.table_view.append(list())
-            self.table_view[index].append(pygame.image.load(row[0]).convert_alpha())
-            self.table_view[index].append(normalfont.render(row[1], True, self.fontcolor).convert_alpha())
-            self.table_view[index].append(normalfont.render(row[2], True, self.fontcolor).convert_alpha())
