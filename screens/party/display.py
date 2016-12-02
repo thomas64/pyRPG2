@@ -367,12 +367,13 @@ class Display(object):
         return False
 
     def _leave_party(self):
-        text = ["Do you want me to leave your party?",
-                "",
-                "Yes, you may leave.",
-                "No, I want you to stay."]
-        self.leave_box = ConfirmBox(self.engine.gamestate, self.engine.audio, text, self.cur_hero.FAC)
-        self.engine.gamestate.push(self.leave_box)
+        if self.hc != 0:    # als het niet alagos zelf is.
+            text = ["Do you want me to leave your party?",
+                    "",
+                    "Yes, you may leave.",
+                    "No, I want you to stay."]
+            self.leave_box = ConfirmBox(self.engine.gamestate, self.engine.audio, text, self.cur_hero.FAC)
+            self.engine.gamestate.push(self.leave_box)
 
     def _previous(self):
         self.hc -= 1
