@@ -126,8 +126,14 @@ class ListBox(object):
             if self.lay_rect.y - self.rect.y < 0:
                 self.lay_rect.y += SCROLLSPEED
         elif event.button == Keys.Scrolldown.value:
-            if self.lay_rect.y - self.rect.y > self.rect.height - self.layer_height + 2:  # +2 is nodig tegen scroll-
-                self.lay_rect.y -= SCROLLSPEED                                            # ghosting bij hoogte 1/4
+            if self.lay_rect.y - self.rect.y > self.rect.height - self.layer_height:
+                self.lay_rect.y -= SCROLLSPEED
+
+        # om na het scrollen eventueel weer netjes uit te lijnen
+        if self.lay_rect.bottom < self.rect.bottom:
+            self.lay_rect.bottom = self.rect.bottom - 1  # de - 1 is nodig omdat er een line border is om de box.
+        if self.lay_rect.top > self.rect.top:
+            self.lay_rect.top = self.rect.top
 
         self._update_rects_in_layer_rect_with_offset()
 
@@ -159,11 +165,21 @@ class ListBox(object):
     def duplicate_selection(self, selected_object_name):
         """
         Deze roept de selectie aan. Hij doet dat op basis van de meegegeven naam uit de andere list.
+        Verplaatst de layer indien de selectie uit beeld gaat.
         :param selected_object_name: de naam van bijv de spell "Fireball"
         """
         for index, row in enumerate(self.table_data):
             if row[self.row_nr_with_obj].NAM == selected_object_name:
                 self.cur_item = index
+                selection = self.cur_item * ROWHEIGHT
+                area_above_box = self.rect.top - self.lay_rect.top
+                area_below_box = self.rect.bottom - self.lay_rect.bottom + self.layer_height - ROWHEIGHT
+                if selection > area_below_box:
+                    self.lay_rect.top = self.rect.top - (selection - self.box_height + ROWHEIGHT)
+                    self._update_rects_in_layer_rect_with_offset()
+                elif selection < area_above_box:
+                    self.lay_rect.top = self.rect.top - selection
+                    self._update_rects_in_layer_rect_with_offset()
                 break
 
     def render(self, screen):

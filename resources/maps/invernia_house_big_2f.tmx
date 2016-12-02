@@ -349,10 +349,10 @@
 </data>
  </layer>
  <objectgroup name="portals">
-  <object id="88" name="invernia_house_big_1f" x="336" y="128" width="16" height="32"/>
+  <object id="88" name="invernia_house_big_1f" x="320" y="128" width="16" height="16"/>
  </objectgroup>
  <objectgroup name="start_pos">
-  <object id="87" name="invernia_house_big_1f" x="368" y="128" width="16" height="16"/>
+  <object id="87" name="invernia_house_big_1f" x="352" y="128" width="16" height="16"/>
  </objectgroup>
  <objectgroup name="sounds" visible="0">
   <object id="26" name="step_stone" x="272" y="48" width="160" height="608"/>
@@ -368,7 +368,7 @@
   <object id="85" x="464" y="496" width="96" height="16"/>
   <object id="86" x="144" y="432" width="32" height="16"/>
   <object id="89" x="336" y="160" width="32" height="16"/>
-  <object id="90" x="336" y="144" height="32"/>
+  <object id="90" x="304" y="144" width="16"/>
   <object id="95" x="464" y="448" width="32" height="16"/>
   <object id="96" x="512" y="432" width="32" height="16"/>
   <object id="97" x="528" y="464" width="32" height="16"/>
@@ -392,7 +392,7 @@
   <object id="77" x="432" y="384" width="64" height="32"/>
   <object id="78" x="128" y="384" width="64" height="32"/>
  </objectgroup>
- <objectgroup name="objects">
+ <objectgroup name="objects" visible="0">
   <object id="91" name="person1" x="112" y="240" width="32" height="32">
    <properties>
     <property name="direction" value="east"/>

@@ -250,17 +250,17 @@ class MapMusic(enum.Enum):
     ersin_cave_room2 =          "ersin_cave",    None
     ersin_cave_room3 =          "ersin_cave",    None
     invernia_town =             "invernia_town", "town"
-    invernia_armor_shop =       "invernia_town", None
-    invernia_weapon_shop =      "invernia_town", None
-    invernia_item_shop =        "invernia_town", None
-    invernia_inn_1f =           "invernia_town", None
-    invernia_inn_2f =           "invernia_town", None
-    invernia_guild =            "invernia_town", "fire"
-    invernia_school =           "invernia_town", None
-    invernia_house_big_1f =     "invernia_town", None
-    invernia_house_big_2f =     "invernia_town", None
-    invernia_house_left =       "invernia_town", None
-    invernia_house_right =      "invernia_town", None
+    invernia_armor_shop =       "house",         None
+    invernia_weapon_shop =      "house",         None
+    invernia_item_shop =        "house",         None
+    invernia_inn_1f =           "house",         None
+    invernia_inn_2f =           "house",         None
+    invernia_guild =            "house",         "fire"
+    invernia_school =           "house",         None
+    invernia_house_big_1f =     "house",         None
+    invernia_house_big_2f =     "house",         None
+    invernia_house_left =       "house",         None
+    invernia_house_right =      "house",         None
 
 
 class MapTitle(enum.Enum):
