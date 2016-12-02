@@ -64,12 +64,12 @@ XPTITLE = "XP Remaining: "
 OBJECTDATABASE = SchoolDatabase
 OBJECTTYPE = "spell"
 
-CURRENTLEVEL1 = "Current"
-CURRENTLEVEL2 = "Level:"
+CURRENTRANK1 = "Current"
+CURRENTRANK2 = "Rank:"
 SPELLNAME1 = "Spell"
 SPELLNAME2 = "Name:"
-NEXTLEVEL1 = "Next"
-NEXTLEVEL2 = "Level:"
+NEXTRANK1 = "Next"
+NEXTRANK2 = "Rank:"
 GOLDCOST1 = "Gold"
 GOLDCOST2 = "Cost:"
 XPCOST1 = "XP"
@@ -330,12 +330,12 @@ class Display:
         # afwijkende SPELLNAME1. object_type gebruikt. vanwege polymorph van trainer.
         spellname1 = self.tinyfont.render(self.object_type.title(), True, FONTCOLOR).convert_alpha()
         spellname2 = self.tinyfont.render(SPELLNAME2, True, FONTCOLOR).convert_alpha()
-        currentlevel1 = self.tinyfont.render(CURRENTLEVEL1, True, FONTCOLOR).convert_alpha()
-        currentlevel2 = self.tinyfont.render(CURRENTLEVEL2, True, FONTCOLOR).convert_alpha()
+        currentrank1 = self.tinyfont.render(CURRENTRANK1, True, FONTCOLOR).convert_alpha()
+        currentrank2 = self.tinyfont.render(CURRENTRANK2, True, FONTCOLOR).convert_alpha()
         spellname3 = self.tinyfont.render(self.object_type.title(), True, FONTCOLOR).convert_alpha()
         spellname4 = self.tinyfont.render(SPELLNAME2, True, FONTCOLOR).convert_alpha()
-        nextlevel1 = self.tinyfont.render(NEXTLEVEL1, True, FONTCOLOR).convert_alpha()
-        nextlevel2 = self.tinyfont.render(NEXTLEVEL2, True, FONTCOLOR).convert_alpha()
+        nextrank1 = self.tinyfont.render(NEXTRANK1, True, FONTCOLOR).convert_alpha()
+        nextrank2 = self.tinyfont.render(NEXTRANK2, True, FONTCOLOR).convert_alpha()
         goldcost1 = self.tinyfont.render(GOLDCOST1, True, FONTCOLOR).convert_alpha()
         goldcost2 = self.tinyfont.render(GOLDCOST2, True, FONTCOLOR).convert_alpha()
         xpcost1 = self.tinyfont.render(XPCOST1, True, FONTCOLOR).convert_alpha()
@@ -345,15 +345,15 @@ class Display:
         xpos = self._set_x(KNOWNBOXPOSX) + SUBTITLEPOSX
         self.screen.blit(spellname1, (xpos + kb.COLUMN2X, self._set_y(SUBTITLEPOSY1)))
         self.screen.blit(spellname2, (xpos + kb.COLUMN2X, self._set_y(SUBTITLEPOSY2)))
-        self.screen.blit(currentlevel1, (xpos + kb.COLUMN3X, self._set_y(SUBTITLEPOSY1)))
-        self.screen.blit(currentlevel2, (xpos + kb.COLUMN3X, self._set_y(SUBTITLEPOSY2)))
+        self.screen.blit(currentrank1, (xpos + kb.COLUMN3X, self._set_y(SUBTITLEPOSY1)))
+        self.screen.blit(currentrank2, (xpos + kb.COLUMN3X, self._set_y(SUBTITLEPOSY2)))
 
         import screens.school.learnbox as lb
         xpos = self._set_x(LEARNBOXPOSX) + SUBTITLEPOSX
         self.screen.blit(spellname3, (xpos + lb.COLUMN2X, self._set_y(SUBTITLEPOSY1)))
         self.screen.blit(spellname4, (xpos + lb.COLUMN2X, self._set_y(SUBTITLEPOSY2)))
-        self.screen.blit(nextlevel1, (xpos + lb.COLUMN3X, self._set_y(SUBTITLEPOSY1)))
-        self.screen.blit(nextlevel2, (xpos + lb.COLUMN3X, self._set_y(SUBTITLEPOSY2)))
+        self.screen.blit(nextrank1, (xpos + lb.COLUMN3X, self._set_y(SUBTITLEPOSY1)))
+        self.screen.blit(nextrank2, (xpos + lb.COLUMN3X, self._set_y(SUBTITLEPOSY2)))
         self.screen.blit(goldcost1, (xpos + lb.COLUMN4X, self._set_y(SUBTITLEPOSY1)))
         self.screen.blit(goldcost2, (xpos + lb.COLUMN4X, self._set_y(SUBTITLEPOSY2)))
         self.screen.blit(xpcost1, (xpos + lb.COLUMN5X, self._set_y(SUBTITLEPOSY1)))

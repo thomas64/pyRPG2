@@ -25,9 +25,17 @@ LARGEFONTSIZE = 100
 NORMALFONTSIZE = 50
 SMALLFONTSIZE = 20
 
+TITLEPOSX = 1/16
+TITLEPOSY = 1/32
+FACEPOSX = 1/16
+FACEPOSY = 3/16
+EXTRAFACESIZE = 20
+LINESNEXTTOFACE = 3
+SMALLLINEHEIGHT = 30
+
 CREATEBOXWIDTH = 3/16
 CREATEBOXHEIGHT = 73/100
-CREATEBOXPOSX = 2/5
+CREATEBOXPOSX = 43/100
 CREATEBOXPOSY = 6/32
 
 POUCHBOXWIDTH = 3/16     # van het scherm
@@ -56,7 +64,7 @@ class Display(object):
     """
     ...
     """
-    def __init__(self, engine):
+    def __init__(self, engine, hero):
         self.engine = engine
 
         self.screen = pygame.display.get_surface()
@@ -70,6 +78,8 @@ class Display(object):
         self.create_title = self.largefont.render(CREATETITLE, True, FONTCOLOR).convert_alpha()
         self.pouch_title = self.largefont.render(POUCHTITLE, True, FONTCOLOR).convert_alpha()
 
+        self.cur_hero = hero
+        self._init_face()
         self._init_boxes()
 
         self.close_button = Button(
@@ -77,6 +87,21 @@ class Display(object):
             COLORKEY, FONTCOLOR)
 
         self.info_label = ""
+
+    def _init_face(self):
+        face_image = pygame.image.load(self.cur_hero.FAC).convert_alpha()
+        self.background.blit(face_image, (self._set_x(FACEPOSX), self._set_y(FACEPOSY)))
+
+        for index, line in enumerate(self.cur_hero.alc.welcome_text(self.cur_hero.NAM)):
+            rline = self.smallfont.render(line, True, FONTCOLOR).convert_alpha()
+            if index < LINESNEXTTOFACE:
+                self.background.blit(rline,
+                                     (self._set_x(FACEPOSX) + face_image.get_width() + EXTRAFACESIZE,
+                                      self._set_y(FACEPOSY) + EXTRAFACESIZE + index * SMALLLINEHEIGHT))
+            else:
+                self.background.blit(rline,
+                                     (self._set_x(FACEPOSX),
+                                      self._set_y(FACEPOSY) + EXTRAFACESIZE + index * SMALLLINEHEIGHT))
 
     def _init_boxes(self):
         self._init_createbox()
@@ -87,8 +112,11 @@ class Display(object):
         width = self.screen.get_width() * CREATEBOXWIDTH
         height = self.screen.get_height() * CREATEBOXHEIGHT + EXTRAHEIGHT
         # zoek in de PouchItemDatabase naar de enum keys die eindigen op _pot of _flk en stop die allemaal in een list.
+        # en zoek ook naar potions die juiste alc skill waarde hebben om gemaakt te kunnen worden.
         self.createbox = CreateBox(self._set_x(CREATEBOXPOSX), self._set_y(CREATEBOXPOSY), int(width), int(height),
-                                   [itm for itm in PouchItemDatabase if itm.name[-4:] in ('_pot', '_flk')])
+                                   [itm for itm in PouchItemDatabase
+                                    if itm.name[-4:] in ('_pot', '_flk') and
+                                    self.cur_hero.alc.tot >= itm.value['alc']], self.cur_hero.alc)
 
     def _init_pouchbox(self):
         width = self.screen.get_width() * POUCHBOXWIDTH
@@ -162,6 +190,9 @@ class Display(object):
         """
         self.screen.fill(BACKGROUNDCOLOR)
         self.screen.blit(self.background, (0, 0))
+
+        alc_title = self.largefont.render(self.cur_hero.alc.NAM, True, FONTCOLOR).convert_alpha()
+        self.screen.blit(alc_title, (self._set_x(TITLEPOSX), self._set_y(TITLEPOSY)))
 
         self.screen.blit(self.create_title, ((self._set_x(CREATEBOXPOSX)) +
                                              (self.screen.get_width() * CREATEBOXWIDTH / 2) -

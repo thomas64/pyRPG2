@@ -45,14 +45,14 @@ class TreasureChestDatabase(dict):
     def mec_text(value):
         """..."""
         return ["There's a dangerous trap on this treasurechest.",
-                "You need a level {} of the Mechanic Skill to".format(value),
+                "You need a rank {} of the Mechanic Skill to".format(value),
                 "disarm the trap."]
 
     @staticmethod
     def thf_text(value):
         """..."""
         return ["There's a lock on this treasurechest.",
-                "You need a level {} of the Thief Skill".format(value),
+                "You need a rank {} of the Thief Skill".format(value),
                 "to pick the lock."]
 
     @staticmethod

@@ -360,7 +360,7 @@ class Display(object):
             if self.skill_click:
                 if self.selected_skill == self.cur_hero.alc:
                     self.engine.audio.play_sound(SFX.menu_select)
-                    push_object = Alchemist(self.engine)
+                    push_object = Alchemist(self.engine, self.cur_hero)
                     self.engine.gamestate.push(push_object)
             self._reset_vars()
             return True

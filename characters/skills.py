@@ -127,6 +127,36 @@ class Alchemist(Skill):
                     "successfully create a potion. " \
                     "Click on the Alchemist skill name in the party screen to open the potion manufacturing screen."
 
+    def welcome_text(self, hero_name):
+        """..."""
+        return ("It is here where your hero {} can".format(hero_name),
+                "manufacture various potions.",
+                "In the 'Create' box you see all the potions",
+                "that you are able to manufacture with your current",
+                "Alchemist rank of {}. The percentage states the chance".format(self.tot),
+                "of success with the creation of that specific potion.",
+                "More powerful potions have a lower chance of success.",
+                "A higher Alchemist rank will increase that chance.",
+                "The 'Pouch' box shows your current inventory of",
+                "potions. The number shows the quantity of that potion",
+                "in your possession.",
+                "When the process of creating a potion fails, the resources",
+                "(Herbs, Spices and Gemstones) and the potion are lost.")
+
+    def get_percentage(self, potion_alc_lev):
+        """
+        De formule voor de chance of success te bepalen bij het maken van een potion.
+        :param potion_alc_lev: minimale alchemist level wat deze potion nodig heeft
+        :return: percentage
+        """
+        percentage = round(40 + (self.tot - potion_alc_lev) * (60 / (10 - potion_alc_lev)))
+        if percentage == 100:
+            return 99
+        elif percentage > 100:
+            return 100
+        else:
+            return percentage
+
 
 class Diplomat(Skill):
     """
