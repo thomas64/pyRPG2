@@ -166,6 +166,17 @@ class Endurance(Stat):
         self.qty += 1
         self.cur += 1
 
+    @property
+    def tot(self):
+        """
+        self.tot = self.cur + self.ext
+        total: current + extra
+        """
+        total = self.cur + self.ext
+        if total < 0:
+            total = 0
+        return total
+
 
 class Strength(Stat):
     """
@@ -196,3 +207,10 @@ class Stamina(Stat):
         """
         self.qty += 1
         self.cur += 1
+
+    @property
+    def tot(self):
+        """
+        Bij sta komt er geen ext om de hoek kijken zoals bij edu. cur is gewoon total.
+        """
+        return self.cur

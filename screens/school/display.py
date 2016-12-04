@@ -301,7 +301,8 @@ class Display:
         """
         for selector in self.selectors:
             selector.update(self.selected_hero)
-        self.gold_amount = self.engine.data.pouch['gold'].qty
+        gold = PouchItem(**PouchItemDatabase.gold.value)
+        self.gold_amount = self.engine.data.pouch.get_quantity(gold)
         self.xp_amount = self.selected_hero.exp.rem
 
     def render(self):

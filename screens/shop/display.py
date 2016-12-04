@@ -353,7 +353,8 @@ class Display(object):
         """
         for selector in self.selectors:
             selector.update(self.shoptype)
-        self.gold_amount = self.engine.data.pouch['gold'].qty
+        gold = PouchItem(**PouchItemDatabase.gold.value)
+        self.gold_amount = self.engine.data.pouch.get_quantity(gold)
 
     def render(self):
         """

@@ -23,6 +23,16 @@ class Pouch(dict):
         """
         return sorted(self.values(), key=lambda xx: xx.SRT)
 
+    def get_quantity(self, pouch_item):
+        """
+        Geeft het aantal terug van het gevraagde pouch item object.
+        :param pouch_item: object
+        :return: het aantal of 0
+        """
+        if pouch_item.RAW in self:
+            return self[pouch_item.RAW].qty
+        return 0
+
     def contains(self, pouch_item, quantity):
         """
         Bekijkt of het item en de quantity in de pouch zitten.
@@ -41,11 +51,11 @@ class Pouch(dict):
         """
         Inventory.add_i(self, pouch_item, quantity, verbose)
 
-    def remove(self, pouch_item, cost, verbose=True):
+    def remove(self, pouch_item, cost, verbose=True, force=False):
         """
         Verwijdert quantity uit de pouch. Als je iets koopt bijv.
         """
-        if cost < 1:
+        if cost < 1 and force is False:
             Console.error_quantity_less_than_one(cost)
             raise ValueError
 

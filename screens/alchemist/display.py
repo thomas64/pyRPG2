@@ -3,13 +3,17 @@
 class: Display
 """
 
+import random
+
 import pygame
 
 from components import Button
+from components import MessageBox
 from components import Transition
 from constants import GameState
 from constants import Keys
 from database import PouchItemDatabase
+from inventoryitems import PouchItem
 
 from screens.shop.infobox import InfoBox
 from .createbox import CreateBox
@@ -157,6 +161,8 @@ class Display(object):
             if event.button == Keys.Leftclick.value:
                 if self.close_button.single_click(event) == Keys.Exit.value:
                     self._close()
+                if self._handle_create_box_click(event):
+                    return
 
             elif event.button in (Keys.Scrollup.value, Keys.Scrolldown.value):
                 if self.createbox.rect.collidepoint(event.pos):
@@ -207,6 +213,53 @@ class Display(object):
         self.createbox.render(self.screen)
         self.pouchbox.render(self.screen)
         self.close_button.render(self.screen, FONTCOLOR, True)
+
+    def _handle_create_box_click(self, event):
+        create_click, selected_potion = self.createbox.mouse_click(event)
+        if create_click:
+            herbs = PouchItem(**PouchItemDatabase.herbs.value)
+            spices = PouchItem(**PouchItemDatabase.spices.value)
+            gemstones = PouchItem(**PouchItemDatabase.gemstones.value)
+            hrb_qty = self.engine.data.pouch.get_quantity(herbs)
+            spc_qty = self.engine.data.pouch.get_quantity(spices)
+            gms_qty = self.engine.data.pouch.get_quantity(gemstones)
+
+            if selected_potion.HRB > hrb_qty or \
+               selected_potion.SPC > spc_qty or \
+               selected_potion.GMS > gms_qty:
+                text = ["You do not have the right components",
+                        "to create that {}.".format(selected_potion.NAM)]
+                push_object = MessageBox(self.engine.gamestate, text)
+                self.engine.gamestate.push(push_object)
+                return
+            elif self.cur_hero.sta.cur < self.cur_hero.alc.STA_COST:
+                text = ["You do not have enough stamina",
+                        "to create that {}.".format(selected_potion.NAM)]
+                push_object = MessageBox(self.engine.gamestate, text)
+                self.engine.gamestate.push(push_object)
+                return
+            elif 'pouch is full' is False:  # todo, moet pouch is vol hier? of in pouch?
+                return
+
+            self.engine.data.pouch.remove(herbs, selected_potion.HRB, force=True)  # want kan ook 0 zijn.
+            self.engine.data.pouch.remove(spices, selected_potion.SPC, force=True)
+            self.engine.data.pouch.remove(gemstones, selected_potion.GMS, force=True)
+
+            self.cur_hero.sta.cur -= self.cur_hero.alc.STA_COST
+
+            rnd_percentage = random.randint(1, 100)
+            potion_chance = self.cur_hero.alc.get_percentage(selected_potion.ALC)
+            if potion_chance >= rnd_percentage:
+                text = ["{} successfully created.".format(selected_potion.NAM)]
+                self.engine.data.pouch.add(selected_potion)
+                push_object = MessageBox(self.engine.gamestate, text)
+                self.engine.gamestate.push(push_object)
+            else:
+                text = ["Failed to create a {}.".format(selected_potion.NAM)]
+                push_object = MessageBox(self.engine.gamestate, text)
+                self.engine.gamestate.push(push_object)
+
+            self._init_boxes()
 
     def _set_x(self, posx):
         return self.screen.get_width() * posx

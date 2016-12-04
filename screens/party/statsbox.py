@@ -133,7 +133,7 @@ class StatsBox(BaseBox):
             self.view_matrix.append(
                 [self.normalfont.render(stat.NAM + " :", True, self._get_color(index)).convert_alpha(),
                  self.normalfont.render(str(stat.qty), True, self.fontcolor1).convert_alpha(),
-                 self._set_color(stat.ext, 1),
+                 self._set_color(stat.ext + (stat.cur - stat.qty if hasattr(stat, 'cur') else 0), 1),
                  self.normalfont.render("("+str(stat.tot)+")", True, self.fontcolor1).convert_alpha(),
                  self._set_color(preview_value, 2)
                  ]

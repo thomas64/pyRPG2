@@ -122,15 +122,16 @@ class Alchemist(Skill):
     """
     def __init__(self, quantity):
         super().__init__(SkillType.alc.value, SkillType.alc.name, 12, quantity)
-        self.DESC = "Allows the character to manufacture various potions out of Herbs, Spices and Gemstones. " \
+        self.DESC = "Allows the character to manufacture various magical potions out of Herbs, Spices and Gemstones. " \
                     "A higher Alchemist rank means a wider variety of possible potions and a higher chance to " \
                     "successfully create a potion. " \
                     "Click on the Alchemist skill name in the party screen to open the potion manufacturing screen."
+        self.STA_COST = 3
 
     def welcome_text(self, hero_name):
         """..."""
         return ("It is here where your hero {} can".format(hero_name),
-                "manufacture various potions.",
+                "manufacture various magical potions.",
                 "In the 'Create' box you see all the potions",
                 "that you are able to manufacture with your current",
                 "Alchemist rank of {}. The percentage states the chance".format(self.tot),
@@ -140,7 +141,7 @@ class Alchemist(Skill):
                 "The 'Pouch' box shows your current inventory of",
                 "potions. The number shows the quantity of that potion",
                 "in your possession.",
-                "When the process of creating a potion fails, the resources",
+                "When the process of creating a potion fails, the components",
                 "(Herbs, Spices and Gemstones) and the potion are lost.")
 
     def get_percentage(self, potion_alc_lev):
@@ -149,6 +150,8 @@ class Alchemist(Skill):
         :param potion_alc_lev: minimale alchemist level wat deze potion nodig heeft
         :return: percentage
         """
+        # met een gelijke chm rank als min potion rank, heb je steeds 40% kans op succes.
+        # dus je hebt steeds 60% te stijgen in de levels
         percentage = round(40 + (self.tot - potion_alc_lev) * (60 / (10 - potion_alc_lev)))
         if percentage == 100:
             return 99
