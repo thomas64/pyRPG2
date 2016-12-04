@@ -115,10 +115,6 @@ class Display(object):
         self.xp_cost = 0
         self.confirm_box = None
 
-        # variabelen voor klikken van een skill voor bijv alchemist screen
-        self.skill_click = None
-        self.selected_skill = None
-
     def on_enter(self):
         """
         Wanneer deze state op de stack komt, voer dit uit.
@@ -192,11 +188,11 @@ class Display(object):
 
             if event.button == Keys.Leftclick.value:
 
-                # als er op een statsbox item geklikt wordt
-                if self._handle_stat_box_click(event):
+                if self._handle_stat_box_click(event):   # als er op een statsbox item geklikt wordt
                     return
-
-                if self._handle_skill_box_click(event):
+                if self._handle_skill_box_click(event):  # of skillbox
+                    return
+                if self._handle_pouch_box_click(event):  # of pouchbox
                     return
 
                 # als de clickbox er is en er wordt buiten geklikt, laat hem dan verdwijnen.
@@ -356,13 +352,28 @@ class Display(object):
         :return:
         """
         if self.skills_box.rect.collidepoint(event.pos):
-            self.skill_click, self.selected_skill = self.skills_box.mouse_click(event)
-            if self.skill_click:
-                if self.selected_skill == self.cur_hero.alc:
+            skill_click, selected_skill = self.skills_box.mouse_click(event)
+            if skill_click:
+                if selected_skill == self.cur_hero.alc:
                     self.engine.audio.play_sound(SFX.menu_select)
                     push_object = Alchemist(self.engine, self.cur_hero)
                     self.engine.gamestate.push(push_object)
-            self._reset_vars()
+            return True
+        return False
+
+    def _handle_pouch_box_click(self, event):
+        """
+        ...
+        :param event:
+        :return:
+        """
+        if self.pouch_box.rect.collidepoint(event.pos):
+            pouch_click, selected_item = self.pouch_box.mouse_click(event)
+            if pouch_click:
+                selected_item.USE()
+                # self.engine.audio.play_sound(SFX.menu_select)
+                # push_object = MessageBox(self.engine.gamestate, [selected_item.NAM])
+                # self.engine.gamestate.push(push_object)
             return True
         return False
 
