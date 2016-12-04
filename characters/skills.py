@@ -130,19 +130,19 @@ class Alchemist(Skill):
 
     def welcome_text(self, hero_name):
         """..."""
-        return ("It is here where your hero {} can".format(hero_name),
-                "manufacture various magical potions.",
+        return ("It is here where {} can manufacture".format(hero_name),
+                "various magical potions.",
                 "In the 'Create' box you see all the potions",
-                "that you are able to manufacture with your current",
-                "Alchemist rank of {}. The percentage states the chance".format(self.tot),
-                "of success with the creation of that specific potion.",
+                "that you are able to manufacture with your",
+                "current Alchemist rank of {}. The percentage states the".format(self.tot),
+                "chance of success with the creation of that specific potion.",
                 "More powerful potions have a lower chance of success.",
                 "A higher Alchemist rank will increase that chance.",
-                "The 'Pouch' box shows your current inventory of",
-                "potions. The number shows the quantity of that potion",
-                "in your possession.",
+                "The 'Pouch' box shows your current inventory of potions. The",
+                "number shows the quantity of that potion in your possession.",
                 "When the process of creating a potion fails, the components",
-                "(Herbs, Spices and Gemstones) and the potion are lost.")
+                "(Herbs, Spices and Gemstones) and the potion are lost.",
+                "The creation of a potion will also use up some stamina.")
 
     def get_percentage(self, potion_alc_lev):
         """

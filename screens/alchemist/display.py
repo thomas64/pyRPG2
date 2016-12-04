@@ -28,36 +28,40 @@ FONTCOLOR = pygame.Color("black")
 FONT = 'colonna'
 LARGEFONTSIZE = 100
 NORMALFONTSIZE = 50
+MIDDLEFONTSIZE = 40
 SMALLFONTSIZE = 20
 
+CREATETITLE = "Create"
+POUCHTITLE = "Pouch"
 TITLEPOSX = 1/16
 TITLEPOSY = 1/32
 FACEPOSX = 1/16
 FACEPOSY = 3/16
-EXTRAFACESIZE = 20
-LINESNEXTTOFACE = 3
-SMALLLINEHEIGHT = 30
+EXTRAFACESIZEX = 20
+EXTRAFACESIZEY = 0
+LINESNEXTTOFACE = 4
+SMALLLINEHEIGHT = 27
+
+STATITLE = "Stamina {}: "
+STATITLEPOSX = 1/16
+STATITLEPOSY = 75/100
 
 CREATEBOXWIDTH = 3/16
 CREATEBOXHEIGHT = 73/100
-CREATEBOXPOSX = 43/100
+CREATEBOXPOSX = 47/100
 CREATEBOXPOSY = 6/32
 
 POUCHBOXWIDTH = 3/16     # van het scherm
 POUCHBOXHEIGHT = 73/100
-POUCHBOXPOSX = 16/24     # x op 16/24 van het scherm
+POUCHBOXPOSX = 72/100     # x op 72/100 van het scherm
 POUCHBOXPOSY = 6/32
 
 EXTRAHEIGHT = 0         # zodat de laatste item er voor helft op komt
 
-CREATETITLE = "Create"
-POUCHTITLE = "Pouch"
-TITLEPOSY = 1/32
-
-INFOBOXWIDTH = 1/4
-INFOBOXHEIGHT = 1/6
+INFOBOXWIDTH = 25/100
+INFOBOXHEIGHT = 11/100
 INFOBOXPOSX = 1/16
-INFOBOXPOSY = 6/8
+INFOBOXPOSY = 81/100
 
 BTNWIDTH = 70
 BTNHEIGHT = 40
@@ -79,6 +83,7 @@ class Display(object):
 
         self.largefont = pygame.font.SysFont(FONT, LARGEFONTSIZE)
         self.normalfont = pygame.font.SysFont(FONT, NORMALFONTSIZE)
+        self.middlefont = pygame.font.SysFont(FONT, MIDDLEFONTSIZE)
         self.smallfont = pygame.font.SysFont(FONT, SMALLFONTSIZE)
         self.create_title = self.largefont.render(CREATETITLE, True, FONTCOLOR).convert_alpha()
         self.pouch_title = self.largefont.render(POUCHTITLE, True, FONTCOLOR).convert_alpha()
@@ -101,12 +106,12 @@ class Display(object):
             rline = self.smallfont.render(line, True, FONTCOLOR).convert_alpha()
             if index < LINESNEXTTOFACE:
                 self.background.blit(rline,
-                                     (self._set_x(FACEPOSX) + face_image.get_width() + EXTRAFACESIZE,
-                                      self._set_y(FACEPOSY) + EXTRAFACESIZE + index * SMALLLINEHEIGHT))
+                                     (self._set_x(FACEPOSX) + face_image.get_width() + EXTRAFACESIZEX,
+                                      self._set_y(FACEPOSY) + EXTRAFACESIZEY + index * SMALLLINEHEIGHT))
             else:
                 self.background.blit(rline,
                                      (self._set_x(FACEPOSX),
-                                      self._set_y(FACEPOSY) + EXTRAFACESIZE + index * SMALLLINEHEIGHT))
+                                      self._set_y(FACEPOSY) + EXTRAFACESIZEY + index * SMALLLINEHEIGHT))
 
     def _init_boxes(self):
         self._init_createbox()
@@ -175,6 +180,7 @@ class Display(object):
             if event.key == Keys.Exit.value:
                 self._close()
 
+    # noinspection PyMethodMayBeStatic
     def multi_input(self, key_input, mouse_pos, dt):
         """
         ...
@@ -184,6 +190,7 @@ class Display(object):
         """
         pass
 
+    # noinspection PyMethodMayBeStatic
     def update(self, dt):
         """
         ...
@@ -210,6 +217,10 @@ class Display(object):
                                             (self.pouch_title.get_width() / 2),
                                             self._set_y(TITLEPOSY)))
 
+        sta_title = self.middlefont.render(
+                    STATITLE.format(self.cur_hero.NAM) + str(self.cur_hero.sta.cur), True, FONTCOLOR).convert_alpha()
+        self.screen.blit(sta_title, (self._set_x(STATITLEPOSX), self._set_y(STATITLEPOSY)))
+
         self.infobox.render(self.screen, self.info_label)
         self.createbox.render(self.screen)
         self.pouchbox.render(self.screen)
@@ -233,17 +244,17 @@ class Display(object):
                 self.engine.audio.play_sound(SFX.menu_cancel)
                 push_object = MessageBox(self.engine.gamestate, text)
                 self.engine.gamestate.push(push_object)
-                return
+                return True
             elif self.cur_hero.sta.cur < self.cur_hero.alc.STA_COST:
                 text = ["You do not have enough stamina",
                         "to create that {}.".format(selected_potion.NAM)]
                 self.engine.audio.play_sound(SFX.menu_cancel)
                 push_object = MessageBox(self.engine.gamestate, text)
                 self.engine.gamestate.push(push_object)
-                return
+                return True
             elif 'pouch is full' is False:  # todo, moet pouch is vol hier? of in pouch?
                 self.engine.audio.play_sound(SFX.menu_cancel)
-                return
+                return True
 
             self.engine.data.pouch.remove(herbs, selected_potion.HRB, force=True)  # want kan ook 0 zijn.
             self.engine.data.pouch.remove(spices, selected_potion.SPC, force=True)
@@ -266,6 +277,8 @@ class Display(object):
                 self.engine.gamestate.push(push_object)
 
             self._init_boxes()
+            return True
+        return False
 
     def _set_x(self, posx):
         return self.screen.get_width() * posx
