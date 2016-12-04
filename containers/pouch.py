@@ -27,7 +27,7 @@ class Pouch(dict):
         """
         Geeft het aantal terug van het gevraagde pouch item object.
         :param pouch_item: object
-        :return: het aantal of 0
+        :return: het aantal of als het item niet bestaat return 0
         """
         if pouch_item.RAW in self:
             return self[pouch_item.RAW].qty
@@ -54,6 +54,11 @@ class Pouch(dict):
     def remove(self, pouch_item, cost, verbose=True, force=False):
         """
         Verwijdert quantity uit de pouch. Als je iets koopt bijv.
+        :param pouch_item:
+        :param cost:
+        :param verbose:
+        :param force: als hij er 0 uit de pouch moet nemen vanwege polymorph, dan zou hij crashen, gebruik force
+        om qty 0 uit de pouch te nemen.
         """
         if cost < 1 and force is False:
             Console.error_quantity_less_than_one(cost)

@@ -152,20 +152,26 @@ class BaseBox(object):
             eqp_skl = hero.get_equipped_item_of_type(hovered_equipment_item.TYP).get_value_of(skill_raw)
             new_skl = hovered_equipment_item.get_value_of(skill_raw)
 
-            # bekijk of de oude penalty kleiner is dan het nieuwe verschil.
-            old_pen = 999
-            for skl in hero.skills_tuple:
-                if skl.RAW == skill_raw:
-                    old_pen = skl.ext
-                    break
-
             diff = new_skl - eqp_skl
-            # als dat zo is, geef die dan weer, maar niet als de oude penalty gewoon 0 is zoals standaard.
-            if diff > abs(old_pen) and not old_pen == 0:
-                return abs(old_pen)
-            else:
-                return diff
+            return diff
         return ""
+
+            # volgens mij is deze code overbodig geworden door de aanpassing dat hij de diff lager dan 0 mag hebben
+            # ik heb hem daarom uitgezet, maar ik weet dit nog niet helemaal zeker:
+            # bekijk of de oude penalty kleiner is dan het nieuwe verschil.
+            # old_pen = 999
+            # for skl in hero.skills_tuple:
+            #     if skl.RAW == skill_raw:
+            #         old_pen = skl.ext
+            #         break
+            #
+            # diff = new_skl - eqp_skl
+            # als dat zo is, geef die dan weer, maar niet als de oude penalty gewoon 0 is zoals standaard.
+            # if diff > abs(old_pen) and not old_pen == 0:
+            #     return abs(old_pen)
+            # else:
+            #     return diff
+        # return ""
 
     def _create_rect_with_offset(self, index, text, columnxx, columnsy, rowheight):
         """

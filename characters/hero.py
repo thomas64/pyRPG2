@@ -239,7 +239,7 @@ class Hero(object):
         """
         Waarschijnlijk alleen voor visuele partyscreen weergave.
         """
-        return self.wpn_hit + self.war_hit
+        return self.eqp_hit + self.war_hit
 
     @property
     def wpn_dam(self):

@@ -1227,6 +1227,6 @@
    </properties>
   </object>
   <object id="131" name="note6" x="448" y="432" width="32" height="32"/>
-  <object id="132" name="note7" x="192" y="288" width="32" height="32"/>
+  <object id="132" name="note7" x="192" y="288" width="32" height="48"/>
  </objectgroup>
 </map>

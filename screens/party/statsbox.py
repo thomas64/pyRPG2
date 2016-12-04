@@ -65,7 +65,7 @@ class StatsBox(BaseBox):
         mvp_bval = str(hero.sta_mvp)
         prt_bval = str(hero.tot_prt)
         des_bval = str(hero.sld_des)
-        hit_bval = str(hero.sub_hit)+" %"
+        hit_bval = str(hero.wpn_hit)+" %"
         dam_bval = str(hero.wpn_dam)
 
         xpr_diff = ""
@@ -75,17 +75,17 @@ class StatsBox(BaseBox):
         mvp_diff = hero.dif_mvp
         prt_diff = ""
         des_diff = ""
-        hit_diff = hero.eqp_hit
+        hit_diff = hero.sub_hit
         dam_diff = ""
 
         xpr_tval = ""
         txp_tval = ""
         nxt_tval = ""
         wht_tval = ""
-        mvp_tval = "("+str(hero.tot_mvp)+")"
+        mvp_tval = ""
         prt_tval = ""
         des_tval = ""
-        hit_tval = "("+str(hero.tot_hit)+" %)"
+        hit_tval = ""
         dam_tval = ""
 
         xpr_prev = ""
@@ -133,6 +133,7 @@ class StatsBox(BaseBox):
             self.view_matrix.append(
                 [self.normalfont.render(stat.NAM + " :", True, self._get_color(index)).convert_alpha(),
                  self.normalfont.render(str(stat.qty), True, self.fontcolor1).convert_alpha(),
+                 # extra if voor stats die een .cur hebben. die moeten dat ook meten.
                  self._set_color(stat.ext + (stat.cur - stat.qty if hasattr(stat, 'cur') else 0), 1),
                  self.normalfont.render("("+str(stat.tot)+")", True, self.fontcolor1).convert_alpha(),
                  self._set_color(preview_value, 2)
@@ -174,7 +175,7 @@ class StatsBox(BaseBox):
                 "has, the more movepoints. The more weight your character has, the less movepoints. The first column "
                 "shows the number of movepoints calculated from your character's stamina. The second (red) column "
                 "shows the calculated weight subtracted. If that column is green, it means that your character has "
-                "special movepoints enhancers in his/her equipment. The column in parenthesis shows the total value.")
+                "special movepoints enhancers in his/her equipment.")
 
         elif stat == StatType.prt:
             # Protection
@@ -189,8 +190,7 @@ class StatsBox(BaseBox):
             return (
                 "Defines how much chance the weapon of your character has in striking the enemy successfully. "
                 "The higher the percentage, the higher the chance to hit. The first column shows the hit chance from "
-                "your character's weapon plus a possible calculated warrior skill. The second (green) column shows "
-                "the special hit chance enhancers in your character's equipment. The column in parenthesis shows "
-                "the total value.",
+                "your character's weapon. The second (green) column shows your skill bonuses plus "
+                "the special hit chance enhancers in your character's equipment.",
                 " ",
                 "{}% from Warrior Skill.".format(ext_stat))

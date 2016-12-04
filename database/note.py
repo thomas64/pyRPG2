@@ -28,5 +28,5 @@ class NoteDatabase(enum.Enum):
               " ",
               "                      John the Hiker"]]
     note6 = [["What a strange statue...",
-              "You'd wonder what it is here for."]]
+              "You might wonder what it's here for."]]
     note7 = [["That's right, it's a pole sticking out of the water."]]
