@@ -14,7 +14,7 @@ from constants import GameState
 from constants import Keys
 from constants import SFX
 from database import PouchItemDatabase
-from inventoryitems import PouchItem
+import inventoryitems
 
 from screens.shop.infobox import InfoBox
 from .createbox import CreateBox
@@ -139,9 +139,11 @@ class Display(object):
         height = self.screen.get_height() * INFOBOXHEIGHT
         self.infobox = InfoBox(self._set_x(INFOBOXPOSX), self._set_y(INFOBOXPOSY), int(width), int(height))
 
+    # noinspection PyMissingOrEmptyDocstring
     def on_enter(self):
         pass
 
+    # noinspection PyMissingOrEmptyDocstring
     def on_exit(self):
         pass
 
@@ -229,9 +231,9 @@ class Display(object):
     def _handle_create_box_click(self, event):
         create_click, selected_potion = self.createbox.mouse_click(event)
         if create_click:
-            herbs = PouchItem(**PouchItemDatabase.herbs.value)
-            spices = PouchItem(**PouchItemDatabase.spices.value)
-            gemstones = PouchItem(**PouchItemDatabase.gemstones.value)
+            herbs = inventoryitems.factory_pouch_item(PouchItemDatabase.herbs)
+            spices = inventoryitems.factory_pouch_item(PouchItemDatabase.spices)
+            gemstones = inventoryitems.factory_pouch_item(PouchItemDatabase.gemstones)
             hrb_qty = self.engine.data.pouch.get_quantity(herbs)
             spc_qty = self.engine.data.pouch.get_quantity(spices)
             gms_qty = self.engine.data.pouch.get_quantity(gemstones)

@@ -370,7 +370,7 @@ class Display(object):
         if self.pouch_box.rect.collidepoint(event.pos):
             pouch_click, selected_item = self.pouch_box.mouse_click(event)
             if pouch_click:
-                selected_item.USE()
+                selected_item.use()
                 # self.engine.audio.play_sound(SFX.menu_select)
                 # push_object = MessageBox(self.engine.gamestate, [selected_item.NAM])
                 # self.engine.gamestate.push(push_object)

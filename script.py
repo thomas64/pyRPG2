@@ -11,7 +11,7 @@ from database import TreasureChestDatabase
 from database import WeaponDatabase
 from database import PouchItemDatabase
 from inventoryitems import EquipmentItem
-from inventoryitems import PouchItem
+import inventoryitems
 
 
 class Script:
@@ -36,7 +36,7 @@ class Script:
 
         eqp_item = EquipmentItem(**WeaponDatabase.bronzemace.value)
         data.inventory.add_i(eqp_item, verbose=False)
-        pouch_item = PouchItem(**PouchItemDatabase.gold.value)
+        pouch_item = inventoryitems.factory_pouch_item(PouchItemDatabase.gold)
         data.pouch.add(pouch_item, 1, verbose=False)
 
         data.map_name = 'ersin_forest_center'

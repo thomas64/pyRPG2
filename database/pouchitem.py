@@ -25,13 +25,6 @@ POTIONYELLOW = os.path.join(POUCHPATH, "potion_yellow.png")
 NOTEPIMG = os.path.join(POUCHPATH, "note.png")
 
 
-# todo, methods hier definieren voor de potions hun werkingen.
-
-def healing_potion():
-    """..."""
-    print("test")
-
-
 class PouchItemDatabase(enum.Enum):
     """..."""
     gold = dict(nam="Gold",           srt=1,  spr=GOLDIMG,
@@ -48,7 +41,6 @@ class PouchItemDatabase(enum.Enum):
                      desc="A written note that says that you are not a monster.")
 
     hlg_pot = dict(nam="Healing Potion",      srt=5, spr=POTIONBLUE,    val=4,  hrb=3, spc=0, gms=0, alc=1,
-                   use=healing_potion,
                    desc="Restores a fifth of the drinker's lost Endurance and Stamina. Creating a "
                         "Healing Potion requires 3 Herbs and an Alchemist rank of at least 1.")
     cur_pot = dict(nam="Curing Potion",       srt=6, spr=POTIONBLUE,    val=8,  hrb=3, spc=2, gms=0, alc=3,

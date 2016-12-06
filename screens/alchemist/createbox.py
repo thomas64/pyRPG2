@@ -4,7 +4,7 @@ class: CreateBox
 """
 
 from components import ListBox
-from inventoryitems import PouchItem
+import inventoryitems
 
 COLUMN1X = 0
 COLUMN2X = 34
@@ -37,7 +37,7 @@ class CreateBox(ListBox):
     def _fill_table_data(self, potion_database, hero_alc_skill):
 
         for potion in potion_database:
-            potion_obj = PouchItem(**potion.value)
+            potion_obj = inventoryitems.factory_pouch_item(potion)
             percentage = str(hero_alc_skill.get_percentage(potion_obj.ALC)) + " %"
             self.table_data.append(
                 # row[0],            row[1],       row[2],    row[3],   row[4]

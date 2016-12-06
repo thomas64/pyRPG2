@@ -31,7 +31,7 @@ from database import SignDatabase
 from database import PouchItemDatabase
 
 from inventoryitems import EquipmentItem
-from inventoryitems import PouchItem
+import inventoryitems
 
 import screens.school
 import screens.shop
@@ -200,7 +200,7 @@ class Window(object):
             yes = self.inn_box.TOPINDEX
             scr_capt = self.inn_box.scr_capt
             if choice == yes:
-                gold = PouchItem(**PouchItemDatabase.gold.value)
+                gold = inventoryitems.factory_pouch_item(PouchItemDatabase.gold)
                 if self.engine.data.pouch.remove(gold, self.inn_data['price']):
                     self.engine.audio.play_sound(SFX.coins)
                     self.engine.gamestate.push(Transition(self.engine.gamestate))
@@ -675,7 +675,7 @@ class Window(object):
                 text.append("{} {}".format(value['qty'], equipment_item.NAM))
                 image.append(equipment_item_spr)
             elif key.startswith('itm'):
-                pouch_item = PouchItem(**value['nam'].value)
+                pouch_item = inventoryitems.factory_pouch_item(value['nam'])
                 pouch_item_spr = pygame.image.load(pouch_item.SPR).convert_alpha()
                 self.engine.data.pouch.add(pouch_item, quantity=value['qty'])
                 text.append("{} {}".format(value['qty'], pouch_item.NAM))

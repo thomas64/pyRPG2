@@ -11,7 +11,7 @@ from components import MessageBox
 from constants import QuestState
 
 from .equipment import EquipmentItem
-from .pouch import PouchItem
+import inventoryitems
 
 
 class BaseQuestItem(object):
@@ -147,7 +147,7 @@ class FetchItemQuestItem(BaseQuestItem):
                 eqp_obj = EquipmentItem(**value['nam'].value)
                 all_items.append(data.inventory.contains(eqp_obj, value['qty']))
             elif key.startswith('itm'):
-                itm_obj = PouchItem(**value['nam'].value)
+                itm_obj = inventoryitems.factory_pouch_item(value['nam'])
                 all_items.append(data.pouch.contains(itm_obj, value['qty']))
 
         return all(all_items)
@@ -163,7 +163,7 @@ class FetchItemQuestItem(BaseQuestItem):
                 eqp_obj = EquipmentItem(**value['nam'].value)
                 data.inventory.remove_i(eqp_obj, value['qty'])
             elif key.startswith('itm'):
-                itm_obj = PouchItem(**value['nam'].value)
+                itm_obj = inventoryitems.factory_pouch_item(value['nam'])
                 data.pouch.remove(itm_obj, value['qty'])
 
 

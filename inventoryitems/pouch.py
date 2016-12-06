@@ -22,3 +22,21 @@ class PouchItem(object):
         :return:
         """
         return self.DESC
+
+    def use(self):
+        """
+        Lege methode voor overervende children.
+        """
+        pass
+
+
+class HealingPotion(PouchItem):
+    """
+    ...
+    """
+    def use(self):
+        """
+        Dezelfde methode, maar nu gevuld met iets.
+        """
+        print("hoi")
+

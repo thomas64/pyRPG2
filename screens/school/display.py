@@ -14,7 +14,7 @@ from constants import Keys
 from constants import SFX
 from database import SchoolDatabase
 from database import PouchItemDatabase
-from inventoryitems import PouchItem
+import inventoryitems
 
 from screens.shop.infobox import InfoBox
 from .knownbox import KnownBox
@@ -133,6 +133,8 @@ class Display:
             BTNWIDTH, BTNHEIGHT, (self.background.get_width() + CLOSEX, CLOSEY), CLOSELBL, Keys.Exit.value,
             COLORKEY, FONTCOLOR)
 
+        self.gold_object = inventoryitems.factory_pouch_item(PouchItemDatabase.gold)
+
         self.info_label = ""
         self._reset_vars()
 
@@ -205,8 +207,7 @@ class Display:
             yes = self.confirm_box.TOPINDEX
             if choice == yes:
                 self.engine.audio.play_sound(SFX.scroll)
-                gold = PouchItem(**PouchItemDatabase.gold.value)
-                self.engine.data.pouch.remove(gold, self.gold_cost)
+                self.engine.data.pouch.remove(self.gold_object, self.gold_cost)
                 self.selected_hero.exp.rem -= self.xp_cost
                 # hier staat selected_spell eventueel nog op 0
                 self._on_enter2()
@@ -301,8 +302,7 @@ class Display:
         """
         for selector in self.selectors:
             selector.update(self.selected_hero)
-        gold = PouchItem(**PouchItemDatabase.gold.value)
-        self.gold_amount = self.engine.data.pouch.get_quantity(gold)
+        self.gold_amount = self.engine.data.pouch.get_quantity(self.gold_object)
         self.xp_amount = self.selected_hero.exp.rem
 
     def render(self):
