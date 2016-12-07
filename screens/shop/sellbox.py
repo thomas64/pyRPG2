@@ -49,7 +49,7 @@ class SellBox(ListBox):
             # inventory is hier pouch
             for pouch_item_obj in inventory.get_all_pouch_items():
                 # party is hier shopdatabase
-                for pouch_item_dict in party:
+                for pouch_item_dict in party.values():
                     if pouch_item_obj.NAM == pouch_item_dict.value['nam']:
                         pouch_item_spr = pygame.image.load(pouch_item_obj.SPR).convert_alpha()
                         pouch_item_nam = pouch_item_obj.NAM

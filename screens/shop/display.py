@@ -4,11 +4,9 @@ class: Display
 """
 
 import collections
-import enum
 import importlib
 
 import pygame
-import aenum
 
 from components import Button
 from components import ConfirmBox
@@ -83,18 +81,6 @@ CLOSELBL = "Close"
 CLOSEX, CLOSEY = -100, 40    # negatieve x omdat de positie van rechts bepaald wordt.
 
 
-class WeaponEnum(enum.Enum):
-    """Lege Enum om te vullen vanuit _init_selectors()"""
-
-
-class PouchEnum(enum.Enum):
-    """Lege Enum om te vullen vanuit _init_selectors()"""
-
-
-class EquipmentEnum(enum.Enum):
-    """Lege Enum om te vullen vanuit _init_selectors()"""
-
-
 class Display(object):
     """
     ...
@@ -140,18 +126,18 @@ class Display(object):
         for index, shoptype in enumerate(self.shoptype_list):
 
             if type(shoptype) == WeaponType:
-                self.databases[shoptype.name] = WeaponEnum
+                self.databases[shoptype.name] = collections.OrderedDict()
                 from database import WeaponDatabase
                 # omdat alle wapens in wpn zitten moet de database opnieuw opgebouwd worden met alleen de juiste wapens
                 for weapon_itm in WeaponDatabase:
                     if weapon_itm.value['skl'] == shoptype:
-                        aenum.extend_enum(self.databases[shoptype.name], weapon_itm.name, weapon_itm.value)
+                        self.databases[shoptype.name][weapon_itm.name] = weapon_itm
 
             # pouchitems zijn een tuple, zie shopdatabase, equipmentitems zijn enum.
             elif type(shoptype) == tuple:
-                self.databases[shoptype[0].name] = PouchEnum
+                self.databases[shoptype[0].name] = collections.OrderedDict()
                 for pouch_itm in shoptype[1]:
-                    aenum.extend_enum(self.databases[shoptype[0].name], pouch_itm.name, pouch_itm.value)
+                    self.databases[shoptype[0].name][pouch_itm.name] = pouch_itm
 
                 # maak van de tuple in de lijst een enum, net zoals de rest uit lijst.
                 self.shoptype_list[index] = shoptype[0]
@@ -159,7 +145,7 @@ class Display(object):
                 shoptype = shoptype[0]
 
             else:
-                self.databases[shoptype.name] = EquipmentEnum
+                self.databases[shoptype.name] = collections.OrderedDict()
                 db_select = dict(acy='AccessoryDatabase', amu='AmuletDatabase', arm='ArmorDatabase', blt='BeltDatabase',
                                  bts='BootsDatabase', brc='BraceletDatabase', clk='CloakDatabase', glv='GlovesDatabase',
                                  hlm='HelmetDatabase', rng='RingDatabase', sld='ShieldDatabase')
@@ -169,7 +155,8 @@ class Display(object):
                 enum_db = getattr(lib, db_select[shoptype.name])  # enum_db is bijv HelmetDatabase
                 for equipment_itm in enum_db:
                     if equipment_itm.value['typ'] == shoptype:
-                        aenum.extend_enum(self.databases[shoptype.name], equipment_itm.name, equipment_itm.value)
+                        self.databases[shoptype.name][equipment_itm.name] = equipment_itm
+
             # voeg selector objecten toe
             self.selectors.add(Selector(self._set_x(SELECTORPOSX) + index * SELECTORWIDTH,
                                         self._set_y(SELECTORPOSY), shoptype))
@@ -217,9 +204,9 @@ class Display(object):
         if self.material_list:
             # maak eerst buy_db weer leeg
             buy_database = collections.OrderedDict()
-            for itm_key, itm_value in self.databases[self.shoptype.name].items():
-                if itm_value.get('mtr') in self.material_list:
-                    buy_database[itm_key] = itm_value
+            for itm_enum in self.databases[self.shoptype.name].values():
+                if itm_enum.value.get('mtr') in self.material_list:
+                    buy_database[itm_enum.name] = itm_enum
         self.buybox = BuyBox(self._set_x(BUYBOXPOSX), self._set_y(BUYBOXPOSY), int(width), int(height),
                              buy_database, self.sum_merchant)
 

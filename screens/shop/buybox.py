@@ -42,7 +42,7 @@ class BuyBox(ListBox):
 
     def _fill_table_data(self, equipment_database):
 
-        for equipment_item in equipment_database:
+        for equipment_item in equipment_database.values():
 
             # speciaal alleen voor pouchitems
             if equipment_item.value['typ'] == EquipmentType.itm:
