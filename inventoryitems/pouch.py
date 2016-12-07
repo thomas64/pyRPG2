@@ -23,20 +23,42 @@ class PouchItem(object):
         """
         return self.DESC
 
-    def use(self):
+    def use(self, hero):
         """
         Lege methode voor overervende children.
         """
-        pass
+        return None, None
 
 
 class HealingPotion(PouchItem):
     """
     ...
     """
-    def use(self):
+    def use(self, hero):
         """
         Dezelfde methode, maar nu gevuld met iets.
         """
-        print("hoi")
+        if hero.cur_hp < hero.max_hp:
 
+            healpoints = round(hero.max_hp / self.HP)
+
+            hero.edu.cur += healpoints
+            if hero.edu.cur > hero.edu.qty:
+                healpoints = hero.edu.cur - hero.edu.qty
+                hero.edu.cur = hero.edu.qty
+
+                hero.sta.cur += healpoints
+                if hero.sta.cur > hero.sta.qty:
+                    healpoints = hero.sta.cur - hero.sta.qty
+                    hero.sta.cur = hero.sta.qty
+
+                    hero.lev.cur += healpoints
+                    if hero.lev.cur > hero.lev.qty:
+                        # healpoints = 0
+                        hero.lev.cur = hero.lev.qty
+
+            text = ["{} used a {}.".format(hero.NAM, self.NAM)]
+            return True, text
+        else:
+            text = ["A {} cannot be used right now.".format(self.NAM)]
+            return False, text
