@@ -23,7 +23,7 @@ class PouchItem(object):
         """
         return self.DESC
 
-    def use(self, hero):
+    def use(self, *args):
         """
         Lege methode voor overervende children.
         """
@@ -39,24 +39,41 @@ class HealingPotion(PouchItem):
         Dezelfde methode, maar nu gevuld met iets.
         """
         if hero.cur_hp < hero.max_hp:
-
             healpoints = round(hero.max_hp / self.HP)
+            hero.recover_part_hp(healpoints)
+            text = ["{} used a {}.".format(hero.NAM, self.NAM)]
+            return True, text
+        else:
+            text = ["A {} cannot be used right now.".format(self.NAM)]
+            return False, text
 
-            hero.edu.cur += healpoints
-            if hero.edu.cur > hero.edu.qty:
-                healpoints = hero.edu.cur - hero.edu.qty
-                hero.edu.cur = hero.edu.qty
 
-                hero.sta.cur += healpoints
-                if hero.sta.cur > hero.sta.qty:
-                    healpoints = hero.sta.cur - hero.sta.qty
-                    hero.sta.cur = hero.sta.qty
+class CuringPotion(HealingPotion):
+    """
+    Is een child van HealingPotion, alleen self.HP is anders.
+    Hoeft dus niet eens een child te zijn, maar voor de duidelijkheid in de class name is het wel handig.
+    """
 
-                    hero.lev.cur += healpoints
-                    if hero.lev.cur > hero.lev.qty:
-                        # healpoints = 0
-                        hero.lev.cur = hero.lev.qty
 
+class StaminaPotion(PouchItem):
+    """..."""
+    def use(self, hero):
+        """..."""
+        if hero.sta.cur < hero.sta.qty:
+            hero.recover_full_stamina()
+            text = ["{} used a {}.".format(hero.NAM, self.NAM)]
+            return True, text
+        else:
+            text = ["A {} cannot be used right now.".format(self.NAM)]
+            return False, text
+
+
+class RestorePotion(PouchItem):
+    """..."""
+    def use(self, hero):
+        """..."""
+        if hero.cur_hp < hero.max_hp:
+            hero.recover_full_hp()
             text = ["{} used a {}.".format(hero.NAM, self.NAM)]
             return True, text
         else:

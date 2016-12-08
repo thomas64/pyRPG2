@@ -207,7 +207,8 @@ class Window(object):
                     push_object = MessageBox(self.engine.gamestate, InnDatabase.paid_text(),
                                              face_image=self.inn_data['face'], scr_capt=scr_capt)
                     self.engine.gamestate.push(push_object)
-                    # todo, health afhandelen.
+                    for hero in self.party:
+                        hero.recover_full_hp()
                 else:
                     push_object = MessageBox(self.engine.gamestate, InnDatabase.fail_text(),
                                              face_image=self.inn_data['face'], scr_capt=scr_capt)

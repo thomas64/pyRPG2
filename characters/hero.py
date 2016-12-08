@@ -396,3 +396,37 @@ class Hero(object):
             self.lev.qty += 1
             self.lev.cur += 1
             # Output.character_gain_level(self.NAME, self.level.quantity)
+
+    def recover_full_hp(self):
+        """
+        Zet alle .cur waarden om naar de .qty waarden
+        """
+        self.edu.cur = self.edu.qty
+        self.sta.cur = self.sta.qty
+        self.lev.cur = self.lev.qty
+
+    def recover_part_hp(self, healpoints):
+        """
+        Als de te herstellen hp zich over edu sta en lev verdeeld.
+        :param healpoints: de hoeveelheid hp dat bij de character hersteld.
+        """
+        self.edu.cur += healpoints
+        if self.edu.cur > self.edu.qty:
+            healpoints = self.edu.cur - self.edu.qty
+            self.edu.cur = self.edu.qty
+
+            self.sta.cur += healpoints
+            if self.sta.cur > self.sta.qty:
+                healpoints = self.sta.cur - self.sta.qty
+                self.sta.cur = self.sta.qty
+
+                self.lev.cur += healpoints
+                if self.lev.cur > self.lev.qty:
+                    # healpoints = 0
+                    self.lev.cur = self.lev.qty
+
+    def recover_full_stamina(self):
+        """
+        Zet alleen de .sta.cur waarde om naar de .qty waarde.
+        """
+        self.sta.cur = self.sta.qty

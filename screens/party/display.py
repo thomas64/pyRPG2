@@ -320,6 +320,7 @@ class Display(object):
     def _handle_stat_box_click(self, event):
         """
         ...
+        :param event:
         :return:
         """
         if self.stats_box.rect.collidepoint(event.pos):
@@ -370,6 +371,7 @@ class Display(object):
         if self.pouch_box.rect.collidepoint(event.pos):
             pouch_click, selected_item = self.pouch_box.mouse_click(event)
             if pouch_click:
+                # todo, maken dat in battle je niet op deze manier potions kan drinken.
                 able, message = selected_item.use(self.cur_hero)
                 if able and message:
                     self.engine.audio.play_sound(SFX.menu_select)

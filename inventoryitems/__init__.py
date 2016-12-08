@@ -31,10 +31,19 @@ def factory_pouch_item(enum):
 
     from .pouch import PouchItem
     from .pouch import HealingPotion
+    from .pouch import CuringPotion
+    from .pouch import StaminaPotion
+    from .pouch import RestorePotion
 
     # de check moet op de name. door de shop kan het namelijk ook vanuit een andere enum komen, maar de naam
     # zal in ieder geval hetzelfde zijn. dus daar kan de check op.
     if enum.name == PouchItemDatabase.hlg_pot.name:
         return HealingPotion(**enum.value)
+    elif enum.name == PouchItemDatabase.cur_pot.name:
+        return CuringPotion(**enum.value)
+    elif enum.name == PouchItemDatabase.sta_pot.name:
+        return StaminaPotion(**enum.value)
+    elif enum.name == PouchItemDatabase.res_pot.name:
+        return RestorePotion(**enum.value)
     else:
         return PouchItem(**enum.value)
