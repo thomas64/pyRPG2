@@ -137,9 +137,10 @@ class MessageBox(object):
         pass
 
     def update(self, dt):
-        # dit is voor een reward. als er een spr_image is, dan krijg je iets. een geluidje erbij.
-        # todo, audio moet aangepast worden, en verschillende audio mogelijkheden
-        if self.spr_image and self.sound:
+        """
+        Laat een evt geluid horen, eenmalig.
+        """
+        if self.sound:
             if self.audio_first_time is False:
                 self.audio_first_time = True
                 self.audio.play_sound(self.sound)

@@ -202,10 +202,9 @@ class Window(object):
             if choice == yes:
                 gold = inventoryitems.factory_pouch_item(PouchItemDatabase.gold)
                 if self.engine.data.pouch.remove(gold, self.inn_data['price']):
-                    self.engine.audio.play_sound(SFX.coins)
                     self.engine.gamestate.push(Transition(self.engine.gamestate))
                     push_object = MessageBox(self.engine.gamestate, self.engine.audio, InnDatabase.paid_text(),
-                                             face_image=self.inn_data['face'], scr_capt=scr_capt)
+                                             face_image=self.inn_data['face'], scr_capt=scr_capt, sound=SFX.coins)
                     self.engine.gamestate.push(push_object)
                     for hero in self.party:
                         hero.recover_full_hp()
@@ -638,9 +637,9 @@ class Window(object):
                                                                        mec_v, mec_h, thf_v, thf_h)
                     image = []
                     text, image = self.display_loot(chest_data['content'], text, image)
-                    self.engine.audio.play_sound(SFX.chest)
                     chest_data['content'] = dict()
-                    push_object = MessageBox(self.engine.gamestate, self.engine.audio, text, spr_image=image)
+                    push_object = MessageBox(self.engine.gamestate, self.engine.audio,
+                                             text, spr_image=image, sound=SFX.chest)
                     self.engine.gamestate.push(push_object)
 
     def check_sparklies(self, check_rect):
@@ -657,9 +656,9 @@ class Window(object):
                 text = ["Found:"]
                 image = []
                 text, image = self.display_loot(sparkly_data['content'], text, image)
-                self.engine.audio.play_sound(SFX.sparkly)
                 sparkly_data['content'] = dict()
-                push_object = MessageBox(self.engine.gamestate, self.engine.audio, text, spr_image=image)
+                push_object = MessageBox(self.engine.gamestate, self.engine.audio,
+                                         text, spr_image=image, sound=SFX.sparkly)
                 self.engine.gamestate.push(push_object)
 
     def display_loot(self, content_data, text, image):

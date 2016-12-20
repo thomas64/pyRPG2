@@ -307,6 +307,8 @@ class SFX(enum.Enum):
     scroll = 10
     chest = 11
     sparkly = 12
+    reward = 13
+    equip = 14
 
 
 class Keys(enum.Enum):

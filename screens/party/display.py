@@ -128,6 +128,7 @@ class Display(object):
             choice = self.leave_box.cur_item
             yes = self.leave_box.TOPINDEX
             if choice == yes:
+                self.engine.audio.play_sound(SFX.menu_select)
                 self.engine.data.party.remove(self.cur_hero)
                 # update daarna het party scherm
                 self.cur_hero = self.engine.data.party['alagos']
@@ -135,6 +136,8 @@ class Display(object):
                 self.hc = self.party.index(self.cur_hero)
                 self._init_boxes()
                 self.party_changed = True
+            else:
+                self.engine.audio.play_sound(SFX.menu_cancel)
             self.leave_box = None
 
         # Als de upgrade stat confirmbox in beeld is geweest.
@@ -147,7 +150,7 @@ class Display(object):
                 self.selected_stat.upgrade()
                 self._init_boxes()
             else:
-                self.engine.audio.play_sound(SFX.menu_select)
+                self.engine.audio.play_sound(SFX.menu_cancel)
 
             self._reset_vars()
 
@@ -213,6 +216,7 @@ class Display(object):
                         return
                 new_hc = self.hc
                 if new_hc != old_hc:
+                    self.engine.audio.play_sound(SFX.menu_switch)
                     self._init_boxes()
 
                 # als er in de inventory box wordt geklikt
@@ -221,12 +225,14 @@ class Display(object):
                     boxpos, equipment_type = self.inventory_box.mouse_click(event)
                     # als er geen clickbox is en wel een equipment_type, geef dan een clickbox weer
                     if not self.invclick_box and equipment_type:
+                        self.engine.audio.play_sound(SFX.menu_switch)
                         self.invclick_box = InvClickBox(boxpos, equipment_type, self.party, self.inventory)
                     return
 
                 for button in self.buttons:
                     button_press = button.single_click(event)
                     if button_press == Keys.Exit.value:
+                        self.engine.audio.play_sound(SFX.menu_cancel)
                         self.engine.gamestate.pop()
                     elif button_press == Keys.Prev.value:
                         self._previous()
@@ -250,6 +256,7 @@ class Display(object):
             self.info_label = ""
 
             if event.key in (Keys.Exit.value, Keys.Inv.value):
+                self.engine.audio.play_sound(SFX.menu_cancel)
                 self.engine.gamestate.pop()
             elif event.key == Keys.Prev.value:
                 self._previous()
@@ -329,18 +336,16 @@ class Display(object):
                 self.xp_cost = self.selected_stat.xp_cost
                 success, text = self.selected_stat.is_able_to_upgrade(self.cur_hero.exp.rem)
                 if success:
-                    self.engine.audio.play_sound(SFX.menu_select)
                     text = ["You have {} XP Remaining.".format(self.cur_hero.exp.rem),
                             "Are you sure you wish to train",
                             "the stat {} for {} XP?".format(self.selected_stat.NAM, self.xp_cost),
                             "",
                             "Yes",
                             "No"]
-                    self.confirm_box = ConfirmBox(self.engine.gamestate, self.engine.audio, text)
+                    self.confirm_box = ConfirmBox(self.engine.gamestate, self.engine.audio, text, sound=SFX.menu_select)
                     self.engine.gamestate.push(self.confirm_box)
                 else:
-                    self.engine.audio.play_sound(SFX.menu_cancel)
-                    push_object = MessageBox(self.engine.gamestate, self.engine.audio, text)
+                    push_object = MessageBox(self.engine.gamestate, self.engine.audio, text, sound=SFX.menu_cancel)
                     self.engine.gamestate.push(push_object)
                     self._reset_vars()
             return True
@@ -374,12 +379,10 @@ class Display(object):
                 # todo, maken dat in battle je niet op deze manier potions kan drinken.
                 able, message = selected_item.use(self.cur_hero)
                 if able and message:
-                    self.engine.audio.play_sound(SFX.menu_select)
-                    push_object = MessageBox(self.engine.gamestate, self.engine.audio, message)
+                    push_object = MessageBox(self.engine.gamestate, self.engine.audio, message, sound=SFX.menu_select)
                     self.engine.gamestate.push(push_object)
                 elif not able and message:
-                    self.engine.audio.play_sound(SFX.menu_cancel)
-                    push_object = MessageBox(self.engine.gamestate, self.engine.audio, message)
+                    push_object = MessageBox(self.engine.gamestate, self.engine.audio, message, sound=SFX.menu_cancel)
                     self.engine.gamestate.push(push_object)
             return True
         return False
@@ -390,16 +393,19 @@ class Display(object):
                     "",
                     "Yes, you may leave.",
                     "No, I want you to stay."]
-            self.leave_box = ConfirmBox(self.engine.gamestate, self.engine.audio, text, self.cur_hero.FAC)
+            self.leave_box = ConfirmBox(self.engine.gamestate, self.engine.audio,
+                                        text, self.cur_hero.FAC, sound=SFX.menu_select)
             self.engine.gamestate.push(self.leave_box)
 
     def _previous(self):
+        self.engine.audio.play_sound(SFX.menu_switch)
         self.hc -= 1
         if self.hc < 0:
             self.hc = len(self.party) - 1
         self._init_boxes()
 
     def _next(self):
+        self.engine.audio.play_sound(SFX.menu_switch)
         self.hc += 1
         if self.hc > len(self.party) - 1:
             self.hc = 0

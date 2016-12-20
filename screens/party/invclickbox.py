@@ -7,6 +7,7 @@ import pygame
 
 from components import MessageBox
 from constants import Keys
+from constants import SFX
 import inventoryitems
 
 
@@ -221,7 +222,7 @@ class InvClickBox(object):
                     # of niet al van een hero is
                     else:
                         text = ["That {} is already equipped by {}.".format(selected_item.NAM, row[6])]
-                        push_object = MessageBox(gamestate, audio, text)
+                        push_object = MessageBox(gamestate, audio, text, sound=SFX.menu_cancel)
                         gamestate.push(push_object)
 
                 # unequip

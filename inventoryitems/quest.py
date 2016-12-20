@@ -7,8 +7,8 @@ class: PersonMessageQuestItem
 
 from components import ConfirmBox
 from components import MessageBox
-
 from constants import QuestState
+from constants import SFX
 
 from .equipment import EquipmentItem
 import inventoryitems
@@ -96,8 +96,11 @@ class FetchItemQuestItem(BaseQuestItem):
                 text = ["Received:"]
                 image = []
                 text, image = display_loot(self.reward, text, image)
-                push_object = MessageBox(gamestate, audio, text, spr_image=image, scr_capt=scr_capt)
+                push_object = MessageBox(gamestate, audio, text, spr_image=image, scr_capt=scr_capt, sound=SFX.reward)
                 gamestate.push(push_object)
+            else:
+                # als er geen directe reward is, maar er is wel een soort quest klaring.
+                audio.play_sound(SFX.reward)
             # nog een bedank berichtje van de quest owner.
             push_object = MessageBox(gamestate, audio, self._get_text(), face_image=face_image, scr_capt=scr_capt)
             gamestate.push(push_object)
@@ -195,7 +198,7 @@ class PersonMessageQuestItem(BaseQuestItem):
                 text = ["Received:"]
                 image = []
                 text, image = display_loot(self.reward, text, image)
-                push_object = MessageBox(gamestate, audio, text, spr_image=image)
+                push_object = MessageBox(gamestate, audio, text, spr_image=image, sound=SFX.reward)
                 gamestate.push(push_object)
                 gamestate.swap()
 
@@ -226,12 +229,13 @@ class PersonMessageQuestItem(BaseQuestItem):
         if choice == yes:
             # ga naar Finished
             self._update_state(person_id, is_fulfilled=True)
-            push_object = MessageBox(gamestate, audio,
-                                     self._get_text(person_id), face_image=face_image, scr_capt=scr_capt)
+            push_object = MessageBox(gamestate, audio, self._get_text(person_id),
+                                     face_image=face_image, scr_capt=scr_capt, sound=SFX.menu_select)
             gamestate.push(push_object)
 
         else:
             # bij 'nee' dan wordt je state weer een stapje omlaag gezet.
+            audio.play_sound(SFX.menu_cancel)
             if self.state == QuestState.Ready:
                 self.state = QuestState.Running
 
@@ -293,7 +297,7 @@ class ReceiveItemQuestItem(BaseQuestItem):
             text = ["Received:"]
             image = []
             text, image = display_loot(self.reward, text, image)
-            push_object = MessageBox(gamestate, audio, text, spr_image=image)
+            push_object = MessageBox(gamestate, audio, text, spr_image=image, sound=SFX.reward)
             gamestate.push(push_object)
 
         for text_part in reversed(self._get_text()):

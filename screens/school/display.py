@@ -375,18 +375,16 @@ class Display:
             self.xp_cost = self.selected_spell.xp_cost
             succes, text = self._handle_learn_box_click2()
             if succes:
-                self.engine.audio.play_sound(SFX.menu_select)
                 text = ["Are you sure you wish to learn the",
                         "{} {} for {} XP and {} gold?".format(self.object_type, self.selected_spell.NAM,
                                                               self.xp_cost, self.gold_cost),
                         "",
                         "Yes",
                         "No"]
-                self.confirm_box = ConfirmBox(self.engine.gamestate, self.engine.audio, text)
+                self.confirm_box = ConfirmBox(self.engine.gamestate, self.engine.audio, text, sound=SFX.menu_select)
                 self.engine.gamestate.push(self.confirm_box)
             else:
-                self.engine.audio.play_sound(SFX.menu_cancel)
-                push_object = MessageBox(self.engine.gamestate, self.engine.audio, text)
+                push_object = MessageBox(self.engine.gamestate, self.engine.audio, text, sound=SFX.menu_cancel)
                 self.engine.gamestate.push(push_object)
                 self._reset_vars()
             return True

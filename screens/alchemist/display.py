@@ -243,15 +243,13 @@ class Display(object):
                selected_potion.GMS > gms_qty:
                 text = ["You do not have the right components",
                         "to create that {}.".format(selected_potion.NAM)]
-                self.engine.audio.play_sound(SFX.menu_cancel)
-                push_object = MessageBox(self.engine.gamestate, self.engine.audio, text)
+                push_object = MessageBox(self.engine.gamestate, self.engine.audio, text, sound=SFX.menu_cancel)
                 self.engine.gamestate.push(push_object)
                 return True
             elif self.cur_hero.sta.cur < self.cur_hero.alc.STA_COST:
                 text = ["You do not have enough stamina",
                         "to create that {}.".format(selected_potion.NAM)]
-                self.engine.audio.play_sound(SFX.menu_cancel)
-                push_object = MessageBox(self.engine.gamestate, self.engine. audio, text)
+                push_object = MessageBox(self.engine.gamestate, self.engine. audio, text, sound=SFX.menu_cancel)
                 self.engine.gamestate.push(push_object)
                 return True
             elif 'pouch is full' is False:  # todo, moet pouch is vol hier? of in pouch?
@@ -269,13 +267,11 @@ class Display(object):
             if potion_chance >= rnd_percentage:
                 text = ["{} successfully created.".format(selected_potion.NAM)]
                 self.engine.data.pouch.add(selected_potion)
-                self.engine.audio.play_sound(SFX.menu_select)
-                push_object = MessageBox(self.engine.gamestate, self.engine.audio, text)
+                push_object = MessageBox(self.engine.gamestate, self.engine.audio, text, sound=SFX.menu_select)
                 self.engine.gamestate.push(push_object)
             else:
                 text = ["Failed to create a {}.".format(selected_potion.NAM)]
-                self.engine.audio.play_sound(SFX.menu_cancel)
-                push_object = MessageBox(self.engine.gamestate, self.engine.audio, text)
+                push_object = MessageBox(self.engine.gamestate, self.engine.audio, text, sound=SFX.menu_cancel)
                 self.engine.gamestate.push(push_object)
 
             self._init_boxes()

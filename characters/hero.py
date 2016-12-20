@@ -9,6 +9,7 @@ import characters.spells
 from components import MessageBox
 from constants import EquipmentType
 from constants import Minimals
+from constants import SFX
 from constants import SkillType
 from constants import StatType
 from constants import WeaponType
@@ -284,6 +285,8 @@ class Hero(object):
                 if value_eqp_item.TYP == new_equipment_item.TYP:
                     # als de hero het equipment item mag/kan gebruiken:
                     if self.is_able_to_equip(gamestate, audio, new_equipment_item):
+                        if audio:  # audio kan None zijn door constructor van deze class.
+                            audio.play_sound(SFX.equip)
                         # stel de gekozen attribute bijv self.bts in op de nieuwe equipment
                         setattr(self, key_eqp_item, new_equipment_item)
                         self.calc_stats()
@@ -302,7 +305,7 @@ class Hero(object):
         if not self.has_enough_weapon_skill_to_equip(new_equipment_item):
             text = ["{} doesn't have the skill to equip that {}.".format(
                                                         self.NAM, new_equipment_item.NAM)]
-            push_object = MessageBox(gamestate, audio, text)
+            push_object = MessageBox(gamestate, audio, text, sound=SFX.menu_cancel)
             gamestate.push(push_object)
             return False
 
@@ -317,20 +320,20 @@ class Hero(object):
             if new_equipment_item.get_value_of(stat.name) > stat3:
                 text = ["{} needs {} {} to equip that {}.".format(self.NAM, new_equipment_item.get_value_of(stat.name),
                                                                   stat.value[5:], new_equipment_item.NAM)]
-                push_object = MessageBox(gamestate, audio, text)
+                push_object = MessageBox(gamestate, audio, text, sound=SFX.menu_cancel)
                 gamestate.push(push_object)
                 return False
 
         if (new_equipment_item.get_value_of('SKL') == WeaponType.mis and
                 self.sld.is_not_empty()):
             text = ['{} can not use a bow when a shield is equipped.'.format(self.NAM)]
-            push_object = MessageBox(gamestate, audio, text)
+            push_object = MessageBox(gamestate, audio, text, sound=SFX.menu_cancel)
             gamestate.push(push_object)
             return False
         elif (new_equipment_item.get_value_of('SKL') == WeaponType.shd and
                 self.wpn.get_value_of('SKL') == WeaponType.mis):
             text = ['{} can not use a shield when a bow is equipped.'.format(self.NAM)]
-            push_object = MessageBox(gamestate, audio, text)
+            push_object = MessageBox(gamestate, audio, text, sound=SFX.menu_cancel)
             gamestate.push(push_object)
             return False
 

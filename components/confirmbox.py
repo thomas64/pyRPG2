@@ -31,9 +31,11 @@ class ConfirmBox(object):
     """
     Geeft een selectie weer op het scherm.
     """
-    def __init__(self, gamestate, audio, raw_text, face_image=None, callback=None):
+    def __init__(self, gamestate, audio, raw_text, face_image=None, callback=None, sound=None):
         self.gamestate = gamestate
         self.audio = audio
+        self.audio_first_time = False
+        self.sound = sound
         self.screen = pygame.display.get_surface()
         self.name = GameState.MessageBox
         self.scr_capt = ScreenCapture()
@@ -105,6 +107,7 @@ class ConfirmBox(object):
                 if item.collidepoint(event.pos) and index >= self.TOPINDEX:
                     if self.cur_item != index:
                         self.cur_item = index
+                        self.audio.play_sound(SFX.menu_switch)
                     break
 
         elif event.type == pygame.MOUSEBUTTONDOWN:
@@ -122,11 +125,13 @@ class ConfirmBox(object):
                 self.gamestate.pop()
 
             if event.key == Keys.Up.value and self.cur_item > self.TOPINDEX:
+                self.audio.play_sound(SFX.menu_switch)
                 self.cur_item -= 1
             elif event.key == Keys.Up.value and self.cur_item == self.TOPINDEX:
                 self.audio.play_sound(SFX.menu_error)
                 self.cur_item = self.TOPINDEX
             elif event.key == Keys.Down.value and self.cur_item < len(self.raw_text) - 1:
+                self.audio.play_sound(SFX.menu_switch)
                 self.cur_item += 1
             elif event.key == Keys.Down.value and self.cur_item == len(self.raw_text) - 1:
                 self.audio.play_sound(SFX.menu_error)
@@ -137,9 +142,16 @@ class ConfirmBox(object):
 
     def update(self, dt):
         """
+        Laat een evt geluid horen, eenmalig.
         Herschrijf alle tekst opnieuw, maar nu met de geselecteerde item een ander kleur.
         :param dt:
         """
+
+        if self.sound:
+            if self.audio_first_time is False:
+                self.audio_first_time = True
+                self.audio.play_sound(self.sound)
+
         self.vis_text = []          # de visuele tekst
         for index, row in enumerate(self.raw_text):
             if index == self.cur_item:

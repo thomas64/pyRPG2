@@ -383,19 +383,17 @@ class Display(object):
     def _handle_buy_box_click(self, event):
         self.buy_click, self.selected_item, self.value = self.buybox.mouse_click(event)
         if self.buy_click and self.value <= self.gold_amount:
-            self.engine.audio.play_sound(SFX.menu_select)
             text = ["You may buy 1 {} for {} gold.".format(self.selected_item.NAM, self.value),
                     "",
                     "Yes please.",
                     "No thanks."]
-            self.confirm_box = ConfirmBox(self.engine.gamestate, self.engine.audio, text)
+            self.confirm_box = ConfirmBox(self.engine.gamestate, self.engine.audio, text, sound=SFX.menu_select)
             self.engine.gamestate.push(self.confirm_box)
             return True
         elif self.buy_click and self.value > self.gold_amount:
-            self.engine.audio.play_sound(SFX.menu_cancel)
             text = ["You need {} more gold to".format(self.value - self.gold_amount),
                     "buy that {}.".format(self.selected_item.NAM)]
-            push_object = MessageBox(self.engine.gamestate, self.engine.audio, text)
+            push_object = MessageBox(self.engine.gamestate, self.engine.audio, text, sound=SFX.menu_cancel)
             self.engine.gamestate.push(push_object)
             self.buy_click = False
             self.selected_item = None
@@ -407,22 +405,19 @@ class Display(object):
         self.sell_click, self.selected_item, self.tot_quantity, self.value = self.sellbox.mouse_click(event)
         # als een item maar 0 gc oplevert.
         if self.sell_click and self.value == 0:
-            self.engine.audio.play_sound(SFX.menu_cancel)
             text = ["I do not want that item."]
-            push_object = MessageBox(self.engine.gamestate, self.engine.audio, text)
+            push_object = MessageBox(self.engine.gamestate, self.engine.audio, text, sound=SFX.menu_cancel)
             self.engine.gamestate.push(push_object)
             self.sell_click = False
             return True
         elif self.sell_click and self.selected_item:
-            self.engine.audio.play_sound(SFX.menu_select)
             text = self._fill_confirm_box_with_sell_text()
-            self.confirm_box = ConfirmBox(self.engine.gamestate, self.engine.audio, text)
+            self.confirm_box = ConfirmBox(self.engine.gamestate, self.engine.audio, text, sound=SFX.menu_select)
             self.engine.gamestate.push(self.confirm_box)
             return True
         elif self.sell_click and not self.selected_item:
-            self.engine.audio.play_sound(SFX.menu_cancel)
             text = ["You must unequip that to sell it."]
-            push_object = MessageBox(self.engine.gamestate, self.engine.audio, text)
+            push_object = MessageBox(self.engine.gamestate, self.engine.audio, text, sound=SFX.menu_cancel)
             self.engine.gamestate.push(push_object)
             self.sell_click = False
             return True
