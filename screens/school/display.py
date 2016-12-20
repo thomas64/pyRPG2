@@ -386,7 +386,7 @@ class Display:
                 self.engine.gamestate.push(self.confirm_box)
             else:
                 self.engine.audio.play_sound(SFX.menu_cancel)
-                push_object = MessageBox(self.engine.gamestate, text)
+                push_object = MessageBox(self.engine.gamestate, self.engine.audio, text)
                 self.engine.gamestate.push(push_object)
                 self._reset_vars()
             return True

@@ -395,7 +395,7 @@ class Display(object):
             self.engine.audio.play_sound(SFX.menu_cancel)
             text = ["You need {} more gold to".format(self.value - self.gold_amount),
                     "buy that {}.".format(self.selected_item.NAM)]
-            push_object = MessageBox(self.engine.gamestate, text)
+            push_object = MessageBox(self.engine.gamestate, self.engine.audio, text)
             self.engine.gamestate.push(push_object)
             self.buy_click = False
             self.selected_item = None
@@ -409,7 +409,7 @@ class Display(object):
         if self.sell_click and self.value == 0:
             self.engine.audio.play_sound(SFX.menu_cancel)
             text = ["I do not want that item."]
-            push_object = MessageBox(self.engine.gamestate, text)
+            push_object = MessageBox(self.engine.gamestate, self.engine.audio, text)
             self.engine.gamestate.push(push_object)
             self.sell_click = False
             return True
@@ -422,7 +422,7 @@ class Display(object):
         elif self.sell_click and not self.selected_item:
             self.engine.audio.play_sound(SFX.menu_cancel)
             text = ["You must unequip that to sell it."]
-            push_object = MessageBox(self.engine.gamestate, text)
+            push_object = MessageBox(self.engine.gamestate, self.engine.audio, text)
             self.engine.gamestate.push(push_object)
             self.sell_click = False
             return True

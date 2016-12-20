@@ -31,11 +31,14 @@ class MessageBox(object):
     """
     Geeft een bericht weer op het scherm.
     """
-    def __init__(self, gamestate, raw_text, face_image=None, spr_image=None, scr_capt=None):
+    def __init__(self, gamestate, audio, raw_text, face_image=None, spr_image=None, scr_capt=None, sound=None):
         """
         :param spr_image: list van loaded images
         """
         self.gamestate = gamestate
+        self.audio = audio
+        self.audio_first_time = False
+        self.sound = sound
         self.screen = pygame.display.get_surface()
         self.name = GameState.MessageBox
 
@@ -134,4 +137,9 @@ class MessageBox(object):
         pass
 
     def update(self, dt):
-        pass
+        # dit is voor een reward. als er een spr_image is, dan krijg je iets. een geluidje erbij.
+        # todo, audio moet aangepast worden, en verschillende audio mogelijkheden
+        if self.spr_image and self.sound:
+            if self.audio_first_time is False:
+                self.audio_first_time = True
+                self.audio.play_sound(self.sound)

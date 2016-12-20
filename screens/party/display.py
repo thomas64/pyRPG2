@@ -200,7 +200,7 @@ class Display(object):
                     self.invclick_box = None
 
                 elif self.invclick_box and self.invclick_box.rect.collidepoint(event.pos):
-                    if self.invclick_box.mouse_click(event, self.engine.gamestate, self.cur_hero):
+                    if self.invclick_box.mouse_click(event, self.engine.gamestate, self.engine.audio, self.cur_hero):
                         self.invclick_box = None
                     return  # anders vangt hij ook nog andere clicks hieronder in deze methode af
 
@@ -340,7 +340,7 @@ class Display(object):
                     self.engine.gamestate.push(self.confirm_box)
                 else:
                     self.engine.audio.play_sound(SFX.menu_cancel)
-                    push_object = MessageBox(self.engine.gamestate, text)
+                    push_object = MessageBox(self.engine.gamestate, self.engine.audio, text)
                     self.engine.gamestate.push(push_object)
                     self._reset_vars()
             return True
@@ -375,11 +375,11 @@ class Display(object):
                 able, message = selected_item.use(self.cur_hero)
                 if able and message:
                     self.engine.audio.play_sound(SFX.menu_select)
-                    push_object = MessageBox(self.engine.gamestate, message)
+                    push_object = MessageBox(self.engine.gamestate, self.engine.audio, message)
                     self.engine.gamestate.push(push_object)
                 elif not able and message:
                     self.engine.audio.play_sound(SFX.menu_cancel)
-                    push_object = MessageBox(self.engine.gamestate, message)
+                    push_object = MessageBox(self.engine.gamestate, self.engine.audio, message)
                     self.engine.gamestate.push(push_object)
             return True
         return False

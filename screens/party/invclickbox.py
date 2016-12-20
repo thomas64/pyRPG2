@@ -186,11 +186,12 @@ class InvClickBox(object):
                     return equipment_item.show_info(), equipment_item
                 return None, equipment_item
 
-    def mouse_click(self, event, gamestate, hero):
+    def mouse_click(self, event, gamestate, audio, hero):
         """
         Equip het geselecteerde item.
         :param event: pygame.MOUSEBUTTONDOWN uit partyscreen
         :param gamestate: self.engine.gamestate uit partydisplay
+        :param audio: self.engine.audio uit partydisplay
         :param hero: de huidige geselecteerde hero uit partyscreen
         """
         for index, row in enumerate(self.table_data):
@@ -209,7 +210,7 @@ class InvClickBox(object):
                             # als hij in de inventory zit
                             if self.inventory.contains(selected_item):
                                 # als het aankleden gelukt is
-                                if hero.set_equipment_item(gamestate, selected_item):
+                                if hero.set_equipment_item(gamestate, audio, selected_item):
                                     # verwijder hem dan uit de inventory
                                     self.inventory.remove_i(selected_item)
                                     # als degene die je aan had niet een lege is
@@ -220,7 +221,7 @@ class InvClickBox(object):
                     # of niet al van een hero is
                     else:
                         text = ["That {} is already equipped by {}.".format(selected_item.NAM, row[6])]
-                        push_object = MessageBox(gamestate, text)
+                        push_object = MessageBox(gamestate, audio, text)
                         gamestate.push(push_object)
 
                 # unequip
@@ -229,7 +230,7 @@ class InvClickBox(object):
                     # als degene die je al aan hebt geen lege is
                     if equipped_item.is_not_empty():
                         # trek dan de lege aan
-                        hero.set_equipment_item(gamestate, selected_item)
+                        hero.set_equipment_item(gamestate, audio, selected_item)
                         # en voeg degene die je aan had toe aan de inventory
                         self.inventory.add_i(equipped_item)
                         return True

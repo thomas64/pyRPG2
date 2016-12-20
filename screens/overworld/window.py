@@ -188,7 +188,7 @@ class Window(object):
                     self.load_map()
                 else:
                     text = ["It seems your party is full already."]
-                    push_object = MessageBox(self.engine.gamestate, text,
+                    push_object = MessageBox(self.engine.gamestate, self.engine.audio, text,
                                              face_image=self.hero_data.FAC, scr_capt=scr_capt)
                     self.engine.gamestate.push(push_object)
 
@@ -204,17 +204,17 @@ class Window(object):
                 if self.engine.data.pouch.remove(gold, self.inn_data['price']):
                     self.engine.audio.play_sound(SFX.coins)
                     self.engine.gamestate.push(Transition(self.engine.gamestate))
-                    push_object = MessageBox(self.engine.gamestate, InnDatabase.paid_text(),
+                    push_object = MessageBox(self.engine.gamestate, self.engine.audio, InnDatabase.paid_text(),
                                              face_image=self.inn_data['face'], scr_capt=scr_capt)
                     self.engine.gamestate.push(push_object)
                     for hero in self.party:
                         hero.recover_full_hp()
                 else:
-                    push_object = MessageBox(self.engine.gamestate, InnDatabase.fail_text(),
+                    push_object = MessageBox(self.engine.gamestate, self.engine.audio, InnDatabase.fail_text(),
                                              face_image=self.inn_data['face'], scr_capt=scr_capt)
                     self.engine.gamestate.push(push_object)
             else:
-                push_object = MessageBox(self.engine.gamestate, InnDatabase.deny_text(),
+                push_object = MessageBox(self.engine.gamestate, self.engine.audio, InnDatabase.deny_text(),
                                          face_image=self.inn_data['face'], scr_capt=scr_capt)
                 self.engine.gamestate.push(push_object)
 
@@ -224,7 +224,7 @@ class Window(object):
         elif self.quest_box:
             # roept de callback aan die is meegegeven aan confirmbox bij de logbook quest
             # de callback hier is decided() uit inventoryitems\quest.py
-            self.quest_box.callback(self.engine.gamestate, self.engine.data, self.person_face,
+            self.quest_box.callback(self.engine.gamestate, self.engine.data, self.engine.audio, self.person_face,
                                     self.quest_box.cur_item, self.quest_box.TOPINDEX, self.quest_box.scr_capt,
                                     self.person_id, self.display_loot)
 
@@ -564,7 +564,7 @@ class Window(object):
             # of als hij dat niet heeft
             else:
                 for text_part in reversed(person_data['text']):
-                    push_object = MessageBox(self.engine.gamestate, text_part, person_data['face'])
+                    push_object = MessageBox(self.engine.gamestate, self.engine.audio, text_part, person_data['face'])
                     self.engine.gamestate.push(push_object)
 
     def check_notes(self, check_rect):
@@ -580,11 +580,11 @@ class Window(object):
             note_text = NoteDatabase[note_id].value
             if type(note_text) == list:
                 for text_part in reversed(note_text):
-                    push_object = MessageBox(self.engine.gamestate, text_part)
+                    push_object = MessageBox(self.engine.gamestate, self.engine.audio, text_part)
                     self.engine.gamestate.push(push_object)
             # een plaatje alleen is een string en geen list.
             else:
-                push_object = MessageBox(self.engine.gamestate, [""], note_text)
+                push_object = MessageBox(self.engine.gamestate, self.engine.audio, [""], note_text)
                 self.engine.gamestate.push(push_object)
 
     def check_signs(self):
@@ -597,7 +597,7 @@ class Window(object):
                 sign_id = self.current_map.signs[object_nr].sign_id
                 sign_data = SignDatabase[sign_id].value
 
-                push_object = MessageBox(self.engine.gamestate, sign_data)
+                push_object = MessageBox(self.engine.gamestate, self.engine.audio, sign_data)
                 self.engine.gamestate.push(push_object)
 
     def check_chests(self):
@@ -619,14 +619,14 @@ class Window(object):
                             mec_v, mec_h = self.engine.data.party.get_highest_value_of_skill(key)
                             if mec_v < value:
                                 text = self.engine.data.treasure_chests.mec_text(chest_data['condition'][key])
-                                push_object = MessageBox(self.engine.gamestate, text)
+                                push_object = MessageBox(self.engine.gamestate, self.engine.audio, text)
                                 self.engine.gamestate.push(push_object)
                                 return
                         elif key == "thf":
                             thf_v, thf_h = self.engine.data.party.get_highest_value_of_skill(key)
                             if thf_v < value:
                                 text = self.engine.data.treasure_chests.thf_text(chest_data['condition'][key])
-                                push_object = MessageBox(self.engine.gamestate, text)
+                                push_object = MessageBox(self.engine.gamestate, self.engine.audio, text)
                                 self.engine.gamestate.push(push_object)
                                 return
 
@@ -640,7 +640,7 @@ class Window(object):
                     text, image = self.display_loot(chest_data['content'], text, image)
                     self.engine.audio.play_sound(SFX.chest)
                     chest_data['content'] = dict()
-                    push_object = MessageBox(self.engine.gamestate, text, spr_image=image)
+                    push_object = MessageBox(self.engine.gamestate, self.engine.audio, text, spr_image=image)
                     self.engine.gamestate.push(push_object)
 
     def check_sparklies(self, check_rect):
@@ -659,7 +659,7 @@ class Window(object):
                 text, image = self.display_loot(sparkly_data['content'], text, image)
                 self.engine.audio.play_sound(SFX.sparkly)
                 sparkly_data['content'] = dict()
-                push_object = MessageBox(self.engine.gamestate, text, spr_image=image)
+                push_object = MessageBox(self.engine.gamestate, self.engine.audio, text, spr_image=image)
                 self.engine.gamestate.push(push_object)
 
     def display_loot(self, content_data, text, image):
