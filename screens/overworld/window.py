@@ -445,6 +445,7 @@ class Window(object):
         Bekijk of collide met een hero.
         """
         if len(check_rect.collidelistall(self.current_map.heroes)) == 1:
+            self.engine.audio.play_sound(SFX.message)
             object_name = check_rect.collidelist(self.current_map.heroes)
             hero_sprite = self.current_map.heroes[object_name]
             # ook hier moet een hero in party niet gecheckt worden
@@ -520,6 +521,7 @@ class Window(object):
         de lege een verlengde is van de gevulde. Hij vergelijkt person_id, dus hij turnt alleen met dezelfde id.
         """
         if len(check_rect.collidelistall(self.current_map.inns)) == 1:
+            self.engine.audio.play_sound(SFX.message)
             object_nr = check_rect.collidelist(self.current_map.inns)
             inn_id = self.current_map.inns[object_nr].person_id
             self.inn_data = InnDatabase[inn_id].value
@@ -538,6 +540,7 @@ class Window(object):
         Bekijk of hij collide met een standing of wandering person.
         """
         if len(check_rect.collidelistall(self.current_map.people)) == 1:
+            self.engine.audio.play_sound(SFX.message)
             object_nr = check_rect.collidelist(self.current_map.people)
             person_sprite = self.current_map.people[object_nr]
             person_data = PeopleDatabase[person_sprite.person_id].value
@@ -574,6 +577,7 @@ class Window(object):
         In tegenovergestelde volgorde moet hij op de stack komen.
         """
         if len(check_rect.collidelistall(self.current_map.notes)) == 1:
+            self.engine.audio.play_sound(SFX.message)
             object_nr = check_rect.collidelist(self.current_map.notes)
             note_id = self.current_map.notes[object_nr].name
             note_text = NoteDatabase[note_id].value
@@ -592,6 +596,7 @@ class Window(object):
         """
         if self.party_sprites[0].last_direction == Direction.North:
             if len(self.party_sprites[0].rect.collidelistall(self.current_map.signs)) == 1:
+                self.engine.audio.play_sound(SFX.message)
                 object_nr = self.party_sprites[0].rect.collidelist(self.current_map.signs)
                 sign_id = self.current_map.signs[object_nr].sign_id
                 sign_data = SignDatabase[sign_id].value
