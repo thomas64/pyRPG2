@@ -310,6 +310,7 @@ class SFX(enum.Enum):
     reward = 13
     equip = 14
     message = 15
+    upgrade = 16
 
 
 class Keys(enum.Enum):

@@ -375,7 +375,9 @@ class Display:
             self.xp_cost = self.selected_spell.xp_cost
             succes, text = self._handle_learn_box_click2()
             if succes:
-                text = ["Are you sure you wish to learn the",
+                text = ["{}: {}  --> {}.".format(self.selected_spell.NAM,
+                                                 self.selected_spell.qty, self.selected_spell.qty + 1),
+                        "Are you sure you wish to learn the",
                         "{} {} for {} XP and {} gold?".format(self.object_type, self.selected_spell.NAM,
                                                               self.xp_cost, self.gold_cost),
                         "",

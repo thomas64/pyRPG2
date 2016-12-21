@@ -127,8 +127,8 @@ class Display(object):
         if self.leave_box:
             choice = self.leave_box.cur_item
             yes = self.leave_box.TOPINDEX
+            self.engine.audio.play_sound(SFX.menu_select)
             if choice == yes:
-                self.engine.audio.play_sound(SFX.menu_select)
                 self.engine.data.party.remove(self.cur_hero)
                 # update daarna het party scherm
                 self.cur_hero = self.engine.data.party['alagos']
@@ -136,8 +136,6 @@ class Display(object):
                 self.hc = self.party.index(self.cur_hero)
                 self._init_boxes()
                 self.party_changed = True
-            else:
-                self.engine.audio.play_sound(SFX.menu_cancel)
             self.leave_box = None
 
         # Als de upgrade stat confirmbox in beeld is geweest.
@@ -145,12 +143,12 @@ class Display(object):
             choice = self.confirm_box.cur_item
             yes = self.confirm_box.TOPINDEX
             if choice == yes:
-                self.engine.audio.play_sound(SFX.menu_select)
+                self.engine.audio.play_sound(SFX.upgrade)
                 self.cur_hero.exp.rem -= self.xp_cost
                 self.selected_stat.upgrade()
                 self._init_boxes()
             else:
-                self.engine.audio.play_sound(SFX.menu_cancel)
+                self.engine.audio.play_sound(SFX.menu_select)
 
             self._reset_vars()
 
@@ -232,7 +230,7 @@ class Display(object):
                 for button in self.buttons:
                     button_press = button.single_click(event)
                     if button_press == Keys.Exit.value:
-                        self.engine.audio.play_sound(SFX.menu_cancel)
+                        self.engine.audio.play_sound(SFX.menu_select)
                         self.engine.gamestate.pop()
                     elif button_press == Keys.Prev.value:
                         self._previous()
@@ -336,7 +334,9 @@ class Display(object):
                 self.xp_cost = self.selected_stat.xp_cost
                 success, text = self.selected_stat.is_able_to_upgrade(self.cur_hero.exp.rem)
                 if success:
-                    text = ["You have {} XP Remaining.".format(self.cur_hero.exp.rem),
+                    text = ["{}: {}  --> {}.".format(self.selected_stat.NAM,
+                                                     self.selected_stat.qty, self.selected_stat.qty + 1),
+                            "You have {} XP Remaining.".format(self.cur_hero.exp.rem),
                             "Are you sure you wish to train",
                             "the stat {} for {} XP?".format(self.selected_stat.NAM, self.xp_cost),
                             "",
