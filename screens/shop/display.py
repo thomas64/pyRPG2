@@ -387,7 +387,7 @@ class Display(object):
                     "",
                     "Yes please.",
                     "No thanks."]
-            self.confirm_box = ConfirmBox(self.engine.gamestate, self.engine.audio, text, sound=SFX.menu_select)
+            self.confirm_box = ConfirmBox(self.engine.gamestate, self.engine.audio, text, sound=SFX.message)
             self.engine.gamestate.push(self.confirm_box)
             return True
         elif self.buy_click and self.value > self.gold_amount:
@@ -412,7 +412,7 @@ class Display(object):
             return True
         elif self.sell_click and self.selected_item:
             text = self._fill_confirm_box_with_sell_text()
-            self.confirm_box = ConfirmBox(self.engine.gamestate, self.engine.audio, text, sound=SFX.menu_select)
+            self.confirm_box = ConfirmBox(self.engine.gamestate, self.engine.audio, text, sound=SFX.message)
             self.engine.gamestate.push(self.confirm_box)
             return True
         elif self.sell_click and not self.selected_item:

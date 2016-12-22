@@ -252,7 +252,7 @@ class Display(object):
                 push_object = MessageBox(self.engine.gamestate, self.engine. audio, text, sound=SFX.menu_cancel)
                 self.engine.gamestate.push(push_object)
                 return True
-            elif 'pouch is full' is False:  # todo, moet pouch is vol hier? of in pouch?
+            elif 'pouch is full' is False:  # todo, moet 'pouch is vol' hier? of in pouch?
                 self.engine.audio.play_sound(SFX.menu_cancel)
                 return True
 
@@ -267,7 +267,7 @@ class Display(object):
             if potion_chance >= rnd_percentage:
                 text = ["{} successfully created.".format(selected_potion.NAM)]
                 self.engine.data.pouch.add(selected_potion)
-                push_object = MessageBox(self.engine.gamestate, self.engine.audio, text, sound=SFX.menu_select)
+                push_object = MessageBox(self.engine.gamestate, self.engine.audio, text, sound=SFX.message)
                 self.engine.gamestate.push(push_object)
             else:
                 text = ["Failed to create a {}.".format(selected_potion.NAM)]

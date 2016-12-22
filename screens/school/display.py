@@ -206,7 +206,7 @@ class Display:
             choice = self.confirm_box.cur_item
             yes = self.confirm_box.TOPINDEX
             if choice == yes:
-                self.engine.audio.play_sound(SFX.scroll)
+                self.engine.audio.play_sound(SFX.upgrade)
                 self.engine.data.pouch.remove(self.gold_object, self.gold_cost)
                 self.selected_hero.exp.rem -= self.xp_cost
                 # hier staat selected_spell eventueel nog op 0
@@ -383,7 +383,7 @@ class Display:
                         "",
                         "Yes",
                         "No"]
-                self.confirm_box = ConfirmBox(self.engine.gamestate, self.engine.audio, text, sound=SFX.menu_select)
+                self.confirm_box = ConfirmBox(self.engine.gamestate, self.engine.audio, text, sound=SFX.message)
                 self.engine.gamestate.push(self.confirm_box)
             else:
                 push_object = MessageBox(self.engine.gamestate, self.engine.audio, text, sound=SFX.menu_cancel)

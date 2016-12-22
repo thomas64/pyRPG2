@@ -61,8 +61,10 @@ class FetchItemQuestItem(BaseQuestItem):
         :param display_loot: Voor deze niet nodig, maar wel voor PersonMessageQuestItem.
         :return: deze is voor het vullen van een quest_box in window. returnt een confirmbox indien nodig.
         """
-        push_object = MessageBox(gamestate, audio, self._get_text(), face_image)
-        gamestate.push(push_object)
+        for text_part in reversed(self._get_text()):
+            push_object = MessageBox(gamestate, audio, text_part, face_image)
+            gamestate.push(push_object)
+
         self._update_state(self._is_ready_to_fulfill(data))
 
         if self.state == QuestState.Ready:
@@ -93,6 +95,7 @@ class FetchItemQuestItem(BaseQuestItem):
             # hij kan voldoen, komt daarom met text en plaatjes terug, om dat weer te kunnen geven.
             self._fulfill(data)
             if self.reward:
+                audio.play_sound(SFX.menu_select)
                 text = ["Received:"]
                 image = []
                 text, image = display_loot(self.reward, text, image)
@@ -102,12 +105,14 @@ class FetchItemQuestItem(BaseQuestItem):
                 # als er geen directe reward is, maar er is wel een soort quest klaring.
                 audio.play_sound(SFX.reward)
             # nog een bedank berichtje van de quest owner.
-            push_object = MessageBox(gamestate, audio, self._get_text(), face_image=face_image, scr_capt=scr_capt)
-            gamestate.push(push_object)
+            for text_part in reversed(self._get_text()):
+                push_object = MessageBox(gamestate, audio, text_part, face_image=face_image, scr_capt=scr_capt)
+                gamestate.push(push_object)
             # ga naar Rewarded
             self._update_state(got_rewarded=True)
         else:
             # bij 'nee' dan wordt je state weer een stapje omlaag gezet.
+            audio.play_sound(SFX.menu_select)
             if self.state == QuestState.Ready:
                 self.state = QuestState.Running
 
@@ -190,8 +195,9 @@ class PersonMessageQuestItem(BaseQuestItem):
         :param display_loot: methode uit window waar het overzicht gegeven wordt van wat je ontvangen hebt.
         :return: deze is voor het vullen van een quest_box in window. returnt een confirmbox indien nodig.
         """
-        push_object = MessageBox(gamestate, audio, self._get_text(person_id), face_image)
-        gamestate.push(push_object)
+        for text_part in reversed(self._get_text(person_id)):
+            push_object = MessageBox(gamestate, audio, text_part, face_image)
+            gamestate.push(push_object)
 
         if self.state == QuestState.Finished:
             if self.people[person_id] == 'main':
@@ -229,13 +235,15 @@ class PersonMessageQuestItem(BaseQuestItem):
         if choice == yes:
             # ga naar Finished
             self._update_state(person_id, is_fulfilled=True)
-            push_object = MessageBox(gamestate, audio, self._get_text(person_id),
-                                     face_image=face_image, scr_capt=scr_capt, sound=SFX.menu_select)
-            gamestate.push(push_object)
+            audio.play_sound(SFX.reward)
+            # let op, maar 1x reward geluid, dus niet in de messagebox zelf stoppen.
+            for text_part in reversed(self._get_text(person_id)):
+                push_object = MessageBox(gamestate, audio, text_part, face_image=face_image, scr_capt=scr_capt)
+                gamestate.push(push_object)
 
         else:
             # bij 'nee' dan wordt je state weer een stapje omlaag gezet.
-            audio.play_sound(SFX.menu_cancel)
+            audio.play_sound(SFX.menu_select)
             if self.state == QuestState.Ready:
                 self.state = QuestState.Running
 

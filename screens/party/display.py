@@ -230,8 +230,7 @@ class Display(object):
                 for button in self.buttons:
                     button_press = button.single_click(event)
                     if button_press == Keys.Exit.value:
-                        self.engine.audio.play_sound(SFX.menu_select)
-                        self.engine.gamestate.pop()
+                        self._close()
                     elif button_press == Keys.Prev.value:
                         self._previous()
                     elif button_press == Keys.Next.value:
@@ -254,8 +253,7 @@ class Display(object):
             self.info_label = ""
 
             if event.key in (Keys.Exit.value, Keys.Inv.value):
-                self.engine.audio.play_sound(SFX.menu_cancel)
-                self.engine.gamestate.pop()
+                self._close()
             elif event.key == Keys.Prev.value:
                 self._previous()
             elif event.key == Keys.Next.value:
@@ -342,7 +340,7 @@ class Display(object):
                             "",
                             "Yes",
                             "No"]
-                    self.confirm_box = ConfirmBox(self.engine.gamestate, self.engine.audio, text, sound=SFX.menu_select)
+                    self.confirm_box = ConfirmBox(self.engine.gamestate, self.engine.audio, text, sound=SFX.message)
                     self.engine.gamestate.push(self.confirm_box)
                 else:
                     push_object = MessageBox(self.engine.gamestate, self.engine.audio, text, sound=SFX.menu_cancel)
@@ -361,7 +359,7 @@ class Display(object):
             skill_click, selected_skill = self.skills_box.mouse_click(event)
             if skill_click:
                 if selected_skill == self.cur_hero.alc:
-                    self.engine.audio.play_sound(SFX.menu_select)
+                    self.engine.audio.play_sound(SFX.message)
                     push_object = Alchemist(self.engine, self.cur_hero)
                     self.engine.gamestate.push(push_object)
             return True
@@ -379,7 +377,7 @@ class Display(object):
                 # todo, maken dat in battle je niet op deze manier potions kan drinken.
                 able, message = selected_item.use(self.cur_hero)
                 if able and message:
-                    push_object = MessageBox(self.engine.gamestate, self.engine.audio, message, sound=SFX.menu_select)
+                    push_object = MessageBox(self.engine.gamestate, self.engine.audio, message, sound=SFX.message)
                     self.engine.gamestate.push(push_object)
                 elif not able and message:
                     push_object = MessageBox(self.engine.gamestate, self.engine.audio, message, sound=SFX.menu_cancel)
@@ -394,7 +392,7 @@ class Display(object):
                     "Yes, you may leave.",
                     "No, I want you to stay."]
             self.leave_box = ConfirmBox(self.engine.gamestate, self.engine.audio,
-                                        text, self.cur_hero.FAC, sound=SFX.menu_select)
+                                        text, self.cur_hero.FAC, sound=SFX.message)
             self.engine.gamestate.push(self.leave_box)
 
     def _previous(self):
@@ -410,3 +408,7 @@ class Display(object):
         if self.hc > len(self.party) - 1:
             self.hc = 0
         self._init_boxes()
+
+    def _close(self):
+        self.engine.audio.play_sound(SFX.scroll)
+        self.engine.gamestate.pop()

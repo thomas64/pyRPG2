@@ -174,6 +174,6 @@ class Display(object):
         self.engine.gamestate.push(push_object)
 
     def _show_party_screen(self):
-        self.engine.audio.play_sound(SFX.menu_select)
+        self.engine.audio.play_sound(SFX.scroll)
         push_object = screens.party.Display(self.engine)
         self.engine.gamestate.push(push_object)
