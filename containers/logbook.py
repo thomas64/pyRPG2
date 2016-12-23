@@ -4,7 +4,8 @@ class: Logbook
 """
 
 from constants import QuestType
-from inventoryitems import FetchItemQuestItem
+from inventoryitems import FetchItemWithRewardQuestItem
+from inventoryitems import FetchItemWithoutRewardQuestItem
 from inventoryitems import PersonMessageQuestItem
 from inventoryitems import ReceiveItemQuestItem
 
@@ -24,11 +25,15 @@ class Logbook(dict):
         :return: het quest object
         """
         if not self.get(quest_key):
-            if quest_value['qtype'] == QuestType.FetchItemQuest:
-                self[quest_key] = FetchItemQuestItem(quest_value['qtype'],
-                                                     quest_value['condition'],
-                                                     quest_value['reward'],
-                                                     quest_value['text'])
+            if quest_value['qtype'] == QuestType.FetchItemWithRewardQuest:
+                self[quest_key] = FetchItemWithRewardQuestItem(quest_value['qtype'],
+                                                               quest_value['condition'],
+                                                               quest_value['reward'],
+                                                               quest_value['text'])
+            elif quest_value['qtype'] == QuestType.FetchItemWithoutRewardQuest:
+                self[quest_key] = FetchItemWithoutRewardQuestItem(quest_value['qtype'],
+                                                                  quest_value['condition'],
+                                                                  quest_value['text'])
             elif quest_value['qtype'] == QuestType.PersonMessageQuest:
                 self[quest_key] = PersonMessageQuestItem(quest_value['qtype'],
                                                          quest_value['people'],

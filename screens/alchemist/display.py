@@ -285,5 +285,6 @@ class Display(object):
         return self.screen.get_height() * posy
 
     def _close(self):
+        self.engine.audio.play_sound(SFX.scroll)
         self.engine.gamestate.pop()
         self.engine.gamestate.push(Transition(self.engine.gamestate))

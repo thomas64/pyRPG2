@@ -18,7 +18,7 @@ class TreasureChestDatabase(dict):
     def __init__(self, **kwargs):
         super().__init__(**kwargs)
 
-        # ersin_forest_start
+        # ersin_forest_center
         self['chest1'] = dict(content=dict(itm1=dict(nam=PouchItemDatabase.gold,          qty=2),
                                            itm2=dict(nam=PouchItemDatabase.herbs,         qty=3),
                                            eqp1=dict(nam=WeaponDatabase.bronzeshortsword, qty=1),

@@ -8,7 +8,8 @@ def: factory_empty_equipment_item
 # - mvp aan items
 
 from .equipment import EquipmentItem
-from .quest import FetchItemQuestItem
+from .quest import FetchItemWithRewardQuestItem
+from .quest import FetchItemWithoutRewardQuestItem
 from .quest import PersonMessageQuestItem
 from .quest import ReceiveItemQuestItem
 

@@ -13,7 +13,7 @@ from .pouchitem import PouchItemDatabase
 class QuestDatabase(enum.Enum):
     """..."""
 
-    quest1 = dict(qtype=QuestType.FetchItemQuest,
+    quest1 = dict(qtype=QuestType.FetchItemWithRewardQuest,
                   condition=dict(itm1=dict(nam=PouchItemDatabase.herbs, qty=5)),
                   reward=dict(itm1=dict(nam=PouchItemDatabase.gold,     qty=2),
                               eqp1=dict(nam=WeaponDatabase.bronzedart,  qty=1)),
@@ -56,10 +56,9 @@ class QuestDatabase(enum.Enum):
                             )
                   )
 
-    quest3 = dict(qtype=QuestType.FetchItemQuest,
+    quest3 = dict(qtype=QuestType.FetchItemWithoutRewardQuest,
                   condition=dict(itm1=dict(nam=PouchItemDatabase.proofnote, qty=1)),
                   # geen reward, maar wel remove_temp_blockers() (standaard)
-                  reward=dict(),
                   text=([["Halt! You may not enter Invernia Town!",
                           "Only if you can prove that you are not a monster."]],
                         # deze tekst voor de confirmbox kan maar 1 regel beslaan, anders volgorde verkeerd

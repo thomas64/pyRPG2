@@ -8,6 +8,7 @@ import pygame
 from components import Button
 from components import ConfirmBox
 from components import MessageBox
+from components import Transition
 from constants import GameState
 from constants import Keys
 from constants import SFX
@@ -359,9 +360,10 @@ class Display(object):
             skill_click, selected_skill = self.skills_box.mouse_click(event)
             if skill_click:
                 if selected_skill == self.cur_hero.alc:
-                    self.engine.audio.play_sound(SFX.message)
+                    self.engine.audio.play_sound(SFX.scroll)
                     push_object = Alchemist(self.engine, self.cur_hero)
                     self.engine.gamestate.push(push_object)
+                    self.engine.gamestate.push(Transition(self.engine.gamestate))
             return True
         return False
 
@@ -412,3 +414,4 @@ class Display(object):
     def _close(self):
         self.engine.audio.play_sound(SFX.scroll)
         self.engine.gamestate.pop()
+        self.engine.gamestate.push(Transition(self.engine.gamestate))

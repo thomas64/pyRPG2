@@ -31,7 +31,7 @@ class ConfirmBox(object):
     """
     Geeft een selectie weer op het scherm.
     """
-    def __init__(self, gamestate, audio, raw_text, face_image=None, callback=None, sound=None):
+    def __init__(self, gamestate, audio, raw_text, face_image=None, callback=None, sound=SFX.message):
         self.gamestate = gamestate
         self.audio = audio
         self.audio_first_time = False

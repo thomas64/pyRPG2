@@ -217,9 +217,10 @@ class SpellType(enum.Enum):
 
 class QuestType(enum.Enum):
     """..."""
-    FetchItemQuest = 1
-    PersonMessageQuest = 2
-    ReceiveItemQuest = 3
+    FetchItemWithRewardQuest = 1
+    FetchItemWithoutRewardQuest = 2
+    PersonMessageQuest = 3
+    ReceiveItemQuest = 4
     EnemyQuest = 9
 
 
@@ -299,18 +300,21 @@ class SFX(enum.Enum):
     menu_select = 2
     menu_error = 3
     menu_cancel = 4
-    step_grass = 5
-    step_stone = 6
-    step_wood = 7
-    step_carpet = 8
-    coins = 9
-    scroll = 10
-    chest = 11
-    sparkly = 12
-    reward = 13
-    equip = 14
-    message = 15
-    upgrade = 16
+    step_grass = 10
+    step_stone = 11
+    step_wood = 12
+    step_carpet = 13
+    step_sand = 14
+    coins = 20
+    scroll = 21
+    chest = 22
+    sparkly = 23
+    reward = 24
+    upgrade = 25
+    join = 26
+    equip = 27
+    message = 30
+    done = 31
 
 
 class Keys(enum.Enum):

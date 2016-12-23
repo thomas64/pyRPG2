@@ -184,13 +184,17 @@ class Window(object):
             scr_capt = self.hero_box.scr_capt
             if choice == yes:
                 if self.engine.data.party.add(self.hero_data):
+                    self.engine.audio.play_sound(SFX.join)
                     self.engine.key_timer = NEWMAPTIMEOUT
                     self.load_map()
+                    self.engine.gamestate.push(Transition(self.engine.gamestate))
                 else:
                     text = ["It seems your party is full already."]
                     push_object = MessageBox(self.engine.gamestate, self.engine.audio, text,
-                                             face_image=self.hero_data.FAC, scr_capt=scr_capt)
+                                             face_image=self.hero_data.FAC, scr_capt=scr_capt, last=True)
                     self.engine.gamestate.push(push_object)
+            else:
+                self.engine.audio.play_sound(SFX.done)
 
             self.hero_box = None
             self.hero_data = None
@@ -204,17 +208,18 @@ class Window(object):
                 if self.engine.data.pouch.remove(gold, self.inn_data['price']):
                     self.engine.gamestate.push(Transition(self.engine.gamestate))
                     push_object = MessageBox(self.engine.gamestate, self.engine.audio, InnDatabase.paid_text(),
-                                             face_image=self.inn_data['face'], scr_capt=scr_capt, sound=SFX.coins)
+                                             face_image=self.inn_data['face'], scr_capt=scr_capt,
+                                             sound=SFX.coins, last=True)
                     self.engine.gamestate.push(push_object)
                     for hero in self.party:
                         hero.recover_full_hp()
                 else:
                     push_object = MessageBox(self.engine.gamestate, self.engine.audio, InnDatabase.fail_text(),
-                                             face_image=self.inn_data['face'], scr_capt=scr_capt)
+                                             face_image=self.inn_data['face'], scr_capt=scr_capt, last=True)
                     self.engine.gamestate.push(push_object)
             else:
                 push_object = MessageBox(self.engine.gamestate, self.engine.audio, InnDatabase.deny_text(),
-                                         face_image=self.inn_data['face'], scr_capt=scr_capt)
+                                         face_image=self.inn_data['face'], scr_capt=scr_capt, last=True)
                 self.engine.gamestate.push(push_object)
 
             self.inn_box = None
@@ -445,7 +450,6 @@ class Window(object):
         Bekijk of collide met een hero.
         """
         if len(check_rect.collidelistall(self.current_map.heroes)) == 1:
-            self.engine.audio.play_sound(SFX.message)
             object_name = check_rect.collidelist(self.current_map.heroes)
             hero_sprite = self.current_map.heroes[object_name]
             # ook hier moet een hero in party niet gecheckt worden
@@ -521,7 +525,6 @@ class Window(object):
         de lege een verlengde is van de gevulde. Hij vergelijkt person_id, dus hij turnt alleen met dezelfde id.
         """
         if len(check_rect.collidelistall(self.current_map.inns)) == 1:
-            self.engine.audio.play_sound(SFX.message)
             object_nr = check_rect.collidelist(self.current_map.inns)
             inn_id = self.current_map.inns[object_nr].person_id
             self.inn_data = InnDatabase[inn_id].value
@@ -540,7 +543,6 @@ class Window(object):
         Bekijk of hij collide met een standing of wandering person.
         """
         if len(check_rect.collidelistall(self.current_map.people)) == 1:
-            self.engine.audio.play_sound(SFX.message)
             object_nr = check_rect.collidelist(self.current_map.people)
             person_sprite = self.current_map.people[object_nr]
             person_data = PeopleDatabase[person_sprite.person_id].value
@@ -565,8 +567,9 @@ class Window(object):
 
             # of als hij dat niet heeft
             else:
-                for text_part in reversed(person_data['text']):
-                    push_object = MessageBox(self.engine.gamestate, self.engine.audio, text_part, person_data['face'])
+                for i, text_part in enumerate(reversed(person_data['text'])):
+                    push_object = MessageBox(self.engine.gamestate, self.engine.audio, text_part, person_data['face'],
+                                             last=(True if i == 0 else False))
                     self.engine.gamestate.push(push_object)
 
     def check_notes(self, check_rect):
@@ -577,17 +580,17 @@ class Window(object):
         In tegenovergestelde volgorde moet hij op de stack komen.
         """
         if len(check_rect.collidelistall(self.current_map.notes)) == 1:
-            self.engine.audio.play_sound(SFX.message)
             object_nr = check_rect.collidelist(self.current_map.notes)
             note_id = self.current_map.notes[object_nr].name
             note_text = NoteDatabase[note_id].value
             if type(note_text) == list:
-                for text_part in reversed(note_text):
-                    push_object = MessageBox(self.engine.gamestate, self.engine.audio, text_part)
+                for i, text_part in enumerate(reversed(note_text)):
+                    push_object = MessageBox(self.engine.gamestate, self.engine.audio, text_part,
+                                             last=(True if i == 0 else False))
                     self.engine.gamestate.push(push_object)
             # een plaatje alleen is een string en geen list.
             else:
-                push_object = MessageBox(self.engine.gamestate, self.engine.audio, [""], note_text)
+                push_object = MessageBox(self.engine.gamestate, self.engine.audio, [""], note_text, last=True)
                 self.engine.gamestate.push(push_object)
 
     def check_signs(self):
@@ -596,12 +599,11 @@ class Window(object):
         """
         if self.party_sprites[0].last_direction == Direction.North:
             if len(self.party_sprites[0].rect.collidelistall(self.current_map.signs)) == 1:
-                self.engine.audio.play_sound(SFX.message)
                 object_nr = self.party_sprites[0].rect.collidelist(self.current_map.signs)
                 sign_id = self.current_map.signs[object_nr].sign_id
                 sign_data = SignDatabase[sign_id].value
 
-                push_object = MessageBox(self.engine.gamestate, self.engine.audio, sign_data)
+                push_object = MessageBox(self.engine.gamestate, self.engine.audio, sign_data, last=True)
                 self.engine.gamestate.push(push_object)
 
     def check_chests(self):
