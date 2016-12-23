@@ -37,7 +37,7 @@ class ConfirmBox(object):
         self.audio_first_time = False
         self.sound = sound
         self.screen = pygame.display.get_surface()
-        self.name = GameState.MessageBox
+        self.name = GameState.ConfirmBox
         self.scr_capt = ScreenCapture()
 
         self.callback = callback    # mogelijkheid tot methode meegeven

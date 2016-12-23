@@ -3,8 +3,6 @@
 class: StateMachine
 """
 
-import collections
-
 from console import Console
 from constants import GameState
 
@@ -16,7 +14,7 @@ class StateMachine(object):
     peeking and popping an empty stack returns None.
     """
     def __init__(self):
-        self.statestack = collections.deque()
+        self.statestack = list()
         self.prev_state = None
         self.new_state = False
 
@@ -113,3 +111,24 @@ class StateMachine(object):
             lst[start:end]=sublist
             print(lst)
         """
+
+    def push_confirmbox_to_end(self):
+        """
+        Kijk eerst of de laatste een ConfirmBox is.
+        Ga dan van voren bekijken naar de eerste MessageBox.
+        Stop dan de ConfirmBox voor die MessageBox.
+        Verwijder de ConfirmBox aan het eind.
+        """
+        if self.peek().name == GameState.ConfirmBox:
+            first_index = None
+            for index, state in enumerate(self.statestack):
+                if state.name == GameState.MessageBox:
+                    first_index = index
+                    break
+            if first_index is not None:
+                self.statestack.insert(first_index, self.peek())
+                self.pop()
+            else:
+                raise AttributeError
+        else:
+            raise AttributeError

@@ -40,8 +40,9 @@ class GameState(enum.Enum):
     Conversation = 8
     PartyScreen = 9
     MessageBox = 10
-    Shop = 11
-    FadeBlack = 12
+    ConfirmBox = 11
+    Shop = 12
+    FadeBlack = 13
 
 
 class Direction(enum.Enum):

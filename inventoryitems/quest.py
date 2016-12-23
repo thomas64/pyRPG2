@@ -71,8 +71,8 @@ class FetchItemWithoutRewardQuestItem(BaseQuestItem):
         if self.state == QuestState.Ready:
             push_object = ConfirmBox(gamestate, audio, self._get_text(), callback=self.decided)
             gamestate.push(push_object)
-            # draai de messagebox en confirmbox om in de stack.
-            gamestate.swap()
+            # plaats de confirmbox achter alle messageboxen
+            gamestate.push_confirmbox_to_end()
             return push_object
 
         return None
@@ -182,27 +182,6 @@ class FetchItemWithRewardQuestItem(FetchItemWithoutRewardQuestItem):
         super().__init__(qtype, condition, text)
         self.reward = reward
 
-    def show_message(self, gamestate, data, audio, face_image, person_id, display_loot):
-        """
-        Override method
-        """
-        for i, text_part in enumerate(reversed(self._get_text())):
-            push_object = MessageBox(gamestate, audio, text_part, face_image,
-                                     last=(True if i == 0 and (not self._is_ready_to_fulfill(data) or
-                                                               self.state == QuestState.Rewarded) else False))
-            gamestate.push(push_object)
-
-        self._update_state(self._is_ready_to_fulfill(data))
-
-        if self.state == QuestState.Ready:
-            push_object = ConfirmBox(gamestate, audio, self._get_text(), callback=self.decided)
-            gamestate.push(push_object)
-            # draai de messagebox en confirmbox om in de stack.
-            gamestate.swap()
-            return push_object
-
-        return None
-
     def decided(self, gamestate, data, audio, face_image, choice, yes, scr_capt, person_id, display_loot):
         """
         Override method
@@ -268,10 +247,7 @@ class PersonMessageQuestItem(BaseQuestItem):
         :param display_loot: methode uit window waar het overzicht gegeven wordt van wat je ontvangen hebt.
         :return: deze is voor het vullen van een quest_box in window. returnt een confirmbox indien nodig.
         """
-        for i, text_part in enumerate(reversed(self._get_text(person_id))):
-            push_object = MessageBox(gamestate, audio, text_part, face_image, last=self._message_is_last(i, person_id))
-            gamestate.push(push_object)
-
+        # let op dat de volgorde volledig omgedraaid is.
         if self.state == QuestState.Finished:
             if self.people[person_id] == 'main':
                 text = ["Received:"]
@@ -279,15 +255,18 @@ class PersonMessageQuestItem(BaseQuestItem):
                 text, image = display_loot(self.reward, text, image)
                 push_object = MessageBox(gamestate, audio, text, spr_image=image, sound=SFX.reward, last=True)
                 gamestate.push(push_object)
-                gamestate.swap()
+
+        for i, text_part in enumerate(reversed(self._get_text(person_id))):
+            push_object = MessageBox(gamestate, audio, text_part, face_image, last=self._message_is_last(i, person_id))
+            gamestate.push(push_object)
 
         self._update_state(person_id)
 
         if self.state == QuestState.Ready:
             push_object = ConfirmBox(gamestate, audio, self._get_text(person_id), callback=self.decided)
             gamestate.push(push_object)
-            # draai de messagebox en confirmbox om in de stack.
-            gamestate.swap()
+            # plaats de confirmbox achter alle messageboxen
+            gamestate.push_confirmbox_to_end()
             return push_object
 
         return None
