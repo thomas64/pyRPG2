@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<map version="1.0" orientation="orthogonal" renderorder="right-down" width="140" height="140" tilewidth="16" tileheight="16" nextobjectid="474">
+<map version="1.0" orientation="orthogonal" renderorder="right-down" width="140" height="140" tilewidth="16" tileheight="16" nextobjectid="475">
  <tileset firstgid="1" name="ersin_forest_center" tilewidth="16" tileheight="16" tilecount="1798" columns="62">
   <image source="tilesets/ersin_forest_center.png" width="992" height="464"/>
  </tileset>
@@ -1664,5 +1664,6 @@
   <object id="471" name="chest4" x="1264" y="1840" width="32" height="32"/>
   <object id="472" name="sparkly1" x="1088" y="1984" width="32" height="32"/>
   <object id="473" name="sparkly3" type="geen sprite" x="992" y="1984" width="32" height="32"/>
+  <object id="474" name="sparkly4" type="no spr" x="1152" y="1984" width="32" height="32"/>
  </objectgroup>
 </map>
