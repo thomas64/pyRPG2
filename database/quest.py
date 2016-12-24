@@ -14,16 +14,16 @@ class QuestDatabase(enum.Enum):
     """..."""
 
     quest1 = dict(qtype=QuestType.FetchItemWithRewardQuest,
-                  condition=dict(itm1=dict(nam=PouchItemDatabase.herbs, qty=5)),
+                  condition=dict(itm1=dict(nam=PouchItemDatabase.herbs, qty=10)),
                   reward=dict(itm1=dict(nam=PouchItemDatabase.gold,     qty=2),
                               eqp1=dict(nam=WeaponDatabase.bronzedart,  qty=1)),
                   # deze teksten staan in QuestState volgorde.
-                  text=([["Hi mister."], ["I need 5 herbs for my mommy. She's ill."],
+                  text=([["Hi mister."], ["I need 10 herbs for my mommy.", "She's ill."],
                          ["Can you please help me find some?"]],
-                        [["If you've got 5 herbs, please give them to me."]],
+                        [["If you've got 10 herbs,", "please give them to me."]],
                         # de confirmbox tekst moet niet tussen dubbele blokhaken
-                        ["Help the boy out and give him 5 herbs?", "", "Yes, ofcourse!", "No, these are my herbs."],
-                        [["Thanks a lot for the herbs! Now my mom will be better soon."],
+                        ["Help the boy out and give him 10 herbs?", "", "Yes, ofcourse!", "No, these are my herbs."],
+                        [["Thanks a lot for the herbs!", "Now my mom will be better soon."],
                          ["Instead of the herbs I found this here in the forest.",
                           "You can have it, for helping my mommy."]],
                         [["Hi mister."], ["It seems my mommy is all better now.", "Thanks to you!"]])

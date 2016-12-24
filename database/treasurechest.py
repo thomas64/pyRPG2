@@ -7,6 +7,7 @@ import datetime
 
 from .weapon import WeaponDatabase
 from .helmet import HelmetDatabase
+from .boots import BootsDatabase
 from .pouchitem import PouchItemDatabase
 
 
@@ -19,24 +20,26 @@ class TreasureChestDatabase(dict):
         super().__init__(**kwargs)
 
         # ersin_forest_center
-        self['chest1'] = dict(content=dict(itm1=dict(nam=PouchItemDatabase.gold,          qty=2),
-                                           itm2=dict(nam=PouchItemDatabase.herbs,         qty=3),
-                                           eqp1=dict(nam=WeaponDatabase.bronzeshortsword, qty=1),
-                                           eqp2=dict(nam=HelmetDatabase.leathercap,       qty=1)))
+        self['chest1'] = dict(content=dict(itm1=dict(nam=PouchItemDatabase.hlg_pot,       qty=3)))
         self['chest2'] = dict(condition=dict(thf=3),
-                              content=dict(itm1=dict(nam=PouchItemDatabase.gold,          qty=3)),
+                              content=dict(eqp1=dict(nam=WeaponDatabase.bronzeshortsword, qty=1),
+                                           eqp2=dict(nam=HelmetDatabase.leathercap,       qty=1)),
                               time1=datetime.datetime(2016, 10, 19, 2, 00),
                               time2=datetime.datetime(2099, 10, 19, 2, 15))
         self['chest3'] = dict(condition=dict(mec=2),
                               content=dict(itm1=dict(nam=PouchItemDatabase.gold,          qty=4)))
         self['chest4'] = dict(condition=dict(mec=1, thf=1),
                               content=dict(itm1=dict(nam=PouchItemDatabase.gold,          qty=5)))
-
+        self['chest8'] = dict(condition=dict(thf=2),
+                              content=dict(eqp1=dict(nam=BootsDatabase.leatherboots,      qty=1),
+                                           itm1=dict(nam=PouchItemDatabase.gold,          qty=2)))
         # ersin_cave_room1
         self['chest5'] = dict(content=dict(itm1=dict(nam=PouchItemDatabase.gold,          qty=2)))
         # ersin_cave_room3
-        self['chest6'] = dict(content=dict(itm1=dict(nam=PouchItemDatabase.gold,          qty=2)))
-        self['chest7'] = dict(content=dict(itm1=dict(nam=PouchItemDatabase.gold,          qty=2)))
+        self['chest6'] = dict(content=dict(itm1=dict(nam=PouchItemDatabase.hlg_pot,       qty=2)))
+        self['chest7'] = dict(content=dict(itm1=dict(nam=PouchItemDatabase.fir_flk,       qty=2)))
+        # ersin_forest_invernia
+        self['chest9'] = dict(content=dict(itm1=dict(nam=PouchItemDatabase.ant_pot,       qty=1)))
 
         for value in self.values():
             value['opened'] = 0

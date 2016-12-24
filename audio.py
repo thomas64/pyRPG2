@@ -117,6 +117,7 @@ class Audio(object):
         if currentstate == GameState.OptionsMenu or \
            self.engine.gamestate.prev_state == GameState.OptionsMenu or \
            self.engine.gamestate.prev_state == GameState.MessageBox or \
+           self.engine.gamestate.prev_state == GameState.ConfirmBox or \
            self.engine.gamestate.prev_state == GameState.Shop or \
            self.engine.gamestate.prev_state == GameState.FadeBlack:
             return
@@ -154,6 +155,7 @@ class Audio(object):
         if currentstate == GameState.OptionsMenu or \
            self.engine.gamestate.prev_state == GameState.OptionsMenu or \
            self.engine.gamestate.prev_state == GameState.MessageBox or \
+           self.engine.gamestate.prev_state == GameState.ConfirmBox or \
            self.engine.gamestate.prev_state == GameState.Shop or \
            self.engine.gamestate.prev_state == GameState.FadeBlack:
             return

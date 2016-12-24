@@ -45,7 +45,7 @@ class PeopleDatabase(enum.Enum):
     person76 = dict(name='soldier01',    quest=QuestDatabase.quest3)
     person77 = dict(name='soldier01',    text=[["I'm terribly sorry sir, but I can",
                                                "not allow you to go any further."],
-                                               ["It's too dangerous to go alone..."]])
+                                               ["It's dangerous to go alone."]])
     # ersin_forest_center
     person50 = dict(name='boy01',        quest=QuestDatabase.quest1)
     # ersin_waterfall

@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<map version="1.0" orientation="orthogonal" renderorder="right-down" width="24" height="26" tilewidth="16" tileheight="16" nextobjectid="24210">
+<map version="1.0" orientation="orthogonal" renderorder="right-down" width="24" height="26" tilewidth="16" tileheight="16" nextobjectid="24212">
  <tileset firstgid="1" name="ruleset" tilewidth="16" tileheight="16" tilecount="60" columns="10">
   <image source="tilesets/ruleset.png" width="160" height="96"/>
  </tileset>
@@ -261,7 +261,10 @@
   <object id="24200" x="240" y="96" width="32" height="64"/>
   <object id="24201" x="80" y="96" width="32" height="64"/>
  </objectgroup>
- <objectgroup name="objects"/>
+ <objectgroup name="objects">
+  <object id="24210" name="sparkly7" x="176" y="144" width="32" height="32"/>
+  <object id="24211" name="sparkly6" x="208" y="240" width="32" height="32"/>
+ </objectgroup>
  <layer name="set" width="24" height="26" visible="0">
   <data encoding="csv">
 31,31,31,31,31,31,31,31,31,31,31,31,31,31,31,31,31,31,31,31,31,31,31,31,
