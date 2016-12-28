@@ -7,7 +7,6 @@ def: factory_empty_equipment_item
 # - min int gebruiken voor items?
 # - mvp aan items
 
-from .equipment import EquipmentItem
 from .quest import FetchItemWithRewardQuestItem
 from .quest import FetchItemWithoutRewardQuestItem
 from .quest import PersonMessageQuestItem
@@ -20,7 +19,19 @@ def factory_empty_equipment_item(equipment_type):
     Met **, hij verwacht een dict.
     :param equipment_type: Enum EquipmentType, dus bijv. "sld" "Shield".
     """
+    from .equipment import EquipmentItem
+
     return EquipmentItem(**dict(typ=equipment_type))
+
+
+def factory_equipment_item(enum):
+    """
+    :param enum: Enum waarde uit een van de equipment databases.
+    :return: een object op basis van het item uit de enum database.
+    """
+    from .equipment import EquipmentItem
+
+    return EquipmentItem(**enum.value)
 
 
 def factory_pouch_item(enum):

@@ -10,7 +10,6 @@ from components import MessageBox
 from constants import QuestState
 from constants import SFX
 
-from .equipment import EquipmentItem
 import inventoryitems
 
 
@@ -151,7 +150,7 @@ class FetchItemWithoutRewardQuestItem(BaseQuestItem):
 
         for key, value in self.condition.items():
             if key.startswith('eqp'):
-                eqp_obj = EquipmentItem(**value['nam'].value)
+                eqp_obj = inventoryitems.factory_equipment_item(value['nam'])
                 all_items.append(data.inventory.contains(eqp_obj, value['qty']))
             elif key.startswith('itm'):
                 itm_obj = inventoryitems.factory_pouch_item(value['nam'])
@@ -167,7 +166,7 @@ class FetchItemWithoutRewardQuestItem(BaseQuestItem):
 
         for key, value in self.condition.items():
             if key.startswith('eqp'):
-                eqp_obj = EquipmentItem(**value['nam'].value)
+                eqp_obj = inventoryitems.factory_equipment_item(value['nam'])
                 data.inventory.remove_i(eqp_obj, value['qty'])
             elif key.startswith('itm'):
                 itm_obj = inventoryitems.factory_pouch_item(value['nam'])

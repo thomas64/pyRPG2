@@ -75,13 +75,13 @@ class Hero(object):
 
         # hier kan zeker None ingevuld worden omdat gamestate hierbij zeker weten niet zal pushen een messagebox.
         if kwargs[EquipmentType.wpn.name]:
-            self.set_equipment_item(None, None, inventoryitems.EquipmentItem(**kwargs[EquipmentType.wpn.name].value))
+            self.set_equipment_item(None, None, inventoryitems.factory_equipment_item(kwargs[EquipmentType.wpn.name]))
         # kwargs['sld'] moet bestaan om de if te mogen doen.
         # maar de uitkomst moet niet None zijn om aan de voorwaarde te voldoen.
         if kwargs[EquipmentType.sld.name]:
-            self.set_equipment_item(None, None, inventoryitems.EquipmentItem(**kwargs[EquipmentType.sld.name].value))
+            self.set_equipment_item(None, None, inventoryitems.factory_equipment_item(kwargs[EquipmentType.sld.name]))
         if kwargs[EquipmentType.arm.name]:
-            self.set_equipment_item(None, None, inventoryitems.EquipmentItem(**kwargs[EquipmentType.arm.name].value))
+            self.set_equipment_item(None, None, inventoryitems.factory_equipment_item(kwargs[EquipmentType.arm.name]))
 
         self.scl = containers.School(kwargs['scl'])
         if kwargs.get('spl'):

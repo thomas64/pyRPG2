@@ -168,7 +168,7 @@ class Player(Person):
         self.feet.midbottom = self.rect.midbottom
 
     def check_blocker(self, high_blockers, low_blockers, temp_blockers, walking_blockers,
-                                                                                moverange, map_width, map_height, dt):
+                      moverange, map_width, map_height, dt):
         """
         Bekijk of de unit tegen een andere sprite aan loopt.
         :param high_blockers: lijst van rects van map1.high_blocker_rects

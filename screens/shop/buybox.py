@@ -7,7 +7,6 @@ import pygame
 
 from components import ListBox
 from constants import EquipmentType
-from inventoryitems import EquipmentItem
 import inventoryitems
 
 COLUMN1X = 0
@@ -58,11 +57,11 @@ class BuyBox(ListBox):
 
             else:
                 if equipment_item.value['shp']:
-                    equipment_item_obj = EquipmentItem(**equipment_item.value)
+                    equipment_item_obj = inventoryitems.factory_equipment_item(equipment_item)
                     equipment_item_spr = pygame.image.load(equipment_item_obj.SPR).subsurface(
                         equipment_item_obj.COL, equipment_item_obj.ROW, self.subsurw, self.subsurh).convert_alpha()
                     equipment_item_nam = equipment_item_obj.NAM
-                    equipment_item_val = str(round(equipment_item_obj.VAL - ((equipment_item_obj.VAL / 100) * self.sale)))
+                    equipment_item_val = str(round(equipment_item_obj.VAL - ((equipment_item_obj.VAL/100) * self.sale)))
                     self.table_data.append(
                         # row[0],                   row[1],         row[2],         row[3],     row[4]
                         [equipment_item_spr, equipment_item_nam, equipment_item_val, None, equipment_item_obj]

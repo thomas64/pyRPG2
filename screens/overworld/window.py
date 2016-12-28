@@ -30,7 +30,6 @@ from database import SignDatabase
 
 from database import PouchItemDatabase
 
-from inventoryitems import EquipmentItem
 import inventoryitems
 
 import screens.school
@@ -675,7 +674,7 @@ class Window(object):
         """
         for key, value in content_data.items():
             if key.startswith('eqp'):
-                equipment_item = EquipmentItem(**value['nam'].value)
+                equipment_item = inventoryitems.factory_equipment_item(value['nam'])
                 equipment_item_spr = pygame.image.load(equipment_item.SPR).subsurface(
                     equipment_item.COL, equipment_item.ROW, ICONSIZE, ICONSIZE).convert_alpha()
                 self.engine.data.inventory.add_i(equipment_item, quantity=value['qty'])

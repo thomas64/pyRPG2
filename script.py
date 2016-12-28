@@ -10,7 +10,6 @@ from database import SparklyDatabase
 from database import TreasureChestDatabase
 from database import WeaponDatabase
 from database import PouchItemDatabase
-from inventoryitems import EquipmentItem
 import inventoryitems
 
 
@@ -34,7 +33,7 @@ class Script:
         # Vul de party aan met de eerste hero
         data.party.add(data.heroes['alagos'], verbose=False)
 
-        eqp_item = EquipmentItem(**WeaponDatabase.bronzemace.value)
+        eqp_item = inventoryitems.factory_equipment_item(WeaponDatabase.bronzemace)
         data.inventory.add_i(eqp_item, verbose=False)
         pouch_item = inventoryitems.factory_pouch_item(PouchItemDatabase.gold)
         data.pouch.add(pouch_item, 1, verbose=False)

@@ -57,7 +57,8 @@ class HeroBox(object):
 
         self.face = pygame.image.load(self.hero.FAC).convert_alpha()
         self.name = self.largefont.render(self.hero.NAM, True, FONTCOLOR).convert_alpha()
-        self.leave = Button(LEAVEW, LEAVEH, (self.rect.right + LEAVEX, self.rect.top + LEAVEY), LEAVELBL, True, HEROCOLOR, LINECOLOR)
+        self.leave = Button(LEAVEW, LEAVEH, (self.rect.right + LEAVEX, self.rect.top + LEAVEY), LEAVELBL, True,
+                            HEROCOLOR, LINECOLOR)
         self.level = None
         self.hitpoints = None
         self.full_hp = None
