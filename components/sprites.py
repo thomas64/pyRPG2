@@ -18,7 +18,7 @@ BUTTONFONT = 'impact'
 BUTTONFONTCOLOR = pygame.Color("white")
 BUTTONFONTSIZE = 14
 BUTTONBGCOLOR = pygame.Color("black")
-BUTTONPRESSCOLOR = pygame.Color("gray12")
+BUTTONPRESSCOLOR = pygame.Color("gray60")
 
 CHESTSPRITE = 'resources/sprites/objects/chest.png'
 SPARKLYSPRITE = 'resources/sprites/objects/sparkly.png'
@@ -45,6 +45,7 @@ class Button(pygame.sprite.Sprite):
         self.visible = True
 
         self.image = pygame.Surface((self.width, self.height))
+        self.image.set_colorkey(self.bgcolor)
         self.image = self.image.convert()
         self.rect = self.image.get_rect()
         self.rect.topleft = position
@@ -92,17 +93,14 @@ class Button(pygame.sprite.Sprite):
         else:
             self.bgcolor = bgcolor
 
-    def render(self, surface, linecolor=BUTTONFONTCOLOR, colorkey=False):
+    def render(self, surface, linecolor=BUTTONFONTCOLOR):
         """
         Teken de zichtbare knoppen op de gegeven surface.
         :param surface: self.screen uit engine
         :param linecolor: als hij moet afwijken van de standaard wit, dan kan dat hier
-        :param colorkey: als hij transparant moet afwijken ipv de standaard zwart, dan kan dat hier
         """
         if self.visible:
             self.image.fill(self.bgcolor)
-            if colorkey:
-                self.image.set_colorkey(self.bgcolor)
             pygame.draw.rect(self.image, linecolor, (0, 0, self.width, self.height), 1)
             self.image.blit(self.label, self.labelrect)
             surface.blit(self.image, self.rect.topleft)

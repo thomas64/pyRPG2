@@ -8,9 +8,9 @@ import pygame
 from .basebox import BaseBox
 
 
-COLUMN1X = 50
-COLUMN2X = 90
-COLUMN3X = 240
+COLUMN1X = 25
+COLUMN2X = COLUMN1X + 40
+COLUMN3X = COLUMN2X + 130
 COLUMNSY = 50
 ROWHEIGHT = 30
 

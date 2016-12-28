@@ -8,6 +8,7 @@ import pygame
 from components import Button
 from components import ConfirmBox
 from components import MessageBox
+from components import TextBox
 from components import Transition
 from constants import GameState
 from constants import Keys
@@ -16,7 +17,6 @@ from database import SchoolDatabase
 from database import PouchItemDatabase
 import inventoryitems
 
-from screens.shop.infobox import InfoBox
 from .knownbox import KnownBox
 from .learnbox import LearnBox
 from .selector import Selector
@@ -188,7 +188,7 @@ class Display:
     def _init_infobox(self):
         width = self.screen.get_width() * INFOBOXWIDTH
         height = self.screen.get_height() * INFOBOXHEIGHT
-        self.infobox = InfoBox(self._set_x(INFOBOXPOSX), self._set_y(INFOBOXPOSY), int(width), int(height))
+        self.infobox = TextBox((self._set_x(INFOBOXPOSX), self._set_y(INFOBOXPOSY)), int(width), int(height))
 
     def _reset_vars(self):
         self.learn_click = False
@@ -365,7 +365,7 @@ class Display:
         self.infobox.render(self.screen, self.info_label)
         self.knownbox.render(self.screen)
         self.learnbox.render(self.screen)
-        self.close_button.render(self.screen, FONTCOLOR, True)
+        self.close_button.render(self.screen, FONTCOLOR)
 
     def _handle_learn_box_click(self, event):
         self.learn_click, self.selected_spell = self.learnbox.mouse_click(event)

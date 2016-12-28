@@ -8,6 +8,7 @@ import pygame
 from components import Button
 from components import ConfirmBox
 from components import MessageBox
+from components import TextBox
 from components import Transition
 from constants import GameState
 from constants import Keys
@@ -15,7 +16,6 @@ from constants import SFX
 
 from screens.alchemist.display import Display as Alchemist
 from .herobox import HeroBox
-from .infobox import InfoBox
 from .invclickbox import InvClickBox
 from .inventorybox import InventoryBox
 from .pouchbox import PouchBox
@@ -25,32 +25,35 @@ from .statsbox import StatsBox
 
 
 BACKGROUNDCOLOR = pygame.Color("black")
-LINECOLOR = pygame.Color("white")
+BACKGROUNDSPRITE = 'resources/sprites/parchment.png'
+COLORKEY = pygame.Color("white")
+LINECOLOR = pygame.Color("black")
 
 CLOSELBL = "Close"
-PREVLBL = "Previous"
+PREVLBL = "Prev"
 NEXTLBL = "Next"
 
-CLOSEX, CLOSEY = -81, 10    # negatieve x omdat de positie van rechts bepaald wordt.
-PREVX, PREVY = -81, 44
-NEXTX, NEXTY = -81, 78
-BTNWIDTH = 71
+CLOSEX, CLOSEY = -93, 30    # negatieve x omdat de positie van rechts bepaald wordt.
+PREVX, PREVY =   -93, 64
+NEXTX, NEXTY =   -93, 98
+BTNWIDTH = 60
 BTNHEIGHT = 30
 
-HEROBOXX, HEROBOXY = 10, 10
-HEROBOXVAR = 255
-STATBOXX, STATBOXY = 10,  118
-STATBOXW, STATBOXH = 329, 480
-INFOBOXX, INFOBOXY = 10,  603
-INFOBOXW, INFOBOXH = 329, 155
-SKILBOXX, SKILBOXY = 349, 118
-SKILBOXW, SKILBOXH = 329, 640
-INVBOXX, INVBOXY = 688, 118
-INVBOXW, INVBOXH = 329, 310
-SPELBOXX, SPELBOXY = 688, 438
-SPELBOXW, SPELBOXH = 329, 320
-PCHBOXX, PCHBOXY = 1027, 118
-PCHBOXW, PCHBOXH = 329, 640
+HEROBOXX, HEROBOXY = 43, 30
+HEROBOXW, HEROBOXH = 241, 98
+HEROBOXVAR = 246
+STATBOXX, STATBOXY = 43,  133
+STATBOXW, STATBOXH = 270, 460
+INVBOXX, INVBOXY =   323, 133
+INVBOXW, INVBOXH =   200, 460
+INFOBOXX, INFOBOXY = 43,  598
+INFOBOXW, INFOBOXH = 480, 135
+SKILBOXX, SKILBOXY = 533, 133
+SKILBOXW, SKILBOXH = 300, 600
+SPELBOXX, SPELBOXY = 843, 133
+SPELBOXW, SPELBOXH = 240, 600
+PCHBOXX, PCHBOXY =  1093, 133
+PCHBOXW, PCHBOXH =   240, 600
 
 NEWMAPTIMEOUT = 0.5
 
@@ -61,12 +64,11 @@ class Display(object):
     """
     def __init__(self, engine):
         self.engine = engine
-        self.screen = pygame.display.get_surface()
-        self.background = pygame.Surface(self.screen.get_size())
-        self.background.fill(BACKGROUNDCOLOR)
-        self.background = self.background.convert()
 
+        self.screen = pygame.display.get_surface()
         self.name = GameState.PartyScreen
+        self.background = pygame.image.load(BACKGROUNDSPRITE).convert_alpha()
+        self.background = pygame.transform.scale(self.background, self.screen.get_size())
 
         self.key_input = None           # dit is voor de mousepress op een button.
 
@@ -92,22 +94,22 @@ class Display(object):
 
     def _init_buttons(self):
         bg_width = self.background.get_width()
-        button_c = Button(BTNWIDTH, BTNHEIGHT, (bg_width + CLOSEX, CLOSEY), CLOSELBL, Keys.Exit.value)
-        button_q = Button(BTNWIDTH, BTNHEIGHT, (bg_width + PREVX,  PREVY),  PREVLBL,  Keys.Prev.value)
-        button_w = Button(BTNWIDTH, BTNHEIGHT, (bg_width + NEXTX,  NEXTY),  NEXTLBL,  Keys.Next.value)
+        button_c = Button(BTNWIDTH, BTNHEIGHT, (bg_width + CLOSEX, CLOSEY), CLOSELBL, Keys.Exit.value, COLORKEY, LINECOLOR)
+        button_q = Button(BTNWIDTH, BTNHEIGHT, (bg_width + PREVX,  PREVY),  PREVLBL,  Keys.Prev.value, COLORKEY, LINECOLOR)
+        button_w = Button(BTNWIDTH, BTNHEIGHT, (bg_width + NEXTX,  NEXTY),  NEXTLBL,  Keys.Next.value, COLORKEY, LINECOLOR)
         self.buttons = (button_c, button_q, button_w)
 
     def _init_boxes(self):
         self.hero_boxes = []
         for index, hero in enumerate(self.party):
-            self.hero_boxes.append(HeroBox((HEROBOXX + index * HEROBOXVAR, HEROBOXY), index, hero))
+            self.hero_boxes.append(HeroBox((HEROBOXX + index * HEROBOXVAR, HEROBOXY), HEROBOXW, HEROBOXH, index, hero))
 
         self.stats_box = StatsBox((STATBOXX,        STATBOXY), STATBOXW, STATBOXH)
-        self.info_box = InfoBox((INFOBOXX,          INFOBOXY), INFOBOXW, INFOBOXH)
+        self.info_box = TextBox((INFOBOXX,          INFOBOXY), INFOBOXW, INFOBOXH)
         self.skills_box = SkillsBox((SKILBOXX,      SKILBOXY), SKILBOXW, SKILBOXH)
         self.inventory_box = InventoryBox((INVBOXX, INVBOXY),  INVBOXW,  INVBOXH)
-        self.pouch_box = PouchBox((PCHBOXX,         PCHBOXY),  PCHBOXW,  PCHBOXH)
         self.spells_box = SpellsBox((SPELBOXX,      SPELBOXY), SPELBOXW, SPELBOXH)
+        self.pouch_box = PouchBox((PCHBOXX,         PCHBOXY),  PCHBOXW,  PCHBOXH)
 
     def _reset_vars(self):
         # variabelen voor klikken van upgrade stat
@@ -172,30 +174,27 @@ class Display(object):
 
             self.hovered_equipment_item = None
             self.info_label = ""
+            self.stats_box.cur_item = None
+            self.skills_box.cur_item = None
+            self.spells_box.cur_item = None
+            self.pouch_box.cur_item = None
 
-            if self.stats_box.rect.collidepoint(event.pos):
+            if self.invclick_box and self.invclick_box.rect.collidepoint(event.pos):
+                self.info_label, self.hovered_equipment_item = self.invclick_box.mouse_hover(event)
+            elif self.stats_box.rect.collidepoint(event.pos):
                 self.info_label = self.stats_box.mouse_hover(event)
             elif self.skills_box.rect.collidepoint(event.pos):
                 self.info_label = self.skills_box.mouse_hover(event)
-            elif self.invclick_box and self.invclick_box.rect.collidepoint(event.pos):
-                self.info_label, self.hovered_equipment_item = self.invclick_box.mouse_hover(event)
             elif self.inventory_box.rect.collidepoint(event.pos):
                 self.info_label = self.inventory_box.mouse_hover(event)
-            elif self.pouch_box.rect.collidepoint(event.pos):
-                self.info_label = self.pouch_box.mouse_hover(event)
             elif self.spells_box.rect.collidepoint(event.pos):
                 self.info_label = self.spells_box.mouse_hover(event)
+            elif self.pouch_box.rect.collidepoint(event.pos):
+                self.info_label = self.pouch_box.mouse_hover(event)
 
         elif event.type == pygame.MOUSEBUTTONDOWN:
 
             if event.button == Keys.Leftclick.value:
-
-                if self._handle_stat_box_click(event):   # als er op een statsbox item geklikt wordt
-                    return
-                if self._handle_skill_box_click(event):  # of skillbox
-                    return
-                if self._handle_pouch_box_click(event):  # of pouchbox
-                    return
 
                 # als de clickbox er is en er wordt buiten geklikt, laat hem dan verdwijnen.
                 if self.invclick_box and not self.invclick_box.rect.collidepoint(event.pos):
@@ -205,6 +204,13 @@ class Display(object):
                     if self.invclick_box.mouse_click(event, self.engine.gamestate, self.engine.audio, self.cur_hero):
                         self.invclick_box = None
                     return  # anders vangt hij ook nog andere clicks hieronder in deze methode af
+
+                if self._handle_stat_box_click(event):   # als er op een statsbox item geklikt wordt
+                    return
+                if self._handle_skill_box_click(event):  # of skillbox
+                    return
+                if self._handle_pouch_box_click(event):  # of pouchbox
+                    return
 
                 # als er op een herobox wordt geklikt of het kruisje daarvan.
                 old_hc = self.hc
@@ -240,6 +246,8 @@ class Display(object):
             elif event.button in (Keys.Scrollup.value, Keys.Scrolldown.value):
                 if self.invclick_box and self.invclick_box.rect.collidepoint(event.pos):
                     self.invclick_box.mouse_scroll(event)
+                if self.skills_box.rect.collidepoint(event.pos):
+                    self.skills_box.mouse_scroll(event)
                 if self.spells_box.rect.collidepoint(event.pos):
                     self.spells_box.mouse_scroll(event)
                 if self.pouch_box.rect.collidepoint(event.pos):
@@ -284,7 +292,7 @@ class Display(object):
         :param dt: self.clock.tick(FPS)/1000.0
         """
         for button in self.buttons:
-            button.update(self.key_input)
+            button.update(self.key_input, COLORKEY)
 
         for hero_box in self.hero_boxes:
             hero_box.update(self.hc)
@@ -301,10 +309,11 @@ class Display(object):
         """
         screen -> achtergond -> knoppen -> heroboxes -> verder
         """
+        self.screen.fill(BACKGROUNDCOLOR)
         self.screen.blit(self.background, (0, 0))
 
         for button in self.buttons:
-            button.render(self.screen)
+            button.render(self.screen, LINECOLOR)
 
         for hero_box in self.hero_boxes:
             hero_box.render(self.screen, self.hc)
@@ -317,9 +326,6 @@ class Display(object):
         self.spells_box.render(self.screen)
         if self.invclick_box:
             self.invclick_box.render(self.screen)
-
-        # name2 = self.largefont.render(cur_hero.NAM, True, FONTCOLOR)   = voorbeeld van hoe een naam buiten een herobox
-        # name2_rect = self.screen.blit(name2, (500, 300))
 
     def _handle_stat_box_click(self, event):
         """

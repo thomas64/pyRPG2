@@ -9,6 +9,7 @@ import pygame
 
 from components import Button
 from components import MessageBox
+from components import TextBox
 from components import Transition
 from constants import GameState
 from constants import Keys
@@ -16,7 +17,6 @@ from constants import SFX
 from database import PouchItemDatabase
 import inventoryitems
 
-from screens.shop.infobox import InfoBox
 from .createbox import CreateBox
 from .pouchbox import PouchBox
 
@@ -137,7 +137,7 @@ class Display(object):
     def _init_infobox(self):
         width = self.screen.get_width() * INFOBOXWIDTH
         height = self.screen.get_height() * INFOBOXHEIGHT
-        self.infobox = InfoBox(self._set_x(INFOBOXPOSX), self._set_y(INFOBOXPOSY), int(width), int(height))
+        self.infobox = TextBox((self._set_x(INFOBOXPOSX), self._set_y(INFOBOXPOSY)), int(width), int(height))
 
     # noinspection PyMissingOrEmptyDocstring
     def on_enter(self):
@@ -226,7 +226,7 @@ class Display(object):
         self.infobox.render(self.screen, self.info_label)
         self.createbox.render(self.screen)
         self.pouchbox.render(self.screen)
-        self.close_button.render(self.screen, FONTCOLOR, True)
+        self.close_button.render(self.screen, FONTCOLOR)
 
     def _handle_create_box_click(self, event):
         create_click, selected_potion = self.createbox.mouse_click(event)

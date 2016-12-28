@@ -8,12 +8,12 @@ import pygame
 from .basebox import BaseBox
 
 
-COLUMN1X = 40   # icon
-COLUMN2X = 80   # naam
-COLUMN3X = 180  # base stat
-COLUMN4X = 200  # ext value
-COLUMN5X = 240  # tot stat
-COLUMN6X = 270  # preview value
+COLUMN1X = 30              # icon
+COLUMN2X = COLUMN1X + 40   # naam
+COLUMN3X = COLUMN2X + 100  # base stat
+COLUMN4X = COLUMN3X + 20   # ext value
+COLUMN5X = COLUMN4X + 30   # preview value
+COLUMN6X = COLUMN5X + 30   # tot stat
 COLUMNSY = 50
 ROWHEIGHT = 32
 
@@ -52,8 +52,8 @@ class SkillsBox(BaseBox):
                      self.normalfont.render(skill.NAM + " :", True, self._get_color(index)).convert_alpha(),
                      self.normalfont.render(str(skill.qty), True, self.fontcolor1).convert_alpha(),
                      self._set_color(skill.ext, 1),
-                     self.normalfont.render("(" + str(skill.tot) + ")", True, self.fontcolor1).convert_alpha(),
-                     self._set_color(preview_value, 2)
+                     self._set_color(preview_value, 2),
+                     self.normalfont.render(str(skill.tot), True, self.fontcolor1).convert_alpha()
                      ]
                 )
                 self.data_matrix.append([skill, None, skill.DESC])

@@ -9,11 +9,11 @@ from constants import StatType
 from .basebox import BaseBox
 
 
-COLUMN1X = 50   # naam
-COLUMN2X = 160  # base stat
-COLUMN3X = 200  # ext value
-COLUMN4X = 240  # tot stat
-COLUMN5X = 280  # preview value
+COLUMN1X = 20               # naam
+COLUMN2X = COLUMN1X + 110   # base stat
+COLUMN3X = COLUMN2X + 40    # ext value
+COLUMN4X = COLUMN3X + 30    # preview value
+COLUMN5X = COLUMN4X + 30    # tot stat
 COLUMNSY = 50
 ROWHEIGHT = 22
 
@@ -78,16 +78,6 @@ class StatsBox(BaseBox):
         hit_diff = hero.sub_hit
         dam_diff = ""
 
-        xpr_tval = ""
-        txp_tval = ""
-        nxt_tval = ""
-        wht_tval = ""
-        mvp_tval = ""
-        prt_tval = ""
-        des_tval = ""
-        hit_tval = ""
-        dam_tval = ""
-
         xpr_prev = ""
         txp_prev = ""
         nxt_prev = ""
@@ -97,6 +87,16 @@ class StatsBox(BaseBox):
         des_prev = self._get_difference(hero, hovered_equipment_item, StatType.des.name)
         hit_prev = self._get_difference(hero, hovered_equipment_item, StatType.hit.name)
         dam_prev = self._get_difference(hero, hovered_equipment_item, StatType.dam.name)
+
+        xpr_tval = ""
+        txp_tval = ""
+        nxt_tval = ""
+        wht_tval = ""
+        mvp_tval = ""
+        prt_tval = ""
+        des_tval = ""
+        hit_tval = ""
+        dam_tval = ""
 
         xpr_desc = ""
         txp_desc = ""
@@ -108,17 +108,17 @@ class StatsBox(BaseBox):
         hit_desc = self._desc(StatType.hit, hero.war_hit)
         dam_desc = ""
 
-        no1_dict = dict(name="",       bval="",       diff="",       tval="",       prev="",       desc="")
-        xpr_dict = dict(name=xpr_name, bval=xpr_bval, diff=xpr_diff, tval=xpr_tval, prev=xpr_prev, desc=xpr_desc)
-        txp_dict = dict(name=txp_name, bval=txp_bval, diff=txp_diff, tval=txp_tval, prev=txp_prev, desc=txp_desc)
-        nxt_dict = dict(name=nxt_name, bval=nxt_bval, diff=nxt_diff, tval=nxt_tval, prev=nxt_prev, desc=nxt_desc)
-        no2_dict = dict(name="",       bval="",       diff="",       tval="",       prev="",       desc="")
-        wht_dict = dict(name=wht_name, bval=wht_bval, diff=wht_diff, tval=wht_tval, prev=wht_prev, desc=wht_desc)
-        mvp_dict = dict(name=mvp_name, bval=mvp_bval, diff=mvp_diff, tval=mvp_tval, prev=mvp_prev, desc=mvp_desc)
-        prt_dict = dict(name=prt_name, bval=prt_bval, diff=prt_diff, tval=prt_tval, prev=prt_prev, desc=prt_desc)
-        des_dict = dict(name=des_name, bval=des_bval, diff=des_diff, tval=des_tval, prev=des_prev, desc=des_desc)
-        hit_dict = dict(name=hit_name, bval=hit_bval, diff=hit_diff, tval=hit_tval, prev=hit_prev, desc=hit_desc)
-        dam_dict = dict(name=dam_name, bval=dam_bval, diff=dam_diff, tval=dam_tval, prev=dam_prev, desc=dam_desc)
+        no1_dict = dict(name="",       bval="",       diff="",       prev="",       tval="",       desc="")
+        xpr_dict = dict(name=xpr_name, bval=xpr_bval, diff=xpr_diff, prev=xpr_prev, tval=xpr_tval, desc=xpr_desc)
+        txp_dict = dict(name=txp_name, bval=txp_bval, diff=txp_diff, prev=txp_prev, tval=txp_tval, desc=txp_desc)
+        nxt_dict = dict(name=nxt_name, bval=nxt_bval, diff=nxt_diff, prev=nxt_prev, tval=nxt_tval, desc=nxt_desc)
+        no2_dict = dict(name="",       bval="",       diff="",       prev="",       tval="",       desc="")
+        wht_dict = dict(name=wht_name, bval=wht_bval, diff=wht_diff, prev=wht_prev, tval=wht_tval, desc=wht_desc)
+        mvp_dict = dict(name=mvp_name, bval=mvp_bval, diff=mvp_diff, prev=mvp_prev, tval=mvp_tval, desc=mvp_desc)
+        prt_dict = dict(name=prt_name, bval=prt_bval, diff=prt_diff, prev=prt_prev, tval=prt_tval, desc=prt_desc)
+        des_dict = dict(name=des_name, bval=des_bval, diff=des_diff, prev=des_prev, tval=des_tval, desc=des_desc)
+        hit_dict = dict(name=hit_name, bval=hit_bval, diff=hit_diff, prev=hit_prev, tval=hit_tval, desc=hit_desc)
+        dam_dict = dict(name=dam_name, bval=dam_bval, diff=dam_diff, prev=dam_prev, tval=dam_tval, desc=dam_desc)
 
         data_list = [no1_dict, xpr_dict, txp_dict, nxt_dict, no2_dict,
                      wht_dict, mvp_dict, prt_dict, des_dict, hit_dict, dam_dict]
@@ -135,8 +135,8 @@ class StatsBox(BaseBox):
                  self.normalfont.render(str(stat.qty), True, self.fontcolor1).convert_alpha(),
                  # extra if voor stats die een .cur hebben. die moeten dat ook meten.
                  self._set_color(stat.ext + (stat.cur - stat.qty if hasattr(stat, 'cur') else 0), 1),
-                 self.normalfont.render("("+str(stat.tot)+")", True, self.fontcolor1).convert_alpha(),
-                 self._set_color(preview_value, 2)
+                 self._set_color(preview_value, 2),
+                 self.normalfont.render(str(stat.tot), True, self.fontcolor1).convert_alpha()
                  ]
             )
             self.data_matrix.append([stat, None, stat.DESC])
@@ -147,8 +147,8 @@ class StatsBox(BaseBox):
                 [self.normalfont.render(itm_list["name"], True, self._get_color(index)).convert_alpha(),
                  self.normalfont.render(itm_list["bval"], True, self.fontcolor1).convert_alpha(),
                  self._set_color(itm_list["diff"], 1),
-                 self.normalfont.render(itm_list["tval"], True, self.fontcolor1).convert_alpha(),
-                 self._set_color(itm_list["prev"], 2, itm_list["name"])  # dit is om weight te bepalen
+                 self._set_color(itm_list["prev"], 2, itm_list["name"]),  # dit is om weight te bepalen
+                 self.normalfont.render(itm_list["tval"], True, self.fontcolor1).convert_alpha()
                  ]
             )
             self.data_matrix.append([None, None, itm_list["desc"]])

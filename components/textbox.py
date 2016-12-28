@@ -6,12 +6,13 @@ class: TextBox
 import pygame
 
 COLORKEY = pygame.Color("green")
-LINECOLOR = pygame.Color("white")
+LINECOLOR = pygame.Color("black")
 
-TEXTOFFSET = 10
+TEXTOFFSETX = 10
+TEXTOFFSETY = 8
 COL1, COL2 = 0, 150
 
-FONTCOLOR = pygame.Color("white")
+FONTCOLOR = pygame.Color("black")
 FONT = 'verdana'
 FONTSIZE = 11
 LINEHEIGHT = 13
@@ -29,7 +30,7 @@ class TextBox(object):
         self.rect = self.surface.get_rect()
         self.rect.topleft = position
 
-        self.subsurf = pygame.Surface((width - TEXTOFFSET*2, height - TEXTOFFSET*2))
+        self.subsurf = pygame.Surface((width - TEXTOFFSETX*2, height - TEXTOFFSETY*2))
         self.subsurf = self.subsurf.convert()
         self.subrect = self.subsurf.get_rect()
 
@@ -53,7 +54,7 @@ class TextBox(object):
         :param screen: self.screen van partyscreen
         :param text: de tekst om weer te geven
         """
-        self.surface.blit(self.subsurf, (TEXTOFFSET, TEXTOFFSET))
+        self.surface.blit(self.subsurf, (TEXTOFFSETX, TEXTOFFSETY))
         self.subsurf.blit(self.background, (0, 0))
         pygame.draw.rect(self.surface, self.linecolor, self.surface.get_rect(), 1)
 

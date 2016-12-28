@@ -7,25 +7,22 @@ import pygame
 
 from components import Button
 
-BACKGROUNDCOLOR = pygame.Color("black")
-LINECOLOR = pygame.Color("white")
-HEROCOLOR = pygame.Color("gray24")
-
-BOXWIDTH = 250
-BOXHEIGHT = 98
+COLORKEY = pygame.Color("white")
+LINECOLOR = pygame.Color("black")
+HEROCOLOR = pygame.Color("gray60")
 
 FACEX, FACEY = 1, 1
 NAMEX, NAMEY = 111, 4
 LEVELX, LEVELY = 111, 36
 HITPOINTSX, HITPOINTSY = 111, 56
 HEALTHBARX, HEALTHBARY = 111, 81
-HEALTHBARWIDTH = 135
+HEALTHBARWIDTH = 125
 HEALTHBARHEIGHT = 13
 
 LEVEL = "Level: {:12}"
 HITPOINTS = "HitPoints: {:5}/ {}"
 
-FONTCOLOR = pygame.Color("white")
+FONTCOLOR = pygame.Color("black")
 FONT = 'impact'
 LARGEFONTSIZE = 25
 NORMALFONTSIZE = 15
@@ -45,15 +42,12 @@ class HeroBox(object):
     """
     Alle weergegeven informatie in een hero boxje in het partyscherm.
     """
-    def __init__(self, position, index, hero):
-        self.surface = pygame.Surface((BOXWIDTH, BOXHEIGHT))
+    def __init__(self, position, width, height, index, hero):
+        self.surface = pygame.Surface((width, height))
+        self.surface.set_colorkey(COLORKEY)
         self.surface = self.surface.convert()
         self.rect = self.surface.get_rect()
         self.rect.topleft = position
-
-        self.background = pygame.Surface(self.surface.get_size())
-        self.background.fill(BACKGROUNDCOLOR)
-        self.background = self.background.convert()
 
         self.largefont = pygame.font.SysFont(FONT, LARGEFONTSIZE)
         self.normalfont = pygame.font.SysFont(FONT, NORMALFONTSIZE)
@@ -63,7 +57,7 @@ class HeroBox(object):
 
         self.face = pygame.image.load(self.hero.FAC).convert_alpha()
         self.name = self.largefont.render(self.hero.NAM, True, FONTCOLOR).convert_alpha()
-        self.leave = Button(LEAVEW, LEAVEH, (self.rect.right + LEAVEX, self.rect.top + LEAVEY), LEAVELBL, True)
+        self.leave = Button(LEAVEW, LEAVEH, (self.rect.right + LEAVEX, self.rect.top + LEAVEY), LEAVELBL, True, HEROCOLOR, LINECOLOR)
         self.level = None
         self.hitpoints = None
         self.full_hp = None
@@ -123,11 +117,10 @@ class HeroBox(object):
         :param cur_hc: het huidige party hero nummer uit display
         """
         if cur_hc == self.party_index:
-            self.background.fill(HEROCOLOR)
+            self.surface.fill(HEROCOLOR)
         else:
-            self.background.fill(BACKGROUNDCOLOR)
+            self.surface.fill(COLORKEY)
 
-        self.surface.blit(self.background, (0, 0))
         pygame.draw.rect(self.surface, LINECOLOR, self.surface.get_rect(), 1)
         self.surface.blit(self.face, (FACEX, FACEY))
         self.surface.blit(self.name, (NAMEX, NAMEY))
@@ -138,4 +131,4 @@ class HeroBox(object):
 
         screen.blit(self.surface, self.rect.topleft)
 
-        self.leave.render(screen)
+        self.leave.render(screen, LINECOLOR)

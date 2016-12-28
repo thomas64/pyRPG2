@@ -8,29 +8,29 @@ import pygame
 from console import Console
 from constants import Keys
 
-BACKGROUNDCOLOR = pygame.Color("black")
-LINECOLOR = pygame.Color("white")
+COLORKEY = pygame.Color("white")
+LINECOLOR = pygame.Color("black")
 
-FONTCOLOR1 = pygame.Color("white")
-FONTCOLOR2 = pygame.Color("yellow")
+FONTCOLOR1 = pygame.Color("black")
+FONTCOLOR2 = pygame.Color("gray60")
 FONT = 'impact'
 LARGEFONTSIZE = 25
 NORMALFONTSIZE = 15
 
-POSCOLOR1 = pygame.Color("green")
-POSCOLOR2 = pygame.Color("lightgreen")
+POSCOLOR1 = pygame.Color("forestgreen")
+POSCOLOR2 = pygame.Color("green")
 NEGCOLOR1 = pygame.Color("red")
 NEGCOLOR2 = pygame.Color("orangered")
 
 TITLEX, TITLEY = 7, 1
 SCROLLSPEED = 20
-BOTTOMSPACER = 20  # tegen bottom ghosting. deze maakt de layerheight net iets langer.
+BOTTOMSPACER = 7  # tegen bottom ghosting. deze maakt de layerheight net iets langer.
 ICONOFFSET = -6
 
 COLFORRECTS = 1  # in alle party boxen zitten de rects in data_list[X][1], behalve statsbox nog(!)
 MOUSEHOVERWIDTH = 200
 
-TITLERECT = (1, 1, 327, 35)  # 327 = boxwidth - 2
+TITLERECT = (1, 1, 300, 35)  # 300 = zo breed als de breedste box
 UPSPRITE = 'resources/sprites/up.png'
 DOWNSPRITE = 'resources/sprites/down.png'
 ARROWRIGHT = -20
@@ -46,6 +46,7 @@ class BaseBox(object):
         self.box_width = width
         self.box_height = height
         self.surface = pygame.Surface((width, height))
+        self.surface.set_colorkey(COLORKEY)
         self.surface = self.surface.convert()
         self.rect = self.surface.get_rect()
         self.rect.topleft = position
@@ -86,7 +87,7 @@ class BaseBox(object):
         self.lay_rect.topleft = self.rect.topleft
 
         self.background = pygame.Surface((self.box_width, self.layer_height))
-        self.background.fill(BACKGROUNDCOLOR)
+        self.background.fill(COLORKEY)
         self.background = self.background.convert()
 
     def _update_rects_in_layer_rect_with_offset(self):
@@ -220,10 +221,10 @@ class BaseBox(object):
             value = ""
             return self.normalfont.render(value, True, self.fontcolor1).convert_alpha()
         elif value > 0:
-            value = "(+" + str(value) + ")"
+            value = "+" + str(value)
             return self.normalfont.render(value, True, poscolor).convert_alpha()
         elif value < 0:
-            value = "(" + str(value) + ")"
+            value = str(value)
             return self.normalfont.render(value, True, negcolor).convert_alpha()
 
     def render(self, screen):
@@ -233,11 +234,13 @@ class BaseBox(object):
         """
         self.surface.blit(self.layer, (0, self.lay_rect.y - self.rect.y))
         self.layer.blit(self.background, (0, 0))
-        pygame.draw.rect(self.surface, self.linecolor, self.surface.get_rect(), 1)
 
         # zwarte background achter de titel. is voor scrollen.
-        pygame.draw.rect(self.surface, BACKGROUNDCOLOR, pygame.Rect(TITLERECT))
+        pygame.draw.rect(self.surface, COLORKEY, pygame.Rect(TITLERECT))
         self.surface.blit(self.title, (self.title_x, self.title_y))
+
+        # zwarte omranding ná de titel, omdat de titel uitsteekt.
+        pygame.draw.rect(self.surface, self.linecolor, self.surface.get_rect(), 1)
 
         for index, row in enumerate(self.view_matrix):
             for row_nr, columnx in enumerate(self.total_columns):

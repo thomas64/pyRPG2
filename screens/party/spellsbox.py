@@ -8,9 +8,9 @@ import pygame
 from .basebox import BaseBox
 
 
-COLUMN1X = 50
-COLUMN2X = 90
-COLUMN3X = 220
+COLUMN1X = 25
+COLUMN2X = COLUMN1X + 40
+COLUMN3X = COLUMN2X + 130
 COLUMNSY = 50
 ROWHEIGHT = 34
 
@@ -42,7 +42,7 @@ class SpellsBox(BaseBox):
         self.data_matrix = []
         for index, spell in enumerate(hero.scl.get_all_spells()):
             self.view_matrix.append(
-                [pygame.image.load(spell.ICON).subsurface(spell.COL, spell.ROW, 32, 32).convert(),
+                [pygame.image.load(spell.ICON).subsurface(spell.COL, spell.ROW, 32, 32).convert_alpha(),
                  self.normalfont.render(spell.NAM + " :", True, self._get_color(index)).convert_alpha(),
                  self.normalfont.render(str(spell.qty), True, self.fontcolor1).convert_alpha()
                  ]

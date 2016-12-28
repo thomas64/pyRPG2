@@ -11,11 +11,11 @@ from constants import SFX
 import inventoryitems
 
 
-BACKGROUNDCOLOR = pygame.Color("black")
-LINECOLOR = pygame.Color("white")
-SELECTCOLOR = pygame.Color("gray24")
+BACKGROUNDCOLOR = pygame.Color("gray60")
+LINECOLOR = pygame.Color("black")
+SELECTCOLOR = (150, 100, 100, 128)
 
-BOXTRANS = 224  # 1-255 hoger is zwarter
+BOXTRANS = 208  # 1-255 hoger is minder transparant
 
 COLUMN1X = 0
 COLUMN2X = 34
@@ -29,7 +29,7 @@ ICONOFFSET = 1
 TEXTOFFSET = 7
 SUBSURW, SUBSURH = 32, 32
 
-FONTCOLOR = pygame.Color("white")
+FONTCOLOR = pygame.Color("black")
 FONT = 'impact'
 NORMALFONTSIZE = 15
 
