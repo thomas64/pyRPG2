@@ -8,11 +8,13 @@ import pygame
 from components import Button
 from components import ConfirmBox
 from components import MessageBox
+from components import Parchment
 from components import TextBox
-from components import Transition
+
 from constants import GameState
 from constants import Keys
 from constants import SFX
+
 from database import SchoolDatabase
 from database import PouchItemDatabase
 import inventoryitems
@@ -23,20 +25,12 @@ from .selector import Selector
 
 
 BACKGROUNDCOLOR = pygame.Color("black")
-BACKGROUNDSPRITE = 'resources/sprites/parchment.png'
 COLORKEY = pygame.Color("white")
 
 FACEPOSX = 1/16
 FACEPOSY = 3/16
 
 FONTCOLOR = pygame.Color("black")
-FONT = 'colonna'
-SUBFONT = 'verdana'
-LARGEFONTSIZE = 100
-NORMALFONTSIZE = 50
-MIDDLEFONTSIZE = 40
-SMALLFONTSIZE = 20
-TINYFONTSIZE = 12
 
 SMALLLINEHEIGHT = 30
 EXTRAFACESIZE = 20
@@ -98,27 +92,19 @@ CLOSELBL = "Close"
 CLOSEX, CLOSEY = -100, 40    # negatieve x omdat de positie van rechts bepaald wordt.
 
 
-class Display:
+class Display(Parchment):
     """
     ...
     """
     def __init__(self, engine, schooltype_list, face):
-        self.engine = engine
+        super().__init__(engine)
 
         self.schooltype_list = schooltype_list
 
         self.selected_hero = self.engine.data.party['alagos']  # todo, alagos moet eigenlijk niet hard coded zijn
 
-        self.screen = pygame.display.get_surface()
         self.name = GameState.Shop
-        self.background = pygame.image.load(BACKGROUNDSPRITE).convert_alpha()
-        self.background = pygame.transform.scale(self.background, self.screen.get_size())
 
-        self.largefont = pygame.font.SysFont(FONT, LARGEFONTSIZE)
-        self.normalfont = pygame.font.SysFont(FONT, NORMALFONTSIZE)
-        self.middlefont = pygame.font.SysFont(FONT, MIDDLEFONTSIZE)
-        self.smallfont = pygame.font.SysFont(FONT, SMALLFONTSIZE)
-        self.tinyfont = pygame.font.SysFont(SUBFONT, TINYFONTSIZE)
         self.learn_title = self.largefont.render(LEARNTITLE, True, FONTCOLOR).convert_alpha()
         self.known_title = self.largefont.render(KNOWNTITLE, True, FONTCOLOR).convert_alpha()
         self.gold_amount = None
@@ -223,14 +209,6 @@ class Display:
         """
         self.selected_hero.scl.add_s(self.selected_spell)
 
-    # noinspection PyMethodMayBeStatic
-    def on_exit(self):
-        """
-        Wanneer deze state onder een andere state van de stack komt, voer dit uit.
-        Op dit moment nog niets echts.
-        """
-        pass
-
     def single_input(self, event):
         """
         Handelt de muis en keyboard input af.
@@ -260,6 +238,7 @@ class Display:
                 for selector in self.selectors:
                     hero = selector.mouse_click(event)
                     if hero:
+                        self.engine.audio.play_sound(SFX.menu_switch)
                         self.selected_hero = hero
                         self._init_boxes()
                         break
@@ -399,13 +378,8 @@ class Display:
         return self.selected_hero.scl.is_able_to_learn(self.selected_spell, self.selected_hero.wiz.qty,
                                                        self.xp_amount, self.gold_amount)
 
-    def _set_x(self, posx):
-        return self.screen.get_width() * posx
-
-    def _set_y(self, posy):
-        return self.screen.get_height() * posy
-
     def _previous(self):
+        self.engine.audio.play_sound(SFX.menu_switch)
         party_list = list(self.engine.data.party.values())
         index = party_list.index(self.selected_hero)
         index -= 1
@@ -415,6 +389,7 @@ class Display:
         self._init_boxes()
 
     def _next(self):
+        self.engine.audio.play_sound(SFX.menu_switch)
         party_list = list(self.engine.data.party.values())
         index = party_list.index(self.selected_hero)
         index += 1
@@ -422,7 +397,3 @@ class Display:
             index = 0
         self.selected_hero = party_list[index]
         self._init_boxes()
-
-    def _close(self):
-        self.engine.gamestate.pop()
-        self.engine.gamestate.push(Transition(self.engine.gamestate))

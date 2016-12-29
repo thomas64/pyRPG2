@@ -8,8 +8,10 @@ import pygame
 from components import Button
 from components import ConfirmBox
 from components import MessageBox
+from components import Parchment
 from components import TextBox
 from components import Transition
+
 from constants import GameState
 from constants import Keys
 from constants import SFX
@@ -25,7 +27,6 @@ from .statsbox import StatsBox
 
 
 BACKGROUNDCOLOR = pygame.Color("black")
-BACKGROUNDSPRITE = 'resources/sprites/parchment.png'
 COLORKEY = pygame.Color("white")
 LINECOLOR = pygame.Color("black")
 
@@ -58,17 +59,15 @@ PCHBOXW, PCHBOXH =   240, 600
 NEWMAPTIMEOUT = 0.5
 
 
-class Display(object):
+class Display(Parchment):
     """
     Overzicht scherm PartyScreen.
     """
     def __init__(self, engine):
+        super().__init__(engine)
         self.engine = engine
 
-        self.screen = pygame.display.get_surface()
         self.name = GameState.PartyScreen
-        self.background = pygame.image.load(BACKGROUNDSPRITE).convert_alpha()
-        self.background = pygame.transform.scale(self.background, self.screen.get_size())
 
         self.key_input = None           # dit is voor de mousepress op een button.
 
@@ -416,8 +415,3 @@ class Display(object):
         if self.hc > len(self.party) - 1:
             self.hc = 0
         self._init_boxes()
-
-    def _close(self):
-        self.engine.audio.play_sound(SFX.scroll)
-        self.engine.gamestate.pop()
-        self.engine.gamestate.push(Transition(self.engine.gamestate))

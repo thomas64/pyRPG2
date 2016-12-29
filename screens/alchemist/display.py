@@ -9,8 +9,8 @@ import pygame
 
 from components import Button
 from components import MessageBox
+from components import Parchment
 from components import TextBox
-from components import Transition
 from constants import GameState
 from constants import Keys
 from constants import SFX
@@ -22,14 +22,8 @@ from .pouchbox import PouchBox
 
 
 BACKGROUNDCOLOR = pygame.Color("black")
-BACKGROUNDSPRITE = 'resources/sprites/parchment.png'
 COLORKEY = pygame.Color("white")
 FONTCOLOR = pygame.Color("black")
-FONT = 'colonna'
-LARGEFONTSIZE = 100
-NORMALFONTSIZE = 50
-MIDDLEFONTSIZE = 40
-SMALLFONTSIZE = 20
 
 CREATETITLE = "Create"
 POUCHTITLE = "Pouch"
@@ -69,22 +63,15 @@ CLOSELBL = "Close"
 CLOSEX, CLOSEY = -100, 40    # negatieve x omdat de positie van rechts bepaald wordt.
 
 
-class Display(object):
+class Display(Parchment):
     """
     ...
     """
     def __init__(self, engine, hero):
-        self.engine = engine
+        super().__init__(engine)
 
-        self.screen = pygame.display.get_surface()
         self.name = GameState.Shop
-        self.background = pygame.image.load(BACKGROUNDSPRITE).convert_alpha()
-        self.background = pygame.transform.scale(self.background, self.screen.get_size())
 
-        self.largefont = pygame.font.SysFont(FONT, LARGEFONTSIZE)
-        self.normalfont = pygame.font.SysFont(FONT, NORMALFONTSIZE)
-        self.middlefont = pygame.font.SysFont(FONT, MIDDLEFONTSIZE)
-        self.smallfont = pygame.font.SysFont(FONT, SMALLFONTSIZE)
         self.create_title = self.largefont.render(CREATETITLE, True, FONTCOLOR).convert_alpha()
         self.pouch_title = self.largefont.render(POUCHTITLE, True, FONTCOLOR).convert_alpha()
 
@@ -139,14 +126,6 @@ class Display(object):
         height = self.screen.get_height() * INFOBOXHEIGHT
         self.infobox = TextBox((self._set_x(INFOBOXPOSX), self._set_y(INFOBOXPOSY)), int(width), int(height))
 
-    # noinspection PyMissingOrEmptyDocstring
-    def on_enter(self):
-        pass
-
-    # noinspection PyMissingOrEmptyDocstring
-    def on_exit(self):
-        pass
-
     def single_input(self, event):
         """
         Handelt de muis en keyboard input af.
@@ -181,24 +160,6 @@ class Display(object):
         elif event.type == pygame.KEYDOWN:
             if event.key == Keys.Exit.value:
                 self._close()
-
-    # noinspection PyMethodMayBeStatic
-    def multi_input(self, key_input, mouse_pos, dt):
-        """
-        ...
-        :param key_input: pygame.key.get_pressed()
-        :param mouse_pos: pygame.mouse.get_pos()
-        :param dt: self.clock.tick(FPS)/1000.0
-        """
-        pass
-
-    # noinspection PyMethodMayBeStatic
-    def update(self, dt):
-        """
-        ...
-        :param dt: self.clock.tick(FPS)/1000.0
-        """
-        pass
 
     def render(self):
         """
@@ -277,14 +238,3 @@ class Display(object):
             self._init_boxes()
             return True
         return False
-
-    def _set_x(self, posx):
-        return self.screen.get_width() * posx
-
-    def _set_y(self, posy):
-        return self.screen.get_height() * posy
-
-    def _close(self):
-        self.engine.audio.play_sound(SFX.scroll)
-        self.engine.gamestate.pop()
-        self.engine.gamestate.push(Transition(self.engine.gamestate))

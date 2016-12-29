@@ -9,6 +9,7 @@ from .listbox import ListBox
 from .map import Map
 from .messagebox import MessageBox
 from .namedrect import NamedRect
+from .parchment import Parchment
 from .portal import Portal
 from .screencapture import ScreenCapture
 from .textbox import TextBox

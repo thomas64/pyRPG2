@@ -11,13 +11,15 @@ import pygame
 from components import Button
 from components import ConfirmBox
 from components import MessageBox
+from components import Parchment
 from components import TextBox
-from components import Transition
+
 from constants import GameState
 from constants import Keys
 from constants import SFX
 from constants import EquipmentType
 from constants import WeaponType
+
 from database import PouchItemDatabase
 from database import ShopDatabase
 import inventoryitems
@@ -28,17 +30,12 @@ from .sellbox import SellBox
 
 
 BACKGROUNDCOLOR = pygame.Color("black")
-BACKGROUNDSPRITE = 'resources/sprites/parchment.png'
 COLORKEY = pygame.Color("white")
 
 FACEPOSX = 1/16
 FACEPOSY = 3/16
 
 FONTCOLOR = pygame.Color("black")
-FONT = 'colonna'
-LARGEFONTSIZE = 100
-NORMALFONTSIZE = 50
-SMALLFONTSIZE = 20
 
 SMALLLINEHEIGHT = 30
 EXTRAFACESIZE = 20
@@ -81,12 +78,13 @@ CLOSELBL = "Close"
 CLOSEX, CLOSEY = -100, 40    # negatieve x omdat de positie van rechts bepaald wordt.
 
 
-class Display(object):
+class Display(Parchment):
     """
     ...
     """
     def __init__(self, engine, shoptype_list, shopmaterial_list, face):
-        self.engine = engine
+        super().__init__(engine)
+
         # is een list van bijv: [EquipmentType.arm, WeaponType.swd]
         self.shoptype_list = list(shoptype_list)  # het moet een kopie van de lijst zijn, niet de lijst zelf,
         # vanwege de _init_selectors(), waar iets uit de lijst vervangen wordt. door een kopie te maken kan dat.
@@ -94,14 +92,8 @@ class Display(object):
         self.material_list = shopmaterial_list
         self.databases = {}
 
-        self.screen = pygame.display.get_surface()
         self.name = GameState.Shop
-        self.background = pygame.image.load(BACKGROUNDSPRITE).convert_alpha()
-        self.background = pygame.transform.scale(self.background, self.screen.get_size())
 
-        self.largefont = pygame.font.SysFont(FONT, LARGEFONTSIZE)
-        self.normalfont = pygame.font.SysFont(FONT, NORMALFONTSIZE)
-        self.smallfont = pygame.font.SysFont(FONT, SMALLFONTSIZE)
         self.buy_title = self.largefont.render(BUYTITLE, True, FONTCOLOR).convert_alpha()
         self.sell_title = self.largefont.render(SELLTITLE, True, FONTCOLOR).convert_alpha()
         self.gold_amount = None
@@ -266,14 +258,6 @@ class Display(object):
 
             self._reset_vars()
 
-    # noinspection PyMethodMayBeStatic
-    def on_exit(self):
-        """
-        Wanneer deze state onder een andere state van de stack komt, voer dit uit.
-        Op dit moment nog niets echts.
-        """
-        pass
-
     def single_input(self, event):
         """
         Handelt de muis en keyboard input af.
@@ -306,6 +290,7 @@ class Display(object):
                 for selector in self.selectors:
                     shoptype = selector.mouse_click(event)
                     if shoptype:
+                        self.engine.audio.play_sound(SFX.menu_switch)
                         self.shoptype = shoptype
                         self._init_boxes()
                         break
@@ -423,12 +408,6 @@ class Display(object):
             return True
         return False
 
-    def _set_x(self, posx):
-        return self.screen.get_width() * posx
-
-    def _set_y(self, posy):
-        return self.screen.get_height() * posy
-
     def _fill_confirm_box_with_sell_text(self):
         text = ["I'll give you " + str(self.value) + " gold for 1 " + self.selected_item.NAM + ".",
                 "",
@@ -477,6 +456,7 @@ class Display(object):
         return text
 
     def _previous(self):
+        self.engine.audio.play_sound(SFX.menu_switch)
         for index, shoptype in enumerate(self.shoptype_list):
             if shoptype == self.shoptype:
                 i = index - 1
@@ -487,6 +467,7 @@ class Display(object):
                 break
 
     def _next(self):
+        self.engine.audio.play_sound(SFX.menu_switch)
         for index, shoptype in enumerate(self.shoptype_list):
             if shoptype == self.shoptype:
                 i = index + 1
@@ -495,7 +476,3 @@ class Display(object):
                 self.shoptype = self.shoptype_list[i]
                 self._init_boxes()
                 break
-
-    def _close(self):
-        self.engine.gamestate.pop()
-        self.engine.gamestate.push(Transition(self.engine.gamestate))

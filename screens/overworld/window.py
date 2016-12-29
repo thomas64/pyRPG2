@@ -479,6 +479,7 @@ class Window(object):
                     if spr.person_id == shop_id:
                         spr.turn(self.party_sprites[0].rect)
 
+            self.engine.audio.play_sound(SFX.scroll)
             push_object = screens.shop.Display(self.engine, shop_data['content'],
                                                shop_data.get('material'),  # material is geen garantie
                                                shop_data['face'])
@@ -496,6 +497,7 @@ class Window(object):
 
             school_sprite.turn(self.party_sprites[0].rect)
 
+            self.engine.audio.play_sound(SFX.scroll)
             push_object = screens.school.Display(self.engine, school_data['content'], school_data['face'])
             self.engine.gamestate.push(push_object)
             self.engine.gamestate.push(Transition(self.engine.gamestate))
@@ -514,6 +516,7 @@ class Window(object):
                     if spr.person_id == trainer_id:
                         spr.turn(self.party_sprites[0].rect)
 
+            self.engine.audio.play_sound(SFX.scroll)
             push_object = screens.trainer.Display(self.engine, trainer_data['content'], trainer_data['face'])
             self.engine.gamestate.push(push_object)
             self.engine.gamestate.push(Transition(self.engine.gamestate))
