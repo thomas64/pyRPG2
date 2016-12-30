@@ -15,7 +15,7 @@ COLUMN3X = 68
 COLUMN4X = 102
 COLUMN5X = 350
 
-TOTALCOLUMNS = (('icon', COLUMN1X), ('icon', COLUMN2X), ('text', COLUMN3X), ('text', COLUMN4X), ('text', COLUMN5X))
+TOTALCOLUMNS = (('f_icon', COLUMN1X), ('f_icon', COLUMN2X), ('text', COLUMN3X), ('text', COLUMN4X), ('text', COLUMN5X))
 
 
 class SellBox(ListBox):
@@ -27,6 +27,11 @@ class SellBox(ListBox):
 
         self.sale = sum_merchant
 
+        self.total_columns = TOTALCOLUMNS
+        self.column1x = COLUMN1X    # deze is voor de baseclass
+        self.row_nr_with_rect = 6   # row[6]
+        self.row_nr_with_obj = 5    # row[5]
+
         self.table_data = []
         self._fill_table_data(equipment_type, party, inventory)
         self.table_view = []
@@ -34,11 +39,6 @@ class SellBox(ListBox):
         self._setup_scroll_layer()
 
         self.cur_item = None
-
-        self.total_columns = TOTALCOLUMNS
-        self.column1x = COLUMN1X    # deze is voor de baseclass
-        self.row_nr_with_rect = 6   # row[6]
-        self.row_nr_with_obj = 5    # row[5]
         self._update_rects_in_layer_rect_with_offset()
 
     def _fill_table_data(self, equipment_type, party, inventory):
@@ -112,20 +112,6 @@ class SellBox(ListBox):
                         # row[5],   row[6], [7]
                      equipment_item, None, ""]
                 )
-
-    def _setup_table_view(self):
-        """
-        Zet table_data om in een visuele weergave.
-        """
-        normalfont = pygame.font.SysFont(self.font, self.fontsize)
-
-        for index, row in enumerate(self.table_data):
-            self.table_view.append(list())
-            self.table_view[index].append(row[0])
-            self.table_view[index].append(row[1])
-            self.table_view[index].append(normalfont.render(row[2], True, self.fontcolor).convert_alpha())
-            self.table_view[index].append(normalfont.render(row[3], True, self.fontcolor).convert_alpha())
-            self.table_view[index].append(normalfont.render(row[4], True, self.fontcolor).convert_alpha())
 
     def mouse_click(self, event):
         """

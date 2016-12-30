@@ -212,4 +212,4 @@ class Console:
         """
         ListBox.render()
         """
-        print("Not 'icon' or 'text'.")
+        print("Not 'icon', 'f_icon', or 'text'.")

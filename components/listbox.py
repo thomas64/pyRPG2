@@ -72,7 +72,10 @@ class ListBox(object):
     def _setup_table_view(self):
         """
         Zet table_data om in een visuele weergave.
-        Drie mogelijkheden voor een weergave. icon, subicon en text.
+        Vier mogelijkheden voor een weergave. f_icon, icon, subicon en text.
+        f_icon is voor een icon die al geformeerd is naar een pygame image in de _fill_table_data(). dit is omdat
+        er een verschil is in plaatjes aanlevering tussen equipment waar alle icon op 1 png staan en pouchitems,
+        waar alle icons allemaal aparte png's zijn. misschien is het handig dit nog eens aan te passen.
         subicon is voor een icon die subsurface nodig heeft.
         """
         normalfont = pygame.font.SysFont(self.font, self.fontsize)
@@ -82,6 +85,8 @@ class ListBox(object):
             for row_nr, columnx in enumerate(self.total_columns):
                 if columnx[0] == 'icon':
                     self.table_view[index].append(pygame.image.load(row[row_nr]).convert_alpha())
+                elif columnx[0] == 'f_icon':
+                    self.table_view[index].append(row[row_nr])
                 elif columnx[0] == 'subicon':
                     self.table_view[index].append(
                         pygame.image.load(row[row_nr]).subsurface(
@@ -208,7 +213,7 @@ class ListBox(object):
 
         for index, row in enumerate(self.table_view):
             for row_nr, columnx in enumerate(self.total_columns):
-                if columnx[0] in ('icon', 'subicon'):
+                if columnx[0] in ('icon', 'f_icon', 'subicon'):
                     self.layer.blit(
                         row[row_nr],
                         (columnx[1] + self.iconoffset, self.columnsy + self.iconoffset + index * self.rowheight))
