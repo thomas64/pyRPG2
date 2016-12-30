@@ -78,6 +78,10 @@ class ListBox(object):
         waar alle icons allemaal aparte png's zijn. misschien is het handig dit nog eens aan te passen.
         subicon is voor een icon die subsurface nodig heeft.
         """
+        # wanneer alle pouchitems op 1 png komen en ze allemaal een col en row waarde krijgen dan is f_icon niet
+        # meer nodig. nu zijn alle icons nog aparte png's.
+        # edit: dit is toch niet waar, want hero's zullen 'nooit' een col en row waarde krijgen, dus f_icon blijft nodig
+
         normalfont = pygame.font.SysFont(self.font, self.fontsize)
 
         for index, row in enumerate(self.table_data):
