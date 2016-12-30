@@ -213,3 +213,17 @@ class Console:
         ListBox.render()
         """
         print("Not 'icon', 'f_icon', or 'text'.")
+
+    @staticmethod
+    def error_no_messagebox_in_stack():
+        """
+        StateMachine.push_confirmbox_to_end()
+        """
+        print("No MessageBox found in stack.")
+
+    @staticmethod
+    def error_no_confirmbox_in_top_state():
+        """
+        StateMachine.push_confirmbox_to_end()
+        """
+        print("Top state in the stack is not a ConfirmBox.")

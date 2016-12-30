@@ -129,6 +129,8 @@ class StateMachine(object):
                 self.statestack.insert(first_index, self.peek())
                 self.pop()
             else:
+                Console.error_no_messagebox_in_stack()
                 raise AttributeError
         else:
+            Console.error_no_confirmbox_in_top_state()
             raise AttributeError
