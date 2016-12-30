@@ -17,6 +17,7 @@ from constants import Keys
 from constants import SFX
 
 from screens.alchemist.display import Display as Alchemist
+from screens.mechanic.display import Display as Mechanic
 from .herobox import HeroBox
 from .invclickbox import InvClickBox
 from .inventorybox import InventoryBox
@@ -367,6 +368,11 @@ class Display(Parchment):
                 if selected_skill == self.cur_hero.alc:
                     self.engine.audio.play_sound(SFX.scroll)
                     push_object = Alchemist(self.engine, self.cur_hero)
+                    self.engine.gamestate.push(push_object)
+                    self.engine.gamestate.push(Transition(self.engine.gamestate))
+                elif selected_skill == self.cur_hero.mec:
+                    self.engine.audio.play_sound(SFX.scroll)
+                    push_object = Mechanic(self.engine, self.cur_hero)
                     self.engine.gamestate.push(push_object)
                     self.engine.gamestate.push(Transition(self.engine.gamestate))
             return True
