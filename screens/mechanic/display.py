@@ -14,19 +14,20 @@ from components import TextBox
 from constants import EquipmentType as EqTy
 from constants import GameState
 from constants import Keys
-from constants import WeaponType as WeTy
+from constants import SFX
 
-from .upgradeablebox import UpgradeableBox
+from .createbox import CreateBox
+from .inventorybox import InventoryBox
 from screens.shop.selector import Selector
 
 BACKGROUNDCOLOR = pygame.Color("black")
 COLORKEY = pygame.Color("white")
 FONTCOLOR = pygame.Color("black")
 
-INFOBOXWIDTH = 25/100
-INFOBOXHEIGHT = 11/100
+INFOBOXWIDTH = 1/4
+INFOBOXHEIGHT = 1/6
 INFOBOXPOSX = 1/16
-INFOBOXPOSY = 81/100
+INFOBOXPOSY = 6/8
 
 BTNWIDTH = 70
 BTNHEIGHT = 40
@@ -35,17 +36,21 @@ CLOSEX, CLOSEY = -100, 40    # negatieve x omdat de positie van rechts bepaald w
 
 EXTRAHEIGHT = 0         # zodat de laatste item er voor helft op komt
 
-UPGBOXWIDTH = 5/16
-UPGBOXHEIGHT = 73/100
-UPGBOXPOSX = 15/24
-UPGBOXPOSY = 6/32
+CREATEBOXWIDTH = 20 / 100
+CREATEBOXHEIGHT = 73 / 100
+CREATEBOXPOSX = 40 / 100
+CREATEBOXPOSY = 6 / 32
+
+INVENTORYBOXWIDTH = 26/100
+INVENTORYBOXHEIGHT = 73/100
+INVENTORYBOXPOSX = 64/100
+INVENTORYBOXPOSY = 6/32
 
 SELECTORPOSX = 2/32
 SELECTORPOSY = 20/32
 SELECTORWIDTH = 36
 
-UPGRADELIST = [WeTy.swd, WeTy.haf, WeTy.pol, WeTy.mis, WeTy.thr,
-               EqTy.sld, EqTy.hlm, EqTy.arm, EqTy.glv, EqTy.bts]
+CREATELIST = [EqTy.wpn, EqTy.sld, EqTy.hlm, EqTy.arm, EqTy.clk, EqTy.glv, EqTy.blt, EqTy.bts]
 
 
 class Display(Parchment):
@@ -55,7 +60,7 @@ class Display(Parchment):
     def __init__(self, engine, hero):
         super().__init__(engine)
 
-        self.eqptype = UPGRADELIST[0]
+        self.eqptype = CREATELIST[0]
 
         self.name = GameState.Shop
 
@@ -76,7 +81,7 @@ class Display(Parchment):
     def _init_selectors(self):
         self.selectors = pygame.sprite.Group()
 
-        for index, eqp_type in enumerate(UPGRADELIST):
+        for index, eqp_type in enumerate(CREATELIST):
             self.selectors.add(Selector(self._set_x(SELECTORPOSX) + index * SELECTORWIDTH,
                                         self._set_y(SELECTORPOSY), eqp_type))
 
@@ -84,18 +89,47 @@ class Display(Parchment):
 
     def _init_boxes(self):
         self._init_infobox()
-        self._init_upgradeablebox()
+        self._init_createbox()
+        self._init_inventorybox()
 
     def _init_infobox(self):
         width = self.screen.get_width() * INFOBOXWIDTH
         height = self.screen.get_height() * INFOBOXHEIGHT
         self.infobox = TextBox((self._set_x(INFOBOXPOSX), self._set_y(INFOBOXPOSY)), int(width), int(height))
 
-    def _init_upgradeablebox(self):
-        width = self.screen.get_width() * UPGBOXWIDTH
-        height = self.screen.get_height() * UPGBOXHEIGHT + EXTRAHEIGHT
-        self.upgbox = UpgradeableBox(self._set_x(UPGBOXPOSX), self._set_y(UPGBOXPOSY), int(width), int(height),
-                                     self.eqptype, self.engine.data.party, self.engine.data.inventory)
+    def _init_createbox(self):
+        width = self.screen.get_width() * CREATEBOXWIDTH
+        height = self.screen.get_height() * CREATEBOXHEIGHT + EXTRAHEIGHT
+
+        if self.eqptype == EqTy.wpn:
+            from database.weapon import WeaponDatabase as DataBase
+        elif self.eqptype == EqTy.sld:
+            from database.shield import ShieldDatabase as DataBase
+        elif self.eqptype == EqTy.hlm:
+            from database.helmet import HelmetDatabase as DataBase
+        elif self.eqptype == EqTy.arm:
+            from database.armor import ArmorDatabase as DataBase
+        elif self.eqptype == EqTy.clk:
+            from database.cloak import CloakDatabase as DataBase
+        elif self.eqptype == EqTy.glv:
+            from database.gloves import GlovesDatabase as DataBase
+        elif self.eqptype == EqTy.blt:
+            from database.belt import BeltDatabase as DataBase
+        elif self.eqptype == EqTy.bts:
+            from database.boots import BootsDatabase as DataBase
+        else:
+            raise AttributeError
+
+        self.createbox = CreateBox(self._set_x(CREATEBOXPOSX), self._set_y(CREATEBOXPOSY), int(width), int(height),
+                                   DataBase)
+
+    def _init_inventorybox(self):
+        width = self.screen.get_width() * INVENTORYBOXWIDTH
+        height = self.screen.get_height() * INVENTORYBOXHEIGHT + EXTRAHEIGHT
+        self.inventorybox = InventoryBox(self._set_x(INVENTORYBOXPOSX), self._set_y(INVENTORYBOXPOSY),
+                                         int(width), int(height),
+                                         self.eqptype, self.engine.data.party,
+                                         self.engine.data.pouch, self.engine.data.inventory)
 
     def single_input(self, event):
         """
@@ -104,6 +138,10 @@ class Display(Parchment):
         """
         if event.type == pygame.MOUSEMOTION:
             self.info_label = ""
+            self.inventorybox.cur_item = None
+
+            if self.inventorybox.rect.collidepoint(event.pos):
+                selected_name, self.info_label = self.inventorybox.mouse_hover(event)
 
         elif event.type == pygame.MOUSEBUTTONDOWN:
 
@@ -111,9 +149,31 @@ class Display(Parchment):
                 if self.close_button.single_click(event) == Keys.Exit.value:
                     self._close()
 
+                for selector in self.selectors:
+                    eqptype = selector.mouse_click(event)
+                    if eqptype:
+                        if eqptype != self.eqptype:
+                            self.engine.audio.play_sound(SFX.menu_switch)
+                            self.eqptype = eqptype
+                            self._init_boxes()
+                            break
+
         elif event.type == pygame.KEYDOWN:
             if event.key == Keys.Exit.value:
                 self._close()
+            elif event.key == Keys.Prev.value:
+                self._previous()
+            elif event.key == Keys.Next.value:
+                self._next()
+
+    def update(self, dt):
+        """
+        Update de selector border color.
+        Update de gold quantity.
+        :param dt: self.clock.tick(FPS)/1000.0
+        """
+        for selector in self.selectors:
+            selector.update(self.eqptype)
 
     def render(self):
         """
@@ -125,5 +185,28 @@ class Display(Parchment):
         self.selectors.draw(self.background)
 
         self.infobox.render(self.screen, self.info_label)
-        self.upgbox.render(self.screen)
+        self.createbox.render(self.screen)
+        self.inventorybox.render(self.screen)
         self.close_button.render(self.screen, FONTCOLOR)
+
+    def _previous(self):
+        self.engine.audio.play_sound(SFX.menu_switch)
+        for index, eqptype in enumerate(CREATELIST):
+            if eqptype == self.eqptype:
+                i = index - 1
+                if i < 0:
+                    i = len(CREATELIST) - 1
+                self.eqptype = CREATELIST[i]
+                self._init_boxes()
+                break
+
+    def _next(self):
+        self.engine.audio.play_sound(SFX.menu_switch)
+        for index, eqptype in enumerate(CREATELIST):
+            if eqptype == self.eqptype:
+                i = index + 1
+                if i >= len(CREATELIST):
+                    i = 0
+                self.eqptype = CREATELIST[i]
+                self._init_boxes()
+                break

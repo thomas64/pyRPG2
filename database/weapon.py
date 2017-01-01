@@ -16,13 +16,16 @@ SPRITEPATH = 'resources/sprites/icons/equipment/weapon1.png'
 
 class WeaponDatabase(enum.Enum):
     """
-    Een lege Enum.
+    Een lege Enum. (met customs)
     """
+    customsword = dict(nam="Custom Sword", spr=SPRITEPATH, srt=1, val=1, shp=False, min_str=0, dam=0, hit=0, skl=WeaponType.swd, col=0,   row=672, cus=True, clt=2, ltr=3, wod=4,  mtl=20)
+    customaxe = dict(nam="Custom Axe",     spr=SPRITEPATH, srt=2, val=1, shp=False, min_str=0, dam=0, hit=0, skl=WeaponType.haf, col=32,  row=672, cus=True, clt=2, ltr=3, wod=6,  mtl=18)
+    customspear = dict(nam="Custom Spear", spr=SPRITEPATH, srt=3, val=1, shp=False, min_str=0, dam=0, hit=0, skl=WeaponType.pol, col=64,  row=672, cus=True, clt=3, ltr=4, wod=10, mtl=12)
+    custombow = dict(nam="Custom Bow",     spr=SPRITEPATH, srt=4, val=1, shp=False, min_int=0, dam=0, hit=0, skl=WeaponType.mis, col=96,  row=672, cus=True, clt=5, ltr=2, wod=20, mtl=2)
+    customknife = dict(nam="Custom Knife", spr=SPRITEPATH, srt=5, val=1, shp=False, min_str=0, dam=0, hit=0, skl=WeaponType.thr, col=128, row=672, cus=True, clt=1, ltr=2, wod=1,  mtl=15)
 
 
-# Vul de OrderedDict self met de gecombineerde data.
-
-# todo, upgradable, min_mech, metals zijn nog niet verwerkt.
+# Vul de Enum met de gecombineerde data.
 
 #                     val, min int, min str, dam, srt, col,     mtr[6]
 weapon_material = {
@@ -79,7 +82,7 @@ for material_key, material_value in weapon_material.items():
             temp_weapon_dict[raw_key_name] = dict(
                 nam=(material_key + " " + type_key + " " + upgraded_key).strip(),
 
-                # puur voor sortering in de winkels
+                # voor sortering in de winkels
                 srt=material_value[4] + type_value[7] + upgraded_value[3],
 
                 # berekening value: material * type * upgraded

@@ -16,13 +16,13 @@ SPRITEPATH = 'resources/sprites/icons/equipment/shield4.png'
 
 class ShieldDatabase(enum.Enum):
     """
-    Een lege Enum.
+    Een lege Enum. (met custom)
     """
+    customshield = dict(nam="Custom Shield", spr=SPRITEPATH, srt=1, val=1, shp=False,
+                        min_str=0, prt=0, des=0, dex=0, stl=0, col=192, row=0, cus=True, clt=0, ltr=2, wod=18, mtl=12)
 
 
-# Vul de OrderedDict self met de gecombineerde data.
-
-# todo, upgradable, min_mech, metals zijn nog niet verwerkt.
+# Vul de Enum met de gecombineerde data.
 
 #                     val, min str, prt, des, dex, stl,  srt, col,      mtr[8]
 shield_material = {
@@ -61,7 +61,7 @@ for material_key, material_value in shield_material.items():
             temp_shield_dict[raw_key_name] = dict(
                 nam=(material_key + " " + type_key + " " + upgraded_key).strip(),
 
-                # puur voor sortering in de database, omdat geen enum is
+                # voor sortering in de database
                 srt=material_value[6] + type_value[6] + upgraded_value[6],
 
                 # berekening value: material * type * upgraded

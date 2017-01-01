@@ -290,10 +290,11 @@ class Display(Parchment):
                 for selector in self.selectors:
                     shoptype = selector.mouse_click(event)
                     if shoptype:
-                        self.engine.audio.play_sound(SFX.menu_switch)
-                        self.shoptype = shoptype
-                        self._init_boxes()
-                        break
+                        if shoptype != self.shoptype:
+                            self.engine.audio.play_sound(SFX.menu_switch)
+                            self.shoptype = shoptype
+                            self._init_boxes()
+                            break
 
                 # return of anders worden sommigen variabelen weer overschreven.
                 if self._handle_buy_box_click(event):

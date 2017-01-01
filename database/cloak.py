@@ -15,10 +15,13 @@ SPRITEPATH = 'resources/sprites/icons/equipment/cloak1.png'
 class CloakDatabase(enum.Enum):
     """..."""
     #                                                             val=prt**2+4
-    cottoncloak = dict(nam="Cotton Cloak",                srt=1,  val=5,  shp=True,  wht=1, prt=1, col=0,   row=0,  mtr=ItemMaterial.ctn)
-    leathercloak = dict(nam="Leather Cloak",              srt=2,  val=8,  shp=True,  wht=2, prt=2, col=32,  row=0,  mtr=ItemMaterial.ltr)
+    customcloak = dict(nam="Custom Cloak",                srt=1,  val=1,  shp=False, wht=0, prt=0, col=96,  row=0,
+                       cus=True, clt=3, ltr=3, wod=0, mtl=0)
+
+    cottoncloak = dict(nam="Cotton Cloak",                srt=2,  val=5,  shp=True,  wht=1, prt=1, col=0,   row=0,  mtr=ItemMaterial.ctn)
+    leathercloak = dict(nam="Leather Cloak",              srt=3,  val=8,  shp=True,  wht=2, prt=2, col=32,  row=0,  mtr=ItemMaterial.ltr)
     #                                                             val=stl**2+9                 neppe materiale eigenlijk
-    covercloak = dict(nam="Cover Cloak",                  srt=3,  val=10, shp=True,  wht=0, stl=1, col=0,   row=32, mtr=ItemMaterial.ctn)
+    covercloak = dict(nam="Cover Cloak",                  srt=4,  val=10, shp=True,  wht=0, stl=1, col=0,   row=32, mtr=ItemMaterial.ctn)
     darkcloak = dict(nam="Dark Cloak",                    srt=5,  val=13, shp=True,  wht=0, stl=2, col=32,  row=32, mtr=ItemMaterial.ltr)
     disguisecloak = dict(nam="Disguise Cloak",            srt=7,  val=18, shp=True,  wht=0, stl=3, col=64,  row=32, mtr=ItemMaterial.brz)
     concealcloak = dict(nam="Conceal Cloak",              srt=9,  val=25, shp=True,  wht=0, stl=4, col=96,  row=32, mtr=ItemMaterial.irn)

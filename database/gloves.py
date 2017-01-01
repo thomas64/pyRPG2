@@ -15,18 +15,15 @@ SPRITEPATH = 'resources/sprites/icons/equipment/gloves1.png'
 class GlovesDatabase(enum.Enum):
     """..."""
     #                                                             val=prt**2+5
-    leathergloves = dict(nam="Leather Gloves",            srt=1,  val=6,  shp=True,  wht=1, prt=1,        col=0,   row=0, mtr=ItemMaterial.ltr)
+    customgauntlets = dict(nam="Custom Gauntlets",        srt=1,  val=1,  shp=False, wht=0, prt=0,        col=0,   row=64,
+                           cus=True, clt=3, ltr=2, wod=0, mtl=7)
 
+    leathergloves = dict(nam="Leather Gloves",            srt=2,  val=6,  shp=True,  wht=1, prt=1,        col=0,   row=0, mtr=ItemMaterial.ltr)
     bronzegauntlets = dict(nam="Bronze Gauntlets",        srt=3,  val=9,  shp=True,  wht=2, prt=2,        col=32,  row=0, mtr=ItemMaterial.brz)
-    bronzegauntlets2 = dict(nam="Bronze Gauntlets +",     srt=4,  val=10, shp=False, wht=1, prt=2,        col=32,  row=0, mtr=ItemMaterial.brz)
     irongauntlets = dict(nam="Iron Gauntlets",            srt=5,  val=14, shp=True,  wht=3, prt=3,        col=64,  row=0, mtr=ItemMaterial.irn)
-    irongauntlets2 = dict(nam="Iron Gauntlets +",         srt=6,  val=15, shp=False, wht=2, prt=3,        col=64,  row=0, mtr=ItemMaterial.irn)
     steelgauntlets = dict(nam="Steel Gauntlets",          srt=7,  val=21, shp=True,  wht=4, prt=4,        col=96,  row=0, mtr=ItemMaterial.stl)
-    steelgauntlets2 = dict(nam="Steel Gauntlets +",       srt=8,  val=22, shp=False, wht=3, prt=4,        col=96,  row=0, mtr=ItemMaterial.stl)
     silvergauntlets = dict(nam="Silver Gauntlets",        srt=9,  val=30, shp=True,  wht=5, prt=5,        col=128, row=0, mtr=ItemMaterial.slv)
-    silvergauntlets2 = dict(nam="Silver Gauntlets +",     srt=10, val=31, shp=False, wht=4, prt=5,        col=128, row=0, mtr=ItemMaterial.slv)
     titaniumgauntlets = dict(nam="Titanium Gauntlets",    srt=11, val=41, shp=False, wht=2, prt=5,        col=160, row=0, mtr=ItemMaterial.tnm)
-    titaniumgauntlets2 = dict(nam="Titanium Gauntlets +", srt=12, val=42, shp=False, wht=1, prt=5,        col=160, row=0, mtr=ItemMaterial.tnm)
 
     gauntletsofmight = dict(nam="Gauntlets of Might",     srt=13, val=6,  shp=False, wht=2, prt=2, str=3, col=0,   row=32)
     laboratorygloves = dict(nam="Laboratory Gloves",      srt=14, val=6,  shp=False, wht=0,        alc=2, col=32,  row=32)

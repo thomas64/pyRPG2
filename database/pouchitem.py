@@ -15,6 +15,9 @@ GOLDIMG = os.path.join(POUCHPATH, "gold.png")
 HERBIMG = os.path.join(POUCHPATH, "herbs.png")
 SPICEIMG = os.path.join(POUCHPATH, "spices.png")
 GEMSTONEIMG = os.path.join(POUCHPATH, "gemstones.png")
+CLOTHIMG = os.path.join(POUCHPATH, "cloth.png")
+LEATHERIMG = os.path.join(POUCHPATH, "leather.png")
+WOODIMG = os.path.join(POUCHPATH, "wood.png")
 METALIMG = os.path.join(POUCHPATH, "metals.png")
 POTIONBLUE = os.path.join(POUCHPATH, "potion_blue.png")
 POTIONGREEN = os.path.join(POUCHPATH, "potion_green.png")
@@ -38,7 +41,13 @@ class PouchItemDatabase(enum.Enum):
     gemstones = dict(nam="Gemstones", srt=4,  spr=GEMSTONEIMG,    val=1,
                      desc="Gemstones are used in magical spells (Wizard Skill) "
                           "and in creating potions (Alchemist Skill).")
-    metals = dict(nam="Metals",       srt=5,  spr=METALIMG,       val=1,
+    cloth = dict(nam="Cloth",         srt=5,  spr=CLOTHIMG,       val=1,
+                 desc="Cloth is used for improving weapons, shields, armor and other equipment (Mechanic Skill).")
+    leather = dict(nam="Leather",     srt=6,  spr=LEATHERIMG,     val=1,
+                   desc="Leather is used for improving weapons, shields, armor and other equipment (Mechanic Skill).")
+    wood = dict(nam="Wood",           srt=7,  spr=WOODIMG,        val=1,
+                desc="Wood is used for improving weapons, shields, armor and other equipment (Mechanic Skill).")
+    metals = dict(nam="Metals",       srt=8,  spr=METALIMG,       val=1,
                   desc="Metals are used for improving weapons, shields, armor and other equipment (Mechanic Skill).")
 
     proofnote = dict(nam="Proofnote", srt=40, spr=NOTEPIMG,

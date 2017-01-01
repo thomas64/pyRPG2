@@ -238,10 +238,11 @@ class Display(Parchment):
                 for selector in self.selectors:
                     hero = selector.mouse_click(event)
                     if hero:
-                        self.engine.audio.play_sound(SFX.menu_switch)
-                        self.selected_hero = hero
-                        self._init_boxes()
-                        break
+                        if hero != self.selected_hero:
+                            self.engine.audio.play_sound(SFX.menu_switch)
+                            self.selected_hero = hero
+                            self._init_boxes()
+                            break
 
                 if self._handle_learn_box_click(event):
                     return
