@@ -201,6 +201,12 @@ class Mechanic(Skill):
         self.DESC = "Allows the character to upgrade inventory with metals. The process also costs gold. " \
                     "A higher Mechanic rank means a higher chance to successfully upgrade an item. " \
                     "The item is destroyed when upgrade is unsuccessful."
+        self.STA_COST = 3
+
+    def welcome_text(self, hero_name):
+        """..."""
+        return ("Name is {}.".format(hero_name),
+                "Current Mechanic rank of {}.".format(self.tot),)
 
 
 class Merchant(Skill):

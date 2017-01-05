@@ -40,19 +40,19 @@ class Script:
 
         #### todo, tijdelijk
         pouch_item = inventoryitems.factory_pouch_item(PouchItemDatabase.herbs)
-        data.pouch.add(pouch_item, 1, verbose=False)
+        data.pouch.add(pouch_item, 99, verbose=False)
         pouch_item = inventoryitems.factory_pouch_item(PouchItemDatabase.spices)
-        data.pouch.add(pouch_item, 1, verbose=False)
+        data.pouch.add(pouch_item, 99, verbose=False)
         pouch_item = inventoryitems.factory_pouch_item(PouchItemDatabase.gemstones)
-        data.pouch.add(pouch_item, 1, verbose=False)
+        data.pouch.add(pouch_item, 99, verbose=False)
         pouch_item = inventoryitems.factory_pouch_item(PouchItemDatabase.cloth)
-        data.pouch.add(pouch_item, 1, verbose=False)
+        data.pouch.add(pouch_item, 99, verbose=False)
         pouch_item = inventoryitems.factory_pouch_item(PouchItemDatabase.leather)
-        data.pouch.add(pouch_item, 1, verbose=False)
+        data.pouch.add(pouch_item, 99, verbose=False)
         pouch_item = inventoryitems.factory_pouch_item(PouchItemDatabase.wood)
-        data.pouch.add(pouch_item, 1, verbose=False)
+        data.pouch.add(pouch_item, 99, verbose=False)
         pouch_item = inventoryitems.factory_pouch_item(PouchItemDatabase.metals)
-        data.pouch.add(pouch_item, 1, verbose=False)
+        data.pouch.add(pouch_item, 99, verbose=False)
         ####
 
         data.map_name = 'ersin_forest_center'

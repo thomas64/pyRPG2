@@ -11,10 +11,13 @@ from components import Button
 from components import MessageBox
 from components import Parchment
 from components import TextBox
+
 from constants import GameState
 from constants import Keys
 from constants import SFX
+
 from database import PouchItemDatabase
+
 import inventoryitems
 
 from .createbox import CreateBox

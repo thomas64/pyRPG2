@@ -8,6 +8,7 @@ import random
 import pygame
 
 from components import Button
+from components import MessageBox
 from components import Parchment
 from components import TextBox
 
@@ -16,6 +17,10 @@ from constants import GameState
 from constants import Keys
 from constants import SFX
 
+from database import PouchItemDatabase
+
+import inventoryitems
+
 from .createbox import CreateBox
 from .inventorybox import InventoryBox
 from screens.shop.selector import Selector
@@ -23,6 +28,21 @@ from screens.shop.selector import Selector
 BACKGROUNDCOLOR = pygame.Color("black")
 COLORKEY = pygame.Color("white")
 FONTCOLOR = pygame.Color("black")
+
+CREATETITLE = "Create"
+INVENTORYTITLE = "Invent."
+TITLEPOSX = 1/16
+TITLEPOSY = 1/32
+FACEPOSX = 1/16
+FACEPOSY = 3/16
+EXTRAFACESIZEX = 20
+EXTRAFACESIZEY = 0
+LINESNEXTTOFACE = 4
+SMALLLINEHEIGHT = 27
+
+STATITLE = "Stamina {}: "
+STATITLEPOSX = 1/16
+STATITLEPOSY = 68/100
 
 INFOBOXWIDTH = 1/4
 INFOBOXHEIGHT = 1/6
@@ -64,12 +84,12 @@ class Display(Parchment):
 
         self.name = GameState.Shop
 
-        # self.create_title = self.largefont.render(CREATETITLE, True, FONTCOLOR).convert_alpha()
-        # self.pouch_title = self.largefont.render(POUCHTITLE, True, FONTCOLOR).convert_alpha()
+        self.create_title = self.largefont.render(CREATETITLE, True, FONTCOLOR).convert_alpha()
+        self.inventory_title = self.largefont.render(INVENTORYTITLE, True, FONTCOLOR).convert_alpha()
 
         self.cur_hero = hero
         self._init_selectors()
-        # self._init_face()
+        self._init_face()
         self._init_boxes()
 
         self.close_button = Button(
@@ -77,6 +97,21 @@ class Display(Parchment):
             COLORKEY, FONTCOLOR)
 
         self.info_label = ""
+
+    def _init_face(self):
+        face_image = pygame.image.load(self.cur_hero.FAC).convert_alpha()
+        self.background.blit(face_image, (self._set_x(FACEPOSX), self._set_y(FACEPOSY)))
+
+        for index, line in enumerate(self.cur_hero.mec.welcome_text(self.cur_hero.NAM)):
+            rline = self.smallfont.render(line, True, FONTCOLOR).convert_alpha()
+            if index < LINESNEXTTOFACE:
+                self.background.blit(rline,
+                                     (self._set_x(FACEPOSX) + face_image.get_width() + EXTRAFACESIZEX,
+                                      self._set_y(FACEPOSY) + EXTRAFACESIZEY + index * SMALLLINEHEIGHT))
+            else:
+                self.background.blit(rline,
+                                     (self._set_x(FACEPOSX),
+                                      self._set_y(FACEPOSY) + EXTRAFACESIZEY + index * SMALLLINEHEIGHT))
 
     def _init_selectors(self):
         self.selectors = pygame.sprite.Group()
@@ -152,6 +187,8 @@ class Display(Parchment):
 
                 if self.close_button.single_click(event) == Keys.Exit.value:
                     self._close()
+                if self._handle_create_box_click(event):
+                    return
 
                 for selector in self.selectors:
                     eqptype = selector.mouse_click(event)
@@ -192,12 +229,72 @@ class Display(Parchment):
         self.screen.fill(BACKGROUNDCOLOR)
         self.screen.blit(self.background, (0, 0))
 
+        mec_title = self.largefont.render(self.cur_hero.mec.NAM, True, FONTCOLOR).convert_alpha()
+        self.screen.blit(mec_title, (self._set_x(TITLEPOSX), self._set_y(TITLEPOSY)))
+
+        self.screen.blit(self.create_title, ((self._set_x(CREATEBOXPOSX)) +
+                                             (self.screen.get_width() * CREATEBOXWIDTH / 2) -
+                                             (self.create_title.get_width() / 2),
+                                             self._set_y(TITLEPOSY)))
+        self.screen.blit(self.inventory_title, ((self._set_x(INVENTORYBOXPOSX)) +
+                                                (self.screen.get_width() * INVENTORYBOXWIDTH / 2) -
+                                                (self.inventory_title.get_width() / 2),
+                                                self._set_y(TITLEPOSY)))
+
+        sta_title = self.middlefont.render(
+                    STATITLE.format(self.cur_hero.NAM) + str(self.cur_hero.sta.cur), True, FONTCOLOR).convert_alpha()
+        self.screen.blit(sta_title, (self._set_x(STATITLEPOSX), self._set_y(STATITLEPOSY)))
+
         self.selectors.draw(self.background)
 
         self.infobox.render(self.screen, self.info_label)
         self.createbox.render(self.screen)
         self.inventorybox.render(self.screen)
         self.close_button.render(self.screen, FONTCOLOR)
+
+    def _handle_create_box_click(self, event):
+        create_click, selected_equipment = self.createbox.mouse_click(event)
+        if create_click:
+            cloth = inventoryitems.factory_pouch_item(PouchItemDatabase.cloth)
+            leather = inventoryitems.factory_pouch_item(PouchItemDatabase.leather)
+            wood = inventoryitems.factory_pouch_item(PouchItemDatabase.wood)
+            metals = inventoryitems.factory_pouch_item(PouchItemDatabase.metals)
+            clt_qty = self.engine.data.pouch.get_quantity(cloth)
+            ltr_qty = self.engine.data.pouch.get_quantity(leather)
+            wod_qty = self.engine.data.pouch.get_quantity(wood)
+            mtl_qty = self.engine.data.pouch.get_quantity(metals)
+
+            if selected_equipment.CLT > clt_qty or \
+               selected_equipment.LTR > ltr_qty or \
+               selected_equipment.WOD > wod_qty or \
+               selected_equipment.MTL > mtl_qty:
+                text = ["You do not have the right components",
+                        "to create that {}.".format(selected_equipment.NAM)]
+                push_object = MessageBox(self.engine.gamestate, self.engine.audio, text, sound=SFX.menu_cancel)
+                self.engine.gamestate.push(push_object)
+                return True
+            elif self.cur_hero.sta.cur < self.cur_hero.mec.STA_COST:
+                text = ["You do not have enough stamina",
+                        "to create that {}.".format(selected_equipment.NAM)]
+                push_object = MessageBox(self.engine.gamestate, self.engine. audio, text, sound=SFX.menu_cancel)
+                self.engine.gamestate.push(push_object)
+                return True
+            elif 'pouch is full' is False:  # todo, moet 'pouch is vol' hier? of in pouch?
+                self.engine.audio.play_sound(SFX.menu_cancel)
+                return True
+
+            self.engine.data.pouch.remove(cloth, selected_equipment.CLT, force=True)  # want kan ook 0 zijn.
+            self.engine.data.pouch.remove(leather, selected_equipment.LTR, force=True)
+            self.engine.data.pouch.remove(wood, selected_equipment.WOD, force=True)
+            self.engine.data.pouch.remove(metals, selected_equipment.MTL, force=True)
+
+            self.cur_hero.sta.cur -= self.cur_hero.mec.STA_COST
+
+            # todo, hier het random gebeuren op basis van je mec level.
+
+            self._init_boxes()
+            return True
+        return False
 
     def _previous(self):
         self.engine.audio.play_sound(SFX.menu_switch)
