@@ -17,8 +17,15 @@ class ArmorDatabase(enum.Enum):
     """
     Een lege Enum. (met alleen een custom erin.)
     """
-    customarmor = dict(nam="Custom Armor", spr=SPRITEPATH, srt=1, val=1, shp=False, wht=0, prt=0, stl=0, col=0, row=192,
-                       cus=True, clt=6, ltr=9, wod=2, mtl=15)
+    customarmor = dict(nam="Custom Armor", srt=1, val=1, shp=False, wht=0, prt=0, stl=0, col=0, row=192,
+                       cus=True, clt=6, ltr=9, wod=2, mtl=15,
+                       desc="The Weight of a custom made Armor may vary between 1-16, Protection between 1-16 and "
+                            "Stealth between 0- -15. Creating a Custom Armor requires 6 Cloth, 9 Leather, 2 Wood and "
+                            "15 metals.")
+
+for equipment_item in ArmorDatabase:
+    equipment_item.value['typ'] = EquipmentType.arm
+    equipment_item.value['spr'] = SPRITEPATH
 
 
 # Vul de Enum met de gecombineerde data.

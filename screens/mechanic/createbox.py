@@ -48,3 +48,13 @@ class CreateBox(ListBox):
                     # row[0],                 row[1],      row[2],    row[3]
                     [equipment_obj.SPR, equipment_item_nam, None,   equipment_obj]
                 )
+
+    def mouse_hover(self, event):
+        """
+        :param event: pygame.MOUSEMOTION uit mechanic screen
+        """
+        for index, row in enumerate(self.table_data):
+            if row[self.row_nr_with_rect].collidepoint(event.pos):
+                self.cur_item = index
+                return row[self.row_nr_with_obj].NAM, row[self.row_nr_with_obj].DESC
+        return None, None

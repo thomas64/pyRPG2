@@ -16,7 +16,9 @@ class CloakDatabase(enum.Enum):
     """..."""
     #                                                             val=prt**2+4
     customcloak = dict(nam="Custom Cloak",                srt=1,  val=1,  shp=False, wht=0, prt=0, col=96,  row=0,
-                       cus=True, clt=3, ltr=3, wod=0, mtl=0)
+                       cus=True, clt=3, ltr=3, wod=0, mtl=0,
+                       desc="The Weight of a custom made Cloak may vary between 1-3 and Protection between 1-3. "
+                            "Creating a Custom Cloak requires 3 Cloth and 3 Leather.")
 
     cottoncloak = dict(nam="Cotton Cloak",                srt=2,  val=5,  shp=True,  wht=1, prt=1, col=0,   row=0,  mtr=ItemMaterial.ctn)
     leathercloak = dict(nam="Leather Cloak",              srt=3,  val=8,  shp=True,  wht=2, prt=2, col=32,  row=0,  mtr=ItemMaterial.ltr)

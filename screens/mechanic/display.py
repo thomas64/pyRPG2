@@ -138,14 +138,18 @@ class Display(Parchment):
         """
         if event.type == pygame.MOUSEMOTION:
             self.info_label = ""
+            self.createbox.cur_item = None
             self.inventorybox.cur_item = None
 
+            if self.createbox.rect.collidepoint(event.pos):
+                selected_name, self.info_label = self.createbox.mouse_hover(event)
             if self.inventorybox.rect.collidepoint(event.pos):
                 selected_name, self.info_label = self.inventorybox.mouse_hover(event)
 
         elif event.type == pygame.MOUSEBUTTONDOWN:
 
             if event.button == Keys.Leftclick.value:
+
                 if self.close_button.single_click(event) == Keys.Exit.value:
                     self._close()
 
@@ -157,6 +161,12 @@ class Display(Parchment):
                             self.eqptype = eqptype
                             self._init_boxes()
                             break
+
+            elif event.button in (Keys.Scrollup.value, Keys.Scrolldown.value):
+                if self.createbox.rect.collidepoint(event.pos):
+                    self.createbox.mouse_scroll(event)
+                if self.inventorybox.rect.collidepoint(event.pos):
+                    self.inventorybox.mouse_scroll(event)
 
         elif event.type == pygame.KEYDOWN:
             if event.key == Keys.Exit.value:

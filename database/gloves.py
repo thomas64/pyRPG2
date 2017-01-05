@@ -16,7 +16,9 @@ class GlovesDatabase(enum.Enum):
     """..."""
     #                                                             val=prt**2+5
     customgauntlets = dict(nam="Custom Gauntlets",        srt=1,  val=1,  shp=False, wht=0, prt=0,        col=0,   row=64,
-                           cus=True, clt=3, ltr=2, wod=0, mtl=7)
+                           cus=True, clt=3, ltr=2, wod=0, mtl=7,
+                           desc="The Weight of custom made Gauntlets may vary between 1-6 and Protection between 1-6. "
+                                "Creating Custom Gauntlets requires 3 Cloth, 2 Leather and 7 metals.")
 
     leathergloves = dict(nam="Leather Gloves",            srt=2,  val=6,  shp=True,  wht=1, prt=1,        col=0,   row=0, mtr=ItemMaterial.ltr)
     bronzegauntlets = dict(nam="Bronze Gauntlets",        srt=3,  val=9,  shp=True,  wht=2, prt=2,        col=32,  row=0, mtr=ItemMaterial.brz)

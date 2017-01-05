@@ -16,7 +16,9 @@ class HelmetDatabase(enum.Enum):
     """..."""
     #                                                       val=prt**2+6
     customhelmet = dict(nam="Custom Helmet",        srt=1,  val=1,  shp=False, wht=0, prt=0,             col=0,   row=64,
-                        cus=True, clt=1, ltr=1, wod=0, mtl=10)
+                        cus=True, clt=1, ltr=1, wod=0, mtl=10,
+                        desc="The Weight of a custom made Helmet may vary between 1-6 and Protection between 1-6. "
+                             "Creating a Custom Helmet requires 1 Cloth, 1 Leather and 10 metals.")
 
     leathercap = dict(nam="Leather Cap",            srt=2,  val=7,  shp=True,  wht=1, prt=1,             col=0,   row=0, mtr=ItemMaterial.ltr)
     bronzehelmet = dict(nam="Bronze Helmet",        srt=3,  val=10, shp=True,  wht=2, prt=2,             col=32,  row=0, mtr=ItemMaterial.brz)

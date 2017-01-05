@@ -18,12 +18,31 @@ class WeaponDatabase(enum.Enum):
     """
     Een lege Enum. (met customs)
     """
-    customsword = dict(nam="Custom Sword", spr=SPRITEPATH, srt=1, val=1, shp=False, min_str=0, dam=0, hit=0, skl=WeaponType.swd, col=0,   row=672, cus=True, clt=2, ltr=3, wod=4,  mtl=20)
-    customaxe = dict(nam="Custom Axe",     spr=SPRITEPATH, srt=2, val=1, shp=False, min_str=0, dam=0, hit=0, skl=WeaponType.haf, col=32,  row=672, cus=True, clt=2, ltr=3, wod=6,  mtl=18)
-    customspear = dict(nam="Custom Spear", spr=SPRITEPATH, srt=3, val=1, shp=False, min_str=0, dam=0, hit=0, skl=WeaponType.pol, col=64,  row=672, cus=True, clt=3, ltr=4, wod=10, mtl=12)
-    custombow = dict(nam="Custom Bow",     spr=SPRITEPATH, srt=4, val=1, shp=False, min_int=0, dam=0, hit=0, skl=WeaponType.mis, col=96,  row=672, cus=True, clt=5, ltr=2, wod=20, mtl=2)
-    customknife = dict(nam="Custom Knife", spr=SPRITEPATH, srt=5, val=1, shp=False, min_str=0, dam=0, hit=0, skl=WeaponType.thr, col=128, row=672, cus=True, clt=1, ltr=2, wod=1,  mtl=15)
+    customsword = dict(nam="Custom Sword", srt=1, val=1, shp=False, min_str=0, dam=0, hit=0, skl=WeaponType.swd, col=0,   row=672, cus=True, clt=2, ltr=3, wod=4,  mtl=20,
+                       desc="The Damage of a custom made Sword may vary between 10-24, Hit Chance between 35-75 and "
+                            "Strength needed to wield it between 5-25. "
+                            "Creating a Custom Sword requires 2 Cloth, 3 Leather, 4 Wood and 20 metals.")
+    customaxe = dict(nam="Custom Axe",     srt=2, val=1, shp=False, min_str=0, dam=0, hit=0, skl=WeaponType.haf, col=32,  row=672, cus=True, clt=2, ltr=3, wod=6,  mtl=18,
+                     desc="The Damage of a custom made Axe may vary between 16-30, Hit Chance between 25-65 and "
+                          "Strength needed to wield it between 11-31. "
+                          "Creating a Custom Sword requires 2 Cloth, 3 Leather, 4 Wood and 20 metals.")
+    customspear = dict(nam="Custom Spear", srt=3, val=1, shp=False, min_str=0, dam=0, hit=0, skl=WeaponType.pol, col=64,  row=672, cus=True, clt=3, ltr=4, wod=10, mtl=12,
+                       desc="The Damage of a custom made Spear may vary between 4-18, Hit Chance between 45-85 and "
+                            "Strength needed to wield it between 7-21. "
+                            "Creating a Custom Spear requires 3 Cloth, 4 Leather, 10 Wood and 12 metals.")
+    custombow = dict(nam="Custom Bow",     srt=4, val=1, shp=False, min_int=0, dam=0, hit=0, skl=WeaponType.mis, col=96,  row=672, cus=True, clt=5, ltr=2, wod=20, mtl=2,
+                     desc="The Damage of a custom made Bow may vary between 10-24, Hit Chance between 35-75 and "
+                          "Intelligence needed to wield it between 13-30. "
+                          "Creating a Custom Bow requires 5 Cloth, 2 Leather, 20 Wood and 2 metals.")
+    customknife = dict(nam="Custom Knife", srt=5, val=1, shp=False, min_str=0, dam=0, hit=0, skl=WeaponType.thr, col=128, row=672, cus=True, clt=1, ltr=2, wod=1,  mtl=15,
+                       desc="The Damage of a custom made Knife may vary between 4-18, Hit Chance between 25-65 and "
+                            "Strength needed to wield it between 3-29. "
+                            "Creating a Custom Knife requires 1 Cloth, 2 Leather, 1 Wood and 15 metals.")
 
+
+for equipment_item in WeaponDatabase:
+    equipment_item.value['typ'] = EquipmentType.wpn
+    equipment_item.value['spr'] = SPRITEPATH
 
 # Vul de Enum met de gecombineerde data.
 
