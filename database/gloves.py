@@ -15,7 +15,8 @@ SPRITEPATH = 'resources/sprites/icons/equipment/gloves1.png'
 class GlovesDatabase(enum.Enum):
     """..."""
     #                                                             val=prt**2+5
-    customgauntlets = dict(nam="Custom Gauntlets",        srt=1,  val=1,  shp=False, wht=0, prt=0,        col=0,   row=64,
+    customgauntlets = dict(nam="Custom Gauntlets",        srt=1,  val=1,  shp=False, wht='X', prt='X',  col=0,   row=64,
+                           min_wht=1, max_wht=6, min_prt=1, max_prt=6,
                            cus=True, clt=3, ltr=2, wod=0, mtl=7,
                            desc="The Weight of custom made Gauntlets may vary between 1-6 and Protection between 1-6. "
                                 "Creating Custom Gauntlets requires 3 Cloth, 2 Leather and 7 metals.")

@@ -15,7 +15,8 @@ SPRITEPATH = 'resources/sprites/icons/equipment/helmet1.png'
 class HelmetDatabase(enum.Enum):
     """..."""
     #                                                       val=prt**2+6
-    customhelmet = dict(nam="Custom Helmet",        srt=1,  val=1,  shp=False, wht=0, prt=0,             col=0,   row=64,
+    customhelmet = dict(nam="Custom Helmet",        srt=1,  val=1,  shp=False, wht='X', prt='X',        col=0,   row=64,
+                        min_wht=1, max_wht=6, min_prt=1, max_prt=6,
                         cus=True, clt=1, ltr=1, wod=0, mtl=10,
                         desc="The Weight of a custom made Helmet may vary between 1-6 and Protection between 1-6. "
                              "Creating a Custom Helmet requires 1 Cloth, 1 Leather and 10 metals.")

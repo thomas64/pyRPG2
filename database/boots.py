@@ -15,7 +15,8 @@ SPRITEPATH = 'resources/sprites/icons/equipment/boots1.png'
 class BootsDatabase(enum.Enum):
     """..."""
     #                                                     val=prt**2+8
-    customboots = dict(nam="Custom Boots",        srt=1,  val=1,  shp=False, wht=0, prt=0,        col=128, row=32,
+    customboots = dict(nam="Custom Boots",        srt=1,  val=1,  shp=False, wht='X', prt='X',        col=128, row=32,
+                       min_wht=1, max_wht=6, min_prt=1, max_prt=6,
                        cus=True, clt=2, ltr=4, wod=0, mtl=6,
                        desc="The Weight of custom made Boots may vary between 1-6 and Protection between 1-6. "
                             "Creating Custom Boots requires 2 Cloth, 4 Leather and 6 metals.")

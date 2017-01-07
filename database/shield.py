@@ -19,7 +19,10 @@ class ShieldDatabase(enum.Enum):
     Een lege Enum. (met custom)
     """
     customshield = dict(nam="Custom Shield", srt=1, val=1, shp=False,
-                        min_str=0, prt=0, des=0, dex=0, stl=0, col=192, row=0, cus=True, clt=0, ltr=2, wod=18, mtl=12,
+                        min_str='X', prt='X', des='X', dex='X', stl='X', col=192, row=0,
+                        min_min_str=5, max_min_str=31, min_prt=2, max_prt=16, min_des=5, max_des=31,
+                        min_dex=-11, max_dex=-1, min_stl=-21, max_stl=-3,
+                        cus=True, clt=0, ltr=2, wod=18, mtl=12,
                         desc="The Protection of a custom made Shield may vary between 2-16, Defense between 5-31, "
                              "Dexterity between -1 - -11, Stealth between -3 - -21 and Strength needed to wield it "
                              "between 5-31. "

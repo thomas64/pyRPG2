@@ -278,7 +278,7 @@ class Hero(object):
         :return: is het equippen gelukt?
         """
         # ga door de waarden van alle attributen van hero heen.
-        for key_eqp_item, value_eqp_item in self.__dict__.items():
+        for key_eqp_item, value_eqp_item in vars(self).items():
             # als de attribute van type eqp_item is, (en dat weet hij omdat new_eqp_item ook van type eqp_item is)
             if isinstance(value_eqp_item, type(new_equipment_item)):
                 # als de type van het equipment item overeenkomt met het type van de nieuwe equipment item

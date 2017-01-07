@@ -16,7 +16,8 @@ class BeltDatabase(enum.Enum):
     """..."""
     # idee? belts zijn voornamelijk voor bedoeld voor agi te uppen?
     #                                                  val=prt**2+3
-    custombelt = dict(nam="Custom Belt",        srt=1, val=1, shp=False, wht=0, prt=0, agi=0,  col=0,   row=32,
+    custombelt = dict(nam="Custom Belt",        srt=1, val=1, shp=False, wht='X', prt='X', agi='X', col=0, row=32,
+                      min_wht=0, max_wht=2, min_prt=0, max_prt=2, min_agi=0, max_agi=3,
                       cus=True, clt=2, ltr=2, wod=0, mtl=0,
                       desc="The Weight of a custom made Belt may vary between 0-2, Protection between 0-2 and "
                            "Agility between 0-3. Creating a Custom Belt requires 2 Cloth and 2 Leather.")

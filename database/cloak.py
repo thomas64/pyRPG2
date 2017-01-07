@@ -15,7 +15,8 @@ SPRITEPATH = 'resources/sprites/icons/equipment/cloak1.png'
 class CloakDatabase(enum.Enum):
     """..."""
     #                                                             val=prt**2+4
-    customcloak = dict(nam="Custom Cloak",                srt=1,  val=1,  shp=False, wht=0, prt=0, col=96,  row=0,
+    customcloak = dict(nam="Custom Cloak",                srt=1,  val=1,  shp=False, wht='X', prt='X', col=96,  row=0,
+                       min_wht=1, max_wht=3, min_prt=1, max_prt=3,
                        cus=True, clt=3, ltr=3, wod=0, mtl=0,
                        desc="The Weight of a custom made Cloak may vary between 1-3 and Protection between 1-3. "
                             "Creating a Custom Cloak requires 3 Cloth and 3 Leather.")

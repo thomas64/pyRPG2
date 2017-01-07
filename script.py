@@ -58,3 +58,5 @@ class Script:
         data.map_name = 'ersin_forest_center'
         data.map_pos = 'start_game'     # dit is de naam van de startpositie object in de tmx map
         data.map_dir = Direction.South
+
+        data.custom_inventory_counter = 0

@@ -3,8 +3,6 @@
 class: Display
 """
 
-import random
-
 import pygame
 
 from components import Button
@@ -290,7 +288,29 @@ class Display(Parchment):
 
             self.cur_hero.sta.cur -= self.cur_hero.mec.STA_COST
 
-            # todo, hier het random gebeuren op basis van je mec level.
+            # hoog het custom nummer op en zet die achter de .RAW zodat er meerdere customs in de inventory kunnen
+            self.engine.data.custom_inventory_counter += 1
+            selected_equipment.RAW += str(self.engine.data.custom_inventory_counter)
+
+            # loop door alle attributen van selected_equipment heen
+            # list(), zodat uit de iterate verwijderd kan worden
+            for attr, value in list(vars(selected_equipment).items()):
+                # als er een waarde van een attribute op 'X' vanuit de database staat,
+                # dat betekent dat hij nog gevuld moet worden.
+                if value == 'X':
+                    # wat is de waarde van de gelijknamige attribute met 'MIN_' ervoor
+                    min_value = getattr(selected_equipment, 'MIN_'+attr)
+                    max_value = getattr(selected_equipment, 'MAX_'+attr)
+                    # vraag bij de Mechanic Skill de berekende waarden op. en zet attribute op die waarde.
+                    setattr(selected_equipment, attr, self.cur_hero.mec.get_eqp_itm_attr_value(min_value, max_value))
+                    # en verwijder de overblijfselen
+                    delattr(selected_equipment, 'MIN_'+attr)
+                    delattr(selected_equipment, 'MAX_'+attr)
+
+            text = ["{} successfully created.".format(selected_equipment.NAM)]
+            self.engine.data.inventory.add_i(selected_equipment)
+            push_object = MessageBox(self.engine.gamestate, self.engine.audio, text, sound=SFX.message)
+            self.engine.gamestate.push(push_object)
 
             self._init_boxes()
             return True

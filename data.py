@@ -24,3 +24,5 @@ class Data(object):
         self.map_name = None
         self.map_pos = None
         self.map_dir = None
+
+        self.custom_inventory_counter = 0

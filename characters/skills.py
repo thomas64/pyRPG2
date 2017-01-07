@@ -4,6 +4,8 @@ class: Skill
 class: etc
 """
 
+import random
+
 from constants import SkillType
 
 
@@ -207,6 +209,14 @@ class Mechanic(Skill):
         """..."""
         return ("Name is {}.".format(hero_name),
                 "Current Mechanic rank of {}.".format(self.tot),)
+
+    def get_eqp_itm_attr_value(self, min_value, max_value):
+        """
+        ...
+        :return:
+        """
+        # todo, juiste berekening afhankelijk van Rank
+        return random.randint(min_value, max_value)
 
 
 class Merchant(Skill):
