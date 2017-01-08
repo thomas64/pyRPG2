@@ -16,12 +16,15 @@ HLMBOX = pygame.Rect(200 / 2 - 17,  40, 33, 33)  # 200 is de breedte van de box
 AMUBOX = pygame.Rect(200 / 2 - 17, 105, 33, 33)
 ARMBOX = pygame.Rect(200 / 2 - 35, 155, 33, 33)
 CLKBOX = pygame.Rect(200 / 2 + 1,  155, 33, 33)
-WPNBOX = pygame.Rect(200 / 2 - 85, 185, 33, 33)
-BRCBOX = pygame.Rect(200 / 2 - 85, 225, 33, 33)
-GLVBOX = pygame.Rect(200 / 2 - 85, 265, 33, 33)
-SLDBOX = pygame.Rect(200 / 2 + 50, 185, 33, 33)
-RNGBOX = pygame.Rect(200 / 2 + 50, 225, 33, 33)
-ACYBOX = pygame.Rect(200 / 2 + 50, 265, 33, 33)
+
+BRCBOX = pygame.Rect(200 / 2 - 85, 195, 33, 33)
+GLVBOX = pygame.Rect(200 / 2 - 85, 235, 33, 33)
+WPNBOX = pygame.Rect(200 / 2 - 85, 275, 33, 33)
+
+ACYBOX = pygame.Rect(200 / 2 + 50, 195, 33, 33)
+RNGBOX = pygame.Rect(200 / 2 + 50, 235, 33, 33)
+SLDBOX = pygame.Rect(200 / 2 + 50, 275, 33, 33)
+
 BLTBOX = pygame.Rect(200 / 2 - 17, 215, 33, 33)
 BTSBOX = pygame.Rect(200 / 2 - 17, 415, 33, 33)
 # de volgorde van deze lijst is belangrijk. hij moet gelijk zijn aan Hero.equipment_tuple()
