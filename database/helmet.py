@@ -15,11 +15,11 @@ SPRITEPATH = 'resources/sprites/icons/equipment/helmet1.png'
 class HelmetDatabase(enum.Enum):
     """..."""
     #                                                       val=prt**2+6
-    customhelmet = dict(nam="Custom Helmet",        srt=1,  val=1,  shp=False, wht='X', prt='X',        col=0,   row=64,
-                        min_wht=1, max_wht=6, min_prt=1, max_prt=6,
+    customhelmet = dict(nam="Custom Helmet",        srt=1,  val=2,  shp=False, wht='X', prt='X',        col=0,   row=64,
+                        min_wht=6, max_wht=1, min_prt=1, max_prt=6,
                         cus=True, clt=1, ltr=1, wod=0, mtl=10,
-                        desc="The Weight of a custom made Helmet may vary between 1-6 and Protection between 1-6. "
-                             "Creating a Custom Helmet requires 1 Cloth, 1 Leather and 10 metals.")
+                        desc=("Creating a Custom Helmet requires 1 Cloth, 1 Leather and 10 metals.", " ",
+                              "Weight: 1 - 6", "Protection: 1 - 6"))
 
     leathercap = dict(nam="Leather Cap",            srt=2,  val=7,  shp=True,  wht=1, prt=1,             col=0,   row=0, mtr=ItemMaterial.ltr)
     bronzehelmet = dict(nam="Bronze Helmet",        srt=3,  val=10, shp=True,  wht=2, prt=2,             col=32,  row=0, mtr=ItemMaterial.brz)

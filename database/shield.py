@@ -18,15 +18,14 @@ class ShieldDatabase(enum.Enum):
     """
     Een lege Enum. (met custom)
     """
-    customshield = dict(nam="Custom Shield", srt=1, val=1, shp=False,
+    customshield = dict(nam="Custom Shield", srt=1, val=2, shp=False,
                         min_str='X', prt='X', des='X', dex='X', stl='X', col=192, row=0,
-                        min_min_str=5, max_min_str=31, min_prt=2, max_prt=16, min_des=5, max_des=31,
+                        min_min_str=31, max_min_str=5, min_prt=2, max_prt=16, min_des=5, max_des=31,
                         min_dex=-11, max_dex=-1, min_stl=-21, max_stl=-3,
                         cus=True, clt=0, ltr=2, wod=18, mtl=12,
-                        desc="The Protection of a custom made Shield may vary between 2-16, Defense between 5-31, "
-                             "Dexterity between -1 - -11, Stealth between -3 - -21 and Strength needed to wield it "
-                             "between 5-31. "
-                             "Creating a Custom Shield requires 2 Leather, 18 Wood and 12 metals.")
+                        desc=("Creating a Custom Shield requires 2 Leather, 18 Wood and 12 metals.", " ",
+                              "Min. Strength: 5 - 31", "Protection: 2 - 16", "Defense: 5 - 31", "Dexterity -11 - -1",
+                              "Stealth: -21 - -3"))
 
 
 for equipment_item in ShieldDatabase:

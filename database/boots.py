@@ -15,11 +15,11 @@ SPRITEPATH = 'resources/sprites/icons/equipment/boots1.png'
 class BootsDatabase(enum.Enum):
     """..."""
     #                                                     val=prt**2+8
-    customboots = dict(nam="Custom Boots",        srt=1,  val=1,  shp=False, wht='X', prt='X',        col=128, row=32,
-                       min_wht=1, max_wht=6, min_prt=1, max_prt=6,
+    customboots = dict(nam="Custom Boots",        srt=1,  val=2,  shp=False, wht='X', prt='X',        col=128, row=32,
+                       min_wht=6, max_wht=1, min_prt=1, max_prt=6,
                        cus=True, clt=2, ltr=4, wod=0, mtl=6,
-                       desc="The Weight of custom made Boots may vary between 1-6 and Protection between 1-6. "
-                            "Creating Custom Boots requires 2 Cloth, 4 Leather and 6 metals.")
+                       desc=("Creating Custom Boots requires 2 Cloth, 4 Leather and 6 metals.", " ",
+                             "Weight: 1 - 6", "Protection: 1 - 6"))
 
     leatherboots = dict(nam="Leather Boots",      srt=2,  val=9,  shp=True,  wht=1, prt=1,        col=0,   row=0,  mtr=ItemMaterial.ltr)
     bronzeboots = dict(nam="Bronze Boots",        srt=3,  val=12, shp=True,  wht=2, prt=2,        col=32,  row=0,  mtr=ItemMaterial.brz)

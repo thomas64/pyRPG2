@@ -18,12 +18,11 @@ class ArmorDatabase(enum.Enum):
     Een lege Enum. (met alleen een custom erin.)
     """
     # waarde 'X' betekent dat hij nog gevuld moet worden in Mechanic Screen
-    customarmor = dict(nam="Custom Armor", srt=1, val=1, shp=False, wht='X', prt='X', stl='X', col=0, row=192,
-                       min_wht=1, max_wht=16, min_prt=1, max_prt=16, min_stl=-15, max_stl=0,
+    customarmor = dict(nam="Custom Armor", srt=1, val=2, shp=False, wht='X', prt='X', stl='X', col=0, row=192,
+                       min_wht=16, max_wht=1, min_prt=1, max_prt=16, min_stl=-15, max_stl=0,
                        cus=True, clt=6, ltr=9, wod=2, mtl=15,
-                       desc="The Weight of a custom made Armor may vary between 1-16, Protection between 1-16 and "
-                            "Stealth between 0- -15. Creating a Custom Armor requires 6 Cloth, 9 Leather, 2 Wood and "
-                            "15 metals.")
+                       desc=("Creating a Custom Armor requires 6 Cloth, 9 Leather, 2 Wood and 15 metals.", " ",
+                             "Weight: 1 - 16", "Protection: 1 - 16", "Stealth: -15 - 0"))
 
 for equipment_item in ArmorDatabase:
     equipment_item.value['typ'] = EquipmentType.arm

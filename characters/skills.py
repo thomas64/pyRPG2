@@ -207,16 +207,48 @@ class Mechanic(Skill):
 
     def welcome_text(self, hero_name):
         """..."""
-        return ("Name is {}.".format(hero_name),
-                "Current Mechanic rank of {}.".format(self.tot),)
+        return ("It is here where {} can create".format(hero_name),
+                "custom equipment items.",
+                "Below here you can select one the",
+                "possible types of equipment. In the",
+                "'Create' box you see all the equipment items that",
+                "you are able to create.",
+                "Besides the needed materials, creating an",
+                "equipment item will also use up some stamina.",
+                "The current Mechanic rank of {} is {}. A higher".format(hero_name, self.tot),
+                "Mechanic rank will result in better property",
+                "values of the newly created equipment item.",
+                "The 'Inventory' box shows your current inventory",
+                "of pouch- and equipment items.")
 
     def get_eqp_itm_attr_value(self, min_value, max_value):
         """
-        ...
-        :return:
+        Geef een waarde terug op basis van de huidige skill rank in de meegegeven reeks.
+        Op basis van random gauss.
         """
-        # todo, juiste berekening afhankelijk van Rank
-        return random.randint(min_value, max_value)
+        # bereken de range. abs omdat in het geval van bijv min_str de waarden omgedraaid kunnen zijn.
+        num_range = abs(max_value - min_value)
+        # hoe groot is 1 stapje over de range als er in totaal 10 stapjes zijn.
+        step = num_range / 9
+        # zet de mec skill om naar de juiste positie in de range
+        if max_value < min_value:
+            target = min_value - (self.tot * step) + step
+        else:
+            target = min_value + (self.tot * step) - step
+        # pak een willekeurige plek op de range op basis van de target met normaalverdeling.
+        result = random.gauss(target, step * 2)
+
+        # even de waarden omdraaien voor bijv min_str. want daar is laag 'goed' en hoog 'slecht'
+        if max_value < min_value:
+            min_value, max_value = max_value, min_value
+
+        # als hij te hoog of te laag is, zet hem dan gelijk aan de max of min.
+        if result > max_value:
+            result = max_value
+        elif result < min_value:
+            result = min_value
+
+        return round(result)
 
 
 class Merchant(Skill):
