@@ -200,9 +200,10 @@ class Mechanic(Skill):
     """
     def __init__(self, quantity):
         super().__init__(SkillType.mec.value, SkillType.mec.name, 4, quantity)
-        self.DESC = "Allows the character to upgrade inventory with metals. The process also costs gold. " \
-                    "A higher Mechanic rank means a higher chance to successfully upgrade an item. " \
-                    "The item is destroyed when upgrade is unsuccessful."
+        self.DESC = "Allows the character to disarm traps on chests. Also allows the character to make equipment " \
+                    "items from Cloth, Leather, Wood and Metals. A higher Mechanic rank means a better quality " \
+                    "of the custom made equipment items. " \
+                    "Click on the Mechanic skill name in the party screen to open the equipment item creation screen."
         self.STA_COST = 3
 
     def welcome_text(self, hero_name):
