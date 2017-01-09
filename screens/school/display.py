@@ -9,7 +9,6 @@ from components import Button
 from components import ConfirmBox
 from components import MessageBox
 from components import Parchment
-from components import TextBox
 
 from constants import GameState
 from constants import Keys
@@ -24,7 +23,6 @@ from .learnbox import LearnBox
 from .selector import Selector
 
 
-BACKGROUNDCOLOR = pygame.Color("black")
 COLORKEY = pygame.Color("white")
 
 FACEPOSX = 1/16
@@ -121,7 +119,6 @@ class Display(Parchment):
 
         self.gold_object = inventoryitems.factory_pouch_item(PouchItemDatabase.gold)
 
-        self.info_label = ""
         self._reset_vars()
 
         self.object_type = OBJECTTYPE
@@ -157,7 +154,7 @@ class Display(Parchment):
     def _init_boxes(self):
         self._init_knownbox()
         self._init_learnbox()
-        self._init_infobox()
+        self._init_infobox(INFOBOXWIDTH, INFOBOXHEIGHT, INFOBOXPOSX, INFOBOXPOSY)
 
     def _init_knownbox(self):
         width = self.screen.get_width() * KNOWNBOXWIDTH
@@ -170,11 +167,6 @@ class Display(Parchment):
         height = self.screen.get_height() * LEARNBOXHEIGHT + EXTRAHEIGHT
         self.learnbox = LearnBox(self._set_x(LEARNBOXPOSX), self._set_y(LEARNBOXPOSY), int(width), int(height),
                                  self.schooltype_list, self.selected_hero)
-
-    def _init_infobox(self):
-        width = self.screen.get_width() * INFOBOXWIDTH
-        height = self.screen.get_height() * INFOBOXHEIGHT
-        self.infobox = TextBox((self._set_x(INFOBOXPOSX), self._set_y(INFOBOXPOSY)), int(width), int(height))
 
     def _reset_vars(self):
         self.learn_click = False
@@ -289,8 +281,8 @@ class Display(Parchment):
         """
         Teken alles op het scherm, de titels, de boxen.
         """
-        self.screen.fill(BACKGROUNDCOLOR)
-        self.screen.blit(self.background, (0, 0))
+        super().render()
+
         # titels midden boven de boxen
         self.screen.blit(self.learn_title, ((self._set_x(LEARNBOXPOSX)) +
                                             (self.screen.get_width() * LEARNBOXWIDTH / 2) -
@@ -342,7 +334,6 @@ class Display(Parchment):
 
         self.selectors.draw(self.background)
 
-        self.infobox.render(self.screen, self.info_label)
         self.knownbox.render(self.screen)
         self.learnbox.render(self.screen)
         self.close_button.render(self.screen, FONTCOLOR)

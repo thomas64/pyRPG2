@@ -10,7 +10,6 @@ import pygame
 from components import Button
 from components import MessageBox
 from components import Parchment
-from components import TextBox
 
 from constants import GameState
 from constants import Keys
@@ -24,7 +23,6 @@ from .createbox import CreateBox
 from .pouchbox import PouchBox
 
 
-BACKGROUNDCOLOR = pygame.Color("black")
 COLORKEY = pygame.Color("white")
 FONTCOLOR = pygame.Color("black")
 
@@ -86,8 +84,6 @@ class Display(Parchment):
             BTNWIDTH, BTNHEIGHT, (self.background.get_width() + CLOSEX, CLOSEY), CLOSELBL, Keys.Exit.value,
             COLORKEY, FONTCOLOR)
 
-        self.info_label = ""
-
     def _init_face(self):
         face_image = pygame.image.load(self.cur_hero.FAC).convert_alpha()
         self.background.blit(face_image, (self._set_x(FACEPOSX), self._set_y(FACEPOSY)))
@@ -106,7 +102,7 @@ class Display(Parchment):
     def _init_boxes(self):
         self._init_createbox()
         self._init_pouchbox()
-        self._init_infobox()
+        self._init_infobox(INFOBOXWIDTH, INFOBOXHEIGHT, INFOBOXPOSX, INFOBOXPOSY)
 
     def _init_createbox(self):
         width = self.screen.get_width() * CREATEBOXWIDTH
@@ -123,11 +119,6 @@ class Display(Parchment):
         height = self.screen.get_height() * POUCHBOXHEIGHT + EXTRAHEIGHT
         self.pouchbox = PouchBox(self._set_x(POUCHBOXPOSX), self._set_y(POUCHBOXPOSY), int(width), int(height),
                                  self.engine.data.pouch)
-
-    def _init_infobox(self):
-        width = self.screen.get_width() * INFOBOXWIDTH
-        height = self.screen.get_height() * INFOBOXHEIGHT
-        self.infobox = TextBox((self._set_x(INFOBOXPOSX), self._set_y(INFOBOXPOSY)), int(width), int(height))
 
     def single_input(self, event):
         """
@@ -168,8 +159,7 @@ class Display(Parchment):
         """
         Teken alles op het scherm.
         """
-        self.screen.fill(BACKGROUNDCOLOR)
-        self.screen.blit(self.background, (0, 0))
+        super().render()
 
         alc_title = self.largefont.render(self.cur_hero.alc.NAM, True, FONTCOLOR).convert_alpha()
         self.screen.blit(alc_title, (self._set_x(TITLEPOSX), self._set_y(TITLEPOSY)))
@@ -187,7 +177,6 @@ class Display(Parchment):
                     STATITLE.format(self.cur_hero.NAM) + str(self.cur_hero.sta.cur), True, FONTCOLOR).convert_alpha()
         self.screen.blit(sta_title, (self._set_x(STATITLEPOSX), self._set_y(STATITLEPOSY)))
 
-        self.infobox.render(self.screen, self.info_label)
         self.createbox.render(self.screen)
         self.pouchbox.render(self.screen)
         self.close_button.render(self.screen, FONTCOLOR)

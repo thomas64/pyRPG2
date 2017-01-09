@@ -8,7 +8,6 @@ import pygame
 from components import Button
 from components import MessageBox
 from components import Parchment
-from components import TextBox
 
 from constants import EquipmentType as EqTy
 from constants import GameState
@@ -23,7 +22,6 @@ from .createbox import CreateBox
 from .inventorybox import InventoryBox
 from screens.shop.selector import Selector
 
-BACKGROUNDCOLOR = pygame.Color("black")
 COLORKEY = pygame.Color("white")
 FONTCOLOR = pygame.Color("black")
 
@@ -94,8 +92,6 @@ class Display(Parchment):
             BTNWIDTH, BTNHEIGHT, (self.background.get_width() + CLOSEX, CLOSEY), CLOSELBL, Keys.Exit.value,
             COLORKEY, FONTCOLOR)
 
-        self.info_label = ""
-
     def _init_face(self):
         face_image = pygame.image.load(self.cur_hero.FAC).convert_alpha()
         self.background.blit(face_image, (self._set_x(FACEPOSX), self._set_y(FACEPOSY)))
@@ -121,14 +117,9 @@ class Display(Parchment):
         self.selectors.draw(self.background)
 
     def _init_boxes(self):
-        self._init_infobox()
+        self._init_infobox(INFOBOXWIDTH, INFOBOXHEIGHT, INFOBOXPOSX, INFOBOXPOSY)
         self._init_createbox()
         self._init_inventorybox()
-
-    def _init_infobox(self):
-        width = self.screen.get_width() * INFOBOXWIDTH
-        height = self.screen.get_height() * INFOBOXHEIGHT
-        self.infobox = TextBox((self._set_x(INFOBOXPOSX), self._set_y(INFOBOXPOSY)), int(width), int(height))
 
     def _init_createbox(self):
         width = self.screen.get_width() * CREATEBOXWIDTH
@@ -224,8 +215,7 @@ class Display(Parchment):
         """
         Teken alles op het scherm.
         """
-        self.screen.fill(BACKGROUNDCOLOR)
-        self.screen.blit(self.background, (0, 0))
+        super().render()
 
         mec_title = self.largefont.render(self.cur_hero.mec.NAM, True, FONTCOLOR).convert_alpha()
         self.screen.blit(mec_title, (self._set_x(TITLEPOSX), self._set_y(TITLEPOSY)))
@@ -245,7 +235,6 @@ class Display(Parchment):
 
         self.selectors.draw(self.background)
 
-        self.infobox.render(self.screen, self.info_label)
         self.createbox.render(self.screen)
         self.inventorybox.render(self.screen)
         self.close_button.render(self.screen, FONTCOLOR)

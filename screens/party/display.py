@@ -17,6 +17,7 @@ from constants import Keys
 from constants import SFX
 
 from screens.alchemist.display import Display as Alchemist
+from screens.healer.display import Display as Healer
 from screens.mechanic.display import Display as Mechanic
 from .herobox import HeroBox
 from .invclickbox import InvClickBox
@@ -27,7 +28,6 @@ from .spellsbox import SpellsBox
 from .statsbox import StatsBox
 
 
-BACKGROUNDCOLOR = pygame.Color("black")
 COLORKEY = pygame.Color("white")
 LINECOLOR = pygame.Color("black")
 
@@ -84,7 +84,6 @@ class Display(Parchment):
         self._init_boxes()
 
         self.invclick_box = None
-        self.info_label = ""
         self.hovered_equipment_item = None
 
         self.leave_box = None
@@ -105,7 +104,7 @@ class Display(Parchment):
             self.hero_boxes.append(HeroBox((HEROBOXX + index * HEROBOXVAR, HEROBOXY), HEROBOXW, HEROBOXH, index, hero))
 
         self.stats_box = StatsBox((STATBOXX,        STATBOXY), STATBOXW, STATBOXH)
-        self.info_box = TextBox((INFOBOXX,          INFOBOXY), INFOBOXW, INFOBOXH)
+        self.infobox = TextBox((INFOBOXX,           INFOBOXY), INFOBOXW, INFOBOXH)
         self.skills_box = SkillsBox((SKILBOXX,      SKILBOXY), SKILBOXW, SKILBOXH)
         self.inventory_box = InventoryBox((INVBOXX, INVBOXY),  INVBOXW,  INVBOXH)
         self.spells_box = SpellsBox((SPELBOXX,      SPELBOXY), SPELBOXW, SPELBOXH)
@@ -309,8 +308,7 @@ class Display(Parchment):
         """
         screen -> achtergond -> knoppen -> heroboxes -> verder
         """
-        self.screen.fill(BACKGROUNDCOLOR)
-        self.screen.blit(self.background, (0, 0))
+        super().render()
 
         for button in self.buttons:
             button.render(self.screen, LINECOLOR)
@@ -319,7 +317,6 @@ class Display(Parchment):
             hero_box.render(self.screen, self.hc)
 
         self.stats_box.render(self.screen)
-        self.info_box.render(self.screen, self.info_label)
         self.skills_box.render(self.screen)
         self.inventory_box.render(self.screen)
         self.pouch_box.render(self.screen)
@@ -368,6 +365,11 @@ class Display(Parchment):
                 if selected_skill == self.cur_hero.alc:
                     self.engine.audio.play_sound(SFX.scroll)
                     push_object = Alchemist(self.engine, self.cur_hero)
+                    self.engine.gamestate.push(push_object)
+                    self.engine.gamestate.push(Transition(self.engine.gamestate))
+                elif selected_skill == self.cur_hero.hlr:
+                    self.engine.audio.play_sound(SFX.scroll)
+                    push_object = Healer(self.engine, self.cur_hero, self.party)
                     self.engine.gamestate.push(push_object)
                     self.engine.gamestate.push(Transition(self.engine.gamestate))
                 elif selected_skill == self.cur_hero.mec:

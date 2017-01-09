@@ -7,9 +7,10 @@ import pygame
 
 from constants import SFX
 
+from .textbox import TextBox
 from .transition import Transition
 
-
+BACKGROUNDCOLOR = pygame.Color("black")
 BACKGROUNDSPRITE = 'resources/sprites/parchment.png'
 FONT = 'colonna'
 SUBFONT = 'verdana'
@@ -37,6 +38,13 @@ class Parchment(object):
         self.smallfont = pygame.font.SysFont(FONT, SMALLFONTSIZE)
         self.tinyfont = pygame.font.SysFont(SUBFONT, TINYFONTSIZE)
 
+        self.info_label = ""
+
+    def _init_infobox(self, w, h, x, y):
+        width = self.screen.get_width() * w
+        height = self.screen.get_height() * h
+        self.infobox = TextBox((self._set_x(x), self._set_y(y)), int(width), int(height))
+
     # noinspection PyMissingOrEmptyDocstring
     def on_enter(self):
         pass
@@ -59,7 +67,10 @@ class Parchment(object):
 
     # noinspection PyMissingOrEmptyDocstring
     def render(self):
-        pass
+        self.screen.fill(BACKGROUNDCOLOR)
+        self.screen.blit(self.background, (0, 0))
+
+        self.infobox.render(self.screen, self.info_label)
 
     def _set_x(self, posx):
         return self.screen.get_width() * posx
