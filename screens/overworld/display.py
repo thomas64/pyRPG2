@@ -11,7 +11,7 @@ from constants import GameState
 from constants import Keys
 from constants import SFX
 import screens.menu
-import screens.party
+from screens import Party
 
 from .window import Window
 
@@ -176,6 +176,6 @@ class Display(object):
 
     def _show_party_screen(self):
         self.engine.audio.play_sound(SFX.scroll)
-        push_object = screens.party.Display(self.engine)
+        push_object = Party(self.engine)
         self.engine.gamestate.push(push_object)
         self.engine.gamestate.push(Transition(self.engine.gamestate))

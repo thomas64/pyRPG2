@@ -16,9 +16,10 @@ from constants import GameState
 from constants import Keys
 from constants import SFX
 
-from screens.alchemist.display import Display as Alchemist
-from screens.healer.display import Display as Healer
-from screens.mechanic.display import Display as Mechanic
+from screens import Alchemist
+from screens import Healer
+from screens import Mechanic
+
 from .herobox import HeroBox
 from .invclickbox import InvClickBox
 from .inventorybox import InventoryBox

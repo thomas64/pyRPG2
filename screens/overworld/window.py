@@ -32,9 +32,9 @@ from database import PouchItemDatabase
 
 import inventoryitems
 
-import screens.school
-import screens.shop
-import screens.trainer
+from screens import School
+from screens import Shop
+from screens import Trainer
 
 
 BACKGROUNDCOLOR = pygame.Color("gray12")
@@ -480,9 +480,8 @@ class Window(object):
                         spr.turn(self.party_sprites[0].rect)
 
             self.engine.audio.play_sound(SFX.scroll)
-            push_object = screens.shop.Display(self.engine, shop_data['content'],
-                                               shop_data.get('material'),  # material is geen garantie
-                                               shop_data['face'])
+            # material is geen garantie, daarom heeft die .get()
+            push_object = Shop(self.engine, shop_data['content'], shop_data.get('material'), shop_data['face'])
             self.engine.gamestate.push(push_object)
             self.engine.gamestate.push(Transition(self.engine.gamestate))
 
@@ -498,7 +497,7 @@ class Window(object):
             school_sprite.turn(self.party_sprites[0].rect)
 
             self.engine.audio.play_sound(SFX.scroll)
-            push_object = screens.school.Display(self.engine, school_data['content'], school_data['face'])
+            push_object = School(self.engine, school_data['content'], school_data['face'])
             self.engine.gamestate.push(push_object)
             self.engine.gamestate.push(Transition(self.engine.gamestate))
 
@@ -517,7 +516,7 @@ class Window(object):
                         spr.turn(self.party_sprites[0].rect)
 
             self.engine.audio.play_sound(SFX.scroll)
-            push_object = screens.trainer.Display(self.engine, trainer_data['content'], trainer_data['face'])
+            push_object = Trainer(self.engine, trainer_data['content'], trainer_data['face'])
             self.engine.gamestate.push(push_object)
             self.engine.gamestate.push(Transition(self.engine.gamestate))
 
