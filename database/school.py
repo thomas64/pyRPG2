@@ -25,9 +25,9 @@ class SchoolDatabase(enum.Enum):
     def welcome_text():
         """..."""
         return ("Good day sir, and welcome to my school.",
-                "In the 'Known' box are all the spells you",
-                "already have learned.  And in the",
-                "'Learn' box are all the spells that I can teach.",
+                "In the 'Learn' box are all the spells that",
+                "I can teach. And in the 'Known' box are",
+                "all the spells you already have learned.",
                 "Click once on a selected item to learn a spell.",
                 "You can scroll through the lists with your mouse-",
                 "wheel if the list is longer than what you can see.",

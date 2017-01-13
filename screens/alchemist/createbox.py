@@ -10,7 +10,9 @@ COLUMN1X = 0
 COLUMN2X = 34
 COLUMN3X = 200
 
-TOTALCOLUMNS = (('icon', COLUMN1X), ('text', COLUMN2X), ('text', COLUMN3X))
+TOTALCOLUMNS = (('icon', COLUMN1X, "", ""),
+                ('text', COLUMN2X, "Potion", "Name:"),
+                ('text', COLUMN3X, "Chance of", "Success:"))
 
 
 class CreateBox(ListBox):

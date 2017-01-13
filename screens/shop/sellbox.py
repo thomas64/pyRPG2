@@ -15,7 +15,11 @@ COLUMN3X = 68
 COLUMN4X = 102
 COLUMN5X = 350
 
-TOTALCOLUMNS = (('f_icon', COLUMN1X), ('f_icon', COLUMN2X), ('text', COLUMN3X), ('text', COLUMN4X), ('text', COLUMN5X))
+TOTALCOLUMNS = (('f_icon', COLUMN1X, "", ""),
+                ('f_icon', COLUMN2X, "", ""),
+                ('text', COLUMN3X, "Item", "Qty:"),
+                ('text', COLUMN4X, "Item", "Name:"),
+                ('text', COLUMN5X, "Gold", "Value:"))
 
 
 class SellBox(ListBox):

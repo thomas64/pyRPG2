@@ -9,7 +9,7 @@ import os
 from components import Transition
 from constants import SFX
 from loadsave import Dialog as LoadDialog
-import screens.overworld
+from screens import Overworld
 
 from .basemenu import BaseMenu
 
@@ -75,7 +75,7 @@ class LoadMenu(BaseMenu):
             # als de data niet corrupt is.
             if data:
                 self.engine.data = data
-                push_object = screens.overworld.Display(self.engine)
+                push_object = Overworld(self.engine)
                 self.engine.gamestate.change(push_object)
                 self.engine.gamestate.push(Transition(self.engine.gamestate))
             else:

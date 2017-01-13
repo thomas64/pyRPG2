@@ -9,7 +9,8 @@ import inventoryitems
 COLUMN1X = 0
 COLUMN2X = 34
 
-TOTALCOLUMNS = (('subicon', COLUMN1X), ('text', COLUMN2X))
+TOTALCOLUMNS = (('subicon', COLUMN1X, "", ""),
+                ('text', COLUMN2X, "Item", "Name:"))
 
 
 class CreateBox(ListBox):

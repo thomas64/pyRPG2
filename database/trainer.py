@@ -34,9 +34,9 @@ class TrainerDatabase(enum.Enum):
     def welcome_text():
         """..."""
         return ("Good day sir. Welcome to my academy.",
-                "In the 'Known' box are all the skills you",
-                "already have been trained in.  And in",
-                "the 'Train' box are all the skills that I can train.",
+                "In the 'Train' box are all the skills that",
+                "I can train you in. And in the 'Known'",
+                "box are all the skills you already have been trained in.",
                 "Click once on a selected item to train a skill.",
                 "You can scroll through the lists with your mouse-",
                 "wheel if the list is longer than what you can see.",

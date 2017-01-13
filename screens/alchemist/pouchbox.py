@@ -9,7 +9,9 @@ COLUMN1X = 0
 COLUMN2X = 34
 COLUMN3X = 68
 
-TOTALCOLUMNS = (('icon', COLUMN1X), ('text', COLUMN2X), ('text', COLUMN3X))
+TOTALCOLUMNS = (('icon', COLUMN1X, "", ""),
+                ('text', COLUMN2X, "Item", "Qty:"),
+                ('text', COLUMN3X, "Item", "Name:"))
 
 
 class PouchBox(ListBox):

@@ -9,7 +9,9 @@ COLUMN1X = 0
 COLUMN2X = 34
 COLUMN3X = 234
 
-TOTALCOLUMNS = (('icon', COLUMN1X), ('text', COLUMN2X), ('text', COLUMN3X))
+TOTALCOLUMNS = (('icon', COLUMN1X, "", ""),
+                ('text', COLUMN2X, "Skill", "Name:"),
+                ('text', COLUMN3X, "Current", "Rank:"))
 
 
 class KnownBox(ListBox):

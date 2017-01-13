@@ -14,7 +14,11 @@ COLUMN3X = 234
 COLUMN4X = 284
 COLUMN5X = 334
 
-TOTALCOLUMNS = (('subicon', COLUMN1X), ('text', COLUMN2X), ('text', COLUMN3X), ('text', COLUMN4X), ('text', COLUMN5X))
+TOTALCOLUMNS = (('subicon', COLUMN1X, "", ""),
+                ('text', COLUMN2X, "Spell", "Name:"),
+                ('text', COLUMN3X, "Next", "Rank:"),
+                ('text', COLUMN4X, "Gold", "Cost:"),
+                ('text', COLUMN5X, "XP", "Cost:"))
 
 
 class LearnBox(ListBox):
