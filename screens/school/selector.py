@@ -25,7 +25,7 @@ class Selector(pygame.sprite.Sprite):
     def __init__(self, x, y, hero):
         super().__init__()
 
-        self.hero = hero
+        self.selector_type = hero
 
         self.image = self._load_selected_image(PATH, hero.NAM.lower())
         pygame.draw.rect(self.image, LINECOLOR, self.image.get_rect(), LINETHICKNESS)
@@ -50,13 +50,13 @@ class Selector(pygame.sprite.Sprite):
         :param event: pygame.MOUSEBUTTONDOWN uit shopscreen
         """
         if self.rect.collidepoint(event.pos):
-            return self.hero
+            return self.selector_type
 
     def update(self, hero):
         """
         ...
         """
-        if hero == self.hero:
+        if hero == self.selector_type:
             pygame.draw.rect(self.image, SELECTCOLOR, self.image.get_rect(), LINETHICKNESS)
         else:
             pygame.draw.rect(self.image, LINECOLOR, self.image.get_rect(), LINETHICKNESS)

@@ -8,13 +8,11 @@ import importlib
 
 import pygame
 
-from components import Button
 from components import ConfirmBox
 from components import MessageBox
 from components import Parchment
 
 from constants import GameState
-from constants import Keys
 from constants import SFX
 from constants import EquipmentType
 from constants import WeaponType
@@ -28,52 +26,7 @@ from .selector import Selector
 from .sellbox import SellBox
 
 
-COLORKEY = pygame.Color("white")
-
-FACEPOSX = 1/16
-FACEPOSY = 3/16
-
-FONTCOLOR = pygame.Color("black")
-
-SMALLLINEHEIGHT = 30
-EXTRAFACESIZE = 20
-LINESNEXTTOFACE = 3
-
-BUYBOXWIDTH = 3/16
-BUYBOXHEIGHT = 73/100
-BUYBOXPOSX = 2/5
-BUYBOXPOSY = 6/32
-
-SELLBOXWIDTH = 5/16     # van het scherm
-SELLBOXHEIGHT = 73/100
-SELLBOXPOSX = 15/24     # x op 15/24 van het scherm
-SELLBOXPOSY = 6/32
-
-EXTRAHEIGHT = 0         # zodat de laatste item er voor helft op komt
-
-BUYTITLE = "Buy"
-SELLTITLE = "Sell"
-GOLDTITLE = "Gold: "
-TITLEPOSY = 1/32
-
-INFOBOXWIDTH = 1/4
-INFOBOXHEIGHT = 1/6
-INFOBOXPOSX = 1/16
-INFOBOXPOSY = 6/8
-
-GOLDTITLEPOSX = 1/16
-GOLDTITLEPOSY = 11/16
-
-SELECTORPOSX = 2/32
-SELECTORPOSY = 20/32
-SELECTORWIDTH = 36
-
-SHOPTITLEPOSX = 1/16
-
-BTNWIDTH = 70
-BTNHEIGHT = 40
-CLOSELBL = "Close"
-CLOSEX, CLOSEY = -100, 40    # negatieve x omdat de positie van rechts bepaald wordt.
+SOURCETITLE1 = "Gold: {}"
 
 
 class Display(Parchment):
@@ -81,38 +34,72 @@ class Display(Parchment):
     ...
     """
     def __init__(self, engine, shoptype_list, shopmaterial_list, face):
-        super().__init__(engine)
+        super().__init__(engine, "Buy", "Sell")
 
         # is een list van bijv: [EquipmentType.arm, WeaponType.swd]
-        self.shoptype_list = list(shoptype_list)  # het moet een kopie van de lijst zijn, niet de lijst zelf,
+        self.subtype_list = list(shoptype_list)  # het moet een kopie van de lijst zijn, niet de lijst zelf,
         # vanwege de _init_selectors(), waar iets uit de lijst vervangen wordt. door een kopie te maken kan dat.
-        self.shoptype = self.shoptype_list[0]
+        self.subtype = self.subtype_list[0]
         self.material_list = shopmaterial_list
         self.databases = {}
 
         self.name = GameState.Shop
 
-        self.buy_title = self.largefont.render(BUYTITLE, True, FONTCOLOR).convert_alpha()
-        self.sell_title = self.largefont.render(SELLTITLE, True, FONTCOLOR).convert_alpha()
-        self.gold_amount = None
+        self.main_title_pos_x = 1 / 16
+        self.main_title_pos_y = 1 / 32
+        self.source_title1 = SOURCETITLE1
+        self.source_title1_pos_x = 1 / 16
+        self.source_title1_pos_y = 11 / 16
+        self.sub_title_pos_x = 5
+        self.sub_title_pos_y1 = 15 / 100
+        self.sub_title_pos_y2 = 17 / 100
 
+        self.face_pos_x = 1 / 16
+        self.face_pos_y = 3 / 16
+        self.extra_face_size_x = 20
+        self.extra_face_size_y = 20
+        self.lines_next_to_face = 3
+        self.small_line_height = 30
+
+        self.leftbox_width = 3 / 16
+        self.leftbox_height = 73 / 100
+        self.leftbox_pos_x = 2 / 5
+        self.leftbox_pos_y = 6 / 32
+        self.rightbox_width = 5 / 16
+        self.rightbox_height = 73 / 100
+        self.rightbox_pos_x = 15 / 24
+        self.rightbox_pos_y = 6 / 32
+        self.infobox_width = 1 / 4
+        self.infobox_height = 1 / 6
+        self.infobox_pos_x = 1 / 16
+        self.infobox_pos_y = 6 / 8
+
+        self.selector_pos_x = 2 / 32
+        self.selector_pos_y = 20 / 32
+        self.selector_width = 36
+
+        self.gold_amount = None
+        self.gold_object = inventoryitems.factory_pouch_item(PouchItemDatabase.gold)
         self.sum_merchant = self.engine.data.party.get_sum_value_of_skill("mer")
 
+        self._init_face_and_text(face, ShopDatabase.welcome_text())
         self._init_selectors()
-        self._init_face(face)
         self._init_boxes()
-
-        self.close_button = Button(
-            BTNWIDTH, BTNHEIGHT, (self.background.get_width() + CLOSEX, CLOSEY), CLOSELBL, Keys.Exit.value,
-            COLORKEY, FONTCOLOR)
-
-        self.gold_object = inventoryitems.factory_pouch_item(PouchItemDatabase.gold)
+        self._init_buttons()
 
         self._reset_vars()
 
+    def _reset_vars(self):
+        self.buy_click = False
+        self.sell_click = False
+        self.selected_item = None
+        self.tot_quantity = 0
+        self.sel_quantity = []
+        self.value = 0
+        self.confirm_box = None
+
     def _init_selectors(self):
-        self.selectors = pygame.sprite.Group()
-        for index, shoptype in enumerate(self.shoptype_list):
+        for index, shoptype in enumerate(self.subtype_list):
 
             if type(shoptype) == WeaponType:
                 self.databases[shoptype.name] = collections.OrderedDict()
@@ -129,7 +116,7 @@ class Display(Parchment):
                     self.databases[shoptype[0].name][pouch_itm.name] = pouch_itm
 
                 # maak van de tuple in de lijst een enum, net zoals de rest uit lijst.
-                self.shoptype_list[index] = shoptype[0]
+                self.subtype_list[index] = shoptype[0]
                 # doe deze ook eventjes voor hieronder in de selectors.add()
                 shoptype = shoptype[0]
 
@@ -147,66 +134,42 @@ class Display(Parchment):
                         self.databases[shoptype.name][equipment_itm.name] = equipment_itm
 
             # voeg selector objecten toe
-            self.selectors.add(Selector(self._set_x(SELECTORPOSX) + index * SELECTORWIDTH,
-                                        self._set_y(SELECTORPOSY), shoptype))
-        self.selectors.draw(self.background)
-
-    def _init_face(self, face):
-        face_image = pygame.image.load(face).convert_alpha()
-        self.background.blit(face_image, (self._set_x(FACEPOSX), self._set_y(FACEPOSY)))
-
-        for index, line in enumerate(ShopDatabase.welcome_text()):
-            rline = self.smallfont.render(line, True, FONTCOLOR).convert_alpha()
-            if index < LINESNEXTTOFACE:
-                self.background.blit(rline,
-                                     (self._set_x(FACEPOSX) + face_image.get_width() + EXTRAFACESIZE,
-                                      self._set_y(FACEPOSY) + EXTRAFACESIZE + index * SMALLLINEHEIGHT))
-            else:
-                self.background.blit(rline,
-                                     (self._set_x(FACEPOSX),
-                                      self._set_y(FACEPOSY) + EXTRAFACESIZE + index * SMALLLINEHEIGHT))
+            self.selectors.add(Selector(self._set_x(self.selector_pos_x) + index * self.selector_width,
+                                        self._set_y(self.selector_pos_y), shoptype))
 
     def _init_boxes(self):
-        self._init_sellbox()
+        self._init_infobox()
         self._init_buybox()
-        self._init_infobox(INFOBOXWIDTH, INFOBOXHEIGHT, INFOBOXPOSX, INFOBOXPOSY)
-
-    def _init_sellbox(self):
-        width = self.screen.get_width() * SELLBOXWIDTH
-        height = self.screen.get_height() * SELLBOXHEIGHT + EXTRAHEIGHT
-
-        # een speciale sellbox voor pouchitems, geeft de data.pouch en de shoptypedb mee, ipv data.inv en party.
-        if self.shoptype == EquipmentType.itm:
-            self.sellbox = SellBox(self._set_x(SELLBOXPOSX), self._set_y(SELLBOXPOSY), int(width), int(height),
-                                   self.shoptype, self.databases[self.shoptype.name], self.engine.data.pouch,
-                                   self.sum_merchant)
-        else:
-            self.sellbox = SellBox(self._set_x(SELLBOXPOSX), self._set_y(SELLBOXPOSY), int(width), int(height),
-                                   self.shoptype, self.engine.data.party, self.engine.data.inventory, self.sum_merchant)
+        self._init_sellbox()
 
     def _init_buybox(self):
-        width = self.screen.get_width() * BUYBOXWIDTH
-        height = self.screen.get_height() * BUYBOXHEIGHT + EXTRAHEIGHT
-
-        buy_database = self.databases[self.shoptype.name]
+        width = self.screen.get_width() * self.leftbox_width
+        height = self.screen.get_height() * self.leftbox_height
+        database = self.databases[self.subtype.name]
         # extra stukje voor als er een bepaalde materiaal lijst is, voeg alleen die met de juiste materiaal toe.
         if self.material_list:
             # maak eerst buy_db weer leeg
-            buy_database = collections.OrderedDict()
-            for itm_enum in self.databases[self.shoptype.name].values():
+            database = collections.OrderedDict()
+            for itm_enum in self.databases[self.subtype.name].values():
                 if itm_enum.value.get('mtr') in self.material_list:
-                    buy_database[itm_enum.name] = itm_enum
-        self.buybox = BuyBox(self._set_x(BUYBOXPOSX), self._set_y(BUYBOXPOSY), int(width), int(height),
-                             buy_database, self.sum_merchant)
+                    database[itm_enum.name] = itm_enum
+        self.leftbox = BuyBox(self._set_x(self.leftbox_pos_x), self._set_y(self.leftbox_pos_y),
+                              int(width), int(height), database, self.sum_merchant)
 
-    def _reset_vars(self):
-        self.buy_click = False
-        self.sell_click = False
-        self.selected_item = None
-        self.tot_quantity = 0
-        self.sel_quantity = []
-        self.value = 0
-        self.confirm_box = None
+    def _init_sellbox(self):
+        width = self.screen.get_width() * self.rightbox_width
+        height = self.screen.get_height() * self.rightbox_height
+        # een speciale sellbox voor pouchitems, geeft de data.pouch en de shoptypedb mee, ipv data.inv en party.
+        if self.subtype == EquipmentType.itm:
+            self.rightbox = SellBox(self._set_x(self.rightbox_pos_x), self._set_y(self.rightbox_pos_y),
+                                    int(width), int(height),
+                                    self.subtype, self.databases[self.subtype.name], self.engine.data.pouch,
+                                    self.sum_merchant)
+        else:
+            self.rightbox = SellBox(self._set_x(self.rightbox_pos_x), self._set_y(self.rightbox_pos_y),
+                                    int(width), int(height),
+                                    self.subtype, self.engine.data.party, self.engine.data.inventory,
+                                    self.sum_merchant)
 
     def on_enter(self):
         """
@@ -250,71 +213,13 @@ class Display(Parchment):
 
             self._reset_vars()
 
-    def single_input(self, event):
-        """
-        Handelt de muis en keyboard input af.
-        :param event: pygame.event.get()
-        """
-
-        # todo, sellbox en buybox met toetsenbord
-        # todo, equipment die hero's aanhebben kunnen sellen
-
-        if event.type == pygame.MOUSEMOTION:
-
-            self.info_label = ""
-            self.buybox.cur_item = None
-            self.sellbox.cur_item = None
-
-            if self.buybox.rect.collidepoint(event.pos):
-                selected_name, self.info_label = self.buybox.mouse_hover(event)
-                self.sellbox.duplicate_selection(selected_name)
-            if self.sellbox.rect.collidepoint(event.pos):
-                selected_name, self.info_label = self.sellbox.mouse_hover(event)
-                self.buybox.duplicate_selection(selected_name)
-
-        elif event.type == pygame.MOUSEBUTTONDOWN:
-
-            if event.button == Keys.Leftclick.value:
-
-                if self.close_button.single_click(event) == Keys.Exit.value:
-                    self._close()
-
-                for selector in self.selectors:
-                    shoptype = selector.mouse_click(event)
-                    if shoptype:
-                        if shoptype != self.shoptype:
-                            self.engine.audio.play_sound(SFX.menu_switch)
-                            self.shoptype = shoptype
-                            self._init_boxes()
-                            break
-
-                # return of anders worden sommigen variabelen weer overschreven.
-                if self._handle_buy_box_click(event):
-                    return
-                if self._handle_sell_box_click(event):
-                    return
-
-            elif event.button in (Keys.Scrollup.value, Keys.Scrolldown.value):
-                if self.buybox.rect.collidepoint(event.pos):
-                    self.buybox.mouse_scroll(event)
-                if self.sellbox.rect.collidepoint(event.pos):
-                    self.sellbox.mouse_scroll(event)
-
-        elif event.type == pygame.KEYDOWN:
-            if event.key == Keys.Exit.value:
-                self._close()
-            elif event.key == Keys.Prev.value:
-                self._previous()
-            elif event.key == Keys.Next.value:
-                self._next()
-
     def multi_input(self, key_input, mouse_pos, dt):
         """
         :param key_input: pygame.key.get_pressed()
         :param mouse_pos: pygame.mouse.get_pos()
         :param dt: self.clock.tick(FPS)/1000.0
         """
-        # cheat voor geld erbij ctrl+
+        # todo, weghalen uiteindelijk. cheat voor geld erbij ctrl+
         if key_input[pygame.K_LCTRL] or key_input[pygame.K_RCTRL]:
             if key_input[pygame.K_KP_PLUS]:
                 self.engine.data.pouch.add(self.gold_object, 1, False)
@@ -328,37 +233,13 @@ class Display(Parchment):
         :param dt: self.clock.tick(FPS)/1000.0
         """
         for selector in self.selectors:
-            selector.update(self.shoptype)
+            selector.update(self.subtype)
         self.gold_amount = self.engine.data.pouch.get_quantity(self.gold_object)
+        self.main_title = self.subtype.value
+        self.source_title1 = SOURCETITLE1.format(str(self.gold_amount))
 
-    def render(self):
-        """
-        Teken alles op het scherm, de titels, de boxen.
-        """
-        super().render()
-
-        # titels midden boven de boxen
-        self.screen.blit(self.buy_title, ((self._set_x(BUYBOXPOSX)) +
-                                          (self.screen.get_width() * BUYBOXWIDTH / 2) -
-                                          (self.buy_title.get_width() / 2),
-                                          self._set_y(TITLEPOSY)))
-        self.screen.blit(self.sell_title, ((self._set_x(SELLBOXPOSX)) +
-                                           (self.screen.get_width() * SELLBOXWIDTH / 2) -
-                                           (self.sell_title.get_width() / 2),
-                                           self._set_y(TITLEPOSY)))
-        gold_title = self.normalfont.render(GOLDTITLE + str(self.gold_amount), True, FONTCOLOR).convert_alpha()
-        self.screen.blit(gold_title, (self._set_x(GOLDTITLEPOSX), self._set_y(GOLDTITLEPOSY)))
-        shoptype_title = self.largefont.render(self.shoptype.value, True, FONTCOLOR).convert_alpha()
-        self.screen.blit(shoptype_title, (self._set_x(SHOPTITLEPOSX), self._set_y(TITLEPOSY)))
-
-        self.selectors.draw(self.background)
-
-        self.buybox.render(self.screen)
-        self.sellbox.render(self.screen)
-        self.close_button.render(self.screen, FONTCOLOR)
-
-    def _handle_buy_box_click(self, event):
-        self.buy_click, self.selected_item, self.value = self.buybox.mouse_click(event)
+    def _handle_leftbox_click(self, event):
+        self.buy_click, self.selected_item, self.value = self.leftbox.mouse_click(event)
         if self.buy_click and self.value <= self.gold_amount:
             text = ["You may buy 1 {} for {} gold.".format(self.selected_item.NAM, self.value),
                     "",
@@ -378,8 +259,8 @@ class Display(Parchment):
             return True
         return False
 
-    def _handle_sell_box_click(self, event):
-        self.sell_click, self.selected_item, self.tot_quantity, self.value = self.sellbox.mouse_click(event)
+    def _handle_rightbox_click(self, event):
+        self.sell_click, self.selected_item, self.tot_quantity, self.value = self.rightbox.mouse_click(event)
         # als een item maar 0 gc oplevert.
         if self.sell_click and self.value == 0:
             text = ["I do not want that item."]
@@ -446,25 +327,3 @@ class Display(Parchment):
                                 " of them for " + str(int(self.value * self.tot_quantity)) + " gold.")
                     self.sel_quantity.append(self.tot_quantity)
         return text
-
-    def _previous(self):
-        self.engine.audio.play_sound(SFX.menu_switch)
-        for index, shoptype in enumerate(self.shoptype_list):
-            if shoptype == self.shoptype:
-                i = index - 1
-                if i < 0:
-                    i = len(self.shoptype_list)-1
-                self.shoptype = self.shoptype_list[i]
-                self._init_boxes()
-                break
-
-    def _next(self):
-        self.engine.audio.play_sound(SFX.menu_switch)
-        for index, shoptype in enumerate(self.shoptype_list):
-            if shoptype == self.shoptype:
-                i = index + 1
-                if i >= len(self.shoptype_list):
-                    i = 0
-                self.shoptype = self.shoptype_list[i]
-                self._init_boxes()
-                break

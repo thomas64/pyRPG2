@@ -3,15 +3,11 @@
 class: Display
 """
 
-import pygame
-
-from components import Button
 from components import MessageBox
 from components import Parchment
 
 from constants import EquipmentType as EqTy
 from constants import GameState
-from constants import Keys
 from constants import SFX
 
 from database import PouchItemDatabase
@@ -22,51 +18,8 @@ from .createbox import CreateBox
 from .inventorybox import InventoryBox
 from screens.shop.selector import Selector
 
-COLORKEY = pygame.Color("white")
-FONTCOLOR = pygame.Color("black")
 
-CREATETITLE = "Create"
-INVENTORYTITLE = "Invent."
-TITLEPOSX = 1/16
-TITLEPOSY = 1/32
-FACEPOSX = 1/16
-FACEPOSY = 3/16
-EXTRAFACESIZEX = 20
-EXTRAFACESIZEY = 0
-LINESNEXTTOFACE = 4
-SMALLLINEHEIGHT = 27
-
-STATITLE = "Stamina {}: "
-STATITLEPOSX = 1/16
-STATITLEPOSY = 70/100
-
-INFOBOXWIDTH = 30/100
-INFOBOXHEIGHT = 16/100
-INFOBOXPOSX = 1/16
-INFOBOXPOSY = 76/100
-
-BTNWIDTH = 70
-BTNHEIGHT = 40
-CLOSELBL = "Close"
-CLOSEX, CLOSEY = -100, 40    # negatieve x omdat de positie van rechts bepaald wordt.
-
-EXTRAHEIGHT = 0         # zodat de laatste item er voor helft op komt
-
-CREATEBOXWIDTH = 20 / 100
-CREATEBOXHEIGHT = 73 / 100
-CREATEBOXPOSX = 40 / 100
-CREATEBOXPOSY = 6 / 32
-
-INVENTORYBOXWIDTH = 26/100
-INVENTORYBOXHEIGHT = 73/100
-INVENTORYBOXPOSX = 64/100
-INVENTORYBOXPOSY = 6/32
-
-SELECTORPOSX = 2/32
-SELECTORPOSY = 65/100
-SELECTORWIDTH = 36
-
-CREATELIST = [EqTy.wpn, EqTy.sld, EqTy.hlm, EqTy.arm, EqTy.clk, EqTy.glv, EqTy.blt, EqTy.bts]
+SOURCETITLE1 = "Stamina {}: {}"
 
 
 class Display(Parchment):
@@ -74,133 +27,95 @@ class Display(Parchment):
     ...
     """
     def __init__(self, engine, hero):
-        super().__init__(engine)
+        super().__init__(engine, "Create", "Invent.")
 
-        self.eqptype = CREATELIST[0]
+        self.subtype_list = [EqTy.wpn, EqTy.sld, EqTy.hlm, EqTy.arm, EqTy.clk, EqTy.glv, EqTy.blt, EqTy.bts]
+        self.subtype = self.subtype_list[0]
 
         self.name = GameState.Shop
 
-        self.create_title = self.largefont.render(CREATETITLE, True, FONTCOLOR).convert_alpha()
-        self.inventory_title = self.largefont.render(INVENTORYTITLE, True, FONTCOLOR).convert_alpha()
+        self.main_title_pos_x = 1 / 16
+        self.main_title_pos_y = 1 / 32
+        self.source_title1 = SOURCETITLE1
+        self.source_title1_pos_x = 1 / 16
+        self.source_title1_pos_y = 70 / 100
+        self.sub_title_pos_x = 5
+        self.sub_title_pos_y1 = 15 / 100
+        self.sub_title_pos_y2 = 17 / 100
+
+        self.face_pos_x = 1 / 16
+        self.face_pos_y = 3 / 16
+        self.extra_face_size_x = 20
+        self.extra_face_size_y = 0
+        self.lines_next_to_face = 4
+        self.small_line_height = 27
+
+        self.leftbox_width = 20 / 100
+        self.leftbox_height = 73 / 100
+        self.leftbox_pos_x = 40 / 100
+        self.leftbox_pos_y = 6 / 32
+        self.rightbox_width = 26 / 100
+        self.rightbox_height = 73 / 100
+        self.rightbox_pos_x = 64 / 100
+        self.rightbox_pos_y = 6 / 32
+        self.infobox_width = 30 / 100
+        self.infobox_height = 16 / 100
+        self.infobox_pos_x = 1 / 16
+        self.infobox_pos_y = 76 / 100
+
+        self.selector_pos_x = 2 / 32
+        self.selector_pos_y = 65 / 100
+        self.selector_width = 36
 
         self.cur_hero = hero
+        self._init_face_and_text(self.cur_hero.FAC, self.cur_hero.mec.welcome_text(self.cur_hero.NAM))
         self._init_selectors()
-        self._init_face()
         self._init_boxes()
-
-        self.close_button = Button(
-            BTNWIDTH, BTNHEIGHT, (self.background.get_width() + CLOSEX, CLOSEY), CLOSELBL, Keys.Exit.value,
-            COLORKEY, FONTCOLOR)
-
-    def _init_face(self):
-        face_image = pygame.image.load(self.cur_hero.FAC).convert_alpha()
-        self.background.blit(face_image, (self._set_x(FACEPOSX), self._set_y(FACEPOSY)))
-
-        for index, line in enumerate(self.cur_hero.mec.welcome_text(self.cur_hero.NAM)):
-            rline = self.smallfont.render(line, True, FONTCOLOR).convert_alpha()
-            if index < LINESNEXTTOFACE:
-                self.background.blit(rline,
-                                     (self._set_x(FACEPOSX) + face_image.get_width() + EXTRAFACESIZEX,
-                                      self._set_y(FACEPOSY) + EXTRAFACESIZEY + index * SMALLLINEHEIGHT))
-            else:
-                self.background.blit(rline,
-                                     (self._set_x(FACEPOSX),
-                                      self._set_y(FACEPOSY) + EXTRAFACESIZEY + index * SMALLLINEHEIGHT))
+        self._init_buttons()
 
     def _init_selectors(self):
-        self.selectors = pygame.sprite.Group()
-
-        for index, eqp_type in enumerate(CREATELIST):
-            self.selectors.add(Selector(self._set_x(SELECTORPOSX) + index * SELECTORWIDTH,
-                                        self._set_y(SELECTORPOSY), eqp_type))
-
-        self.selectors.draw(self.background)
+        for index, eqp_type in enumerate(self.subtype_list):
+            self.selectors.add(Selector(self._set_x(self.selector_pos_x) + index * self.selector_width,
+                                        self._set_y(self.selector_pos_y), eqp_type))
 
     def _init_boxes(self):
-        self._init_infobox(INFOBOXWIDTH, INFOBOXHEIGHT, INFOBOXPOSX, INFOBOXPOSY)
+        self._init_infobox()
         self._init_createbox()
         self._init_inventorybox()
 
     def _init_createbox(self):
-        width = self.screen.get_width() * CREATEBOXWIDTH
-        height = self.screen.get_height() * CREATEBOXHEIGHT + EXTRAHEIGHT
+        width = self.screen.get_width() * self.leftbox_width
+        height = self.screen.get_height() * self.leftbox_height
 
-        if self.eqptype == EqTy.wpn:
+        if self.subtype == EqTy.wpn:
             from database.weapon import WeaponDatabase as DataBase
-        elif self.eqptype == EqTy.sld:
+        elif self.subtype == EqTy.sld:
             from database.shield import ShieldDatabase as DataBase
-        elif self.eqptype == EqTy.hlm:
+        elif self.subtype == EqTy.hlm:
             from database.helmet import HelmetDatabase as DataBase
-        elif self.eqptype == EqTy.arm:
+        elif self.subtype == EqTy.arm:
             from database.armor import ArmorDatabase as DataBase
-        elif self.eqptype == EqTy.clk:
+        elif self.subtype == EqTy.clk:
             from database.cloak import CloakDatabase as DataBase
-        elif self.eqptype == EqTy.glv:
+        elif self.subtype == EqTy.glv:
             from database.gloves import GlovesDatabase as DataBase
-        elif self.eqptype == EqTy.blt:
+        elif self.subtype == EqTy.blt:
             from database.belt import BeltDatabase as DataBase
-        elif self.eqptype == EqTy.bts:
+        elif self.subtype == EqTy.bts:
             from database.boots import BootsDatabase as DataBase
         else:
             raise AttributeError
 
-        self.createbox = CreateBox(self._set_x(CREATEBOXPOSX), self._set_y(CREATEBOXPOSY), int(width), int(height),
-                                   DataBase)
+        self.leftbox = CreateBox(self._set_x(self.leftbox_pos_x), self._set_y(self.leftbox_pos_y),
+                                 int(width), int(height), DataBase)
 
     def _init_inventorybox(self):
-        width = self.screen.get_width() * INVENTORYBOXWIDTH
-        height = self.screen.get_height() * INVENTORYBOXHEIGHT + EXTRAHEIGHT
-        self.inventorybox = InventoryBox(self._set_x(INVENTORYBOXPOSX), self._set_y(INVENTORYBOXPOSY),
-                                         int(width), int(height),
-                                         self.eqptype, self.engine.data.party,
-                                         self.engine.data.pouch, self.engine.data.inventory)
-
-    def single_input(self, event):
-        """
-        Handelt de muis en keyboard input af.
-        :param event: pygame.event.get()
-        """
-        if event.type == pygame.MOUSEMOTION:
-            self.info_label = ""
-            self.createbox.cur_item = None
-            self.inventorybox.cur_item = None
-
-            if self.createbox.rect.collidepoint(event.pos):
-                selected_name, self.info_label = self.createbox.mouse_hover(event)
-            if self.inventorybox.rect.collidepoint(event.pos):
-                selected_name, self.info_label = self.inventorybox.mouse_hover(event)
-
-        elif event.type == pygame.MOUSEBUTTONDOWN:
-
-            if event.button == Keys.Leftclick.value:
-
-                if self.close_button.single_click(event) == Keys.Exit.value:
-                    self._close()
-                if self._handle_create_box_click(event):
-                    return
-
-                for selector in self.selectors:
-                    eqptype = selector.mouse_click(event)
-                    if eqptype:
-                        if eqptype != self.eqptype:
-                            self.engine.audio.play_sound(SFX.menu_switch)
-                            self.eqptype = eqptype
-                            self._init_boxes()
-                            break
-
-            elif event.button in (Keys.Scrollup.value, Keys.Scrolldown.value):
-                if self.createbox.rect.collidepoint(event.pos):
-                    self.createbox.mouse_scroll(event)
-                if self.inventorybox.rect.collidepoint(event.pos):
-                    self.inventorybox.mouse_scroll(event)
-
-        elif event.type == pygame.KEYDOWN:
-            if event.key == Keys.Exit.value:
-                self._close()
-            elif event.key == Keys.Prev.value:
-                self._previous()
-            elif event.key == Keys.Next.value:
-                self._next()
+        width = self.screen.get_width() * self.rightbox_width
+        height = self.screen.get_height() * self.rightbox_height
+        self.rightbox = InventoryBox(self._set_x(self.rightbox_pos_x), self._set_y(self.rightbox_pos_y),
+                                     int(width), int(height),
+                                     self.subtype, self.engine.data.party,
+                                     self.engine.data.pouch, self.engine.data.inventory)
 
     def update(self, dt):
         """
@@ -209,38 +124,12 @@ class Display(Parchment):
         :param dt: self.clock.tick(FPS)/1000.0
         """
         for selector in self.selectors:
-            selector.update(self.eqptype)
+            selector.update(self.subtype)
+        self.main_title = self.cur_hero.mec.NAM
+        self.source_title1 = SOURCETITLE1.format(self.cur_hero.NAM, self.cur_hero.sta.cur)
 
-    def render(self):
-        """
-        Teken alles op het scherm.
-        """
-        super().render()
-
-        mec_title = self.largefont.render(self.cur_hero.mec.NAM, True, FONTCOLOR).convert_alpha()
-        self.screen.blit(mec_title, (self._set_x(TITLEPOSX), self._set_y(TITLEPOSY)))
-
-        self.screen.blit(self.create_title, ((self._set_x(CREATEBOXPOSX)) +
-                                             (self.screen.get_width() * CREATEBOXWIDTH / 2) -
-                                             (self.create_title.get_width() / 2),
-                                             self._set_y(TITLEPOSY)))
-        self.screen.blit(self.inventory_title, ((self._set_x(INVENTORYBOXPOSX)) +
-                                                (self.screen.get_width() * INVENTORYBOXWIDTH / 2) -
-                                                (self.inventory_title.get_width() / 2),
-                                                self._set_y(TITLEPOSY)))
-
-        sta_title = self.middlefont.render(
-                    STATITLE.format(self.cur_hero.NAM) + str(self.cur_hero.sta.cur), True, FONTCOLOR).convert_alpha()
-        self.screen.blit(sta_title, (self._set_x(STATITLEPOSX), self._set_y(STATITLEPOSY)))
-
-        self.selectors.draw(self.background)
-
-        self.createbox.render(self.screen)
-        self.inventorybox.render(self.screen)
-        self.close_button.render(self.screen, FONTCOLOR)
-
-    def _handle_create_box_click(self, event):
-        create_click, selected_equipment = self.createbox.mouse_click(event)
+    def _handle_leftbox_click(self, event):
+        create_click, selected_equipment = self.leftbox.mouse_click(event)
         if create_click:
             cloth = inventoryitems.factory_pouch_item(PouchItemDatabase.cloth)
             leather = inventoryitems.factory_pouch_item(PouchItemDatabase.leather)
@@ -304,25 +193,3 @@ class Display(Parchment):
             self._init_boxes()
             return True
         return False
-
-    def _previous(self):
-        self.engine.audio.play_sound(SFX.menu_switch)
-        for index, eqptype in enumerate(CREATELIST):
-            if eqptype == self.eqptype:
-                i = index - 1
-                if i < 0:
-                    i = len(CREATELIST) - 1
-                self.eqptype = CREATELIST[i]
-                self._init_boxes()
-                break
-
-    def _next(self):
-        self.engine.audio.play_sound(SFX.menu_switch)
-        for index, eqptype in enumerate(CREATELIST):
-            if eqptype == self.eqptype:
-                i = index + 1
-                if i >= len(CREATELIST):
-                    i = 0
-                self.eqptype = CREATELIST[i]
-                self._init_boxes()
-                break

@@ -8,7 +8,6 @@ import pygame
 from components import Button
 from components import ConfirmBox
 from components import MessageBox
-from components import Parchment
 from components import TextBox
 from components import Transition
 
@@ -27,6 +26,17 @@ from .pouchbox import PouchBox
 from .skillsbox import SkillsBox
 from .spellsbox import SpellsBox
 from .statsbox import StatsBox
+
+
+BACKGROUNDCOLOR = pygame.Color("black")
+BACKGROUNDSPRITE = 'resources/sprites/parchment.png'
+FONT = 'colonna'
+SUBFONT = 'verdana'
+LARGEFONTSIZE = 100
+NORMALFONTSIZE = 50
+MIDDLEFONTSIZE = 40
+SMALLFONTSIZE = 20
+TINYFONTSIZE = 12
 
 
 COLORKEY = pygame.Color("white")
@@ -61,13 +71,24 @@ PCHBOXW, PCHBOXH =   240, 600
 NEWMAPTIMEOUT = 0.5
 
 
-class Display(Parchment):
+class Display(object):
     """
     Overzicht scherm PartyScreen.
     """
     def __init__(self, engine):
-        super().__init__(engine)
         self.engine = engine
+
+        self.screen = pygame.display.get_surface()
+        self.background = pygame.image.load(BACKGROUNDSPRITE).convert_alpha()
+        self.background = pygame.transform.scale(self.background, self.screen.get_size())
+
+        self.largefont = pygame.font.SysFont(FONT, LARGEFONTSIZE)
+        self.normalfont = pygame.font.SysFont(FONT, NORMALFONTSIZE)
+        self.middlefont = pygame.font.SysFont(FONT, MIDDLEFONTSIZE)
+        self.smallfont = pygame.font.SysFont(FONT, SMALLFONTSIZE)
+        self.tinyfont = pygame.font.SysFont(SUBFONT, TINYFONTSIZE)
+
+        self.info_label = ""
 
         self.name = GameState.PartyScreen
 
@@ -309,7 +330,10 @@ class Display(Parchment):
         """
         screen -> achtergond -> knoppen -> heroboxes -> verder
         """
-        super().render()
+        self.screen.fill(BACKGROUNDCOLOR)
+        self.screen.blit(self.background, (0, 0))
+
+        self.infobox.render(self.screen, self.info_label)
 
         for button in self.buttons:
             button.render(self.screen, LINECOLOR)
@@ -424,3 +448,8 @@ class Display(Parchment):
         if self.hc > len(self.party) - 1:
             self.hc = 0
         self._init_boxes()
+
+    def _close(self):
+        self.engine.audio.play_sound(SFX.scroll)
+        self.engine.gamestate.pop()
+        self.engine.gamestate.push(Transition(self.engine.gamestate))
