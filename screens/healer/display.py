@@ -7,10 +7,12 @@ from components import MessageBox
 from components import Parchment
 
 from constants import GameState
+from constants import HealingType
 from constants import SFX
 
 from .herobox import HeroBox
 from .pouchbox import PouchBox
+from .selector import Selector
 
 
 SOURCETITLE1 = "Stamina {}: {}"
@@ -23,6 +25,9 @@ class Display(Parchment):
     def __init__(self, engine, hero, party):
         super().__init__(engine, "Party", "Pouch")
 
+        self.subtype_list = [HealingType.hands, HealingType.herbs]
+        self.subtype = self.subtype_list[0]
+
         self.name = GameState.Shop
 
         self.main_title_pos_x = 1 / 16
@@ -30,6 +35,9 @@ class Display(Parchment):
         self.source_title1 = SOURCETITLE1
         self.source_title1_pos_x = 1 / 16
         self.source_title1_pos_y = 70 / 100
+        self.source_title2 = self.subtype.value
+        self.source_title2_pos_x = 1 / 16
+        self.source_title2_pos_y = 65 / 100
         self.sub_title_pos_x = 5
         self.sub_title_pos_y1 = 15 / 100
         self.sub_title_pos_y2 = 17 / 100
@@ -55,7 +63,7 @@ class Display(Parchment):
         self.infobox_pos_y = 76 / 100
 
         self.selector_pos_x = 2 / 32
-        self.selector_pos_y = 65 / 100
+        self.selector_pos_y = 60 / 100
         self.selector_width = 36
 
         self.cur_hero = hero
@@ -66,7 +74,9 @@ class Display(Parchment):
         self._init_buttons()
 
     def _init_selectors(self):
-        pass
+        for index, healing_type in enumerate(self.subtype_list):
+            self.selectors.add(Selector(self._set_x(self.selector_pos_x) + index * self.selector_width,
+                                        self._set_y(self.selector_pos_y), healing_type))
 
     def _init_boxes(self):
         self._init_infobox()
@@ -89,5 +99,12 @@ class Display(Parchment):
         """
         :param dt: self.clock.tick(FPS)/1000.0
         """
+        for selector in self.selectors:
+            selector.update(self.subtype)
         self.main_title = self.cur_hero.hlr.NAM
         self.source_title1 = SOURCETITLE1.format(self.cur_hero.NAM, str(self.cur_hero.sta.cur))
+        self.source_title2 = self.subtype.value
+
+    def _handle_leftbox_click(self, event):
+        # todo
+        pass

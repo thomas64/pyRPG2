@@ -1,0 +1,57 @@
+
+"""
+class: Selector
+"""
+
+import os
+
+import pygame
+
+
+LINECOLOR = pygame.Color("black")
+SELECTCOLOR = pygame.Color("red")
+LINETHICKNESS = 1
+PATH = 'resources/sprites/icons/spells/'
+
+
+class Selector(pygame.sprite.Sprite):
+    """
+    Is bijna een volledige kopie van de shop selector.
+    """
+    def __init__(self, x, y, healing_type):
+        super().__init__()
+
+        self.selector_type = healing_type
+
+        # hij komt binnen met een hoofdletter van de enum, maar de bestandsnaam heeft een kleine letter
+        self.image = self._load_selected_image(PATH, healing_type.name)
+        pygame.draw.rect(self.image, LINECOLOR, self.image.get_rect(), LINETHICKNESS)
+        self.rect = self.image.get_rect()
+        self.rect.topleft = x, y
+
+    @staticmethod
+    def _load_selected_image(path, healing_type):
+        """
+        Loopt langs alle plaatjes uit de map en controleert of de naam overeenkomt met de opgevraagde type.
+        :return: het gevonden plaatje.
+        """
+        for file in os.listdir(path):
+            name, ext = os.path.splitext(file)
+            if name == healing_type:
+                return pygame.image.load(os.path.join(path, file)).convert_alpha()
+
+    def mouse_click(self, event):
+        """
+        :param event: pygame.MOUSEBUTTONDOWN uit shopscreen
+        """
+        if self.rect.collidepoint(event.pos):
+            return self.selector_type
+
+    def update(self, healing_type):
+        """
+        ...
+        """
+        if healing_type == self.selector_type:
+            pygame.draw.rect(self.image, SELECTCOLOR, self.image.get_rect(), LINETHICKNESS)
+        else:
+            pygame.draw.rect(self.image, LINECOLOR, self.image.get_rect(), LINETHICKNESS)

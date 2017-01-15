@@ -3,6 +3,7 @@
 class: GameState
 class: Direction
 class: PersonState
+class: HealingType
 class: EquipmentType
 class: WeaponType
 class: ItemMaterial
@@ -62,6 +63,14 @@ class PersonState(enum.Enum):
     """
     Resting = 1
     Moving = 2
+
+
+class HealingType(enum.Enum):
+    """
+    Alle manieren voor een Healer Skill.
+    """
+    hands = "Lay on Hands"
+    herbs = "Heal with Herbs"
 
 
 class EquipmentType(enum.Enum):
