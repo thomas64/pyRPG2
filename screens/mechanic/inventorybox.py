@@ -46,7 +46,7 @@ class InventoryBox(ListBox):
         # hieronder is een bijna een exacte kopie van pouchbox.
 
         for pouch_item_obj in pouch.get_all_pouch_items():
-            if hasattr(pouch_item_obj, 'VAL'):  # todo, hij checkt nu op 'VAL' of hij wat laat zien in deze lijst. okee?
+            if pouch_item_obj.is_sellable():
                 pouch_item_spr = pygame.image.load(pouch_item_obj.SPR).convert_alpha()
                 self.table_data.append(
                     # row[0],          row[1],              row[2],             row[3],          row[4],    row[5]

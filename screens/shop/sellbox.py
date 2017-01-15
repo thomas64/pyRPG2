@@ -53,8 +53,12 @@ class SellBox(ListBox):
             # inventory is hier pouch
             for pouch_item_obj in inventory.get_all_pouch_items():
                 # party is hier shopdatabase
-                for pouch_item_dict in party.values():
-                    if pouch_item_obj.NAM == pouch_item_dict.value['nam']:
+                # * deze twee regels en break onderaan uitgezet, zodat de itm shop alles laat zien om te sellen.
+                # * niet alleen wat hij ook verkoopt.
+                # for pouch_item_dict in party.values():
+                #     if pouch_item_obj.NAM == pouch_item_dict.value['nam']:
+                # * deze if regel is bij het uitzetten van boven 2 regels toegevoegd, om niet alles te kunnen sellen.
+                if pouch_item_obj.is_sellable():
                         pouch_item_spr = pygame.image.load(pouch_item_obj.SPR).convert_alpha()
                         pouch_item_nam = pouch_item_obj.NAM
                         pouch_item_val = str(round(pouch_item_obj.VAL / 2 + ((pouch_item_obj.VAL / 200) * self.sale)))
@@ -64,7 +68,7 @@ class SellBox(ListBox):
                              # row[5],      row[6], [7]
                              pouch_item_obj, None,  ""]
                         )
-                        break
+                        # break
 
         else:
             # hieronder volgt bijna een exacte kopie van invclickbox

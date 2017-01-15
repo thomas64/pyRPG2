@@ -38,7 +38,7 @@ class PouchBox(ListBox):
     def _fill_table_data(self, pouch):
 
         for pouch_item_obj in pouch.get_all_pouch_items():
-            if hasattr(pouch_item_obj, 'VAL'):  # todo, hij checkt nu op 'VAL' of hij wat laat zien in deze lijst. okee?
+            if pouch_item_obj.is_sellable():
                 self.table_data.append(
                     # row[0],                   row[1],              row[2],             row[3],      row[4]
                     [pouch_item_obj.SPR, str(pouch_item_obj.qty), pouch_item_obj.NAM, pouch_item_obj, None]
