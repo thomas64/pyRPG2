@@ -43,15 +43,12 @@ class InventoryBox(ListBox):
 
         black_spr = pygame.image.load(self.transp).convert_alpha()
 
-        # hieronder is een bijna een exacte kopie van pouchbox.
-
-        for pouch_item_obj in pouch.get_all_pouch_items():
-            if pouch_item_obj.is_sellable():
-                pouch_item_spr = pygame.image.load(pouch_item_obj.SPR).convert_alpha()
-                self.table_data.append(
-                    # row[0],          row[1],              row[2],             row[3],          row[4],    row[5]
-                    [black_spr, pouch_item_spr, str(pouch_item_obj.qty), pouch_item_obj.NAM, pouch_item_obj, None]
-                )
+        for resource_item in pouch.get_all_resource_items():
+            resource_item_spr = pygame.image.load(resource_item.SPR).convert_alpha()
+            self.table_data.append(
+                # row[0],          row[1],              row[2],             row[3],          row[4],    row[5]
+                [black_spr, resource_item_spr, str(resource_item.qty), resource_item.NAM, resource_item, None]
+            )
 
         # hieronder volgt bijna een exacte kopie van sellbox.
 

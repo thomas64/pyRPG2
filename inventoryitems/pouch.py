@@ -38,6 +38,16 @@ class PouchItem(object):
             return True
         return False
 
+    def is_resource(self):
+        """
+        Als de value waarde 1 is, dan is het een resource.
+        :return:
+        """
+        if hasattr(self, 'VAL'):
+            if self.VAL == 1:
+                return True
+        return False
+
 
 class HealingPotion(PouchItem):
     """

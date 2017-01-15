@@ -23,6 +23,14 @@ class Pouch(dict):
         """
         return sorted(self.values(), key=lambda xx: xx.SRT)
 
+    def get_all_resource_items(self):
+        """
+        Geeft een gesorteerde lijst terug met alleen resources.
+        :return:
+        """
+        sorted_list = sorted(self.values(), key=lambda xx: xx.SRT)
+        return [item for item in sorted_list if item.is_resource()]
+
     def get_quantity(self, pouch_item):
         """
         Geeft het aantal terug van het gevraagde pouch item object.
