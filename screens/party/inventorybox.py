@@ -62,12 +62,13 @@ class InventoryBox(BaseBox):
         :param event: pygame.MOUSEMOTION uit partyscreen
         :return: visuele weergave uit equipment_item.show_info(), of niets.
         """
-        for index, box in enumerate(self.offset_boxes):
-            if box.collidepoint(event.pos):
-                equipment_item = self.equipment_items[index]
-                if equipment_item.is_not_empty():
-                    return equipment_item.show_info()
-                return None
+        if len(self.equipment_items) > 0:  # deze regel moet erboven. bij het laden van de box is self.eqp_itms nog
+            for index, box in enumerate(self.offset_boxes):             # leeg, als je dan met mouse toevallig al
+                if box.collidepoint(event.pos):                         # beweegt, heeft hij nog niet de index die in
+                    equipment_item = self.equipment_items[index]        # <- deze regel nodig is. en dan crasht hij.
+                    if equipment_item.is_not_empty():
+                        return equipment_item.show_info()
+                    return None
 
     def mouse_click(self, event):
         """
