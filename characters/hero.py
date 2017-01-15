@@ -435,3 +435,10 @@ class Hero(object):
         Zet alleen de .sta.cur waarde om naar de .qty waarde.
         """
         self.sta.cur = self.sta.qty
+
+    def show_info(self):
+        """
+        show_info is polymorph met EquipmentItem()
+        :return:
+        """
+        return self.NAM

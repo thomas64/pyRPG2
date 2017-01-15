@@ -3,59 +3,17 @@
 class: Display
 """
 
-import pygame
-
-from components import Button
 from components import MessageBox
 from components import Parchment
 
 from constants import GameState
-from constants import Keys
 from constants import SFX
 
-COLORKEY = pygame.Color("white")
-FONTCOLOR = pygame.Color("black")
+from .herobox import HeroBox
+from .pouchbox import PouchBox
 
-LEFTBOXTITLE = "Left"
-RIGHTBOXTITLE = "Right"
-TITLEPOSX = 1/16
-TITLEPOSY = 1/32
-FACEPOSX = 1/16
-FACEPOSY = 3/16
-EXTRAFACESIZEX = 20
-EXTRAFACESIZEY = 0
-LINESNEXTTOFACE = 4
-SMALLLINEHEIGHT = 27
 
-STATITLE = "Stamina {}: "
-STATITLEPOSX = 1/16
-STATITLEPOSY = 70/100
-
-INFOBOXWIDTH = 30/100
-INFOBOXHEIGHT = 16/100
-INFOBOXPOSX = 1/16
-INFOBOXPOSY = 76/100
-
-BTNWIDTH = 70
-BTNHEIGHT = 40
-CLOSELBL = "Close"
-CLOSEX, CLOSEY = -100, 40    # negatieve x omdat de positie van rechts bepaald wordt.
-
-EXTRAHEIGHT = 0         # zodat de laatste item er voor helft op komt
-
-LEFTBOXWIDTH = 20 / 100
-LEFTBOXHEIGHT = 73 / 100
-LEFTBOXPOSX = 40 / 100
-LEFTBOXPOSY = 6 / 32
-
-RIGHTBOXWIDTH = 26/100
-RIGHTBOXHEIGHT = 73/100
-RIGHTBOXPOSX = 64/100
-RIGHTBOXPOSY = 6/32
-
-SELECTORPOSX = 2/32
-SELECTORPOSY = 65/100
-SELECTORWIDTH = 36
+SOURCETITLE1 = "Stamina {}: {}"
 
 
 class Display(Parchment):
@@ -63,68 +21,73 @@ class Display(Parchment):
     ...
     """
     def __init__(self, engine, hero, party):
-        super().__init__(engine)
+        super().__init__(engine, "Party", "Pouch")
 
         self.name = GameState.Shop
 
-        self.left_box_title = self.largefont.render(LEFTBOXTITLE, True, FONTCOLOR).convert_alpha()
-        self.right_box_title = self.largefont.render(RIGHTBOXTITLE, True, FONTCOLOR).convert_alpha()
+        self.main_title_pos_x = 1 / 16
+        self.main_title_pos_y = 1 / 32
+        self.source_title1 = SOURCETITLE1
+        self.source_title1_pos_x = 1 / 16
+        self.source_title1_pos_y = 70 / 100
+        self.sub_title_pos_x = 5
+        self.sub_title_pos_y1 = 15 / 100
+        self.sub_title_pos_y2 = 17 / 100
+
+        self.face_pos_x = 1 / 16
+        self.face_pos_y = 3 / 16
+        self.extra_face_size_x = 20
+        self.extra_face_size_y = 0
+        self.lines_next_to_face = 4
+        self.small_line_height = 27
+
+        self.leftbox_width = 25 / 100
+        self.leftbox_height = 73 / 100
+        self.leftbox_pos_x = 40 / 100
+        self.leftbox_pos_y = 6 / 32
+        self.rightbox_width = 15 / 100
+        self.rightbox_height = 73 / 100
+        self.rightbox_pos_x = 70 / 100
+        self.rightbox_pos_y = 6 / 32
+        self.infobox_width = 30 / 100
+        self.infobox_height = 16 / 100
+        self.infobox_pos_x = 1 / 16
+        self.infobox_pos_y = 76 / 100
+
+        self.selector_pos_x = 2 / 32
+        self.selector_pos_y = 65 / 100
+        self.selector_width = 36
 
         self.cur_hero = hero
         self.party = party
-        # self._init_selectors()
-        # self._init_face()
+        self._init_face_and_text(self.cur_hero.FAC, ["TODO"])
+        self._init_selectors()
         self._init_boxes()
+        self._init_buttons()
 
-        self.close_button = Button(
-            BTNWIDTH, BTNHEIGHT, (self.background.get_width() + CLOSEX, CLOSEY), CLOSELBL, Keys.Exit.value,
-            COLORKEY, FONTCOLOR)
+    def _init_selectors(self):
+        pass
 
     def _init_boxes(self):
-        self._init_infobox(INFOBOXWIDTH, INFOBOXHEIGHT, INFOBOXPOSX, INFOBOXPOSY)
+        self._init_infobox()
+        self._init_herobox()
+        self._init_pouchbox()
 
-    def single_input(self, event):
+    def _init_herobox(self):
+        width = self.screen.get_width() * self.leftbox_width
+        height = self.screen.get_height() * self.leftbox_height
+        self.leftbox = HeroBox(self._set_x(self.leftbox_pos_x), self._set_y(self.leftbox_pos_y),
+                               int(width), int(height), self.engine.data.party, self.cur_hero)
+
+    def _init_pouchbox(self):
+        width = self.screen.get_width() * self.rightbox_width
+        height = self.screen.get_height() * self.rightbox_height
+        self.rightbox = PouchBox(self._set_x(self.rightbox_pos_x), self._set_y(self.rightbox_pos_y),
+                                 int(width), int(height), self.engine.data.pouch)
+
+    def update(self, dt):
         """
-        Handelt de muis en keyboard input af.
-        :param event: pygame.event.get()
+        :param dt: self.clock.tick(FPS)/1000.0
         """
-        if event.type == pygame.MOUSEMOTION:
-            self.info_label = ""
-
-        elif event.type == pygame.MOUSEBUTTONDOWN:
-
-            if event.button == Keys.Leftclick.value:
-
-                if self.close_button.single_click(event) == Keys.Exit.value:
-                    self._close()
-
-            elif event.button in (Keys.Scrollup.value, Keys.Scrolldown.value):
-                pass
-
-        elif event.type == pygame.KEYDOWN:
-            if event.key == Keys.Exit.value:
-                self._close()
-
-    def render(self):
-        """
-        Teken alles op het scherm.
-        """
-        super().render()
-
-        hlr_title = self.largefont.render(self.cur_hero.hlr.NAM, True, FONTCOLOR).convert_alpha()
-        self.screen.blit(hlr_title, (self._set_x(TITLEPOSX), self._set_y(TITLEPOSY)))
-
-        self.screen.blit(self.left_box_title, ((self._set_x(LEFTBOXPOSX)) +
-                                               (self.screen.get_width() * LEFTBOXWIDTH / 2) -
-                                               (self.left_box_title.get_width() / 2),
-                                               self._set_y(TITLEPOSY)))
-        self.screen.blit(self.right_box_title, ((self._set_x(RIGHTBOXPOSX)) +
-                                                (self.screen.get_width() * RIGHTBOXWIDTH / 2) -
-                                                (self.right_box_title.get_width() / 2),
-                                                self._set_y(TITLEPOSY)))
-
-        sta_title = self.middlefont.render(
-                    STATITLE.format(self.cur_hero.NAM) + str(self.cur_hero.sta.cur), True, FONTCOLOR).convert_alpha()
-        self.screen.blit(sta_title, (self._set_x(STATITLEPOSX), self._set_y(STATITLEPOSY)))
-
-        self.close_button.render(self.screen, FONTCOLOR)
+        self.main_title = self.cur_hero.hlr.NAM
+        self.source_title1 = SOURCETITLE1.format(self.cur_hero.NAM, str(self.cur_hero.sta.cur))
