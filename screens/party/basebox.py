@@ -6,6 +6,7 @@ class: BaseBox
 import pygame
 
 from console import Console
+from constants import ColumnType
 from constants import Keys
 
 COLORKEY = pygame.Color("white")
@@ -244,11 +245,11 @@ class BaseBox(object):
 
         for index, row in enumerate(self.view_matrix):
             for row_nr, columnx in enumerate(self.total_columns):
-                if columnx[0] == 'icon':
+                if columnx[0] == ColumnType.icon:
                     self.layer.blit(
                         row[row_nr],
                         (columnx[1], self.columnsy + self.iconoffset + index * self.rowheight))
-                elif columnx[0] == 'text':
+                elif columnx[0] == ColumnType.text:
                     self.layer.blit(
                         row[row_nr],
                         (columnx[1], self.columnsy + index * self.rowheight))

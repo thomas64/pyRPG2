@@ -212,7 +212,7 @@ class Console:
         """
         ListBox.render()
         """
-        print("Not 'icon', 'f_icon', or 'text'.")
+        print("Not 'icon', 's_icon', 'f_icon', or 'text'.")
 
     @staticmethod
     def error_no_messagebox_in_stack():

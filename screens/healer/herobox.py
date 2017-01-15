@@ -6,14 +6,15 @@ class: HeroBox
 import pygame
 
 from components import ListBox
+from constants import ColumnType
 
 COLUMN1X = 0
 COLUMN2X = 34
 COLUMN3X = 134
 
-TOTALCOLUMNS = (('f_icon', COLUMN1X, "", ""),
-                ('text', COLUMN2X, "", ""),
-                ('text', COLUMN3X, "", ""))
+TOTALCOLUMNS = ((ColumnType.f_icon, COLUMN1X, "", ""),
+                (ColumnType.text,   COLUMN2X, "", ""),
+                (ColumnType.text,   COLUMN3X, "", ""))
 
 
 class HeroBox(ListBox):

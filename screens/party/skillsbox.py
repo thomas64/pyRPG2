@@ -5,6 +5,8 @@ class: SkillsBox
 
 import pygame
 
+from constants import ColumnType
+
 from .basebox import BaseBox
 
 
@@ -18,8 +20,12 @@ COLUMNSY = 50
 ROWHEIGHT = 32
 
 TITLE = "Skills"
-TOTALCOLUMNS = (('icon', COLUMN1X), ('text', COLUMN2X), ('text', COLUMN3X), ('text', COLUMN4X), ('text', COLUMN5X),
-                                                                                                ('text', COLUMN6X))
+TOTALCOLUMNS = ((ColumnType.icon, COLUMN1X),
+                (ColumnType.text, COLUMN2X),
+                (ColumnType.text, COLUMN3X),
+                (ColumnType.text, COLUMN4X),
+                (ColumnType.text, COLUMN5X),
+                (ColumnType.text, COLUMN6X))
 
 
 class SkillsBox(BaseBox):

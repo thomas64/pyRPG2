@@ -4,13 +4,14 @@ class: CreateBox
 """
 
 from components import ListBox
+from constants import ColumnType
 import inventoryitems
 
 COLUMN1X = 0
 COLUMN2X = 34
 
-TOTALCOLUMNS = (('subicon', COLUMN1X, "", ""),
-                ('text', COLUMN2X, "Item", "Name:"))
+TOTALCOLUMNS = ((ColumnType.s_icon, COLUMN1X, "", ""),
+                (ColumnType.text,   COLUMN2X, "Item", "Name:"))
 
 
 class CreateBox(ListBox):

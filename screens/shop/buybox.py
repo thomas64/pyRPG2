@@ -6,6 +6,7 @@ class: BuyBox
 import pygame
 
 from components import ListBox
+from constants import ColumnType
 from constants import EquipmentType
 import inventoryitems
 
@@ -13,9 +14,9 @@ COLUMN1X = 0
 COLUMN2X = 34
 COLUMN3X = 210
 
-TOTALCOLUMNS = (('f_icon', COLUMN1X, "", ""),
-                ('text', COLUMN2X, "Item", "Name:"),
-                ('text', COLUMN3X, "Gold", "Cost:"))
+TOTALCOLUMNS = ((ColumnType.f_icon, COLUMN1X, "", ""),
+                (ColumnType.text,   COLUMN2X, "Item", "Name:"),
+                (ColumnType.text,   COLUMN3X, "Gold", "Cost:"))
 
 
 class BuyBox(ListBox):

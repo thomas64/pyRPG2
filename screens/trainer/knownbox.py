@@ -4,14 +4,15 @@ class: KnownBox
 """
 
 from components import ListBox
+from constants import ColumnType
 
 COLUMN1X = 0
 COLUMN2X = 34
 COLUMN3X = 234
 
-TOTALCOLUMNS = (('icon', COLUMN1X, "", ""),
-                ('text', COLUMN2X, "Skill", "Name:"),
-                ('text', COLUMN3X, "Current", "Rank:"))
+TOTALCOLUMNS = ((ColumnType.icon, COLUMN1X, "", ""),
+                (ColumnType.text, COLUMN2X, "Skill", "Name:"),
+                (ColumnType.text, COLUMN3X, "Current", "Rank:"))
 
 
 class KnownBox(ListBox):

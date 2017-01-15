@@ -4,6 +4,7 @@ class: TrainBox
 """
 
 from components import ListBox
+from constants import ColumnType
 
 COLUMN1X = 0
 COLUMN2X = 34
@@ -11,11 +12,11 @@ COLUMN3X = 234
 COLUMN4X = 284
 COLUMN5X = 334
 
-TOTALCOLUMNS = (('icon', COLUMN1X, "", ""),
-                ('text', COLUMN2X, "Spell", "Name:"),
-                ('text', COLUMN3X, "Next", "Rank:"),
-                ('text', COLUMN4X, "Gold", "Cost:"),
-                ('text', COLUMN5X, "XP", "Cost:"))
+TOTALCOLUMNS = ((ColumnType.icon, COLUMN1X, "", ""),
+                (ColumnType.text, COLUMN2X, "Spell", "Name:"),
+                (ColumnType.text, COLUMN3X, "Next", "Rank:"),
+                (ColumnType.text, COLUMN4X, "Gold", "Cost:"),
+                (ColumnType.text, COLUMN5X, "XP", "Cost:"))
 
 
 class TrainBox(ListBox):

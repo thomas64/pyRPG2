@@ -4,14 +4,15 @@ class: PouchBox
 """
 
 from components import ListBox
+from constants import ColumnType
 
 COLUMN1X = 0
 COLUMN2X = 34
 COLUMN3X = 68
 
-TOTALCOLUMNS = (('icon', COLUMN1X, "", ""),
-                ('text', COLUMN2X, "Item", "Qty:"),
-                ('text', COLUMN3X, "Item", "Name:"))
+TOTALCOLUMNS = ((ColumnType.icon, COLUMN1X, "", ""),
+                (ColumnType.text, COLUMN2X, "Item", "Qty:"),
+                (ColumnType.text, COLUMN3X, "Item", "Name:"))
 
 
 class PouchBox(ListBox):

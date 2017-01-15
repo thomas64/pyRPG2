@@ -5,6 +5,7 @@ class: StatsBox
 
 # todo, de extra benodigde kolommen bekijken in vb en implementeren. ook de kolommen uit pyRPG1.
 
+from constants import ColumnType
 from constants import StatType
 from .basebox import BaseBox
 
@@ -18,7 +19,11 @@ COLUMNSY = 50
 ROWHEIGHT = 22
 
 TITLE = "Stats"
-TOTALCOLUMNS = (('text', COLUMN1X), ('text', COLUMN2X), ('text', COLUMN3X), ('text', COLUMN4X), ('text', COLUMN5X))
+TOTALCOLUMNS = ((ColumnType.text, COLUMN1X),
+                (ColumnType.text, COLUMN2X),
+                (ColumnType.text, COLUMN3X),
+                (ColumnType.text, COLUMN4X),
+                (ColumnType.text, COLUMN5X))
 
 
 class StatsBox(BaseBox):

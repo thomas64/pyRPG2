@@ -6,6 +6,7 @@ class: ListBox
 import pygame
 
 from console import Console
+from constants import ColumnType
 from constants import Keys
 
 
@@ -87,15 +88,15 @@ class ListBox(object):
         for index, row in enumerate(self.table_data):
             self.table_view.append(list())
             for row_nr, columnx in enumerate(self.total_columns):
-                if columnx[0] == 'icon':
+                if columnx[0] == ColumnType.icon:
                     self.table_view[index].append(pygame.image.load(row[row_nr]).convert_alpha())
-                elif columnx[0] == 'f_icon':
+                elif columnx[0] == ColumnType.f_icon:
                     self.table_view[index].append(row[row_nr])
-                elif columnx[0] == 'subicon':
+                elif columnx[0] == ColumnType.s_icon:
                     self.table_view[index].append(
                         pygame.image.load(row[row_nr]).subsurface(
                             row[self.row_nr_with_obj].COL, row[self.row_nr_with_obj].ROW, 32, 32).convert_alpha())
-                elif columnx[0] == 'text':
+                elif columnx[0] == ColumnType.text:
                     self.table_view[index].append(normalfont.render(row[row_nr], True, self.fontcolor).convert_alpha())
 
     def _setup_scroll_layer(self):
@@ -217,11 +218,11 @@ class ListBox(object):
 
         for index, row in enumerate(self.table_view):
             for row_nr, columnx in enumerate(self.total_columns):
-                if columnx[0] in ('icon', 'f_icon', 'subicon'):
+                if columnx[0] in (ColumnType.icon, ColumnType.f_icon, ColumnType.s_icon):
                     self.layer.blit(
                         row[row_nr],
                         (columnx[1] + self.iconoffset, self.columnsy + self.iconoffset + index * self.rowheight))
-                elif columnx[0] == 'text':
+                elif columnx[0] == ColumnType.text:
                     self.layer.blit(
                         row[row_nr],
                         (columnx[1] + self.textoffset, self.columnsy + self.textoffset + index * self.rowheight))

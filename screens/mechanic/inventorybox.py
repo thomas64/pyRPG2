@@ -6,16 +6,17 @@ class: InventoryBox
 import pygame
 
 from components import ListBox
+from constants import ColumnType
 
 COLUMN1X = 0
 COLUMN2X = 34
 COLUMN3X = 68
 COLUMN4X = 102
 
-TOTALCOLUMNS = (('f_icon', COLUMN1X, "", ""),
-                ('f_icon', COLUMN2X, "", ""),
-                ('text', COLUMN3X, "Item", "Qty:"),
-                ('text', COLUMN4X, "Item", "Name:"))
+TOTALCOLUMNS = ((ColumnType.f_icon, COLUMN1X, "", ""),
+                (ColumnType.f_icon, COLUMN2X, "", ""),
+                (ColumnType.text,   COLUMN3X, "Item", "Qty:"),
+                (ColumnType.text,   COLUMN4X, "Item", "Name:"))
 
 
 class InventoryBox(ListBox):
