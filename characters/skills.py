@@ -6,6 +6,7 @@ class: etc
 
 import random
 
+from constants import HealingType
 from constants import SkillType
 
 
@@ -179,9 +180,28 @@ class Healer(Skill):
     """
     def __init__(self, quantity):
         super().__init__(SkillType.hlr.value, SkillType.hlr.name, 8, quantity)
-        self.DESC = "Allows the character to heal another character in combat. " \
-                    "Character may use herbs to double the amount of damage restored. " \
-                    "A higher Healer rank means more restoration of damage."
+        self.DESC = "Allows the character to heal another character. " \
+                    "Character may use herbs to double the amount of health restored. " \
+                    "A higher Healer rank means more restoration of health."
+        self.STA_COST = 3
+        self.HRB_COST = 3
+
+    def welcome_text(self, hero_name):
+        """..."""
+        return ("It is here where {} can heal".format(hero_name),
+                "other party members.",
+                "")  # todo, afmaken
+
+    def get_healpoints(self, healing_type):
+        """
+        Op basis van een healing_type, geef healpoints terug.
+        """
+        if healing_type == HealingType.hands:
+            return self.tot * 2 + 5
+        elif healing_type == HealingType.herbs:
+            return (self.tot * 2 + 5) * 2
+        else:
+            raise AttributeError
 
 
 class Loremaster(Skill):

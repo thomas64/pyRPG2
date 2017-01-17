@@ -10,6 +10,10 @@ from constants import GameState
 from constants import HealingType
 from constants import SFX
 
+from database import PouchItemDatabase
+
+import inventoryitems
+
 from .herobox import HeroBox
 from .pouchbox import PouchBox
 from .selector import Selector
@@ -68,7 +72,7 @@ class Display(Parchment):
 
         self.cur_hero = hero
         self.party = party
-        self._init_face_and_text(self.cur_hero.FAC, ["TODO"])
+        self._init_face_and_text(self.cur_hero.FAC, self.cur_hero.hlr.welcome_text(self.cur_hero.NAM))
         self._init_selectors()
         self._init_boxes()
         self._init_buttons()
@@ -106,5 +110,42 @@ class Display(Parchment):
         self.source_title2 = self.subtype.value
 
     def _handle_leftbox_click(self, event):
-        # todo
-        pass
+        heal_click, selected_hero = self.leftbox.mouse_click(event)
+        if heal_click:
+            if self.cur_hero.sta.cur < self.cur_hero.hlr.STA_COST:
+                text = ["{} does not have enough stamina".format(self.cur_hero.NAM),
+                        "to heal {}.".format(selected_hero.NAM)]
+                push_object = MessageBox(self.engine.gamestate, self.engine.audio, text, sound=SFX.menu_cancel)
+                self.engine.gamestate.push(push_object)
+                return True
+            elif selected_hero.cur_hp >= selected_hero.max_hp:
+                text = ["{} already at max health.".format(selected_hero.NAM)]
+                push_object = MessageBox(self.engine.gamestate, self.engine.audio, text, sound=SFX.menu_cancel)
+                self.engine.gamestate.push(push_object)
+                return True
+
+            if self.subtype == HealingType.herbs:
+                herbs = inventoryitems.factory_pouch_item(PouchItemDatabase.herbs)
+                hrb_qty = self.engine.data.pouch.get_quantity(herbs)
+                if self.cur_hero.hlr.HRB_COST > hrb_qty:
+                    text = ["You do not have the right components",
+                            "to perform that action."]
+                    push_object = MessageBox(self.engine.gamestate, self.engine.audio, text, sound=SFX.menu_cancel)
+                    self.engine.gamestate.push(push_object)
+                    return True
+                self.engine.data.pouch.remove(herbs, self.cur_hero.hlr.HRB_COST)
+
+            self.cur_hero.sta.cur -= self.cur_hero.hlr.STA_COST
+            healpoints = self.cur_hero.hlr.get_healpoints(self.subtype)
+            old_hp = selected_hero.cur_hp
+            selected_hero.recover_part_hp(healpoints)
+            new_hp = selected_hero.cur_hp
+            healpoints = new_hp - old_hp
+
+            text = ["{} heals {} by {}.".format(self.cur_hero.NAM, selected_hero.NAM, healpoints)]
+            push_object = MessageBox(self.engine.gamestate, self.engine.audio, text, sound=SFX.message)
+            self.engine.gamestate.push(push_object)
+
+            self._init_boxes()
+            return True
+        return False

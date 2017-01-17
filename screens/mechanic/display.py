@@ -150,7 +150,7 @@ class Display(Parchment):
                 self.engine.gamestate.push(push_object)
                 return True
             elif self.cur_hero.sta.cur < self.cur_hero.mec.STA_COST:
-                text = ["You do not have enough stamina",
+                text = ["{} does not have enough stamina".format(self.cur_hero.NAM),
                         "to create that {}.".format(selected_equipment.NAM)]
                 push_object = MessageBox(self.engine.gamestate, self.engine. audio, text, sound=SFX.menu_cancel)
                 self.engine.gamestate.push(push_object)
