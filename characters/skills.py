@@ -120,9 +120,7 @@ class Skill(object):
 
 
 class Alchemist(Skill):
-    """
-    ...
-    """
+    """..."""
     def __init__(self, quantity):
         super().__init__(SkillType.alc.value, SkillType.alc.name, 12, quantity)
         self.DESC = "Allows the character to manufacture various magical potions out of Herbs, Spices and Gemstones. " \
@@ -175,9 +173,7 @@ class Diplomat(Skill):
 
 
 class Healer(Skill):
-    """
-    ...
-    """
+    """..."""
     def __init__(self, quantity):
         super().__init__(SkillType.hlr.value, SkillType.hlr.name, 8, quantity)
         self.DESC = "Allows the character to heal another character. " \
@@ -189,8 +185,15 @@ class Healer(Skill):
     def welcome_text(self, hero_name):
         """..."""
         return ("It is here where {} can heal".format(hero_name),
-                "other party members.",
-                "")  # todo, afmaken
+                "other party members. The current",
+                "Healer rank of {} is {}. A higher".format(hero_name, self.tot),
+                "Healer rank means more restoration of health.",
+                "In the 'Party' box you see everyone except the",
+                "healer itself. Click on someone to heal him/ her.",
+                "Healing someone will use up some Stamina.",
+                "Below here you can select 2 types of healing",
+                "practices. The 'Heal with Herbs' will also use up",
+                "some Herbs, but it will double the healing effect.")
 
     def get_healpoints(self, healing_type):
         """
@@ -215,9 +218,7 @@ class Loremaster(Skill):
 
 
 class Mechanic(Skill):
-    """
-    ...
-    """
+    """..."""
     def __init__(self, quantity):
         super().__init__(SkillType.mec.value, SkillType.mec.name, 4, quantity)
         self.DESC = "Allows the character to disarm traps on chests. Also allows the character to make equipment " \

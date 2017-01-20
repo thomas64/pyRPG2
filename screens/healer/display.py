@@ -49,9 +49,9 @@ class Display(Parchment):
         self.face_pos_x = 1 / 16
         self.face_pos_y = 3 / 16
         self.extra_face_size_x = 20
-        self.extra_face_size_y = 0
-        self.lines_next_to_face = 4
-        self.small_line_height = 27
+        self.extra_face_size_y = 20
+        self.lines_next_to_face = 3
+        self.small_line_height = 30
 
         self.leftbox_width = 25 / 100
         self.leftbox_height = 73 / 100
