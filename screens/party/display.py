@@ -417,7 +417,8 @@ class Display(object):
                 # todo, maken dat in battle je niet op deze manier potions kan drinken.
                 able, message = selected_item.use(self.cur_hero)
                 if able and message:
-                    push_object = MessageBox(self.engine.gamestate, self.engine.audio, message, sound=SFX.message)
+                    push_object = MessageBox(self.engine.gamestate, self.engine.audio, message, sound=SFX.message,
+                                             last=(False if type(message) == list else True))  # een img is een string.
                     self.engine.gamestate.push(push_object)
                 elif not able and message:
                     push_object = MessageBox(self.engine.gamestate, self.engine.audio, message, sound=SFX.menu_cancel)

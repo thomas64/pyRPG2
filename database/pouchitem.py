@@ -10,6 +10,7 @@ from constants import EquipmentType
 
 
 POUCHPATH = 'resources/sprites/icons/pouch'
+IMGPATH = 'resources/images/'
 
 GOLDIMG = os.path.join(POUCHPATH, "gold.png")
 HERBIMG = os.path.join(POUCHPATH, "herbs.png")
@@ -50,8 +51,8 @@ class PouchItemDatabase(enum.Enum):
     metals = dict(nam="Metals",       srt=8,  spr=METALIMG,       val=1,
                   desc="Metals are used for improving weapons, shields, armor and other equipment (Mechanic Skill).")
 
-    proofnote = dict(nam="Proofnote", srt=40, spr=NOTEPIMG,
-                     desc="A written note that says that you are not a monster.")
+    proofnote = dict(nam="Proofnote", srt=40, spr=NOTEPIMG,       click=IMGPATH+'landkaart.jpg',
+                     desc="A written note that says that you are not a monster.")  # todo, deze click is temp en voorb.
 
     hlg_pot = dict(nam="Healing Potion",      srt=15, spr=POTIONBLUE,    val=4,  hrb=3, spc=0, gms=0, alc=1, hp=5,
                    desc="Restores a fifth of the drinker's lost Endurance and Stamina. Creating a "

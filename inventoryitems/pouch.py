@@ -25,9 +25,13 @@ class PouchItem(object):
 
     def use(self, *args):
         """
-        Lege methode voor overervende children.
+        Voornamelijk methode voor overervende children, maar als er in de CLICK een plaatje staat, beeld die
+        dan af met een MessageBox.
         """
-        return None, None
+        if hasattr(self, 'CLICK'):
+            return True, self.CLICK
+        else:
+            return None, None
 
     def is_sellable(self):
         """

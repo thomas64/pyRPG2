@@ -584,14 +584,12 @@ class Window(object):
             object_nr = check_rect.collidelist(self.current_map.notes)
             note_id = self.current_map.notes[object_nr].name
             note_text = NoteDatabase[note_id].value
-            if type(note_text) == list:
-                for i, text_part in enumerate(reversed(note_text)):
-                    push_object = MessageBox(self.engine.gamestate, self.engine.audio, text_part,
-                                             last=(True if i == 0 else False))
-                    self.engine.gamestate.push(push_object)
-            # een plaatje alleen is een string en geen list.
-            else:
-                push_object = MessageBox(self.engine.gamestate, self.engine.audio, [""], note_text, last=True)
+            # als het nog geen list (wat moet), bijvoorbeeld bij een plaatje, maak dan van de "string" een ["string"]
+            if type(note_text) != list:
+                note_text = [note_text]
+            for i, text_part in enumerate(reversed(note_text)):
+                push_object = MessageBox(self.engine.gamestate, self.engine.audio, text_part,
+                                         last=(True if i == 0 else False))
                 self.engine.gamestate.push(push_object)
 
     def check_signs(self):
