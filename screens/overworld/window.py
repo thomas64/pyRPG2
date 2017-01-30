@@ -98,7 +98,8 @@ class Window(object):
         Maak een nieuwe map aan met de hero's in het veld.
         """
         # treasurechest database moet meegegeven worden, want is object en geen enum. is voor tijdelijke kistjes.
-        self.current_map = Map(self.engine.data.map_name, self.engine.data.treasure_chests)
+        # logbook moet ook meegegeven worden vanwege quest_blockers die verwijderd moeten worden.
+        self.current_map = Map(self.engine.data.map_name, self.engine.data.treasure_chests, self.engine.data.logbook)
         self.group = self.current_map.view
         self.grid_sprite = None
         self.cbox_sprites = []
@@ -136,8 +137,6 @@ class Window(object):
         self.group.add(self.current_map.chests)
         self.group.add(self.current_map.sparkly)
 
-        self.remove_temp_blockers()
-
         # de eerste keer dat deze 2 draaien is Overworld nog niet op de gamestack gepushed. daarom herstart begintune.
         self.engine.audio.set_bg_music(self.engine.gamestate.peek().name)
         self.engine.audio.set_bg_sounds(self.engine.gamestate.peek().name)
@@ -145,21 +144,6 @@ class Window(object):
         # want deze is alleen nodig voor de audio, dus nadien weghalen.
         # hij wordt vanaf nu (22-06-2016) ook voor beginpositie bepaling gebruikt, maar hij mag nog steeds weg nadien.
         self.prev_map_name = None
-
-    def remove_temp_blockers(self):
-        """
-        verwijder eventueel temp blockers weer
-        """
-        # als er iets in de lijst van temp blockers staat:
-        if len(self.current_map.temp_blocker_rects) > 0:
-            # van 0 tot 3 bijv
-            for i in range(0, len(self.current_map.temp_blocker_rects), 1):
-                # de naam van de tempblocker is de key van de quest. haal die uit het logbook op basis van de naam.
-                the_quest = self.engine.data.logbook.get(self.current_map.temp_blocker_rects[i].name)
-                # bekijk dan of hij al rewarded is:
-                if the_quest is not None and the_quest.is_rewarded():
-                    # haal dan die temp blocker uit de lijst
-                    del self.current_map.temp_blocker_rects[i]
 
     def align(self):
         """
@@ -231,7 +215,7 @@ class Window(object):
                                     self.quest_box.cur_item, self.quest_box.TOPINDEX, self.quest_box.scr_capt,
                                     self.person_id, self.display_loot)
 
-            self.remove_temp_blockers()
+            self.current_map.remove_rewarded_quest_blockers(self.engine.data.logbook)
 
             self.quest_box = None
             self.person_face = None
@@ -309,7 +293,7 @@ class Window(object):
         # todo, moet dit niet naar de unit class?
         self.party_sprites[0].check_blocker(self.current_map.high_blocker_rects,
                                             self.current_map.low_blocker_rects,
-                                            self.current_map.temp_blocker_rects,
+                                            self.current_map.quest_blocker_rects,
                                             [sprite.get_blocker() for sprite in self.current_map.people if
                                              getattr(sprite, 'wander_area', None)],  # alleen maar lopende sprites,
                                             None,                                    # standing sprites hebben al een

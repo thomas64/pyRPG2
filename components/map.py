@@ -51,7 +51,7 @@ class Map(object):
     """
     Bevat allemaal lijsten van rects.
     """
-    def __init__(self, name, treasure_chests_database):
+    def __init__(self, name, treasure_chests_database, logbook):
         map_tmx = MAPPATH + name + '.tmx'
 
         tmx_data = pytmx.load_pygame(map_tmx)
@@ -71,7 +71,7 @@ class Map(object):
 
         self.high_blocker_rects = []
         self.low_blocker_rects = []
-        self.temp_blocker_rects = []
+        self.quest_blocker_rects = []
         self.sounds = []
         self.start_pos = []
         self.portals = []
@@ -99,7 +99,9 @@ class Map(object):
         for obj in tmx_data.get_layer_by_name(OBJECTS):
             if obj.name == 'blocker':
                 # in obj.type staat de bijbehorende quest key.
-                self.temp_blocker_rects.append(NamedRect(obj.type, self._pg_rect(obj)))
+                self.quest_blocker_rects.append(NamedRect(obj.type, self._pg_rect(obj)))
+                # verwijder daarna weer de geklaarde quest blockers.
+                self.remove_rewarded_quest_blockers(logbook)
             elif obj.name.startswith('shop'):
                 shop_object = Person(obj.name, ShopDatabase[obj.name].value['sprite'],
                                      self._pg_rect(obj), OBJECTLAYER, self._has_dir(obj, 'direction'), obj.type)
@@ -203,6 +205,21 @@ class Map(object):
         if hasattr(obj, attr):
             return Direction[obj.direction.title()]
         return None
+
+    def remove_rewarded_quest_blockers(self, logbook):
+        """
+        verwijder eventueel quest blockers weer
+        """
+        # als er iets in de lijst van quest blockers staat:
+        if len(self.quest_blocker_rects) > 0:
+            # van 0 tot 3 bijv
+            for i in range(0, len(self.quest_blocker_rects), 1):
+                # de naam van de tempblocker is de key van de quest. haal die uit het logbook op basis van de naam.
+                the_quest = logbook.get(self.quest_blocker_rects[i].name)
+                # bekijk dan of hij al rewarded is:
+                if the_quest is not None and the_quest.is_rewarded():
+                    # haal dan die quest blocker uit de lijst
+                    del self.quest_blocker_rects[i]
 
     def get_position(self, from_map_name, from_pos_nr):
         """

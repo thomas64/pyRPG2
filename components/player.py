@@ -167,13 +167,13 @@ class Player(Person):
         self.rect.topleft = (round(self.rect.x / grid_size) * grid_size, round(self.rect.y / grid_size) * grid_size)
         self.feet.midbottom = self.rect.midbottom
 
-    def check_blocker(self, high_blockers, low_blockers, temp_blockers, walking_blockers,
+    def check_blocker(self, high_blockers, low_blockers, quest_blockers, walking_blockers,
                       moverange, map_width, map_height, dt):
         """
         Bekijk of de unit tegen een andere sprite aan loopt.
         :param high_blockers: lijst van rects van map1.high_blocker_rects
         :param low_blockers: lijst van rects van map1.low_blocker_rects
-        :param temp_blockers: lijst van blockers die door quests weg zijn te krijgen.
+        :param quest_blockers: lijst van blockers die door quests weg zijn te krijgen.
         :param walking_blockers: lijst van rects van walking people
         :param moverange: jouw moverange sprite
         :param map_width: breedte van de map
@@ -187,13 +187,13 @@ class Player(Person):
 
             # tempblockers zijn named rects, dat werkt niet bij move_side ed, vandaar deze tijdelijke omzetting.
             tb = []  # lege tempblocker list
-            for named_rect in temp_blockers:
+            for named_rect in quest_blockers:
                 tb.append(named_rect.rect)
 
             # maak kopieen van de lijsten, zodat er eventueel wat uit verwijderd kan worden
             hb = high_blockers.copy()
             lb = low_blockers.copy()
-            lb = lb + tb  # temp blockers worden bij low blockers gestopt
+            lb = lb + tb  # quest blockers worden bij low blockers gestopt
             wb = walking_blockers.copy()
 
             # loop tegen de rand van een high_blocker aan
