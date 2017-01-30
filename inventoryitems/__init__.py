@@ -7,8 +7,7 @@ def: factory_empty_equipment_item
 # - min int gebruiken voor items?
 # - mvp aan items
 
-from .quest import FetchItemWithRewardQuestItem
-from .quest import FetchItemWithoutRewardQuestItem
+from .quest import FetchItemQuestItem
 from .quest import PersonMessageQuestItem
 from .quest import ReceiveItemQuestItem
 

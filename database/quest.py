@@ -13,7 +13,7 @@ from .pouchitem import PouchItemDatabase
 class QuestDatabase(enum.Enum):
     """..."""
 
-    quest1 = dict(qtype=QuestType.FetchItemWithRewardQuest,
+    quest1 = dict(qtype=QuestType.FetchItemQuest,
                   condition=dict(itm1=dict(nam=PouchItemDatabase.herbs, qty=10)),
                   reward=dict(itm1=dict(nam=PouchItemDatabase.gold,     qty=2),
                               eqp1=dict(nam=WeaponDatabase.bronzedart,  qty=1)),
@@ -28,6 +28,7 @@ class QuestDatabase(enum.Enum):
                           "You can have it, for helping my mommy."]],
                         [["Hi mister."], ["It seems my mommy is all better now.", "Thanks to you!"]])
                   )
+
     quest2 = dict(qtype=QuestType.PersonMessageQuest,
                   reward=dict(itm1=dict(nam=PouchItemDatabase.gold,     qty=1)),
                   people=dict(person74='main',
@@ -52,9 +53,9 @@ class QuestDatabase(enum.Enum):
                             )
                   )
 
-    quest3 = dict(qtype=QuestType.FetchItemWithoutRewardQuest,
+    quest3 = dict(qtype=QuestType.FetchItemQuest,
                   condition=dict(itm1=dict(nam=PouchItemDatabase.proofnote, qty=1)),
-                  # geen reward, maar wel remove_temp_blockers() (standaard)
+                  reward=None,  # geen reward, maar wel remove_quest_blockers() (standaard)
                   text=([["Halt! You may not enter Invernia Town!",
                           "Only if you can prove that you are not a monster."]],
                         [["Halt! You may not enter Invernia Town!",

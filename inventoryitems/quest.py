@@ -17,9 +17,10 @@ class BaseQuestItem(object):
     """
     Abstracte base class voor quests.
     """
-    def __init__(self, qtype, text):
+    def __init__(self, qtype, reward, text):
         self.state = QuestState.Unknown
         self.qtype = qtype
+        self.reward = reward
         self.text = text
 
     def _get_text(self, *args):
@@ -40,12 +41,12 @@ class BaseQuestItem(object):
             return False
 
 
-class FetchItemWithoutRewardQuestItem(BaseQuestItem):
+class FetchItemQuestItem(BaseQuestItem):
     """
-    Een persoon vraagt je om een of meerdere items. En bij het overdragen krijg je geen beloning.
+    Een persoon vraagt je om een of meerdere items. En bij het overdragen krijg je eventueel een beloning.
     """
-    def __init__(self, qtype, condition, text):
-        super().__init__(qtype, text)
+    def __init__(self, qtype, condition, reward, text):
+        super().__init__(qtype, reward, text)
         self.condition = condition
 
     def show_message(self, gamestate, data, audio, face_image, person_id, display_loot):
@@ -95,18 +96,34 @@ class FetchItemWithoutRewardQuestItem(BaseQuestItem):
             # hij kan voldoen, komt daarom met text en plaatjes terug, om dat weer te kunnen geven.
             self._fulfill(data)
 
-            # als er geen directe reward is, maar er is wel een soort quest klaring.
-            audio.play_sound(SFX.reward)
-
-            # nog een bedank berichtje van de quest owner.
-            amount_messages = len(self._get_text()) - 1
-            for i, text_part in enumerate(reversed(self._get_text())):
-                push_object = MessageBox(gamestate, audio, text_part, face_image=face_image, scr_capt=scr_capt,
-                                         sound=(None if i == amount_messages else SFX.message),
-                                         last=(True if i == 0 else False))
+            if self.reward:
+                text = ["Received:"]
+                image = []
+                text, image = display_loot(self.reward, text, image)
+                push_object = MessageBox(gamestate, audio, text, spr_image=image, scr_capt=scr_capt,
+                                         sound=SFX.reward, last=True)
                 gamestate.push(push_object)
+
+                # nog een bedank berichtje van de quest owner.
+                for text_part in reversed(self._get_text()):
+                    push_object = MessageBox(gamestate, audio, text_part, face_image=face_image, scr_capt=scr_capt)
+                    gamestate.push(push_object)
+
+            else:
+                # als er geen directe reward is, maar er is wel een soort quest klaring.
+                audio.play_sound(SFX.reward)
+
+                # nog een bedank berichtje van de quest owner.
+                amount_messages = len(self._get_text()) - 1
+                for i, text_part in enumerate(reversed(self._get_text())):
+                    push_object = MessageBox(gamestate, audio, text_part, face_image=face_image, scr_capt=scr_capt,
+                                             sound=(None if i == amount_messages else SFX.message),
+                                             last=(True if i == 0 else False))
+                    gamestate.push(push_object)
+
             # ga naar Rewarded
             self._update_state(got_rewarded=True)
+
         else:
             # bij 'nee' dan word je state weer een stapje omlaag gezet.
             audio.play_sound(SFX.done)
@@ -173,52 +190,13 @@ class FetchItemWithoutRewardQuestItem(BaseQuestItem):
                 data.pouch.remove(itm_obj, value['qty'])
 
 
-class FetchItemWithRewardQuestItem(FetchItemWithoutRewardQuestItem):
-    """
-    Een persoon vraagt je om een of meerdere items. En bij het overdragen krijg je een beloning.
-    """
-    def __init__(self, qtype, condition, reward, text):
-        super().__init__(qtype, condition, text)
-        self.reward = reward
-
-    def decided(self, gamestate, data, audio, face_image, choice, yes, scr_capt, person_id, display_loot):
-        """
-        Override method
-        """
-        if choice == yes:
-            # ga naar Finished
-            self._update_state(is_fulfilled=True)
-            # hij kan voldoen, komt daarom met text en plaatjes terug, om dat weer te kunnen geven.
-            self._fulfill(data)
-
-            text = ["Received:"]
-            image = []
-            text, image = display_loot(self.reward, text, image)
-            push_object = MessageBox(gamestate, audio, text, spr_image=image, scr_capt=scr_capt,
-                                     sound=SFX.reward, last=True)
-            gamestate.push(push_object)
-
-            # nog een bedank berichtje van de quest owner.
-            for text_part in reversed(self._get_text()):
-                push_object = MessageBox(gamestate, audio, text_part, face_image=face_image, scr_capt=scr_capt)
-                gamestate.push(push_object)
-            # ga naar Rewarded
-            self._update_state(got_rewarded=True)
-        else:
-            # bij 'nee' dan word je state weer een stapje omlaag gezet.
-            audio.play_sound(SFX.done)
-            if self.state == QuestState.Ready:
-                self.state = QuestState.Running
-
-
 class PersonMessageQuestItem(BaseQuestItem):
     """
     Een persoon vraagt je om wat te zeggen tegen een ander. Na te voldoen krijg je van de eerste weer een beloning.
     """
     def __init__(self, qtype, people, reward, text):
-        super().__init__(qtype, text)
+        super().__init__(qtype, reward, text)
         self.people = people
-        self.reward = reward
 
     def _message_is_last(self, i, person_id):
         """
@@ -339,8 +317,7 @@ class ReceiveItemQuestItem(BaseQuestItem):
     Je praat met een persoon, en die geeft je gelijk wat.
     """
     def __init__(self, qtype, reward, text):
-        super().__init__(qtype, text)
-        self.reward = reward
+        super().__init__(qtype, reward, text)
 
     def show_message(self, gamestate, data, audio, face_image, person_id, display_loot):
         """
