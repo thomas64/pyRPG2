@@ -183,17 +183,17 @@ class Player(Person):
         t = False   # deze variabele is er om te kijken of true_pos aangepast moet worden aan het eind.
 
         # als je snel rent, gewoon door muren heen gaan.
-        if self.movespeed != MOVESPEED4:
+        if not self.is_highspeed_moving():
 
-            # tempblockers zijn named rects, dat werkt niet bij move_side ed, vandaar deze tijdelijke omzetting.
-            tb = []  # lege tempblocker list
+            # quest blockers zijn named rects, dat werkt niet bij move_side ed, vandaar deze tijdelijke omzetting.
+            qb = []  # lege quest blocker list
             for named_rect in quest_blockers:
-                tb.append(named_rect.rect)
+                qb.append(named_rect.rect)
 
             # maak kopieen van de lijsten, zodat er eventueel wat uit verwijderd kan worden
             hb = high_blockers.copy()
             lb = low_blockers.copy()
-            lb = lb + tb  # quest blockers worden bij low blockers gestopt
+            lb = lb + qb  # quest blockers worden bij low blockers gestopt
             wb = walking_blockers.copy()
 
             # loop tegen de rand van een high_blocker aan
@@ -230,9 +230,9 @@ class Player(Person):
                 return
 
             # loop recht tegen een high_ of low_blocker aan
-            # hier zit tb nog een keer in bij lb
+            # hier zit qb nog een keer in bij lb
             while self.rect.collidelist(high_blockers) > -1 or \
-                    self.rect.collidelist(low_blockers + tb) > -1 or \
+                    self.rect.collidelist(low_blockers + qb) > -1 or \
                     self.rect.collidelist(walking_blockers) > -1:
                 self._move_back()
                 t = True
@@ -371,7 +371,7 @@ class Player(Person):
         # return clipped_rect
 
     def _get_frame(self, frame_set, dt, make_sound):
-        if self.movespeed != MOVESPEED4:  # geen animatie of geluid bij MOVESPEED4
+        if not self.is_highspeed_moving():  # geen animatie of geluid bij MOVESPEED4
             self.step_count += self.movespeed * dt
             if self.step_count > STEPSPEED:
                 self.step_count = 0
@@ -396,6 +396,12 @@ class Player(Person):
            self.time_left > 0 or self.time_right > 0:
             return True
         return False
+
+    def is_highspeed_moving(self):
+        """
+        Bekijkt of de user op MOVESPEED4 aan het bewegen is.
+        """
+        return self.movespeed == MOVESPEED4
 
     def get_check_rect(self):
         """

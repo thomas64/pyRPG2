@@ -83,6 +83,7 @@ class Map(object):
         self.people = []
         self.notes = []
         self.signs = []
+        self.text_events = []
         self.chests = []
         self.sparkly = []
 
@@ -102,6 +103,9 @@ class Map(object):
                 self.quest_blocker_rects.append(NamedRect(obj.type, self._pg_rect(obj)))
                 # verwijder daarna weer de geklaarde quest blockers.
                 self.remove_rewarded_quest_blockers(logbook)
+            elif obj.name.startswith('textevent'):
+                # in obj.type kan iets staan, als daar bijv zwart staat, dan heeft het text_event een zwarte achtergrond
+                self.text_events.append(NamedRect(obj.name, self._pg_rect(obj), obj.type))
             elif obj.name.startswith('shop'):
                 shop_object = Person(obj.name, ShopDatabase[obj.name].value['sprite'],
                                      self._pg_rect(obj), OBJECTLAYER, self._has_dir(obj, 'direction'), obj.type)
@@ -214,7 +218,7 @@ class Map(object):
         if len(self.quest_blocker_rects) > 0:
             # van 0 tot 3 bijv
             for i in range(0, len(self.quest_blocker_rects), 1):
-                # de naam van de tempblocker is de key van de quest. haal die uit het logbook op basis van de naam.
+                # de naam van de quest blocker is de key van de quest. haal die uit het logbook op basis van de naam.
                 the_quest = logbook.get(self.quest_blocker_rects[i].name)
                 # bekijk dan of hij al rewarded is:
                 if the_quest is not None and the_quest.is_rewarded():

@@ -42,7 +42,9 @@ GRIDCOLOR = pygame.Color("gray36")
 HEROCOLOR = pygame.Color("blue")
 HIGHBLOCKERCOLOR = pygame.Color("yellow")
 LOWBLOCKERCOLOR = pygame.Color("purple")
-SHOPCOLOR = pygame.Color("black")
+OBJECTCOLOR = pygame.Color("black")
+WANDERBOXCOLOR = pygame.Color("green")
+TEXTEVENTCOLOR = pygame.Color("red")
 
 PLAYERLAYER = 5
 
@@ -251,7 +253,9 @@ class Window(object):
                         self.cbox_sprites.append(ColorBox(rect, LOWBLOCKERCOLOR, CBOXLAYER))
                     for obj in self.current_map.people:
                         if getattr(obj, 'wander_area', None):
-                            self.cbox_sprites.append(ColorBox(obj.wander_area, SHOPCOLOR, CBOXLAYER))
+                            self.cbox_sprites.append(ColorBox(obj.wander_area, WANDERBOXCOLOR, CBOXLAYER))
+                    for obj in self.current_map.text_events:
+                        self.cbox_sprites.append(ColorBox(obj.rect, TEXTEVENTCOLOR, CBOXLAYER))
                     for obj_group in (self.current_map.heroes,
                                       self.current_map.shops,
                                       self.current_map.schools,
@@ -263,7 +267,7 @@ class Window(object):
                                       self.current_map.chests,
                                       self.current_map.sparkly):
                         for obj in obj_group:
-                            self.cbox_sprites.append(ColorBox(obj.rect, SHOPCOLOR, CBOXLAYER))
+                            self.cbox_sprites.append(ColorBox(obj.rect, OBJECTCOLOR, CBOXLAYER))
                     self.group.add(self.cbox_sprites)
                 else:
                     self.group.remove(self.cbox_sprites)
@@ -313,6 +317,7 @@ class Window(object):
         """
         # Is de hero tegen een soundobject of een portal aangelopen
         self.check_sounds()
+        self.check_text_events()  # deze staat voor portals vanwege een evt vloeiende Transition.
         self.check_portals()
 
         # Update locaties (indien F11).
@@ -412,6 +417,46 @@ class Window(object):
             self.portal_to_nr = self.current_map.portals[portal_nr].to_nr
             self.load_map()
             self.engine.gamestate.push(Transition(self.engine.gamestate, full_screen=False))
+
+    def check_text_events(self):
+        """
+        Bekijk of hij collide met een text event. Laat dan een reeks msgboxen zien.
+        Verwijder daarna het eenmalige event.
+        """
+        if not self.party_sprites[0].is_highspeed_moving():
+            if len(self.party_sprites[0].rect.collidelistall(self.current_map.text_events)) == 1:
+                object_nr = self.party_sprites[0].rect.collidelist(self.current_map.text_events)
+                event_name = self.current_map.text_events[object_nr].name
+                event_text = self.engine.data.text_events[event_name]['text']
+
+                if event_text:
+
+                    # kan een boolean of een functie zijn
+                    event_condition = self.engine.data.text_events[event_name]['condition']
+                    # kijk of het een functie is
+                    if callable(event_condition):
+                        # voer met de () erachter de methode uit die in die dict staat.
+                        event_condition = event_condition()
+                        # en maak er een boolean van
+                    if event_condition:
+
+                        # zwarte of normale achtergrond?
+                        scr_capt = None  # normale achtergrond
+                        if self.current_map.text_events[object_nr].opt:  # als er iets in .opt staat
+                            self.engine.gamestate.push(Transition(self.engine.gamestate, full_screen=False))
+                            scr_capt = False  # zwarte achtergrond
+
+                        event_face = self.engine.data.text_events[event_name]['face']
+                        event_face.reverse()
+                        for i, text_part in enumerate(reversed(event_text)):
+                            push_object = MessageBox(self.engine.gamestate, self.engine.audio, text_part,
+                                                     face_image=event_face[i], scr_capt=scr_capt,
+                                                     last=(True if i == 0 else False))
+                            self.engine.gamestate.push(push_object)
+
+                        self.engine.data.text_events[event_name]['text'] = None
+                        self.engine.data.text_events[event_name]['face'] = None
+                        self.engine.data.text_events[event_name]['condition'] = False
 
     def action_button(self):
         """

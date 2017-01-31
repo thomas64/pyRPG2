@@ -38,6 +38,7 @@ class MessageBox(object):
         :param raw_text: dit is een list die aangeleverd moet worden. Als het alleen een string is, dan wordt het
         een plaatje die gebruikt maakt van face_image.
         :param spr_image: list van loaded images
+        :param scr_capt: een vorige scr_capt meegeven, niets meegeven = nieuwe capt, False = zwart scherm.
         :param last: is het de laatste msgbox uit een reeks? True of False. Geef dan het afsluit geluidje 'done'.
         """
         self.gamestate = gamestate
@@ -50,6 +51,8 @@ class MessageBox(object):
 
         if scr_capt is None:
             self.scr_capt = ScreenCapture()
+        elif scr_capt is False:
+            self.scr_capt = ScreenCapture(black_background=True)
         else:
             self.scr_capt = scr_capt
 
