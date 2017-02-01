@@ -13,8 +13,8 @@ WINDOWH = 718  # de vraag is hoe kan hij de positie vanuit window meegeven terwi
 WINDOWX = 10
 WINDOWY = 40
 
-INCREASE = 150
-TOTAL = 75
+ALPHA = 1250
+TIME = 0.7
 
 
 # noinspection PyMissingOrEmptyDocstring
@@ -25,22 +25,25 @@ class Transition(object):
     def __init__(self, gamestate, full_screen=True):
         self.gamestate = gamestate
         self.screen = pygame.display.get_surface()
-        self.surface = self.screen.get_rect()
+        self.rect = self.screen.get_rect()
         if not full_screen:
-            self.surface = pygame.Rect(WINDOWX, WINDOWY, WINDOWW, WINDOWH)
+            self.rect = pygame.Rect(WINDOWX, WINDOWY, WINDOWW, WINDOWH)
         self.name = GameState.FadeBlack
-        self.increase = 0
-        self.color = (0, 0, 0, self.increase)
+        self.timer = 0
+        self.color = (0, 0, 0, 0)
 
     def update(self, dt):
-        self.increase += dt * INCREASE
-        if self.increase > TOTAL:
+        self.timer += dt
+        if self.timer > TIME:
             self.gamestate.pop()
             return
-        self.color = (0, 0, 0, self.increase)
+        new_alpha = ALPHA * dt
+        if new_alpha < 0 or new_alpha > 255:
+            new_alpha = 0  # soms om een onbekende reden komt hij boven de 255 uit. hiermee is dat afgevangen.
+        self.color = (0, 0, 0, new_alpha)
 
     def render(self):
-        pygame.gfxdraw.box(self.screen, self.surface, self.color)
+        pygame.gfxdraw.box(self.screen, self.rect, self.color)
 
     def on_enter(self):
         pass
