@@ -72,6 +72,7 @@ class Player(Person):
         """
         Verzet de positie in de opgegeven richting.
         """
+        self.movespeed = MOVESPEED2  # hij beweegt standaard met movespeed1, maar de animatie gaat met MS2.
         self.old_position = list(self.rect.topleft)
 
         if self.move_direction == Direction.North:

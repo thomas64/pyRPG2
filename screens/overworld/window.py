@@ -285,19 +285,21 @@ class Window(object):
         :param mouse_pos: pygame.mouse.get_pos()
         :param dt: self.clock.tick(FPS)/1000.0
         """
-        if key_input[Keys.Zoomplus.value[0]] or key_input[Keys.Zoomplus.value[1]]:
-            value = self.current_map.map_layer.zoom + ZOOMSPEED
-            if value < MAXZOOM:
-                self.current_map.map_layer.zoom = value
-        elif key_input[Keys.Zoommin.value[0]] or key_input[Keys.Zoommin.value[1]]:
-            value = self.current_map.map_layer.zoom - ZOOMSPEED
-            if value > MINZOOM:
-                self.current_map.map_layer.zoom = value
-        elif key_input[Keys.Zoomreset.value[0]] or key_input[Keys.Zoomreset.value[1]]:
-            self.current_map.map_layer.zoom = DEFZOOM
 
         # geen key_input mogelijk bij automatisch bewegen
         if not self.auto_move_event:
+
+            if key_input[Keys.Zoomplus.value[0]] or key_input[Keys.Zoomplus.value[1]]:
+                value = self.current_map.map_layer.zoom + ZOOMSPEED
+                if value < MAXZOOM:
+                    self.current_map.map_layer.zoom = value
+            elif key_input[Keys.Zoommin.value[0]] or key_input[Keys.Zoommin.value[1]]:
+                value = self.current_map.map_layer.zoom - ZOOMSPEED
+                if value > MINZOOM:
+                    self.current_map.map_layer.zoom = value
+            elif key_input[Keys.Zoomreset.value[0]] or key_input[Keys.Zoomreset.value[1]]:
+                self.current_map.map_layer.zoom = DEFZOOM
+
             self.party_sprites[0].speed(key_input)
             self.party_sprites[0].direction(key_input, dt)
             # todo, moet dit niet naar de unit class?
@@ -310,6 +312,8 @@ class Window(object):
                                                 self.current_map.width,                  # een blocker
                                                 self.current_map.height,
                                                 dt)
+        else:
+            self.run_move_event(dt)
 
         self.leader_trail(dt)
 
@@ -348,8 +352,6 @@ class Window(object):
             obj.update(sparkly_data['taken'], dt)
         # en update eventuele quest blockers
         self.current_map.remove_rewarded_quest_blockers(self.engine.data.logbook)
-
-        self.run_move_event(dt)
 
         # beweeg wandering people.
         # er staan niet alleen maar wandering in c_m.people, ook standing people, maar update wordt daarbij ge-pass-t
