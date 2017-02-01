@@ -791,6 +791,7 @@
   <object id="26309" name="person76" x="32" y="464" width="32" height="32"/>
   <object id="26310" name="blocker" type="quest3" x="16" y="464" width="16" height="128"/>
  </objectgroup>
+ <objectgroup name="events"/>
  <layer name="set" width="40" height="40" visible="0">
   <data encoding="csv">
 2,2,2,2,2,2,2,2,2,2,3,3,3,3,3,3,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,

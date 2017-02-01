@@ -27,5 +27,6 @@ from .trainer import TrainerDatabase            # Enum data, gebruik de data
 from .note import NoteDatabase                  # Enum data, gebruik de data
 from .sign import SignDatabase                  # Enum data, gebruik de data
 from .sparkly import SparklyDatabase            # Dict class, maak aan het begin 1 object van
+from .moveevent import MoveEventDatabase        # Dict class, maak aan het begin 1 object van
 from .textevent import TextEventDatabase        # Dict class, maak aan het begin 1 object van
 from .treasurechest import TreasureChestDatabase    # Dict class, maak aan het begin 1 object van

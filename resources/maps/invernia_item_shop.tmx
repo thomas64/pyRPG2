@@ -345,4 +345,5 @@
   </object>
   <object id="50" name="person11" x="304" y="368" width="32" height="32"/>
  </objectgroup>
+ <objectgroup name="events"/>
 </map>

@@ -1208,4 +1208,5 @@
   <object id="145" name="sparkly19" x="96" y="1088" width="32" height="32"/>
   <object id="146" name="sparkly18" x="672" y="352" width="32" height="32"/>
  </objectgroup>
+ <objectgroup name="events"/>
 </map>

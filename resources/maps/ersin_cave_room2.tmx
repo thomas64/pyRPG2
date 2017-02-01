@@ -549,6 +549,7 @@
  <objectgroup name="objects">
   <object id="24075" name="sparkly2" x="240" y="208" width="32" height="32"/>
  </objectgroup>
+ <objectgroup name="events"/>
  <layer name="set" width="46" height="38" visible="0">
   <data encoding="csv">
 31,31,31,31,31,31,31,31,31,31,31,31,31,31,31,31,31,31,31,31,31,31,31,31,31,31,31,31,31,31,31,31,31,31,31,31,31,31,31,31,31,31,31,31,31,31,

@@ -1230,4 +1230,5 @@
   <object id="132" name="note7" x="192" y="288" width="32" height="48"/>
   <object id="133" name="chest9" x="704" y="80" width="32" height="32"/>
  </objectgroup>
+ <objectgroup name="events"/>
 </map>

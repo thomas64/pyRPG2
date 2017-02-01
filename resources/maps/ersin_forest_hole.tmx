@@ -264,7 +264,9 @@
  <objectgroup name="objects">
   <object id="24210" name="sparkly7" x="176" y="144" width="32" height="32"/>
   <object id="24211" name="sparkly6" x="208" y="240" width="32" height="32"/>
-  <object id="24212" name="textevent2" type="zwarte achtergrond" x="144" y="144" width="16" height="16"/>
+ </objectgroup>
+ <objectgroup name="events">
+  <object id="24212" name="text2" type="zwarte achtergrond" x="144" y="144" width="16" height="16"/>
  </objectgroup>
  <layer name="set" width="24" height="26" visible="0">
   <data encoding="csv">

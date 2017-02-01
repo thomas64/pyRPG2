@@ -68,6 +68,36 @@ class Player(Person):
         elif key_input[Keys.Mvspeed1_1.value] or key_input[Keys.Mvspeed1_2.value]:
             self.movespeed = MOVESPEED1
 
+    def auto_move(self, dt, movespeed=MOVESPEED1):
+        """
+        Verzet de positie in de opgegeven richting.
+        """
+        self.old_position = list(self.rect.topleft)
+
+        if self.move_direction == Direction.North:
+            self.full_sprite.set_clip(self.north_states[0])
+        elif self.move_direction == Direction.West:
+            self.full_sprite.set_clip(self.west_states[0])
+        elif self.move_direction == Direction.East:
+            self.full_sprite.set_clip(self.east_states[0])
+        else:
+            self.full_sprite.set_clip(self.south_states[0])
+        self.image = self.full_sprite.subsurface(self.full_sprite.get_clip())
+
+        if self.move_direction == Direction.North:
+            self.true_position[1] -= movespeed * dt
+        elif self.move_direction == Direction.South:
+            self.true_position[1] += movespeed * dt
+        elif self.move_direction == Direction.West:
+            self.true_position[0] -= movespeed * dt
+        elif self.move_direction == Direction.East:
+            self.true_position[0] += movespeed * dt
+
+        self.rect.x = round(self.true_position[0])
+        self.rect.y = round(self.true_position[1])
+
+        self.animate(dt)
+
     def direction(self, key_input, dt):
         """
         Geef de unit een richting mee.

@@ -16,6 +16,7 @@ from components import Player
 from components import Transition
 
 from constants import Direction
+from constants import PersonState
 from constants import Keys
 from constants import SFX
 
@@ -94,6 +95,11 @@ class Window(object):
         self.quest_box = None   # confirmbox
         self.person_face = None
         self.person_id = None
+
+        self.auto_move_event = False
+        self.auto_move_script = list()
+        self.auto_move_part = list()
+        self.auto_move_script_index = 0
 
     def load_map(self):
         """
@@ -217,8 +223,6 @@ class Window(object):
                                     self.quest_box.cur_item, self.quest_box.TOPINDEX, self.quest_box.scr_capt,
                                     self.person_id, self.display_loot)
 
-            self.current_map.remove_rewarded_quest_blockers(self.engine.data.logbook)
-
             self.quest_box = None
             self.person_face = None
             self.person_id = None
@@ -292,18 +296,20 @@ class Window(object):
         elif key_input[Keys.Zoomreset.value[0]] or key_input[Keys.Zoomreset.value[1]]:
             self.current_map.map_layer.zoom = DEFZOOM
 
-        self.party_sprites[0].speed(key_input)
-        self.party_sprites[0].direction(key_input, dt)
-        # todo, moet dit niet naar de unit class?
-        self.party_sprites[0].check_blocker(self.current_map.high_blocker_rects,
-                                            self.current_map.low_blocker_rects,
-                                            self.current_map.quest_blocker_rects,
-                                            [sprite.get_blocker() for sprite in self.current_map.people if
-                                             getattr(sprite, 'wander_area', None)],  # alleen maar lopende sprites,
-                                            None,                                    # standing sprites hebben al een
-                                            self.current_map.width,                  # blocker
-                                            self.current_map.height,
-                                            dt)
+        # geen key_input mogelijk bij automatisch bewegen
+        if not self.auto_move_event:
+            self.party_sprites[0].speed(key_input)
+            self.party_sprites[0].direction(key_input, dt)
+            # todo, moet dit niet naar de unit class?
+            self.party_sprites[0].check_blocker(self.current_map.high_blocker_rects,
+                                                self.current_map.low_blocker_rects,
+                                                self.current_map.quest_blocker_rects,
+                                                [sprite.get_blocker() for sprite in self.current_map.people if
+                                                 getattr(sprite, 'wander_area', None)],  # alleen maar lopende sprites,
+                                                None,                                    # standing sprites hebben al
+                                                self.current_map.width,                  # een blocker
+                                                self.current_map.height,
+                                                dt)
 
         self.leader_trail(dt)
 
@@ -319,6 +325,7 @@ class Window(object):
         self.check_sounds()
         self.check_text_events()  # deze staat voor portals vanwege een evt vloeiende Transition.
         self.check_portals()
+        self.check_move_events()
 
         # Update locaties (indien F11).
         # misschien gaat dit een probleem geven wanneer ingame de party grootte wordt gewijzigd.
@@ -339,6 +346,10 @@ class Window(object):
         for obj in self.current_map.sparkly:
             sparkly_data = self.engine.data.sparklies[obj.sparkly_id]
             obj.update(sparkly_data['taken'], dt)
+        # en update eventuele quest blockers
+        self.current_map.remove_rewarded_quest_blockers(self.engine.data.logbook)
+
+        self.run_move_event(dt)
 
         # beweeg wandering people.
         # er staan niet alleen maar wandering in c_m.people, ook standing people, maar update wordt daarbij ge-pass-t
@@ -390,6 +401,38 @@ class Window(object):
                 ps.move_direction = self.leader_history[index][3]
                 ps.movespeed = self.leader_history[index][4]
                 ps.animate(dt, make_sound=False)
+
+    def run_move_event(self, dt):
+        """
+        Beweeg de hero automatisch indien
+        """
+        if self.auto_move_event:
+
+            self.auto_move_part = self.auto_move_script[self.auto_move_script_index]
+
+            if self.auto_move_part[0] == PersonState.Moving:
+                self.party_sprites[0].last_direction = self.auto_move_part[1]
+                self.party_sprites[0].move_direction = self.auto_move_part[1]
+                self.party_sprites[0].auto_move(dt)
+            elif self.auto_move_part[0] == PersonState.Resting:
+                self.party_sprites[0].last_direction = self.auto_move_part[1]
+                self.party_sprites[0].move_direction = None
+                self.party_sprites[0].auto_move(dt)
+
+            # handel de automatisch beweging timer af.
+            # auto_move_part[2] is de timer. [1] is de direction. [0] is de personstate
+            if self.auto_move_part[2] > 0.0:
+                self.auto_move_part[2] -= dt
+            if self.auto_move_part[2] < 0.0:
+                self.auto_move_part[2] = 0.0
+                # als hij aan het eind van het move script is.
+                if self.auto_move_script_index >= len(self.auto_move_script) - 1:
+                    self.auto_move_event = False
+                    self.auto_move_script = list()
+                    self.auto_move_part = list()
+                    self.auto_move_script_index = 0
+                else:
+                    self.auto_move_script_index += 1
 
     def check_sounds(self):
         """
@@ -457,6 +500,25 @@ class Window(object):
                         self.engine.data.text_events[event_name]['text'] = None
                         self.engine.data.text_events[event_name]['face'] = None
                         self.engine.data.text_events[event_name]['condition'] = False
+
+    def check_move_events(self):
+        """
+        Collide je met een move_event. Zet daarna uit.
+        """
+        if not self.party_sprites[0].is_highspeed_moving():
+            if len(self.party_sprites[0].rect.collidelistall(self.current_map.move_events)) == 1:
+                object_nr = self.party_sprites[0].rect.collidelist(self.current_map.move_events)
+                event_name = self.current_map.move_events[object_nr].name
+                event_data = self.engine.data.move_events[event_name]
+
+                # voer maar 1x uit
+                if event_data['condition']:
+                    event_data['condition'] = False
+
+                    self.auto_move_event = True
+                    self.auto_move_script = event_data['movement']
+                    self.auto_move_part = list()
+                    self.auto_move_script_index = 0
 
     def action_button(self):
         """

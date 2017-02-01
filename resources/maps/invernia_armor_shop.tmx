@@ -339,4 +339,5 @@
    </properties>
   </object>
  </objectgroup>
+ <objectgroup name="events"/>
 </map>

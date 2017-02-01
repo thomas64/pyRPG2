@@ -7,6 +7,7 @@ import characters
 from constants import Direction
 from database import HeroDatabase
 from database import SparklyDatabase
+from database import MoveEventDatabase
 from database import TextEventDatabase
 from database import TreasureChestDatabase
 from database import WeaponDatabase
@@ -30,6 +31,7 @@ class Script:
         # Treasure chest en Sparklies worden geen losse objecten, maar blijven 1 object met meerdere dicts.
         data.treasure_chests = TreasureChestDatabase()
         data.sparklies = SparklyDatabase()
+        data.move_events = MoveEventDatabase()
         data.text_events = TextEventDatabase(data)
 
         # Vul de party aan met de eerste hero

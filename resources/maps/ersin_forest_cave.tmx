@@ -644,4 +644,5 @@
  <objectgroup name="objects">
   <object id="1" name="sign2" type="2" x="960" y="144" width="32" height="32"/>
  </objectgroup>
+ <objectgroup name="events"/>
 </map>

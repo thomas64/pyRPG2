@@ -32,7 +32,8 @@ from database import TrainerDatabase
 
 MAPPATH = 'resources/maps/'
 
-# de zes object layers in een tmx map
+# de zeven object layers in een tmx map
+EVENTS = "events"
 OBJECTS = "objects"
 HIGHBLOCKER = "high_blocker"
 LOWBLOCKER = "low_blocker"
@@ -84,6 +85,7 @@ class Map(object):
         self.notes = []
         self.signs = []
         self.text_events = []
+        self.move_events = []
         self.chests = []
         self.sparkly = []
 
@@ -97,15 +99,17 @@ class Map(object):
             self.start_pos.append(Portal(obj.name, self._pg_rect(obj), name, obj.type, self._has_dir(obj, 'direction')))
         for obj in tmx_data.get_layer_by_name(PORTALS):
             self.portals.append(Portal(name, self._pg_rect(obj), obj.name, obj.type))
+        for obj in tmx_data.get_layer_by_name(EVENTS):
+            if obj.name.startswith('text'):
+                # in obj.type kan iets staan, als daar bijv zwart staat, dan heeft het text_event een zwarte achtergrond
+                self.text_events.append(NamedRect(obj.name, self._pg_rect(obj), obj.type))
+            elif obj.name.startswith('move'):
+                self.move_events.append(NamedRect(obj.name, self._pg_rect(obj)))
+
         for obj in tmx_data.get_layer_by_name(OBJECTS):
             if obj.name == 'blocker':
                 # in obj.type staat de bijbehorende quest key.
                 self.quest_blocker_rects.append(NamedRect(obj.type, self._pg_rect(obj)))
-                # verwijder daarna weer de geklaarde quest blockers.
-                self.remove_rewarded_quest_blockers(logbook)
-            elif obj.name.startswith('textevent'):
-                # in obj.type kan iets staan, als daar bijv zwart staat, dan heeft het text_event een zwarte achtergrond
-                self.text_events.append(NamedRect(obj.name, self._pg_rect(obj), obj.type))
             elif obj.name.startswith('shop'):
                 shop_object = Person(obj.name, ShopDatabase[obj.name].value['sprite'],
                                      self._pg_rect(obj), OBJECTLAYER, self._has_dir(obj, 'direction'), obj.type)

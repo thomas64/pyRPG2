@@ -317,6 +317,7 @@
  <objectgroup name="objects">
   <object id="23632" name="chest5" x="96" y="256" width="32" height="32"/>
  </objectgroup>
+ <objectgroup name="events"/>
  <layer name="set" width="28" height="34" visible="0">
   <data encoding="csv">
 31,31,31,31,31,31,31,31,31,31,31,31,31,31,31,31,31,31,31,31,31,31,31,31,31,31,31,31,
