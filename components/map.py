@@ -6,7 +6,6 @@ class: Map
 import datetime
 
 import pygame
-import pytmx
 import pyscroll
 
 from .namedrect import NamedRect
@@ -31,8 +30,6 @@ from database import TrainerDatabase
 from database import TreasureChestDatabase
 
 
-MAPPATH = 'resources/maps/'
-
 # de zeven object layers in een tmx map
 EVENTS = "events"
 OBJECTS = "objects"
@@ -54,9 +51,7 @@ class Map(object):
     Bevat allemaal lijsten van rects.
     """
     def __init__(self, name):
-        map_tmx = MAPPATH + name + '.tmx'
-
-        tmx_data = pytmx.load_pygame(map_tmx)
+        tmx_data = MapTitle[name].value[1]
         map_data = pyscroll.TiledMapData(tmx_data)
         self.map_layer = pyscroll.BufferedRenderer(map_data, (WINDOWWIDTH, WINDOWHEIGHT))
         self.map_layer.zoom = 2
@@ -69,7 +64,7 @@ class Map(object):
         self.window_width = WINDOWWIDTH
         self.window_height = WINDOWHEIGHT
 
-        self.title = MapTitle[name].value
+        self.title = MapTitle[name].value[0]
 
         self.high_blocker_rects = []
         self.low_blocker_rects = []

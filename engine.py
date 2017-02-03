@@ -3,11 +3,13 @@
 class: GameEngine
 """
 
+import threading
+
 import pygame
 import pygame.gfxdraw
 
 from audio import Audio
-# from console import Console
+from console import Console
 from constants import GameState
 from constants import Keys
 import screens.menu
@@ -42,12 +44,11 @@ class GameEngine(object):
         self.audio = Audio(self)
 
         self.running = False
-        # self.ready_for_map_loading = False todo, zet aan voor het nieuwe map laden
 
         self.clock = pygame.time.Clock()
         self.playtime = 0.0
         self.dt = 0.0
-        self.key_timer = 0.0
+        self.key_timer = 1.0  # kaarten laad tijd
         self.state_timer = 0.0
 
         self.debugfont = pygame.font.SysFont(DEBUGFONT, DEBUGFONTSIZE)
@@ -55,6 +56,20 @@ class GameEngine(object):
         self.mouse_input = None
 
         self.show_debug = False
+
+        threading.Thread(target=self.load_all_maps).start()
+
+    @staticmethod
+    def load_all_maps():
+        """..."""
+        from constants import MapTitle
+        import pytmx
+        map_path = 'resources/maps/'
+        Console.load_all_maps()
+        # noinspection PyTypeChecker
+        for map_name in MapTitle:
+            map_name.value.append(pytmx.load_pygame(map_path + map_name.name + '.tmx'))
+        Console.maps_loaded()
 
     def on_enter(self):
         """
@@ -99,7 +114,8 @@ class GameEngine(object):
                 # todo, deze, de key en de methode moeten uiteindelijk weg.
                 self._kill_game()
 
-        self.gamestate.peek().single_input(event)
+        if self.key_timer == 0.0:
+            self.gamestate.peek().single_input(event)
 
     def multi_input(self):
         """

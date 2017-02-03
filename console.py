@@ -75,6 +75,20 @@ class Console:
         print("Corrupt options file.")
 
     @staticmethod
+    def load_all_maps():
+        """
+        Engine.load_all_maps()
+        """
+        print("Loading world maps...")
+
+    @staticmethod
+    def maps_loaded():
+        """
+        Engine.load_all_maps()
+        """
+        print("World maps loaded.")
+
+    @staticmethod
     def load_gamedata():
         """
         Dialog.load()

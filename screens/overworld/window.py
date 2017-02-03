@@ -60,8 +60,7 @@ CBOXLAYER = 9
 GRIDSIZE = 32
 ICONSIZE = 32
 
-# todo, zet naar 1.0 voor nieuwe map laden
-NEWMAPTIMEOUT = 0.5  # minimale keyblock. Zonder deze timer kun je op de movement keys drukken terwijl de map laadt.
+NEWMAPTIMEOUT = 1.0  # minimale keyblock. Zonder deze timer kun je op de movement keys drukken terwijl de map laadt.
 
 
 class Window(object):
@@ -461,9 +460,8 @@ class Window(object):
             self.engine.data.map_pos = self.prev_map_name       # zet de point om naar een string naam.
             # als er een .to_nr is, namelijk het obj.type van een portal, gebruik dan .to_nr voor lokatiebepaling
             self.portal_to_nr = self.current_map.portals[portal_nr].to_nr
-            self.load_map()  # todo, map laden later, deze uit
+            self.load_map()
             self.engine.gamestate.push(Transition(self.engine.gamestate, full_screen=False))
-            # self.engine.ready_for_map_loading = True todo, deze aan
 
     def check_text_events(self):
         """
