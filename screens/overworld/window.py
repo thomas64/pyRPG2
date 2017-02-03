@@ -28,6 +28,7 @@ from database import ShopDatabase
 from database import TrainerDatabase
 from database import NoteDatabase
 from database import SignDatabase
+from database import TreasureChestDatabase
 
 from database import PouchItemDatabase
 
@@ -59,6 +60,7 @@ CBOXLAYER = 9
 GRIDSIZE = 32
 ICONSIZE = 32
 
+# todo, zet naar 1.0 voor nieuwe map laden
 NEWMAPTIMEOUT = 0.5  # minimale keyblock. Zonder deze timer kun je op de movement keys drukken terwijl de map laadt.
 
 
@@ -98,16 +100,15 @@ class Window(object):
 
         self.auto_move_event = False
         self.auto_move_script = list()
-        self.auto_move_part = list()
         self.auto_move_script_index = 0
+        self.auto_move_part = list()
+        self.auto_move_timer = 0
 
     def load_map(self):
         """
         Maak een nieuwe map aan met de hero's in het veld.
         """
-        # treasurechest database moet meegegeven worden, want is object en geen enum. is voor tijdelijke kistjes.
-        # logbook moet ook meegegeven worden vanwege quest_blockers die verwijderd moeten worden.
-        self.current_map = Map(self.engine.data.map_name, self.engine.data.treasure_chests, self.engine.data.logbook)
+        self.current_map = Map(self.engine.data.map_name)
         self.group = self.current_map.view
         self.grid_sprite = None
         self.cbox_sprites = []
@@ -410,8 +411,6 @@ class Window(object):
         """
         if self.auto_move_event:
 
-            self.auto_move_part = self.auto_move_script[self.auto_move_script_index]
-
             if self.auto_move_part[0] == PersonState.Moving:
                 self.party_sprites[0].last_direction = self.auto_move_part[1]
                 self.party_sprites[0].move_direction = self.auto_move_part[1]
@@ -423,18 +422,20 @@ class Window(object):
 
             # handel de automatisch beweging timer af.
             # auto_move_part[2] is de timer. [1] is de direction. [0] is de personstate
-            if self.auto_move_part[2] > 0.0:
-                self.auto_move_part[2] -= dt
-            if self.auto_move_part[2] < 0.0:
-                self.auto_move_part[2] = 0.0
+            if self.auto_move_timer > 0.0:
+                self.auto_move_timer -= dt
+            if self.auto_move_timer <= 0.0:
                 # als hij aan het eind van het move script is.
                 if self.auto_move_script_index >= len(self.auto_move_script) - 1:
                     self.auto_move_event = False
-                    self.auto_move_script = list()
-                    self.auto_move_part = list()
+                    self.auto_move_script = None
                     self.auto_move_script_index = 0
+                    self.auto_move_part = None
+                    self.auto_move_timer = 0
                 else:
                     self.auto_move_script_index += 1
+                    self.auto_move_part = self.auto_move_script[self.auto_move_script_index]
+                    self.auto_move_timer = self.auto_move_part[2]  # [2] is de timer
 
     def check_sounds(self):
         """
@@ -460,8 +461,9 @@ class Window(object):
             self.engine.data.map_pos = self.prev_map_name       # zet de point om naar een string naam.
             # als er een .to_nr is, namelijk het obj.type van een portal, gebruik dan .to_nr voor lokatiebepaling
             self.portal_to_nr = self.current_map.portals[portal_nr].to_nr
-            self.load_map()
+            self.load_map()  # todo, map laden later, deze uit
             self.engine.gamestate.push(Transition(self.engine.gamestate, full_screen=False))
+            # self.engine.ready_for_map_loading = True todo, deze aan
 
     def check_text_events(self):
         """
@@ -481,7 +483,7 @@ class Window(object):
                     # kijk of het een functie is
                     if callable(event_condition):
                         # voer met de () erachter de methode uit die in die dict staat.
-                        event_condition = event_condition()
+                        event_condition = event_condition(None, self.engine.data)  # de None is voor niet static method.
                         # en maak er een boolean van
                     if event_condition:
 
@@ -519,8 +521,9 @@ class Window(object):
 
                     self.auto_move_event = True
                     self.auto_move_script = event_data['movement']
-                    self.auto_move_part = list()
                     self.auto_move_script_index = 0
+                    self.auto_move_part = self.auto_move_script[self.auto_move_script_index]
+                    self.auto_move_timer = self.auto_move_part[2]  # [2] is de timer
 
     def action_button(self):
         """
@@ -646,10 +649,8 @@ class Window(object):
 
             # maar dan, als de persoon een quest heeft
             if person_data.get('quest'):
-                # stop hem in data.logbook en haal de juiste self.quest_data er weer uit.
                 quest_key = person_data['quest'].name
-                quest_value = person_data['quest'].value
-                the_quest = self.engine.data.logbook.add_quest(quest_key, quest_value)
+                the_quest = self.engine.data.logbook[quest_key]
                 # het gezicht is in on_enter() weer nodig, vandaar deze declaratie.
                 self.person_face = person_data['face']
                 # idem voor person_id
@@ -716,14 +717,14 @@ class Window(object):
                         if key == "mec":
                             mec_v, mec_h = self.engine.data.party.get_highest_value_of_skill(key)
                             if mec_v < value:
-                                text = self.engine.data.treasure_chests.mec_text(chest_data['condition'][key])
+                                text = TreasureChestDatabase.mec_text(chest_data['condition'][key])
                                 push_object = MessageBox(self.engine.gamestate, self.engine.audio, text)
                                 self.engine.gamestate.push(push_object)
                                 return
                         elif key == "thf":
                             thf_v, thf_h = self.engine.data.party.get_highest_value_of_skill(key)
                             if thf_v < value:
-                                text = self.engine.data.treasure_chests.thf_text(chest_data['condition'][key])
+                                text = TreasureChestDatabase.thf_text(chest_data['condition'][key])
                                 push_object = MessageBox(self.engine.gamestate, self.engine.audio, text)
                                 self.engine.gamestate.push(push_object)
                                 return
@@ -732,8 +733,7 @@ class Window(object):
 
                 if chest_data['content']:
                     chest_data['opened'] = 1
-                    text = self.engine.data.treasure_chests.open_chest(chest_data.get('condition'),
-                                                                       mec_v, mec_h, thf_v, thf_h)
+                    text = TreasureChestDatabase.open_chest(chest_data.get('condition'), mec_v, mec_h, thf_v, thf_h)
                     image = []
                     text, image = self.display_loot(chest_data['content'], text, image)
                     chest_data['content'] = dict()

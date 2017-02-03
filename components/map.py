@@ -28,6 +28,7 @@ from database import PeopleDatabase
 from database import SchoolDatabase
 from database import ShopDatabase
 from database import TrainerDatabase
+from database import TreasureChestDatabase
 
 
 MAPPATH = 'resources/maps/'
@@ -52,7 +53,7 @@ class Map(object):
     """
     Bevat allemaal lijsten van rects.
     """
-    def __init__(self, name, treasure_chests_database, logbook):
+    def __init__(self, name):
         map_tmx = MAPPATH + name + '.tmx'
 
         tmx_data = pytmx.load_pygame(map_tmx)
@@ -167,9 +168,9 @@ class Map(object):
                 self.high_blocker_rects.append(sign_object.get_blocker())
                 self.signs.append(sign_object)
             elif obj.name.startswith('chest'):
-                if treasure_chests_database[obj.name].get('time1'):
-                    time1 = treasure_chests_database[obj.name]['time1']
-                    time2 = treasure_chests_database[obj.name]['time2']
+                if 'time1' in TreasureChestDatabase[obj.name].value:
+                    time1 = TreasureChestDatabase[obj.name].value['time1']
+                    time2 = TreasureChestDatabase[obj.name].value['time2']
                     timestamp = datetime.datetime.now()
                     if time1 < timestamp < time2:
                         chest_object = TreasureChest(obj.name, self._pg_rect(obj), OBJECTLAYER)

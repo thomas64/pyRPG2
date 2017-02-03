@@ -42,6 +42,7 @@ class GameEngine(object):
         self.audio = Audio(self)
 
         self.running = False
+        # self.ready_for_map_loading = False todo, zet aan voor het nieuwe map laden
 
         self.clock = pygame.time.Clock()
         self.playtime = 0.0
@@ -121,12 +122,12 @@ class GameEngine(object):
         """
         if self.key_timer > 0.0:
             self.key_timer -= self.dt
-        if self.key_timer < 0.0:
+        if self.key_timer <= 0.0:
             self.key_timer = 0.0
 
         if self.state_timer > 0.0:
             self.state_timer -= self.dt
-        if self.state_timer < 0.0:
+        if self.state_timer < 0.0:  # todo, wat nou als hij precies op 0.0 uitkomt?
             self.state_timer = 0.0
             self.gamestate.pop()
 
