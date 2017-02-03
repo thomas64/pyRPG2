@@ -10,8 +10,8 @@ import pygame
 
 from console import Console
 
-OPTIONSPATH = 'options'
-OPTIONSFILE = os.path.join(OPTIONSPATH, 'video.cfg')
+SETTINGSPATH = 'settings'
+SETTINGSFILE = os.path.join(SETTINGSPATH, 'video.cfg')
 
 
 class Video(object):
@@ -33,15 +33,15 @@ class Video(object):
         """
         Laad settings uit config bestand.
         """
-        if not os.path.exists(OPTIONSPATH):
-            os.makedirs(OPTIONSPATH)
+        if not os.path.exists(SETTINGSPATH):
+            os.makedirs(SETTINGSPATH)
 
         try:
-            with open(OPTIONSFILE, 'rb') as f:
+            with open(SETTINGSFILE, 'rb') as f:
                 self.fullscreen = pickle.load(f)
-            Console.load_options()
+            Console.load_settings()
         except (pickle.UnpicklingError, FileNotFoundError, EOFError):
-            Console.corrupt_options()
+            Console.corrupt_settings()
             self.fullscreen = False
             self.write_cfg()
 
@@ -49,9 +49,9 @@ class Video(object):
         """
         Schrijf settings naar config bestand.
         """
-        with open(OPTIONSFILE, 'wb') as f:
+        with open(SETTINGSFILE, 'wb') as f:
             pickle.dump(self.fullscreen, f)
-        Console.write_options()
+        Console.write_settings()
 
     def flip_fullscreen(self):
         """

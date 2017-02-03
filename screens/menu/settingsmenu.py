@@ -1,14 +1,14 @@
 
 """
-class: OptionsMenu
+class: SettingsMenu
 """
 
 from .basemenu import BaseMenu
 
 
-class OptionsMenu(BaseMenu):
+class SettingsMenu(BaseMenu):
     """
-    De options items. Deze worden geladen uit een bestand en op aangepast.
+    De settings items. Deze worden geladen uit een bestand en op aangepast.
     """
     def __init__(self, engine):
         super().__init__(engine)

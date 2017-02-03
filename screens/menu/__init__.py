@@ -24,7 +24,7 @@ def create_menu(state_name, engine, title1=None, animation1=None, scr_capt=None,
     from .mainmenu import MainMenu
     from .loadmenu import LoadMenu
     from .savemenu import SaveMenu
-    from .optionsmenu import OptionsMenu
+    from .settingsmenu import SettingsMenu
     from .pausemenu import PauseMenu
 
     content = None
@@ -55,8 +55,8 @@ def create_menu(state_name, engine, title1=None, animation1=None, scr_capt=None,
         if select is None:
             select = -1
 
-    elif state_name == GameState.OptionsMenu:
-        content = OptionsMenu(engine)
+    elif state_name == GameState.SettingsMenu:
+        content = SettingsMenu(engine)
         if title1 is None:
             title1 = None
         if animation1 is None:

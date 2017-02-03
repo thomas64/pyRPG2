@@ -20,7 +20,7 @@ class PauseMenu(BaseMenu):
         self.content = ['Continue',
                         'Load Game',
                         'Save Game',
-                        'Options',
+                        'Settings',
                         'Main Menu']
 
     def on_select(self, menu_item, title, animation, scr_capt, index):
@@ -43,8 +43,8 @@ class PauseMenu(BaseMenu):
             push_object = screens.menu.create_menu(GameState.SaveMenu, self.engine, scr_capt=scr_capt)
             self.engine.gamestate.push(push_object)
 
-        elif menu_item.text == "Options":
-            push_object = screens.menu.create_menu(GameState.OptionsMenu, self.engine, scr_capt=scr_capt)
+        elif menu_item.text == "Settings":
+            push_object = screens.menu.create_menu(GameState.SettingsMenu, self.engine, scr_capt=scr_capt)
             self.engine.gamestate.push(push_object)
 
         elif menu_item.text == "Main Menu":

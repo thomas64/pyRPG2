@@ -15,8 +15,8 @@ from constants import MapMusic
 from constants import SFX
 
 
-OPTIONSPATH = 'options'
-OPTIONSFILE = os.path.join(OPTIONSPATH, 'audio.cfg')
+SETTINGSPATH = 'settings'
+SETTINGSFILE = os.path.join(SETTINGSPATH, 'audio.cfg')
 MUSICPATH = 'resources/music'
 SOUNDSPATH = 'resources/sounds'
 
@@ -61,15 +61,15 @@ class Audio(object):
         """
         Laad settings uit config bestand.
         """
-        if not os.path.exists(OPTIONSPATH):
-            os.makedirs(OPTIONSPATH)
+        if not os.path.exists(SETTINGSPATH):
+            os.makedirs(SETTINGSPATH)
 
         try:
-            with open(OPTIONSFILE, 'rb') as f:
+            with open(SETTINGSFILE, 'rb') as f:
                 self.music, self.sound = pickle.load(f)
-            Console.load_options()
+            Console.load_settings()
         except (pickle.UnpicklingError, FileNotFoundError, EOFError):
-            Console.corrupt_options()
+            Console.corrupt_settings()
             self.music, self.sound = True, True
             self.write_cfg()
 
@@ -77,9 +77,9 @@ class Audio(object):
         """
         Schrijf settings naar config bestand.
         """
-        with open(OPTIONSFILE, 'wb') as f:
+        with open(SETTINGSFILE, 'wb') as f:
             pickle.dump([self.music, self.sound], f)
-        Console.write_options()
+        Console.write_settings()
 
     def flip_sound(self):
         """
@@ -112,10 +112,10 @@ class Audio(object):
         Als mag, fade dan de huidige. Volume max, fade nieuwe muziek in.
         :param currentstate: self.gamestate.peek().name
         """
-        # bij options menu moet er niets veranderen, en ook niet als hij van options komt.
+        # bij settings menu moet er niets veranderen, en ook niet als hij van settings komt.
         # ook niet als hij van messagebox komt. todo, dit begint wat lelijk te worden.
-        if currentstate == GameState.OptionsMenu or \
-           self.engine.gamestate.prev_state == GameState.OptionsMenu or \
+        if currentstate == GameState.SettingsMenu or \
+           self.engine.gamestate.prev_state == GameState.SettingsMenu or \
            self.engine.gamestate.prev_state == GameState.MessageBox or \
            self.engine.gamestate.prev_state == GameState.ConfirmBox or \
            self.engine.gamestate.prev_state == GameState.Shop or \
@@ -152,8 +152,8 @@ class Audio(object):
         Zet de achtergrond geluiden aan of uit afhankelijk van een state.
         :param currentstate: self.statemachine.peek()
         """
-        if currentstate == GameState.OptionsMenu or \
-           self.engine.gamestate.prev_state == GameState.OptionsMenu or \
+        if currentstate == GameState.SettingsMenu or \
+           self.engine.gamestate.prev_state == GameState.SettingsMenu or \
            self.engine.gamestate.prev_state == GameState.MessageBox or \
            self.engine.gamestate.prev_state == GameState.ConfirmBox or \
            self.engine.gamestate.prev_state == GameState.Shop or \

@@ -35,7 +35,7 @@ class GameState(enum.Enum):
     MainMenu = 1
     LoadMenu = "Load Game"
     SaveMenu = "Save Game"
-    OptionsMenu = 4
+    SettingsMenu = 4
     PauseMenu = 5
 
     Overworld = 6

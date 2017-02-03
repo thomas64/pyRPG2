@@ -51,28 +51,28 @@ class Console:
         print("Game cleared all states from stack.")
 
     @staticmethod
-    def load_options():
+    def load_settings():
         """
         Audio._load_cfg()
         Video._load_cfg()
         """
-        print("Loading options file...")
+        print("Loading settings file...")
 
     @staticmethod
-    def write_options():
+    def write_settings():
         """
         Audio.write_cfg()
         Video.write_cfg()
         """
-        print("Writing options files...")
+        print("Writing settings files...")
 
     @staticmethod
-    def corrupt_options():
+    def corrupt_settings():
         """
         Video._load_cfg()
         Audio._load_cfg()
         """
-        print("Corrupt options file.")
+        print("Corrupt settings file.")
 
     @staticmethod
     def load_all_maps():

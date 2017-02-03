@@ -22,7 +22,7 @@ class MainMenu(BaseMenu):
 
         self.content = ['New Game',
                         'Load Game',
-                        'Options',
+                        'Settings',
                         'Exit']
 
     def on_select(self, menu_item, title, animation, scr_capt, index):
@@ -46,8 +46,8 @@ class MainMenu(BaseMenu):
             self.engine.gamestate.push(push_object)
             self.engine.gamestate.push(Transition(self.engine.gamestate))
 
-        elif menu_item.text == "Options":
-            push_object = screens.menu.create_menu(GameState.OptionsMenu, self.engine,
+        elif menu_item.text == "Settings":
+            push_object = screens.menu.create_menu(GameState.SettingsMenu, self.engine,
                                                    title1=title, animation1=animation)
             self.engine.gamestate.push(push_object)
 
