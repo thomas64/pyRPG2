@@ -3,12 +3,7 @@
 setup.py
 """
 
-import cx_Freeze
+from distutils.core import setup
+import py2exe
 
-cx_Freeze.setup(
-    name="PyRPG2",
-    version="0.1",
-    options={"build_exe": {"packages": ["pygame"],
-                           "include_files": ["resources"]}},
-    executables=[cx_Freeze.Executable("main.py")]
-)
+setup(console=['main.py'])

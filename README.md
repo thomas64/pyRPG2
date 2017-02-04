@@ -6,4 +6,6 @@ Dependencies for this Python 3 game are:
 - pyscroll
 - aenum
 
-All are available with pip.
+All of these are available with pip.
+
+Run this program with 'python main.py'.

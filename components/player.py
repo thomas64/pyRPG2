@@ -45,7 +45,7 @@ class Player(Person):
         self.move_direction = None
 
         self.movespeed = 0
-        self.step_count = 0
+        self.step_count = STEPSPEED  # direct uit stilstand animeren
         self.step_animation = 0
 
         self.time_up = 0

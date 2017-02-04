@@ -44,6 +44,7 @@ class GameEngine(object):
         self.audio = Audio(self)
 
         self.running = False
+        self.new_game = False
 
         self.clock = pygame.time.Clock()
         self.playtime = 0.0

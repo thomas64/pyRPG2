@@ -3,6 +3,7 @@
 class: MainMenu
 """
 
+from components import MessageBox
 from components import Transition
 from constants import GameState
 from data import Data
@@ -35,11 +36,16 @@ class MainMenu(BaseMenu):
         :param index: zie BaseMenu
         """
         if menu_item.text == "New Game":
+            self.engine.new_game = True
             self.engine.data = Data()
             Script.new_game(self.engine.data)
             push_object = Overworld(self.engine)
             self.engine.gamestate.change(push_object)
             self.engine.gamestate.push(Transition(self.engine.gamestate))
+            self.engine.gamestate.push(MessageBox(self.engine.gamestate, self.engine.audio, Script.intro_text(),
+                                                  scr_capt=False, sound=None))
+            self.engine.gamestate.push(Transition(self.engine.gamestate))
+            self.engine.new_game = False
 
         elif menu_item.text == "Load Game":
             push_object = screens.menu.create_menu(GameState.LoadMenu, self.engine)

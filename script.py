@@ -74,3 +74,9 @@ class Script:
         data.map_dir = Direction.South
 
         data.custom_inventory_counter = 0
+
+    @staticmethod
+    def intro_text():
+        """..."""
+        return ["A long time ago in a galaxy far,",
+                "far away...."]
