@@ -36,7 +36,7 @@ class MainMenu(BaseMenu):
         :param index: zie BaseMenu
         """
         if menu_item.text == "New Game":
-            self.engine.new_game = True
+            self.engine.wait_for_transition_before_loading_music = True
             self.engine.audio.fade_bg_music()
             self.engine.data = Data()
             Script.new_game(self.engine.data)
@@ -46,7 +46,8 @@ class MainMenu(BaseMenu):
             self.engine.gamestate.push(MessageBox(self.engine.gamestate, self.engine.audio, Script.intro_text(),
                                                   scr_capt=False, sound=None))
             self.engine.gamestate.push(Transition(self.engine.gamestate))
-            self.engine.new_game = False
+            self.engine.wait_for_transition_before_loading_music = False
+            self.engine.try_to_load_music = True
 
         elif menu_item.text == "Load Game":
             push_object = screens.menu.create_menu(GameState.LoadMenu, self.engine)

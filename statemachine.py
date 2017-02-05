@@ -71,11 +71,6 @@ class StateMachine(object):
         :param state: Push a new state onto the stack.
         :return: Returns the pushed value.
         """
-        try:
-            self.prev_state = self.peek().name
-            self.peek().on_exit()
-        except AttributeError:
-            pass                            # doe niet on_exit() bij lege stack
         # bij messagebox fade geen console output
         if state.name != GameState.MessageBox and \
            state.name != GameState.FadeBlack:

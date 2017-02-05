@@ -145,14 +145,6 @@ class Window(object):
         self.group.add(self.current_map.chests)
         self.group.add(self.current_map.sparkly)
 
-        # de eerste keer dat deze 2 draaien is Overworld nog niet op de gamestack gepushed. daarom herstart begintune.
-        self.engine.audio.set_bg_music(self.engine.gamestate.peek().name)
-        self.engine.audio.set_bg_sounds(self.engine.gamestate.peek().name)
-
-        # want deze is alleen nodig voor de audio, dus nadien weghalen.
-        # hij wordt vanaf nu (22-06-2016) ook voor beginpositie bepaling gebruikt, maar hij mag nog steeds weg nadien.
-        self.prev_map_name = None
-
     def align(self):
         """
         Positioneer de party achter de hero. Vul de geschiedenis vol met de huidige positie data.
@@ -258,8 +250,10 @@ class Window(object):
                     for obj in self.current_map.people:
                         if getattr(obj, 'wander_area', None):
                             self.cbox_sprites.append(ColorBox(obj.wander_area, WANDERBOXCOLOR, CBOXLAYER))
-                    for obj in self.current_map.text_events:
-                        self.cbox_sprites.append(ColorBox(obj.rect, TEXTEVENTCOLOR, CBOXLAYER))
+                    for obj_group in (self.current_map.text_events,
+                                      self.current_map.move_events):
+                        for obj in obj_group:
+                            self.cbox_sprites.append(ColorBox(obj.rect, TEXTEVENTCOLOR, CBOXLAYER))
                     for obj_group in (self.current_map.heroes,
                                       self.current_map.shops,
                                       self.current_map.schools,
@@ -460,6 +454,9 @@ class Window(object):
             self.engine.data.map_pos = self.prev_map_name       # zet de point om naar een string naam.
             # als er een .to_nr is, namelijk het obj.type van een portal, gebruik dan .to_nr voor lokatiebepaling
             self.portal_to_nr = self.current_map.portals[portal_nr].to_nr
+            self.engine.audio.fade_bg_music_when_loading_a_new_map()
+            self.engine.audio.fade_bg_sounds_when_loading_a_new_map()
+            self.engine.try_to_load_music = True
             self.load_map()
             self.engine.gamestate.push(Transition(self.engine.gamestate, full_screen=False))
 

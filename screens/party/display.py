@@ -453,6 +453,10 @@ class Display(object):
             self.engine.key_timer = NEWMAPTIMEOUT
             self.engine.gamestate.deep_peek().window.load_map()
 
+        # deze 2 regels zijn eigenlijk lelijke oplossingen. ze zijn er om de muziek goed te zetten
+        self.engine.try_to_load_music = True
+        self.engine.gamestate.deep_peek().window.prev_map_name = None
+
         self.engine.audio.play_sound(SFX.scroll)
         self.engine.gamestate.push(Transition(self.engine.gamestate))
         self.engine.gamestate.deep_pop()

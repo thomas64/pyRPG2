@@ -74,10 +74,13 @@ class LoadMenu(BaseMenu):
             data = LoadDialog.load(filename)
             # als de data niet corrupt is.
             if data:
+                self.engine.wait_for_transition_before_loading_music = True
                 self.engine.data = data
                 push_object = Overworld(self.engine)
                 self.engine.gamestate.change(push_object)
                 self.engine.gamestate.push(Transition(self.engine.gamestate))
+                self.engine.wait_for_transition_before_loading_music = False
+                self.engine.try_to_load_music = True
             else:
                 self.engine.audio.stop_sound(SFX.menu_select)
                 self.engine.audio.play_sound(SFX.menu_error)

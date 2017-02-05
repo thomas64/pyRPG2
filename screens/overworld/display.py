@@ -90,8 +90,10 @@ class Display(object):
         Wanneer deze state op de stack komt, voer dit uit.
         Zet muziek en achtergrond geluiden indien nodig.
         """
-        self.engine.audio.set_bg_music(self.name)
-        self.engine.audio.set_bg_sounds(self.name)
+        if self.engine.wait_for_transition_before_loading_music is False:
+            self.engine.audio.set_bg_music(self.name)
+            self.engine.audio.set_bg_sounds(self.name)
+            self.engine.try_to_load_music = False
 
         self.window.on_enter()
 

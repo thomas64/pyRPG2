@@ -44,7 +44,9 @@ class GameEngine(object):
         self.audio = Audio(self)
 
         self.running = False
-        self.new_game = False
+        self.all_maps_loaded = False
+        self.wait_for_transition_before_loading_music = False
+        self.try_to_load_music = False
 
         self.clock = pygame.time.Clock()
         self.playtime = 0.0
@@ -60,8 +62,7 @@ class GameEngine(object):
 
         threading.Thread(target=self.load_all_maps).start()
 
-    @staticmethod
-    def load_all_maps():
+    def load_all_maps(self):
         """..."""
         from constants import MapTitle
         import pytmx
@@ -70,6 +71,7 @@ class GameEngine(object):
         # noinspection PyTypeChecker
         for map_name in MapTitle:
             map_name.value.append(pytmx.load_pygame(map_path + map_name.name + '.tmx'))
+        self.all_maps_loaded = True
         Console.maps_loaded()
 
     def on_enter(self):
@@ -194,6 +196,7 @@ class GameEngine(object):
                 hero = self.gamestate.peek().window.party_sprites[0]
                 text2 = (
                     "map:               {}".format(self.data.map_name),
+                    "prev_map:          {}".format(self.gamestate.peek().window.prev_map_name),
                     "zoom:              {:.1f}".format(self.gamestate.peek().window.current_map.map_layer.zoom),
                     "time_up:           {}".format(hero.time_up),
                     "time_down:         {}".format(hero.time_down),
