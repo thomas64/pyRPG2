@@ -53,4 +53,4 @@ class SettingsMenu(BaseMenu):
             self.engine.audio.write_cfg()
 
         elif menu_item.text == "Back":
-            self.on_exit()
+            self.on_quit()

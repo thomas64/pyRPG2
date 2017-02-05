@@ -37,6 +37,7 @@ class MainMenu(BaseMenu):
         """
         if menu_item.text == "New Game":
             self.engine.new_game = True
+            self.engine.audio.fade_bg_music()
             self.engine.data = Data()
             Script.new_game(self.engine.data)
             push_object = Overworld(self.engine)
@@ -58,9 +59,9 @@ class MainMenu(BaseMenu):
             self.engine.gamestate.push(push_object)
 
         elif menu_item.text == "Exit":
-            self.on_exit()
+            self.on_quit()
 
-    def on_exit(self):
+    def on_quit(self):
         """
         Zie BaseMenu. Stopt de engine.
         """

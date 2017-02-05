@@ -256,8 +256,8 @@ class Parchment(object):
 
     def _close(self):
         self.engine.audio.play_sound(SFX.scroll)
-        self.engine.gamestate.pop()
         self.engine.gamestate.push(Transition(self.engine.gamestate))
+        self.engine.gamestate.deep_pop()
 
     def _previous(self):
         self.engine.audio.play_sound(SFX.menu_switch)

@@ -58,6 +58,14 @@ class StateMachine(object):
         except IndexError:
             return None                     # empty stack
 
+    def deep_pop(self, stackindex=-2):
+        """
+        Pop de op een na bovenste laag van de stack.
+        """
+        self.deep_peek().on_exit()
+        Console.state_deep_pop(self.deep_peek().name)
+        del self.statestack[stackindex]
+
     def push(self, state):
         """
         :param state: Push a new state onto the stack.

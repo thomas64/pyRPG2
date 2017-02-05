@@ -29,7 +29,7 @@ class SaveMenu(LoadMenu):
         """
         filename = None
         if menu_item.text == "Back":
-            self.on_exit()
+            self.on_quit()
         elif "..." in menu_item.text:
             new_name = InputBox(self.engine.audio).input_loop()
             if new_name:

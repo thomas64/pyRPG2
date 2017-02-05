@@ -138,7 +138,7 @@ class Display(object):
                                                    self.scr_capt, self.cur_item)
             elif event.key == Keys.Exit.value:
                 self.audio.play_sound(SFX.menu_select)
-                self.menu_content_object.on_exit()
+                self.menu_content_object.on_quit()
 
     # noinspection PyMethodMayBeStatic
     def multi_input(self, key_input, mouse_pos, dt):

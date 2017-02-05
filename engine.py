@@ -49,7 +49,7 @@ class GameEngine(object):
         self.clock = pygame.time.Clock()
         self.playtime = 0.0
         self.dt = 0.0
-        self.key_timer = 1.0  # kaarten laad tijd
+        self.key_timer = 2.0  # kaarten laad tijd
         self.state_timer = 0.0
 
         self.debugfont = pygame.font.SysFont(DEBUGFONT, DEBUGFONTSIZE)

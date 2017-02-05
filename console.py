@@ -33,7 +33,7 @@ class Console:
         StateMachine.push()
         :param state: Enum
         """
-        print("Game pushed {} on stack.".format(state))
+        print("Game pushed {} on top of stack.".format(state))
 
     @staticmethod
     def state_pop(state):
@@ -41,7 +41,15 @@ class Console:
         StateMachine.pop()
         :param state: Enum
         """
-        print("Game popped {} off stack.".format(state))
+        print("Game popped {} from top of stack.".format(state))
+
+    @staticmethod
+    def state_deep_pop(state):
+        """
+        StateMachine.deep_pop()
+        :param state: Enum
+        """
+        print("Game popped {} from inside of stack.".format(state))
 
     @staticmethod
     def state_clear():

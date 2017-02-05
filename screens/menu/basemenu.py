@@ -25,7 +25,7 @@ class BaseMenu(object):
         """
         raise NotImplementedError
 
-    def on_exit(self):
+    def on_quit(self):
         """
         Als er een exit commando, bijvoorbeeld escape wordt gedaan.
         Popt de bovenste state.

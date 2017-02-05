@@ -179,11 +179,8 @@ class Display(object):
     def on_exit(self):
         """
         Wanneer deze state onder een andere state van de stack komt, voer dit uit.
-        Wanneer de party is aangepast herlaadt dan de map voor visuele update.
         """
-        if self.party_changed:
-            self.engine.key_timer = NEWMAPTIMEOUT
-            self.engine.gamestate.deep_peek().window.load_map()
+        pass
 
     def single_input(self, event):
         """
@@ -451,6 +448,11 @@ class Display(object):
         self._init_boxes()
 
     def _close(self):
+        # Wanneer de party is aangepast herlaad dan de map voor visuele update.
+        if self.party_changed:
+            self.engine.key_timer = NEWMAPTIMEOUT
+            self.engine.gamestate.deep_peek().window.load_map()
+
         self.engine.audio.play_sound(SFX.scroll)
-        self.engine.gamestate.pop()
         self.engine.gamestate.push(Transition(self.engine.gamestate))
+        self.engine.gamestate.deep_pop()

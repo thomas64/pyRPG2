@@ -65,7 +65,7 @@ class LoadMenu(BaseMenu):
         :param index: zie BaseMenu
         """
         if menu_item.text == "Back":
-            self.on_exit()
+            self.on_quit()
         elif "..." in menu_item.text:
             self.engine.audio.stop_sound(SFX.menu_select)
             self.engine.audio.play_sound(SFX.menu_error)

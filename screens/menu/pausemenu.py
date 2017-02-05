@@ -33,7 +33,7 @@ class PauseMenu(BaseMenu):
         :param index: zie BaseMenu
         """
         if menu_item.text == "Continue":
-            self.on_exit()
+            self.on_quit()
 
         elif menu_item.text == "Load Game":
             push_object = screens.menu.create_menu(GameState.LoadMenu, self.engine, scr_capt=scr_capt)
