@@ -227,49 +227,52 @@ class Window(object):
         if event.type == pygame.KEYDOWN:
 
             if event.key == Keys.Align.value:
-                self.party_sprites[0].align_to_grid(GRIDSIZE)
-                self.align()
+                if self.engine.debug_mode:
+                    self.party_sprites[0].align_to_grid(GRIDSIZE)
+                    self.align()
 
             elif event.key == Keys.Grid.value:
-                if self.grid_sprite is None:
-                    self.grid_sprite = Grid(self.current_map.width, self.current_map.height,
-                                            GRIDCOLOR, GRIDSIZE, GRIDLAYER)
-                    self.group.add(self.grid_sprite)
-                else:
-                    self.group.remove(self.grid_sprite)
-                    self.grid_sprite = None
+                if self.engine.debug_mode:
+                    if self.grid_sprite is None:
+                        self.grid_sprite = Grid(self.current_map.width, self.current_map.height,
+                                                GRIDCOLOR, GRIDSIZE, GRIDLAYER)
+                        self.group.add(self.grid_sprite)
+                    else:
+                        self.group.remove(self.grid_sprite)
+                        self.grid_sprite = None
 
             elif event.key == Keys.Cbox.value:
-                if len(self.cbox_sprites) == 0:                             # als de lijst leeg is.
-                    for unit in self.party_sprites:
-                        self.cbox_sprites.append(ColorBox(unit.rect, HEROCOLOR, CBOXLAYER))
-                    for rect in self.current_map.high_blocker_rects:
-                        self.cbox_sprites.append(ColorBox(rect, HIGHBLOCKERCOLOR, CBOXLAYER))
-                    for rect in self.current_map.low_blocker_rects:
-                        self.cbox_sprites.append(ColorBox(rect, LOWBLOCKERCOLOR, CBOXLAYER))
-                    for obj in self.current_map.people:
-                        if getattr(obj, 'wander_area', None):
-                            self.cbox_sprites.append(ColorBox(obj.wander_area, WANDERBOXCOLOR, CBOXLAYER))
-                    for obj_group in (self.current_map.text_events,
-                                      self.current_map.move_events):
-                        for obj in obj_group:
-                            self.cbox_sprites.append(ColorBox(obj.rect, TEXTEVENTCOLOR, CBOXLAYER))
-                    for obj_group in (self.current_map.heroes,
-                                      self.current_map.shops,
-                                      self.current_map.schools,
-                                      self.current_map.trainers,
-                                      self.current_map.inns,
-                                      self.current_map.people,
-                                      self.current_map.notes,
-                                      self.current_map.signs,
-                                      self.current_map.chests,
-                                      self.current_map.sparkly):
-                        for obj in obj_group:
-                            self.cbox_sprites.append(ColorBox(obj.rect, OBJECTCOLOR, CBOXLAYER))
-                    self.group.add(self.cbox_sprites)
-                else:
-                    self.group.remove(self.cbox_sprites)
-                    self.cbox_sprites = []
+                if self.engine.debug_mode:
+                    if len(self.cbox_sprites) == 0:                             # als de lijst leeg is.
+                        for unit in self.party_sprites:
+                            self.cbox_sprites.append(ColorBox(unit.rect, HEROCOLOR, CBOXLAYER))
+                        for rect in self.current_map.high_blocker_rects:
+                            self.cbox_sprites.append(ColorBox(rect, HIGHBLOCKERCOLOR, CBOXLAYER))
+                        for rect in self.current_map.low_blocker_rects:
+                            self.cbox_sprites.append(ColorBox(rect, LOWBLOCKERCOLOR, CBOXLAYER))
+                        for obj in self.current_map.people:
+                            if getattr(obj, 'wander_area', None):
+                                self.cbox_sprites.append(ColorBox(obj.wander_area, WANDERBOXCOLOR, CBOXLAYER))
+                        for obj_group in (self.current_map.text_events,
+                                          self.current_map.move_events):
+                            for obj in obj_group:
+                                self.cbox_sprites.append(ColorBox(obj.rect, TEXTEVENTCOLOR, CBOXLAYER))
+                        for obj_group in (self.current_map.heroes,
+                                          self.current_map.shops,
+                                          self.current_map.schools,
+                                          self.current_map.trainers,
+                                          self.current_map.inns,
+                                          self.current_map.people,
+                                          self.current_map.notes,
+                                          self.current_map.signs,
+                                          self.current_map.chests,
+                                          self.current_map.sparkly):
+                            for obj in obj_group:
+                                self.cbox_sprites.append(ColorBox(obj.rect, OBJECTCOLOR, CBOXLAYER))
+                        self.group.add(self.cbox_sprites)
+                    else:
+                        self.group.remove(self.cbox_sprites)
+                        self.cbox_sprites = []
 
     def multi_input(self, key_input, mouse_pos, dt):
         """
@@ -283,18 +286,20 @@ class Window(object):
         # geen key_input mogelijk bij automatisch bewegen
         if not self.auto_move_event:
 
-            if key_input[Keys.Zoomplus.value[0]] or key_input[Keys.Zoomplus.value[1]]:
-                value = self.current_map.map_layer.zoom + ZOOMSPEED
-                if value < MAXZOOM:
-                    self.current_map.map_layer.zoom = value
-            elif key_input[Keys.Zoommin.value[0]] or key_input[Keys.Zoommin.value[1]]:
-                value = self.current_map.map_layer.zoom - ZOOMSPEED
-                if value > MINZOOM:
-                    self.current_map.map_layer.zoom = value
-            elif key_input[Keys.Zoomreset.value[0]] or key_input[Keys.Zoomreset.value[1]]:
-                self.current_map.map_layer.zoom = DEFZOOM
+            if self.engine.debug_mode:
+                if key_input[Keys.Zoomplus.value[0]] or key_input[Keys.Zoomplus.value[1]]:
+                    value = self.current_map.map_layer.zoom + ZOOMSPEED
+                    if value < MAXZOOM:
+                        self.current_map.map_layer.zoom = value
+                elif key_input[Keys.Zoommin.value[0]] or key_input[Keys.Zoommin.value[1]]:
+                    value = self.current_map.map_layer.zoom - ZOOMSPEED
+                    if value > MINZOOM:
+                        self.current_map.map_layer.zoom = value
+                elif key_input[Keys.Zoomreset.value[0]] or key_input[Keys.Zoomreset.value[1]]:
+                    self.current_map.map_layer.zoom = DEFZOOM
 
-            self.party_sprites[0].speed(key_input)
+            if self.engine.debug_mode:
+                self.party_sprites[0].speed(key_input)
             self.party_sprites[0].direction(key_input, dt)
             # todo, moet dit niet naar de unit class?
             self.party_sprites[0].check_blocker(self.current_map.high_blocker_rects,

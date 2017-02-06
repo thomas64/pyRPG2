@@ -219,12 +219,13 @@ class Display(Parchment):
         :param mouse_pos: pygame.mouse.get_pos()
         :param dt: self.clock.tick(FPS)/1000.0
         """
-        # todo, weghalen uiteindelijk. cheat voor geld erbij ctrl+
-        if key_input[pygame.K_LCTRL] or key_input[pygame.K_RCTRL]:
-            if key_input[pygame.K_KP_PLUS]:
-                self.engine.data.pouch.add(self.gold_object, 1, False)
-            elif key_input[pygame.K_KP_MINUS]:
-                self.engine.data.pouch.remove(self.gold_object, 1, False)
+        if self.engine.debug_mode:
+            # todo, weghalen uiteindelijk. cheat voor geld erbij ctrl+
+            if key_input[pygame.K_LCTRL] or key_input[pygame.K_RCTRL]:
+                if key_input[pygame.K_KP_PLUS]:
+                    self.engine.data.pouch.add(self.gold_object, 1, False)
+                elif key_input[pygame.K_KP_MINUS]:
+                    self.engine.data.pouch.remove(self.gold_object, 1, False)
 
     def update(self, dt):
         """

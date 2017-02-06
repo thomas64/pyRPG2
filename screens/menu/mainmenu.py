@@ -39,7 +39,7 @@ class MainMenu(BaseMenu):
             self.engine.wait_for_transition_before_loading_music = True
             self.engine.audio.fade_bg_music()
             self.engine.data = Data()
-            Script.new_game(self.engine.data)
+            Script.new_game(self.engine.data, self.engine.debug_mode)
             push_object = Overworld(self.engine)
             self.engine.gamestate.change(push_object)
             self.engine.gamestate.push(Transition(self.engine.gamestate))

@@ -66,3 +66,10 @@ class MenuText(object):
         pos_y = self.rect.y
         # zet de nieuwe positie
         self.set_position(pos_x, pos_y)
+
+    def change_value(self, old_val, new_val):
+        """
+        :param old_val: int
+        :param new_val:int
+        """
+        self.text = self.text.replace(str(old_val), str(new_val))

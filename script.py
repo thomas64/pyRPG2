@@ -27,7 +27,7 @@ class Script:
     """
 
     @staticmethod
-    def new_game(data):
+    def new_game(data, debug_mode):
         """
         Wat te doen bij het starten van een nieuw spel.
         :param data: self.engine.data
@@ -49,25 +49,26 @@ class Script:
         pouch_item = inventoryitems.factory_pouch_item(PouchItemDatabase.gold)
         data.pouch.add(pouch_item, 1, verbose=False)
 
-        #### todo, tijdelijk
-        data.pouch.add(pouch_item, 900, verbose=False)
-        data.heroes['alagos'].gain_experience(999)
+        if debug_mode:
+            #### todo, tijdelijk
+            data.pouch.add(pouch_item, 900, verbose=False)
+            data.heroes['alagos'].gain_experience(999)
 
-        pouch_item = inventoryitems.factory_pouch_item(PouchItemDatabase.herbs)
-        data.pouch.add(pouch_item, 999, verbose=False)
-        pouch_item = inventoryitems.factory_pouch_item(PouchItemDatabase.spices)
-        data.pouch.add(pouch_item, 999, verbose=False)
-        pouch_item = inventoryitems.factory_pouch_item(PouchItemDatabase.gemstones)
-        data.pouch.add(pouch_item, 999, verbose=False)
-        pouch_item = inventoryitems.factory_pouch_item(PouchItemDatabase.cloth)
-        data.pouch.add(pouch_item, 999, verbose=False)
-        pouch_item = inventoryitems.factory_pouch_item(PouchItemDatabase.leather)
-        data.pouch.add(pouch_item, 999, verbose=False)
-        pouch_item = inventoryitems.factory_pouch_item(PouchItemDatabase.wood)
-        data.pouch.add(pouch_item, 999, verbose=False)
-        pouch_item = inventoryitems.factory_pouch_item(PouchItemDatabase.metals)
-        data.pouch.add(pouch_item, 999, verbose=False)
-        ####################
+            pouch_item = inventoryitems.factory_pouch_item(PouchItemDatabase.herbs)
+            data.pouch.add(pouch_item, 999, verbose=False)
+            pouch_item = inventoryitems.factory_pouch_item(PouchItemDatabase.spices)
+            data.pouch.add(pouch_item, 999, verbose=False)
+            pouch_item = inventoryitems.factory_pouch_item(PouchItemDatabase.gemstones)
+            data.pouch.add(pouch_item, 999, verbose=False)
+            pouch_item = inventoryitems.factory_pouch_item(PouchItemDatabase.cloth)
+            data.pouch.add(pouch_item, 999, verbose=False)
+            pouch_item = inventoryitems.factory_pouch_item(PouchItemDatabase.leather)
+            data.pouch.add(pouch_item, 999, verbose=False)
+            pouch_item = inventoryitems.factory_pouch_item(PouchItemDatabase.wood)
+            data.pouch.add(pouch_item, 999, verbose=False)
+            pouch_item = inventoryitems.factory_pouch_item(PouchItemDatabase.metals)
+            data.pouch.add(pouch_item, 999, verbose=False)
+            ####################
 
         data.map_name = 'ersin_forest_center'
         data.map_pos = 'start_game'     # dit is de naam van de startpositie object in de tmx map

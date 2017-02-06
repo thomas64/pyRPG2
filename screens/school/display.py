@@ -140,12 +140,13 @@ class Display(Parchment):
         :param mouse_pos: pygame.mouse.get_pos()
         :param dt: self.clock.tick(FPS)/1000.0
         """
-        # todo, weghalen uiteindelijk. cheat voor xp erbij ctrl+
-        if key_input[pygame.K_LCTRL] or key_input[pygame.K_RCTRL]:
-            if key_input[pygame.K_KP_PLUS]:
-                self.subtype.gain_experience(1)
-            elif key_input[pygame.K_KP_MINUS]:
-                self.subtype.gain_experience(-1)
+        if self.engine.debug_mode:
+            # todo, weghalen uiteindelijk. cheat voor xp erbij ctrl+
+            if key_input[pygame.K_LCTRL] or key_input[pygame.K_RCTRL]:
+                if key_input[pygame.K_KP_PLUS]:
+                    self.subtype.gain_experience(1)
+                elif key_input[pygame.K_KP_MINUS]:
+                    self.subtype.gain_experience(-1)
 
     def update(self, dt):
         """

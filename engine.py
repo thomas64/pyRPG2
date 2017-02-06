@@ -59,6 +59,8 @@ class GameEngine(object):
         self.mouse_input = None
 
         self.show_debug = False
+        self.debug_mode = False
+        self.fps = FPS
 
         threading.Thread(target=self.load_all_maps).start()
 
@@ -88,7 +90,7 @@ class GameEngine(object):
         """
         while self.running:
             # limit the redraw speed to 60 frames per second
-            self.dt = self.clock.tick(FPS)/1000.0
+            self.dt = self.clock.tick(self.fps)/1000.0
             self.playtime += self.dt
 
             for event in pygame.event.get():
@@ -110,12 +112,13 @@ class GameEngine(object):
         if event.type == pygame.KEYDOWN:
             # Console.keyboard_down(event.key, event.unicode)
 
-            if event.key == Keys.Debug.value:
-                # simple boolean swith
-                self.show_debug ^= True
-            if event.key == Keys.Kill.value:
-                # todo, deze, de key en de methode moeten uiteindelijk weg.
-                self._kill_game()
+            if self.debug_mode:
+                if event.key == Keys.Debug.value:
+                    # simple boolean swith
+                    self.show_debug ^= True
+                if event.key == Keys.Kill.value:
+                    # todo, deze, de key en de methode moeten uiteindelijk weg.
+                    self._kill_game()
 
         if self.key_timer == 0.0:
             self.gamestate.peek().single_input(event)
@@ -169,6 +172,16 @@ class GameEngine(object):
         import sys
         pygame.quit()
         sys.exit()
+
+    def change_fps(self):
+        """..."""
+        old_fps = self.fps
+        if self.fps < 100:
+            self.fps += 40
+        else:
+            self.fps = 20
+        new_fps = self.fps
+        return old_fps, new_fps
 
     def _show_debug(self):
         if self.show_debug:

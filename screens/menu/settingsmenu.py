@@ -25,6 +25,11 @@ class SettingsMenu(BaseMenu):
             self.content.append('Sound: On')
         else:
             self.content.append('Sound: Off')
+        if engine.debug_mode:
+            self.content.append('Debug mode: On')
+        else:
+            self.content.append('Debug mode: Off')
+        self.content.append('FPS: {}'.format(engine.fps))
 
         self.content.append('Back')
 
@@ -51,6 +56,14 @@ class SettingsMenu(BaseMenu):
             menu_item.flip_switch()
             self.engine.audio.flip_sound()
             self.engine.audio.write_cfg()
+
+        elif menu_item.text.startswith("Debug mode:"):
+            menu_item.flip_switch()
+            self.engine.debug_mode ^= True
+
+        elif menu_item.text.startswith("FPS:"):
+            old_fps, new_fps = self.engine.change_fps()
+            menu_item.change_value(old_fps, new_fps)
 
         elif menu_item.text == "Back":
             self.on_quit()
