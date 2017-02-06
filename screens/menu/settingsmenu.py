@@ -17,6 +17,10 @@ class SettingsMenu(BaseMenu):
             self.content.append('Full screen: On')
         else:
             self.content.append('Full screen: Off')
+        if engine.video.window_frame:
+            self.content.append('Window frame: On')
+        else:
+            self.content.append('Window frame: Off')
         if engine.audio.music:
             self.content.append('Music: On')
         else:
@@ -45,6 +49,11 @@ class SettingsMenu(BaseMenu):
         if menu_item.text.startswith("Full screen:"):
             menu_item.flip_switch()
             self.engine.video.flip_fullscreen()
+            self.engine.video.write_cfg()
+
+        elif menu_item.text.startswith("Window frame:"):
+            menu_item.flip_switch()
+            self.engine.video.flip_window_frame()
             self.engine.video.write_cfg()
 
         elif menu_item.text.startswith("Music:"):
