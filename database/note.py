@@ -22,7 +22,7 @@ class NoteDatabase(enum.Enum):
     note4 = [["You found a secret book."],
              ["But there are no pages..."]]
     # ersin_forest
-    note5 = [["There is a small note sticked to the tent:"],
+    note5 = [["There is a small note pinned to the tent:"],
              ["I'm out admiring the scenery.",
               "I'll be back...",
               " ",

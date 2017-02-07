@@ -54,7 +54,7 @@ class PeopleDatabase(enum.Enum):
     # invernia_town
     person52 = dict(name='boy01',        text=[["Hi mister!", "We're playing hide and seek.",
                                                "I'm seeking, where are they?"]])
-    person53 = dict(name='girl01',       text=[["Aaw, I'm already caugth."]])
+    person53 = dict(name='girl01',       text=[["Aaw, I'm already caught."]])
     person54 = dict(name='girl02',       text=[["Psst, I'm hiding, please don't say anything."]])
     person55 = dict(name='boy02',        text=[["Teehee, he'll never find me here."]])
     # invernia_inn_1f

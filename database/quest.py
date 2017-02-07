@@ -22,7 +22,7 @@ class QuestDatabase(enum.Enum):
                          ["Can you please help me find some?"]],
                         [["If you've got 10 herbs,", "please give them to me."]],
                         # de confirmbox tekst moet niet tussen dubbele blokhaken
-                        ["Help the boy out and give him 10 herbs?", "", "Yes, ofcourse!", "No, these are my herbs."],
+                        ["Help the boy out and give him 10 herbs?", "", "Yes, of course!", "No, these are my herbs."],
                         [["Thanks a lot for the herbs!", "Now my mom will be better soon."],
                          ["Instead of the herbs I found this here in the forest.",
                           "You can have it, for helping my mommy."]],
@@ -72,7 +72,7 @@ class QuestDatabase(enum.Enum):
                   # meerdere textscheremen zoals bij notes.
                   text=([["It's so beautiful, I can watch this scenery for hours."],
                          ["    .       .       .       .       .       .       ."],
-                         ["By the way, have you been bothered", "by that half ass soldier at our town?",
+                         ["By the way, have you been bothered", "by that halfwit soldier at our town?",
                           "He has taken it up on himself to prevent", "monsters for entering the town!"],
                          ["That may be noble, but he is not able", "to see the difference between a normal",
                           "person and an evil monster."], ["So he asks for proof?!?"],

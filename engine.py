@@ -107,10 +107,14 @@ class GameEngine(object):
         Handelt de muis en keyboard input af.
         :param event: pygame.event.get()
         """
+        if event.type == pygame.MOUSEMOTION:
+            pygame.mouse.set_visible(True)
+
         # if event.type == pygame.MOUSEBUTTONDOWN:          # todo, tijdelijk staan ze uit
         #     Console.mouse_down(event.pos, event.button)
         if event.type == pygame.KEYDOWN:
             # Console.keyboard_down(event.key, event.unicode)
+            pygame.mouse.set_visible(False)
 
             if self.debug_mode:
                 if event.key == Keys.Debug.value:

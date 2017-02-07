@@ -61,6 +61,8 @@ class StateMachine(object):
     def deep_pop(self, stackindex=-2):
         """
         Pop de op een na bovenste laag van de stack.
+        Deze is in leven geroepen zodat je eerst wat op de stack kan gooien. En dan die daar onder zit te poppen.
+        Op deze manier wordt de on_enter() van die dááronder niet aangeroepen.
         """
         self.deep_peek().on_exit()
         Console.state_deep_pop(self.deep_peek().name)

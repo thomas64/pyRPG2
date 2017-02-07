@@ -41,14 +41,14 @@ class TreasureChestDatabase(aenum.NoAliasEnum):
     @staticmethod
     def mec_text(value):
         """..."""
-        return ["There's a dangerous trap on this treasurechest.",
+        return ["There's a dangerous trap on this treasure chest.",
                 "You need a rank {} of the Mechanic Skill to".format(value),
                 "disarm the trap."]
 
     @staticmethod
     def thf_text(value):
         """..."""
-        return ["There's a lock on this treasurechest.",
+        return ["There's a lock on this treasure chest.",
                 "You need a rank {} of the Thief Skill".format(value),
                 "to pick the lock."]
 

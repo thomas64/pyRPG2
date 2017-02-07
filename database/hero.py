@@ -173,7 +173,7 @@ class HeroDatabase(enum.Enum):
                     "But I still need to prep myself a little bit.",
                     "May I join you in your travels?",
                     "",
-                    "Ofcourse Rydalin, I would like your company.",
+                    "Of course Rydalin, I would like your company.",
                     "I'm sorry, already so many people joined me.")
 
         elif hero_raw == cls.codrif.name:  # p(1).xpt >= 9000 - ((9000 / 100) * sale)
@@ -184,7 +184,7 @@ class HeroDatabase(enum.Enum):
                     "somewhere interesting. Maybe if I join you I can help",
                     "you... or help me? I don't know. Uuhhm, yes?",
                     "",
-                    "Hahaha, ofcourse we can help each other.",
+                    "Hahaha, of course we can help each other.",
                     "Uuuuuhmmm... No.")
 
         elif hero_raw == cls.galen.name:
@@ -235,7 +235,7 @@ class HeroDatabase(enum.Enum):
             return ("Hellooo there!",
                     "You need me. Everybody needs me.",
                     "And that's obvious if you'd know me.",
-                    "But ofcourse that is possible now!",
+                    "But of course that is possible now!",
                     "I shall join your party. And I am sure",
                     "you cannot refuse such an offer.",
                     "",
