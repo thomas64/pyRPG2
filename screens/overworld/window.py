@@ -632,7 +632,8 @@ class Window(object):
                         spr.turn(self.party_sprites[0].rect)
 
             self.inn_box = ConfirmBox(self.engine.gamestate, self.engine.audio,
-                                      InnDatabase.welcome_text(self.inn_data['price']), self.inn_data['face'])
+                                      InnDatabase.welcome_text(self.inn_data['price']),
+                                      face_image=self.inn_data['face'])
             self.engine.gamestate.push(self.inn_box)
 
     def check_people(self, check_rect):
@@ -663,8 +664,8 @@ class Window(object):
             # of als hij dat niet heeft
             else:
                 for i, text_part in enumerate(reversed(person_data['text'])):
-                    push_object = MessageBox(self.engine.gamestate, self.engine.audio, text_part, person_data['face'],
-                                             last=(True if i == 0 else False))
+                    push_object = MessageBox(self.engine.gamestate, self.engine.audio, text_part,
+                                             face_image=person_data['face'], last=(True if i == 0 else False))
                     self.engine.gamestate.push(push_object)
 
     def check_notes(self, check_rect):
@@ -737,8 +738,8 @@ class Window(object):
                     image = []
                     text, image = self.display_loot(chest_data['content'], text, image)
                     chest_data['content'] = dict()
-                    push_object = MessageBox(self.engine.gamestate, self.engine.audio,
-                                             text, spr_image=image, sound=SFX.chest)
+                    push_object = MessageBox(self.engine.gamestate, self.engine.audio, text,
+                                             spr_image=image, sound=SFX.chest)
                     self.engine.gamestate.push(push_object)
 
     def check_sparklies(self, check_rect):
@@ -756,8 +757,8 @@ class Window(object):
                 image = []
                 text, image = self.display_loot(sparkly_data['content'], text, image)
                 sparkly_data['content'] = dict()
-                push_object = MessageBox(self.engine.gamestate, self.engine.audio,
-                                         text, spr_image=image, sound=SFX.sparkly)
+                push_object = MessageBox(self.engine.gamestate, self.engine.audio, text,
+                                         spr_image=image, sound=SFX.sparkly)
                 self.engine.gamestate.push(push_object)
 
     def display_loot(self, content_data, text, image):

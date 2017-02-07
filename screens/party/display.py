@@ -429,8 +429,8 @@ class Display(object):
                     "",
                     "Yes, you may leave.",
                     "No, I want you to stay."]
-            self.leave_box = ConfirmBox(self.engine.gamestate, self.engine.audio,
-                                        text, self.cur_hero.FAC, sound=SFX.message)
+            self.leave_box = ConfirmBox(self.engine.gamestate, self.engine.audio, text,
+                                        face_image=self.cur_hero.FAC, sound=SFX.message)
             self.engine.gamestate.push(self.leave_box)
 
     def _previous(self):

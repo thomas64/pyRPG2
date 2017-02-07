@@ -61,7 +61,7 @@ class FetchItemQuestItem(BaseQuestItem):
         :return: deze is voor het vullen van een quest_box in window. returnt een confirmbox indien nodig.
         """
         for i, text_part in enumerate(reversed(self._get_text())):
-            push_object = MessageBox(gamestate, audio, text_part, face_image,
+            push_object = MessageBox(gamestate, audio, text_part, face_image=face_image,
                                      last=(True if i == 0 and (not self._is_ready_to_fulfill(data) or
                                                                self.state == QuestState.Rewarded) else False))
             gamestate.push(push_object)
@@ -100,8 +100,8 @@ class FetchItemQuestItem(BaseQuestItem):
                 text = ["Received:"]
                 image = []
                 text, image = display_loot(self.reward, text, image)
-                push_object = MessageBox(gamestate, audio, text, spr_image=image, scr_capt=scr_capt,
-                                         sound=SFX.reward, last=True)
+                push_object = MessageBox(gamestate, audio, text,
+                                         spr_image=image, scr_capt=scr_capt, sound=SFX.reward, last=True)
                 gamestate.push(push_object)
 
                 # nog een bedank berichtje van de quest owner.
@@ -234,7 +234,8 @@ class PersonMessageQuestItem(BaseQuestItem):
                 gamestate.push(push_object)
 
         for i, text_part in enumerate(reversed(self._get_text(person_id))):
-            push_object = MessageBox(gamestate, audio, text_part, face_image, last=self._message_is_last(i, person_id))
+            push_object = MessageBox(gamestate, audio, text_part,
+                                     face_image=face_image, last=self._message_is_last(i, person_id))
             gamestate.push(push_object)
 
         self._update_state(person_id)
@@ -340,7 +341,7 @@ class ReceiveItemQuestItem(BaseQuestItem):
             gamestate.push(push_object)
 
         for i, text_part in enumerate(reversed(self._get_text())):
-            push_object = MessageBox(gamestate, audio, text_part, face_image,
+            push_object = MessageBox(gamestate, audio, text_part, face_image=face_image,
                                      last=(True if i == 0 and self.state == QuestState.Rewarded else False))
             gamestate.push(push_object)
 

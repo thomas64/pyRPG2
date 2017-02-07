@@ -33,7 +33,7 @@ class MessageBox(object):
     Geeft een bericht weer op het scherm.
     """
     def __init__(self, gamestate, audio, raw_text, face_image=None, spr_image=None, scr_capt=None, sound=SFX.message,
-                 last=False):
+                 last=False, callback=None):
         """
         :param raw_text: dit is een list die aangeleverd moet worden. Als het alleen een string is, dan wordt het
         een plaatje die gebruikt maakt van face_image.
@@ -55,6 +55,8 @@ class MessageBox(object):
             self.scr_capt = ScreenCapture(black_background=True)
         else:
             self.scr_capt = scr_capt
+
+        self.callback = callback
 
         self.font = pygame.font.SysFont(FONT, FONTSIZE)
 
