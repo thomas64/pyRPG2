@@ -144,8 +144,8 @@ class Display(object):
         Wanneer deze state op de stack komt, voer dit uit.
         Zet muziek en achtergrond geluiden indien nodig.
         """
-        self.engine.audio.set_bg_music(self.name)
-        self.engine.audio.set_bg_sounds(self.name)
+        self.engine.audio.set_bg_music()
+        self.engine.audio.set_bg_sounds()
 
         # Als de leave party confirmbox in beeld is geweest.
         if self.leave_box:
@@ -452,10 +452,6 @@ class Display(object):
         if self.party_changed:
             self.engine.key_timer = NEWMAPTIMEOUT
             self.engine.gamestate.deep_peek().window.load_map()
-
-        # deze 2 regels zijn eigenlijk lelijke oplossingen. ze zijn er om de muziek goed te zetten
-        self.engine.try_to_load_music = True
-        self.engine.gamestate.deep_peek().window.prev_map_name = None
 
         self.engine.audio.play_sound(SFX.scroll)
         self.engine.gamestate.push(Transition(self.engine.gamestate))

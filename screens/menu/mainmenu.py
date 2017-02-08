@@ -7,7 +7,6 @@ from components import MessageBox
 from components import Transition
 from constants import GameState
 from data import Data
-from screens import Overworld
 from script import Script
 
 from .basemenu import BaseMenu
@@ -36,18 +35,19 @@ class MainMenu(BaseMenu):
         :param index: zie BaseMenu
         """
         if menu_item.text == "New Game":
-            self.engine.wait_for_transition_before_loading_music = True
             self.engine.audio.fade_bg_music()
             self.engine.data = Data()
             Script.new_game(self.engine.data, self.engine.debug_mode)
-            push_object = Overworld(self.engine)
-            self.engine.gamestate.change(push_object)
+            # als deze stack leeg is, komt Overworld er op.
             self.engine.gamestate.push(Transition(self.engine.gamestate))
+            self.engine.gamestate.deep_pop()
             self.engine.gamestate.push(MessageBox(self.engine.gamestate, self.engine.audio, Script.intro_text(),
                                                   scr_capt=False, sound=None))
             self.engine.gamestate.push(Transition(self.engine.gamestate))
-            self.engine.wait_for_transition_before_loading_music = False
-            self.engine.try_to_load_music = True
+            self.engine.gamestate.push(MessageBox(self.engine.gamestate, self.engine.audio, ["Loading world..."],
+                                                  scr_capt=False, sound=None))
+            self.engine.gamestate.push(Transition(self.engine.gamestate))
+            self.engine.force_bg_music = True
 
         elif menu_item.text == "Load Game":
             push_object = screens.menu.create_menu(GameState.LoadMenu, self.engine)

@@ -13,6 +13,7 @@ from console import Console
 from constants import GameState
 from constants import Keys
 import screens.menu
+from screens import Overworld
 from statemachine import StateMachine
 from video import Video
 
@@ -45,13 +46,12 @@ class GameEngine(object):
 
         self.running = False
         self.all_maps_loaded = False
-        self.wait_for_transition_before_loading_music = False
-        self.try_to_load_music = False
+        self.force_bg_music = False
 
         self.clock = pygame.time.Clock()
         self.playtime = 0.0
         self.dt = 0.0
-        self.key_timer = 2.0  # kaarten laad tijd
+        self.key_timer = 0.0
         self.state_timer = 0.0
 
         self.debugfont = pygame.font.SysFont(DEBUGFONT, DEBUGFONTSIZE)
@@ -93,14 +93,20 @@ class GameEngine(object):
             self.dt = self.clock.tick(self.fps)/1000.0
             self.playtime += self.dt
 
-            for event in pygame.event.get():
-                if event.type == pygame.QUIT:
-                    self.running = False
-                self.single_input(event)
-            self.multi_input()
-            self.update()
-            self.render()
+            if not self.gamestate.is_empty():
+                for event in pygame.event.get():
+                    if event.type == pygame.QUIT:
+                        self.running = False
+                    self.single_input(event)
+                self.multi_input()
+                self.update()
+                self.render()
             pygame.display.flip()
+
+            # als de stack leeg is, push Overworld. Dit vanwege geluid en kaarten laden.
+            if self.gamestate.is_empty():
+                if self.all_maps_loaded:
+                    self.gamestate.push(Overworld(self))
 
     def single_input(self, event):
         """
@@ -259,6 +265,8 @@ class GameEngine(object):
             except AttributeError:
                 pass
             text2 = (
+                "",
+                "prev_state:        {}".format(self.gamestate.prev_state),
                 "",
                 "StateStack:"
             )

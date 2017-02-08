@@ -77,8 +77,8 @@ class Display(object):
         Wanneer deze state op de stack komt, voer dit uit.
         Zet muziek en achtergrond geluiden indien nodig.
         """
-        self.audio.set_bg_music(self.name)
-        self.audio.set_bg_sounds(self.name)
+        self.audio.set_bg_music()
+        self.audio.set_bg_sounds()
 
     # noinspection PyMethodMayBeStatic
     def on_exit(self):

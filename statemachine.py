@@ -44,15 +44,17 @@ class StateMachine(object):
         Returns None if the stack is empty.
         """
         try:
-            self.prev_state = self.peek().name
+            # fade is nooit een prev state
+            if self.peek().name != GameState.FadeBlack:
+                self.prev_state = self.peek().name
             self.peek().on_exit()
             # bij messagebox en fade geen console output
             if self.peek().name != GameState.MessageBox and \
                self.peek().name != GameState.FadeBlack:
                 Console.state_pop(self.peek().name)
             del self.statestack[-1]
-            self.peek().on_enter()
-            self.prev_state = None
+            if not self.is_empty():
+                self.peek().on_enter()
             self.new_state = True
             return len(self.statestack) > 0
         except IndexError:
@@ -68,18 +70,23 @@ class StateMachine(object):
         Console.state_deep_pop(self.deep_peek().name)
         del self.statestack[stackindex]
 
-    def push(self, state):
+    def push(self, state, with_on_enter=True):
         """
         :param state: Push a new state onto the stack.
+        :param with_on_enter: wanneer False, sla dan de on_enter() over. vaak voor het uitstellen van de muziek.
         :return: Returns the pushed value.
         """
-        # bij messagebox fade geen console output
+        try:  # try is voor als er niets te peeken valt nog
+            if self.peek().name != GameState.FadeBlack:
+                self.prev_state = self.peek().name
+        except AttributeError:
+            pass
         if state.name != GameState.MessageBox and \
            state.name != GameState.FadeBlack:
             Console.state_push(state.name)
         self.statestack.append(state)
-        self.peek().on_enter()
-        self.prev_state = None
+        if with_on_enter:
+            self.peek().on_enter()
         self.new_state = True
         return state
 
@@ -87,18 +94,24 @@ class StateMachine(object):
         """
         Clear the whole stack.
         """
+        if self.peek().name != GameState.FadeBlack:
+            self.prev_state = self.peek().name
         self.peek().on_exit()
         Console.state_clear()
         self.statestack = []
-        self.prev_state = None
 
-    def change(self, state):
+    def change(self, state, with_on_enter=True):
         """
         Clear the whole stack. And pushes one.
         :param state: Push a new state onto the stack.
+        :param with_on_enter: wanneer False, sla dan de on_enter() over. vaak voor het uitstellen van de muziek.
         """
         self._clear()
-        self.push(state)
+        self.push(state, with_on_enter)
+
+    def is_empty(self):
+        """..."""
+        return len(self.statestack) == 0
 
     def swap(self):
         """

@@ -6,10 +6,10 @@ class: LoadMenu
 import datetime
 import os
 
+from components import MessageBox
 from components import Transition
 from constants import SFX
 from loadsave import Dialog as LoadDialog
-from screens import Overworld
 
 from .basemenu import BaseMenu
 
@@ -74,13 +74,13 @@ class LoadMenu(BaseMenu):
             data = LoadDialog.load(filename)
             # als de data niet corrupt is.
             if data:
-                self.engine.wait_for_transition_before_loading_music = True     # als deze op False staat, én Overworld
-                self.engine.data = data                                         # komt in de on_enter() dan gaat hij
-                push_object = Overworld(self.engine)                            # proberen muziek te laden.
-                self.engine.gamestate.change(push_object)                       # daarom gaat hij op False, pas nadat
-                self.engine.gamestate.push(Transition(self.engine.gamestate))   # Transition() op de stack staat.
-                self.engine.wait_for_transition_before_loading_music = False    # als die weg is, dan laadt hij pas
-                self.engine.try_to_load_music = True                            # de muziek.
+                self.engine.data = data
+                # als er na de reeks gamestates niets meer op stack ligt, komt overworld er in.
+                self.engine.gamestate.change(Transition(self.engine.gamestate))
+                self.engine.gamestate.push(MessageBox(self.engine.gamestate, self.engine.audio, ["Loading world..."],
+                                                      scr_capt=False, sound=None))
+                self.engine.gamestate.push(Transition(self.engine.gamestate))
+                self.engine.force_bg_music = True
             else:
                 self.engine.audio.stop_sound(SFX.menu_select)
                 self.engine.audio.play_sound(SFX.menu_error)

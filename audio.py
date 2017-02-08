@@ -92,8 +92,7 @@ class Audio(object):
         else:
             self.sound = True
             self.play_sound(SFX.menu_select)         # en speel weer een geluid af omdat er geluid is.
-            # kijkt 1 laag dieper om te zien of hij in mainmenu of pausemenu zit
-            self.set_bg_sounds(self.engine.gamestate.deep_peek().name)
+            self.set_bg_sounds(force=True)
 
     def flip_music(self):
         """
@@ -104,73 +103,118 @@ class Audio(object):
             self.stop_bg_music()
         else:
             self.music = True
-            self.set_bg_music(self.engine.gamestate.deep_peek().name)
+            self.set_bg_music(force=True)
 
     # todo, muziek van mainmenu later in laten komen?
-    def set_bg_music(self, currentstate):
+    def set_bg_music(self, force=False):
         """
-        Als mag, fade dan de huidige. Volume max, fade nieuwe muziek in.
-        :param currentstate: self.gamestate.peek().name
+        Alle bg music voorwaardelijke mogelijkheden op een rij afgehandeld.
         """
-        if self.engine.try_to_load_music:
-            if currentstate == GameState.Overworld:
-                if self._new_map_has_different_bg_music():
-                    self.bg_music_channel.set_volume(1)
-                    self.play_bg_music(MapMusic[self.engine.data.map_name].value[0])
-            return
-        else:
-            # bij settings menu moet er niets veranderen, en ook niet als hij van settings komt.
-            # ook niet als hij van messagebox komt. todo, dit begint wat lelijk te worden.
-            if currentstate == GameState.SettingsMenu or \
-               self.engine.gamestate.prev_state == GameState.SettingsMenu or \
-               self.engine.gamestate.prev_state == GameState.MessageBox or \
-               self.engine.gamestate.prev_state == GameState.ConfirmBox or \
-               self.engine.gamestate.prev_state == GameState.Shop or \
-               self.engine.gamestate.prev_state == GameState.FadeBlack:
-                return
+        curr_state = self.engine.gamestate.peek().name
+        prev_state = self.engine.gamestate.prev_state
 
-        self.fade_bg_music()
-        self.bg_music_channel.set_volume(1)
-
-        if currentstate == GameState.MainMenu:
-            # de fade en setvolume staan nu in de if, want bij muziek moet het niet altijd
+        if curr_state == GameState.MainMenu and \
+                (prev_state is None or
+                 prev_state == GameState.MainMenu or
+                 prev_state == GameState.LoadMenu):
+            self.bg_music_channel.set_volume(1)
             self.play_bg_music(TITLESCREEN)
-        elif currentstate == GameState.Overworld:
-            self.play_bg_music(MapMusic[self.engine.data.map_name].value[0])
-
-    def set_bg_sounds(self, currentstate):
-        """
-        Zet de achtergrond geluiden aan of uit afhankelijk van een state.
-        :param currentstate: self.statemachine.peek()
-        """
-        if self.engine.try_to_load_music:
-            if currentstate == GameState.Overworld:
-                if self._new_map_has_different_bg_sounds():
-                    self.bg_sound_channel1.set_volume(1)
-                    self.bg_sound_channel2.set_volume(1)
-                    self.play_sound(MapMusic[self.engine.data.map_name].value[1],
-                                    loop=-1, channel=self.bg_sound_channel1)
-            return
-        else:
-            if currentstate == GameState.SettingsMenu or \
-               self.engine.gamestate.prev_state == GameState.SettingsMenu or \
-               self.engine.gamestate.prev_state == GameState.MessageBox or \
-               self.engine.gamestate.prev_state == GameState.ConfirmBox or \
-               self.engine.gamestate.prev_state == GameState.Shop or \
-               self.engine.gamestate.prev_state == GameState.FadeBlack:
-                return
-
-        self.fade_bg_sounds()
-        self.bg_sound_channel1.set_volume(1)
-        self.bg_sound_channel2.set_volume(1)
-
-        if currentstate == GameState.MainMenu:
+        elif curr_state == GameState.MainMenu and \
+                prev_state == GameState.SettingsMenu:
             pass
+        elif curr_state == GameState.LoadMenu and \
+                prev_state == GameState.MainMenu:
+            self.fade_bg_music()
+        elif curr_state == GameState.SettingsMenu and \
+                prev_state == GameState.MainMenu and \
+                force is True:
+            self.bg_music_channel.set_volume(1)
+            self.play_bg_music(TITLESCREEN)
+        elif curr_state == GameState.SettingsMenu:
+            pass
+        elif curr_state == GameState.PauseMenu:
+            self.fade_bg_music()
+        elif curr_state == GameState.PartyScreen:
+            self.fade_bg_music()
+        elif curr_state == GameState.Overworld and \
+                prev_state == GameState.MessageBox and \
+                force is True:
+            self.bg_music_channel.set_volume(1)
+            self.play_bg_music(MapMusic[self.engine.data.map_name].value[0])
+        elif curr_state == GameState.Overworld and \
+                (prev_state == GameState.PauseMenu or
+                 prev_state == GameState.PartyScreen):
+            self.bg_music_channel.set_volume(1)
+            self.play_bg_music(MapMusic[self.engine.data.map_name].value[0])
+        elif curr_state == GameState.Overworld and \
+                (prev_state == GameState.Shop or
+                 prev_state == GameState.ConfirmBox):
+            pass
+        elif curr_state == GameState.Overworld and \
+                prev_state == GameState.Overworld:
+            if self._new_map_has_different_bg_music():
+                self.bg_music_channel.set_volume(1)
+                self.play_bg_music(MapMusic[self.engine.data.map_name].value[0])
+
+    def set_bg_sounds(self, force=False):
+        """
+        Alle bg sounds voorwaardelijke mogelijkheden op een rij afgehandeld.
+        """
+        curr_state = self.engine.gamestate.peek().name
+        prev_state = self.engine.gamestate.prev_state
+
+        if curr_state == GameState.MainMenu and \
+                (prev_state is None or
+                 prev_state == GameState.MainMenu or
+                 prev_state == GameState.LoadMenu):
+            self.bg_sound_channel1.set_volume(1)
+            self.bg_sound_channel2.set_volume(1)
             # self.play_sound(RIVER, loop=-1, channel=self.bg_sound_channel1)
             # self.play_sound(WIND, loop=-1, channel=self.bg_sound_channel2)
-        elif currentstate == GameState.Overworld:
+        elif curr_state == GameState.MainMenu and \
+                prev_state == GameState.SettingsMenu:
+            pass
+        elif curr_state == GameState.LoadMenu and \
+                prev_state == GameState.MainMenu:
+            self.fade_bg_sounds()
+        elif curr_state == GameState.SettingsMenu and \
+                prev_state == GameState.MainMenu and \
+                force is True:
+            self.bg_sound_channel1.set_volume(1)
+            self.bg_sound_channel2.set_volume(1)
+            # self.play_sound(RIVER, loop=-1, channel=self.bg_sound_channel1)
+            # self.play_sound(WIND, loop=-1, channel=self.bg_sound_channel2)
+        elif curr_state == GameState.SettingsMenu:
+            pass
+        elif curr_state == GameState.PauseMenu:
+            self.fade_bg_sounds()
+        elif curr_state == GameState.PartyScreen:
+            self.fade_bg_sounds()
+        elif curr_state == GameState.Overworld and \
+                prev_state == GameState.MessageBox and \
+                force is True:
+            self.bg_sound_channel1.set_volume(1)
+            self.bg_sound_channel2.set_volume(1)
             self.play_sound(MapMusic[self.engine.data.map_name].value[1],
                             loop=-1, channel=self.bg_sound_channel1)
+        elif curr_state == GameState.Overworld and \
+                (prev_state == GameState.PauseMenu or
+                 prev_state == GameState.PartyScreen):
+            self.bg_sound_channel1.set_volume(1)
+            self.bg_sound_channel2.set_volume(1)
+            self.play_sound(MapMusic[self.engine.data.map_name].value[1],
+                            loop=-1, channel=self.bg_sound_channel1)
+        elif curr_state == GameState.Overworld and \
+                (prev_state == GameState.Shop or
+                 prev_state == GameState.ConfirmBox):
+            pass
+        elif curr_state == GameState.Overworld and \
+                prev_state == GameState.Overworld:
+            if self._new_map_has_different_bg_sounds():
+                self.bg_sound_channel1.set_volume(1)
+                self.bg_sound_channel2.set_volume(1)
+                self.play_sound(MapMusic[self.engine.data.map_name].value[1],
+                                loop=-1, channel=self.bg_sound_channel1)
 
     def play_sound(self, sound, loop=0, channel=None):
         """

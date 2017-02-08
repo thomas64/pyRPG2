@@ -461,7 +461,6 @@ class Window(object):
             self.portal_to_nr = self.current_map.portals[portal_nr].to_nr
             self.engine.audio.fade_bg_music_when_loading_a_new_map()
             self.engine.audio.fade_bg_sounds_when_loading_a_new_map()
-            self.engine.try_to_load_music = True
             self.load_map()
             self.engine.gamestate.push(Transition(self.engine.gamestate, full_screen=False))
 
@@ -557,6 +556,7 @@ class Window(object):
                                            HeroDatabase.opening(self.hero_data.RAW),
                                            face_image=self.hero_data.FAC)
                 self.engine.gamestate.push(self.hero_box)
+                self.prev_map_name = self.engine.data.map_name  # deze is voor het geluid recht te breien.
 
     def check_shops(self, check_rect):
         """

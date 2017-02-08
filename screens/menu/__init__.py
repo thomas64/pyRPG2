@@ -41,8 +41,7 @@ def create_menu(state_name, engine, title1=None, animation1=None, scr_capt=None,
         content = LoadMenu(engine)
         title1 = Title(title=None, sub=GameState.LoadMenu.value)
         animation1 = None
-        if scr_capt is None:
-            scr_capt = None
+        scr_capt = scr_capt
         if select is None:
             select = -1
 
@@ -50,19 +49,15 @@ def create_menu(state_name, engine, title1=None, animation1=None, scr_capt=None,
         content = SaveMenu(engine)
         title1 = Title(title=None, sub=GameState.SaveMenu.value)
         animation1 = None
-        if scr_capt is None:
-            scr_capt = None
+        scr_capt = scr_capt
         if select is None:
             select = -1
 
     elif state_name == GameState.SettingsMenu:
         content = SettingsMenu(engine)
-        if title1 is None:
-            title1 = None
-        if animation1 is None:
-            animation1 = None
-        if scr_capt is None:
-            scr_capt = None
+        title1 = title1
+        animation1 = animation1
+        scr_capt = scr_capt
         select = -1
 
     elif state_name == GameState.PauseMenu:
