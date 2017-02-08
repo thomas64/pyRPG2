@@ -103,6 +103,12 @@ class GameEngine(object):
                 self.render()
             pygame.display.flip()
 
+            # pop() het laadscherm wanneer dat kan.
+            if not self.gamestate.is_empty():
+                if self.gamestate.peek().name == GameState.LoadScreen:
+                    if self.all_maps_loaded:
+                        self.gamestate.pop()
+
             # als de stack leeg is, push Overworld. Dit vanwege geluid en kaarten laden.
             if self.gamestate.is_empty():
                 if self.all_maps_loaded:

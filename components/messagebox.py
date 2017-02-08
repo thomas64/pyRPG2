@@ -33,7 +33,7 @@ class MessageBox(object):
     Geeft een bericht weer op het scherm.
     """
     def __init__(self, gamestate, audio, raw_text, face_image=None, spr_image=None, scr_capt=None, sound=SFX.message,
-                 last=False, callback=None):
+                 last=False, callback=None, no_key=False, name=GameState.MessageBox):
         """
         :param raw_text: dit is een list die aangeleverd moet worden. Als het alleen een string is, dan wordt het
         een plaatje die gebruikt maakt van face_image.
@@ -47,7 +47,7 @@ class MessageBox(object):
         self.sound = sound
         self.last = last
         self.screen = pygame.display.get_surface()
-        self.name = GameState.MessageBox
+        self.name = name
 
         if scr_capt is None:
             self.scr_capt = ScreenCapture()
@@ -57,6 +57,7 @@ class MessageBox(object):
             self.scr_capt = scr_capt
 
         self.callback = callback
+        self.no_key = no_key
 
         self.font = pygame.font.SysFont(FONT, FONTSIZE)
 
@@ -109,6 +110,9 @@ class MessageBox(object):
         Handelt de muis en keyboard input af.
         :param event: pygame.event.get()
         """
+        if self.no_key:
+            return
+
         if event.type == pygame.KEYDOWN:
             if event.key == Keys.Exit.value:
                 self._exit()
@@ -160,7 +164,8 @@ class MessageBox(object):
         pass
 
     def multi_input(self, key_input, mouse_pos, dt):
-        pass
+        if self.no_key:
+            return
 
     def update(self, dt):
         """

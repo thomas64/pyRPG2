@@ -45,7 +45,7 @@ class MainMenu(BaseMenu):
                                                   scr_capt=False, sound=None))
             self.engine.gamestate.push(Transition(self.engine.gamestate))
             self.engine.gamestate.push(MessageBox(self.engine.gamestate, self.engine.audio, ["Loading world..."],
-                                                  scr_capt=False, sound=None))
+                                                  scr_capt=False, sound=None, no_key=True, name=GameState.LoadScreen))
             self.engine.gamestate.push(Transition(self.engine.gamestate))
             self.engine.force_bg_music = True
 

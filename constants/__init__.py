@@ -46,6 +46,7 @@ class GameState(enum.Enum):
     ConfirmBox = 11
     Shop = 12
     FadeBlack = 13
+    LoadScreen = 14
 
 
 class Direction(enum.Enum):
