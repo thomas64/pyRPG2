@@ -3,6 +3,7 @@
 class: MainMenu
 """
 
+from components import LoadScreen
 from components import MessageBox
 from components import Transition
 from constants import GameState
@@ -41,10 +42,9 @@ class MainMenu(BaseMenu):
             # als deze stack leeg is, komt Overworld er op.
             self.engine.gamestate.push(Transition())
             self.engine.gamestate.deep_pop()
-            self.engine.gamestate.push(MessageBox(Script.intro_text(), scr_capt=False, sound=None))
+            self.engine.gamestate.push(MessageBox(Script.intro_text(), scr_capt=False, last=True))
             self.engine.gamestate.push(Transition())
-            self.engine.gamestate.push(MessageBox(["Loading world..."], scr_capt=False, sound=None,
-                                                  no_key=True, name=GameState.LoadScreen))
+            self.engine.gamestate.push(LoadScreen())
             self.engine.gamestate.push(Transition())
             self.engine.force_bg_music = True
 

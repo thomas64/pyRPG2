@@ -7,11 +7,13 @@ import threading
 
 import pygame
 import pygame.gfxdraw
+import pytmx
 
 from audio import Audio
 from console import Console
 from constants import GameState
 from constants import Keys
+from constants import MapTitle
 import screens.menu
 from screens import Overworld
 from statemachine import StateMachine
@@ -66,13 +68,15 @@ class GameEngine(object):
 
     def load_all_maps(self):
         """..."""
-        from constants import MapTitle
-        import pytmx
         map_path = 'resources/maps/'
         Console.load_all_maps()
-        # noinspection PyTypeChecker
-        for map_name in MapTitle:
-            map_name.value.append(pytmx.load_pygame(map_path + map_name.name + '.tmx'))
+        try:
+            # noinspection PyTypeChecker
+            for map_name in MapTitle:
+                map_name.value.append(pytmx.load_pygame(map_path + map_name.name + '.tmx'))
+        except pygame.error:
+            # bij het sluiten van het spel voordat alle kaarten geladen zijn.
+            pass
         self.all_maps_loaded = True
         Console.maps_loaded()
 

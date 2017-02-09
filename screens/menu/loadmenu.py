@@ -6,9 +6,8 @@ class: LoadMenu
 import datetime
 import os
 
-from components import MessageBox
+from components import LoadScreen
 from components import Transition
-from constants import GameState
 from constants import SFX
 from loadsave import Dialog as LoadDialog
 
@@ -78,8 +77,7 @@ class LoadMenu(BaseMenu):
                 self.engine.data = data
                 # als er na de reeks gamestates niets meer op stack ligt, komt overworld er in.
                 self.engine.gamestate.change(Transition())
-                self.engine.gamestate.push(MessageBox(["Loading world..."], scr_capt=False, sound=None,
-                                                      no_key=True, name=GameState.LoadScreen))
+                self.engine.gamestate.push(LoadScreen())
                 self.engine.gamestate.push(Transition())
                 self.engine.force_bg_music = True
             else:
