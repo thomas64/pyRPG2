@@ -176,16 +176,19 @@ class Display(object):
 
             self._reset_vars()
 
+    # noinspection PyMethodMayBeStatic
     def on_exit(self):
         """
         Wanneer deze state onder een andere state van de stack komt, voer dit uit.
         """
         pass
 
-    def single_input(self, event):
+    def single_input(self, event, gamestate, audio):
         """
         Handelt de muis en keyboard input af.
         :param event: pygame.event.get()
+        :param gamestate:
+        :param audio:
         """
 
         if event.type == pygame.MOUSEMOTION:
@@ -219,7 +222,7 @@ class Display(object):
                     self.invclick_box = None
 
                 elif self.invclick_box and self.invclick_box.rect.collidepoint(event.pos):
-                    if self.invclick_box.mouse_click(event, self.engine.gamestate, self.engine.audio, self.cur_hero):
+                    if self.invclick_box.mouse_click(event, gamestate, audio, self.cur_hero):
                         self.invclick_box = None
                     return  # anders vangt hij ook nog andere clicks hieronder in deze methode af
 
@@ -239,7 +242,7 @@ class Display(object):
                         return
                 new_hc = self.hc
                 if new_hc != old_hc:
-                    self.engine.audio.play_sound(SFX.menu_switch)
+                    audio.play_sound(SFX.menu_switch)
                     self._init_boxes()
 
                 # als er in de inventory box wordt geklikt
@@ -248,7 +251,7 @@ class Display(object):
                     boxpos, equipment_type = self.inventory_box.mouse_click(event)
                     # als er geen clickbox is en wel een equipment_type, geef dan een clickbox weer
                     if not self.invclick_box and equipment_type:
-                        self.engine.audio.play_sound(SFX.menu_switch)
+                        audio.play_sound(SFX.menu_switch)
                         self.invclick_box = InvClickBox(boxpos, equipment_type, self.party, self.inventory)
                     return
 
@@ -304,10 +307,12 @@ class Display(object):
         for button in self.buttons:
             self.key_input = button.multi_click(mouse_pos, self.key_input)
 
-    def update(self, dt):
+    def update(self, dt, gamestate, audio):
         """
         Update alle waarden in de boxen.
         :param dt: self.clock.tick(FPS)/1000.0
+        :param gamestate:
+        :param audio:
         """
         for button in self.buttons:
             button.update(self.key_input, COLORKEY)
@@ -366,10 +371,10 @@ class Display(object):
                             "",
                             "Yes",
                             "No"]
-                    self.confirm_box = ConfirmBox(self.engine.gamestate, self.engine.audio, text, sound=SFX.message)
+                    self.confirm_box = ConfirmBox(text, sound=SFX.message)
                     self.engine.gamestate.push(self.confirm_box)
                 else:
-                    push_object = MessageBox(self.engine.gamestate, self.engine.audio, text, sound=SFX.menu_cancel)
+                    push_object = MessageBox(text, sound=SFX.menu_cancel)
                     self.engine.gamestate.push(push_object)
                     self._reset_vars()
             return True
@@ -388,17 +393,17 @@ class Display(object):
                     self.engine.audio.play_sound(SFX.scroll)
                     push_object = Alchemist(self.engine, self.cur_hero)
                     self.engine.gamestate.push(push_object)
-                    self.engine.gamestate.push(Transition(self.engine.gamestate))
+                    self.engine.gamestate.push(Transition())
                 elif selected_skill == self.cur_hero.hlr:
                     self.engine.audio.play_sound(SFX.scroll)
                     push_object = Healer(self.engine, self.cur_hero, self.party)
                     self.engine.gamestate.push(push_object)
-                    self.engine.gamestate.push(Transition(self.engine.gamestate))
+                    self.engine.gamestate.push(Transition())
                 elif selected_skill == self.cur_hero.mec:
                     self.engine.audio.play_sound(SFX.scroll)
                     push_object = Mechanic(self.engine, self.cur_hero)
                     self.engine.gamestate.push(push_object)
-                    self.engine.gamestate.push(Transition(self.engine.gamestate))
+                    self.engine.gamestate.push(Transition())
             return True
         return False
 
@@ -414,11 +419,11 @@ class Display(object):
                 # todo, maken dat in battle je niet op deze manier potions kan drinken.
                 able, message = selected_item.use(self.cur_hero)
                 if able and message:
-                    push_object = MessageBox(self.engine.gamestate, self.engine.audio, message, sound=SFX.message,
+                    push_object = MessageBox(message, sound=SFX.message,
                                              last=(False if type(message) == list else True))  # een img is een string.
                     self.engine.gamestate.push(push_object)
                 elif not able and message:
-                    push_object = MessageBox(self.engine.gamestate, self.engine.audio, message, sound=SFX.menu_cancel)
+                    push_object = MessageBox(message, sound=SFX.menu_cancel)
                     self.engine.gamestate.push(push_object)
             return True
         return False
@@ -429,8 +434,7 @@ class Display(object):
                     "",
                     "Yes, you may leave.",
                     "No, I want you to stay."]
-            self.leave_box = ConfirmBox(self.engine.gamestate, self.engine.audio, text,
-                                        face_image=self.cur_hero.FAC, sound=SFX.message)
+            self.leave_box = ConfirmBox(text, face_image=self.cur_hero.FAC, sound=SFX.message)
             self.engine.gamestate.push(self.leave_box)
 
     def _previous(self):
@@ -454,5 +458,5 @@ class Display(object):
             self.engine.gamestate.deep_peek().window.load_map()
 
         self.engine.audio.play_sound(SFX.scroll)
-        self.engine.gamestate.push(Transition(self.engine.gamestate))
+        self.engine.gamestate.push(Transition())
         self.engine.gamestate.deep_pop()

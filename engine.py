@@ -137,7 +137,7 @@ class GameEngine(object):
                     self._kill_game()
 
         if self.key_timer == 0.0:
-            self.gamestate.peek().single_input(event)
+            self.gamestate.peek().single_input(event, self.gamestate, self.audio)
 
     def multi_input(self):
         """
@@ -169,7 +169,7 @@ class GameEngine(object):
             self.state_timer = 0.0
             self.gamestate.pop()
 
-        self.gamestate.peek().update(self.dt)
+        self.gamestate.peek().update(self.dt, self.gamestate, self.audio)
 
     def render(self):
         """

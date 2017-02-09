@@ -39,20 +39,19 @@ class MainMenu(BaseMenu):
             self.engine.data = Data()
             Script.new_game(self.engine.data, self.engine.debug_mode)
             # als deze stack leeg is, komt Overworld er op.
-            self.engine.gamestate.push(Transition(self.engine.gamestate))
+            self.engine.gamestate.push(Transition())
             self.engine.gamestate.deep_pop()
-            self.engine.gamestate.push(MessageBox(self.engine.gamestate, self.engine.audio, Script.intro_text(),
-                                                  scr_capt=False, sound=None))
-            self.engine.gamestate.push(Transition(self.engine.gamestate))
-            self.engine.gamestate.push(MessageBox(self.engine.gamestate, self.engine.audio, ["Loading world..."],
-                                                  scr_capt=False, sound=None, no_key=True, name=GameState.LoadScreen))
-            self.engine.gamestate.push(Transition(self.engine.gamestate))
+            self.engine.gamestate.push(MessageBox(Script.intro_text(), scr_capt=False, sound=None))
+            self.engine.gamestate.push(Transition())
+            self.engine.gamestate.push(MessageBox(["Loading world..."], scr_capt=False, sound=None,
+                                                  no_key=True, name=GameState.LoadScreen))
+            self.engine.gamestate.push(Transition())
             self.engine.force_bg_music = True
 
         elif menu_item.text == "Load Game":
             push_object = screens.menu.create_menu(GameState.LoadMenu, self.engine)
             self.engine.gamestate.push(push_object)
-            self.engine.gamestate.push(Transition(self.engine.gamestate))
+            self.engine.gamestate.push(Transition())
 
         elif menu_item.text == "Settings":
             push_object = screens.menu.create_menu(GameState.SettingsMenu, self.engine,

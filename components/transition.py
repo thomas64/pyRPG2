@@ -19,11 +19,7 @@ TIME = 0.7
 
 # noinspection PyMissingOrEmptyDocstring
 class Transition(object):
-    """
-    ...
-    """
-    def __init__(self, gamestate, full_screen=True):
-        self.gamestate = gamestate
+    def __init__(self, full_screen=True):
         self.screen = pygame.display.get_surface()
         self.rect = self.screen.get_rect()
         if not full_screen:
@@ -32,10 +28,10 @@ class Transition(object):
         self.timer = 0
         self.color = (0, 0, 0, 0)
 
-    def update(self, dt):
+    def update(self, dt, gamestate, audio):
         self.timer += dt
         if self.timer > TIME:
-            self.gamestate.pop()
+            gamestate.pop()
             return
         new_alpha = ALPHA * dt
         if new_alpha < 0 or new_alpha > 255:
@@ -51,7 +47,7 @@ class Transition(object):
     def on_exit(self):
         pass
 
-    def single_input(self, event):
+    def single_input(self, event, gamestate, audio):
         pass
 
     def multi_input(self, key_input, mouse_pos, dt):

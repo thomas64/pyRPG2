@@ -99,9 +99,11 @@ class Display(Parchment):
         self.rightbox = PouchBox(self._set_x(self.rightbox_pos_x), self._set_y(self.rightbox_pos_y),
                                  int(width), int(height), self.engine.data.pouch)
 
-    def update(self, dt):
+    def update(self, dt, gamestate, audio):
         """
         :param dt: self.clock.tick(FPS)/1000.0
+        :param gamestate:
+        :param audio:
         """
         for selector in self.selectors:
             selector.update(self.subtype)
@@ -115,12 +117,12 @@ class Display(Parchment):
             if self.cur_hero.sta.cur < self.cur_hero.hlr.STA_COST:
                 text = ["{} does not have enough stamina".format(self.cur_hero.NAM),
                         "to heal {}.".format(selected_hero.NAM)]
-                push_object = MessageBox(self.engine.gamestate, self.engine.audio, text, sound=SFX.menu_cancel)
+                push_object = MessageBox(text, sound=SFX.menu_cancel)
                 self.engine.gamestate.push(push_object)
                 return True
             elif selected_hero.cur_hp >= selected_hero.max_hp:
                 text = ["{} already at max health.".format(selected_hero.NAM)]
-                push_object = MessageBox(self.engine.gamestate, self.engine.audio, text, sound=SFX.menu_cancel)
+                push_object = MessageBox(text, sound=SFX.menu_cancel)
                 self.engine.gamestate.push(push_object)
                 return True
 
@@ -130,7 +132,7 @@ class Display(Parchment):
                 if self.cur_hero.hlr.HRB_COST > hrb_qty:
                     text = ["You do not have the right components",
                             "to perform that action."]
-                    push_object = MessageBox(self.engine.gamestate, self.engine.audio, text, sound=SFX.menu_cancel)
+                    push_object = MessageBox(text, sound=SFX.menu_cancel)
                     self.engine.gamestate.push(push_object)
                     return True
                 self.engine.data.pouch.remove(herbs, self.cur_hero.hlr.HRB_COST)
@@ -143,7 +145,7 @@ class Display(Parchment):
             healpoints = new_hp - old_hp
 
             text = ["{} heals {} by {}.".format(self.cur_hero.NAM, selected_hero.NAM, healpoints)]
-            push_object = MessageBox(self.engine.gamestate, self.engine.audio, text, sound=SFX.message)
+            push_object = MessageBox(text, sound=SFX.message)
             self.engine.gamestate.push(push_object)
 
             self._init_boxes()

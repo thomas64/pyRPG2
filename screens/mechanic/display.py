@@ -117,11 +117,13 @@ class Display(Parchment):
                                      self.subtype, self.engine.data.party,
                                      self.engine.data.pouch, self.engine.data.inventory)
 
-    def update(self, dt):
+    def update(self, dt, gamestate, audio):
         """
         Update de selector border color.
         Update de gold quantity.
         :param dt: self.clock.tick(FPS)/1000.0
+        :param gamestate:
+        :param audio:
         """
         for selector in self.selectors:
             selector.update(self.subtype)
@@ -146,13 +148,13 @@ class Display(Parchment):
                selected_equipment.MTL > mtl_qty:
                 text = ["You do not have the right components",
                         "to create that {}.".format(selected_equipment.NAM)]
-                push_object = MessageBox(self.engine.gamestate, self.engine.audio, text, sound=SFX.menu_cancel)
+                push_object = MessageBox(text, sound=SFX.menu_cancel)
                 self.engine.gamestate.push(push_object)
                 return True
             elif self.cur_hero.sta.cur < self.cur_hero.mec.STA_COST:
                 text = ["{} does not have enough stamina".format(self.cur_hero.NAM),
                         "to create that {}.".format(selected_equipment.NAM)]
-                push_object = MessageBox(self.engine.gamestate, self.engine.audio, text, sound=SFX.menu_cancel)
+                push_object = MessageBox(text, sound=SFX.menu_cancel)
                 self.engine.gamestate.push(push_object)
                 return True
             elif 'pouch is full' is False:  # todo, moet 'pouch is vol' hier? of in pouch?
@@ -187,7 +189,7 @@ class Display(Parchment):
 
             text = ["{} successfully created.".format(selected_equipment.NAM)]
             self.engine.data.inventory.add_i(selected_equipment)
-            push_object = MessageBox(self.engine.gamestate, self.engine.audio, text, sound=SFX.message)
+            push_object = MessageBox(text, sound=SFX.message)
             self.engine.gamestate.push(push_object)
 
             self._init_boxes()

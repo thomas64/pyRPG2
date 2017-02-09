@@ -50,4 +50,4 @@ class PauseMenu(BaseMenu):
         elif menu_item.text == "Main Menu":
             push_object = screens.menu.create_menu(GameState.MainMenu, self.engine, select=-1)
             self.engine.gamestate.change(push_object, with_on_enter=False)
-            self.engine.gamestate.push(Transition(self.engine.gamestate))
+            self.engine.gamestate.push(Transition())

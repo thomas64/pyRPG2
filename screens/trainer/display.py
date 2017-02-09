@@ -148,11 +148,13 @@ class Display(Parchment):
                 elif key_input[pygame.K_KP_MINUS]:
                     self.subtype.gain_experience(-1)
 
-    def update(self, dt):
+    def update(self, dt, gamestate, audio):
         """
         Update de selector border color.
         Update de gold en xp quantity.
         :param dt: self.clock.tick(FPS)/1000.0
+        :param gamestate:
+        :param audio:
         """
         for selector in self.selectors:
             selector.update(self.subtype)
@@ -178,10 +180,10 @@ class Display(Parchment):
                         "",
                         "Yes",
                         "No"]
-                self.confirm_box = ConfirmBox(self.engine.gamestate, self.engine.audio, text, sound=SFX.message)
+                self.confirm_box = ConfirmBox(text, sound=SFX.message)
                 self.engine.gamestate.push(self.confirm_box)
             else:
-                push_object = MessageBox(self.engine.gamestate, self.engine.audio, text, sound=SFX.menu_cancel)
+                push_object = MessageBox(text, sound=SFX.menu_cancel)
                 self.engine.gamestate.push(push_object)
                 self._reset_vars()
             return True

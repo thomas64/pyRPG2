@@ -31,11 +31,9 @@ class ConfirmBox(object):
     """
     Geeft een selectie weer op het scherm.
     """
-    def __init__(self, gamestate, audio, raw_text, face_image=None, sound=SFX.message, callback=None):
-        self.gamestate = gamestate
-        self.audio = audio
-        self.audio_first_time = False
+    def __init__(self, raw_text, face_image=None, sound=SFX.message, callback=None):
         self.sound = sound
+        self.audio_first_time = False
         self.screen = pygame.display.get_surface()
         self.name = GameState.ConfirmBox
         self.scr_capt = ScreenCapture()
@@ -97,60 +95,64 @@ class ConfirmBox(object):
     def on_exit(self):
         pass
 
-    def single_input(self, event):
+    def single_input(self, event, gamestate, audio):
         """
         Handelt de muis en keyboard input af.
         :param event: pygame.event.get()
+        :param gamestate:
+        :param audio:
         """
         if event.type == pygame.MOUSEMOTION:
             for index, item in enumerate(self.text_rects):
                 if item.collidepoint(event.pos) and index >= self.TOPINDEX:
                     if self.cur_item != index:
                         self.cur_item = index
-                        self.audio.play_sound(SFX.menu_switch)
+                        audio.play_sound(SFX.menu_switch)
                     break
 
         elif event.type == pygame.MOUSEBUTTONDOWN:
             if event.button == Keys.Leftclick.value:
                 for index, item in enumerate(self.text_rects):
                     if item.collidepoint(event.pos) and index >= self.TOPINDEX:
-                        self.gamestate.pop()
+                        gamestate.pop()
 
         elif event.type == pygame.KEYDOWN:
             if event.key == Keys.Exit.value:
                 self.cur_item = None
-                self.gamestate.pop()
+                gamestate.pop()
 
             elif event.key in Keys.Select.value:
-                self.gamestate.pop()
+                gamestate.pop()
 
             if event.key == Keys.Up.value and self.cur_item > self.TOPINDEX:
-                self.audio.play_sound(SFX.menu_switch)
+                audio.play_sound(SFX.menu_switch)
                 self.cur_item -= 1
             elif event.key == Keys.Up.value and self.cur_item == self.TOPINDEX:
-                self.audio.play_sound(SFX.menu_error)
+                audio.play_sound(SFX.menu_error)
                 self.cur_item = self.TOPINDEX
             elif event.key == Keys.Down.value and self.cur_item < len(self.raw_text) - 1:
-                self.audio.play_sound(SFX.menu_switch)
+                audio.play_sound(SFX.menu_switch)
                 self.cur_item += 1
             elif event.key == Keys.Down.value and self.cur_item == len(self.raw_text) - 1:
-                self.audio.play_sound(SFX.menu_error)
+                audio.play_sound(SFX.menu_error)
                 self.cur_item = len(self.raw_text) - 1
 
     def multi_input(self, key_input, mouse_pos, dt):
         pass
 
-    def update(self, dt):
+    def update(self, dt, gamestate, audio):
         """
         Laat een evt geluid horen, eenmalig.
         Herschrijf alle tekst opnieuw, maar nu met de geselecteerde item een ander kleur.
         :param dt:
+        :param gamestate:
+        :param audio:
         """
 
         if self.sound:
             if self.audio_first_time is False:
                 self.audio_first_time = True
-                self.audio.play_sound(self.sound)
+                audio.play_sound(self.sound)
 
         self.vis_text = []          # de visuele tekst
         for index, row in enumerate(self.raw_text):

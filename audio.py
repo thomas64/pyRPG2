@@ -137,7 +137,8 @@ class Audio(object):
         elif curr_state == GameState.PartyScreen:
             self.fade_bg_music()
         elif curr_state == GameState.Overworld and \
-                prev_state == GameState.MessageBox and \
+                (prev_state == GameState.MessageBox or
+                 prev_state == GameState.LoadScreen) and \
                 force is True:
             self.bg_music_channel.set_volume(1)
             self.play_bg_music(MapMusic[self.engine.data.map_name].value[0])
@@ -191,7 +192,8 @@ class Audio(object):
         elif curr_state == GameState.PartyScreen:
             self.fade_bg_sounds()
         elif curr_state == GameState.Overworld and \
-                prev_state == GameState.MessageBox and \
+                (prev_state == GameState.MessageBox or
+                 prev_state == GameState.LoadScreen) and \
                 force is True:
             self.bg_sound_channel1.set_volume(1)
             self.bg_sound_channel2.set_volume(1)

@@ -187,7 +187,7 @@ class Display(Parchment):
                             self.engine.data.pouch.add(self.selected_item)
                         else:
                             self.engine.data.inventory.add_i(self.selected_item)  # van origineel zit hij erin. maar hij
-                        self.engine.audio.play_sound(SFX.coins)             # filtert nu al bij het klikken.
+                        self.engine.audio.play_sound(SFX.coins)                   # filtert nu al bij het klikken.
                         self._init_sellbox()
                 else:
                     self.engine.audio.play_sound(SFX.menu_select)
@@ -227,11 +227,13 @@ class Display(Parchment):
                 elif key_input[pygame.K_KP_MINUS]:
                     self.engine.data.pouch.remove(self.gold_object, 1, False)
 
-    def update(self, dt):
+    def update(self, dt, gamestate, audio):
         """
         Update de selector border color.
         Update de gold quantity.
         :param dt: self.clock.tick(FPS)/1000.0
+        :param gamestate:
+        :param audio:
         """
         for selector in self.selectors:
             selector.update(self.subtype)
@@ -246,13 +248,13 @@ class Display(Parchment):
                     "",
                     "Yes please.",
                     "No thanks."]
-            self.confirm_box = ConfirmBox(self.engine.gamestate, self.engine.audio, text, sound=SFX.message)
+            self.confirm_box = ConfirmBox(text, sound=SFX.message)
             self.engine.gamestate.push(self.confirm_box)
             return True
         elif self.buy_click and self.value > self.gold_amount:
             text = ["You need {} more gold to".format(self.value - self.gold_amount),
                     "buy that {}.".format(self.selected_item.NAM)]
-            push_object = MessageBox(self.engine.gamestate, self.engine.audio, text, sound=SFX.menu_cancel)
+            push_object = MessageBox(text, sound=SFX.menu_cancel)
             self.engine.gamestate.push(push_object)
             self.buy_click = False
             self.selected_item = None
@@ -265,18 +267,18 @@ class Display(Parchment):
         # als een item maar 0 gc oplevert.
         if self.sell_click and self.value == 0:
             text = ["I do not want that item."]
-            push_object = MessageBox(self.engine.gamestate, self.engine.audio, text, sound=SFX.menu_cancel)
+            push_object = MessageBox(text, sound=SFX.menu_cancel)
             self.engine.gamestate.push(push_object)
             self.sell_click = False
             return True
         elif self.sell_click and self.selected_item:
             text = self._fill_confirm_box_with_sell_text()
-            self.confirm_box = ConfirmBox(self.engine.gamestate, self.engine.audio, text, sound=SFX.message)
+            self.confirm_box = ConfirmBox(text, sound=SFX.message)
             self.engine.gamestate.push(self.confirm_box)
             return True
         elif self.sell_click and not self.selected_item:
             text = ["You must unequip that to sell it."]
-            push_object = MessageBox(self.engine.gamestate, self.engine.audio, text, sound=SFX.menu_cancel)
+            push_object = MessageBox(text, sound=SFX.menu_cancel)
             self.engine.gamestate.push(push_object)
             self.sell_click = False
             return True

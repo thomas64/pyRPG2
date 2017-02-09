@@ -49,19 +49,18 @@ class FetchItemQuestItem(BaseQuestItem):
         super().__init__(qtype, reward, text)
         self.condition = condition
 
-    def show_message(self, gamestate, data, audio, face_image, person_id, display_loot):
+    def show_message(self, gamestate, data, face_image, person_id, display_loot):
         """
         Geef een bericht en waneer mogelijk ook een confirmbox erachteraan.
         :param gamestate: self.engine.gamestate
         :param data: self.engine.data
-        :param audio: self.engine.audio
         :param face_image: PeopleDatabase[person_sprite.person_id].value['face']
         :param person_id: Voor deze niet nodig, maar wel voor PersonMessageQuestItem.
         :param display_loot: Voor deze niet nodig, maar wel voor PersonMessageQuestItem.
         :return: deze is voor het vullen van een quest_box in window. returnt een confirmbox indien nodig.
         """
         for i, text_part in enumerate(reversed(self._get_text())):
-            push_object = MessageBox(gamestate, audio, text_part, face_image=face_image,
+            push_object = MessageBox(text_part, face_image=face_image,
                                      last=(True if i == 0 and (not self._is_ready_to_fulfill(data) or
                                                                self.state == QuestState.Rewarded) else False))
             gamestate.push(push_object)
@@ -69,7 +68,7 @@ class FetchItemQuestItem(BaseQuestItem):
         self._update_state(self._is_ready_to_fulfill(data))
 
         if self.state == QuestState.Ready:
-            push_object = ConfirmBox(gamestate, audio, self._get_text(), callback=self.decided)
+            push_object = ConfirmBox(self._get_text(), callback=self.decided)
             gamestate.push(push_object)
             # plaats de confirmbox achter alle messageboxen
             gamestate.push_confirmbox_to_end()
@@ -100,13 +99,12 @@ class FetchItemQuestItem(BaseQuestItem):
                 text = ["Received:"]
                 image = []
                 text, image = display_loot(self.reward, text, image)
-                push_object = MessageBox(gamestate, audio, text,
-                                         spr_image=image, scr_capt=scr_capt, sound=SFX.reward, last=True)
+                push_object = MessageBox(text, spr_image=image, scr_capt=scr_capt, sound=SFX.reward, last=True)
                 gamestate.push(push_object)
 
                 # nog een bedank berichtje van de quest owner.
                 for text_part in reversed(self._get_text()):
-                    push_object = MessageBox(gamestate, audio, text_part, face_image=face_image, scr_capt=scr_capt)
+                    push_object = MessageBox(text_part, face_image=face_image, scr_capt=scr_capt)
                     gamestate.push(push_object)
 
             else:
@@ -116,7 +114,7 @@ class FetchItemQuestItem(BaseQuestItem):
                 # nog een bedank berichtje van de quest owner.
                 amount_messages = len(self._get_text()) - 1
                 for i, text_part in enumerate(reversed(self._get_text())):
-                    push_object = MessageBox(gamestate, audio, text_part, face_image=face_image, scr_capt=scr_capt,
+                    push_object = MessageBox(text_part, face_image=face_image, scr_capt=scr_capt,
                                              sound=(None if i == amount_messages else SFX.message),
                                              last=(True if i == 0 else False))
                     gamestate.push(push_object)
@@ -213,12 +211,11 @@ class PersonMessageQuestItem(BaseQuestItem):
             return True
         return False
 
-    def show_message(self, gamestate, data, audio, face_image, person_id, display_loot):
+    def show_message(self, gamestate, data, face_image, person_id, display_loot):
         """
         Geeft een bericht en waneer mogelijk ook een confirmbox erachteraan.
         :param gamestate: self.engine.gamestate
         :param data: self.engine.data
-        :param audio: self.engine.audio
         :param face_image: PeopleDatabase[person_sprite.person_id].value['face']
         :param person_id: Nodig voor identificatie en voor weergeven tekst van de juiste persoon.
         :param display_loot: methode uit window waar het overzicht gegeven wordt van wat je ontvangen hebt.
@@ -230,18 +227,17 @@ class PersonMessageQuestItem(BaseQuestItem):
                 text = ["Received:"]
                 image = []
                 text, image = display_loot(self.reward, text, image)
-                push_object = MessageBox(gamestate, audio, text, spr_image=image, sound=SFX.reward, last=True)
+                push_object = MessageBox(text, spr_image=image, sound=SFX.reward, last=True)
                 gamestate.push(push_object)
 
         for i, text_part in enumerate(reversed(self._get_text(person_id))):
-            push_object = MessageBox(gamestate, audio, text_part,
-                                     face_image=face_image, last=self._message_is_last(i, person_id))
+            push_object = MessageBox(text_part, face_image=face_image, last=self._message_is_last(i, person_id))
             gamestate.push(push_object)
 
         self._update_state(person_id)
 
         if self.state == QuestState.Ready:
-            push_object = ConfirmBox(gamestate, audio, self._get_text(person_id), callback=self.decided)
+            push_object = ConfirmBox(self._get_text(person_id), callback=self.decided)
             gamestate.push(push_object)
             # plaats de confirmbox achter alle messageboxen
             gamestate.push_confirmbox_to_end()
@@ -268,7 +264,7 @@ class PersonMessageQuestItem(BaseQuestItem):
 
             amount_messages = len(self._get_text(person_id)) - 1
             for i, text_part in enumerate(reversed(self._get_text(person_id))):
-                push_object = MessageBox(gamestate, audio, text_part, face_image=face_image, scr_capt=scr_capt,
+                push_object = MessageBox(text_part, face_image=face_image, scr_capt=scr_capt,
                                          sound=(SFX.reward if i == amount_messages else SFX.message),
                                          last=(True if i == 0 else False))
                 gamestate.push(push_object)
@@ -320,12 +316,11 @@ class ReceiveItemQuestItem(BaseQuestItem):
     def __init__(self, qtype, reward, text):
         super().__init__(qtype, reward, text)
 
-    def show_message(self, gamestate, data, audio, face_image, person_id, display_loot):
+    def show_message(self, gamestate, data, face_image, person_id, display_loot):
         """
         Geeft een bericht net zoals notes verdeeld over meerdere schermen, met een inverse loop.
         :param gamestate: self.engine.gamestate
         :param data: self.engine.data
-        :param audio: self.engine.audio
         :param face_image: PeopleDatabase[person_sprite.person_id].value['face']
         :param person_id: Voor deze niet nodig, maar wel voor PersonMessageQuestItem.
         :param display_loot: methode uit window waar het overzicht gegeven wordt van wat je ontvangen hebt.
@@ -337,11 +332,11 @@ class ReceiveItemQuestItem(BaseQuestItem):
             text = ["Received:"]
             image = []
             text, image = display_loot(self.reward, text, image)
-            push_object = MessageBox(gamestate, audio, text, spr_image=image, sound=SFX.reward, last=True)
+            push_object = MessageBox(text, spr_image=image, sound=SFX.reward, last=True)
             gamestate.push(push_object)
 
         for i, text_part in enumerate(reversed(self._get_text())):
-            push_object = MessageBox(gamestate, audio, text_part, face_image=face_image,
+            push_object = MessageBox(text_part, face_image=face_image,
                                      last=(True if i == 0 and self.state == QuestState.Rewarded else False))
             gamestate.push(push_object)
 

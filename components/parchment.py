@@ -134,10 +134,12 @@ class Parchment(object):
     def on_exit(self):
         pass
 
-    def single_input(self, event):
+    def single_input(self, event, gamestate, audio):
         """
         Handelt de muis en keyboard input af.
         :param event: pygame.event.get()
+        :param gamestate:
+        :param audio:
         """
 
         # todo, sellbox en buybox met toetsenbord
@@ -159,7 +161,7 @@ class Parchment(object):
 
             if event.button == Keys.Leftclick.value:
                 if self.closebutton.single_click(event) == Keys.Exit.value:
-                    self._close()
+                    self._close(gamestate, audio)
                 # return of anders worden sommigen variabelen weer overschreven.
                 if self._handle_leftbox_click(event):
                     return
@@ -171,7 +173,7 @@ class Parchment(object):
                         subtype = selector.mouse_click(event)
                         if subtype:
                             if subtype != self.subtype:
-                                self.engine.audio.play_sound(SFX.menu_switch)
+                                audio.play_sound(SFX.menu_switch)
                                 self.subtype = subtype
                                 self._init_boxes()
                                 break
@@ -184,18 +186,18 @@ class Parchment(object):
 
         elif event.type == pygame.KEYDOWN:
             if event.key == Keys.Exit.value:
-                self._close()
+                self._close(gamestate, audio)
             elif event.key == Keys.Prev.value:
-                self._previous()
+                self._previous(audio)
             elif event.key == Keys.Next.value:
-                self._next()
+                self._next(audio)
 
     # noinspection PyMissingOrEmptyDocstring
     def multi_input(self, key_input, mouse_pos, dt):
         pass
 
     # noinspection PyMissingOrEmptyDocstring
-    def update(self, dt):
+    def update(self, dt, gamestate, audio):
         pass
 
     # noinspection PyMissingOrEmptyDocstring
@@ -254,13 +256,14 @@ class Parchment(object):
     def _set_y(self, posy):
         return self.screen.get_height() * posy
 
-    def _close(self):
-        self.engine.audio.play_sound(SFX.scroll)
-        self.engine.gamestate.push(Transition(self.engine.gamestate))
-        self.engine.gamestate.deep_pop()
+    @staticmethod
+    def _close(gamestate, audio):
+        audio.play_sound(SFX.scroll)
+        gamestate.push(Transition())
+        gamestate.deep_pop()
 
-    def _previous(self):
-        self.engine.audio.play_sound(SFX.menu_switch)
+    def _previous(self, audio):
+        audio.play_sound(SFX.menu_switch)
         for index, subtype in enumerate(self.subtype_list):
             if subtype == self.subtype:
                 i = index - 1
@@ -270,8 +273,8 @@ class Parchment(object):
                 self._init_boxes()
                 break
 
-    def _next(self):
-        self.engine.audio.play_sound(SFX.menu_switch)
+    def _next(self, audio):
+        audio.play_sound(SFX.menu_switch)
         for index, subtype in enumerate(self.subtype_list):
             if subtype == self.subtype:
                 i = index + 1

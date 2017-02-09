@@ -28,8 +28,7 @@ class InputBox(object):
     """
     Geeft een input box weer om te kunnen typen.
     """
-    def __init__(self, audio):
-        self.audio = audio
+    def __init__(self):
         self.screen = pygame.display.get_surface()
         self.surface = pygame.Surface((BOXWIDTH, BOXHEIGHT))
         self.surface = self.surface.convert()
@@ -43,7 +42,7 @@ class InputBox(object):
         self.running = False
         self.confirm = False
 
-    def input_loop(self):
+    def input_loop(self, audio):
         """
         De loop waarin hij blijft, totdat de juiste input komt.
         """
@@ -61,7 +60,7 @@ class InputBox(object):
         if self.confirm:
             new_name = "".join(self.textbox[0:-1])  # return de string maar zonder het laatste character
             if new_name:
-                self.audio.play_sound(SFX.menu_select)
+                audio.play_sound(SFX.menu_select)
             return new_name
         else:
             return None

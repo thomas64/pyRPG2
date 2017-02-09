@@ -170,11 +170,10 @@ class Window(object):
                     self.engine.audio.play_sound(SFX.join)
                     self.engine.key_timer = NEWMAPTIMEOUT
                     self.load_map()
-                    self.engine.gamestate.push(Transition(self.engine.gamestate))
+                    self.engine.gamestate.push(Transition())
                 else:
                     text = ["It seems your party is full already."]
-                    push_object = MessageBox(self.engine.gamestate, self.engine.audio, text,
-                                             face_image=self.hero_data.FAC, scr_capt=scr_capt, last=True)
+                    push_object = MessageBox(text, face_image=self.hero_data.FAC, scr_capt=scr_capt, last=True)
                     self.engine.gamestate.push(push_object)
             else:
                 self.engine.audio.play_sound(SFX.done)
@@ -189,20 +188,19 @@ class Window(object):
             if choice == yes:
                 gold = inventoryitems.factory_pouch_item(PouchItemDatabase.gold)
                 if self.engine.data.pouch.remove(gold, self.inn_data['price']):
-                    self.engine.gamestate.push(Transition(self.engine.gamestate))
-                    push_object = MessageBox(self.engine.gamestate, self.engine.audio, InnDatabase.paid_text(),
-                                             face_image=self.inn_data['face'], scr_capt=scr_capt,
-                                             sound=SFX.coins, last=True)
+                    self.engine.gamestate.push(Transition())
+                    push_object = MessageBox(InnDatabase.paid_text(), face_image=self.inn_data['face'],
+                                             scr_capt=scr_capt, sound=SFX.coins, last=True)
                     self.engine.gamestate.push(push_object)
                     for hero in self.party:
                         hero.recover_full_hp()
                 else:
-                    push_object = MessageBox(self.engine.gamestate, self.engine.audio, InnDatabase.fail_text(),
-                                             face_image=self.inn_data['face'], scr_capt=scr_capt, last=True)
+                    push_object = MessageBox(InnDatabase.fail_text(), face_image=self.inn_data['face'],
+                                             scr_capt=scr_capt, last=True)
                     self.engine.gamestate.push(push_object)
             else:
-                push_object = MessageBox(self.engine.gamestate, self.engine.audio, InnDatabase.deny_text(),
-                                         face_image=self.inn_data['face'], scr_capt=scr_capt, last=True)
+                push_object = MessageBox(InnDatabase.deny_text(), face_image=self.inn_data['face'],
+                                         scr_capt=scr_capt, last=True)
                 self.engine.gamestate.push(push_object)
 
             self.inn_box = None
@@ -462,7 +460,7 @@ class Window(object):
             self.engine.audio.fade_bg_music_when_loading_a_new_map()
             self.engine.audio.fade_bg_sounds_when_loading_a_new_map()
             self.load_map()
-            self.engine.gamestate.push(Transition(self.engine.gamestate, full_screen=False))
+            self.engine.gamestate.push(Transition(full_screen=False))
 
     def check_text_events(self):
         """
@@ -489,14 +487,13 @@ class Window(object):
                         # zwarte of normale achtergrond?
                         scr_capt = None  # normale achtergrond
                         if self.current_map.text_events[object_nr].opt:  # als er iets in .opt staat
-                            self.engine.gamestate.push(Transition(self.engine.gamestate, full_screen=False))
+                            self.engine.gamestate.push(Transition(full_screen=False))
                             scr_capt = False  # zwarte achtergrond
 
                         event_face = self.engine.data.text_events[event_name]['face']
                         event_face.reverse()
                         for i, text_part in enumerate(reversed(event_text)):
-                            push_object = MessageBox(self.engine.gamestate, self.engine.audio, text_part,
-                                                     face_image=event_face[i], scr_capt=scr_capt,
+                            push_object = MessageBox(text_part, face_image=event_face[i], scr_capt=scr_capt,
                                                      last=(True if i == 0 else False))
                             self.engine.gamestate.push(push_object)
 
@@ -552,9 +549,7 @@ class Window(object):
 
                 hero_sprite.turn(self.party_sprites[0].rect)
 
-                self.hero_box = ConfirmBox(self.engine.gamestate, self.engine.audio,
-                                           HeroDatabase.opening(self.hero_data.RAW),
-                                           face_image=self.hero_data.FAC)
+                self.hero_box = ConfirmBox(HeroDatabase.opening(self.hero_data.RAW), face_image=self.hero_data.FAC)
                 self.engine.gamestate.push(self.hero_box)
                 self.prev_map_name = self.engine.data.map_name  # deze is voor het geluid recht te breien.
 
@@ -579,7 +574,7 @@ class Window(object):
             # material is geen garantie, daarom heeft die .get()
             push_object = Shop(self.engine, shop_data['content'], shop_data.get('material'), shop_data['face'])
             self.engine.gamestate.push(push_object)
-            self.engine.gamestate.push(Transition(self.engine.gamestate))
+            self.engine.gamestate.push(Transition())
 
     def check_schools(self, check_rect):
         """
@@ -595,7 +590,7 @@ class Window(object):
             self.engine.audio.play_sound(SFX.scroll)
             push_object = School(self.engine, school_data['content'], school_data['face'])
             self.engine.gamestate.push(push_object)
-            self.engine.gamestate.push(Transition(self.engine.gamestate))
+            self.engine.gamestate.push(Transition())
 
     def check_trainers(self, check_rect):
         """
@@ -614,7 +609,7 @@ class Window(object):
             self.engine.audio.play_sound(SFX.scroll)
             push_object = Trainer(self.engine, trainer_data['content'], trainer_data['face'])
             self.engine.gamestate.push(push_object)
-            self.engine.gamestate.push(Transition(self.engine.gamestate))
+            self.engine.gamestate.push(Transition())
 
     def check_inns(self, check_rect):
         """
@@ -631,8 +626,7 @@ class Window(object):
                     if spr.person_id == inn_id:
                         spr.turn(self.party_sprites[0].rect)
 
-            self.inn_box = ConfirmBox(self.engine.gamestate, self.engine.audio,
-                                      InnDatabase.welcome_text(self.inn_data['price']),
+            self.inn_box = ConfirmBox(InnDatabase.welcome_text(self.inn_data['price']),
                                       face_image=self.inn_data['face'])
             self.engine.gamestate.push(self.inn_box)
 
@@ -658,14 +652,13 @@ class Window(object):
                 self.person_id = person_sprite.person_id
 
                 self.quest_box = the_quest.show_message(self.engine.gamestate, self.engine.data,
-                                                        self.engine.audio, self.person_face,
-                                                        self.person_id, self.display_loot)
+                                                        self.person_face, self.person_id, self.display_loot)
 
             # of als hij dat niet heeft
             else:
                 for i, text_part in enumerate(reversed(person_data['text'])):
-                    push_object = MessageBox(self.engine.gamestate, self.engine.audio, text_part,
-                                             face_image=person_data['face'], last=(True if i == 0 else False))
+                    push_object = MessageBox(text_part, face_image=person_data['face'],
+                                             last=(True if i == 0 else False))
                     self.engine.gamestate.push(push_object)
 
     def check_notes(self, check_rect):
@@ -683,8 +676,7 @@ class Window(object):
             if type(note_text) != list:
                 note_text = [note_text]
             for i, text_part in enumerate(reversed(note_text)):
-                push_object = MessageBox(self.engine.gamestate, self.engine.audio, text_part,
-                                         last=(True if i == 0 else False))
+                push_object = MessageBox(text_part, last=(True if i == 0 else False))
                 self.engine.gamestate.push(push_object)
 
     def check_signs(self):
@@ -697,7 +689,7 @@ class Window(object):
                 sign_id = self.current_map.signs[object_nr].sign_id
                 sign_data = SignDatabase[sign_id].value
 
-                push_object = MessageBox(self.engine.gamestate, self.engine.audio, sign_data, last=True)
+                push_object = MessageBox(sign_data, last=True)
                 self.engine.gamestate.push(push_object)
 
     def check_chests(self):
@@ -719,14 +711,14 @@ class Window(object):
                             mec_v, mec_h = self.engine.data.party.get_highest_value_of_skill(key)
                             if mec_v < value:
                                 text = TreasureChestDatabase.mec_text(chest_data['condition'][key])
-                                push_object = MessageBox(self.engine.gamestate, self.engine.audio, text)
+                                push_object = MessageBox(text)
                                 self.engine.gamestate.push(push_object)
                                 return
                         elif key == "thf":
                             thf_v, thf_h = self.engine.data.party.get_highest_value_of_skill(key)
                             if thf_v < value:
                                 text = TreasureChestDatabase.thf_text(chest_data['condition'][key])
-                                push_object = MessageBox(self.engine.gamestate, self.engine.audio, text)
+                                push_object = MessageBox(text)
                                 self.engine.gamestate.push(push_object)
                                 return
 
@@ -738,8 +730,7 @@ class Window(object):
                     image = []
                     text, image = self.display_loot(chest_data['content'], text, image)
                     chest_data['content'] = dict()
-                    push_object = MessageBox(self.engine.gamestate, self.engine.audio, text,
-                                             spr_image=image, sound=SFX.chest)
+                    push_object = MessageBox(text, spr_image=image, sound=SFX.chest)
                     self.engine.gamestate.push(push_object)
 
     def check_sparklies(self, check_rect):
@@ -757,8 +748,7 @@ class Window(object):
                 image = []
                 text, image = self.display_loot(sparkly_data['content'], text, image)
                 sparkly_data['content'] = dict()
-                push_object = MessageBox(self.engine.gamestate, self.engine.audio, text,
-                                         spr_image=image, sound=SFX.sparkly)
+                push_object = MessageBox(text, spr_image=image, sound=SFX.sparkly)
                 self.engine.gamestate.push(push_object)
 
     def display_loot(self, content_data, text, image):

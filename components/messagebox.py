@@ -32,7 +32,7 @@ class MessageBox(object):
     """
     Geeft een bericht weer op het scherm.
     """
-    def __init__(self, gamestate, audio, raw_text, face_image=None, spr_image=None, scr_capt=None, sound=SFX.message,
+    def __init__(self, raw_text, face_image=None, spr_image=None, scr_capt=None, sound=SFX.message,
                  last=False, callback=None, no_key=False, name=GameState.MessageBox):
         """
         :param raw_text: dit is een list die aangeleverd moet worden. Als het alleen een string is, dan wordt het
@@ -41,10 +41,8 @@ class MessageBox(object):
         :param scr_capt: een vorige scr_capt meegeven, niets meegeven = nieuwe capt, False = zwart scherm.
         :param last: is het de laatste msgbox uit een reeks? True of False. Geef dan het afsluit geluidje 'done'.
         """
-        self.gamestate = gamestate
-        self.audio = audio
-        self.audio_first_time = False
         self.sound = sound
+        self.audio_first_time = False
         self.last = last
         self.screen = pygame.display.get_surface()
         self.name = name
@@ -105,29 +103,31 @@ class MessageBox(object):
     def _has_no_text(self):
         return self.raw_text == [""]
 
-    def single_input(self, event):
+    def single_input(self, event, gamestate, audio):
         """
         Handelt de muis en keyboard input af.
         :param event: pygame.event.get()
+        :param gamestate:
+        :param audio:
         """
         if self.no_key:
             return
 
         if event.type == pygame.KEYDOWN:
             if event.key == Keys.Exit.value:
-                self._exit()
+                self._exit(gamestate, audio)
             elif event.key in Keys.Select.value:
-                self._exit()
+                self._exit(gamestate, audio)
             elif event.key == Keys.Action.value:
-                self._exit()
+                self._exit(gamestate, audio)
         elif event.type == pygame.MOUSEBUTTONDOWN:
             if event.button == Keys.Leftclick.value:
-                self._exit()
+                self._exit(gamestate, audio)
 
-    def _exit(self):
+    def _exit(self, gamestate, audio):
         if self.last:
-            self.audio.play_sound(SFX.done)
-        self.gamestate.pop()
+            audio.play_sound(SFX.done)
+        gamestate.pop()
 
     def render(self):
         """
@@ -167,11 +167,11 @@ class MessageBox(object):
         if self.no_key:
             return
 
-    def update(self, dt):
+    def update(self, dt, gamestate, audio):
         """
         Laat een evt geluid horen, eenmalig.
         """
         if self.sound:
             if self.audio_first_time is False:
                 self.audio_first_time = True
-                self.audio.play_sound(self.sound)
+                audio.play_sound(self.sound)

@@ -91,10 +91,12 @@ class Display(object):
         # if self.name == GameState.MainMenu:
         #     print(str(self.name) + " on_exit")
 
-    def single_input(self, event):
+    def single_input(self, event, gamestate, audio):
         """
         Geef de key van het geselecteerde menuitem terug aan het spel.
         :param event: pygame.event.get() uit engine.py
+        :param gamestate:
+        :param audio:
         :return: de key, bijv. 'LoadGame'
         """
         if event.type == pygame.MOUSEMOTION:
@@ -102,42 +104,42 @@ class Display(object):
                 if item.rect.collidepoint(event.pos):
                     if self.cur_item != item.index:
                         self.cur_item = item.index
-                        self.audio.play_sound(SFX.menu_switch)
+                        audio.play_sound(SFX.menu_switch)
                     break
 
         elif event.type == pygame.MOUSEBUTTONDOWN:
             if event.button == Keys.Leftclick.value:
                 for item in self.list_text_objects:
                     if item.rect.collidepoint(event.pos):
-                        self.audio.play_sound(SFX.menu_select)
+                        audio.play_sound(SFX.menu_select)
                         self.menu_content_object.on_select(item,
                                                            self.title, self.animation, self.scr_capt, self.cur_item)
                         break
 
         elif event.type == pygame.KEYDOWN:
             if event.key == Keys.Up.value and self.cur_item > 0:
-                self.audio.play_sound(SFX.menu_switch)
+                audio.play_sound(SFX.menu_switch)
                 self.cur_item -= 1
             elif event.key == Keys.Up.value and self.cur_item == 0:
-                self.audio.play_sound(SFX.menu_error)
+                audio.play_sound(SFX.menu_error)
                 self.cur_item = 0
             elif event.key == Keys.Down.value and self.cur_item < len(self.list_text_objects) - 1:
-                self.audio.play_sound(SFX.menu_switch)
+                audio.play_sound(SFX.menu_switch)
                 self.cur_item += 1
             elif event.key == Keys.Down.value and self.cur_item == len(self.list_text_objects) - 1:
-                self.audio.play_sound(SFX.menu_error)
+                audio.play_sound(SFX.menu_error)
                 self.cur_item = len(self.list_text_objects) - 1
 
             if event.key in Keys.Select.value:
-                self.audio.play_sound(SFX.menu_select)
+                audio.play_sound(SFX.menu_select)
                 self.menu_content_object.on_select(self.list_text_objects[self.cur_item],
                                                    self.title, self.animation, self.scr_capt, self.cur_item)
             elif event.key == Keys.Delete.value:
-                self.audio.play_sound(SFX.menu_select)
+                audio.play_sound(SFX.menu_select)
                 self.menu_content_object.on_delete(self.list_text_objects[self.cur_item],
                                                    self.scr_capt, self.cur_item)
             elif event.key == Keys.Exit.value:
-                self.audio.play_sound(SFX.menu_select)
+                audio.play_sound(SFX.menu_select)
                 self.menu_content_object.on_quit()
 
     # noinspection PyMethodMayBeStatic
@@ -150,10 +152,12 @@ class Display(object):
         """
         pass
 
-    def update(self, dt):
+    def update(self, dt, gamestate, audio):
         """
         Update de achtergrond animatie.
         :param dt: self.clock.tick(FPS)/1000.0
+        :param gamestate:
+        :param audio:
         """
         if self.animation:
             self.animation.update(dt)

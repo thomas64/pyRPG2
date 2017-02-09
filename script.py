@@ -30,6 +30,7 @@ class Script:
     def new_game(data, debug_mode):
         """
         Wat te doen bij het starten van een nieuw spel.
+        :param debug_mode:
         :param data: self.engine.data
         """
         # Vul de heroes database met alle hero objecten die in factory zijn gemaakt.
