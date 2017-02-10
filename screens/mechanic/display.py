@@ -189,7 +189,7 @@ class Display(Parchment):
 
             text = ["{} successfully created.".format(selected_equipment.NAM)]
             self.engine.data.inventory.add_i(selected_equipment)
-            push_object = MessageBox(text, sound=SFX.message)
+            push_object = MessageBox(text)
             self.engine.gamestate.push(push_object)
 
             self._init_boxes()

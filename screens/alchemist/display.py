@@ -136,7 +136,7 @@ class Display(Parchment):
             if potion_chance >= rnd_percentage:
                 text = ["{} successfully created.".format(selected_potion.NAM)]
                 self.engine.data.pouch.add(selected_potion)
-                push_object = MessageBox(text, sound=SFX.message)
+                push_object = MessageBox(text)
                 self.engine.gamestate.push(push_object)
             else:
                 text = ["Failed to create a {}.".format(selected_potion.NAM)]

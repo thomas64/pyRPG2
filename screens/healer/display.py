@@ -145,7 +145,7 @@ class Display(Parchment):
             healpoints = new_hp - old_hp
 
             text = ["{} heals {} by {}.".format(self.cur_hero.NAM, selected_hero.NAM, healpoints)]
-            push_object = MessageBox(text, sound=SFX.message)
+            push_object = MessageBox(text)
             self.engine.gamestate.push(push_object)
 
             self._init_boxes()

@@ -19,18 +19,19 @@ TIME = 0.7
 
 # noinspection PyMissingOrEmptyDocstring
 class Transition(object):
-    def __init__(self, full_screen=True):
+    def __init__(self, wait=TIME, full_screen=True):
         self.screen = pygame.display.get_surface()
         self.rect = self.screen.get_rect()
         if not full_screen:
             self.rect = pygame.Rect(WINDOWX, WINDOWY, WINDOWW, WINDOWH)
         self.name = GameState.FadeBlack
+        self.wait = wait
         self.timer = 0
         self.color = (0, 0, 0, 0)
 
     def update(self, dt, gamestate, audio):
         self.timer += dt
-        if self.timer > TIME:
+        if self.timer > self.wait:
             gamestate.pop()
             return
         new_alpha = ALPHA * dt

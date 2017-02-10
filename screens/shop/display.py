@@ -248,7 +248,7 @@ class Display(Parchment):
                     "",
                     "Yes please.",
                     "No thanks."]
-            self.confirm_box = ConfirmBox(text, sound=SFX.message)
+            self.confirm_box = ConfirmBox(text)
             self.engine.gamestate.push(self.confirm_box)
             return True
         elif self.buy_click and self.value > self.gold_amount:
@@ -273,7 +273,7 @@ class Display(Parchment):
             return True
         elif self.sell_click and self.selected_item:
             text = self._fill_confirm_box_with_sell_text()
-            self.confirm_box = ConfirmBox(text, sound=SFX.message)
+            self.confirm_box = ConfirmBox(text)
             self.engine.gamestate.push(self.confirm_box)
             return True
         elif self.sell_click and not self.selected_item:

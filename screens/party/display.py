@@ -371,7 +371,7 @@ class Display(object):
                             "",
                             "Yes",
                             "No"]
-                    self.confirm_box = ConfirmBox(text, sound=SFX.message)
+                    self.confirm_box = ConfirmBox(text)
                     self.engine.gamestate.push(self.confirm_box)
                 else:
                     push_object = MessageBox(text, sound=SFX.menu_cancel)
@@ -419,8 +419,8 @@ class Display(object):
                 # todo, maken dat in battle je niet op deze manier potions kan drinken.
                 able, message = selected_item.use(self.cur_hero)
                 if able and message:
-                    push_object = MessageBox(message, sound=SFX.message,
-                                             last=(False if type(message) == list else True))  # een img is een string.
+                    # een img is een string.
+                    push_object = MessageBox(message, last=(False if type(message) == list else True))
                     self.engine.gamestate.push(push_object)
                 elif not able and message:
                     push_object = MessageBox(message, sound=SFX.menu_cancel)
@@ -434,7 +434,7 @@ class Display(object):
                     "",
                     "Yes, you may leave.",
                     "No, I want you to stay."]
-            self.leave_box = ConfirmBox(text, face_image=self.cur_hero.FAC, sound=SFX.message)
+            self.leave_box = ConfirmBox(text, face_image=self.cur_hero.FAC)
             self.engine.gamestate.push(self.leave_box)
 
     def _previous(self):

@@ -181,7 +181,7 @@ class Display(Parchment):
                         "",
                         "Yes",
                         "No"]
-                self.confirm_box = ConfirmBox(text, sound=SFX.message)
+                self.confirm_box = ConfirmBox(text)
                 self.engine.gamestate.push(self.confirm_box)
             else:
                 push_object = MessageBox(text, sound=SFX.menu_cancel)

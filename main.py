@@ -23,7 +23,6 @@ def main():
     Prepare our environment, create a display, and start the program.
     """
     os.environ['SDL_VIDEO_CENTERED'] = '1'
-    pygame.mixer.pre_init(44100, 16, 2, 4096)
     pygame.init()
     pygame.display.set_mode((SCREENWIDTH, SCREENHEIGHT))
     pygame.display.set_icon(pygame.image.load(ICONPATH).convert_alpha())

@@ -45,7 +45,7 @@ class MainMenu(BaseMenu):
             self.engine.gamestate.push(MessageBox(Script.intro_text(), scr_capt=False, last=True))
             self.engine.gamestate.push(Transition())
             self.engine.gamestate.push(LoadScreen())
-            self.engine.gamestate.push(Transition())
+            self.engine.gamestate.push(Transition(wait=2))
             self.engine.force_bg_music = True
 
         elif menu_item.text == "Load Game":
