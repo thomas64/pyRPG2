@@ -11,6 +11,7 @@ from database import QuestDatabase
 
 from database import TreasureChestDatabase
 from database import SparklyDatabase
+from database import ChapterDatabase
 from database import MoveEventDatabase
 from database import TextEventDatabase
 
@@ -39,6 +40,7 @@ class Script:
         # Treasure chest en Sparklies worden geen losse objecten, maar blijven 1 object met meerdere dicts.
         data.treasure_chests = database.factory(TreasureChestDatabase)
         data.sparklies = database.factory(SparklyDatabase)
+        data.chapters = database.factory(ChapterDatabase)
         data.move_events = database.factory(MoveEventDatabase)
         data.text_events = database.factory(TextEventDatabase)
 

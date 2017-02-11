@@ -22,10 +22,12 @@ from .hero import HeroDatabase                  # Enum data, maak aan het begin 
 from .quest import QuestDatabase                # Enum data, maak aan het begin alle objecten mee
 from .treasurechest import TreasureChestDatabase    # aEnum data, stop in een dict, gebruik sommige data
 from .sparkly import SparklyDatabase            # aEnum data, stop in een dict, gebruik sommige data
+from .chapter import ChapterDatabase            # aEnum data, stop in een dict
 from .moveevent import MoveEventDatabase        # aEnum data, stop in een dict
 from .textevent import TextEventDatabase        # Enum data, stop in een dict
 
 
+from .location import LocationDatabase          # Enum data, gebruik de data
 from .inn import InnDatabase                    # Enum data, gebruik de data
 from .people import PeopleDatabase              # Enum data, gebruik de data
 from .school import SchoolDatabase              # Enum data, gebruik de data

@@ -50,8 +50,8 @@ class Map(object):
     """
     Bevat allemaal lijsten van rects.
     """
-    def __init__(self, name):
-        tmx_data = MapTitle[name].value[1]
+    def __init__(self, data):
+        tmx_data = MapTitle[data.map_name].value[1]
         map_data = pyscroll.TiledMapData(tmx_data)
         self.map_layer = pyscroll.BufferedRenderer(map_data, (WINDOWWIDTH, WINDOWHEIGHT))
         self.map_layer.zoom = 2
@@ -64,7 +64,7 @@ class Map(object):
         self.window_width = WINDOWWIDTH
         self.window_height = WINDOWHEIGHT
 
-        self.title = MapTitle[name].value[0]
+        self.title = MapTitle[data.map_name].value[0]
 
         self.high_blocker_rects = []
         self.low_blocker_rects = []
@@ -80,6 +80,7 @@ class Map(object):
         self.people = []
         self.notes = []
         self.signs = []
+        self.locations = []
         self.text_events = []
         self.move_events = []
         self.chests = []
@@ -92,11 +93,14 @@ class Map(object):
         for nrect in tmx_data.get_layer_by_name(SOUNDS):
             self.sounds.append(NamedRect(nrect.name, self._pg_rect(nrect)))
         for obj in tmx_data.get_layer_by_name(STARTPOS):
-            self.start_pos.append(Portal(obj.name, self._pg_rect(obj), name, obj.type, self._has_dir(obj, 'direction')))
+            self.start_pos.append(Portal(obj.name, self._pg_rect(obj), data.map_name, obj.type,
+                                         self._has_dir(obj, 'direction')))
         for obj in tmx_data.get_layer_by_name(PORTALS):
-            self.portals.append(Portal(name, self._pg_rect(obj), obj.name, obj.type))
+            self.portals.append(Portal(data.map_name, self._pg_rect(obj), obj.name, obj.type))
         for obj in tmx_data.get_layer_by_name(EVENTS):
-            if obj.name.startswith('text'):
+            if obj.name == 'location':
+                self.locations.append(NamedRect(obj.type, self._pg_rect(obj)))
+            elif obj.name.startswith('text'):
                 # in obj.type kan iets staan, als daar bijv zwart staat, dan heeft het text_event een zwarte achtergrond
                 self.text_events.append(NamedRect(obj.name, self._pg_rect(obj), obj.type))
             elif obj.name.startswith('move'):
@@ -148,6 +152,17 @@ class Map(object):
                     if time1 < timestamp < time2:
                         self.people.append(person_object)
                         # geen blocker voor walking people, die worden actueel in window geladen bij check_blocker.
+                        if not obj.type:
+                            self.high_blocker_rects.append(person_object.get_blocker())
+                elif PeopleDatabase[obj.name].value.get('chapter'):
+                    # zoek de .name op van de chapter in de peopledatabase. (als die er is)
+                    chapter_name = PeopleDatabase[obj.name].value['chapter'].name
+                    # die bevat een dict met 1 waarde
+                    chapter_dict = data.chapters[chapter_name]
+                    # dat is een boolean
+                    chapter_bool = chapter_dict['condition']
+                    if chapter_bool:
+                        self.people.append(person_object)
                         if not obj.type:
                             self.high_blocker_rects.append(person_object.get_blocker())
                 else:

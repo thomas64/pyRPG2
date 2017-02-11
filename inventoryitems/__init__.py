@@ -71,6 +71,7 @@ def factory_all_quests(quests_enum):
     from .quest import FetchItemQuestItem
     from .quest import PersonMessageQuestItem
     from .quest import ReceiveItemQuestItem
+    from .quest import GoSomewhereQuestItem
 
     quests_dict = dict()
     for quest_enum in quests_enum:
@@ -88,5 +89,9 @@ def factory_all_quests(quests_enum):
             quests_dict[quest_enum.name] = ReceiveItemQuestItem(quest_enum.value['qtype'],
                                                                 quest_enum.value['reward'],
                                                                 quest_enum.value['text'])
-
+        elif quest_enum.value['qtype'] == QuestType.GoSomewhereQuest:
+            quests_dict[quest_enum.name] = GoSomewhereQuestItem(quest_enum.value['qtype'],
+                                                                quest_enum.value['condition'],
+                                                                quest_enum.value['reward'],
+                                                                quest_enum.value['text'])
     return quests_dict

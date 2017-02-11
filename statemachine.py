@@ -152,3 +152,19 @@ class StateMachine(object):
         else:
             Console.error_no_confirmbox_in_top_state()
             raise AttributeError
+
+    def input_state_after_all_messageboxes(self, new_state):
+        """
+        Kijk eerst van voren waar de eerste MessageBox is.
+        Stop dan de nieuwe messageboxen ervoor.
+        """
+        first_index = None
+        for index, state in enumerate(self.statestack):
+            if state.name == GameState.MessageBox:
+                first_index = index
+                break
+        if first_index is not None:
+            self.statestack.insert(first_index, new_state)
+        else:
+            Console.error_no_messagebox_in_stack()
+            raise AttributeError

@@ -62,7 +62,7 @@ class FetchItemQuestItem(BaseQuestItem):
         for i, text_part in enumerate(reversed(self._get_text())):
             push_object = MessageBox(text_part, face_image=face_image,
                                      last=(True if i == 0 and (not self._is_ready_to_fulfill(data) or
-                                                               self.state == QuestState.Rewarded) else False))
+                                                               self.is_rewarded()) else False))
             gamestate.push(push_object)
 
         self._update_state(self._is_ready_to_fulfill(data))
@@ -87,7 +87,7 @@ class FetchItemQuestItem(BaseQuestItem):
         :param yes: confirmbox.TOPINDEX
         :param scr_capt: hetzelfde schermafdruk die ook in de voorgaande confirmbox is gebruikt
         :param person_id: Voor deze niet nodig, maar wel voor PersonMessageQuestItem.
-        :param display_loot: methode uit window waar het overzicht gegeven wordt van wat je ontvangen hebt.
+        :param display_loot: methode uit Window() waar het overzicht gegeven wordt van wat je ontvangen hebt.
         """
         if choice == yes:
             # ga naar Finished
@@ -218,7 +218,7 @@ class PersonMessageQuestItem(BaseQuestItem):
         :param data: self.engine.data
         :param face_image: PeopleDatabase[person_sprite.person_id].value['face']
         :param person_id: Nodig voor identificatie en voor weergeven tekst van de juiste persoon.
-        :param display_loot: methode uit window waar het overzicht gegeven wordt van wat je ontvangen hebt.
+        :param display_loot: methode uit Window() waar het overzicht gegeven wordt van wat je ontvangen hebt.
         :return: deze is voor het vullen van een quest_box in window. returnt een confirmbox indien nodig.
         """
         # let op dat de volgorde volledig omgedraaid is.
@@ -323,7 +323,7 @@ class ReceiveItemQuestItem(BaseQuestItem):
         :param data: self.engine.data
         :param face_image: PeopleDatabase[person_sprite.person_id].value['face']
         :param person_id: Voor deze niet nodig, maar wel voor PersonMessageQuestItem.
-        :param display_loot: methode uit window waar het overzicht gegeven wordt van wat je ontvangen hebt.
+        :param display_loot: methode uit Window() waar het overzicht gegeven wordt van wat je ontvangen hebt.
         :return: deze is voor deze quest altijd None.
         """
 
@@ -337,7 +337,7 @@ class ReceiveItemQuestItem(BaseQuestItem):
 
         for i, text_part in enumerate(reversed(self._get_text())):
             push_object = MessageBox(text_part, face_image=face_image,
-                                     last=(True if i == 0 and self.state == QuestState.Rewarded else False))
+                                     last=(True if i == 0 and self.is_rewarded() else False))
             gamestate.push(push_object)
 
         self._update_state()
@@ -349,3 +349,17 @@ class ReceiveItemQuestItem(BaseQuestItem):
         Zet de state gelijk naar rewarded, vanaf welke state dan ook.
         """
         self.state = QuestState.Rewarded
+
+
+class GoSomewhereQuestItem(FetchItemQuestItem):
+    """
+    Een persoon vraagt je om naar een plek te gaan. Wanneer je daar geweest bent en terugkeert dan krijg je evt wat.
+    """
+    def __init__(self, qtype, condition, reward, text):
+        super().__init__(qtype, condition, reward, text)
+
+    def _is_ready_to_fulfill(self, data):
+        return self.condition
+
+    def _fulfill(self, data):
+        pass

@@ -16,6 +16,7 @@ class Data(object):
         self.logbook = dict()
         self.treasure_chests = dict()
         self.sparklies = dict()
+        self.chapters = dict()
         self.move_events = dict()
         self.text_events = dict()
 

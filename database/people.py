@@ -6,6 +6,7 @@ class: PeopleDatabase
 import datetime
 import enum
 
+from .chapter import ChapterDatabase
 from .quest import QuestDatabase
 
 
@@ -46,8 +47,16 @@ class PeopleDatabase(enum.Enum):
     person77 = dict(name='soldier01',    text=[["I'm terribly sorry sir, but I can",
                                                "not allow you to go any further."],
                                                ["It's dangerous to go alone."]])
+    person80 = dict(name='soldier01',    chapter=ChapterDatabase.chapter1,
+                                         text=[["Trespassing is not allowed!"]])
+
+    # ersin_forest_spring
+    person82 = dict(name='animal02',     text=[["Woof"], [" . . . "], ["I mean, hello there."]])
+
     # ersin_forest_center
     person50 = dict(name='boy01',        quest=QuestDatabase.quest1)
+    person81 = dict(name='girl02',       quest=QuestDatabase.quest5)
+
     # ersin_waterfall
     person51 = dict(name='man54',        quest=QuestDatabase.quest4)
 

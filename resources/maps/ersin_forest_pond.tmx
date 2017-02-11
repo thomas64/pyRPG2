@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<map version="1.0" orientation="orthogonal" renderorder="right-down" width="56" height="60" tilewidth="16" tileheight="16" nextobjectid="60">
+<map version="1.0" orientation="orthogonal" renderorder="right-down" width="56" height="60" tilewidth="16" tileheight="16" nextobjectid="63">
  <tileset firstgid="1" name="ersin_forest_pond" tilewidth="16" tileheight="16" tilecount="1420" columns="71">
   <image source="tilesets/ersin_forest_pond.png" width="1136" height="320"/>
  </tileset>
@@ -774,6 +774,9 @@
   <object id="57" name="sparkly15" x="512" y="224" width="32" height="32"/>
   <object id="58" name="sparkly14" x="352" y="224" width="32" height="32"/>
   <object id="59" name="sparkly13" x="256" y="288" width="32" height="32"/>
+  <object id="60" name="person82" type="w" x="448" y="544" width="32" height="32"/>
  </objectgroup>
- <objectgroup name="events"/>
+ <objectgroup name="events">
+  <object id="62" name="location" type="quest5" x="240" y="608" width="384" height="32"/>
+ </objectgroup>
 </map>

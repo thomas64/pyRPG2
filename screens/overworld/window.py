@@ -107,7 +107,7 @@ class Window(object):
         """
         Maak een nieuwe map aan met de hero's in het veld.
         """
-        self.current_map = Map(self.engine.data.map_name)
+        self.current_map = Map(self.engine.data)
         self.group = self.current_map.view
         self.grid_sprite = None
         self.cbox_sprites = []
@@ -251,7 +251,8 @@ class Window(object):
                         for obj in self.current_map.people:
                             if getattr(obj, 'wander_area', None):
                                 self.cbox_sprites.append(ColorBox(obj.wander_area, WANDERBOXCOLOR, CBOXLAYER))
-                        for obj_group in (self.current_map.text_events,
+                        for obj_group in (self.current_map.locations,
+                                          self.current_map.text_events,
                                           self.current_map.move_events):
                             for obj in obj_group:
                                 self.cbox_sprites.append(ColorBox(obj.rect, TEXTEVENTCOLOR, CBOXLAYER))
@@ -318,16 +319,17 @@ class Window(object):
         self.engine.data.map_pos = self.party_sprites[0].rect.topleft
         self.engine.data.map_dir = self.party_sprites[0].last_direction
 
-    def update(self, dt):
-        """
-        :param dt: self.clock.tick(FPS)/1000.0
-        """
         # Is de hero tegen een soundobject of een portal aangelopen
         self.check_sounds()
         self.check_text_events()  # deze staat voor portals vanwege een evt vloeiende Transition.
         self.check_portals()
         self.check_move_events()
+        self.check_locations()
 
+    def update(self, dt):
+        """
+        :param dt: self.clock.tick(FPS)/1000.0
+        """
         # Update locaties (indien F11).
         # misschien gaat dit een probleem geven wanneer ingame de party grootte wordt gewijzigd.
         # dan heeft bijv een boom een unit.rect.topleft oid.
@@ -520,6 +522,23 @@ class Window(object):
                     self.auto_move_script_index = 0
                     self.auto_move_part = self.auto_move_script[self.auto_move_script_index]
                     self.auto_move_timer = self.auto_move_part[2]  # [2] is de timer
+
+    def check_locations(self):
+        """
+        Als je collide met een location.
+        """
+        if not self.party_sprites[0].is_highspeed_moving():
+            if len(self.party_sprites[0].rect.collidelistall(self.current_map.locations)) == 1:
+                object_nr = self.party_sprites[0].rect.collidelist(self.current_map.locations)
+                location_name = self.current_map.locations[object_nr].name
+
+                if location_name.startswith('quest'):
+                    the_quest = self.engine.data.logbook[location_name]
+                    the_quest.condition = True
+
+                elif location_name.startswith('chapter'):
+                    chapter_data = self.engine.data.chapters[location_name]
+                    chapter_data['condition'] = True
 
     def action_button(self):
         """

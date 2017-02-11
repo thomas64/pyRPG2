@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<map version="1.0" orientation="orthogonal" renderorder="right-down" width="140" height="140" tilewidth="16" tileheight="16" nextobjectid="488">
+<map version="1.0" orientation="orthogonal" renderorder="right-down" width="140" height="140" tilewidth="16" tileheight="16" nextobjectid="490">
  <tileset firstgid="1" name="ersin_forest_center" tilewidth="16" tileheight="16" tilecount="1798" columns="62">
   <image source="tilesets/ersin_forest_center.png" width="992" height="464"/>
  </tileset>
@@ -1654,7 +1654,7 @@
   <object id="443" x="2112" y="1312" width="64" height="16"/>
   <object id="444" x="1856" y="1248" width="32" height="48"/>
  </objectgroup>
- <objectgroup name="objects" visible="0">
+ <objectgroup name="objects">
   <object id="455" name="note5" x="1856" y="1280" width="32" height="16"/>
   <object id="459" name="sign5" type="1" x="640" y="1824" width="32" height="32"/>
   <object id="464" name="person50" type="w" x="544" y="2016" width="32" height="32"/>
@@ -1672,11 +1672,13 @@
   <object id="480" name="sparkly10" x="1280" y="704" width="32" height="32"/>
   <object id="481" name="sparkly11" x="1056" y="736" width="32" height="32"/>
   <object id="482" name="sparkly12" x="896" y="224" width="32" height="32"/>
+  <object id="489" name="person81" type="w" x="640" y="1888" width="32" height="32"/>
  </objectgroup>
- <objectgroup name="events" visible="0">
+ <objectgroup name="events">
   <object id="485" name="text4" x="1072" y="1920" width="16" height="16"/>
   <object id="486" name="text3" x="1392" y="1824" width="16" height="16"/>
   <object id="484" name="text1" x="1248" y="1840" width="16" height="16"/>
   <object id="487" name="move1" x="1408" y="1808" width="16" height="16"/>
+  <object id="488" name="location" type="chapter1" x="736" y="2016" width="32" height="96"/>
  </objectgroup>
 </map>
