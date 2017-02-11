@@ -140,10 +140,10 @@ class Window(object):
         self.group.add(self.current_map.schools)
         self.group.add(self.current_map.trainers)
         self.group.add(self.current_map.inns)
-        self.group.add(self.current_map.people)
         self.group.add(self.current_map.signs)
         self.group.add(self.current_map.chests)
         self.group.add(self.current_map.sparkly)
+        self.group.add(self.current_map.people)  # people onderaan, dan lopen ze boven andere dingen.
 
     def align(self):
         """
@@ -670,7 +670,7 @@ class Window(object):
                 # idem voor person_id
                 self.person_id = person_sprite.person_id
 
-                self.quest_box = the_quest.show_message(self.engine.gamestate, self.engine.data,
+                self.quest_box = the_quest.show_message(self.engine.gamestate, self.engine.audio, self.engine.data,
                                                         self.person_face, self.person_id, self.display_loot)
 
             # of als hij dat niet heeft

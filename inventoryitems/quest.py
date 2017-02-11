@@ -49,10 +49,11 @@ class FetchItemQuestItem(BaseQuestItem):
         super().__init__(qtype, reward, text)
         self.condition = condition
 
-    def show_message(self, gamestate, data, face_image, person_id, display_loot):
+    def show_message(self, gamestate, audio, data, face_image, person_id, display_loot):
         """
         Geef een bericht en waneer mogelijk ook een confirmbox erachteraan.
         :param gamestate: self.engine.gamestate
+        :param audio: self.engine.audio
         :param data: self.engine.data
         :param face_image: PeopleDatabase[person_sprite.person_id].value['face']
         :param person_id: Voor deze niet nodig, maar wel voor PersonMessageQuestItem.
@@ -211,10 +212,11 @@ class PersonMessageQuestItem(BaseQuestItem):
             return True
         return False
 
-    def show_message(self, gamestate, data, face_image, person_id, display_loot):
+    def show_message(self, gamestate, audio, data, face_image, person_id, display_loot):
         """
         Geeft een bericht en waneer mogelijk ook een confirmbox erachteraan.
         :param gamestate: self.engine.gamestate
+        :param audio: self.engine.audio
         :param data: self.engine.data
         :param face_image: PeopleDatabase[person_sprite.person_id].value['face']
         :param person_id: Nodig voor identificatie en voor weergeven tekst van de juiste persoon.
@@ -223,16 +225,35 @@ class PersonMessageQuestItem(BaseQuestItem):
         """
         # let op dat de volgorde volledig omgedraaid is.
         if self.state == QuestState.Finished:
-            if self.people[person_id] == 'main':
-                text = ["Received:"]
-                image = []
-                text, image = display_loot(self.reward, text, image)
-                push_object = MessageBox(text, spr_image=image, sound=SFX.reward, last=True)
-                gamestate.push(push_object)
+            if self.reward:
+                if self.people[person_id] == 'main':
+                    text = ["Received:"]
+                    image = []
+                    text, image = display_loot(self.reward, text, image)
+                    push_object = MessageBox(text, spr_image=image, sound=SFX.reward, last=True)
+                    gamestate.push(push_object)
 
-        for i, text_part in enumerate(reversed(self._get_text(person_id))):
-            push_object = MessageBox(text_part, face_image=face_image, last=self._message_is_last(i, person_id))
-            gamestate.push(push_object)
+                    # nog een bedank berichtje van de quest owner.
+                    for text_part in reversed(self._get_text(person_id)):
+                        push_object = MessageBox(text_part, face_image=face_image)
+                        gamestate.push(push_object)
+
+            else:
+                # als er geen reward is
+                audio.play_sound(SFX.reward)
+
+                # nog een bedank berichtje van de quest owner.
+                amount_messages = len(self._get_text(person_id)) - 1
+                for i, text_part in enumerate(reversed(self._get_text(person_id))):
+                    push_object = MessageBox(text_part, face_image=face_image,
+                                             sound=(None if i == amount_messages else SFX.message),
+                                             last=(True if i == 0 else False))
+                    gamestate.push(push_object)
+
+        else:
+            for i, text_part in enumerate(reversed(self._get_text(person_id))):
+                push_object = MessageBox(text_part, face_image=face_image, last=self._message_is_last(i, person_id))
+                gamestate.push(push_object)
 
         self._update_state(person_id)
 
@@ -313,13 +334,12 @@ class ReceiveItemQuestItem(BaseQuestItem):
     """
     Je praat met een persoon, en die geeft je gelijk wat.
     """
-    def __init__(self, qtype, reward, text):
-        super().__init__(qtype, reward, text)
 
-    def show_message(self, gamestate, data, face_image, person_id, display_loot):
+    def show_message(self, gamestate, audio, data, face_image, person_id, display_loot):
         """
         Geeft een bericht net zoals notes verdeeld over meerdere schermen, met een inverse loop.
         :param gamestate: self.engine.gamestate
+        :param audio: self.engine.audio
         :param data: self.engine.data
         :param face_image: PeopleDatabase[person_sprite.person_id].value['face']
         :param person_id: Voor deze niet nodig, maar wel voor PersonMessageQuestItem.
@@ -355,9 +375,6 @@ class GoSomewhereQuestItem(FetchItemQuestItem):
     """
     Een persoon vraagt je om naar een plek te gaan. Wanneer je daar geweest bent en terugkeert dan krijg je evt wat.
     """
-    def __init__(self, qtype, condition, reward, text):
-        super().__init__(qtype, condition, reward, text)
-
     def _is_ready_to_fulfill(self, data):
         return self.condition
 
