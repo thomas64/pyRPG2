@@ -25,6 +25,8 @@ FADEOUTTIME = 500
 # Alle niet overworld kaart muziek.
 TITLESCREEN = 'titlescreen'
 
+DEFAULTSTEPSOUND = "step_grass"
+
 
 class Audio(object):
     """
@@ -43,7 +45,7 @@ class Audio(object):
         self.mfx = self._load_all_sfx(MUSICPATH)
         self.sfx = self._load_all_sfx(SOUNDSPATH)
 
-        self.footstep = None
+        self.footstep = DEFAULTSTEPSOUND
 
     @staticmethod
     def _load_all_sfx(path):

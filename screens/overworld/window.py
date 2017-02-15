@@ -319,6 +319,10 @@ class Window(object):
         self.engine.data.map_pos = self.party_sprites[0].rect.topleft
         self.engine.data.map_dir = self.party_sprites[0].last_direction
 
+    def update(self, dt):
+        """
+        :param dt: self.clock.tick(FPS)/1000.0
+        """
         # Is de hero tegen een soundobject of een portal aangelopen
         self.check_sounds()
         self.check_text_events()  # deze staat voor portals vanwege een evt vloeiende Transition.
@@ -326,10 +330,6 @@ class Window(object):
         self.check_move_events()
         self.check_locations()
 
-    def update(self, dt):
-        """
-        :param dt: self.clock.tick(FPS)/1000.0
-        """
         # Update locaties (indien F11).
         # misschien gaat dit een probleem geven wanneer ingame de party grootte wordt gewijzigd.
         # dan heeft bijv een boom een unit.rect.topleft oid.
