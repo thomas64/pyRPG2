@@ -9,7 +9,7 @@ import pygame
 
 from components import ColorBox
 from components import ConfirmBox
-from components import Grid
+from components import Grid2
 from components import Map
 from components import MessageBox
 from components import Player
@@ -232,8 +232,7 @@ class Window(object):
             elif event.key == Keys.Grid.value:
                 if self.engine.debug_mode:
                     if self.grid_sprite is None:
-                        self.grid_sprite = Grid(self.current_map.width, self.current_map.height,
-                                                GRIDCOLOR, GRIDSIZE, GRIDLAYER)
+                        self.grid_sprite = Grid2(self.current_map.grid, GRIDCOLOR, GRIDLAYER)
                         self.group.add(self.grid_sprite)
                     else:
                         self.group.remove(self.grid_sprite)

@@ -46,6 +46,17 @@ OBJECTLAYER = 4
 PLAYERLAYER = 5
 
 
+class Tile(pygame.Rect):
+    """..."""
+    total_tiles = 0
+
+    def __init__(self, x, y, w, h):
+        super().__init__(x, y, w, h)
+        self.solid = False
+        self.number = Tile.total_tiles
+        Tile.total_tiles += 1
+
+
 class Map(object):
     """
     Bevat allemaal lijsten van rects.
@@ -203,6 +214,16 @@ class Map(object):
             else:
                 Console.error_unknown_map_object()
                 raise NameError
+
+        self.grid = list()
+        Tile.total_tiles = 0
+        for y in range(0, self.height, tileheight):
+            for x in range(0, self.width, tilewidth):
+                tile = Tile(x, y, tilewidth, tileheight)
+                if len(tile.collidelistall(self.high_blocker_rects)) == 1 or \
+                   len(tile.collidelistall(self.low_blocker_rects)) == 1:
+                    tile.solid = True
+                self.grid.append(tile)
 
     @staticmethod
     def _pg_rect(rect):

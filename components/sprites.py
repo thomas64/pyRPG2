@@ -142,6 +142,30 @@ class Grid(pygame.sprite.Sprite):
         self.rect = self.image.get_rect()
 
 
+class Grid2(pygame.sprite.Sprite):
+    """..."""
+    def __init__(self, grid_list, color, layer):
+        super().__init__()
+
+        self._layer = layer
+        self.image = pygame.Surface(grid_list[-1].bottomright)  # laatste element geeft de mapgrootte aan.
+        self.image.fill(FILLCOLOR)
+        self.image.set_colorkey(FILLCOLOR)
+
+        font = pygame.font.SysFont('Tahoma', 8)
+
+        for tile in grid_list:
+            if tile.solid:
+                pygame.draw.rect(self.image, color, tile)
+            else:
+                pygame.draw.rect(self.image, color, tile, 1)
+                text = font.render(str(tile.number), False, color)
+                self.image.blit(text, (tile.x+3, tile.y+3))
+
+        self.image = self.image.convert()
+        self.rect = self.image.get_rect()
+
+
 def get_image(x, y, width, height, spritesheet):
     """
     Extracts image from spritesheet.

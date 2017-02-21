@@ -20,6 +20,7 @@ from .transition import Transition
 from .sprites import Button
 from .sprites import ColorBox
 from .sprites import Grid
+from .sprites import Grid2
 from .sprites import VisionRadius
 
 from .sprites import Sign
