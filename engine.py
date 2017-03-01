@@ -153,6 +153,7 @@ class GameEngine(object):
             self.key_input = pygame.key.get_pressed()
             self.mouse_input = None
             if pygame.mouse.get_pressed()[0]:
+                pygame.mouse.set_visible(True)
                 self.mouse_input = pygame.mouse.get_pos()
 
             self.gamestate.peek().multi_input(self.key_input, self.mouse_input, self.dt)

@@ -384,17 +384,18 @@ class Window(object):
 
             for i in range(1, len(self.party)):
                 ps = self.party_sprites[i]
+                mv = self.party_sprites[0].movespeed
                 # dit was een poging tot een andere manier van trailing. werkt niet goed genoeg.
-                # mv = self.party_sprites[0].movespeed
                 # if mv == 60:
                 #     index = 32 * i
                 # if mv == 120:
                 #     index = 16 * i
                 # if mv == 240:
                 #     index = 8 * i
-                # if mv == 480:
-                #     index = 4 * i
+                # if mv == 960:
+                #     index = 2 * i
 
+                # index = i * (round(mv * dt))
                 index = i * GRIDSIZE
                 ps.rect.x = self.leader_history[index][0]
                 ps.rect.y = self.leader_history[index][1]
