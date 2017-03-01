@@ -215,6 +215,7 @@ class Map(object):
                 Console.error_unknown_map_object()
                 raise NameError
 
+        # stop alle Tiles in een list
         self.grid = list()
         Tile.total_tiles = 0
         for y in range(0, self.height, tileheight):
@@ -224,6 +225,15 @@ class Map(object):
                    len(tile.collidelistall(self.low_blocker_rects)) == 1:
                     tile.solid = True
                 self.grid.append(tile)
+
+        # laat blockers aansluiten.
+        for index, tile in enumerate(self.grid):
+            if not tile.solid:
+                if index >= 1 and index+1 < len(self.grid) and self.grid[index-1].solid and self.grid[index+1].solid:
+                    tile.solid = True
+                w = tmx_data.width
+                if index >= w and index+w < len(self.grid) and self.grid[index-w].solid and self.grid[index+w].solid:
+                    tile.solid = True
 
     @staticmethod
     def _pg_rect(rect):
