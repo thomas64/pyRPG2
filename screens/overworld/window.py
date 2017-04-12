@@ -676,10 +676,12 @@ class Window(object):
 
             # of als hij dat niet heeft
             else:
+                person_data['face'].reverse()  # draai de faces om in volgorde
                 for i, text_part in enumerate(reversed(person_data['text'])):
-                    push_object = MessageBox(text_part, face_image=person_data['face'],
+                    push_object = MessageBox(text_part, face_image=person_data['face'][i],
                                              last=(True if i == 0 else False))
                     self.engine.gamestate.push(push_object)
+                person_data['face'].reverse()  # en weer terugzetten nadien.
 
     def check_notes(self, check_rect):
         """

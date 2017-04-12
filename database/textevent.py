@@ -28,11 +28,17 @@ class TextEventDatabase(enum.Enum):
                  face=[ALAGOS, HEROFACEPATH+"02f_luana.png"])
     text2 = dict(condition=True,
                  text=[["Woah! It's a hidden cave!"]],
-                 face=[ALAGOS])
+                 face=ALAGOS)
     text3 = dict(condition=True,
                  text=[["Kendall!"], ["Kendall!!"], ["Where are you?!"],
                        ["You're wife is looking for you!"], ["KENDALL!!"]],
-                 face=[ALAGOS, ALAGOS, ALAGOS, ALAGOS, ALAGOS])
+                 face=ALAGOS)  # als het geen list is maar een str, dan moet hij voor alle msgboxen hetzelfde zijn
     text4 = dict(condition=True,
                  text=[["Where is he?"], ["He must be somewhere around here..."]],
-                 face=[ALAGOS, ALAGOS])
+                 face=ALAGOS)
+
+
+for text in TextEventDatabase:
+    if type(text.value['face']) == str:  # als het nog geen list is, zet het om naar een list van faces.
+        size = len(text.value['text'])
+        text.value['face'] = [text.value['face']] * size

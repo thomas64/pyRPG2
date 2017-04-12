@@ -14,9 +14,15 @@ PATH = 'resources/sprites/npcs/'
 FEXT = 'f.png'
 SEXT = 's.png'
 
+HEROFACEPATH = 'resources/sprites/heroes/'
+ALAGOS = HEROFACEPATH+"01f_alagos.png"
+
 
 class PeopleDatabase(enum.Enum):
-    """Mogelijkheid om time1 en time2 op te nemen als een person op een specifiek tijdstip aanwezig moet zijn."""
+    """
+    Mogelijkheid om time1 en time2 op te nemen als een person op een specifiek tijdstip aanwezig moet zijn.
+    Mogelijkheid om face alvast mee te geven, deze moet in een list. person80 is een voorbeeld.
+    """
 
     # standard characters
     person1 = dict(name='boy01',         text=[["Hi mister."]])
@@ -48,7 +54,9 @@ class PeopleDatabase(enum.Enum):
                                                "not allow you to go any further."],
                                                ["It's dangerous to go alone."]])
     person80 = dict(name='soldier01',    chapter=ChapterDatabase.chapter1,
-                                         text=[["Trespassing is not allowed!"]])
+                                         text=[["Trespassing is not allowed!"],
+                                               ["I'm sorry."]],
+                    face=[PATH+'soldier01'+FEXT, ALAGOS])
 
     # ersin_forest_spring
     person82 = dict(name='animal02',     text=[["Woof"], [" . . . "], ["I mean, hello there."]])
@@ -102,5 +110,10 @@ class PeopleDatabase(enum.Enum):
     person78 = dict(name='woman03',      text=[["The magic here is from another world!"]])
 
 for person in PeopleDatabase:
-    person.value['face'] = PATH+person.value['name']+FEXT
+    if not person.value.get('face'):  # als er nog geen face is stop ze in een list van faces.
+        if person.value.get('text'):  # een quest heeft geen 'text'
+            size = len(person.value['text'])
+            person.value['face'] = [PATH+person.value['name']+FEXT] * size
+        else:
+            person.value['face'] = PATH + person.value['name'] + FEXT  # bij een quest.
     person.value['sprite'] = PATH+person.value['name']+SEXT
