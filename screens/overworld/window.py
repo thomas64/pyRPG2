@@ -662,17 +662,23 @@ class Window(object):
             # doe gewoon eerst het draaien zoals normaal
             person_sprite.turn(self.party_sprites[0].rect)
 
-            # maar dan, als de persoon een quest heeft
-            if person_data.get('quest'):
+            # maar dan, als de persoon meerdere quests heeft
+            if person_data.get('quest') and type(person_data['quest']) == tuple:
+                # loop dan door al zijn quests
+                for index, quest in enumerate(person_data['quest']):
+                    quest_key = quest.name
+                    the_quest = self.engine.data.logbook[quest_key]
+                    # en als er nog eentje niet rewarded is, voer die dan uit.
+                    # OF als je bij de laatste quest bent, die mag je nog wel een keer uitvoeren.
+                    if not the_quest.is_rewarded() or index == len(person_data['quest'])-1:
+                        self._handle_quest(person_data, person_sprite, the_quest)
+                        break
+
+            # of als de persoon 1 quest heeft
+            elif person_data.get('quest'):
                 quest_key = person_data['quest'].name
                 the_quest = self.engine.data.logbook[quest_key]
-                # het gezicht is in on_enter() weer nodig, vandaar deze declaratie.
-                self.person_face = person_data['face']
-                # idem voor person_id
-                self.person_id = person_sprite.person_id
-
-                self.quest_box = the_quest.show_message(self.engine.gamestate, self.engine.audio, self.engine.data,
-                                                        self.person_face, self.person_id, self.display_loot)
+                self._handle_quest(person_data, person_sprite, the_quest)
 
             # of als hij dat niet heeft
             else:
@@ -682,6 +688,15 @@ class Window(object):
                                              last=(True if i == 0 else False))
                     self.engine.gamestate.push(push_object)
                 person_data['face'].reverse()  # en weer terugzetten nadien.
+
+    def _handle_quest(self, person_data, person_sprite, the_quest):
+        # het gezicht is in on_enter() weer nodig, vandaar deze declaratie.
+        self.person_face = person_data['face']
+        # idem voor person_id
+        self.person_id = person_sprite.person_id
+
+        self.quest_box = the_quest.show_message(self.engine.gamestate, self.engine.audio, self.engine.data,
+                                                self.person_face, self.person_id, self.display_loot)
 
     def check_notes(self, check_rect):
         """

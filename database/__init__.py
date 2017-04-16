@@ -44,7 +44,9 @@ def factory(EnumDatabase):
     :param EnumDatabase: bijv TreasureChestDatabase
     :return: de dict met keys en values.
     """
+    from copy import deepcopy
+
     db_dict = dict()
     for enum in EnumDatabase:
-        db_dict[enum.name] = enum.value.copy()
+        db_dict[enum.name] = deepcopy(enum.value)
     return db_dict

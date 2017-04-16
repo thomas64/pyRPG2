@@ -64,7 +64,9 @@ class PeopleDatabase(enum.Enum):
     # ersin_forest_center
     person50 = dict(name='boy01',        quest=QuestDatabase.quest1)
     person81 = dict(name='girl02',       quest=QuestDatabase.quest5)
-    person83 = dict(name='boy01',        quest=QuestDatabase.quest6)
+    person83 = dict(name='boy01',        quest=(QuestDatabase.quest6,   # een persoon kan meerdere quests achter
+                                                QuestDatabase.quest5,   # elkaar hebben. op deze manier.
+                                                QuestDatabase.quest1))
 
     # ersin_waterfall
     person51 = dict(name='man54',        quest=QuestDatabase.quest4)
