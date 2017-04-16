@@ -234,6 +234,7 @@ class QuestType(enum.Enum):
     PersonMessageQuest = 3
     ReceiveItemQuest = 4
     GoSomewhereQuest = 5
+    FetchItemsPartlyQuest = 6
     EnemyQuest = 9
 
 

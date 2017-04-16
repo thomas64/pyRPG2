@@ -789,7 +789,10 @@ class Window(object):
             elif key.startswith('itm'):
                 pouch_item = inventoryitems.factory_pouch_item(value['nam'])
                 pouch_item_spr = pygame.image.load(pouch_item.SPR).convert_alpha()
-                self.engine.data.pouch.add(pouch_item, quantity=value['qty'])
+                # bij een quest kàn de beloning 0 zijn, dat gaat fout met een error als je het toch toevoegd.
+                # vandaar deze voorwaarde. Je krijgt dan wel 0 te zien als de 'toegevoegde' beloning.
+                if value['qty'] > 0:
+                    self.engine.data.pouch.add(pouch_item, quantity=value['qty'])
                 text.append("{} {}".format(value['qty'], pouch_item.NAM))
                 image.append(pouch_item_spr)
 

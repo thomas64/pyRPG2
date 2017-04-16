@@ -96,3 +96,20 @@ class QuestDatabase(enum.Enum):
                          ["You can have this if you keep it our secret."]],
                         [["Animals really can talk, can they?"]])
                   )
+
+    quest6 = dict(qtype=QuestType.FetchItemsPartlyQuest,
+                  condition=dict(itm1=dict(nam=PouchItemDatabase.herbs,     qty=5),   # Conditions mogen op dit moment
+                                 itm2=dict(nam=PouchItemDatabase.gemstones, qty=3),   # alleen nog maar items zijn en
+                                 itm3=dict(nam=PouchItemDatabase.spices,    qty=2)),  # geen equipment.
+                  # de reward mag ook op dit moment nog maar van 1 type zijn.
+                  reward=dict(itm1=dict(nam=PouchItemDatabase.gold,         qty=1)),  # Dit aantal is per geleverde itm.
+                  text=([["testvoorbeeld:",
+                          "geef me de gevraagde items.",
+                          "5 herbs, 3 gemstones, 2 spices."]],
+                        [["ben je er nu klaar voor?"]],
+                        ["geef je ze gedeeltelijk of niet?", "",
+                         "ja", "nee"],
+                        [["okee, hier is je gepaste beloning.",
+                          "zoveel goud terug als items die ik vroeg."]],
+                        [["meer is er niet."]])
+                  )

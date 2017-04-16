@@ -66,32 +66,42 @@ def factory_all_quests(quests_enum):
     :return: de dict met alle quest objecten
     """
 
+    # deepcopy() is nodig voor kopie van reward die bij een fetchitemspartly wordt aangepast
+    # en dat moet natuurlijk niet terug komen in een nieuwe game.
+    from copy import deepcopy
+
     from constants import QuestType
 
     from .quest import FetchItemQuestItem
     from .quest import PersonMessageQuestItem
     from .quest import ReceiveItemQuestItem
     from .quest import GoSomewhereQuestItem
+    from .quest import FetchItemsPartlyQuestItem
 
     quests_dict = dict()
     for quest_enum in quests_enum:
         if quest_enum.value['qtype'] == QuestType.FetchItemQuest:
-            quests_dict[quest_enum.name] = FetchItemQuestItem(quest_enum.value['qtype'],
-                                                              quest_enum.value['condition'],
-                                                              quest_enum.value['reward'],
-                                                              quest_enum.value['text'])
+            quests_dict[quest_enum.name] = FetchItemQuestItem(deepcopy(quest_enum.value['qtype']),
+                                                              deepcopy(quest_enum.value['condition']),
+                                                              deepcopy(quest_enum.value['reward']),
+                                                              deepcopy(quest_enum.value['text']))
         elif quest_enum.value['qtype'] == QuestType.PersonMessageQuest:
-            quests_dict[quest_enum.name] = PersonMessageQuestItem(quest_enum.value['qtype'],
-                                                                  quest_enum.value['people'],
-                                                                  quest_enum.value['reward'],
-                                                                  quest_enum.value['text'])
+            quests_dict[quest_enum.name] = PersonMessageQuestItem(deepcopy(quest_enum.value['qtype']),
+                                                                  deepcopy(quest_enum.value['people']),
+                                                                  deepcopy(quest_enum.value['reward']),
+                                                                  deepcopy(quest_enum.value['text']))
         elif quest_enum.value['qtype'] == QuestType.ReceiveItemQuest:
-            quests_dict[quest_enum.name] = ReceiveItemQuestItem(quest_enum.value['qtype'],
-                                                                quest_enum.value['reward'],
-                                                                quest_enum.value['text'])
+            quests_dict[quest_enum.name] = ReceiveItemQuestItem(deepcopy(quest_enum.value['qtype']),
+                                                                deepcopy(quest_enum.value['reward']),
+                                                                deepcopy(quest_enum.value['text']))
         elif quest_enum.value['qtype'] == QuestType.GoSomewhereQuest:
-            quests_dict[quest_enum.name] = GoSomewhereQuestItem(quest_enum.value['qtype'],
-                                                                quest_enum.value['condition'],
-                                                                quest_enum.value['reward'],
-                                                                quest_enum.value['text'])
+            quests_dict[quest_enum.name] = GoSomewhereQuestItem(deepcopy(quest_enum.value['qtype']),
+                                                                deepcopy(quest_enum.value['condition']),
+                                                                deepcopy(quest_enum.value['reward']),
+                                                                deepcopy(quest_enum.value['text']))
+        elif quest_enum.value['qtype'] == QuestType.FetchItemsPartlyQuest:
+            quests_dict[quest_enum.name] = FetchItemsPartlyQuestItem(deepcopy(quest_enum.value['qtype']),
+                                                                     deepcopy(quest_enum.value['condition']),
+                                                                     deepcopy(quest_enum.value['reward']),
+                                                                     deepcopy(quest_enum.value['text']))
     return quests_dict

@@ -334,7 +334,6 @@ class ReceiveItemQuestItem(BaseQuestItem):
     """
     Je praat met een persoon, en die geeft je gelijk wat.
     """
-
     def show_message(self, gamestate, audio, data, face_image, person_id, display_loot):
         """
         Geeft een bericht net zoals notes verdeeld over meerdere schermen, met een inverse loop.
@@ -380,3 +379,41 @@ class GoSomewhereQuestItem(FetchItemQuestItem):
 
     def _fulfill(self, data):
         pass
+
+
+class FetchItemsPartlyQuestItem(FetchItemQuestItem):
+    """
+    Een persoon vraagt je om meerdere items. En bij het gedeeltelijk overdragen krijg je eventueel een gedeelte 
+    van de beloning. Bij een volledige overdraging van alle items krijg je de volledige beloning. 1x een overdraging.
+    """
+    def _is_ready_to_fulfill(self, data):
+        """
+        Bekijkt of hij voldoet aan de condition van de quest. En dat doet hij altijd. Want je mag ook niets inleveren.
+        :param data: self.engine.data
+        :return: Als alle conditions goed zijn geeft hij True terug.
+        """
+        return True
+
+    def _fulfill(self, data):
+        """
+        Wordt aangeroepen als hij (gedeeltelijk) de items inlevert.
+        :param data: self.engine.data
+        """
+        itemcounter = 0
+        for key, value in self.condition.items():
+            if key.startswith('eqp'):
+                pass  # todo, dit is dus nog niet geimplementeerd. staat ook een notitie van bij quest6.
+
+            elif key.startswith('itm'):
+                itm_obj = inventoryitems.factory_pouch_item(value['nam'])
+                itm_qty = data.pouch.get_quantity(itm_obj)          # de hoeveelheid die je bezit
+                if itm_qty:                                         # als het aantal groter is dan 0
+                    if itm_qty >= value['qty']:                     # als het item en aantal kloppen
+                        data.pouch.remove(itm_obj, value['qty'])    # haal de gevraagde hoeveelheid weg
+                        itemcounter += value['qty']                 # en doe het aantal bij de counter
+                    elif itm_qty < value['qty']:                    # maar als minder is dan de gevraagde hoeveelheid
+                        data.pouch.remove(itm_obj, itm_qty)         # haal dan alles wat je wel hebt weg
+                        itemcounter += itm_qty                      # en doe het aantal bij de counter
+
+        # todo, er mag nog alleen maar een reward van 'itm1' zijn. dat moet universeler uiteindelijk
+        self.reward['itm1']['qty'] *= itemcounter                   # zet alles om naar de beloning
