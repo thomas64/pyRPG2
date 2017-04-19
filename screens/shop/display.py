@@ -39,7 +39,6 @@ class Display(Parchment):
         # is een list van bijv: [EquipmentType.arm, WeaponType.swd]
         self.subtype_list = list(shoptype_list)  # het moet een kopie van de lijst zijn, niet de lijst zelf,
         # vanwege de _init_selectors(), waar iets uit de lijst vervangen wordt. door een kopie te maken kan dat.
-        self.subtype = self.subtype_list[0]
         self.material_list = shopmaterial_list
         self.databases = {}
 
@@ -84,6 +83,9 @@ class Display(Parchment):
 
         self._init_face_and_text(face, ShopDatabase.welcome_text())
         self._init_selectors()
+        self.subtype = self.subtype_list[0]  # subtype declaratie verplaatst van bovenin naar onder _init_selectors()
+        # omdat in de init_selectors() de subtype_list wordt aangepast naar een juist formaat. dat heeft te maken met
+        # pouchitems die verkocht kunnen worden. die staan namelijk nog een tuple ipv rechtstreeks database.
         self._init_boxes()
         self._init_buttons()
 
