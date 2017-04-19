@@ -38,7 +38,7 @@ class ConfirmBox(object):
         self.name = GameState.ConfirmBox
         self.scr_capt = ScreenCapture()
 
-        self.callback = callback    # mogelijkheid tot methode meegeven
+        self.callback = callback    # mogelijkheid om een object oid mee te geven
 
         self.font = pygame.font.SysFont(FONT, FONTSIZE)
         self.raw_text = raw_text    # de onopgemaakte tekst

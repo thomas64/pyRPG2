@@ -81,27 +81,13 @@ def factory_all_quests(quests_enum):
     quests_dict = dict()
     for quest_enum in quests_enum:
         if quest_enum.value['qtype'] == QuestType.FetchItemQuest:
-            quests_dict[quest_enum.name] = FetchItemQuestItem(deepcopy(quest_enum.value['qtype']),
-                                                              deepcopy(quest_enum.value['condition']),
-                                                              deepcopy(quest_enum.value['reward']),
-                                                              deepcopy(quest_enum.value['text']))
+            quests_dict[quest_enum.name] = FetchItemQuestItem(**deepcopy(quest_enum.value))
         elif quest_enum.value['qtype'] == QuestType.PersonMessageQuest:
-            quests_dict[quest_enum.name] = PersonMessageQuestItem(deepcopy(quest_enum.value['qtype']),
-                                                                  deepcopy(quest_enum.value['people']),
-                                                                  deepcopy(quest_enum.value['reward']),
-                                                                  deepcopy(quest_enum.value['text']))
+            quests_dict[quest_enum.name] = PersonMessageQuestItem(**deepcopy(quest_enum.value))
         elif quest_enum.value['qtype'] == QuestType.ReceiveItemQuest:
-            quests_dict[quest_enum.name] = ReceiveItemQuestItem(deepcopy(quest_enum.value['qtype']),
-                                                                deepcopy(quest_enum.value['reward']),
-                                                                deepcopy(quest_enum.value['text']))
+            quests_dict[quest_enum.name] = ReceiveItemQuestItem(**deepcopy(quest_enum.value))
         elif quest_enum.value['qtype'] == QuestType.GoSomewhereQuest:
-            quests_dict[quest_enum.name] = GoSomewhereQuestItem(deepcopy(quest_enum.value['qtype']),
-                                                                deepcopy(quest_enum.value['condition']),
-                                                                deepcopy(quest_enum.value['reward']),
-                                                                deepcopy(quest_enum.value['text']))
+            quests_dict[quest_enum.name] = GoSomewhereQuestItem(**deepcopy(quest_enum.value))
         elif quest_enum.value['qtype'] == QuestType.FetchItemsPartlyQuest:
-            quests_dict[quest_enum.name] = FetchItemsPartlyQuestItem(deepcopy(quest_enum.value['qtype']),
-                                                                     deepcopy(quest_enum.value['condition']),
-                                                                     deepcopy(quest_enum.value['reward']),
-                                                                     deepcopy(quest_enum.value['text']))
+            quests_dict[quest_enum.name] = FetchItemsPartlyQuestItem(**deepcopy(quest_enum.value))
     return quests_dict

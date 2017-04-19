@@ -137,6 +137,11 @@ class HeroDatabase(enum.Enum):
                   sld=None, 
                   arm=ArmorDatabase.lighttitaniumarmor)
 
+    @staticmethod
+    def closing():
+        """..."""
+        return ["It seems your party is full already."]
+
     @classmethod
     def opening(cls, hero_raw):
         """

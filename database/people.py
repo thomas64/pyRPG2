@@ -112,6 +112,31 @@ class PeopleDatabase(enum.Enum):
     # invernia_school
     person78 = dict(name='woman03',      text=[["The magic here is from another world!"]])
 
+    @staticmethod
+    def get_active_quest(quest_data, logbook):
+        """
+        Als een persoon meerdere quests heeft, dan zoekt hij naar de huidige quest.
+        :param quest_data: person_enum_val['quest']. bijv QuestDatabase.quest2
+        :param logbook: self.engine.data.logbook
+        :return: het quest object uit de logbook
+        """
+        # meerdere quests
+        if type(quest_data) == tuple:
+            # loop dan door al zijn quests
+            for index, quest in enumerate(quest_data):
+                quest_key = quest.name
+                the_quest = logbook[quest_key]
+                # en als er nog eentje niet rewarded is, voer die dan uit.
+                # OF als je bij de laatste quest bent, die mag je nog wel een keer uitvoeren.
+                if not the_quest.is_rewarded() or index == len(quest_data) - 1:
+                    return the_quest
+        # of als de persoon 1 quest heeft
+        else:
+            quest_key = quest_data.name
+            the_quest = logbook[quest_key]
+            return the_quest
+
+
 for person in PeopleDatabase:
     if not person.value.get('face'):  # als er nog geen face is stop ze in een list van faces.
         if person.value.get('text'):  # een quest heeft geen 'text'

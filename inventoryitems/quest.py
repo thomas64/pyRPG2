@@ -49,19 +49,18 @@ class FetchItemQuestItem(BaseQuestItem):
         super().__init__(qtype, reward, text)
         self.condition = condition
 
-    def show_message(self, gamestate, audio, data, face_image, person_id, display_loot):
+    def show_message(self, gamestate, audio, data, person_enum_val, display_loot):
         """
         Geef een bericht en waneer mogelijk ook een confirmbox erachteraan.
         :param gamestate: self.engine.gamestate
         :param audio: self.engine.audio
         :param data: self.engine.data
-        :param face_image: PeopleDatabase[person_sprite.person_id].value['face']
-        :param person_id: Voor deze niet nodig, maar wel voor PersonMessageQuestItem.
+        :param person_enum_val: een Enum .value uit de PeopleDatabase[x].value. het is een dict().
         :param display_loot: Voor deze niet nodig, maar wel voor PersonMessageQuestItem.
         :return: deze is voor het vullen van een quest_box in window. returnt een confirmbox indien nodig.
         """
         for i, text_part in enumerate(reversed(self._get_text())):
-            push_object = MessageBox(text_part, face_image=face_image,
+            push_object = MessageBox(text_part, face_image=person_enum_val['face'],
                                      last=(True if i == 0 and (not self._is_ready_to_fulfill(data) or
                                                                self.is_rewarded()) else False))
             gamestate.push(push_object)
@@ -69,7 +68,7 @@ class FetchItemQuestItem(BaseQuestItem):
         self._update_state(self._is_ready_to_fulfill(data))
 
         if self.state == QuestState.Ready:
-            push_object = ConfirmBox(self._get_text(), callback=self.decided)
+            push_object = ConfirmBox(self._get_text(), callback=person_enum_val)
             gamestate.push(push_object)
             # plaats de confirmbox achter alle messageboxen
             gamestate.push_confirmbox_to_end()
@@ -77,7 +76,7 @@ class FetchItemQuestItem(BaseQuestItem):
 
         return None
 
-    def decided(self, gamestate, data, audio, face_image, choice, yes, scr_capt, person_id, display_loot):
+    def decided(self, gamestate, data, audio, face_image, choice, yes, scr_capt, display_loot):
         """
         Deze wordt in de callback meegegeven bij het keuze moment in de confirmbox van de quest.
         :param gamestate: self.engine.gamestate
@@ -87,7 +86,6 @@ class FetchItemQuestItem(BaseQuestItem):
         :param choice: confirmbox.cur_item
         :param yes: confirmbox.TOPINDEX
         :param scr_capt: hetzelfde schermafdruk die ook in de voorgaande confirmbox is gebruikt
-        :param person_id: Voor deze niet nodig, maar wel voor PersonMessageQuestItem.
         :param display_loot: methode uit Window() waar het overzicht gegeven wordt van wat je ontvangen hebt.
         """
         if choice == yes:
@@ -334,14 +332,13 @@ class ReceiveItemQuestItem(BaseQuestItem):
     """
     Je praat met een persoon, en die geeft je gelijk wat.
     """
-    def show_message(self, gamestate, audio, data, face_image, person_id, display_loot):
+    def show_message(self, gamestate, audio, data, person_enum_val, display_loot):
         """
         Geeft een bericht net zoals notes verdeeld over meerdere schermen, met een inverse loop.
         :param gamestate: self.engine.gamestate
         :param audio: self.engine.audio
         :param data: self.engine.data
-        :param face_image: PeopleDatabase[person_sprite.person_id].value['face']
-        :param person_id: Voor deze niet nodig, maar wel voor PersonMessageQuestItem.
+        :param person_enum_val: een Enum .value uit de PeopleDatabase[x].value. het is een dict().
         :param display_loot: methode uit Window() waar het overzicht gegeven wordt van wat je ontvangen hebt.
         :return: deze is voor deze quest altijd None.
         """
@@ -355,7 +352,7 @@ class ReceiveItemQuestItem(BaseQuestItem):
             gamestate.push(push_object)
 
         for i, text_part in enumerate(reversed(self._get_text())):
-            push_object = MessageBox(text_part, face_image=face_image,
+            push_object = MessageBox(text_part, face_image=person_enum_val['face'],
                                      last=(True if i == 0 and self.is_rewarded() else False))
             gamestate.push(push_object)
 
