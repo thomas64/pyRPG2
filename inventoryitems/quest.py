@@ -27,35 +27,6 @@ class BaseQuestItem(object):
         self.reward = reward
         self.text = text
 
-    def _get_text(self):
-        """
-        Geeft de juiste tekst terug op basis van de state van de quest.
-        :return: de tekst die past bij de index van QuestState
-        """
-        return self.text[self.state.value]
-
-    def is_running(self):
-        """..."""
-        if self.state == QuestState.Running:
-            return True
-        else:
-            return False
-
-    def is_rewarded(self):
-        """
-        Geeft terug of de state rewarded is.
-        :return: true of false
-        """
-        if self.state == QuestState.Rewarded:
-            return True
-        else:
-            return False
-
-
-class FetchItemQuestItem(BaseQuestItem):
-    """
-    Een persoon vraagt je om een of meerdere items. En bij het overdragen krijg je eventueel een beloning.
-    """
     def show_message(self, gamestate, data, person_enum_val):
         """
         Geef een bericht en waneer mogelijk ook een confirmbox erachteraan.
@@ -158,6 +129,44 @@ class FetchItemQuestItem(BaseQuestItem):
         elif self.state == QuestState.Rewarded:
             pass
 
+    def _get_text(self):
+        """
+        Geeft de juiste tekst terug op basis van de state van de quest.
+        :return: de tekst die past bij de index van QuestState
+        """
+        return self.text[self.state.value]
+
+    def is_running(self):
+        """..."""
+        if self.state == QuestState.Running:
+            return True
+        else:
+            return False
+
+    def is_rewarded(self):
+        """
+        Geeft terug of de state rewarded is.
+        :return: true of false
+        """
+        if self.state == QuestState.Rewarded:
+            return True
+        else:
+            return False
+
+    def _is_ready_to_fulfill(self, data):
+        """
+        Deze moet overridden worden. Anders geeft hij altijd False.
+        """
+        return False
+
+    def _fulfill(self, data):
+        pass
+
+
+class FetchItemQuestItem(BaseQuestItem):
+    """
+    Een persoon vraagt je om een of meerdere items. En bij het overdragen krijg je eventueel een beloning.
+    """
     def _is_ready_to_fulfill(self, data):
         """
         Bekijkt of hij voldoet aan de condition van de quest.
@@ -192,9 +201,9 @@ class FetchItemQuestItem(BaseQuestItem):
                 data.pouch.remove(itm_obj, value['qty'])
 
 
-class ReceiveItemQuestItem(FetchItemQuestItem):
+class ReceiveItemQuestItem(BaseQuestItem):
     """
-    Je praat met een persoon, en die geeft je gelijk wat.
+    Je praat met een persoon, en die geeft je op een voorwaarde wat.
     """
     def _is_ready_to_fulfill(self, data):
         """
@@ -205,11 +214,8 @@ class ReceiveItemQuestItem(FetchItemQuestItem):
         """
         return self.condition
 
-    def _fulfill(self, data):
-        pass
 
-
-class FetchItemsPartlyQuestItem(FetchItemQuestItem):
+class FetchItemsPartlyQuestItem(BaseQuestItem):
     """
     Een persoon vraagt je om meerdere items. En bij het gedeeltelijk overdragen krijg je eventueel een gedeelte 
     van de beloning. Bij een volledige overdraging van alle items krijg je de volledige beloning. 1x een overdraging.
@@ -247,7 +253,7 @@ class FetchItemsPartlyQuestItem(FetchItemQuestItem):
         self.reward['itm1']['qty'] *= itemcounter                   # zet alles om naar de beloning
 
 
-class PersonMessageQuest1Item(FetchItemQuestItem):
+class PersonMessageQuest1Item(BaseQuestItem):
     """
     Een persoon vraagt of je wat wil zeggen tegen iemand. Als je dat doet krijg je eventueel een beloning.
     """
@@ -263,11 +269,8 @@ class PersonMessageQuest1Item(FetchItemQuestItem):
         """
         return data.logbook[self.subquest].is_rewarded()
 
-    def _fulfill(self, data):
-        pass
 
-
-class PersonMessageQuest2Item(FetchItemQuestItem):
+class PersonMessageQuest2Item(BaseQuestItem):
     """
     De persoon aan wie je wat moet zeggen van PersonMessageQuest1Item. Kan ook een beloning krijgen.
     """
@@ -282,6 +285,3 @@ class PersonMessageQuest2Item(FetchItemQuestItem):
          je hebt gepraat met die ander.
         """
         return data.logbook[self.subquest].is_running()
-
-    def _fulfill(self, data):
-        pass
