@@ -22,6 +22,7 @@ from constants import SFX
 
 from database import InnDatabase
 from database import HeroDatabase
+from database import LocationDatabase
 from database import PeopleDatabase
 from database import SchoolDatabase
 from database import ShopDatabase
@@ -526,13 +527,16 @@ class Window(object):
             if len(self.party_sprites[0].rect.collidelistall(self.current_map.locations)) == 1:
                 object_nr = self.party_sprites[0].rect.collidelist(self.current_map.locations)
                 location_name = self.current_map.locations[object_nr].name
+                location_enum_val = LocationDatabase[location_name].value
 
-                if location_name.startswith('quest'):
-                    the_quest = self.engine.data.logbook[location_name]
+                if location_enum_val.get('quest'):
+                    quest_key = location_enum_val['quest'].name
+                    the_quest = self.engine.data.logbook[quest_key]
                     the_quest.condition = True
 
-                elif location_name.startswith('chapter'):
-                    chapter_data = self.engine.data.chapters[location_name]
+                elif location_enum_val.get('chapter'):
+                    chapter_key = location_enum_val['chapter'].name
+                    chapter_data = self.engine.data.chapters[chapter_key]
                     chapter_data['condition'] = True
 
     def action_button(self):
@@ -662,8 +666,7 @@ class Window(object):
             if person_enum_val.get('quest'):
                 the_quest = PeopleDatabase.get_active_quest(person_enum_val['quest'], self.engine.data.logbook)
                 # self.quest_box blijft op None als er geen ConfirmBox gereturned wordt.
-                self.quest_box = the_quest.show_message(self.engine.gamestate, self.engine.audio, self.engine.data,
-                                                        person_enum_val, self.display_loot)
+                self.quest_box = the_quest.show_message(self.engine.gamestate, self.engine.data, person_enum_val)
             # of als hij dat niet heeft
             else:
                 person_enum_val['face'].reverse()  # draai de faces om in volgorde

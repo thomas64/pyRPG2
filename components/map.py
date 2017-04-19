@@ -98,8 +98,8 @@ class Map(object):
         for obj in tmx_data.get_layer_by_name(PORTALS):
             self.portals.append(Portal(data.map_name, self._pg_rect(obj), obj.name, obj.type))
         for obj in tmx_data.get_layer_by_name(EVENTS):
-            if obj.name == 'location':
-                self.locations.append(NamedRect(obj.type, self._pg_rect(obj)))
+            if obj.name.startswith('location'):
+                self.locations.append(NamedRect(obj.name, self._pg_rect(obj)))
             elif obj.name.startswith('text'):
                 # in obj.type kan iets staan, als daar bijv zwart staat, dan heeft het text_event een zwarte achtergrond
                 self.text_events.append(NamedRect(obj.name, self._pg_rect(obj), obj.type))

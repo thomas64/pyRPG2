@@ -106,9 +106,9 @@ class PeopleDatabase(enum.Enum):
     # invernia_house_big_2f
     person73 = dict(name='maid01',       text=[["These people are so sweet, taking care for all those children."]])
     # invernia_weapon_shop
-    person74 = dict(name='youngman02',   quest=QuestDatabase.quest2)
+    person74 = dict(name='youngman02',   quest=QuestDatabase.quest7)
     # invernia_armor_shop
-    person75 = dict(name='youngwoman02', quest=QuestDatabase.quest2)
+    person75 = dict(name='youngwoman02', quest=QuestDatabase.quest8)
     # invernia_school
     person78 = dict(name='woman03',      text=[["The magic here is from another world!"]])
 

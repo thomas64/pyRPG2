@@ -73,21 +73,21 @@ def factory_all_quests(quests_enum):
     from constants import QuestType
 
     from .quest import FetchItemQuestItem
-    from .quest import PersonMessageQuestItem
     from .quest import ReceiveItemQuestItem
-    from .quest import GoSomewhereQuestItem
     from .quest import FetchItemsPartlyQuestItem
+    from .quest import PersonMessageQuest1Item
+    from .quest import PersonMessageQuest2Item
 
     quests_dict = dict()
     for quest_enum in quests_enum:
         if quest_enum.value['qtype'] == QuestType.FetchItemQuest:
             quests_dict[quest_enum.name] = FetchItemQuestItem(**deepcopy(quest_enum.value))
-        elif quest_enum.value['qtype'] == QuestType.PersonMessageQuest:
-            quests_dict[quest_enum.name] = PersonMessageQuestItem(**deepcopy(quest_enum.value))
         elif quest_enum.value['qtype'] == QuestType.ReceiveItemQuest:
             quests_dict[quest_enum.name] = ReceiveItemQuestItem(**deepcopy(quest_enum.value))
-        elif quest_enum.value['qtype'] == QuestType.GoSomewhereQuest:
-            quests_dict[quest_enum.name] = GoSomewhereQuestItem(**deepcopy(quest_enum.value))
         elif quest_enum.value['qtype'] == QuestType.FetchItemsPartlyQuest:
             quests_dict[quest_enum.name] = FetchItemsPartlyQuestItem(**deepcopy(quest_enum.value))
+        elif quest_enum.value['qtype'] == QuestType.PersonMessageQuest1:
+            quests_dict[quest_enum.name] = PersonMessageQuest1Item(**deepcopy(quest_enum.value))
+        elif quest_enum.value['qtype'] == QuestType.PersonMessageQuest2:
+            quests_dict[quest_enum.name] = PersonMessageQuest2Item(**deepcopy(quest_enum.value))
     return quests_dict

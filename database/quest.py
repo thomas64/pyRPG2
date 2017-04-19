@@ -29,28 +29,34 @@ class QuestDatabase(enum.Enum):
                         [["Hi mister."], ["It seems my mommy is all better now.", "Thanks to you!"]])
                   )
 
-    quest2 = dict(qtype=QuestType.PersonMessageQuest,
+    quest7 = dict(qtype=QuestType.PersonMessageQuest1,
+                  subquest='quest8',
+                  condition=False,  # deze gaat op True wanneer er positief gekozen is op quest8
                   reward=dict(itm1=dict(nam=PouchItemDatabase.gold,     qty=1)),  # mag ook =None zijn.
-                  people=dict(person74='main',
-                              person75='sub1'),
-                  text=dict(person74=([["How are you?"], ["May I ask you something?"],
-                                       ["I'm a bit shy.",
-                                        "There is this girl that I like, but I'm afraid to tell her."],
-                                       ["Would you tell her for me instead? Please?",
-                                        "She is at the armor shop looking for a dress, and I won't",
-                                        "dare to come near, so I went to this shop, I'm pathetic."]],
-                                      [["Please do it for me. She is at the armor shop."]],
-                                      [[" "]],
-                                      [["Thank you for telling her!", "You can have this, for helping me out."]],
-                                      [["Thanks again, I owe you big time!"]]),
-                            person75=([["How are you?"]],
-                                      [["How are you?"]],
-                                      # de confirmbox tekst moet niet tussen dubbele blokhaken
-                                      ["Bring the pathetic message over to her?", "",
-                                       "Yes, everybody needs a chance.", "No, he has to grow up and be a man."],
-                                      [["I... I didn't know that...", "Thank you for telling me."]],
-                                      [["How are you?"], ["I'm also pretty shy myself."]])
-                            )
+                  text=([["How are you?"], ["May I ask you something?"],
+                         ["I'm a bit shy.",
+                          "There is this girl that I like, but I'm afraid to tell her."],
+                         ["Would you tell her for me instead? Please?",
+                          "She is at the armor shop looking for a dress, and I won't",
+                          "dare to come near, so I went to this shop, I'm pathetic."]],
+                        [["Please do it for me. She is at the armor shop."]],
+                        ["Tell him her big amazing reaction?", "",
+                         "Yes, love is something amazing.", "Nah."],
+                        [["Thank you for telling her!", "You can have this, for helping me out."]],
+                        [["Thanks again, I owe you big time!"]])
+                  )
+
+    quest8 = dict(qtype=QuestType.PersonMessageQuest2,
+                  subquest='quest7',
+                  condition=False,  # deze gaat op True wanneer er met quest7 gepraat is
+                  reward=None,
+                  text=([["How are you?"]],
+                        [["How are you?"]],
+                        # de confirmbox tekst moet niet tussen dubbele blokhaken
+                        ["Bring the pathetic message over to her?", "",
+                         "Yes, everybody needs a chance.", "No, he has to grow up and be a man."],
+                        [["I... I didn't know that...", "Thank you for telling me."]],
+                        [["How are you?"], ["I'm also pretty shy myself."]])
                   )
 
     quest3 = dict(qtype=QuestType.FetchItemQuest,
@@ -68,6 +74,7 @@ class QuestDatabase(enum.Enum):
                   )
 
     quest4 = dict(qtype=QuestType.ReceiveItemQuest,
+                  condition=True,  # staat altijd op True, want je krijgt altijd wat.
                   reward=dict(itm1=dict(nam=PouchItemDatabase.proofnote, qty=1)),
                   # meerdere textscheremen zoals bij notes.
                   text=([["It's so beautiful, I can watch this scenery for hours."],
@@ -78,13 +85,18 @@ class QuestDatabase(enum.Enum):
                           "person and an evil monster."], ["And now he asks for proof?!?"],
                          ["I'll give you a 'Proof of not being a monster',",
                           "because you seem a normal person to me.", "*sigh*"]],
-                        [[" "]], [[" "]], [[" "]],
+                        [["It's so beautiful, I can watch this scenery for hours."],
+                         ["    .       .       .       .       .       .       ."],
+                         ["Ah, there you are.", "Do you want the proof or not?"]],
+                        ["Accept the help of this strange man?", "",
+                         "Yes, aren't we all strange?", "No, I can solve my own problems."],
+                        [["Here you go."]],
                         [["It's so beautiful, I can watch this scenery for hours."],
                          ["    .       .       .       .       .       .       ."],
                          ["Did you 'prove' that you are not a monster?"]])
                   )
 
-    quest5 = dict(qtype=QuestType.GoSomewhereQuest,
+    quest5 = dict(qtype=QuestType.ReceiveItemQuest,
                   condition=False,  # deze gaat naar True als je op de plek bent geweest.
                   reward=dict(eqp1=dict(nam=WeaponDatabase.titaniumlongsword,  qty=1)),  # mag =None zijn.
                   text=([["Hi mister!"], ["There is this magical place in", "the forest where animals can talk."],

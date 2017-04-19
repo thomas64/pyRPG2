@@ -777,6 +777,6 @@
   <object id="60" name="person82" type="w" x="448" y="544" width="32" height="32"/>
  </objectgroup>
  <objectgroup name="events">
-  <object id="62" name="location" type="quest5" x="240" y="608" width="384" height="32"/>
+  <object id="62" name="location2" x="240" y="608" width="384" height="32"/>
  </objectgroup>
 </map>

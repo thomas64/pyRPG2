@@ -1680,6 +1680,6 @@
   <object id="486" name="text3" x="1392" y="1824" width="16" height="16"/>
   <object id="484" name="text1" x="1248" y="1840" width="16" height="16"/>
   <object id="487" name="move1" x="1408" y="1808" width="16" height="16"/>
-  <object id="488" name="location" type="chapter1" x="736" y="2016" width="32" height="96"/>
+  <object id="488" name="location1" x="736" y="2016" width="32" height="96"/>
  </objectgroup>
 </map>
