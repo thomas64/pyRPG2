@@ -15,7 +15,7 @@ SCREENWIDTH = 1366
 SCREENHEIGHT = 768  # 1366, 768  # 1920, 1080
 
 TITLE = 'pyRPG2'
-ICONPATH = 'resources\sprites\icons\skills\warrior.png'
+ICONPATH = 'resources/sprites/icons/skills/warrior.png'
 
 
 def main():
