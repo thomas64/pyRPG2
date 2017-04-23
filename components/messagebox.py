@@ -134,9 +134,9 @@ class MessageBox(object):
                 self._exit(gamestate, audio)
             elif event.key in Keys.Select.value:
                 self._exit(gamestate, audio)
-            elif event.key == Keys.Action.value:
-                self._exit(gamestate, audio)
-        elif event.type == pygame.MOUSEBUTTONDOWN:
+            # elif event.key == Keys.Action.value:  # todo, voorlopig uitgezet dat je met de action knop verder kan
+            #     self._exit(gamestate, audio)      # klikken. dit is vanwege langzamere computers.
+        elif event.type == pygame.MOUSEBUTTONDOWN:  # anders druk je te vaak op a. definitieve oplossing verzinnen.
             if event.button == Keys.Leftclick.value:
                 self._exit(gamestate, audio)
 
