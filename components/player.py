@@ -437,15 +437,21 @@ class Player(Person):
     def get_check_rect(self):
         """
         Bij een check gebruik dan een rect op basis van de hero rect en verplaats die iets in de kijk richting.
+        Versmal de rect ook iets in de breedte van de kijkrichting. Zodat 2 personen naast elkaar niet zo makkelijk
+        meer overlappen.
         :return: de tijdelijk verplaatste rect, gemaakt op basis van de huidige hero rect.
         """
         check_rect = self.rect
         if self.last_direction == Direction.North:
             check_rect = self.rect.move(0, GRIDSIZE / -2)  # -16
+            check_rect = check_rect.inflate(GRIDSIZE * -0.75, 0)  # 3/4 van de grootte eraf.
         elif self.last_direction == Direction.South:
             check_rect = self.rect.move(0, GRIDSIZE / 2)   # 16
+            check_rect = check_rect.inflate(GRIDSIZE * -0.75, 0)
         elif self.last_direction == Direction.West:
             check_rect = self.rect.move(GRIDSIZE / -2, 0)
+            check_rect = check_rect.inflate(0, GRIDSIZE * -0.75)
         elif self.last_direction == Direction.East:
             check_rect = self.rect.move(GRIDSIZE / 2, 0)
+            check_rect = check_rect.inflate(0, GRIDSIZE * -0.75)
         return check_rect
