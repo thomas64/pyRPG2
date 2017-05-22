@@ -231,14 +231,14 @@ class Map(object):
         """
         # als er iets in de lijst van quest blockers staat:
         if len(self.quest_blocker_rects) > 0:
-            # van 0 tot 3 bijv
-            for i in range(0, len(self.quest_blocker_rects), 1):
+            # ga door alle blockers heen, maar in een kopie van de lijst. omdat je gaat verwijderen.
+            for blocker in list(self.quest_blocker_rects):
                 # de naam van de quest blocker is de key van de quest. haal die uit het logbook op basis van de naam.
-                the_quest = logbook.get(self.quest_blocker_rects[i].name)
+                the_quest = logbook.get(blocker.name)
                 # bekijk dan of hij al rewarded is:
                 if the_quest is not None and the_quest.is_rewarded():
                     # haal dan die quest blocker uit de lijst
-                    del self.quest_blocker_rects[i]
+                    self.quest_blocker_rects.remove(blocker)
 
     def get_position(self, from_map_name, from_pos_nr):
         """
