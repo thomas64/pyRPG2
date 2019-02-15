@@ -3,6 +3,7 @@
 class: ShieldDatabase
 """
 
+import enum
 import aenum
 
 from constants import EquipmentType
@@ -13,7 +14,7 @@ from constants import ItemMaterial
 SPRITEPATH = 'resources/sprites/icons/equipment/shield4.png'
 
 
-class ShieldDatabase(aenum.Enum):
+class ShieldDatabase(enum.Enum):
     """
     Een lege Enum. (met custom)
     """
