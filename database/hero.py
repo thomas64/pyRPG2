@@ -121,7 +121,7 @@ class HeroDatabase(enum.Enum):
                   spl=dict(Fireball=6, AirShield=9, Strength=9, Debilitation=9, Mirror=9))
     iellwen = dict(nam="Iellwen", spr=PATH+"13s_iellwen.png", fac=PATH+"13f_iellwen.png",
                    lev=20, scl=SchoolType.str,
-                   int=30, wil=25, dex=30, agi=25, edu=30, str=20, sta=60,
+                   int=35, wil=25, dex=30, agi=25, edu=30, str=20, sta=60,
                    alc=0, dip=0, hlr=10, lor=0, mec=0, mer=0, ran=6, stl=6, thf=0, trb=0, war=10, wiz=8,
                    haf=5, mis=7, pol=0, shd=-1, swd=10, thr=-1,
                    wpn=WeaponDatabase.silverlongsword,
@@ -132,7 +132,7 @@ class HeroDatabase(enum.Enum):
                   lev=25, scl=SchoolType.nmg,
                   int=30, wil=30, dex=30, agi=30, edu=25, str=15, sta=80,
                   alc=10, dip=10, hlr=0, lor=10, mec=0, mer=10, ran=10, stl=10, thf=10, trb=10, war=10, wiz=-1,
-                  haf=10, mis=0, pol=0, shd=0, swd=10, thr=0,
+                  haf=10, mis=-1, pol=-1, shd=0, swd=10, thr=-1,
                   wpn=WeaponDatabase.titaniummace,
                   sld=None, 
                   arm=ArmorDatabase.lighttitaniumarmor)
